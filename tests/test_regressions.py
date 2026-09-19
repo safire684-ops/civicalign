@@ -112,3 +112,35 @@ def test_phantom_medians_are_suppressed():
     assert budget.n_majority == budget.n_minority
     assert budget.median_gap_to_nearest_member > 0.2
     assert budget.is_noise
+
+
+def test_icpsr_is_not_a_usable_join_key():
+    """BUG 4: joining Voteview to the roster on ICPSR silently drops senators.
+
+    A natural-looking pipeline merges Voteview (ICPSR key) to the roster via an
+    ICPSR crosswalk. But the roster's icpsr field is unpopulated for 20 of 100
+    sitting senators -- everyone elected recently (Tuberville, Britt, Kelly,
+    Ossoff, Fetterman, Padilla, Hagerty...). An inner join on ICPSR therefore
+    returns 80 senators and reports success.
+
+    bioguide_id is present for all 100 AND already ships in HSall_members.csv, so
+    the crosswalk is both broken and unnecessary. This test pins the reason.
+    """
+    import json
+
+    people = json.loads(DEFAULT.roster_json.read_text())
+    senators = [p for p in people if p["terms"][-1]["type"] == "sen"]
+
+    with_icpsr = [p for p in senators if "icpsr" in p["id"]]
+    assert len(senators) == 100
+    assert len(with_icpsr) < 100, "if this ever passes, ICPSR became usable"
+
+    # bioguide is complete, which is why the pipeline joins on it
+    assert all("bioguide" in p["id"] for p in senators)
+
+
+def test_voteview_already_carries_bioguide_so_no_crosswalk_is_needed():
+    """The crosswalk step can be skipped entirely: Voteview ships bioguide_id."""
+    with DEFAULT.members_csv.open() as fh:
+        header = next(csv.reader(fh))
+    assert "bioguide_id" in header

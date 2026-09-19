@@ -162,3 +162,128 @@ which is a deviation from a pattern rather than an exact distance.
 > exact distance would require public opinion and roll-call behaviour to be placed
 > on a single deliberately bridged scale, which CivicAlign does not yet do and
 > does not claim to.
+
+---
+
+# Corrections to the DW-NOMINATE integration document
+
+Phase 1 of that document (spatial voting model, Gaussian utility, the MLE loop)
+is a sound explainer and needs no changes. Its advice not to re-estimate the
+model yourself is right. The problems are all in Phase 2 and Phase 3, and three
+of them would ship broken numbers.
+
+## A. The ICPSR crosswalk drops 20% of the Senate
+
+### As written
+
+> This is the most frequent point of failure in civic tech. [...] you must merge
+> these two systems using a "Crosswalk" file.
+
+```python
+merged_df = pd.merge(current_senate, cw_df, left_on='icpsr', right_on='icpsr_id', how='inner')
+```
+
+### What actually happens
+
+The column name is right, but **`icpsr_id` is unpopulated for 220 of 539 rows**
+in the roster file — including 20 of the 100 sitting senators. Every senator
+elected in the last few cycles is missing it: Tuberville, Britt, Kelly, Ossoff,
+Warnock, Fetterman, Padilla, Hickenlooper, Hagerty, Justice, McCormick, Moreno,
+Alsobrooks, Schmitt, Sheehy, Ricketts, Mullin and more.
+
+Run against real data, that inner join returns **80 senators, not 100**, and
+raises no error. Every downstream median is then computed on a biased
+four-fifths of the chamber, skewed toward longer-serving members.
+
+The step is also unnecessary. `HSall_members.csv` already contains a
+`bioguide_id` column (field 11). There is nothing to cross-walk.
+
+### Replacement
+
+```python
+# Voteview already ships bioguide_id -- no ICPSR crosswalk required.
+vv = pd.read_csv(VOTEVIEW_URL)
+senate = vv[(vv.congress == 119) & (vv.chamber == "Senate")]
+
+# Join to the CURRENT roster to resolve who actually holds a seat, on bioguide.
+roster = pd.read_csv(ROSTER_URL)           # unitedstates.github.io, not theunitedstates.io
+merged = senate.merge(roster, on="bioguide_id", how="inner")
+
+assert len(merged) == 100, f"expected 100 seated senators, got {len(merged)}"
+```
+
+The assertion matters more than the join. Without it this class of bug is silent.
+
+## B. The crosswalk URL is dead
+
+`https://theunitedstates.io/...` resolves and accepts a TCP connection on 443
+but fails the TLS handshake, so the fetch never completes. Use
+`https://unitedstates.github.io/congress-legislators/legislators-current.csv`.
+
+## C. `nominate_dim1` cannot do what Phase 2 asks of it
+
+### As written
+
+> Because DW-NOMINATE scores shift slightly over the course of a congressional
+> session as new votes are cast, your database insertion must use an UPSERT
+
+The UPSERT advice is correct. The column choice contradicts it:
+`nominate_dim1` is a **single career-long constant per member**. Murkowski is
+0.204 across all twelve of her Congresses; Crapo 0.505 across ten. Nothing to
+upsert, and no time series is possible.
+
+### Replacement
+
+Store `nokken_poole_dim1`, which is re-estimated per Congress and does move
+(Murkowski 0.124 to 0.299). Keep `nominate_dim1` in a separate column as the
+lifetime summary. Note in the schema that per-Congress estimates are not strictly
+comparable across Congresses.
+
+Also: Phase 2 extracts `nominate_dim2` but nothing in Phases 2-3 uses it, and the
+second dimension is weakly identified in the modern Senate. Store it if you like,
+but do not build a metric on it without checking it is doing real work.
+
+## D. Section 3.3's worked example is wrong in both magnitude and direction
+
+### As written
+
+> Practical Example: If the Senate Chamber Median evaluates to 0.05 [...] and the
+> Judiciary Committee Median evaluates to 0.35 [...] the calculation is
+> 0.35 - 0.05 = +0.30.
+>
+> "This committee leans significantly further right than the overall Senate,
+> acting as a highly conservative gatekeeper for judicial legislation."
+
+### Actual values, 119th Congress
+
+| quantity | document | actual |
+|---|---|---|
+| chamber median | 0.05 | **+0.310** |
+| Judiciary median | 0.35 | **+0.361** |
+| CCD | +0.30 | **+0.051** |
+
+The real drift is one sixth of the example's, below any sensible noise floor. The
+hard-coded warning string would fire on a committee that is statistically
+indistinguishable from the chamber — and Judiciary's members' states lean 3.14
+points *less* Republican than the average Senate seat, so the "conservative
+gatekeeper" reading is backwards on the other measure too.
+
+Replace the example with a committee the data supports, and derive the warning
+from a threshold rather than hard-coding its text. See correction 1 above.
+
+## E. The SQL needs two guards it does not have
+
+`PERCENTILE_CONT(0.5)` is the right function — it interpolates, so a 100-member
+chamber correctly yields the mean of the 50th and 51st. Two gaps remain:
+
+1. **`WHERE is_active = TRUE`** is the right instinct, but nothing in the
+   document says how `is_active` is maintained. This is the whole problem: a
+   `congress = 119` filter alone returns **104 rows for 100 seats**, because
+   departed members stay in the file beside their replacements (FL, OH, OK, SC).
+   All four surplus rows are Republicans, so a naive chamber median comes out
+   +0.364 instead of +0.310.
+
+2. **No phantom-median guard.** The committee query will happily return a median
+   for a 10-10 panel, where it falls between the party blocs and describes no
+   senator. Budget's median sits 0.333 from its nearest real member. Suppress the
+   figure when no member is near it.
