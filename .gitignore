@@ -9,3 +9,6 @@ data/raw/*
 !data/raw/PROVENANCE.tsv
 data/processed/*
 !data/processed/.gitkeep
+
+# editable-install build artifact
+*.egg-info/
