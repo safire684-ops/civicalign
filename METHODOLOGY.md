@@ -49,8 +49,8 @@ across all 100 senators, then read the **residual**: actual minus predicted. The
 fitted line says what ideology a state's election result typically produces; the
 residual says how far a senator sits from that expectation. Units are ideology
 units the whole way through -- the two scales are never subtracted, so they never
-have to match. On 2024 results the fit is r-squared **0.698**, so state election
-results explain about 70% of senator ideology, and a residual is deviation from a
+have to match. On 2024 results the fit is r-squared **0.687**, so state election
+results explain about 69% of senator ideology, and a residual is deviation from a
 strong pattern rather than from noise.
 
 *What it answers:* "Is this senator more extreme than their own state's election
@@ -63,8 +63,8 @@ senator changes no residual at all, which is pinned as a test. If the whole Sena
 moved right, this measure would not show it.
 
 **2. Election results on both sides.** Apportionment skew becomes the average
-state vote share per Senate seat minus the national vote share: **+2.66 points**
-in 2024. Each state gets two senators regardless of population, so small states
+state vote share per Senate seat minus the national vote share: **+3.37 points**
+averaged over 2016/2020/2024. Each state gets two senators regardless of population, so small states
 are over-weighted, and this measures exactly that. Vote share against vote share,
 identical units, no assumption whatsoever. It is a structural claim about seats,
 not a claim about senators' opinions.
@@ -73,13 +73,27 @@ The same method gives committees-vs-public. Report it **against the Senate's own
 average**, not just the nation: the gap against the nation mostly reflects the
 +2.66pt structural skew plus the fact that the majority party holds most seats on
 every committee, neither of which is about the committee. Against the Senate, the
-picture inverts for some -- Judiciary is +0.14 vs the nation but **-2.52 vs the
+picture inverts for some -- Judiciary is +0.23 vs the nation but **-3.14 vs the
 Senate**.
 
-Limits of using presidential vote share as the state measure: it is a single
-election, it is partisan choice rather than policy preference, and a two-party
-share discards third-party votes. It is a measure of what voters *did*, not of
-what they *think*.
+State lean is the average two-party presidential share over 2016, 2020 and 2024,
+each election weighted equally, as partisan-lean indices such as Cook PVI do.
+Three cycles is steadier than one but slower to reflect a state that is genuinely
+moving, so `StateLean.swing` reports the spread between a state's most and least
+Republican year -- Florida moved 6.0 points across the three, California 5.7. A
+large swing means the average is hiding real movement and the residual built on
+it deserves less weight.
+
+Source: MIT Election Data and Science Lab, U.S. President 1976-2024, Harvard
+Dataverse doi:10.7910/DVN/42MVDX. Chosen after rejecting a county-level
+alternative whose 2016 file understated California's Democratic vote by 1.4
+million. Votes are summed per candidate across every party line, because fusion
+voting puts one candidate on several lines and summing by party instead loses
+~292k Trump votes in 2016.
+
+Remaining limits of vote share as the state measure: it is partisan choice rather
+than policy preference, and a two-party share discards third-party votes. It
+measures what voters *did*, not what they *think*.
 
 ## The survey-bridging problem (why absolute distances are still not live)
 
@@ -163,9 +177,10 @@ majority control; `majority_median` is reported alongside to separate the two.
 
 **The whitepaper's Judiciary example does not hold.** Part 7 claims the Judiciary
 Committee is "significantly more partisan than the Senate as a whole." Its CCD is
-**+0.051**, below the noise floor and indistinguishable from the chamber.
-Environment and Appropriations are six times more drifted. Fix the example before
-publishing.
+**+0.051**, below the noise floor, and its members' states lean **3.14 points
+less** Republican than the average Senate seat -- the opposite direction from the
+claim. See `WHITEPAPER_CORRECTIONS.md` for replacement text, along with three
+other claims the data contradicts.
 
 ## Not yet implemented
 

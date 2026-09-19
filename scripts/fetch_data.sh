@@ -21,6 +21,11 @@ fetch () {
 
 fetch "https://voteview.com/static/data/out/members/HSall_members.csv" \
       "HSall_members.csv"
+# MIT Election Data and Science Lab, U.S. President 1976-2024.
+# doi:10.7910/DVN/42MVDX. Reproduces official national totals to within a few
+# dozen votes; a county-level alternative understated CA 2016 Democrats by 1.4M.
+fetch "https://dataverse.harvard.edu/api/access/datafile/13887042" \
+      "mit_president_1976_2024.csv"
 fetch "https://unitedstates.github.io/congress-legislators/legislators-current.json" \
       "legislators-current.json"
 fetch "https://unitedstates.github.io/congress-legislators/committee-membership-current.json" \

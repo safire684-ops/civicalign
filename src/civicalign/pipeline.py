@@ -43,7 +43,7 @@ def run(cfg: Config = DEFAULT) -> Report:
 
     ch = chamber_stats(scores, roster, majority, cfg.cloture_threshold, national)
 
-    lean = elections.load_county_results(cfg.elections_csv, cfg.election_year)
+    lean = elections.load_mit_president(cfg.elections_csv, cfg.election_years)
     fit, reps = representations(scores, roster, lean)
     chlean = chamber_lean(scores, roster, lean)
 

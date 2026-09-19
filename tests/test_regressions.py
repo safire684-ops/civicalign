@@ -85,3 +85,30 @@ def test_seat_guard_rejects_a_crowded_state():
         fake[key] = rosters.Senator(key, f"Phantom {i}", victim.state, "Republican")
     with pytest.raises(voteview.SeatCountError):
         voteview._validate({k: 0.1 for k in fake}, fake)
+
+
+def test_phantom_medians_are_suppressed():
+    """BUG 3: on an evenly split committee the median describes no member.
+
+    Budget is 10-10 and its median sits 0.333 from the nearest real senator --
+    a third of the way across the usable scale. Evenly split committees also
+    produce the LARGEST apparent drift, so without this check the least
+    meaningful findings would rank highest.
+    """
+    from civicalign.pipeline import run
+
+    r = run(DEFAULT)
+    phantoms = [c for c in r.committees if c.median_is_phantom]
+    assert phantoms, "expected at least one evenly split committee"
+
+    # every phantom must be excluded from findings
+    assert all(c.is_noise for c in phantoms)
+
+    # and the effect must be real: phantoms are the evenly split ones
+    for c in phantoms:
+        assert c.is_evenly_split or c.median_gap_to_nearest_member > 0.05
+
+    budget = next(c for c in r.committees if c.code == "SSBU")
+    assert budget.n_majority == budget.n_minority
+    assert budget.median_gap_to_nearest_member > 0.2
+    assert budget.is_noise

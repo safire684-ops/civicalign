@@ -32,7 +32,7 @@ def main() -> int:
     print(f"  minority median               {ch.minority_median:+.4f}")
     print(f"  party gap (polarization)       {ch.party_gap:.4f}")
     cl = r.chamber_lean
-    print(f"\n  apportionment skew, measured in {r.election.year} vote share")
+    print(f"\n  apportionment skew, measured in {r.election.label} avg vote share")
     print(f"  (both sides are election results, so no scale bridging is involved):")
     print(f"    avg state vote share per Senate seat   {cl.senate_lean * 100:6.2f}%")
     print(f"    national vote share                    {cl.national_lean * 100:6.2f}%")
@@ -43,22 +43,34 @@ def main() -> int:
         print("  (the ideology-units version still needs bridged survey data)")
 
     print("\n-- Section 5 / Pillar 6: committee drift ----------------------")
-    print(f"  {'cmte':5s} {'name':22s} {'n':>3s} {'median':>7s} {'CCD':>7s} "
-          f"{'chair':>7s} {'ch-cm':>7s} {'spread':>6s}")
+    print(f"  {'cmte':5s} {'name':22s} {'split':>6s} {'median':>7s} {'CCD':>7s} "
+          f"{'chair':>7s} {'ch-maj':>7s} {'verdict':<14s}")
     for cs in r.committees:
-        flag = "  (noise)" if cs.is_noise else ""
         chair = f"{cs.chair_coord:+.3f}" if cs.chair_coord is not None else "    n/a"
-        cvc = f"{cs.chair_vs_committee:+.3f}" if cs.chair_vs_committee is not None else "    n/a"
-        print(f"  {cs.code:5s} {COMMITTEE_NAMES.get(cs.code, '?'):22s} {cs.n_scored:3d} "
-              f"{cs.median:+7.3f} {cs.ccd:+7.3f} {chair:>7s} {cvc:>7s} {cs.spread:6.2f}{flag}")
+        cvm = (f"{cs.chair_coord - cs.majority_median:+.3f}"
+               if cs.chair_coord is not None and cs.majority_median is not None else "    n/a")
+        if cs.median_is_phantom:
+            verdict = f"PHANTOM {cs.median_gap_to_nearest_member:.2f}"
+        elif cs.is_noise:
+            verdict = "below floor"
+        else:
+            verdict = "usable"
+        print(f"  {cs.code:5s} {COMMITTEE_NAMES.get(cs.code, '?'):22s} "
+              f"{cs.n_majority:2d}/{cs.n_minority:<3d} "
+              f"{cs.median:+7.3f} {cs.ccd:+7.3f} {chair:>7s} {cvm:>7s} {verdict:<14s}")
 
-    n_noise = sum(1 for cs in r.committees if cs.is_noise)
-    print(f"  {n_noise} of {len(r.committees)} committees have CCD below the "
-          f"{c.ccd_noise_floor} noise floor -- not findings.")
+    usable = [cs for cs in r.committees if not cs.is_noise]
+    print(f"\n  Only {len(usable)} of {len(r.committees)} committees have a usable CCD.")
+    print("  PHANTOM = the median falls between the party blocs, where no senator")
+    print("  sits; the number shown is its distance to the nearest real member.")
+    print("  Evenly split committees produce the LARGEST apparent drift, so this")
+    print("  check is what stops the least meaningful findings ranking highest.")
+    print("  'ch-maj' = chair minus their own majority-party median on that panel,")
+    print("  which is a real position and the strongest gatekeeping signal here.")
 
     print("\n-- Section 3 / Pillar 4: senator vs. their state --------------")
     f = r.fit
-    print(f"  fitted on {f.year_note if hasattr(f, 'year_note') else r.election.year} results:"
+    print(f"  fitted on {r.election.label} average results:"
           f"  ideology = {f.intercept:+.3f} {f.slope:+.3f} x state_vote_share")
     print(f"  r-squared {f.r_squared:.3f} over n={f.n}  "
           f"-- state election results explain {f.r_squared * 100:.0f}% of senator ideology")

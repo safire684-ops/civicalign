@@ -16,21 +16,44 @@ def report():
     return run(DEFAULT)
 
 
-def test_national_share_matches_a_known_result(report):
-    """2024 two-party presidential share should land near 50.8% GOP.
+# Official two-party GOP shares, for validating the aggregation end to end.
+# Fusion voting and DC's mislabelled 2020 writein flag both break naive sums, so
+# these are pinned rather than trusted.
+OFFICIAL_TWO_PARTY = {2016: 0.4889, 2020: 0.4773, 2024: 0.5075}
 
-    A wide band, because this guards against a broken aggregation (a dropped
-    state, double-counted counties), not against a small data revision.
-    """
-    share = report.election.national_gop_two_party
-    assert 0.495 < share < 0.520
+
+@pytest.mark.parametrize("year", [2016, 2020, 2024])
+def test_each_year_reproduces_the_official_national_result(report, year):
+    got = report.election.national_by_year[year]
+    assert got == pytest.approx(OFFICIAL_TWO_PARTY[year], abs=0.002)
+
+
+def test_three_year_average_is_the_mean_of_the_three(report):
+    e = report.election
+    expected = sum(e.national_by_year[y] for y in e.years) / len(e.years)
+    assert e.national_gop_two_party == pytest.approx(expected)
+
+
+def test_every_state_has_all_three_elections(report):
+    """States missing a year are dropped, so the average is over a consistent
+    set rather than silently mixing 2-year and 3-year means."""
+    for sl in report.election.states.values():
+        assert set(sl.by_year) == set(report.election.years)
 
 
 def test_all_fifty_states_present(report):
-    """DC aggregates but has no senators, so 50 states must carry a lean."""
+    """Every state with senators must carry a lean. DC has none, so 50."""
     senate_states = {s.state for s in report.senators.values()}
     assert len(senate_states) == 50
     assert all(report.election.lean(st) is not None for st in senate_states)
+
+
+def test_swing_flags_states_the_average_hides(report):
+    """A state that moved a lot across three cycles is less well described by its
+    average, so the swing must be exposed rather than smoothed away."""
+    fl = report.election.state_lean("FL")
+    assert fl is not None
+    assert fl.swing > 0.03  # Florida moved ~6 points across 2016-2024
 
 
 def test_apportionment_skew_is_positive_and_modest(report):
@@ -79,15 +102,14 @@ def test_residual_is_relative_not_absolute():
         "B": Senator("B", "B", "CA", "Democrat"),
         "C": Senator("C", "C", "OH", "Republican"),
     }
+    def sl(usps, share):
+        return elections.StateLean(usps, share, {2016: share, 2020: share, 2024: share})
+
     lean = elections.ElectionLean(
-        year=2024,
-        states={
-            "WY": elections.StateLean("WY", 0.73, 100),
-            "CA": elections.StateLean("CA", 0.40, 100),
-            "OH": elections.StateLean("OH", 0.56, 100),
-        },
-        national_gop_two_party=0.507,
-        national_total_votes=300,
+        years=(2016, 2020, 2024),
+        states={"WY": sl("WY", 0.73), "CA": sl("CA", 0.40), "OH": sl("OH", 0.56)},
+        national_gop_two_party=0.4915,
+        national_by_year={2016: 0.4889, 2020: 0.4773, 2024: 0.5075},
     )
     base = {"A": 0.6, "B": -0.4, "C": 0.2}
     shifted = {k: v + 0.25 for k, v in base.items()}

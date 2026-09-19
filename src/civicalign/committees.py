@@ -12,7 +12,16 @@ class CommitteeStats:
     n_members: int
     median: float
 
-    ccd: float          # committee median - chamber median
+    # committee median - chamber median.
+    #
+    # READ WITH CARE. On an evenly split committee this number is largely an
+    # artifact: the median lands between the party blocs, so it moves with the
+    # seat ratio rather than with anyone's politics. In the 119th the four
+    # committees with the largest CCD -- Environment, Appropriations, Budget,
+    # Ethics -- are all evenly split, and each one's median sits 0.17 to 0.33
+    # away from the nearest real senator. Those are the committees where CCD
+    # means least, not most. `is_noise` now catches this.
+    ccd: float
     cnd: float | None   # committee median - national median (needs bridging)
 
     # The chair, not the median, is the gatekeeper: the chair decides what gets a
@@ -31,6 +40,31 @@ class CommitteeStats:
 
     noise_floor: float
 
+    # Party composition. On an evenly split committee the median falls in the
+    # empty space BETWEEN the two party clusters, where no senator actually sits.
+    n_majority: int
+    n_minority: int
+    nearest_member: float
+
+    @property
+    def median_gap_to_nearest_member(self) -> float:
+        """How far the median sits from the closest real senator.
+
+        Large values mean the median is an artifact of the party split rather
+        than anyone's position. On a 10-10 committee it can exceed 0.3 -- a third
+        of the way across the usable space -- while describing nobody.
+        """
+        return abs(self.nearest_member - self.median)
+
+    @property
+    def median_is_phantom(self) -> bool:
+        """True when no member sits near the median, so it describes no one."""
+        return self.median_gap_to_nearest_member > 0.05
+
+    @property
+    def is_evenly_split(self) -> bool:
+        return abs(self.n_majority - self.n_minority) <= 1
+
     @property
     def is_noise(self) -> bool:
         """CCD below the floor is not a finding.
@@ -40,7 +74,7 @@ class CommitteeStats:
         score, so the metric is quantized -- identical CCDs recur across
         unrelated committees purely as an artifact.
         """
-        return abs(self.ccd) < self.noise_floor
+        return abs(self.ccd) < self.noise_floor or self.median_is_phantom
 
     @property
     def chair_vs_committee(self) -> float | None:
@@ -65,6 +99,7 @@ def committee_stats(
         return None  # too small for a median to mean anything
 
     cm = median(coords)
+    nearest = min(coords, key=lambda v: abs(v - cm))
     chair = find_chair(members)
     chair_coord = scores.get(chair.bioguide) if chair else None
 
@@ -72,6 +107,7 @@ def committee_stats(
         scores[m.bioguide] for m in members
         if m.bioguide in scores and roster[m.bioguide].party == majority
     ]
+    n_maj = len(maj)
 
     return CommitteeStats(
         code=code,
@@ -85,4 +121,7 @@ def committee_stats(
         spread=max(coords) - min(coords),
         coords=tuple(sorted(coords)),
         noise_floor=noise_floor,
+        n_majority=n_maj,
+        n_minority=len(coords) - n_maj,
+        nearest_member=nearest,
     )

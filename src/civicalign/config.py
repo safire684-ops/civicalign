@@ -43,7 +43,11 @@ class Config:
     # State partisan lean from real election results. This is what makes Pillar 4
     # work WITHOUT bridged survey data: see representation.py. Election results are
     # public behaviour measured directly, so no scaling assumption is needed.
-    election_year: int = 2024
+    # Averaged over three presidential cycles, each weighted equally. One
+    # election is noisier and over-reacts to a single candidate; three is steadier
+    # but slower to reflect a state that is genuinely shifting. StateLean.swing
+    # exposes how much movement the average is hiding for each state.
+    election_years: tuple[int, ...] = (2016, 2020, 2024)
 
     # Where state median-voter coordinates come from. See sources/state_prefs.py.
     #   "unavailable" -> Pillar 4 refuses to compute (honest default)
@@ -62,7 +66,7 @@ class Config:
 
     @property
     def elections_csv(self) -> Path:
-        return self.raw_dir / "2024_county_pres.csv"
+        return self.raw_dir / "mit_president_1976_2024.csv"
 
     @property
     def members_csv(self) -> Path:

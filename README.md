@@ -52,13 +52,13 @@ src/civicalign/
 - Everything senator-to-senator: committee drift, chamber median, cloture pivot,
   party medians. One ruler, no bridging needed.
 - **Pillar 4**, via regression on real election results. Fit senator ideology
-  against their state's presidential vote share and read the residual. This never
-  subtracts the two scales, so their units never have to match. State results
-  explain **70%** of senator ideology, so the residual is deviation from a strong
-  pattern.
+  against their state's presidential vote share (averaged over 2016/2020/2024)
+  and read the residual. This never subtracts the two scales, so their units
+  never have to match. State results explain **69%** of senator ideology, so the
+  residual is deviation from a strong pattern.
 - **Pillar 5's apportionment skew**, in vote-share units: the average state vote
   share per Senate seat vs. the national vote share. Election results on both
-  sides, so again no bridging. **+2.66 points.**
+  sides, so again no bridging. **+3.37 points.**
 - **Committees vs. the public**, same way, reported both against the nation and
   against the Senate's own average (which strips out the structural skew and
   majority control, leaving the committee-specific part).
@@ -91,8 +91,8 @@ selects. Trade-off documented there.
 ## Current numbers (119th Congress)
 
 ```
-apportionment skew             +2.66 points  (Senate seats vs. national vote)
-state results explain           70%  of senator ideology (r-squared 0.698)
+apportionment skew             +3.37 points  (Senate seats vs. national vote)
+state results explain           69%  of senator ideology (r-squared 0.687)
 
 chamber median                 +0.3100
 60th-vote pivot (cloture)      +0.4400   (+0.130 vs median)
