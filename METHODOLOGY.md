@@ -30,7 +30,58 @@ Two limits:
 The alternative, `nominate_dim1`, is a career-long constant and cannot support
 any claim about change over time. See `config.py`.
 
-## The bridging problem (why Pillar 4 is not live)
+## Pillar 4 without a shared ruler
+
+Voteview publishes four datasets -- Member Ideology, Congressional Votes,
+Members' Votes, Congressional Parties -- and all four are roll calls and the
+people who cast them. Its scores update live as new votes are recorded, which is
+genuinely useful, but no version of them contains a position for the public. So
+senator-vs-public cannot be a subtraction inside that data.
+
+It does not have to be a subtraction. Two comparisons work with no shared scale
+at all:
+
+**1. Regression, not subtraction.** Fit
+
+    senator ideology = a + b x (state presidential vote share)
+
+across all 100 senators, then read the **residual**: actual minus predicted. The
+fitted line says what ideology a state's election result typically produces; the
+residual says how far a senator sits from that expectation. Units are ideology
+units the whole way through -- the two scales are never subtracted, so they never
+have to match. On 2024 results the fit is r-squared **0.698**, so state election
+results explain about 70% of senator ideology, and a residual is deviation from a
+strong pattern rather than from noise.
+
+*What it answers:* "Is this senator more extreme than their own state's election
+result predicts, compared with how every other senator relates to theirs?"
+
+*What it does not answer:* "How far is this senator from their state's median
+voter?" That is an absolute distance and still needs bridged survey data. The
+residual is **relative to the Senate-wide pattern** -- a uniform shift of every
+senator changes no residual at all, which is pinned as a test. If the whole Senate
+moved right, this measure would not show it.
+
+**2. Election results on both sides.** Apportionment skew becomes the average
+state vote share per Senate seat minus the national vote share: **+2.66 points**
+in 2024. Each state gets two senators regardless of population, so small states
+are over-weighted, and this measures exactly that. Vote share against vote share,
+identical units, no assumption whatsoever. It is a structural claim about seats,
+not a claim about senators' opinions.
+
+The same method gives committees-vs-public. Report it **against the Senate's own
+average**, not just the nation: the gap against the nation mostly reflects the
++2.66pt structural skew plus the fact that the majority party holds most seats on
+every committee, neither of which is about the committee. Against the Senate, the
+picture inverts for some -- Judiciary is +0.14 vs the nation but **-2.52 vs the
+Senate**.
+
+Limits of using presidential vote share as the state measure: it is a single
+election, it is partisan choice rather than policy preference, and a two-party
+share discards third-party votes. It is a measure of what voters *did*, not of
+what they *think*.
+
+## The survey-bridging problem (why absolute distances are still not live)
 
 DW-NOMINATE places senators using how they vote on bills. Surveys place voters
 using what they tell a pollster. Two rulers, two zero points. Subtracting one from
@@ -54,8 +105,10 @@ Bridging requires something present in both datasets. Three options, in
   distances are not real distances. If it reaches the frontend, the frontend must
   say so.
 
-Until one is configured, the pipeline prints `UNAVAILABLE`. A missing dataset
-should be a visible gap in the product, not a plausible-looking number.
+Until one is configured, the pipeline prints `NOT AVAILABLE` for absolute
+distances specifically. A missing dataset should be a visible gap in the product,
+not a plausible-looking number. Note this now blocks only the absolute-distance
+metric -- the regression route above is live and needs none of it.
 
 ## Definitional choices that move the headline
 

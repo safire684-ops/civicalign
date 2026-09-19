@@ -2,10 +2,12 @@
 from dataclasses import dataclass
 
 from .config import Config, DEFAULT
-from .sources import rosters, state_prefs, voteview
+from .sources import elections, rosters, state_prefs, voteview
 from .alignment import Alignment, alignment, rank_all
 from .chamber import ChamberStats, chamber_stats
 from .committees import CommitteeStats, committee_stats
+from .representation import (ChamberLean, CommitteeLean, Fit, Representation,
+                             chamber_lean, committee_lean, representations)
 
 
 @dataclass
@@ -18,6 +20,13 @@ class Report:
     committees: list[CommitteeStats]
     alignments: list[Alignment]
     state_source: state_prefs.StateCoordinateSource
+
+    # Pillar 4 via regression on real election results -- no bridging required.
+    election: elections.ElectionLean
+    fit: Fit
+    chamber_lean: ChamberLean
+    representation: list[Representation]
+    committee_leans: list[CommitteeLean]
 
     @property
     def pillar4_available(self) -> bool:
@@ -34,8 +43,17 @@ def run(cfg: Config = DEFAULT) -> Report:
 
     ch = chamber_stats(scores, roster, majority, cfg.cloture_threshold, national)
 
-    committees = []
-    for code, members in rosters.load_senate_committees(cfg.committees_json).items():
+    lean = elections.load_county_results(cfg.elections_csv, cfg.election_year)
+    fit, reps = representations(scores, roster, lean)
+    chlean = chamber_lean(scores, roster, lean)
+
+    committees, cleans = [], []
+    cmte_rosters = rosters.load_senate_committees(cfg.committees_json)
+    for code, members in cmte_rosters.items():
+        cl = committee_lean(code, members, scores, roster, lean, chlean.senate_lean)
+        if cl:
+            cleans.append(cl)
+    for code, members in cmte_rosters.items():
         cs = committee_stats(
             code, members, scores, roster, ch.median, majority,
             national_coord=national, noise_floor=cfg.ccd_noise_floor,
@@ -43,6 +61,7 @@ def run(cfg: Config = DEFAULT) -> Report:
         if cs:
             committees.append(cs)
     committees.sort(key=lambda c: -abs(c.ccd))
+    cleans.sort(key=lambda c: -abs(c.gap))
 
     aligns = rank_all([
         alignment(b, roster[b].name, roster[b].state, v, src.state(roster[b].state))
@@ -53,4 +72,6 @@ def run(cfg: Config = DEFAULT) -> Report:
         config=cfg, senators=roster, scores=scores,
         unscored=voteview.unscored(roster, scores),
         chamber=ch, committees=committees, alignments=aligns, state_source=src,
+        election=lean, fit=fit, chamber_lean=chlean, representation=reps,
+        committee_leans=cleans,
     )

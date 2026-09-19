@@ -40,6 +40,11 @@ class Config:
     # Options: "adult_citizens" | "registered_voters" | "actual_voters"
     electorate: str = "adult_citizens"
 
+    # State partisan lean from real election results. This is what makes Pillar 4
+    # work WITHOUT bridged survey data: see representation.py. Election results are
+    # public behaviour measured directly, so no scaling assumption is needed.
+    election_year: int = 2024
+
     # Where state median-voter coordinates come from. See sources/state_prefs.py.
     #   "unavailable" -> Pillar 4 refuses to compute (honest default)
     #   "tausanovitch_warshaw" -> published bridged MRP estimates (Option A)
@@ -54,6 +59,10 @@ class Config:
 
     raw_dir: Path = field(default=RAW)
     processed_dir: Path = field(default=PROCESSED)
+
+    @property
+    def elections_csv(self) -> Path:
+        return self.raw_dir / "2024_county_pres.csv"
 
     @property
     def members_csv(self) -> Path:

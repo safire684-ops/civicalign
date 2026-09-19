@@ -1,10 +1,6 @@
 """Unit tests for the arithmetic of Sections 3-5, independent of real data."""
-import sys
-from pathlib import Path
-
 import pytest
 
-sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
 from civicalign.alignment import alignment, rank_all
 from civicalign.space import MAX_DISTANCE, nth_from_left

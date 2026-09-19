@@ -4,11 +4,6 @@ Both were found in real 119th Congress data. Neither raises an error on its own;
 both just produce confident wrong numbers. Hence tests.
 """
 import csv
-import sys
-from pathlib import Path
-
-sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
-
 import pytest
 
 from civicalign.config import DEFAULT

@@ -6,12 +6,22 @@ This repo implements **Sections 2–5** of the math spec (Pillars 4, 5 and 6).
 ## Quick start
 
 ```bash
-python3 -m venv .venv
-./.venv/bin/pip install -e '.[dev]'
-./scripts/fetch_data.sh          # ~8 MB, stamps data/raw/PROVENANCE.tsv
-./.venv/bin/python -m civicalign # prints the full report
-./.venv/bin/python -m pytest -q  # 11 tests
+./scripts/fetch_data.sh    # ~9 MB of source data, stamps data/raw/PROVENANCE.tsv
+./scripts/report.sh        # prints the full report
 ```
+
+No install and no venv needed for the report -- the package is stdlib-only, and
+`report.sh` just sets `PYTHONPATH=src`. For the tests:
+
+```bash
+python3 -m venv .venv && ./.venv/bin/pip install pytest
+./.venv/bin/python -m pytest -q          # 19 tests
+```
+
+`conftest.py` puts `src/` on the path, so tests need no install either. (An
+editable install via `pip install -e .` also works but proved flaky on Python
+3.14 here -- if `import civicalign` ever fails, rerun the install or just use
+`PYTHONPATH=src`.)
 
 No third-party runtime dependencies — stdlib `csv`, `json`, `statistics` only.
 That is deliberate: the whole point of this repo is numbers people can check, and
@@ -37,15 +47,27 @@ src/civicalign/
 
 ## What works today, and what does not
 
-**Working, on real 119th Congress data.** Everything senator-to-senator: committee
-drift, chamber median, cloture pivot, party medians. These live on one ruler and
-need no bridging.
+**Working, on real 119th Congress data.**
 
-**Blocked.** Pillar 4 entirely, and the national half of Pillar 5. Both need state
-and national median-voter coordinates in the same space as senator scores. The
-default source refuses to produce a number rather than inventing one, so the CLI
-prints `UNAVAILABLE` instead of something plausible and wrong. See
-`sources/state_prefs.py` for the three options and the recommendation.
+- Everything senator-to-senator: committee drift, chamber median, cloture pivot,
+  party medians. One ruler, no bridging needed.
+- **Pillar 4**, via regression on real election results. Fit senator ideology
+  against their state's presidential vote share and read the residual. This never
+  subtracts the two scales, so their units never have to match. State results
+  explain **70%** of senator ideology, so the residual is deviation from a strong
+  pattern.
+- **Pillar 5's apportionment skew**, in vote-share units: the average state vote
+  share per Senate seat vs. the national vote share. Election results on both
+  sides, so again no bridging. **+2.66 points.**
+- **Committees vs. the public**, same way, reported both against the nation and
+  against the Senate's own average (which strips out the structural skew and
+  majority control, leaving the committee-specific part).
+
+**Still unavailable: absolute distance to the median voter.** The regression
+answers "is this senator more extreme than their state's own result predicts?"
+It cannot answer "how far is this senator from their state's median voter?" --
+that is an absolute distance and does need bridged survey data. See
+`sources/state_prefs.py` and METHODOLOGY.md.
 
 ## Two bugs this repo is built to prevent
 
@@ -69,6 +91,9 @@ selects. Trade-off documented there.
 ## Current numbers (119th Congress)
 
 ```
+apportionment skew             +2.66 points  (Senate seats vs. national vote)
+state results explain           70%  of senator ideology (r-squared 0.698)
+
 chamber median                 +0.3100
 60th-vote pivot (cloture)      +0.4400   (+0.130 vs median)
 majority (R) median            +0.5640
@@ -87,6 +112,16 @@ Most-drifted committees, `CCD = committee median − chamber median`:
 | Budget | 20 | +0.128 | −0.182 | **+0.897** | **+0.769** |
 | Commerce | 28 | +0.326 | +0.016 | **+0.865** | **+0.539** |
 | Judiciary | 21 | +0.361 | +0.051 | +0.461 | +0.100 |
+
+Most out of step with their own state (residual from the fitted line):
+
+| senator | state | state vote | ideology | predicted | residual |
+|---|---|---|---|---|---|
+| Ron Johnson | WI | 50.4% | +0.897 | −0.003 | **+0.900** |
+| Rick Scott | FL | 56.6% | +0.926 | +0.254 | +0.672 |
+| Ted Budd | NC | 51.6% | +0.693 | +0.046 | +0.647 |
+| Jon Ossoff | GA | 51.1% | −0.547 | +0.025 | −0.572 |
+| Shelley Moore Capito | WV | 71.3% | +0.412 | +0.869 | −0.457 |
 
 See `METHODOLOGY.md` for what these do and do not support — including the
 whitepaper claim about Judiciary that this data does not back.
