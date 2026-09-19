@@ -1,0 +1,20 @@
+[project]
+name = "civicalign"
+version = "0.1.0"
+description = "Deterministic metrics for legislative accountability and institutional drift"
+requires-python = ">=3.11"
+dependencies = []          # stdlib only by design -- see README
+[project.optional-dependencies]
+dev = ["pytest>=8.0"]
+[project.scripts]
+civicalign = "civicalign.cli:main"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

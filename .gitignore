@@ -1,0 +1,11 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Raw source data is large (6 MB+) and re-fetchable via scripts/fetch_data.sh.
+# PROVENANCE.tsv is tracked so a past run's exact inputs stay identifiable.
+data/raw/*
+!data/raw/PROVENANCE.tsv
+data/processed/*
+!data/processed/.gitkeep
