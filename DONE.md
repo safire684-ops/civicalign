@@ -26,10 +26,20 @@ a real and citable thing on its own, and it is most of the way built.
 | A3 | No figure is published that fails its own validity check | **done** (noise floor, phantom-median, seat-count guards) |
 | A4 | Every known limit is written down publicly, not buried | **done** (`METHODOLOGY.md`) |
 | A5 | Every headline number carries an uncertainty range | **done** — and it changed the conclusions |
-| A6 | The public write-up says what the code says | **NOT DONE** — corrections written, not applied |
+| A6 | The public write-up says what the code says | **done** — `WHITEPAPER.md`, figures enforced by tests |
 | A7 | Someone who disagrees can find the exact line that produced a number | **done** (module per spec section) |
 
-**Remaining work: A6 alone. About an hour.**
+**All seven criteria met.** The measurement layer is finished.
+
+The write-up lives in `WHITEPAPER.md`, in this repo, next to the code that
+produces its figures. `tests/test_whitepaper.py` asserts that every number quoted
+in it matches the pipeline — including the named senators and their individual
+figures, which is the highest-risk content in the document. Change a figure in the
+prose, or refresh the data under it, and a test fails and names what to update.
+
+That mechanism is the point. Three specification documents were written before
+this repo existed and every illustrative number in all three was wrong. The fix is
+not more careful writing.
 
 A5 did exactly what it was supposed to do — it removed findings rather than
 decorating them:
@@ -46,9 +56,10 @@ decorating them:
   is a finding in itself.
 * **The regression held.** Slope 95% CI [+3.47, +4.54], nowhere near zero.
 
-A6 is an hour of pasting from `WHITEPAPER_CORRECTIONS.md`, and it is the only
-item with an external deadline, because the current write-up makes claims the data
-contradicts.
+The Gemini specification documents are now superseded for sections 2–5.
+`WHITEPAPER_CORRECTIONS.md` remains as the record of what was wrong in them and
+why, which is worth keeping for whoever owns Pillars 1–3 and 7, since the same
+mistakes appear in the parts of those documents covering their work.
 
 ### How you know you are done
 
@@ -56,6 +67,10 @@ Hand the repo to someone who wants to prove you wrong. If their objections are
 all about *what you chose to measure* rather than *whether your numbers are
 right*, you are done. Disagreement about method is a healthy end state.
 Disagreement about arithmetic is not.
+
+By that test this scope is finished. What remains is other people's work, and
+maintenance: re-run `fetch_data.sh`, and if a test fails, the data moved and the
+prose needs the new number.
 
 ---
 
