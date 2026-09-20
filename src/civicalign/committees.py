@@ -3,6 +3,7 @@ from dataclasses import dataclass
 
 from .space import median
 from .sources.rosters import CommitteeMember, Senator, find_chair
+from .uncertainty import MedianStability, median_stability
 
 
 @dataclass(frozen=True)
@@ -46,6 +47,11 @@ class CommitteeStats:
     n_minority: int
     nearest_member: float
 
+    # Would this finding survive one retirement? A jackknife answers that; a
+    # bootstrap would imply members were sampled from a population, when in fact
+    # they were appointed.
+    stability: MedianStability
+
     @property
     def median_gap_to_nearest_member(self) -> float:
         """How far the median sits from the closest real senator.
@@ -74,7 +80,9 @@ class CommitteeStats:
         score, so the metric is quantized -- identical CCDs recur across
         unrelated committees purely as an artifact.
         """
-        return abs(self.ccd) < self.noise_floor or self.median_is_phantom
+        return (abs(self.ccd) < self.noise_floor
+                or self.median_is_phantom
+                or self.stability.is_fragile)
 
     @property
     def chair_vs_committee(self) -> float | None:
@@ -124,4 +132,5 @@ def committee_stats(
         n_majority=n_maj,
         n_minority=len(coords) - n_maj,
         nearest_member=nearest,
+        stability=median_stability(coords),
     )

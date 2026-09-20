@@ -128,5 +128,11 @@ def test_committee_gap_vs_senate_removes_the_structural_skew(report):
 
 
 def test_fit_predict_is_consistent():
-    f = Fit(slope=2.0, intercept=-1.0, r_squared=0.9, n=10)
+    from civicalign.uncertainty import FitUncertainty
+
+    f = Fit(slope=2.0, intercept=-1.0, r_squared=0.9, n=10,
+            uncertainty=FitUncertainty(se_slope=0.1, se_intercept=0.05,
+                                       residual_se=0.2, n=10))
     assert f.predict(0.5) == pytest.approx(0.0)
+    lo, hi = f.slope_ci95
+    assert lo < 2.0 < hi

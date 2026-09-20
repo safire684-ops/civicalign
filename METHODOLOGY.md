@@ -182,11 +182,44 @@ less** Republican than the average Senate seat -- the opposite direction from th
 claim. See `WHITEPAPER_CORRECTIONS.md` for replacement text, along with three
 other claims the data contradicts.
 
-## Not yet implemented
+## Uncertainty
 
-- **Uncertainty.** Apportionment skew is a small difference between two noisy
-  estimates. Published as a bare number it will not survive review. Bootstrap the
-  medians, or carry posterior draws if Option B lands.
+Not everything here deserves an error bar, and bootstrapping indiscriminately
+would imply a kind of uncertainty these numbers do not have. All 100 senators are
+observed: the Senate is a census, not a sample. So each figure gets the treatment
+that fits it.
+
+**Chamber median — exact, and stable.** Given the scores there is no sampling
+error. What is worth reporting is how tightly it is pinned: the gap between the
+50th and 51st senators is 0.036, and no single departure moves it more than 0.018.
+Publishable.
+
+**Committee medians — not publishable.** A jackknife (drop one member, recompute)
+answers the question that matters: would this survive one retirement? For 17 of 19
+committees, no. Most medians move 0.2-0.34, larger than the CCD values themselves.
+The remaining two are stable but below the noise floor. A bootstrap was not used
+because it would imply members were sampled from a population; they were
+appointed.
+
+**The regression — genuine model uncertainty, computed analytically.** Slope
++4.007 with a 95% interval of [+3.472, +4.542], nowhere near zero. Residual
+standard error 0.285, so a residual needs to clear roughly 0.57 to mean anything.
+Residuals are leverage-corrected (studentized) because a raw residual is easier to
+produce by chance at the edges of the vote-share range, where the line is least
+constrained — otherwise senators from very safe states get flagged merely for
+sitting at the end of the scale. Only **6 of 100** senators clear |t| > 2.
+
+**Apportionment skew — a census of ballots, so almost no statistical error.** Its
+real sensitivity is which elections were included, reported as the spread across
+cycles: 2016 +4.08, 2020 +3.37, 2024 +2.66. The sign never reverses, so the
+finding holds. The monotonic decline is itself worth noting.
+
+**Not covered: score measurement error.** DW-NOMINATE and Nokken-Poole are
+estimates with their own standard errors, but Voteview does not publish per-member
+SEs in the member file, so this cannot be propagated. Stated rather than papered
+over. It is the one remaining gap in the uncertainty treatment.
+
+## Not yet implemented
 - **Roster edge cases.** Ex officio members are currently counted like any other;
   subcommittees are excluded by the four-character code filter. Both rules should
   be deliberate and documented rather than incidental.

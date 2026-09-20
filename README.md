@@ -91,8 +91,10 @@ selects. Trade-off documented there.
 ## Current numbers (119th Congress)
 
 ```
-apportionment skew             +3.37 points  (Senate seats vs. national vote)
+apportionment skew             +3.37 points  (range +2.66 to +4.08 across cycles)
 state results explain           69%  of senator ideology (r-squared 0.687)
+senators significantly off       6  of 100 (|t| > 2, leverage-corrected)
+committee CCDs publishable       0  of 19  -- see below
 
 chamber median                 +0.3100
 60th-vote pivot (cloture)      +0.4400   (+0.130 vs median)

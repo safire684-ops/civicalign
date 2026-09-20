@@ -36,7 +36,12 @@ def main() -> int:
     print(f"  (both sides are election results, so no scale bridging is involved):")
     print(f"    avg state vote share per Senate seat   {cl.senate_lean * 100:6.2f}%")
     print(f"    national vote share                    {cl.national_lean * 100:6.2f}%")
+    lo, hi = cl.skew_range_points
     print(f"    SKEW                                   {cl.skew_points:+6.2f} points")
+    print(f"    per-cycle range                        [{lo:+.2f}, {hi:+.2f}]  "
+          f"-- never crosses zero, so the sign holds")
+    print("    by cycle: " + "  ".join(
+        f"{y}:{v * 100:+.2f}" for y, v in sorted(cl.by_year.items())))
     if ch.apportionment_skew is not None:
         print(f"  apportionment skew in ideology units    {ch.apportionment_skew:+.4f}")
     else:
@@ -60,37 +65,62 @@ def main() -> int:
               f"{cs.median:+7.3f} {cs.ccd:+7.3f} {chair:>7s} {cvm:>7s} {verdict:<14s}")
 
     usable = [cs for cs in r.committees if not cs.is_noise]
-    print(f"\n  Only {len(usable)} of {len(r.committees)} committees have a usable CCD.")
-    print("  PHANTOM = the median falls between the party blocs, where no senator")
-    print("  sits; the number shown is its distance to the nearest real member.")
-    print("  Evenly split committees produce the LARGEST apparent drift, so this")
-    print("  check is what stops the least meaningful findings ranking highest.")
-    print("  'ch-maj' = chair minus their own majority-party median on that panel,")
-    print("  which is a real position and the strongest gatekeeping signal here.")
+    print(f"\n  *** {len(usable)} of {len(r.committees)} committee CCDs survive validation. ***")
+    frag = [cs for cs in r.committees if cs.stability.is_fragile or cs.median_is_phantom]
+    print(f"  {len(frag)} of {len(r.committees)} committee medians move more than 0.05 when one")
+    print("  member leaves -- most move 0.2 to 0.34, LARGER than the CCD values")
+    print("  themselves (0.01 to 0.31). With ~20 members split between two polarised")
+    print("  clusters the median sits on the party boundary, so dropping anyone near")
+    print("  it swings the result across the gap: CCD tracks the seat split, not")
+    print(f"  ideology. The other {len(r.committees) - len(frag)} have stable medians but a CCD too small")
+    print("  to clear the noise floor. Do not publish CCD. The measures below survive.")
+
+    print("\n-- What survives: chair position ------------------------------")
+    print("  A chair is one named person, so there is no median to destabilise.")
+    print("  Measured against their own majority-party median on that panel, which")
+    print("  isolates chair extremity from plain majority control.")
+    ch = [(cs.code, cs.chair_coord, cs.majority_median) for cs in r.committees
+          if cs.chair_coord is not None and cs.majority_median is not None]
+    for code, cc, mm in sorted(ch, key=lambda t: -(t[1] - t[2]))[:5]:
+        print(f"  {code:5s} {COMMITTEE_NAMES.get(code, '?'):22s} chair {cc:+.3f}  "
+              f"majority median {mm:+.3f}  gap {cc - mm:+.3f}")
 
     print("\n-- Section 3 / Pillar 4: senator vs. their state --------------")
     f = r.fit
     print(f"  fitted on {r.election.label} average results:"
           f"  ideology = {f.intercept:+.3f} {f.slope:+.3f} x state_vote_share")
+    lo, hi = f.slope_ci95
     print(f"  r-squared {f.r_squared:.3f} over n={f.n}  "
-          f"-- state election results explain {f.r_squared * 100:.0f}% of senator ideology")
+          f"-- state results explain {f.r_squared * 100:.0f}% of senator ideology")
+    print(f"  slope 95% CI [{lo:+.3f}, {hi:+.3f}]  (excludes zero)   "
+          f"residual SE {f.residual_se:.3f}")
     print("  residual = actual minus predicted. The two scales are never subtracted,")
     print("  so they never have to match. Positive = more conservative than the")
     print("  state's own election result predicts.")
-    print(f"\n  {'':4s} {'senator':24s} {'st':2s} {'state%':>7s} {'ideol':>7s} {'pred':>7s} {'resid':>7s}")
-    for x in r.representation[:10]:
+    sig = [x for x in r.representation if x.is_significant]
+    print(f"\n  {len(sig)} of {f.n} senators are further from their state's pattern than")
+    print("  chance comfortably explains (|t| > 2). Ranked by t, not raw residual:")
+    print(f"  {'':4s} {'senator':24s} {'st':2s} {'state%':>7s} {'resid':>7s} {'t':>6s}")
+    for x in sig:
         print(f"  #{x.rank:<3d} {x.name[:24]:24s} {x.state:2s} "
-              f"{x.state_lean * 100:6.1f}% {x.ideology:+7.3f} {x.predicted:+7.3f} {x.residual:+7.3f}")
-    print(f"  ... best matched: {r.representation[-1].name} "
-          f"({r.representation[-1].state}, residual {r.representation[-1].residual:+.3f})")
+              f"{x.state_lean * 100:6.1f}% {x.residual:+7.3f} {x.t_stat:+6.2f}")
+    print(f"\n  The other {f.n - len(sig)} sit where their state's results predict. A residual")
+    print(f"  needs to clear roughly {2 * f.residual_se:.2f} to mean anything, so a top-ten")
+    print("  list ranked by raw residual would mostly be noise.")
 
     print("\n-- Committees vs. the public (vote share both sides) ----------")
     print(f"  'vs senate' strips out the {cl.skew_points:+.2f}pt structural skew and")
     print("  majority control, leaving the committee-specific part.")
-    print(f"  {'cmte':5s} {'name':22s} {'seats':>5s} {'avg st%':>8s} {'vs nation':>10s} {'vs senate':>10s}")
+    print("  A mean over ~20 states, which is far steadier than a median over the")
+    print("  same members -- but small panels still fail: 'shift' is how far one")
+    print("  departure moves the gap, and must be smaller than the gap itself.")
+    print(f"  {'cmte':5s} {'name':22s} {'seats':>5s} {'vs nation':>10s} {'vs senate':>10s} "
+          f"{'shift':>7s} {'verdict':<8s}")
     for x in sorted(r.committee_leans, key=lambda z: -abs(z.gap_vs_senate)):
+        v = "fragile" if x.is_fragile else "holds"
         print(f"  {x.code:5s} {COMMITTEE_NAMES.get(x.code, '?'):22s} {x.n_seats:5d} "
-              f"{x.mean_lean * 100:7.2f}% {x.gap_points:+9.2f} {x.gap_vs_senate_points:+10.2f}")
+              f"{x.gap_points:+10.2f} {x.gap_vs_senate_points:+10.2f} "
+              f"{x.worst_member_shift_points:7.2f} {v:<8s}")
 
     print("\n-- Absolute distance to the median voter ----------------------")
     if not r.pillar4_available:

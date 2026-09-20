@@ -1,13 +1,14 @@
 # What "done" means
 
-CivicAlign as specified has seven pillars. Nobody finishes a seven-pillar system
-solo, so "done" has to mean something narrower and testable. Below are two
-candidate finish lines with falsifiable criteria. Pick one. The other becomes a
-later decision made with evidence, not a commitment made now.
+**Scope: sections 2-5 of the math spec only** — Pillars 4, 5 and 6. Pillars 1-3
+and 7 belong to someone else and are not measured against here.
+
+That makes "done" answerable, because sections 2-5 are a self-contained
+measurement layer with testable completion criteria.
 
 ---
 
-## Finish line A: the measurement layer (recommended)
+## Finish line: the measurement layer (sections 2-5)
 
 **The claim:** "Here is a reproducible, documented measurement of how far US
 senators and Senate committees sit from their constituents, with every limit
@@ -24,19 +25,30 @@ a real and citable thing on its own, and it is most of the way built.
 | A2 | Every figure traces to a dated, hashed source file | **done** (`PROVENANCE.tsv`) |
 | A3 | No figure is published that fails its own validity check | **done** (noise floor, phantom-median, seat-count guards) |
 | A4 | Every known limit is written down publicly, not buried | **done** (`METHODOLOGY.md`) |
-| A5 | Every headline number carries an uncertainty range | **NOT DONE** — ~2 days |
+| A5 | Every headline number carries an uncertainty range | **done** — and it changed the conclusions |
 | A6 | The public write-up says what the code says | **NOT DONE** — corrections written, not applied |
 | A7 | Someone who disagrees can find the exact line that produced a number | **done** (module per spec section) |
 
-**Remaining work: A5 and A6. Roughly one week.**
+**Remaining work: A6 alone. About an hour.**
 
-A5 is the one that matters. `+3.37 points` and every residual are point estimates
-with no error bars. Bootstrap the medians and the regression; if the skew's range
-crosses zero, that is a finding and you need to know it before publishing, not
-after someone else checks.
+A5 did exactly what it was supposed to do — it removed findings rather than
+decorating them:
 
-A6 is an hour of pasting, and it is the only item with an external deadline,
-because the current write-up makes claims the data contradicts.
+* **CCD is dead.** 0 of 19 committee drift figures are publishable. 17 medians move
+  more than 0.05 when a single member leaves, most by 0.2-0.34, which is larger
+  than the CCD values themselves. The remaining 2 are stable but too small to
+  clear the noise floor. The metric tracks the party seat split, not ideology.
+* **The out-of-step list shrank from 10 to 6.** A residual has to clear roughly
+  0.57 (2 x residual SE) to mean anything. Ranking by raw residual was publishing
+  noise; ranking is now by leverage-corrected t.
+* **The apportionment skew held.** +3.37 points, and every individual cycle keeps
+  the same sign (2016 +4.08, 2020 +3.37, 2024 +2.66). It is also declining, which
+  is a finding in itself.
+* **The regression held.** Slope 95% CI [+3.47, +4.54], nowhere near zero.
+
+A6 is an hour of pasting from `WHITEPAPER_CORRECTIONS.md`, and it is the only
+item with an external deadline, because the current write-up makes claims the data
+contradicts.
 
 ### How you know you are done
 
@@ -47,13 +59,14 @@ Disagreement about arithmetic is not.
 
 ---
 
-## Finish line B: the product (one working page)
+## Out of scope: Pillars 1-3 and 7
 
-**The claim:** "Type your state, see what your senators actually did."
+Bill-text breakdown, roll-call ingestion, committee-vote parsing, and the polling
+overlay. Someone else's part. Listed here only so the handoff is explicit — what
+sections 2-5 owe them is a stable output format and an honest statement of which
+figures are publishable.
 
-This needs Pillars 1-3, which do not exist: bill-text breakdown, roll-call
-ingestion, committee-vote parsing. That is the substance of the original pitch —
-without it there is no "what did my senator do," only an ideology dashboard.
+The criteria below are **not** a to-do list for this scope.
 
 ### Criteria
 
@@ -82,15 +95,20 @@ statements about named politicians is not a product, it is a liability.
 
 ---
 
-## Why A first
+## What to hand over
 
-A is nearly finished and B has not started. Finishing A gives you something real
-to show, and it is the part that makes B trustworthy later: B without A is a
-tracker with no yardstick, and A without B is still a citable instrument.
+Sections 2-5 produce four figures that survive validation, and one that does not.
+The handoff needs to say both, or the dead metric will be published by someone
+who assumes it works:
 
-They are also different jobs. A is statistics and careful documentation. B is
-data engineering plus a hard accuracy problem in language. Doing them at once
-means doing neither.
+| figure | status |
+|---|---|
+| apportionment skew, +3.37 pts (range +2.66 to +4.08) | publishable |
+| chamber median +0.310, cloture pivot +0.440, party gap 0.942 | publishable |
+| 6 senators significantly off their state's pattern | publishable |
+| committee chair vs. own majority-party median | publishable |
+| committee state lean, where the gap exceeds its one-member shift | publishable |
+| **committee-to-chamber drift (CCD)** | **do not publish** |
 
 ---
 
