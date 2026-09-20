@@ -50,10 +50,16 @@ class Config:
     election_years: tuple[int, ...] = (2016, 2020, 2024)
 
     # Where state median-voter coordinates come from. See sources/state_prefs.py.
-    #   "unavailable" -> Pillar 4 refuses to compute (honest default)
-    #   "tausanovitch_warshaw" -> published bridged MRP estimates (Option A)
-    #   "linear_proxy" -> stretched ideology index, NOT a real bridge (Option C)
-    state_source: str = "unavailable"
+    #   "american_ideology_project" -> the bridged joint-scaling estimates the
+    #       specification requires: state publics on the SAME ideological scale as
+    #       roll-call scores, so the absolute distance in Pillar 4 is a legal
+    #       subtraction. Tausanovitch & Warshaw, doi:10.7910/DVN/BQKU4M.
+    #   "unavailable" -> Pillar 4 refuses to compute.
+    state_source: str = "american_ideology_project"
+
+    # Which wave of the bridged estimates. 2020 is the most recent available
+    # (the file also carries 2008 and 2016).
+    ideology_year: int = 2020
 
     # A committee CCD smaller than this is not a finding. Observed CCDs run
     # 0.01-0.31 while internal committee spreads run 1.07-1.68, and with ~20
@@ -63,6 +69,10 @@ class Config:
 
     raw_dir: Path = field(default=RAW)
     processed_dir: Path = field(default=PROCESSED)
+
+    @property
+    def ideology_tab(self) -> Path:
+        return self.raw_dir / "aip_states_ideology_v2022a.tab"
 
     @property
     def elections_csv(self) -> Path:

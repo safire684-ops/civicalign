@@ -26,6 +26,12 @@ fetch "https://voteview.com/static/data/out/members/HSall_members.csv" \
 # dozen votes; a county-level alternative understated CA 2016 Democrats by 1.4M.
 fetch "https://dataverse.harvard.edu/api/access/datafile/13887042" \
       "mit_president_1976_2024.csv"
+# Tausanovitch & Warshaw, American Ideology Project v2022, doi:10.7910/DVN/BQKU4M.
+# The bridged joint-scaling estimates: state publics on the SAME ideological scale
+# as congressional roll-call scores, which is what makes Pillar 4's absolute
+# distance a legal subtraction.
+fetch "https://dataverse.harvard.edu/api/access/datafile/6690212" \
+      "aip_states_ideology_v2022a.tab"
 fetch "https://unitedstates.github.io/congress-legislators/legislators-current.json" \
       "legislators-current.json"
 fetch "https://unitedstates.github.io/congress-legislators/committee-membership-current.json" \

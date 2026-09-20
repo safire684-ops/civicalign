@@ -16,7 +16,9 @@ medians are all senator-to-senator and live on one ruler already.
 So this module is deliberately the only place that needs replacing, and the
 default deliberately REFUSES to guess.
 """
+import csv
 from abc import ABC, abstractmethod
+from pathlib import Path
 
 
 class StateCoordinateSource(ABC):
@@ -53,35 +55,73 @@ class Unavailable(StateCoordinateSource):
         return None
 
 
-class TausanovitchWarshaw(StateCoordinateSource):
-    """Option A: published bridged MRP estimates. RECOMMENDED starting point.
+class AmericanIdeologyProject(StateCoordinateSource):
+    """The bridged joint-scaling dataset the specification requires.
 
-    Tausanovitch & Warshaw (2013), "Measuring Constituent Policy Preferences in
-    Congress, State Legislatures, and Cities", Journal of Politics. Their
-    estimates are built to be comparable with legislator scores, so the bridge is
-    already done and peer-reviewed -- which matters more for a public
-    accountability site than doing it ourselves.
+    Tausanovitch & Warshaw, American Ideology Project, "Subnational ideology and
+    presidential vote estimates (v2022)", Harvard Dataverse doi:10.7910/DVN/BQKU4M,
+    file aip_states_ideology_v2022a.tab, column `mrp_ideology`.
 
-    TODO: drop their state table in data/raw/ and fill in _load(). One linear map
-    onto the senator scale, fit with senators as shared anchors.
+    These are multilevel regression and poststratification estimates that place
+    state publics on the same ideological dimension as congressional roll-call
+    scores, which is what makes the absolute distance in Pillar 4 a legal
+    subtraction rather than two different rulers.
+
+    Both sides sit inside the metric space X = [-1, +1]. State publics are far
+    more tightly clustered (-0.47 to +0.35) than senators (-0.74 to +0.94), which
+    is the expected shape: legislators are more polarised than the people who
+    elect them, and that difference is the substance of Pillar 4, not an artifact.
+
+    Each estimate carries `mrp_ideology_se`, so uncertainty CAN be propagated into
+    the alignment gap -- unlike the senator scores, whose standard errors Voteview
+    does not publish.
     """
 
-    name = "tausanovitch_warshaw"
+    name = "american_ideology_project"
     is_bridged = True
-    citation = "Tausanovitch & Warshaw 2013, J. of Politics"
+    citation = ("Tausanovitch & Warshaw, American Ideology Project v2022, "
+                "Harvard Dataverse doi:10.7910/DVN/BQKU4M")
 
-    def __init__(self) -> None:
+    def __init__(self, path: Path, year: int = 2020) -> None:
+        self.year = year
         self._coords: dict[str, float] = {}
-        raise NotImplementedError(
-            "Download the T&W state estimates into data/raw/ and implement _load(). "
-            "Until then Config.state_source stays 'unavailable'."
-        )
+        self._se: dict[str, float] = {}
+        self._pop: dict[str, int] = {}
+        self._load(path)
+
+    def _load(self, path: Path) -> None:
+        with path.open() as fh:
+            for row in csv.DictReader(fh, delimiter="\t"):
+                if int(row["presidential_year"]) != self.year:
+                    continue
+                usps = row["abb"].strip().strip('"')
+                self._coords[usps] = float(row["mrp_ideology"])
+                self._se[usps] = float(row["mrp_ideology_se"])
+                self._pop[usps] = int(row["population_2020"])
+        if not self._coords:
+            raise ValueError(f"no {self.year} rows found in {path}")
 
     def state(self, usps: str) -> float | None:
         return self._coords.get(usps)
 
+    def state_se(self, usps: str) -> float | None:
+        return self._se.get(usps)
+
     def national(self, electorate: str) -> float | None:
-        raise NotImplementedError
+        """Population-weighted centre of the national public.
+
+        The specification asks for the median voter of the aggregate national
+        electorate. This dataset resolves to states, not individuals, so the
+        population-weighted mean of state centres is the available approximation.
+        The distribution of state centres is close to symmetric, so mean and median
+        land within about 0.01 of each other, but it is an approximation and is
+        labelled as one. DC is included: its residents are part of the national
+        public even though they elect no senator.
+        """
+        if not self._coords:
+            return None
+        total = sum(self._pop[s] for s in self._coords)
+        return sum(self._coords[s] * self._pop[s] for s in self._coords) / total
 
 
 class LinearProxy(StateCoordinateSource):
@@ -117,9 +157,11 @@ class LinearProxy(StateCoordinateSource):
         return vals[mid] if len(vals) % 2 else (vals[mid - 1] + vals[mid]) / 2
 
 
-def build(name: str) -> StateCoordinateSource:
+def build(name: str, path: Path | None = None, year: int = 2020) -> StateCoordinateSource:
     if name == "unavailable":
         return Unavailable()
-    if name == "tausanovitch_warshaw":
-        return TausanovitchWarshaw()
-    raise ValueError(f"unknown state source {name!r} (linear_proxy needs an index passed in)")
+    if name == "american_ideology_project":
+        if path is None:
+            raise ValueError("american_ideology_project needs the data file path")
+        return AmericanIdeologyProject(path, year)
+    raise ValueError(f"unknown state source {name!r}")

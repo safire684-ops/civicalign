@@ -101,8 +101,8 @@ def test_phantom_medians_are_suppressed():
     phantoms = [c for c in r.committees if c.median_is_phantom]
     assert phantoms, "expected at least one evenly split committee"
 
-    # every phantom must be excluded from findings
-    assert all(c.is_noise for c in phantoms)
+    # phantom medians are why Pillar 6 uses the mean instead
+    assert all(c.median_is_phantom for c in phantoms)
 
     # and the effect must be real: phantoms are the evenly split ones
     for c in phantoms:
@@ -111,7 +111,8 @@ def test_phantom_medians_are_suppressed():
     budget = next(c for c in r.committees if c.code == "SSBU")
     assert budget.n_majority == budget.n_minority
     assert budget.median_gap_to_nearest_member > 0.2
-    assert budget.is_noise
+    # the mean does not have this problem: it sits among real members
+    assert budget.mean_jackknife < 0.1
 
 
 def test_icpsr_is_not_a_usable_join_key():

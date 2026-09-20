@@ -47,31 +47,26 @@ def test_chamber_median_is_stable(report):
     assert not ms.is_fragile
 
 
-def test_no_committee_ccd_survives_validation(report):
-    """No committee CCD is publishable, for one of two reasons.
+def test_committee_mean_is_far_more_stable_than_the_median(report):
+    """Pillar 6 uses the committee MEAN, which the median could not support.
 
-    Most committee medians are unstable: 17 of 19 move more than 0.05 when one
-    member leaves, and most move 0.2-0.34, which is larger than the CCD values
-    themselves (0.01-0.31). With ~20 members split between two polarised clusters
-    the median sits on the party boundary, so dropping anyone near it swings the
-    result across the gap.
-
-    The remaining two (Banking, Commerce) have STABLE medians -- 0.024 and 0.034
-    -- but a CCD too small to clear the noise floor. Stable and meaningless rather
-    than unstable.
-
-    Either way none survive. If this ever fails, a committee genuinely became
-    publishable; check which reason changed before trusting it.
+    A median in a small bimodal group lands in the empty gap between the parties
+    and swings when one member leaves: worst case 0.342, larger than any drift it
+    reports. The mean accounts for density and extremity on both sides, so its
+    worst one-member shift is 0.111 and typically under 0.05.
     """
-    assert report.committees, "expected committees"
-    assert all(c.is_noise for c in report.committees)
+    worst_mean = max(c.mean_jackknife for c in report.committees)
+    worst_median = max(c.stability.worst_shift for c in report.committees)
+    assert worst_mean < 0.15
+    assert worst_mean < worst_median / 2, "mean must be far steadier than the median"
 
-    fragile = [c for c in report.committees if c.stability.is_fragile or c.median_is_phantom]
-    stable_but_small = [c for c in report.committees
-                        if not (c.stability.is_fragile or c.median_is_phantom)]
-    assert len(fragile) == 17
-    assert len(stable_but_small) == 2
-    assert all(abs(c.ccd) < c.noise_floor for c in stable_but_small)
+
+def test_committee_drift_reports_only_what_clears_the_noise(report):
+    """Drift must be at least twice the one-member shift to be reported."""
+    usable = [c for c in report.committees if c.mean_is_usable]
+    assert usable, "expected at least one usable committee drift"
+    for c in usable:
+        assert abs(c.ccd_mean) >= 2 * c.mean_jackknife
 
 
 def test_slope_confidence_interval_excludes_zero(report):

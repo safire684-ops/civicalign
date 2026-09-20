@@ -38,10 +38,11 @@ def run(cfg: Config = DEFAULT) -> Report:
     scores = voteview.load_scores(cfg.members_csv, cfg.congress, roster, cfg.score_column)
     majority = rosters.majority_party(roster)
 
-    src = state_prefs.build(cfg.state_source)
+    src = state_prefs.build(cfg.state_source, cfg.ideology_tab, cfg.ideology_year)
     national = src.national(cfg.electorate)
 
     ch = chamber_stats(scores, roster, majority, cfg.cloture_threshold, national)
+    chamber_mean = __import__("statistics").fmean(scores.values())
 
     lean = elections.load_mit_president(cfg.elections_csv, cfg.election_years)
     fit, reps = representations(scores, roster, lean)
@@ -55,12 +56,12 @@ def run(cfg: Config = DEFAULT) -> Report:
             cleans.append(cl)
     for code, members in cmte_rosters.items():
         cs = committee_stats(
-            code, members, scores, roster, ch.median, majority,
+            code, members, scores, roster, ch.median, chamber_mean, majority,
             national_coord=national, noise_floor=cfg.ccd_noise_floor,
         )
         if cs:
             committees.append(cs)
-    committees.sort(key=lambda c: -abs(c.ccd))
+    committees.sort(key=lambda c: -abs(c.ccd_mean))
     cleans.sort(key=lambda c: -abs(c.gap))
 
     aligns = rank_all([

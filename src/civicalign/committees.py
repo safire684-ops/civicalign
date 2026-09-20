@@ -1,6 +1,8 @@
 """Section 5 / Pillar 6: institutional committee drift."""
 from dataclasses import dataclass
 
+import statistics as _st
+
 from .space import median
 from .sources.rosters import CommitteeMember, Senator, find_chair
 from .uncertainty import MedianStability, median_stability
@@ -39,6 +41,18 @@ class CommitteeStats:
     spread: float
     coords: tuple[float, ...]
 
+    # Pillar 6 as specified, using the committee MEAN rather than the median.
+    # The mean accounts for the density and extremity of members on both sides,
+    # so it does not fall into the empty gap between the two party clusters.
+    # Measured against the CHAMBER MEAN, not the chamber median, so both sides of
+    # the subtraction are the same statistic.
+    #
+    # Stability, worst one-member departure: mean 0.111 at worst, median 0.342.
+    mean: float
+    chamber_mean: float
+    ccd_mean: float
+    mean_jackknife: float
+
     noise_floor: float
 
     # Party composition. On an evenly split committee the median falls in the
@@ -72,6 +86,16 @@ class CommitteeStats:
         return abs(self.n_majority - self.n_minority) <= 1
 
     @property
+    def mean_signal_ratio(self) -> float:
+        """Drift divided by how far one departure moves it."""
+        return abs(self.ccd_mean) / self.mean_jackknife if self.mean_jackknife else 0.0
+
+    @property
+    def mean_is_usable(self) -> bool:
+        """Drift at least twice the one-member shift."""
+        return self.mean_signal_ratio >= 2.0
+
+    @property
     def is_noise(self) -> bool:
         """CCD below the floor is not a finding.
 
@@ -97,6 +121,7 @@ def committee_stats(
     scores: dict[str, float],
     roster: dict[str, Senator],
     chamber_median: float,
+    chamber_mean: float,
     majority: str,
     national_coord: float | None = None,
     noise_floor: float = 0.10,
@@ -107,6 +132,11 @@ def committee_stats(
         return None  # too small for a median to mean anything
 
     cm = median(coords)
+    cmean = _st.fmean(coords)
+    jack = max(
+        abs(_st.fmean(coords[:i] + coords[i + 1:]) - cmean)
+        for i in range(len(coords))
+    )
     nearest = min(coords, key=lambda v: abs(v - cm))
     chair = find_chair(members)
     chair_coord = scores.get(chair.bioguide) if chair else None
@@ -119,6 +149,10 @@ def committee_stats(
 
     return CommitteeStats(
         code=code,
+        mean=cmean,
+        chamber_mean=chamber_mean,
+        ccd_mean=cmean - chamber_mean,
+        mean_jackknife=jack,
         n_scored=len(coords),
         n_members=len(members),
         median=cm,
