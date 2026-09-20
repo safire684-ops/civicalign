@@ -32,6 +32,10 @@ fetch "https://dataverse.harvard.edu/api/access/datafile/13887042" \
 # distance a legal subtraction.
 fetch "https://dataverse.harvard.edu/api/access/datafile/6690212" \
       "aip_states_ideology_v2022a.tab"
+# U.S. Census Bureau vintage 2024 state population estimates, for weighting US_m.
+# The published file is used rather than api.census.gov, which requires a key.
+fetch "https://www2.census.gov/programs-surveys/popest/datasets/2020-2024/state/totals/NST-EST2024-ALLDATA.csv" \
+      "NST-EST2024-ALLDATA.csv"
 fetch "https://unitedstates.github.io/congress-legislators/legislators-current.json" \
       "legislators-current.json"
 fetch "https://unitedstates.github.io/congress-legislators/committee-membership-current.json" \

@@ -40,13 +40,34 @@ def raw():
                     and r["bioguide_id"] in roster and r["nokken_poole_dim1"]):
                 x[r["bioguide_id"]] = float(r["nokken_poole_dim1"])
 
-    s, pop = {}, {}
+    s = {}
     with DEFAULT.ideology_tab.open() as fh:
         for r in csv.DictReader(fh, delimiter="\t"):
             if int(r["presidential_year"]) == DEFAULT.ideology_year:
-                a = r["abb"].strip().strip('"')
-                s[a] = float(r["mrp_ideology"])
-                pop[a] = int(r["population_2020"])
+                s[r["abb"].strip().strip('"')] = float(r["mrp_ideology"])
+
+    # Populations come from the Census release, NOT the static 2020 counts carried
+    # inside the ideology file, so the national centre tracks migration.
+    name_to_usps = {
+        "Alabama":"AL","Alaska":"AK","Arizona":"AZ","Arkansas":"AR","California":"CA",
+        "Colorado":"CO","Connecticut":"CT","Delaware":"DE","District of Columbia":"DC",
+        "Florida":"FL","Georgia":"GA","Hawaii":"HI","Idaho":"ID","Illinois":"IL",
+        "Indiana":"IN","Iowa":"IA","Kansas":"KS","Kentucky":"KY","Louisiana":"LA",
+        "Maine":"ME","Maryland":"MD","Massachusetts":"MA","Michigan":"MI",
+        "Minnesota":"MN","Mississippi":"MS","Missouri":"MO","Montana":"MT",
+        "Nebraska":"NE","Nevada":"NV","New Hampshire":"NH","New Jersey":"NJ",
+        "New Mexico":"NM","New York":"NY","North Carolina":"NC","North Dakota":"ND",
+        "Ohio":"OH","Oklahoma":"OK","Oregon":"OR","Pennsylvania":"PA",
+        "Rhode Island":"RI","South Carolina":"SC","South Dakota":"SD","Tennessee":"TN",
+        "Texas":"TX","Utah":"UT","Vermont":"VT","Virginia":"VA","Washington":"WA",
+        "West Virginia":"WV","Wisconsin":"WI","Wyoming":"WY",
+    }
+    col = f"POPESTIMATE{DEFAULT.population_year}"
+    pop = {}
+    with DEFAULT.population_csv.open() as fh:
+        for r in csv.DictReader(fh):
+            if r.get("SUMLEV") == "040" and name_to_usps.get(r["NAME"]):
+                pop[name_to_usps[r["NAME"]]] = int(r[col])
 
     return {"roster": roster, "x": x, "s": s, "pop": pop}
 
@@ -63,18 +84,36 @@ def test_chamber_median_matches_a_hand_computation(raw, report):
     assert report.chamber.median == pytest.approx(st.median(raw["x"].values()))
 
 
+def _us_m(raw):
+    keys = [k for k in raw["s"] if k in raw["pop"]]
+    total = sum(raw["pop"][k] for k in keys)
+    return sum(raw["s"][k] * raw["pop"][k] for k in keys) / total
+
+
 def test_national_centre_matches_a_hand_computation(raw, report):
-    """US_m is the population-weighted centre of the state estimates, DC included."""
-    total = sum(raw["pop"][k] for k in raw["s"])
-    expected = sum(raw["s"][k] * raw["pop"][k] for k in raw["s"]) / total
-    assert report.chamber.national_coord == pytest.approx(expected)
+    """US_m is the Census-weighted centre of the state estimates, DC included."""
+    assert report.chamber.national_coord == pytest.approx(_us_m(raw))
 
 
 def test_apportionment_skew_is_the_difference_of_those_two(raw, report):
-    total = sum(raw["pop"][k] for k in raw["s"])
-    us_m = sum(raw["s"][k] * raw["pop"][k] for k in raw["s"]) / total
-    expected = st.median(raw["x"].values()) - us_m
+    expected = st.median(raw["x"].values()) - _us_m(raw)
     assert report.chamber.apportionment_skew == pytest.approx(expected)
+
+
+def test_population_weights_are_current_not_decennial(raw, report):
+    """Weighting by the file's static 2020 counts would give a different answer.
+
+    If this ever stops failing to differ, the Census ingest silently stopped
+    being used.
+    """
+    old = {}
+    with DEFAULT.ideology_tab.open() as fh:
+        for r in csv.DictReader(fh, delimiter="\t"):
+            if int(r["presidential_year"]) == DEFAULT.ideology_year:
+                old[r["abb"].strip().strip('"')] = int(r["population_2020"])
+    total = sum(old[k] for k in raw["s"])
+    stale = sum(raw["s"][k] * old[k] for k in raw["s"]) / total
+    assert report.chamber.national_coord != pytest.approx(stale, abs=1e-6)
 
 
 def test_every_alignment_gap_and_score_is_correct(raw, report):

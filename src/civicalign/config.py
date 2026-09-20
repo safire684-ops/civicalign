@@ -57,9 +57,15 @@ class Config:
     #   "unavailable" -> Pillar 4 refuses to compute.
     state_source: str = "american_ideology_project"
 
-    # Which wave of the bridged estimates. 2020 is the most recent available
-    # (the file also carries 2008 and 2016).
+    # Which wave of the bridged estimates. 2020 is the most recent PUBLISHED
+    # wave: v2022 is the newest release of the dataset and its 2020 wave is built
+    # from surveys fielded 2017-2021. No 2024 wave exists to ingest.
     ideology_year: int = 2020
+
+    # Census vintage for population weighting of US_m. Re-weighting each year keeps
+    # the national centre current as people move between states, instead of freezing
+    # it at one decennial count.
+    population_year: int = 2024
 
     # A committee CCD smaller than this is not a finding. Observed CCDs run
     # 0.01-0.31 while internal committee spreads run 1.07-1.68, and with ~20
@@ -69,6 +75,10 @@ class Config:
 
     raw_dir: Path = field(default=RAW)
     processed_dir: Path = field(default=PROCESSED)
+
+    @property
+    def population_csv(self) -> Path:
+        return self.raw_dir / "NST-EST2024-ALLDATA.csv"
 
     @property
     def ideology_tab(self) -> Path:

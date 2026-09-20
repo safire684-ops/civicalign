@@ -82,12 +82,20 @@ class AmericanIdeologyProject(StateCoordinateSource):
     citation = ("Tausanovitch & Warshaw, American Ideology Project v2022, "
                 "Harvard Dataverse doi:10.7910/DVN/BQKU4M")
 
-    def __init__(self, path: Path, year: int = 2020) -> None:
+    def __init__(self, path: Path, year: int = 2020,
+                 populations: dict[str, int] | None = None) -> None:
         self.year = year
         self._coords: dict[str, float] = {}
         self._se: dict[str, float] = {}
         self._pop: dict[str, int] = {}
         self._load(path)
+        if populations:
+            # current Census estimates replace the file's static 2020 counts, so
+            # the national centre tracks domestic migration
+            self._pop = {k: populations[k] for k in self._coords if k in populations}
+            self.population_source = "Census Bureau vintage 2024 estimates"
+        else:
+            self.population_source = "2020 census counts carried in the ideology file"
 
     def _load(self, path: Path) -> None:
         with path.open() as fh:
@@ -157,11 +165,12 @@ class LinearProxy(StateCoordinateSource):
         return vals[mid] if len(vals) % 2 else (vals[mid - 1] + vals[mid]) / 2
 
 
-def build(name: str, path: Path | None = None, year: int = 2020) -> StateCoordinateSource:
+def build(name: str, path: Path | None = None, year: int = 2020,
+          populations: dict[str, int] | None = None) -> StateCoordinateSource:
     if name == "unavailable":
         return Unavailable()
     if name == "american_ideology_project":
         if path is None:
             raise ValueError("american_ideology_project needs the data file path")
-        return AmericanIdeologyProject(path, year)
+        return AmericanIdeologyProject(path, year, populations)
     raise ValueError(f"unknown state source {name!r}")

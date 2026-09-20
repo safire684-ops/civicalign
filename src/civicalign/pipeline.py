@@ -2,7 +2,7 @@
 from dataclasses import dataclass
 
 from .config import Config, DEFAULT
-from .sources import elections, rosters, state_prefs, voteview
+from .sources import elections, population, rosters, state_prefs, voteview
 from .alignment import Alignment, alignment, rank_all
 from .chamber import ChamberStats, chamber_stats
 from .committees import CommitteeStats, committee_stats
@@ -38,7 +38,8 @@ def run(cfg: Config = DEFAULT) -> Report:
     scores = voteview.load_scores(cfg.members_csv, cfg.congress, roster, cfg.score_column)
     majority = rosters.majority_party(roster)
 
-    src = state_prefs.build(cfg.state_source, cfg.ideology_tab, cfg.ideology_year)
+    pops = population.load_populations(cfg.population_csv, cfg.population_year)
+    src = state_prefs.build(cfg.state_source, cfg.ideology_tab, cfg.ideology_year, pops)
     national = src.national(cfg.electorate)
 
     ch = chamber_stats(scores, roster, majority, cfg.cloture_threshold, national)

@@ -90,6 +90,16 @@ select:focus-visible{outline:3px solid var(--alert);outline-offset:2px}
   border-radius:4px;margin:30px 0 34px}
 .span{position:absolute;top:0;height:8px;background:var(--alert);opacity:.28;
   border-radius:4px}
+.moe{position:absolute;top:-3px;height:14px;background:var(--muted);opacity:.30;
+  border-radius:3px}
+.anchor{position:absolute;top:50%;width:1px;height:14px;
+  transform:translate(-50%,-50%);background:var(--rule-strong,var(--rule));opacity:.9}
+.atag{position:absolute;top:26px;transform:translateX(-50%);font-size:10.5px;
+  color:var(--muted);white-space:nowrap;opacity:.85}
+.legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:6px;font-size:12px;
+  color:var(--muted)}
+.legend i{display:inline-block;width:20px;height:9px;vertical-align:-1px;
+  margin-right:5px;border-radius:2px;background:var(--muted);opacity:.30}
 .mark{position:absolute;top:50%;width:3px;height:26px;transform:translate(-50%,-50%);
   border-radius:2px}
 .mark.state{background:var(--muted)}
@@ -117,6 +127,35 @@ select:focus-visible{outline:3px solid var(--alert);outline-offset:2px}
 .bigfact p{margin-top:12px;color:var(--muted);font-size:16px;
   max-width:44ch;margin-inline:auto}
 
+.gate{margin-top:52px}
+.gate .intro{margin-top:12px;color:var(--muted);font-size:15.5px;max-width:58ch}
+.grow{background:var(--surface);border:1px solid var(--rule);margin-top:16px;
+  padding:18px 20px 22px}
+.grow .gh{display:flex;justify-content:space-between;align-items:baseline;
+  gap:12px;flex-wrap:wrap}
+.grow .gh b{font-family:var(--serif);font-size:19px;font-weight:700}
+.grow .gh span{font-size:12.5px;color:var(--muted);font-family:var(--sans)}
+.grow p{margin-top:8px;font-size:15px;max-width:52ch}
+.gtrack{position:relative;height:8px;background:var(--rule-soft);border-radius:4px;
+  margin:34px 0 30px}
+.gtrack .gspan{position:absolute;top:0;height:8px;background:var(--alert);
+  opacity:.28;border-radius:4px}
+.gtrack .gm{position:absolute;top:50%;width:3px;height:24px;
+  transform:translate(-50%,-50%);border-radius:2px}
+.gtrack .gm.ch{background:var(--muted)}
+.gtrack .gm.cm{background:var(--alert);width:14px;height:14px;border-radius:50%;
+  border:3px solid var(--surface)}
+.gtrack .gt{position:absolute;font-size:12px;white-space:nowrap;font-weight:600;
+  transform:translateX(-50%)}
+.gtrack .gt.a{top:-28px;color:var(--muted)}
+.gtrack .gt.b{top:22px;color:var(--alert)}
+.caveat{margin-top:16px;font-size:14px;color:var(--muted);max-width:60ch;
+  border-left:3px solid var(--rule);padding-left:14px}
+.stakes{margin-top:2px;background:var(--alert-soft);border:1px solid var(--alert);
+  border-top:none;padding:20px 24px}
+.stakes h3{font-family:var(--sans);font-size:13px;font-weight:700;
+  letter-spacing:.06em;text-transform:uppercase;color:var(--alert)}
+.stakes p{margin-top:8px;font-size:15.5px;max-width:56ch}
 .limits{margin-top:48px;border-top:2px solid var(--ink);padding-top:22px}
 .limits h2{font-size:20px}
 .limits dl{margin:18px 0 0;display:grid;gap:16px}
@@ -134,6 +173,11 @@ footer{margin-top:40px;font-size:13.5px;color:var(--muted)}
 .method summary:focus-visible{outline:3px solid var(--alert);outline-offset:3px}
 .method h2{font-size:20px;display:inline}
 .method p.intro{margin-top:10px;color:var(--muted);font-size:15.5px;max-width:58ch}
+.plain{margin-top:18px;display:grid;gap:14px}
+.plain div{background:var(--calm-soft);border-left:3px solid var(--calm);
+  padding:14px 16px}
+.plain b{display:block;font-size:15px}
+.plain span{color:var(--muted);font-size:14.5px}
 .work{margin-top:20px;background:var(--surface);border:1px solid var(--rule);
   padding:18px 20px;overflow-x:auto}
 .work h3{font-family:var(--sans);font-size:13px;font-weight:700;
@@ -193,6 +237,23 @@ footer{margin-top:40px;font-size:13.5px;color:var(--muted)}
   <span class="n" id="skewn">&mdash;</span>
   <p id="skewp">&mdash;</p>
 </div>
+<div class="stakes">
+  <h3>Why that matters</h3>
+  <p>Because the Senate sits to the right of the national centre, a bill backed by
+    a slim majority of the American public can still fail in the Senate, while a
+    bill favoured mainly by smaller conservative-leaning states can pass without
+    majority support nationally. The skew does not decide any single vote, but it
+    shifts which bills are able to pass at all.</p>
+</div>
+
+<div class="gate">
+  <h2>The committee gatekeepers</h2>
+  <p class="intro">Before a bill can reach the Senate floor, it must first pass
+    through a committee. If a committee sits well to one side of the Senate as a
+    whole, bills that the full chamber might pass can die there instead.</p>
+  <div id="gates"></div>
+  <p class="caveat" id="gatecaveat"></p>
+</div>
 
 <div class="limits">
   <h2>What this can and cannot tell you</h2>
@@ -205,6 +266,10 @@ footer{margin-top:40px;font-size:13.5px;color:var(--muted)}
     <dd>A senator's number summarises every vote they have cast into one figure.
       Someone can match their state overall while voting against it on the issue
       you care most about.</dd>
+    <dt>The match percentage is not a share of votes.</dt>
+    <dd>A 70% representation match does not mean the senator voted your way 70
+      times out of 100. It is a distance on the ideological scale, converted to a
+      percentage so it can be compared across senators.</dd>
     <dt>Almost every senator is more extreme than their state.</dt>
     <dd>The typical senator scores <b id="nsig">&mdash;</b>. A gap is normal in
       today's Senate, so the useful question is not whether there is one but
@@ -218,9 +283,25 @@ footer{margin-top:40px;font-size:13.5px;color:var(--muted)}
 <div class="method">
   <details>
   <summary><h2>Check our work</h2></summary>
-  <p class="intro">Every number above for the state you selected, with the
-    arithmetic written out. You should be able to reproduce all of it with a
-    calculator and the three files listed at the end.</p>
+  <div class="plain">
+    <div><b>How we scored the senator</b>
+      <span>We took every roll-call vote they have cast this session and compared
+      their pattern of yes and no votes against every other member of Congress.
+      That places them at one exact point on the liberal&ndash;conservative
+      scale.</span></div>
+    <div><b>How we scored the state</b>
+      <span>We used large academic surveys of residents in every state, asking
+      about their actual policy preferences. Researchers translate those answers
+      onto the very same scale used for senators, so the two can be compared
+      directly rather than guessed at.</span></div>
+    <div><b>How we compare them</b>
+      <span>We subtract one position from the other. That distance is the whole
+      measurement &mdash; there is no weighting, adjustment or judgement applied
+      on top of it.</span></div>
+  </div>
+  <p class="intro">And here is that arithmetic in full, for the state you picked.
+    You should be able to reproduce every number with a calculator and the three
+    files listed at the end.</p>
   <div id="workings"></div>
   <div class="work">
     <h3>Where each input comes from</h3>
@@ -240,6 +321,9 @@ const M={"congress":119,"scoreCol":"nokken_poole_dim1","ideologyYear":2020,"ideo
 </script>
 <script>
 const C={"medianScore":83.2,"medianGap":0.336,"crossCount":9,"moreCons":53,"moreLib":47};
+</script>
+<script>
+const X={"anchors":[{"name":"Sanders","full":"Bernie Sanders","x":-0.696},{"name":"Collins","full":"Susan Collins","x":0.17},{"name":"Cruz","full":"Ted Cruz","x":0.865}],"chMedian":0.31,"chMean":0.121,"committees":[{"code":"SSEV","name":"Environment","median":0.003,"drift":-0.307,"mean":0.014,"meanDrift":-0.107,"shift":0.289,"meanShift":0.051,"split":[9,9],"n":18},{"code":"SSAP","name":"Appropriations","median":0.004,"drift":-0.306,"mean":0.036,"meanDrift":-0.084,"shift":0.166,"meanShift":0.026,"split":[14,14],"n":28},{"code":"SSFR","name":"Foreign Relations","median":0.535,"drift":0.225,"mean":0.217,"meanDrift":0.097,"shift":0.06,"meanShift":0.035,"split":[12,10],"n":22},{"code":"SSGA","name":"Homeland/Govt Affairs","median":0.521,"drift":0.211,"mean":0.226,"meanDrift":0.105,"shift":0.342,"meanShift":0.05,"split":[8,7],"n":15},{"code":"SSSB","name":"Small Business","median":0.521,"drift":0.211,"mean":0.139,"meanDrift":0.018,"shift":0.342,"meanShift":0.049,"split":[10,9],"n":19},{"code":"SSBU","name":"Budget","median":0.128,"drift":-0.182,"mean":0.119,"meanDrift":-0.002,"shift":0.333,"meanShift":0.043,"split":[10,10],"n":20},{"code":"SLET","name":"Ethics (select)","median":0.139,"drift":-0.171,"mean":0.125,"meanDrift":0.005,"shift":0.301,"meanShift":0.111,"split":[3,3],"n":6},{"code":"SSHR","name":"HELP","median":0.17,"drift":-0.14,"mean":0.078,"meanDrift":-0.042,"shift":0.188,"meanShift":0.039,"split":[12,11],"n":23},{"code":"SLIN","name":"Intelligence (select)","median":0.17,"drift":-0.14,"mean":0.086,"meanDrift":-0.035,"shift":0.175,"meanShift":0.032,"split":[11,10],"n":21},{"code":"SLIA","name":"Indian Affairs (select)","median":0.176,"drift":-0.134,"mean":0.062,"meanDrift":-0.059,"shift":0.254,"meanShift":0.059,"split":[6,5],"n":11},{"code":"SSBK","name":"Banking","median":0.384,"drift":0.074,"mean":0.128,"meanDrift":0.008,"shift":0.024,"meanShift":0.037,"split":[13,11],"n":24},{"code":"SSJU","name":"Judiciary","median":0.361,"drift":0.051,"mean":0.153,"meanDrift":0.033,"shift":0.307,"meanShift":0.037,"split":[11,10],"n":21},{"code":"SSFI","name":"Finance","median":0.359,"drift":0.049,"mean":0.089,"meanDrift":-0.032,"shift":0.282,"meanShift":0.031,"split":[14,13],"n":27},{"code":"SSAF","name":"Agriculture","median":0.328,"drift":0.018,"mean":0.086,"meanDrift":-0.035,"shift":0.245,"meanShift":0.039,"split":[12,11],"n":23},{"code":"SSRA","name":"Rules","median":0.328,"drift":0.018,"mean":0.09,"meanDrift":-0.03,"shift":0.29,"meanShift":0.048,"split":[9,8],"n":17},{"code":"SSVA","name":"Veterans","median":0.292,"drift":-0.018,"mean":0.091,"meanDrift":-0.03,"shift":0.236,"meanShift":0.047,"split":[10,9],"n":19},{"code":"SSAS","name":"Armed Services","median":0.292,"drift":-0.018,"mean":0.143,"meanDrift":0.022,"shift":0.227,"meanShift":0.033,"split":[14,13],"n":27},{"code":"SSCM","name":"Commerce","median":0.326,"drift":0.016,"mean":0.131,"meanDrift":0.01,"shift":0.034,"meanShift":0.032,"split":[15,13],"n":28},{"code":"SSEG","name":"Energy","median":0.301,"drift":-0.009,"mean":0.135,"meanDrift":0.015,"shift":0.125,"meanShift":0.04,"split":[11,9],"n":20}],"popSource":"Census Bureau vintage 2024 estimates","popYear":2024,"surveyPeriod":"2017-2021"};
 </script>
 <script>
 (function(){
@@ -273,9 +357,10 @@ const C={"medianScore":83.2,"medianGap":0.336,"crossCount":9,"moreCons":53,"more
       '<b>less</b> than most senators differ from their state.';
   }
   function tag(s){
-    var v=s.score.toFixed(0)+'% match';
+    var dirWord = s.dir==='conservative' ? 'right' : 'left';
+    var v='Representation match '+s.score.toFixed(0)+'%  \u00b7  '+
+      s.gap.toFixed(2)+' to the '+dirWord+' of the state';
     if(s.rank<=15) v+='  \u00b7  '+s.rank+ordinal(s.rank)+' furthest of 100';
-    else v+='  \u00b7  typical senator scores '+C.medianScore.toFixed(0)+'%';
     return v;
   }
   function ordinal(n){
@@ -294,12 +379,14 @@ const C={"medianScore":83.2,"medianGap":0.336,"crossCount":9,"moreCons":53,"more
       'Surveys of '+st.name+' residents put the state '+
       '<b>'+lean+'</b>. Here is how each of its senators compares.';
 
+    var se=M.se[code]||0;
     document.getElementById('cards').innerHTML = st.senators.map(function(s,i){
       var l=Math.min(pos(st.center),pos(s.record));
       var w=Math.abs(pos(s.record)-pos(st.center));
       var pc=s.party==='Republican'?'r':'d';
       var col=s.party==='Republican'?'var(--rep)':'var(--dem)';
       var flagged=band(s)!=='close';
+      var moeW=(se*2/2)*100, moeL=pos(st.center)-moeW/2;
       return '<div class="card'+(flagged?' flagged':'')+'">'+
         '<div class="who"><h3>'+s.name+'</h3>'+
         '<span class="party '+pc+'">'+s.party+'</span></div>'+
@@ -309,13 +396,22 @@ const C={"medianScore":83.2,"medianGap":0.336,"crossCount":9,"moreCons":53,"more
         '<span>More conservative \u2192</span></div>'+
         '<div class="track">'+
           (w>1.5?'<div class="span" style="left:'+l+'%;width:'+w+'%"></div>':'')+
+          X.anchors.map(function(a){
+            return '<div class="anchor" style="left:'+pos(a.x)+'%"></div>'+
+                   '<div class="atag" style="left:'+pos(a.x)+'%">'+a.name+'</div>';
+          }).join('')+
+          '<div class="moe" style="left:'+moeL+'%;width:'+moeW+'%"></div>'+
           '<div class="mark state" style="left:'+pos(st.center)+'%"></div>'+
           '<div class="mtag top" style="left:'+pos(st.center)+'%">'+
             st.name+' voters</div>'+
           '<div class="mark sen" style="left:'+pos(s.record)+'%;background:'+col+'"></div>'+
           '<div class="mtag bot" style="left:'+pos(s.record)+'%;color:'+col+'">'+
             s.name.split(' ').slice(-1)[0]+'</div>'+
-        '</div></div></div>';
+        '</div>'+
+        '<p class="legend"><span><i></i>grey band = margin of error on '+
+        st.name+"'s position (\u00b1"+se.toFixed(2)+')</span>'+
+        '<span>faint marks = well-known senators, for scale</span></p>'+
+        '</div></div>';
     }).join('');
   }
 
@@ -357,6 +453,38 @@ const C={"medianScore":83.2,"medianGap":0.336,"crossCount":9,"moreCons":53,"more
         M.usM.toFixed(4)+') = '+(M.dUS>0?'+':'')+M.dUS.toFixed(4)+'</div></div>';
     document.getElementById('workings').innerHTML=out;
   }
+
+  (function(){
+    function gpos(v){return ((v+1)/2*100)}
+    var shown=X.committees.slice(0,3);
+    document.getElementById('gates').innerHTML=shown.map(function(c){
+      var dir=c.drift>0?'conservative':'liberal';
+      var l=Math.min(gpos(c.median),gpos(X.chMedian));
+      var w=Math.abs(gpos(c.median)-gpos(X.chMedian));
+      return '<div class="grow"><div class="gh"><b>'+c.name+'</b>'+
+        '<span>'+c.n+' senators \u00b7 '+c.split[0]+' majority, '+c.split[1]+
+        ' minority</span></div>'+
+        '<p>Sits <b>'+Math.abs(c.drift).toFixed(2)+' to the '+
+        (c.drift>0?'right':'left')+'</b> of the Senate as a whole. Bills that lean '+
+        (c.drift>0?'liberal':'conservative')+' have to clear a committee that is more '+
+        dir+' than the chamber that would vote on them.</p>'+
+        '<div class="gtrack">'+
+          (w>1?'<div class="gspan" style="left:'+l+'%;width:'+w+'%"></div>':'')+
+          '<div class="gm ch" style="left:'+gpos(X.chMedian)+'%"></div>'+
+          '<div class="gt a" style="left:'+gpos(X.chMedian)+'%">Senate as a whole</div>'+
+          '<div class="gm cm" style="left:'+gpos(c.median)+'%"></div>'+
+          '<div class="gt b" style="left:'+gpos(c.median)+'%">This committee</div>'+
+        '</div></div>';
+    }).join('');
+    var frag=shown.filter(function(c){return c.shift>=Math.abs(c.drift)});
+    document.getElementById('gatecaveat').innerHTML =
+      'Committee figures are less firm than the senator figures above. A committee '+
+      'has around twenty members split between two parties, so its midpoint can sit '+
+      'in the gap between them and move sharply if one member is replaced'+
+      (frag.length? ' \u2014 which is the case for '+frag.length+' of the three shown here'
+                  : '')+
+      '. Treat these as indicative, not as precise as the state comparisons.';
+  })();
 
   document.getElementById('srcs').innerHTML=M.sources.map(function(t){
     return '<div><b>'+t[0]+'</b><a href="https://'+t[1].replace(/^https?:\/\//,'')+
