@@ -69,10 +69,23 @@ unrepresentative committee inverts the finding.
 > this committee median to both the full Senate median and the national population
 > median.
 
-### Why it needs qualifying
+### Why it must be dropped, not qualified
 
-The calculation is fine; presenting it as the primary finding is not. On evenly
-split committees the median describes nobody:
+An earlier version of this correction said to suppress the median when it
+describes nobody. Uncertainty testing since then shows the metric does not work at
+all, so it should not be presented as a finding in any form.
+
+Drop one member and recompute: **17 of 19 committee medians move by more than
+0.05, most by 0.2 to 0.34** — larger than the CCD values themselves, which run
+0.01 to 0.31. The remaining two are stable but too small to clear the noise floor.
+**No committee's drift figure is publishable.**
+
+The cause is structural and no amount of care in the code fixes it. A committee
+has ~20 members in two clusters that barely overlap, so the median sits on the
+party boundary and any departure near it swings the result across the gap. CCD
+measures the seat split, not ideology.
+
+On evenly split committees it is worse still — the median describes nobody:
 
 | committee | split | median | nearest actual senator | distance |
 |---|---|---|---|---|
