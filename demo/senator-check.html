@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Distance From Your State</title>
+<meta name="description" content="Pick your state and see how far your two senators sit from its voters, on the same scale.">
+<style>
+:root{color-scheme:light dark}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{-webkit-text-size-adjust:100%}
+img{max-width:100%}
+[hidden]{display:none!important}
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Public+Sans:wght@400;500;600;700&display=swap">
+<style>
+:root{
+  --paper:#F2F4F7; --surface:#FFFFFF; --ink:#191C21; --muted:#5F6874;
+  --rule:#DEE3EA; --rule-soft:#EDF0F4;
+  --alert:#A85A00; --alert-soft:#FBF0E2;
+  --calm:#2E6B4F; --calm-soft:#E8F1EC;
+  --rep:#B23B36; --dem:#27589B;
+  --serif:"Source Serif 4",Georgia,serif;
+  --sans:"Public Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --paper:#101317; --surface:#191D23; --ink:#E9ECF0; --muted:#99A3B0;
+  --rule:#2A3039; --rule-soft:#222831;
+  --alert:#E09A4B; --alert-soft:#2A1F12;
+  --calm:#68B189; --calm-soft:#16241D;
+  --rep:#D97872; --dem:#6A9AD6;
+}}
+:root[data-theme="dark"]{
+  --paper:#101317; --surface:#191D23; --ink:#E9ECF0; --muted:#99A3B0;
+  --rule:#2A3039; --rule-soft:#222831;
+  --alert:#E09A4B; --alert-soft:#2A1F12;
+  --calm:#68B189; --calm-soft:#16241D;
+  --rep:#D97872; --dem:#6A9AD6;
+}
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font-family:var(--sans);
+  font-size:16px;line-height:1.6;margin:0}
+.wrap{max-width:720px;margin:0 auto;padding-inline:20px;padding-block:44px 72px}
+h1,h2,h3{font-family:var(--serif);font-weight:600;text-wrap:balance;margin:0}
+h1{font-size:clamp(30px,6vw,44px);line-height:1.1;letter-spacing:-.018em}
+h2{font-size:clamp(21px,3.4vw,26px);line-height:1.22}
+p{margin:0}
+.sub{margin-top:16px;font-size:17.5px;color:var(--muted);max-width:52ch}
+
+.picker{margin-top:34px;background:var(--surface);border:1px solid var(--rule);
+  padding:20px 22px}
+.picker label{display:block;font-size:13px;font-weight:600;
+  letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+select{margin-top:10px;width:100%;font-family:var(--sans);font-size:19px;
+  font-weight:600;padding:12px 14px;border:1.5px solid var(--ink);
+  background:var(--surface);color:var(--ink);border-radius:4px;
+  -webkit-appearance:none;appearance:none;
+  background-image:linear-gradient(45deg,transparent 50%,currentColor 50%),
+    linear-gradient(135deg,currentColor 50%,transparent 50%);
+  background-position:calc(100% - 22px) 55%,calc(100% - 15px) 55%;
+  background-size:7px 7px,7px 7px;background-repeat:no-repeat}
+select:focus-visible{outline:3px solid var(--alert);outline-offset:2px}
+.statefact{margin-top:14px;font-size:15px;color:var(--muted)}
+.statefact b{color:var(--ink);font-weight:600}
+
+.card{background:var(--surface);border:1px solid var(--rule);margin-top:20px;
+  padding:24px 22px 26px}
+.card.flagged{border-color:var(--alert);border-left-width:4px}
+.who{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.who h3{font-size:24px;font-weight:700;font-family:var(--serif)}
+.party{font-size:13px;font-weight:600;letter-spacing:.04em;
+  text-transform:uppercase}
+.party.d{color:var(--dem)} .party.r{color:var(--rep)}
+.verdict{margin-top:12px;font-size:18.5px;line-height:1.45;max-width:46ch;
+  font-family:var(--serif)}
+.verdict b{font-weight:700}
+.tagline{display:inline-block;margin-top:14px;font-size:12.5px;font-weight:600;
+  letter-spacing:.05em;text-transform:uppercase;padding:5px 10px;border-radius:3px}
+.tagline.far{background:var(--alert-soft);color:var(--alert)}
+.tagline.wide{background:var(--alert-soft);color:var(--alert)}
+.tagline.close{background:var(--calm-soft);color:var(--calm)}
+
+.scale{margin-top:26px}
+.scale .ends{display:flex;justify-content:space-between;font-size:12.5px;
+  color:var(--muted);font-weight:600;letter-spacing:.03em}
+.track{position:relative;height:8px;background:var(--rule-soft);
+  border-radius:4px;margin:30px 0 34px}
+.span{position:absolute;top:0;height:8px;background:var(--alert);opacity:.28;
+  border-radius:4px}
+.mark{position:absolute;top:50%;width:3px;height:26px;transform:translate(-50%,-50%);
+  border-radius:2px}
+.mark.state{background:var(--muted)}
+.mark.sen{width:16px;height:16px;border-radius:50%;border:3px solid var(--surface)}
+.mtag{position:absolute;font-size:12.5px;white-space:nowrap;font-weight:600}
+.mtag.top{top:-30px;transform:translateX(-50%);color:var(--muted)}
+.mtag.bot{top:24px;transform:translateX(-50%)}
+.mtag small{display:block;font-weight:400;font-size:11.5px;opacity:.85}
+
+.how{margin-top:52px}
+.how ol{list-style:none;counter-reset:s;padding:0;margin:22px 0 0;
+  display:grid;gap:14px}
+.how li{counter-increment:s;display:grid;grid-template-columns:auto 1fr;
+  gap:16px;align-items:start}
+.how li::before{content:counter(s);font-family:var(--serif);font-size:20px;
+  font-weight:700;color:var(--surface);background:var(--ink);width:32px;
+  height:32px;border-radius:50%;display:grid;place-items:center;line-height:1}
+.how b{display:block;font-size:16.5px}
+.how span{color:var(--muted);font-size:15.5px}
+
+.bigfact{margin-top:48px;background:var(--surface);border:1px solid var(--rule);
+  padding:26px 24px;text-align:center}
+.bigfact .n{font-family:var(--serif);font-size:clamp(38px,8vw,56px);
+  font-weight:700;line-height:1;letter-spacing:-.02em;display:block}
+.bigfact p{margin-top:12px;color:var(--muted);font-size:16px;
+  max-width:44ch;margin-inline:auto}
+
+.limits{margin-top:48px;border-top:2px solid var(--ink);padding-top:22px}
+.limits h2{font-size:20px}
+.limits dl{margin:18px 0 0;display:grid;gap:16px}
+.limits dt{font-weight:700;font-size:15.5px}
+.limits dd{margin:4px 0 0;color:var(--muted);font-size:15.5px;max-width:56ch}
+footer{margin-top:40px;font-size:13.5px;color:var(--muted)}
+.method{margin-top:48px;border-top:2px solid var(--ink);padding-top:22px}
+.method summary{cursor:pointer;list-style:none;display:flex;align-items:center;
+  gap:10px}
+.method summary::-webkit-details-marker{display:none}
+.method summary::after{content:"show";font-family:var(--sans);font-size:12.5px;
+  font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);
+  border:1px solid var(--rule);border-radius:3px;padding:3px 9px}
+.method details[open] summary::after{content:"hide"}
+.method summary:focus-visible{outline:3px solid var(--alert);outline-offset:3px}
+.method h2{font-size:20px;display:inline}
+.method p.intro{margin-top:10px;color:var(--muted);font-size:15.5px;max-width:58ch}
+.work{margin-top:20px;background:var(--surface);border:1px solid var(--rule);
+  padding:18px 20px;overflow-x:auto}
+.work h3{font-family:var(--sans);font-size:13px;font-weight:700;
+  letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.work table{border-collapse:collapse;width:100%;margin-top:12px;font-size:14.5px}
+.work td{padding:7px 10px 7px 0;border-bottom:1px solid var(--rule-soft);
+  vertical-align:top}
+.work td:last-child{text-align:right;font-variant-numeric:tabular-nums;
+  white-space:nowrap;font-weight:600}
+.work tr.total td{border-bottom:none;border-top:2px solid var(--ink);
+  font-weight:700;padding-top:10px}
+.work .formula{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+  font-size:13.5px;background:var(--rule-soft);padding:10px 12px;margin-top:12px;
+  border-radius:3px;overflow-x:auto;white-space:nowrap}
+.srcs{margin-top:20px;display:grid;gap:12px}
+.srcs div{font-size:14.5px}
+.srcs b{display:block}
+.srcs a{word-break:break-all;font-size:13.5px}
+.srcs span{color:var(--muted);font-size:13.5px;display:block}
+@media (max-width:480px){
+  .mtag{font-size:11.5px}
+  .card{padding:20px 17px 22px}
+}
+</style>
+
+<div class="wrap">
+<h1>How far is your senator from your state?</h1>
+<p class="sub">Your senators and your state's voters are both placed on the same
+  scale, from most liberal to most conservative. This measures the exact distance
+  between them.</p>
+
+<div class="picker">
+  <label for="state">Choose your state</label>
+  <select id="state"></select>
+  <p class="statefact" id="statefact"></p>
+</div>
+
+<div id="cards"></div>
+
+<div class="how">
+  <h2>How this works</h2>
+  <ol>
+    <li><div><b>Place your senators on a scale</b>
+      <span>Every roll-call vote a senator has cast, turned into one number from
+      &minus;1 (most liberal) to +1 (most conservative).</span></div></li>
+    <li><div><b>Place your state's voters on the same scale</b>
+      <span>Large surveys of residents in every state, translated by academic
+      researchers into the exact same numbers, so the two can be compared
+      directly.</span></div></li>
+    <li><div><b>Measure the distance between them</b>
+      <span>Subtract one from the other. The further apart, the less your senator
+      reflects the people who elected them. That distance is the score.</span></div></li>
+  </ol>
+</div>
+
+<div class="bigfact">
+  <span class="n" id="skewn">&mdash;</span>
+  <p id="skewp">&mdash;</p>
+</div>
+
+<div class="limits">
+  <h2>What this can and cannot tell you</h2>
+  <dl>
+    <dt>Your state's position is an estimate, not a headcount.</dt>
+    <dd>It comes from large academic surveys modelled down to the state level. It
+      carries a margin of error of roughly 0.04, which is small next to the gaps
+      shown here but is not zero.</dd>
+    <dt>It compares whole records, not individual issues.</dt>
+    <dd>A senator's number summarises every vote they have cast into one figure.
+      Someone can match their state overall while voting against it on the issue
+      you care most about.</dd>
+    <dt>Almost every senator is more extreme than their state.</dt>
+    <dd>The typical senator scores <b id="nsig">&mdash;</b>. A gap is normal in
+      today's Senate, so the useful question is not whether there is one but
+      whether it is bigger than most.</dd>
+    <dt>It says nothing about any single vote.</dt>
+    <dd>This is a senator's whole record at once. It cannot tell you how they
+      voted on one bill you care about.</dd>
+  </dl>
+</div>
+
+<div class="method">
+  <details>
+  <summary><h2>Check our work</h2></summary>
+  <p class="intro">Every number above for the state you selected, with the
+    arithmetic written out. You should be able to reproduce all of it with a
+    calculator and the three files listed at the end.</p>
+  <div id="workings"></div>
+  <div class="work">
+    <h3>Where each input comes from</h3>
+    <div class="srcs" id="srcs"></div>
+  </div>
+  </details>
+</div>
+
+<footer id="foot"></footer>
+</div>
+
+<script>
+const V={"states":{"FL":{"name":"Florida","center":0.002,"se":0.036,"senators":[{"name":"Ashley Moody","party":"Republican","bioguide":"M001244","record":0.617,"gap":0.615,"score":69.3,"rank":9,"crosses":false,"dir":"conservative"},{"name":"Rick Scott","party":"Republican","bioguide":"S001217","record":0.926,"gap":0.924,"score":53.8,"rank":1,"crosses":false,"dir":"conservative"}]},"WI":{"name":"Wisconsin","center":0.004,"se":0.036,"senators":[{"name":"Tammy Baldwin","party":"Democrat","bioguide":"B001230","record":-0.392,"gap":0.396,"score":80.2,"rank":37,"crosses":true,"dir":"liberal"},{"name":"Ron Johnson","party":"Republican","bioguide":"J000293","record":0.897,"gap":0.893,"score":55.4,"rank":2,"crosses":false,"dir":"conservative"}]},"TX":{"name":"Texas","center":0.052,"se":0.036,"senators":[{"name":"John Cornyn","party":"Republican","bioguide":"C001056","record":0.595,"gap":0.543,"score":72.9,"rank":17,"crosses":false,"dir":"conservative"},{"name":"Ted Cruz","party":"Republican","bioguide":"C001098","record":0.865,"gap":0.813,"score":59.4,"rank":3,"crosses":false,"dir":"conservative"}]},"UT":{"name":"Utah","center":0.107,"se":0.037,"senators":[{"name":"John R. Curtis","party":"Republican","bioguide":"C001114","record":0.671,"gap":0.564,"score":71.8,"rank":15,"crosses":false,"dir":"conservative"},{"name":"Mike Lee","party":"Republican","bioguide":"L000577","record":0.891,"gap":0.784,"score":60.8,"rank":4,"crosses":false,"dir":"conservative"}]},"AL":{"name":"Alabama","center":0.198,"se":0.037,"senators":[{"name":"Katie Boyd Britt","party":"Republican","bioguide":"B001319","record":0.671,"gap":0.473,"score":76.4,"rank":25,"crosses":false,"dir":"conservative"},{"name":"Tommy Tuberville","party":"Republican","bioguide":"T000278","record":0.936,"gap":0.738,"score":63.1,"rank":5,"crosses":false,"dir":"conservative"}]},"OH":{"name":"Ohio","center":0.038,"se":0.035,"senators":[{"name":"Jon Husted","party":"Republican","bioguide":"H001104","record":0.586,"gap":0.548,"score":72.6,"rank":16,"crosses":false,"dir":"conservative"},{"name":"Bernie Moreno","party":"Republican","bioguide":"M001242","record":0.725,"gap":0.687,"score":65.7,"rank":6,"crosses":false,"dir":"conservative"}]},"KY":{"name":"Kentucky","center":0.135,"se":0.037,"senators":[{"name":"Mitch McConnell","party":"Republican","bioguide":"M000355","record":0.328,"gap":0.193,"score":90.3,"rank":82,"crosses":false,"dir":"conservative"},{"name":"Rand Paul","party":"Republican","bioguide":"P000603","record":0.812,"gap":0.677,"score":66.1,"rank":7,"crosses":false,"dir":"conservative"}]},"NC":{"name":"North Carolina","center":0.047,"se":0.036,"senators":[{"name":"Ted Budd","party":"Republican","bioguide":"B001305","record":0.693,"gap":0.646,"score":67.7,"rank":8,"crosses":false,"dir":"conservative"},{"name":"Thom Tillis","party":"Republican","bioguide":"T000476","record":0.361,"gap":0.314,"score":84.3,"rank":56,"crosses":false,"dir":"conservative"}]},"GA":{"name":"Georgia","center":0.06,"se":0.035,"senators":[{"name":"Jon Ossoff","party":"Democrat","bioguide":"O000174","record":-0.547,"gap":0.607,"score":69.6,"rank":10,"crosses":true,"dir":"liberal"},{"name":"Raphael G. Warnock","party":"Democrat","bioguide":"W000790","record":-0.467,"gap":0.527,"score":73.6,"rank":19,"crosses":true,"dir":"liberal"}]},"MO":{"name":"Missouri","center":0.114,"se":0.036,"senators":[{"name":"Josh Hawley","party":"Republican","bioguide":"H001089","record":0.521,"gap":0.407,"score":79.7,"rank":35,"crosses":false,"dir":"conservative"},{"name":"Eric Schmitt","party":"Republican","bioguide":"S001227","record":0.72,"gap":0.606,"score":69.7,"rank":11,"crosses":false,"dir":"conservative"}]},"PA":{"name":"Pennsylvania","center":0.009,"se":0.036,"senators":[{"name":"John Fetterman","party":"Democrat","bioguide":"F000479","record":-0.163,"gap":0.172,"score":91.4,"rank":89,"crosses":true,"dir":"liberal"},{"name":"David McCormick","party":"Republican","bioguide":"M001243","record":0.607,"gap":0.598,"score":70.1,"rank":12,"crosses":false,"dir":"conservative"}]},"IN":{"name":"Indiana","center":0.091,"se":0.036,"senators":[{"name":"Jim Banks","party":"Republican","bioguide":"B001299","record":0.679,"gap":0.588,"score":70.6,"rank":13,"crosses":false,"dir":"conservative"},{"name":"Todd Young","party":"Republican","bioguide":"Y000064","record":0.546,"gap":0.455,"score":77.3,"rank":27,"crosses":false,"dir":"conservative"}]},"TN":{"name":"Tennessee","center":0.153,"se":0.036,"senators":[{"name":"Marsha Blackburn","party":"Republican","bioguide":"B001243","record":0.651,"gap":0.498,"score":75.1,"rank":23,"crosses":false,"dir":"conservative"},{"name":"Bill Hagerty","party":"Republican","bioguide":"H000601","record":0.735,"gap":0.582,"score":70.9,"rank":14,"crosses":false,"dir":"conservative"}]},"WY":{"name":"Wyoming","center":0.351,"se":0.045,"senators":[{"name":"John Barrasso","party":"Republican","bioguide":"B001261","record":0.652,"gap":0.301,"score":84.9,"rank":59,"crosses":false,"dir":"conservative"},{"name":"Cynthia M. Lummis","party":"Republican","bioguide":"L000571","record":0.886,"gap":0.535,"score":73.2,"rank":18,"crosses":false,"dir":"conservative"}]},"KS":{"name":"Kansas","center":0.069,"se":0.038,"senators":[{"name":"Roger Marshall","party":"Republican","bioguide":"M001198","record":0.586,"gap":0.517,"score":74.1,"rank":20,"crosses":false,"dir":"conservative"},{"name":"Jerry Moran","party":"Republican","bioguide":"M000934","record":0.375,"gap":0.306,"score":84.7,"rank":58,"crosses":false,"dir":"conservative"}]},"IA":{"name":"Iowa","center":0.043,"se":0.037,"senators":[{"name":"Joni Ernst","party":"Republican","bioguide":"E000295","record":0.555,"gap":0.512,"score":74.4,"rank":21,"crosses":false,"dir":"conservative"},{"name":"Chuck Grassley","party":"Republican","bioguide":"G000386","record":0.461,"gap":0.418,"score":79.1,"rank":32,"crosses":false,"dir":"conservative"}]},"NM":{"name":"New Mexico","center":0.01,"se":0.038,"senators":[{"name":"Martin Heinrich","party":"Democrat","bioguide":"H001046","record":-0.34,"gap":0.35,"score":82.5,"rank":46,"crosses":true,"dir":"liberal"},{"name":"Ben Ray Luj\u00e1n","party":"Democrat","bioguide":"L000570","record":-0.488,"gap":0.498,"score":75.1,"rank":22,"crosses":true,"dir":"liberal"}]},"OK":{"name":"Oklahoma","center":0.157,"se":0.037,"senators":[{"name":"Alan Armstrong","party":"Republican","bioguide":"A000383","record":0.652,"gap":0.495,"score":75.2,"rank":24,"crosses":false,"dir":"conservative"},{"name":"James Lankford","party":"Republican","bioguide":"L000575","record":0.527,"gap":0.37,"score":81.5,"rank":41,"crosses":false,"dir":"conservative"}]},"MA":{"name":"Massachusetts","center":-0.289,"se":0.036,"senators":[{"name":"Edward J. Markey","party":"Democrat","bioguide":"M000133","record":-0.744,"gap":0.455,"score":77.2,"rank":26,"crosses":false,"dir":"liberal"},{"name":"Elizabeth Warren","party":"Democrat","bioguide":"W000817","record":-0.722,"gap":0.433,"score":78.3,"rank":30,"crosses":false,"dir":"liberal"}]},"LA":{"name":"Louisiana","center":0.176,"se":0.037,"senators":[{"name":"Bill Cassidy","party":"Republican","bioguide":"C001075","record":0.426,"gap":0.25,"score":87.5,"rank":71,"crosses":false,"dir":"conservative"},{"name":"John Kennedy","party":"Republican","bioguide":"K000393","record":0.628,"gap":0.452,"score":77.4,"rank":28,"crosses":false,"dir":"conservative"}]},"MT":{"name":"Montana","center":0.201,"se":0.042,"senators":[{"name":"Steve Daines","party":"Republican","bioguide":"D000618","record":0.617,"gap":0.416,"score":79.2,"rank":33,"crosses":false,"dir":"conservative"},{"name":"Tim Sheehy","party":"Republican","bioguide":"S001232","record":0.643,"gap":0.442,"score":77.9,"rank":29,"crosses":false,"dir":"conservative"}]},"MN":{"name":"Minnesota","center":-0.042,"se":0.037,"senators":[{"name":"Amy Klobuchar","party":"Democrat","bioguide":"K000367","record":-0.264,"gap":0.222,"score":88.9,"rank":76,"crosses":false,"dir":"liberal"},{"name":"Tina Smith","party":"Democrat","bioguide":"S001203","record":-0.462,"gap":0.42,"score":79.0,"rank":31,"crosses":false,"dir":"liberal"}]},"VT":{"name":"Vermont","center":-0.286,"se":0.045,"senators":[{"name":"Bernard Sanders","party":"Independent","bioguide":"S000033","record":-0.696,"gap":0.41,"score":79.5,"rank":34,"crosses":false,"dir":"liberal"},{"name":"Peter Welch","party":"Democrat","bioguide":"W000800","record":-0.345,"gap":0.059,"score":97.0,"rank":99,"crosses":false,"dir":"liberal"}]},"SC":{"name":"South Carolina","center":0.129,"se":0.037,"senators":[{"name":"Darline Graham","party":"Republican","bioguide":"G000608","record":0.483,"gap":0.354,"score":82.3,"rank":45,"crosses":false,"dir":"conservative"},{"name":"Tim Scott","party":"Republican","bioguide":"S001184","record":0.53,"gap":0.401,"score":79.9,"rank":36,"crosses":false,"dir":"conservative"}]},"DE":{"name":"Delaware","center":-0.071,"se":0.041,"senators":[{"name":"Christopher A. Coons","party":"Democrat","bioguide":"C001088","record":-0.263,"gap":0.192,"score":90.4,"rank":84,"crosses":false,"dir":"liberal"},{"name":"Lisa Blunt Rochester","party":"Democrat","bioguide":"B001303","record":-0.465,"gap":0.394,"score":80.3,"rank":38,"crosses":false,"dir":"liberal"}]},"NE":{"name":"Nebraska","center":0.102,"se":0.038,"senators":[{"name":"Deb Fischer","party":"Republican","bioguide":"F000463","record":0.44,"gap":0.338,"score":83.1,"rank":49,"crosses":false,"dir":"conservative"},{"name":"Pete Ricketts","party":"Republican","bioguide":"R000618","record":0.475,"gap":0.373,"score":81.4,"rank":39,"crosses":false,"dir":"conservative"}]},"CA":{"name":"California","center":-0.198,"se":0.036,"senators":[{"name":"Alex Padilla","party":"Democrat","bioguide":"P000145","record":-0.569,"gap":0.371,"score":81.5,"rank":40,"crosses":false,"dir":"liberal"},{"name":"Adam B. Schiff","party":"Democrat","bioguide":"S001150","record":-0.378,"gap":0.18,"score":91.0,"rank":87,"crosses":false,"dir":"liberal"}]},"ID":{"name":"Idaho","center":0.273,"se":0.039,"senators":[{"name":"Mike Crapo","party":"Republican","bioguide":"C000880","record":0.562,"gap":0.289,"score":85.6,"rank":63,"crosses":false,"dir":"conservative"},{"name":"James E. Risch","party":"Republican","bioguide":"R000584","record":0.64,"gap":0.367,"score":81.7,"rank":42,"crosses":false,"dir":"conservative"}]},"MI":{"name":"Michigan","center":-0.01,"se":0.036,"senators":[{"name":"Gary C. Peters","party":"Democrat","bioguide":"P000595","record":-0.283,"gap":0.273,"score":86.3,"rank":68,"crosses":false,"dir":"liberal"},{"name":"Elissa Slotkin","party":"Democrat","bioguide":"S001208","record":-0.373,"gap":0.363,"score":81.8,"rank":43,"crosses":false,"dir":"liberal"}]},"WV":{"name":"West Virginia","center":0.201,"se":0.038,"senators":[{"name":"Shelley Moore Capito","party":"Republican","bioguide":"C001047","record":0.412,"gap":0.211,"score":89.4,"rank":80,"crosses":false,"dir":"conservative"},{"name":"James C. Justice","party":"Republican","bioguide":"J000312","record":0.564,"gap":0.363,"score":81.8,"rank":44,"crosses":false,"dir":"conservative"}]},"AZ":{"name":"Arizona","center":0.037,"se":0.036,"senators":[{"name":"Ruben Gallego","party":"Democrat","bioguide":"G000574","record":-0.307,"gap":0.344,"score":82.8,"rank":47,"crosses":true,"dir":"liberal"},{"name":"Mark Kelly","party":"Democrat","bioguide":"K000377","record":-0.299,"gap":0.336,"score":83.2,"rank":51,"crosses":true,"dir":"liberal"}]},"ND":{"name":"North Dakota","center":0.174,"se":0.041,"senators":[{"name":"Kevin Cramer","party":"Republican","bioguide":"C001096","record":0.49,"gap":0.316,"score":84.2,"rank":55,"crosses":false,"dir":"conservative"},{"name":"John Hoeven","party":"Republican","bioguide":"H001061","record":0.512,"gap":0.338,"score":83.1,"rank":48,"crosses":false,"dir":"conservative"}]},"AR":{"name":"Arkansas","center":0.184,"se":0.038,"senators":[{"name":"John Boozman","party":"Republican","bioguide":"B001236","record":0.399,"gap":0.215,"score":89.2,"rank":78,"crosses":false,"dir":"conservative"},{"name":"Tom Cotton","party":"Republican","bioguide":"C001095","record":0.52,"gap":0.336,"score":83.2,"rank":50,"crosses":false,"dir":"conservative"}]},"OR":{"name":"Oregon","center":-0.16,"se":0.036,"senators":[{"name":"Jeff Merkley","party":"Democrat","bioguide":"M001176","record":-0.491,"gap":0.331,"score":83.5,"rank":52,"crosses":false,"dir":"liberal"},{"name":"Ron Wyden","party":"Democrat","bioguide":"W000779","record":-0.453,"gap":0.293,"score":85.4,"rank":61,"crosses":false,"dir":"liberal"}]},"CT":{"name":"Connecticut","center":-0.181,"se":0.038,"senators":[{"name":"Richard Blumenthal","party":"Democrat","bioguide":"B001277","record":-0.414,"gap":0.233,"score":88.4,"rank":73,"crosses":false,"dir":"liberal"},{"name":"Christopher Murphy","party":"Democrat","bioguide":"M001169","record":-0.51,"gap":0.329,"score":83.6,"rank":53,"crosses":false,"dir":"liberal"}]},"NJ":{"name":"New Jersey","center":-0.162,"se":0.036,"senators":[{"name":"Cory A. Booker","party":"Democrat","bioguide":"B001288","record":-0.485,"gap":0.323,"score":83.8,"rank":54,"crosses":false,"dir":"liberal"},{"name":"Andy Kim","party":"Democrat","bioguide":"K000394","record":-0.45,"gap":0.288,"score":85.6,"rank":64,"crosses":false,"dir":"liberal"}]},"MD":{"name":"Maryland","center":-0.164,"se":0.036,"senators":[{"name":"Angela D. Alsobrooks","party":"Democrat","bioguide":"A000382","record":-0.445,"gap":0.281,"score":85.9,"rank":65,"crosses":false,"dir":"liberal"},{"name":"Chris Van Hollen","party":"Democrat","bioguide":"V000128","record":-0.476,"gap":0.312,"score":84.4,"rank":57,"crosses":false,"dir":"liberal"}]},"NV":{"name":"Nevada","center":-0.031,"se":0.037,"senators":[{"name":"Catherine Cortez Masto","party":"Democrat","bioguide":"C001113","record":-0.332,"gap":0.301,"score":85.0,"rank":60,"crosses":false,"dir":"liberal"},{"name":"Jacky Rosen","party":"Democrat","bioguide":"R000608","record":-0.28,"gap":0.249,"score":87.6,"rank":72,"crosses":false,"dir":"liberal"}]},"HI":{"name":"Hawaii","center":-0.209,"se":0.041,"senators":[{"name":"Mazie K. Hirono","party":"Democrat","bioguide":"H001042","record":-0.5,"gap":0.291,"score":85.5,"rank":62,"crosses":false,"dir":"liberal"},{"name":"Brian Schatz","party":"Democrat","bioguide":"S001194","record":-0.431,"gap":0.222,"score":88.9,"rank":77,"crosses":false,"dir":"liberal"}]},"WA":{"name":"Washington","center":-0.176,"se":0.036,"senators":[{"name":"Maria Cantwell","party":"Democrat","bioguide":"C000127","record":-0.35,"gap":0.174,"score":91.3,"rank":88,"crosses":false,"dir":"liberal"},{"name":"Patty Murray","party":"Democrat","bioguide":"M001111","record":-0.456,"gap":0.28,"score":86.0,"rank":66,"crosses":false,"dir":"liberal"}]},"IL":{"name":"Illinois","center":-0.121,"se":0.036,"senators":[{"name":"Tammy Duckworth","party":"Democrat","bioguide":"D000622","record":-0.399,"gap":0.278,"score":86.1,"rank":67,"crosses":false,"dir":"liberal"},{"name":"Richard J. Durbin","party":"Democrat","bioguide":"D000563","record":-0.254,"gap":0.133,"score":93.4,"rank":93,"crosses":false,"dir":"liberal"}]},"CO":{"name":"Colorado","center":-0.057,"se":0.037,"senators":[{"name":"Michael F. Bennet","party":"Democrat","bioguide":"B001267","record":-0.309,"gap":0.252,"score":87.4,"rank":70,"crosses":false,"dir":"liberal"},{"name":"John W. Hickenlooper","party":"Democrat","bioguide":"H000273","record":-0.32,"gap":0.263,"score":86.8,"rank":69,"crosses":false,"dir":"liberal"}]},"MS":{"name":"Mississippi","center":0.222,"se":0.038,"senators":[{"name":"Cindy Hyde-Smith","party":"Republican","bioguide":"H001079","record":0.45,"gap":0.228,"score":88.6,"rank":74,"crosses":false,"dir":"conservative"},{"name":"Roger F. Wicker","party":"Republican","bioguide":"W000437","record":0.414,"gap":0.192,"score":90.4,"rank":83,"crosses":false,"dir":"conservative"}]},"VA":{"name":"Virginia","center":-0.025,"se":0.036,"senators":[{"name":"Tim Kaine","party":"Democrat","bioguide":"K000384","record":-0.205,"gap":0.18,"score":91.0,"rank":85,"crosses":false,"dir":"liberal"},{"name":"Mark R. Warner","party":"Democrat","bioguide":"W000805","record":-0.252,"gap":0.227,"score":88.6,"rank":75,"crosses":false,"dir":"liberal"}]},"ME":{"name":"Maine","center":-0.045,"se":0.041,"senators":[{"name":"Susan M. Collins","party":"Republican","bioguide":"C001035","record":0.17,"gap":0.215,"score":89.3,"rank":79,"crosses":true,"dir":"conservative"},{"name":"Angus S. King, Jr.","party":"Independent","bioguide":"K000383","record":-0.18,"gap":0.135,"score":93.2,"rank":91,"crosses":false,"dir":"liberal"}]},"NY":{"name":"New York","center":-0.207,"se":0.035,"senators":[{"name":"Kirsten E. Gillibrand","party":"Democrat","bioguide":"G000555","record":-0.361,"gap":0.154,"score":92.3,"rank":90,"crosses":false,"dir":"liberal"},{"name":"Charles E. Schumer","party":"Democrat","bioguide":"S000148","record":-0.404,"gap":0.197,"score":90.2,"rank":81,"crosses":false,"dir":"liberal"}]},"SD":{"name":"South Dakota","center":0.228,"se":0.044,"senators":[{"name":"Mike Rounds","party":"Republican","bioguide":"R000605","record":0.408,"gap":0.18,"score":91.0,"rank":86,"crosses":false,"dir":"conservative"},{"name":"John Thune","party":"Republican","bioguide":"T000250","record":0.359,"gap":0.131,"score":93.5,"rank":94,"crosses":false,"dir":"conservative"}]},"NH":{"name":"New Hampshire","center":-0.072,"se":0.039,"senators":[{"name":"Margaret Wood Hassan","party":"Democrat","bioguide":"H001076","record":-0.206,"gap":0.134,"score":93.3,"rank":92,"crosses":false,"dir":"liberal"},{"name":"Jeanne Shaheen","party":"Democrat","bioguide":"S001181","record":-0.162,"gap":0.09,"score":95.5,"rank":97,"crosses":false,"dir":"liberal"}]},"AK":{"name":"Alaska","center":0.176,"se":0.046,"senators":[{"name":"Lisa Murkowski","party":"Republican","bioguide":"M001153","record":0.176,"gap":0.0,"score":100.0,"rank":100,"crosses":false,"dir":"conservative"},{"name":"Dan Sullivan","party":"Republican","bioguide":"S001198","record":0.292,"gap":0.116,"score":94.2,"rank":95,"crosses":false,"dir":"conservative"}]},"RI":{"name":"Rhode Island","center":-0.2,"se":0.042,"senators":[{"name":"Jack Reed","party":"Democrat","bioguide":"R000122","record":-0.303,"gap":0.103,"score":94.8,"rank":96,"crosses":false,"dir":"liberal"},{"name":"Sheldon Whitehouse","party":"Democrat","bioguide":"W000802","record":-0.286,"gap":0.086,"score":95.7,"rank":98,"crosses":false,"dir":"liberal"}]}},"medianGap":0.336,"usM":-0.029,"chM":0.31,"skew":0.339,"congress":119,"ideologyYear":2020,"source":"Tausanovitch & Warshaw, American Ideology Project v2022, Harvard Dataverse doi:10.7910/DVN/BQKU4M"};
+</script>
+<script>
+const M={"congress":119,"scoreCol":"nokken_poole_dim1","ideologyYear":2020,"ideologyCol":"mrp_ideology","se":{"AL":0.0367,"AK":0.0458,"AZ":0.0364,"AR":0.0375,"CA":0.0357,"CO":0.0365,"CT":0.0378,"DE":0.0409,"DC":0.0431,"FL":0.0357,"GA":0.0355,"HI":0.0405,"ID":0.0395,"IL":0.0355,"IN":0.0364,"IA":0.0372,"KS":0.0376,"KY":0.037,"LA":0.0369,"ME":0.0409,"MD":0.0359,"MA":0.0361,"MI":0.0361,"MN":0.0369,"MS":0.0381,"MO":0.0359,"MT":0.0422,"NE":0.0377,"NV":0.0366,"NH":0.0393,"NJ":0.0361,"NM":0.0384,"NY":0.0354,"NC":0.0361,"ND":0.0413,"OH":0.0354,"OK":0.037,"OR":0.0365,"PA":0.0359,"RI":0.0421,"SC":0.0366,"SD":0.0436,"TN":0.0355,"TX":0.0355,"UT":0.0373,"VT":0.0454,"VA":0.0364,"WA":0.0357,"WV":0.038,"WI":0.0364,"WY":0.045},"chM":0.31,"usM":-0.0288,"dUS":0.3388,"sources":[["Senator positions","voteview.com/static/data/out/members/HSall_members.csv","column nokken_poole_dim1, rows where congress=119 and chamber=Senate"],["Who holds each seat","unitedstates.github.io/congress-legislators/legislators-current.json","joined on bioguide id; 104 Voteview rows reduce to the 100 seated"],["State voter positions","dataverse.harvard.edu doi:10.7910/DVN/BQKU4M","file aip_states_ideology_v2022a.tab, column mrp_ideology, 2020 wave"]]};
+</script>
+<script>
+const C={"medianScore":83.2,"medianGap":0.336,"crossCount":9,"moreCons":53,"moreLib":47};
+</script>
+<script>
+(function(){
+  var sel=document.getElementById('state');
+  var names=Object.keys(V.states).sort(function(a,b){
+    return V.states[a].name.localeCompare(V.states[b].name)});
+  sel.innerHTML=names.map(function(k){
+    return '<option value="'+k+'">'+V.states[k].name+'</option>'}).join('');
+
+  function pos(v){ return ((v+1)/2*100); }   // -1..+1 -> 0..100%
+
+  function band(s){
+    if(s.crosses) return 'far';
+    if(s.score < C.medianScore) return 'wide';
+    return 'close';
+  }
+  function sentence(s,st,i){
+    if(s.crosses){
+      var tail = i===0
+        ? ' Only '+C.crossCount+' of the 100 senators are on the opposite side of '+
+          'the middle from their own state.'
+        : ' Both of '+st.name+"'s senators are in that position.";
+      return 'Leans <b>'+s.dir+'</b> while '+st.name+' voters lean the '+
+        '<b>other way</b>.'+tail;
+    }
+    if(s.score < C.medianScore){
+      return 'Votes <b>more '+s.dir+'</b> than '+st.name+' voters do \u2014 and '+
+        'by a wider margin than most senators differ from their state.';
+    }
+    return 'Votes <b>more '+s.dir+'</b> than '+st.name+' voters do, but by '+
+      '<b>less</b> than most senators differ from their state.';
+  }
+  function tag(s){
+    var v=s.score.toFixed(0)+'% match';
+    if(s.rank<=15) v+='  \u00b7  '+s.rank+ordinal(s.rank)+' furthest of 100';
+    else v+='  \u00b7  typical senator scores '+C.medianScore.toFixed(0)+'%';
+    return v;
+  }
+  function ordinal(n){
+    if(n%10===1&&n%100!==11)return'st';
+    if(n%10===2&&n%100!==12)return'nd';
+    if(n%10===3&&n%100!==13)return'rd';return'th';
+  }
+
+  function render(code){
+    var st=V.states[code];
+    var lean = st.center>0.15?'clearly conservative'
+             : st.center>0.05?'slightly conservative'
+             : st.center<-0.15?'clearly liberal'
+             : st.center<-0.05?'slightly liberal':'right about in the middle';
+    document.getElementById('statefact').innerHTML =
+      'Surveys of '+st.name+' residents put the state '+
+      '<b>'+lean+'</b>. Here is how each of its senators compares.';
+
+    document.getElementById('cards').innerHTML = st.senators.map(function(s,i){
+      var l=Math.min(pos(st.center),pos(s.record));
+      var w=Math.abs(pos(s.record)-pos(st.center));
+      var pc=s.party==='Republican'?'r':'d';
+      var col=s.party==='Republican'?'var(--rep)':'var(--dem)';
+      var flagged=band(s)!=='close';
+      return '<div class="card'+(flagged?' flagged':'')+'">'+
+        '<div class="who"><h3>'+s.name+'</h3>'+
+        '<span class="party '+pc+'">'+s.party+'</span></div>'+
+        '<p class="verdict">'+sentence(s,st,i)+'</p>'+
+        '<span class="tagline '+band(s)+'">'+tag(s)+'</span>'+
+        '<div class="scale"><div class="ends"><span>\u2190 More liberal</span>'+
+        '<span>More conservative \u2192</span></div>'+
+        '<div class="track">'+
+          (w>1.5?'<div class="span" style="left:'+l+'%;width:'+w+'%"></div>':'')+
+          '<div class="mark state" style="left:'+pos(st.center)+'%"></div>'+
+          '<div class="mtag top" style="left:'+pos(st.center)+'%">'+
+            st.name+' voters</div>'+
+          '<div class="mark sen" style="left:'+pos(s.record)+'%;background:'+col+'"></div>'+
+          '<div class="mtag bot" style="left:'+pos(s.record)+'%;color:'+col+'">'+
+            s.name.split(' ').slice(-1)[0]+'</div>'+
+        '</div></div></div>';
+    }).join('');
+  }
+
+  function workings(code){
+    var st=V.states[code];
+    var se=M.se[code];
+    var out='';
+    st.senators.forEach(function(s){
+      var gap=Math.abs(s.record-st.center);
+      var as=(1-gap/2)*100;
+      out+='<div class="work"><h3>'+s.name+'</h3><table>'+
+        '<tr><td>Senator\u2019s position <b>x</b><br>'+
+          '<span style="color:var(--muted);font-size:13px">'+M.scoreCol+
+          ', Congress '+M.congress+', id '+s.bioguide+'</span></td><td>'+
+          (s.record>0?'+':'')+s.record.toFixed(3)+'</td></tr>'+
+        '<tr><td>State\u2019s position <b>s</b><br>'+
+          '<span style="color:var(--muted);font-size:13px">'+M.ideologyCol+
+          ', '+M.ideologyYear+' wave, \u00b1'+se.toFixed(3)+'</span></td><td>'+
+          (st.center>0?'+':'')+st.center.toFixed(3)+'</td></tr>'+
+        '<tr class="total"><td>Distance <b>|x \u2212 s|</b></td><td>'+
+          gap.toFixed(3)+'</td></tr>'+
+        '</table>'+
+        '<div class="formula">|'+(s.record>0?'+':'')+s.record.toFixed(3)+
+          ' \u2212 '+(st.center>0?'+':'')+st.center.toFixed(3)+'| = '+gap.toFixed(3)+
+          '</div>'+
+        '<div class="formula">alignment = (1 \u2212 '+gap.toFixed(3)+
+          ' \u00f7 2) \u00d7 100 = '+as.toFixed(1)+'%</div>'+
+        '</div>';
+    });
+    out+='<div class="work"><h3>The Senate against the country</h3><table>'+
+      '<tr><td>Middle senator of 100 <b>Ch</b></td><td>'+
+        (M.chM>0?'+':'')+M.chM.toFixed(4)+'</td></tr>'+
+      '<tr><td>National public <b>US</b><br><span style="color:var(--muted);'+
+        'font-size:13px">all 51 state estimates, weighted by 2020 population</span>'+
+        '</td><td>'+(M.usM>0?'+':'')+M.usM.toFixed(4)+'</td></tr>'+
+      '<tr class="total"><td>Gap <b>Ch \u2212 US</b></td><td>'+
+        (M.dUS>0?'+':'')+M.dUS.toFixed(4)+'</td></tr></table>'+
+      '<div class="formula">'+(M.chM>0?'+':'')+M.chM.toFixed(4)+' \u2212 ('+
+        M.usM.toFixed(4)+') = '+(M.dUS>0?'+':'')+M.dUS.toFixed(4)+'</div></div>';
+    document.getElementById('workings').innerHTML=out;
+  }
+
+  document.getElementById('srcs').innerHTML=M.sources.map(function(t){
+    return '<div><b>'+t[0]+'</b><a href="https://'+t[1].replace(/^https?:\/\//,'')+
+      '">'+t[1]+'</a><span>'+t[2]+'</span></div>';
+  }).join('');
+
+  var _r=render;
+  render=function(c){_r(c);workings(c)};
+  sel.addEventListener('change',function(){render(sel.value)});
+  sel.value='GA';
+  render('GA');
+
+  document.getElementById('skewn').textContent=C.moreCons+' of 100';
+  document.getElementById('skewp').textContent=
+    'senators vote more conservative than their own state, and '+C.moreLib+
+    ' vote more liberal. The Senate as a whole sits noticeably to the right of '+
+    'the American public, because every state gets two senators whether it has '+
+    '40 million people or 600,000 \u2014 and the smaller states lean Republican.';
+  document.getElementById('nsig').textContent=C.medianScore.toFixed(0)+'%';
+  document.getElementById('foot').textContent=
+    'Senator positions: Voteview, University of California Los Angeles, '+
+    V.congress+'th Congress. State voter positions: '+V.source+', '+
+    V.ideologyYear+' wave. Both are placed on the same scale by the researchers '+
+    'who produced the state estimates.';
+})();
+</script>
+
+</html>
