@@ -116,3 +116,25 @@ def test_limits_section_exists(text):
         "cannot be propagated",
     ]:
         assert phrase in text, f"WHITEPAPER.md no longer states the limit: {phrase!r}"
+
+
+def test_json_export_marks_the_dead_metric(report):
+    """The handoff format must flag what may not be displayed.
+
+    Committee drift looks plausible and does not work. A front end building
+    against this JSON cannot show it without ignoring an explicit flag.
+    """
+    from civicalign.export import to_dict
+
+    d = to_dict(report)
+    assert d["committee_drift"]["publishable"] is False
+    assert "do not" in d["committee_drift"]["reason"].lower() or \
+           "survive" in d["committee_drift"]["reason"].lower()
+
+    for key in ("chamber", "apportionment_skew", "state_alignment",
+                "committee_chairs", "committee_state_lean"):
+        assert d[key]["publishable"] is True, f"{key} should be publishable"
+
+    # per-committee flags too, so a consumer iterating the list is also safe
+    assert all(c["publishable"] is False for c in d["committee_drift"]["committees"])
+    assert d["state_alignment"]["n_significant"] == len(d["state_alignment"]["significant"])

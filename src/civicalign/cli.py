@@ -17,6 +17,12 @@ COMMITTEE_NAMES = {
 
 def main() -> int:
     r = run(DEFAULT)
+
+    if "--json" in sys.argv:
+        from .export import to_json
+        print(to_json(r))
+        return 0
+
     c = r.config
 
     print(f"CivicAlign  |  {c.congress}th Congress  |  score column: {c.score_column}")
