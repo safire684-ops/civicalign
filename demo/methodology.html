@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>How We Measure Senate Representation</title>
+<meta name="description" content="Where every number comes from, worked through, and what it can and cannot tell you.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=Public+Sans:wght@400;500;700&display=swap">
+<style>
+:root{
+  --paper:#F2F4F7; --surface:#FFFFFF; --ink:#191C21; --muted:#5F6874;
+  --rule:#DEE3EA; --rule-soft:#EDF0F4; --accent:#A85A00; --accent-soft:#FBF0E2;
+  --serif:"Source Serif 4",Georgia,serif;
+  --sans:"Public Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  --mono:ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --paper:#101317; --surface:#191D23; --ink:#E9ECF0; --muted:#99A3B0;
+  --rule:#2A3039; --rule-soft:#222831; --accent:#E09A4B; --accent-soft:#2A1F12;
+}}
+:root[data-theme="dark"]{
+  --paper:#101317; --surface:#191D23; --ink:#E9ECF0; --muted:#99A3B0;
+  --rule:#2A3039; --rule-soft:#222831; --accent:#E09A4B; --accent-soft:#2A1F12;
+}
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font-family:var(--sans);
+  font-size:16.5px;line-height:1.65;margin:0}
+.wrap{max-width:660px;margin:0 auto;padding-inline:20px;padding-block:48px 80px}
+h1,h2,h3{font-family:var(--serif);font-weight:600;text-wrap:balance;margin:0}
+h1{font-size:clamp(30px,6vw,42px);line-height:1.12;letter-spacing:-.018em}
+h2{font-size:clamp(20px,3.4vw,25px);line-height:1.25}
+h3{font-size:18px;margin-top:34px}
+p{margin:0}
+p+p,p+div,div+p,h3+p{margin-top:14px}
+header{border-bottom:2px solid var(--ink);padding-bottom:24px}
+.eyebrow{font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--muted)}
+h1{margin-top:10px}
+.sub{margin-top:16px;color:var(--muted);font-size:17px;max-width:54ch}
+.asof{margin-top:14px;font-family:var(--mono);font-size:12.5px;color:var(--muted)}
+section{margin-top:46px}
+section>h2+p{margin-top:14px}
+b{font-weight:700}
+code{font-family:var(--mono);font-size:.88em;background:var(--rule-soft);
+  padding:1px 5px;border-radius:3px}
+a{color:var(--accent)}
+.tw{overflow-x:auto;margin-top:18px}
+table{border-collapse:collapse;width:100%;font-size:14.5px}
+th,td{text-align:left;padding:9px 12px 9px 0;border-bottom:1px solid var(--rule);
+  vertical-align:top}
+th{font-family:var(--mono);font-size:10.5px;letter-spacing:.07em;
+  text-transform:uppercase;color:var(--muted);font-weight:500;
+  border-bottom:1px solid var(--ink)}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+table.calc td:last-child{text-align:right;font-variant-numeric:tabular-nums;
+  font-weight:600}
+table.calc tr.total td{border-bottom:none;border-top:2px solid var(--ink);
+  font-weight:700}
+.sm{font-family:var(--mono);font-size:11.5px;color:var(--muted);font-weight:400}
+.limits dl{margin:18px 0 0;display:grid;gap:18px}
+.limits dt{font-weight:700;font-size:16px}
+.limits dd{margin:5px 0 0;color:var(--muted);max-width:58ch}
+@media (max-width:480px){ .wrap{padding-block:36px 56px} }
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <p class="eyebrow">Methodology &middot; 119th Congress</p>
+  <h1>How we measure Senate representation</h1>
+  <p class="sub">We place every US senator and every state's voters on the same
+    scale, then measure the distance between them. This explains where each number
+    comes from and what it can and cannot tell you.</p>
+  <p class="asof">As of 19 September 2026</p>
+</header>
+
+<section>
+  <h2>The question</h2>
+  <p>Does a senator vote the way their state's voters actually lean?</p>
+  <p>That sounds simple, and the answer is genuinely useful: a senator who sits far
+    from their own state is being sent to Washington by one set of people and voting
+    like a different set. But answering it properly turns out to be harder than it
+    looks, and most of the work goes into one specific obstacle.</p>
+</section>
+
+<section>
+  <h2>The hard part</h2>
+  <p>A senator is measured by how they vote on bills. Voters are measured by what
+    they tell a survey. Those are two different rulers with two different zero
+    points, so subtracting one from the other is like subtracting Celsius from
+    Fahrenheit: you get a number, and it means nothing.</p>
+  <p>The fix is to use data where somebody has already done the work of putting both
+    on one ruler. Academic researchers take large surveys of state residents and
+    translate the answers onto the exact same scale that congressional voting records
+    use. That translation is the whole reason the comparison is legitimate, and it is
+    why we use their published estimates rather than any poll we could find.</p>
+  <p>Everything sits on one line running from &minus;1.0 (most liberal) to +1.0
+    (most conservative). Senators and state publics both land somewhere on it. Then
+    subtraction is allowed.</p>
+</section>
+
+<section>
+  <h2>Where the numbers come from</h2>
+  <p>Four public datasets, all free to download. Nothing here is proprietary and
+    nothing is estimated by us.</p>
+  <div class="tw"><table>
+    <tr><th>What</th><th>Source</th><th>Exactly which numbers</th></tr>
+    <tr><td>Senator positions</td>
+        <td><a href="https://voteview.com/">Voteview</a>, UCLA</td>
+        <td>Column <code>nokken_poole_dim1</code>, 119th Congress. Built from every
+            roll-call vote a senator cast this session</td></tr>
+    <tr><td>State voter positions</td>
+        <td><a href="https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/BQKU4M">American Ideology Project</a>, Tausanovitch &amp; Warshaw</td>
+        <td>Column <code>mrp_ideology</code>, 2020 wave, from surveys run 2017&ndash;2021</td></tr>
+    <tr><td>Who holds each seat</td>
+        <td><a href="https://unitedstates.github.io/congress-legislators/">congress-legislators</a></td>
+        <td>Joined by each member's official ID</td></tr>
+    <tr><td>State populations</td>
+        <td><a href="https://www2.census.gov/programs-surveys/popest/datasets/2020-2024/state/totals/">US Census Bureau</a>, vintage 2024</td>
+        <td>Used to weight states when averaging the country</td></tr>
+  </table></div>
+  <p>Two details that sound small and are not. We use the per-Congress version of the
+    senator score, because the better-known version is a single number fixed for a
+    senator's whole career and could never show anyone changing. And the government's
+    own file lists 104 senators for 100 seats, because members who left mid-term stay
+    in it beside their replacements, so we join against the current roster to get the
+    real 100.</p>
+</section>
+
+<section>
+  <h2>The three measurements</h2>
+
+  <h3>1. A senator against their own state</h3>
+  <p>Subtract the two positions. Jon Ossoff of Georgia, worked through:</p>
+  <div class="tw"><table class="calc">
+    <tr><td>Ossoff's voting record</td><td class="n">&minus;0.547</td></tr>
+    <tr><td>Georgia voters</td><td class="n">+0.060</td></tr>
+    <tr class="total"><td>Distance between them</td><td class="n">0.607</td></tr>
+    <tr class="total"><td>Representation match<br><span class="sm">(1 &minus; 0.607 &divide; 2) &times; 100</span></td><td class="n">69.6%</td></tr>
+  </table></div>
+  <p>The match percentage is just the distance rescaled so it reads as a percentage.
+    It is <b>not</b> a share of votes: 69.6% does not mean he voted Georgia's way 69
+    times in 100.</p>
+
+  <p>The widest gaps in the current Senate:</p>
+  <div class="tw"><table>
+    <tr><th>Senator</th><th>State</th><th class="n">Record</th><th class="n">Their state</th><th class="n">Gap</th><th class="n">Match</th></tr>
+    <tr><td>Rick Scott</td><td>FL</td><td class="n">+0.926</td><td class="n">+0.002</td><td class="n">0.924</td><td class="n">53.8%</td></tr>
+    <tr><td>Ron Johnson</td><td>WI</td><td class="n">+0.897</td><td class="n">+0.004</td><td class="n">0.893</td><td class="n">55.4%</td></tr>
+    <tr><td>Ted Cruz</td><td>TX</td><td class="n">+0.865</td><td class="n">+0.052</td><td class="n">0.813</td><td class="n">59.4%</td></tr>
+    <tr><td>Mike Lee</td><td>UT</td><td class="n">+0.891</td><td class="n">+0.107</td><td class="n">0.784</td><td class="n">60.8%</td></tr>
+    <tr><td>Tommy Tuberville</td><td>AL</td><td class="n">+0.936</td><td class="n">+0.198</td><td class="n">0.738</td><td class="n">63.1%</td></tr>
+  </table></div>
+  <p>Context that matters: the typical senator scores <b>83.2%</b>, and <b>53 of
+    100</b> sit more conservative than their state while 47 sit more liberal. A gap is
+    normal. Nine senators sit on the opposite side of centre from their own state,
+    which is the more striking finding.</p>
+
+  <h3>2. The Senate against the country</h3>
+  <p>Same idea, one level up. The middle senator sits at <b>+0.310</b>. The American
+    public, averaging all states weighted by population, sits at <b>&minus;0.027</b>.
+    The gap is <b>+0.337</b>.</p>
+  <p>That gap exists because every state elects two senators whether it holds 40
+    million people or 600,000, and the smaller states lean Republican. It does not
+    decide any single vote, but it shifts which bills can pass at all.</p>
+
+  <h3>3. Committees against the Senate</h3>
+  <p>Bills must clear a committee before reaching the floor, so a committee sitting
+    well to one side can kill bills the full chamber would pass. The tool compares
+    each committee's midpoint to the Senate's midpoint of <b>+0.310</b>.</p>
+  <div class="tw"><table>
+    <tr><th>Committee</th><th class="n">Its midpoint</th><th class="n">Distance from the Senate</th><th class="n">Same gap, by average member</th></tr>
+    <tr><td>Environment</td><td class="n">+0.003</td><td class="n">&minus;0.31</td><td class="n">&minus;0.11</td></tr>
+    <tr><td>Appropriations</td><td class="n">+0.004</td><td class="n">&minus;0.31</td><td class="n">&minus;0.08</td></tr>
+    <tr><td>Foreign Relations</td><td class="n">+0.535</td><td class="n">+0.23</td><td class="n">+0.10</td></tr>
+  </table></div>
+  <p>The last column is there because the two ways of describing a committee
+    disagree, and the gap between them is itself informative. A <b>midpoint</b> is the
+    middle member once you line them up. An <b>average</b> pulls in everyone's
+    position, so members at both extremes drag it toward the centre and the gap comes
+    out smaller. On a committee split evenly between two parties the midpoint can land
+    in the empty space between them, where no actual senator sits &mdash; which is why
+    these are the softest numbers in the whole tool.</p>
+  <p>By the average measure, only <b>4 of 19</b> committees show a gap big enough to
+    be worth reporting: the three above plus Homeland and Governmental Affairs at
+    +0.10. For the rest, the gap is smaller than the amount it would move if one
+    member were swapped.</p>
+</section>
+
+<section class="limits">
+  <h2>What this cannot tell you</h2>
+  <dl>
+    <dt>It says nothing about any single vote.</dt>
+    <dd>A senator's number summarises their whole record into one figure. Someone can
+      match their state overall while voting against it on the issue you care most
+      about.</dd>
+    <dt>Politics is squeezed onto one line.</dt>
+    <dd>A single liberal-to-conservative axis describes congressional voting well,
+      because most roll-call votes split along it. It describes voters less well, since
+      people's economic and social views do not line up as neatly.</dd>
+    <dt>The state figures are estimates.</dt>
+    <dd>They carry a margin of error of about 0.04, which varies a little by state and
+      is drawn on the tool as a dashed band around the state's mark. It is small next
+      to gaps of 0.6 or 0.9, but it is not zero. The senator scores have their own
+      error too, which Voteview does not publish, so we cannot carry it through &mdash;
+      that is the largest remaining hole in the method.</dd>
+    <dt>The survey data lags.</dt>
+    <dd>The most recent published wave is 2020, built from surveys run 2017&ndash;2021.
+      No newer one exists to use. State opinion shifts, so a fast-changing state is
+      described less well than a stable one.</dd>
+    <dt>Committee figures are the softest numbers here.</dt>
+    <dd>A committee holds about twenty members split between two parties, so its centre
+      can move sharply when one member is replaced, and the midpoint and the average
+      disagree about how far it sits from the chamber. Treat them as indicative, not as
+      firm as the senator comparisons.</dd>
+  </dl>
+</section>
+
+<section>
+  <h2>How to check it</h2>
+  <p>Every figure here can be reproduced with a calculator. Download the two files in
+    the table above, find a senator in the Voteview file and read their
+    <code>nokken_poole_dim1</code>, find their state in the ideology file and read its
+    <code>mrp_ideology</code>, and subtract. That is the entire calculation.</p>
+  <p>The code that produces these numbers is checked by a test suite that recomputes
+    every published figure straight from the downloaded files, using nothing from the
+    code it is testing &mdash; so a bug in the pipeline cannot hide behind a test that
+    shares it. Every download is stamped with its date and a checksum, because
+    Voteview revises scores as new votes are recorded.</p>
+  <p>If you want to argue with something here, the useful places are the choices
+    rather than the arithmetic: whether one liberal-to-conservative line is a fair
+    summary of politics, whether 2020 survey data is close enough for a 2026
+    judgement, and whether a committee's average is the right way to describe a group
+    split between two parties. Those are real questions. The subtraction is not in
+    doubt.</p>
+</section>
+</div>
+
+</body>
+</html>
