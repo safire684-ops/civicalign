@@ -110,6 +110,27 @@ def main() -> int:
     for x in sig:
         print(f"    {x.name[:24]:24s} {x.state:2s} residual {x.residual:+.3f}  t {x.t_stat:+.2f}")
 
+    if r.gatekeeping:
+        print("\n-- Pillar 6 by behaviour: which bills each committee buried ----")
+        print(f"  Every bill takes its sponsor's position. Chamber-wide, "
+              f"conservative-sponsored")
+        print(f"  bills are reported out {r.gatekeeping_baseline:+.1f} points more often "
+              f"than liberal-sponsored")
+        print("  ones -- that is majority control, not committee behaviour, so it is")
+        print("  subtracted. The last column is what is left.")
+        print(f"  {'cmte':5s} {'name':22s} {'liberal':>13s} {'conservative':>15s} "
+              f"{'gap':>6s} {'vs base':>8s}")
+        for g in r.gatekeeping:
+            if not g.is_reportable:
+                continue
+            print(f"  {g.code:5s} {COMMITTEE_NAMES.get(g.code, '?'):22s} "
+                  f"{g.lib_reported:4d}/{g.lib_referred:<4d}{g.survival_liberal:5.1f}% "
+                  f"{g.con_reported:5d}/{g.con_referred:<4d}{g.survival_conservative:5.1f}% "
+                  f"{g.gbi:+6.1f} {g.gbi_vs_baseline:+8.1f}")
+        skipped = [g for g in r.gatekeeping if not g.is_reportable]
+        print(f"  {len(skipped)} committees held back: fewer than 25 bills on one side, "
+              f"where one bill moves the rate by whole points.")
+
     print("\n-- Committees vs. the public (vote share both sides) ----------")
     print(f"  'vs senate' strips out the {cl.skew_points:+.2f}pt structural skew and")
     print("  majority control, leaving the committee-specific part.")

@@ -107,6 +107,30 @@ def to_dict(r: Report) -> dict[str, Any]:
                 key=lambda d: -d["gap"],
             ),
         },
+        "committee_gatekeeping": {
+            "publishable": True,
+            "note": ("survival rate of conservative-sponsored minus "
+                     "liberal-sponsored bills, in percentage points; publish "
+                     "gbi_vs_baseline, not gbi"),
+            "baseline_points": round(r.gatekeeping_baseline, 3),
+            "baseline_note": ("chamber-wide gap from majority control; already "
+                              "subtracted in gbi_vs_baseline"),
+            "committees": [
+                {
+                    "code": g.code,
+                    "liberal_referred": g.lib_referred,
+                    "liberal_reported": g.lib_reported,
+                    "conservative_referred": g.con_referred,
+                    "conservative_reported": g.con_reported,
+                    "survival_liberal_pct": round(g.survival_liberal, 2),
+                    "survival_conservative_pct": round(g.survival_conservative, 2),
+                    "gbi": round(g.gbi, 3),
+                    "gbi_vs_baseline": round(g.gbi_vs_baseline, 3),
+                    "publishable": g.is_reportable,
+                }
+                for g in r.gatekeeping
+            ],
+        },
         "committee_state_lean": {
             "publishable": True,
             "note": "publish only entries where publishable is true",

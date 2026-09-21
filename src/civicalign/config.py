@@ -86,6 +86,10 @@ class Config:
     processed_dir: Path = field(default=PROCESSED)
 
     @property
+    def billflow_zip(self) -> Path:
+        return self.raw_dir / f"BILLSTATUS-{self.congress}-s.zip"
+
+    @property
     def population_csv(self) -> Path:
         return self.raw_dir / "NST-EST2024-ALLDATA.csv"
 

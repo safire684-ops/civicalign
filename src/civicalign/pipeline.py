@@ -2,10 +2,12 @@
 from dataclasses import dataclass
 
 from .config import Config, DEFAULT
-from .sources import elections, population, rosters, state_prefs, voteview
+from .sources import (billflow, elections, population, rosters, state_prefs,
+                      voteview)
 from .alignment import Alignment, alignment, rank_all
 from .chamber import ChamberStats, chamber_stats
 from .committees import CommitteeStats, committee_stats
+from .gatekeeping import Gatekeeping, gatekeeping
 from .representation import (ChamberLean, CommitteeLean, Fit, Representation,
                              chamber_lean, committee_lean, representations)
 
@@ -28,6 +30,10 @@ class Report:
     chamber_lean: ChamberLean
     representation: list[Representation]
     committee_leans: list[CommitteeLean]
+
+    # Pillar 6 by revealed behaviour: which bills each committee buried.
+    gatekeeping: list[Gatekeeping]
+    gatekeeping_baseline: float
 
     @property
     def pillar4_available(self) -> bool:
@@ -68,6 +74,12 @@ def run(cfg: Config = DEFAULT) -> Report:
     committees.sort(key=lambda c: -abs(c.ccd_mean))
     cleans.sort(key=lambda c: -abs(c.gap))
 
+    gks: list[Gatekeeping] = []
+    gk_base = 0.0
+    if cfg.billflow_zip.exists():
+        gks, gk_base = gatekeeping(
+            billflow.load_referrals(cfg.billflow_zip), scores)
+
     aligns = rank_all([
         alignment(b, roster[b].name, roster[b].state, v, src.state(roster[b].state))
         for b, v in scores.items()
@@ -78,5 +90,5 @@ def run(cfg: Config = DEFAULT) -> Report:
         unscored=voteview.unscored(roster, scores), votes_cast=votes_cast,
         chamber=ch, committees=committees, alignments=aligns, state_source=src,
         election=lean, fit=fit, chamber_lean=chlean, representation=reps,
-        committee_leans=cleans,
+        committee_leans=cleans, gatekeeping=gks, gatekeeping_baseline=gk_base,
     )

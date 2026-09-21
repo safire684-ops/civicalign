@@ -145,3 +145,58 @@ def test_voteview_already_carries_bioguide_so_no_crosswalk_is_needed():
     with DEFAULT.members_csv.open() as fh:
         header = next(csv.reader(fh))
     assert "bioguide_id" in header
+
+
+def test_gatekeeping_baseline_is_removed_not_ignored():
+    """BUG 5: a raw survival-rate gap mostly measures who holds the majority.
+
+    Chamber-wide, conservative-sponsored bills are reported out more often than
+    liberal-sponsored ones, in almost every committee. That baseline is majority
+    control, not committee behaviour, so reporting the raw index would rank nearly
+    every committee as biased in the same direction.
+    """
+    from civicalign.pipeline import run
+
+    r = run(DEFAULT)
+    if not r.gatekeeping:
+        pytest.skip("bill flow archive not downloaded")
+
+    assert r.gatekeeping_baseline > 0, "expected a majority-control baseline"
+    for g in r.gatekeeping:
+        assert g.gbi_vs_baseline == pytest.approx(g.gbi - r.gatekeeping_baseline)
+
+    # the adjustment must actually separate committees, not shift them together
+    adjusted = [g.gbi_vs_baseline for g in r.gatekeeping if g.is_reportable]
+    assert min(adjusted) < 0 < max(adjusted), (
+        "after removing the baseline some committees must fall on each side"
+    )
+
+
+def test_gatekeeping_rates_are_arithmetically_sound():
+    from civicalign.pipeline import run
+
+    r = run(DEFAULT)
+    if not r.gatekeeping:
+        pytest.skip("bill flow archive not downloaded")
+
+    for g in r.gatekeeping:
+        assert g.lib_reported <= g.lib_referred
+        assert g.con_reported <= g.con_referred
+        assert 0 <= g.survival_liberal <= 100
+        assert 0 <= g.survival_conservative <= 100
+        assert g.referred == g.lib_referred + g.con_referred
+
+
+def test_every_bill_sponsor_is_a_scored_senator():
+    """Referrals whose sponsor we cannot score are dropped, not guessed at."""
+    from civicalign.sources.billflow import load_referrals
+    from civicalign.pipeline import run
+
+    if not DEFAULT.billflow_zip.exists():
+        pytest.skip("bill flow archive not downloaded")
+
+    r = run(DEFAULT)
+    refs = load_referrals(DEFAULT.billflow_zip)
+    assert len(refs) > 4000, f"only {len(refs)} referrals parsed"
+    counted = sum(1 for x in refs if x.sponsor in r.scores)
+    assert counted / len(refs) > 0.95, "most sponsors should be sitting senators"

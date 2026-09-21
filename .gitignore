@@ -12,3 +12,8 @@ data/processed/*
 
 # editable-install build artifact
 *.egg-info/
+
+# never commit credentials
+*.key
+.env
+secrets*
