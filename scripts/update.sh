@@ -1,21 +1,48 @@
 #!/usr/bin/env bash
-# Refresh every source, then verify nothing broke.
+# The whole update chain, in the order that keeps bad data off the page.
 #
-# Safe to run on a schedule: each source is fetched independently and only
-# replaces the live file if it passes its own validation, so a bad download or a
-# server outage leaves the previous good data in place.
+#   1 fetch    each source independently; a source that fails its own check
+#              leaves the previous good file in place
+#   2 verify   61 tests, including ones that recompute every published figure
+#              from the raw files
+#   3 rebuild  push the new numbers into the demo page, which carries its data
+#              inside itself
+#   4 confirm  re-run the checks against the rebuilt page
+#
+# If step 2 fails the page is NOT rebuilt: the site keeps serving the last
+# figures that passed, which is the whole point of doing it in this order.
 set -uo pipefail
 cd "$(dirname "$0")/.."
 
+PY=python3
+[ -x ./.venv/bin/python ] && PY=./.venv/bin/python
+
+echo "1/4  fetching sources"
 PYTHONPATH=src python3 -m civicalign.agents
 fetch_status=$?
 
 echo
-echo "verifying the figures still hold..."
-if [ -x ./.venv/bin/python ]; then
-  ./.venv/bin/python -m pytest -q || exit 2
-else
-  python3 -m pytest -q || exit 2
+echo "2/4  verifying the figures"
+if ! $PY -m pytest -q; then
+  echo
+  echo "  TESTS FAILED -- the page was not rebuilt."
+  echo "  It is still showing the last figures that passed. Read the failure above:"
+  echo "  a test naming a stale number means the data moved and the prose needs it."
+  exit 2
 fi
 
-exit $fetch_status
+echo
+echo "3/4  rebuilding the page"
+PYTHONPATH=src python3 -m civicalign.build_demo || exit 3
+
+echo
+echo "4/4  confirming the rebuilt page"
+$PY -m pytest -q tests/test_whitepaper.py || exit 4
+
+echo
+if [ $fetch_status -ne 0 ]; then
+  echo "done, but at least one source could not be fetched (see above)."
+  echo "Everything else is current."
+  exit $fetch_status
+fi
+echo "done. All sources current, all checks passed, page rebuilt."
