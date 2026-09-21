@@ -73,7 +73,7 @@ table.calc tr.total td{border-bottom:none;border-top:2px solid var(--ink);
   <p class="sub">We place every US senator and every state's voters on the same
     scale, then measure the distance between them. This explains where each number
     comes from and what it can and cannot tell you.</p>
-  <p class="asof">As of 21 September 2026</p>
+  <p class="asof">As of {{asof}}</p>
 </header>
 
 <section>
@@ -135,33 +135,26 @@ table.calc tr.total td{border-bottom:none;border-top:2px solid var(--ink);
   <h3>1. A senator against their own state</h3>
   <p>Subtract the two positions. Jon Ossoff of Georgia, worked through:</p>
   <div class="tw"><table class="calc">
-    <tr><td>Ossoff's voting record</td><td class="n">&minus;0.547</td></tr>
-    <tr><td>Georgia voters</td><td class="n">+0.060</td></tr>
-    <tr class="total"><td>Distance between them</td><td class="n">0.607</td></tr>
-    <tr class="total"><td>Representation match<br><span class="sm">(1 &minus; 0.607 &divide; 2) &times; 100</span></td><td class="n">69.6%</td></tr>
+    <tr><td>Ossoff's voting record</td><td class="n">{{os_x}}</td></tr>
+    <tr><td>Georgia voters</td><td class="n">{{os_s}}</td></tr>
+    <tr class="total"><td>Distance between them</td><td class="n">{{os_gap}}</td></tr>
+    <tr class="total"><td>Representation match<br><span class="sm">(1 &minus; {{os_gap}} &divide; 2) &times; 100</span></td><td class="n">{{os_as}}%</td></tr>
   </table></div>
   <p>The match percentage is just the distance rescaled so it reads as a percentage.
-    It is <b>not</b> a share of votes: 69.6% does not mean he voted Georgia's way 69
+    It is <b>not</b> a share of votes: {{os_as}}% does not mean he voted Georgia's way {{os_as_int}}
     times in 100.</p>
 
   <p>The widest gaps in the current Senate:</p>
-  <div class="tw"><table>
-    <tr><th>Senator</th><th>State</th><th class="n">Record</th><th class="n">Their state</th><th class="n">Gap</th><th class="n">Match</th></tr>
-    <tr><td>Rick Scott</td><td>FL</td><td class="n">+0.926</td><td class="n">+0.002</td><td class="n">0.924</td><td class="n">53.8%</td></tr>
-    <tr><td>Ron Johnson</td><td>WI</td><td class="n">+0.897</td><td class="n">+0.004</td><td class="n">0.893</td><td class="n">55.4%</td></tr>
-    <tr><td>Ted Cruz</td><td>TX</td><td class="n">+0.865</td><td class="n">+0.052</td><td class="n">0.813</td><td class="n">59.4%</td></tr>
-    <tr><td>Mike Lee</td><td>UT</td><td class="n">+0.891</td><td class="n">+0.107</td><td class="n">0.784</td><td class="n">60.8%</td></tr>
-    <tr><td>Tommy Tuberville</td><td>AL</td><td class="n">+0.936</td><td class="n">+0.198</td><td class="n">0.738</td><td class="n">63.1%</td></tr>
-  </table></div>
-  <p>Context that matters: the typical senator scores <b>83.2%</b>, and <b>53 of
-    100</b> sit more conservative than their state while 47 sit more liberal. A gap is
-    normal. Nine senators sit on the opposite side of centre from their own state,
+{{top_table}}
+  <p>Context that matters: the typical senator scores <b>{{med_as}}%</b>, and <b>{{more_cons}} of
+    100</b> sit more conservative than their state while {{more_lib}} sit more liberal. A gap is
+    normal. {{cross_word}} senators sit on the opposite side of centre from their own state,
     which is the more striking finding.</p>
 
   <h3>2. The Senate against the country</h3>
-  <p>Same idea, one level up. The middle senator sits at <b>+0.310</b>. The American
-    public, averaging all states weighted by population, sits at <b>&minus;0.027</b>.
-    The gap is <b>+0.337</b>.</p>
+  <p>Same idea, one level up. The middle senator sits at <b>{{ch_m}}</b>. The American
+    public, averaging all states weighted by population, sits at <b>{{us_m}}</b>.
+    The gap is <b>{{d_us}}</b>.</p>
   <p>That gap exists because every state elects two senators whether it holds 40
     million people or 600,000, and the smaller states lean Republican. It does not
     decide any single vote, but it shifts which bills can pass at all.</p>
@@ -174,34 +167,22 @@ table.calc tr.total td{border-bottom:none;border-top:2px solid var(--ink);
   <p>Each bill takes the side of the senator who wrote it, using that senator's
     voting record. A bill by a senator with a liberal record counts as liberal. Then,
     for every committee, we compare how often each side's bills got through.</p>
-  <p>The survival rates are stark on their own. Of <b>5,368</b> bills sent to
-    committees this Congress, only <b>421</b> came back out &mdash; about 8%. The
-    Finance Committee let through <b>1 of 872</b>.</p>
+  <p>The survival rates are stark on their own. Of <b>{{gk_referred}}</b> bills sent to
+    committees this Congress, only <b>{{gk_reported}}</b> came back out &mdash; about {{gk_pct}}%. The
+    {{gk_worst_name}} Committee let through <b>{{gk_worst_rep}} of {{gk_worst_ref}}</b>.</p>
 
   <p><b>The adjustment that matters.</b> Across the whole Senate, bills by
-    conservative senators get through <b>2.4 percentage points</b> more often than
+    conservative senators get through <b>{{gk_base}} percentage points</b> more often than
     bills by liberal senators. That happens on almost every committee, because
     Republicans hold the majority. If we left it in, nearly every committee would look
     biased the same way and the measure would say nothing. So each committee is
-    judged against that 2.4-point baseline, not against zero.</p>
-  <div class="tw"><table class="calc">
-    <tr><td>Small Business: conservative bills through</td><td class="n">7 of 35 = 20.0%</td></tr>
-    <tr><td>Small Business: liberal bills through</td><td class="n">4 of 37 = 10.8%</td></tr>
-    <tr><td>Gap</td><td class="n">+9.2 points</td></tr>
-    <tr><td>Minus the Senate-wide baseline</td><td class="n">&minus;2.4 points</td></tr>
-    <tr class="total"><td>Favours conservative bills beyond the baseline by</td><td class="n">+6.8 points</td></tr>
-  </table></div>
+    judged against that {{gk_base}}-point baseline, not against zero.</p>
+{{gk_worked}}
 
   <p>The committees furthest from the Senate-wide pattern:</p>
-  <div class="tw"><table>
-    <tr><th>Committee</th><th class="n">Liberal bills through</th><th class="n">Conservative bills through</th><th class="n">Beyond baseline</th></tr>
-    <tr><td>Small Business</td><td class="n">4 of 37 (10.8%)</td><td class="n">7 of 35 (20.0%)</td><td class="n">+6.8 conservative</td></tr>
-    <tr><td>Foreign Relations</td><td class="n">31 of 123 (25.2%)</td><td class="n">31 of 147 (21.1%)</td><td class="n">&minus;6.5 liberal</td></tr>
-    <tr><td>HELP</td><td class="n">13 of 425 (3.1%)</td><td class="n">28 of 296 (9.5%)</td><td class="n">+4.0 conservative</td></tr>
-    <tr><td>Agriculture</td><td class="n">4 of 194 (2.1%)</td><td class="n">10 of 148 (6.8%)</td><td class="n">+2.3 conservative</td></tr>
-  </table></div>
+{{gk_table}}
   <p>Committees with fewer than 25 bills from either side are left out, because
-    there a single bill moves the percentage by several points. Thirteen of the
+    there a single bill moves the percentage by several points. {{gk_n_reportable}} of the
     committees have enough bills to report.</p>
   <p><b>Why this replaced the earlier committee measure.</b> The first approach
     compared the political position of a committee's members to the Senate's. On a

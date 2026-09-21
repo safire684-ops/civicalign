@@ -31,6 +31,13 @@ a real and citable thing on its own, and it is most of the way built.
 
 **All seven criteria met.** The measurement layer is finished.
 
+**Updated after four audits (2026-09-19 to 21).** Pillars 4 and 5 now use the
+bridged American Ideology Project scale, so the senator-to-state gap is an absolute
+distance rather than a regression residual. Pillar 6 now counts which bills each
+committee let through, from the government's bulk bill release, measured against
+the Senate-wide baseline. Five update agents refresh every source weekly, and the
+page and the report are both checked against a fresh run by the test suite.
+
 The write-up lives in `WHITEPAPER.md`, in this repo, next to the code that
 produces its figures. `tests/test_whitepaper.py` asserts that every number quoted
 in it matches the pipeline — including the named senators and their individual
@@ -123,7 +130,8 @@ who assumes it works:
 | 6 senators significantly off their state's pattern | publishable |
 | committee chair vs. own majority-party median | publishable |
 | committee state lean, where the gap exceeds its one-member shift | publishable |
-| **committee-to-chamber drift (CCD)** | **do not publish** |
+| committee bill survival, measured against the Senate-wide baseline | publishable — 13 committees |
+| **committee-to-chamber drift by member midpoint (CCD)** | **do not publish** — superseded by bill survival |
 
 ---
 

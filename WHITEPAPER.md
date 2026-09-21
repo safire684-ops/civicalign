@@ -112,7 +112,37 @@ because the baseline would shift with it. An absolute distance would require
 public opinion and voting records to be placed on a single deliberately bridged
 scale, which this project does not do and does not claim to.
 
-## Finding 3: committee ideology cannot be measured this way, and is not reported
+## Finding 3: which bills each committee lets through
+
+Committees decide which bills reach the floor, so the direct way to measure them is
+to count what they did. Every Senate bill of the 119th Congress is in the
+government's own bulk release, with its author and every committee it was sent to.
+Each bill takes the side of the senator who wrote it.
+
+Survival is rare on its own: of 5,368 bills sent to committees, 420 came back out.
+The Finance Committee let through 1 of 872.
+
+Across the whole Senate, bills by conservative senators get through 2.4 percentage
+points more often than bills by liberal senators. That is majority control and it
+appears on almost every committee, so each committee is measured against it rather
+than against zero:
+
+| committee | liberal bills through | conservative bills through | beyond baseline |
+|---|---|---|---|
+| Small Business | 4 of 37 | 7 of 35 | +6.8 |
+| Foreign Relations | 31 of 123 | 31 of 147 | −6.5 |
+| HELP | 13 of 425 | 28 of 296 | +4.0 |
+| Agriculture | 4 of 194 | 10 of 148 | +2.3 |
+
+Committees with fewer than 25 bills from either side are not reported; there one
+bill moves the rate by several points. Thirteen committees have enough.
+
+A bill's side comes from its author's record, not its content, so a moderate bill
+by a conservative senator counts as conservative. And bills die for reasons other
+than politics — duplicates, symbolic bills, bills folded into larger ones — which is
+why the comparison between the two sides carries the finding, not the raw rate.
+
+## Why the first committee measure was dropped
 
 Committees decide which bills reach the floor, so an unrepresentative committee is
 a plausible explanation for why legislation dies. The obvious way to measure this

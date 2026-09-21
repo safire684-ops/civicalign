@@ -154,6 +154,37 @@ select:focus-visible{outline:3px solid var(--alert);outline-offset:2px}
   transform:translateX(-50%)}
 .gtrack .gt.a{top:-28px;color:var(--muted)}
 .gtrack .gt.b{top:22px;color:var(--alert)}
+.stark{margin-top:22px;background:var(--surface);border:1px solid var(--rule);
+  padding:20px 22px;display:flex;gap:18px;align-items:baseline;flex-wrap:wrap}
+.stark .big{font-family:var(--serif);font-size:clamp(34px,7vw,46px);
+  font-weight:700;line-height:1;letter-spacing:-.02em}
+.stark p{flex:1 1 240px;font-size:15px;color:var(--muted)}
+.stark p b{color:var(--ink)}
+.basenote{margin-top:16px;font-size:14.5px;color:var(--muted);max-width:60ch}
+.gk{background:var(--surface);border:1px solid var(--rule);margin-top:14px;
+  padding:18px 20px 20px}
+.gk.lean-c{border-left:4px solid var(--rep)}
+.gk.lean-l{border-left:4px solid var(--dem)}
+.gk .gh{display:flex;justify-content:space-between;align-items:baseline;
+  gap:10px;flex-wrap:wrap}
+.gk .gh b{font-family:var(--serif);font-size:19px;font-weight:700}
+.gk .gh span{font-size:12.5px;color:var(--muted)}
+.bars{margin-top:14px;display:grid;gap:10px}
+.bar{display:grid;grid-template-columns:minmax(120px,160px) 1fr auto;gap:12px;
+  align-items:center;font-size:13.5px}
+.bar .lbl{color:var(--muted);font-weight:600}
+.bar .trk{height:12px;background:var(--rule-soft);border-radius:6px;
+  position:relative;overflow:hidden}
+.bar .fill{position:absolute;inset:0 auto 0 0;border-radius:6px}
+.bar .fill.l{background:var(--dem)}
+.bar .fill.c{background:var(--rep)}
+.bar .num{font-variant-numeric:tabular-nums;white-space:nowrap;font-weight:600}
+.bar .num small{font-weight:400;color:var(--muted)}
+.gk .say{margin-top:12px;font-size:15px;max-width:54ch}
+@media (max-width:480px){
+  .bar{grid-template-columns:1fr auto}
+  .bar .trk{grid-column:1 / -1;order:3}
+}
 .caveat{margin-top:16px;font-size:14px;color:var(--muted);max-width:60ch;
   border-left:3px solid var(--rule);padding-left:14px}
 .stakes{margin-top:2px;background:var(--alert-soft);border:1px solid var(--alert);
@@ -253,10 +284,13 @@ footer{margin-top:40px;font-size:13.5px;color:var(--muted)}
 </div>
 
 <div class="gate">
-  <h2>The committee gatekeepers</h2>
-  <p class="intro">Before a bill can reach the Senate floor, it must first pass
-    through a committee. If a committee sits well to one side of the Senate as a
-    whole, bills that the full chamber might pass can die there instead.</p>
+  <h2>Which bills each committee lets through</h2>
+  <p class="intro">Almost every bill is sent to a committee first, and most never
+    come back out. Here we count, for each committee, how many bills it let through
+    to the full Senate &mdash; split by whether a liberal or a conservative senator
+    wrote them.</p>
+  <div class="stark" id="stark"></div>
+  <p class="basenote" id="basenote"></p>
   <div id="gates"></div>
   <p class="caveat" id="gatecaveat"></p>
 </div>
@@ -324,6 +358,9 @@ const V={"states":{"FL":{"name":"Florida","center":0.002,"se":0.036,"senators":[
 </script>
 <script>
 const M={"congress":119,"scoreCol":"nokken_poole_dim1","ideologyYear":2020,"ideologyCol":"mrp_ideology","se":{"FL":0.0357,"WI":0.0364,"TX":0.0355,"UT":0.0373,"AL":0.0367,"OH":0.0354,"KY":0.037,"NC":0.0361,"GA":0.0355,"MO":0.0359,"PA":0.0359,"IN":0.0364,"TN":0.0355,"WY":0.045,"KS":0.0376,"IA":0.0372,"NM":0.0384,"OK":0.037,"MA":0.0361,"LA":0.0369,"MT":0.0422,"MN":0.0369,"VT":0.0454,"SC":0.0366,"DE":0.0409,"NE":0.0377,"CA":0.0357,"ID":0.0395,"MI":0.0361,"WV":0.038,"AZ":0.0364,"ND":0.0413,"AR":0.0375,"OR":0.0365,"CT":0.0378,"NJ":0.0361,"MD":0.0359,"NV":0.0366,"HI":0.0405,"WA":0.0357,"IL":0.0355,"CO":0.0365,"MS":0.0381,"VA":0.0364,"ME":0.0409,"NY":0.0354,"SD":0.0436,"NH":0.0393,"AK":0.0458,"RI":0.0421},"chM":0.31,"usM":-0.0269,"dUS":0.3369,"popYear":2024,"sources":[["Senator positions","voteview.com/static/data/out/members/HSall_members.csv","column nokken_poole_dim1, rows where congress=119 and chamber=Senate"],["Who holds each seat","unitedstates.github.io/congress-legislators/legislators-current.json","joined on bioguide id"],["State voter positions","dataverse.harvard.edu doi:10.7910/DVN/BQKU4M","file aip_states_ideology_v2022a.tab, column mrp_ideology, 2020 wave"],["State populations","www2.census.gov/programs-surveys/popest/datasets/2020-2024/state/totals/","NST-EST2024-ALLDATA.csv, used to weight states"]]};
+</script>
+<script>
+const G={"baseline":2.4,"totalReferred":5368,"totalReported":421,"worst":{"name":"Finance","reported":1,"referred":872},"committees":[{"code":"SSSB","name":"Small Business","libRef":37,"libRep":4,"conRef":35,"conRep":7,"libPct":10.8,"conPct":20.0,"gap":9.2,"vsBase":6.8},{"code":"SSFR","name":"Foreign Relations","libRef":123,"libRep":31,"conRef":147,"conRep":31,"libPct":25.2,"conPct":21.1,"gap":-4.1,"vsBase":-6.5},{"code":"SSHR","name":"HELP","libRef":425,"libRep":13,"conRef":296,"conRep":28,"libPct":3.1,"conPct":9.5,"gap":6.4,"vsBase":4.0},{"code":"SSAF","name":"Agriculture","libRef":194,"libRep":4,"conRef":148,"conRep":10,"libPct":2.1,"conPct":6.8,"gap":4.7,"vsBase":2.3},{"code":"SSFI","name":"Finance","libRef":392,"libRep":0,"conRef":480,"conRep":1,"libPct":0.0,"conPct":0.2,"gap":0.2,"vsBase":-2.2},{"code":"SSCM","name":"Commerce","libRef":225,"libRep":34,"conRef":250,"conRep":49,"libPct":15.1,"conPct":19.6,"gap":4.5,"vsBase":2.1},{"code":"SSVA","name":"Veterans","libRef":88,"libRep":4,"conRef":116,"conRep":10,"libPct":4.5,"conPct":8.6,"gap":4.1,"vsBase":1.7},{"code":"SSGA","name":"Homeland/Govt Affairs","libRef":197,"libRep":19,"conRef":234,"conRep":25,"libPct":9.6,"conPct":10.7,"gap":1.0,"vsBase":-1.4},{"code":"SSBK","name":"Banking","libRef":177,"libRep":0,"conRef":215,"conRep":3,"libPct":0.0,"conPct":1.4,"gap":1.4,"vsBase":-1.0},{"code":"SSEV","name":"Environment","libRef":102,"libRep":6,"conRef":104,"conRep":8,"libPct":5.9,"conPct":7.7,"gap":1.8,"vsBase":-0.6},{"code":"SSJU","name":"Judiciary","libRef":306,"libRep":13,"conRef":349,"conRep":25,"libPct":4.2,"conPct":7.2,"gap":2.9,"vsBase":0.5},{"code":"SSAS","name":"Armed Services","libRef":93,"libRep":0,"conRef":103,"conRep":2,"libPct":0.0,"conPct":1.9,"gap":1.9,"vsBase":-0.5},{"code":"SSEG","name":"Energy","libRef":183,"libRep":32,"conRef":157,"conRep":31,"libPct":17.5,"conPct":19.7,"gap":2.3,"vsBase":-0.2}]};
 </script>
 <script>
 const C={"medianScore":83.2,"medianGap":0.336,"crossCount":9,"moreCons":53,"moreLib":47};
@@ -490,39 +527,52 @@ const X={"anchors":[{"name":"Sanders","full":"Bernard Sanders","x":-0.696},{"nam
   }
 
   (function(){
-    function gpos(v){return ((v+1)/2*100)}
-    var shown=X.committees.slice(0,3);
+    if(!G.committees||!G.committees.length){return;}
+    var pct=function(n,d){return d?Math.round(100*n/d):0};
+    if(G.worst){
+      document.getElementById('stark').innerHTML=
+        '<span class="big">'+G.worst.reported+' of '+G.worst.referred.toLocaleString()+
+        '</span><p>bills sent to the <b>'+G.worst.name+' Committee</b> this Congress '+
+        'made it back out. Across every committee, <b>'+
+        pct(G.totalReported,G.totalReferred)+'%</b> of bills survive \u2014 '+
+        G.totalReported.toLocaleString()+' of '+G.totalReferred.toLocaleString()+'.</p>';
+    }
+    document.getElementById('basenote').innerHTML=
+      'Across the whole Senate, bills written by conservative senators get through '+
+      'slightly more often \u2014 by <b>'+G.baseline.toFixed(1)+' percentage points</b>. '+
+      'That is simply because Republicans hold the majority, and it happens on every '+
+      'committee. So each committee below is judged against that baseline, not '+
+      'against zero.';
+    var max=Math.max.apply(null,G.committees.map(function(c){return Math.max(c.libPct,c.conPct)}));
+    var scale=Math.max(10,Math.ceil(max/5)*5);
+    var shown=G.committees.slice(0,4);
     document.getElementById('gates').innerHTML=shown.map(function(c){
-      var dir=c.drift>0?'conservative':'liberal';
-      var l=Math.min(gpos(c.median),gpos(X.chMedian));
-      var w=Math.abs(gpos(c.median)-gpos(X.chMedian));
-      return '<div class="grow"><div class="gh"><b>'+c.name+'</b>'+
-        '<span>'+c.n+' senators \u00b7 '+c.split[0]+' majority, '+c.split[1]+
-        ' minority</span></div>'+
-        '<p>Sits <b>'+Math.abs(c.drift).toFixed(2)+' to the '+
-        (c.drift>0?'right':'left')+'</b> of the Senate as a whole, measured by each '+
-        'group\u2019s midpoint. Bills that lean '+
-        (c.drift>0?'liberal':'conservative')+' have to clear a committee that is more '+
-        dir+' than the chamber that would vote on them.</p>'+
-        '<p class="alt">Measured by the average member instead, the gap is <b>'+
-        Math.abs(c.meanDrift).toFixed(2)+'</b> \u2014 smaller, because an average is '+
-        'pulled in by members on both sides. Both figures appear in the methodology.</p>'+
-        '<div class="gtrack">'+
-          (w>1?'<div class="gspan" style="left:'+l+'%;width:'+w+'%"></div>':'')+
-          '<div class="gm ch" style="left:'+gpos(X.chMedian)+'%"></div>'+
-          '<div class="gt a" style="left:'+gpos(X.chMedian)+'%">Senate as a whole</div>'+
-          '<div class="gm cm" style="left:'+gpos(c.median)+'%"></div>'+
-          '<div class="gt b" style="left:'+gpos(c.median)+'%">This committee</div>'+
-        '</div></div>';
+      var leanC=c.vsBase>0;
+      var mag=Math.abs(c.vsBase);
+      var say;
+      if(mag<1){
+        say='Treats bills from both sides about the same as the Senate as a whole.';
+      } else {
+        say='Favours <b>'+(leanC?'conservative':'liberal')+'</b>-written bills <b>'+
+          mag.toFixed(1)+' points</b> more than the Senate as a whole does.';
+      }
+      function row(label,cls,rep,ref,p){
+        return '<div class="bar"><span class="lbl">'+label+'</span>'+
+          '<div class="trk"><div class="fill '+cls+'" style="width:'+(100*p/scale)+'%"></div></div>'+
+          '<span class="num">'+p.toFixed(0)+'% <small>'+rep+' of '+ref+'</small></span></div>';
+      }
+      return '<div class="gk '+(mag<1?'':(leanC?'lean-c':'lean-l'))+'">'+
+        '<div class="gh"><b>'+c.name+'</b><span>'+(c.libRef+c.conRef)+' bills sent here</span></div>'+
+        '<div class="bars">'+
+          row('By liberal senators','l',c.libRep,c.libRef,c.libPct)+
+          row('By conservative senators','c',c.conRep,c.conRef,c.conPct)+
+        '</div><p class="say">'+say+'</p></div>';
     }).join('');
-    var frag=shown.filter(function(c){return c.shift>=Math.abs(c.drift)});
-    document.getElementById('gatecaveat').innerHTML =
-      'Committee figures are less firm than the senator figures above. A committee '+
-      'has around twenty members split between two parties, so its midpoint can sit '+
-      'in the gap between them and move sharply if one member is replaced'+
-      (frag.length? ' \u2014 which is the case for '+frag.length+' of the three shown here'
-                  : '')+
-      '. Treat these as indicative, not as precise as the state comparisons.';
+    document.getElementById('gatecaveat').innerHTML=
+      'Showing the four committees furthest from the Senate-wide pattern. Committees '+
+      'with fewer than 25 bills from either side are left out, because there a single '+
+      'bill moves the percentage by several points. A bill takes the side of the '+
+      'senator who wrote it, measured by that senator\u2019s voting record.';
   })();
 
   document.getElementById('srcs').innerHTML=M.sources.map(function(t){

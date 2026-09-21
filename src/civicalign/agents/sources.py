@@ -78,6 +78,35 @@ def _populations(path: Path) -> str | None:
     return None
 
 
+def _ideology(path: Path) -> str | None:
+    """The bridged state estimates Pillars 4 and 5 rest on."""
+    with path.open() as fh:
+        reader = csv.DictReader(fh, delimiter="\t")
+        if reader.fieldnames is None:
+            return "no header row"
+        for col in ("abb", "presidential_year", "mrp_ideology", "mrp_ideology_se"):
+            if col not in reader.fieldnames:
+                return f"column {col!r} has disappeared from the file"
+        rows = [r for r in reader
+                if r["presidential_year"] == str(DEFAULT.ideology_year)]
+    if len(rows) < 50:
+        return f"only {len(rows)} states for the {DEFAULT.ideology_year} wave"
+    return None
+
+
+def _elections(path: Path) -> str | None:
+    """Presidential results used for the vote-share cross-check."""
+    with path.open() as fh:
+        reader = csv.DictReader(fh)
+        if reader.fieldnames is None or "candidatevotes" not in reader.fieldnames:
+            return "expected candidate vote columns are missing"
+        years = {r["year"] for r in reader}
+    missing = {str(y) for y in DEFAULT.election_years} - years
+    if missing:
+        return f"election years {sorted(missing)} not in the file"
+    return None
+
+
 def all_agents() -> list[Agent]:
     return [
         Agent(
@@ -109,6 +138,20 @@ def all_agents() -> list[Agent]:
             validate=_bill_flow,
             min_bytes=1_000_000,
             timeout=300,
+        ),
+        Agent(
+            name="state ideology",
+            url="https://dataverse.harvard.edu/api/access/datafile/6690212",
+            target=RAW / "aip_states_ideology_v2022a.tab",
+            validate=_ideology,
+            min_bytes=10_000,
+        ),
+        Agent(
+            name="election results",
+            url="https://dataverse.harvard.edu/api/access/datafile/13887042",
+            target=RAW / "mit_president_1976_2024.csv",
+            validate=_elections,
+            min_bytes=100_000,
         ),
         Agent(
             name="state populations",
