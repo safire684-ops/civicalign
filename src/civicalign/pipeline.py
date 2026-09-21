@@ -16,6 +16,7 @@ class Report:
     senators: dict[str, rosters.Senator]
     scores: dict[str, float]
     unscored: list[rosters.Senator]
+    votes_cast: dict[str, int]
     chamber: ChamberStats
     committees: list[CommitteeStats]
     alignments: list[Alignment]
@@ -35,7 +36,9 @@ class Report:
 
 def run(cfg: Config = DEFAULT) -> Report:
     roster = rosters.load_current_senators(cfg.roster_json)
-    scores = voteview.load_scores(cfg.members_csv, cfg.congress, roster, cfg.score_column)
+    scores = voteview.load_scores(cfg.members_csv, cfg.congress, roster,
+                                  cfg.score_column, cfg.min_roll_calls)
+    votes_cast = voteview.roll_calls_cast(cfg.members_csv, cfg.congress, roster)
     majority = rosters.majority_party(roster)
 
     pops = population.load_populations(cfg.population_csv, cfg.population_year)
@@ -72,7 +75,7 @@ def run(cfg: Config = DEFAULT) -> Report:
 
     return Report(
         config=cfg, senators=roster, scores=scores,
-        unscored=voteview.unscored(roster, scores),
+        unscored=voteview.unscored(roster, scores), votes_cast=votes_cast,
         chamber=ch, committees=committees, alignments=aligns, state_source=src,
         election=lean, fit=fit, chamber_lean=chlean, representation=reps,
         committee_leans=cleans,

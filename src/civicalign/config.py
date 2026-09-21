@@ -62,6 +62,15 @@ class Config:
     # from surveys fielded 2017-2021. No 2024 wave exists to ingest.
     ideology_year: int = 2020
 
+    # A senator needs at least this many recorded votes before their position is
+    # published. A score built on a handful of votes moves sharply with each new
+    # one, so a newly seated member would otherwise be shown a volatile number.
+    #
+    # Nobody in the 119th is currently below it -- the fewest is 37 votes and the
+    # median is 873 -- so today this guard changes nothing. It exists for the
+    # opening months of a new Congress, when it changes everything.
+    min_roll_calls: int = 30
+
     # Census vintage for population weighting of US_m. Re-weighting each year keeps
     # the national centre current as people move between states, instead of freezing
     # it at one decennial count.

@@ -61,6 +61,8 @@ select{margin-top:10px;width:100%;font-family:var(--sans);font-size:19px;
 select:focus-visible{outline:3px solid var(--alert);outline-offset:2px}
 .statefact{margin-top:14px;font-size:15px;color:var(--muted)}
 .statefact b{color:var(--ink);font-weight:600}
+.stale{display:block;margin-top:8px;font-size:12.5px;color:var(--muted);
+  border-left:2px solid var(--rule);padding-left:9px}
 
 .card{background:var(--surface);border:1px solid var(--rule);margin-top:20px;
   padding:24px 22px 26px}
@@ -242,11 +244,12 @@ footer{margin-top:40px;font-size:13.5px;color:var(--muted)}
 </div>
 <div class="stakes">
   <h3>Why that matters</h3>
-  <p>Because the Senate sits to the right of the national centre, a bill backed by
-    a slim majority of the American public can still fail in the Senate, while a
-    bill favoured mainly by smaller conservative-leaning states can pass without
-    majority support nationally. The skew does not decide any single vote, but it
-    shifts which bills are able to pass at all.</p>
+  <p>This gap works as a <b>structural veto</b>. A bill backed by a slim majority
+    of the American public can fail in the Senate without any senator changing their
+    mind, purely because of which states hold the seats. A bill favoured mainly by
+    smaller conservative-leaning states can pass without majority support nationally.
+    The skew decides no single vote; it decides which bills are able to pass at
+    all.</p>
 </div>
 
 <div class="gate">
@@ -338,12 +341,22 @@ const X={"anchors":[{"name":"Sanders","full":"Bernie Sanders","x":-0.696},{"name
 
   function pos(v){ return ((v+1)/2*100); }   // -1..+1 -> 0..100%
 
-  function band(s){
+  function withinError(s,st,se){
+    // a gap smaller than the survey's own margin of error is not a real gap
+    return Math.abs(s.record - st.center) <= se;
+  }
+  function band(s,st,se){
+    if(withinError(s,st,se)) return 'close';
     if(s.crosses) return 'far';
     if(s.score < C.medianScore) return 'wide';
     return 'close';
   }
-  function sentence(s,st,i){
+  function sentence(s,st,i,se){
+    if(withinError(s,st,se)){
+      return 'Votes <b>statistically in line with '+st.name+'</b>. The difference '+
+        'between them is smaller than the survey\u2019s own margin of error, so it '+
+        'cannot be called a real gap.';
+    }
     if(s.crosses){
       var tail = i===0
         ? ' Only '+C.crossCount+' of the 100 senators are on the opposite side of '+
@@ -358,6 +371,14 @@ const X={"anchors":[{"name":"Sanders","full":"Bernie Sanders","x":-0.696},{"name
     }
     return 'Votes <b>more '+s.dir+'</b> than '+st.name+' voters do, but by '+
       '<b>less</b> than most senators differ from their state.';
+  }
+  function tag(s,st,se){
+    if(withinError(s,st,se)){
+      return '<div class="chips"><span class="chip main">Within the margin of '+
+        'error</span><span class="chip">gap '+s.gap.toFixed(2)+
+        ' \u00b7 margin \u00b1'+se.toFixed(2)+'</span></div>';
+    }
+    return chips(s);
   }
   function chips(s){
     var dirWord = s.dir==='conservative' ? 'right' : 'left';
@@ -380,21 +401,31 @@ const X={"anchors":[{"name":"Sanders","full":"Bernie Sanders","x":-0.696},{"name
              : st.center<-0.05?'slightly liberal':'right about in the middle';
     document.getElementById('statefact').innerHTML =
       'Surveys of '+st.name+' residents put the state '+
-      '<b>'+lean+'</b>. Here is how each of its senators compares.';
+      '<b>'+lean+'</b>. Here is how each of its senators compares.'+
+      ' <span class="stale">Using the '+M.ideologyYear+' survey baseline \u2014 '+
+      'the most recent one published. Population weights are Census '+
+      M.popYear+'.</span>';
 
     var se=M.se[code]||0;
     document.getElementById('cards').innerHTML = st.senators.map(function(s,i){
+      if(s.record===null){
+        return '<div class="card"><div class="who"><h3>'+s.name+'</h3>'+
+          '<span class="party '+(s.party==='Republican'?'r':'d')+'">'+s.party+
+          '</span></div><p class="verdict">Not enough voting record yet. A position '+
+          'is published once a senator has cast enough votes for the estimate to '+
+          'settle; before that it would swing with every new vote.</p></div>';
+      }
       var l=Math.min(pos(st.center),pos(s.record));
       var w=Math.abs(pos(s.record)-pos(st.center));
       var pc=s.party==='Republican'?'r':'d';
       var col=s.party==='Republican'?'var(--rep)':'var(--dem)';
-      var flagged=band(s)!=='close';
+      var flagged=band(s,st,se)!=='close';
       var moeW=(se*2/2)*100, moeL=pos(st.center)-moeW/2;
       return '<div class="card'+(flagged?' flagged':'')+'">'+
         '<div class="who"><h3>'+s.name+'</h3>'+
         '<span class="party '+pc+'">'+s.party+'</span></div>'+
-        '<p class="verdict">'+sentence(s,st,i)+'</p>'+
-        chips(s).replace('class="chip main"','class="chip main '+band(s)+'"')+
+        '<p class="verdict">'+sentence(s,st,i,se)+'</p>'+
+        tag(s,st,se).replace('class="chip main"','class="chip main '+band(s,st,se)+'"')+
         '<div class="scale"><div class="ends">'+
           '<span>\u2190 More liberal</span><span>More conservative \u2192</span>'+
         '</div>'+

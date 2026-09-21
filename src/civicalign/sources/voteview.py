@@ -27,6 +27,7 @@ def load_scores(
     congress: int,
     roster: dict[str, Senator],
     column: str,
+    min_roll_calls: int = 0,
 ) -> dict[str, float]:
     """Coordinate per seated senator, keyed by bioguide.
 
@@ -40,6 +41,14 @@ def load_scores(
             bioguide = row["bioguide_id"]
             if bioguide not in roster:  # departed member, or a replacement's predecessor
                 continue
+            # too few votes: the estimate is not yet stable enough to publish
+            try:
+                cast = int(row.get("nominate_number_of_votes") or 0)
+            except ValueError:
+                cast = 0
+            if cast < min_roll_calls:
+                continue
+
             raw = row.get(column, "")
             if raw not in ("", None):
                 scores[bioguide] = float(raw)
@@ -66,5 +75,25 @@ def _validate(scores: dict[str, float], roster: dict[str, Senator]) -> None:
 
 
 def unscored(roster: dict[str, Senator], scores: dict[str, float]) -> list[Senator]:
-    """Seated senators with no coordinate -- usually too new to have voted enough."""
+    """Seated senators with no published coordinate.
+
+    Either Voteview has no score for them yet, or they are below the vote
+    threshold. The front end shows these as "not enough voting record yet"
+    rather than drawing a number.
+    """
     return [s for b, s in roster.items() if b not in scores]
+
+
+def roll_calls_cast(members_csv: Path, congress: int,
+                    roster: dict[str, Senator]) -> dict[str, int]:
+    """Votes cast per seated senator, for reporting why someone is unscored."""
+    out: dict[str, int] = {}
+    with members_csv.open() as fh:
+        for row in csv.DictReader(fh):
+            if (row["chamber"] == "Senate" and row["congress"] == str(congress)
+                    and row["bioguide_id"] in roster):
+                try:
+                    out[row["bioguide_id"]] = int(row.get("nominate_number_of_votes") or 0)
+                except ValueError:
+                    out[row["bioguide_id"]] = 0
+    return out
