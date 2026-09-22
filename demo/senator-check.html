@@ -475,14 +475,14 @@ const C={"medianScore":83.2,"medianGap":0.336,"crossCount":9,"moreCons":53,"more
       if(s.record==null)return;
       var gap=s.record-st.center;
       out+='<div class="work"><h3>'+esc(s.name)+'</h3><table>'+
-        '<tr><td>Senator’s position <b>x</b><br><span style="color:var(--muted);font-size:13px">'+M.scoreCol+', Congress '+M.congress+', id '+esc(s.bioguide)+'</span></td><td>'+signed(s.record,3)+'</td></tr>'+
-        '<tr><td>State’s position <b>s</b><br><span style="color:var(--muted);font-size:13px">'+M.ideologyCol+', '+M.ideologyYear+' wave, ±'+se.toFixed(3)+'</span></td><td>'+signed(st.center,3)+'</td></tr>'+
+        '<tr><td>Senator’s position <b>x</b><br><span class="src">'+M.scoreCol+', Congress '+M.congress+', id '+esc(s.bioguide)+'</span></td><td>'+signed(s.record,3)+'</td></tr>'+
+        '<tr><td>State’s position <b>s</b><br><span class="src">'+M.ideologyCol+', '+M.ideologyYear+' wave, ±'+se.toFixed(3)+'</span></td><td>'+signed(st.center,3)+'</td></tr>'+
         '<tr class="total"><td>Signed distance <b>x − s</b></td><td>'+signed(gap,3)+'</td></tr></table>'+
         '<div class="formula">'+signed(s.record,3)+' − ('+signed(st.center,3)+') = '+signed(gap,3)+(Math.abs(gap)<=se?'   → inside ±'+se.toFixed(3)+', aligned':'')+'</div></div>';
     });
     out+='<div class="work"><h3>The Senate against the country</h3><table>'+
       '<tr><td>Middle senator of 100 <b>Ch</b></td><td>'+signed(M.chM,4)+'</td></tr>'+
-      '<tr><td>National public <b>US</b><br><span style="color:var(--muted);font-size:13px">all 51 state estimates, weighted by Census '+M.popYear+' population</span></td><td>'+signed(M.usM,4)+'</td></tr>'+
+      '<tr><td>National public <b>US</b><br><span class="src">all 51 state estimates, weighted by Census '+M.popYear+' population</span></td><td>'+signed(M.usM,4)+'</td></tr>'+
       '<tr class="total"><td>Gap <b>Ch − US</b></td><td>'+signed(M.dUS,4)+'</td></tr></table>'+
       '<div class="formula">'+signed(M.chM,4)+' − ('+signed(M.usM,4)+') = '+signed(M.dUS,4)+'</div></div>';
     $('workings').innerHTML=out;

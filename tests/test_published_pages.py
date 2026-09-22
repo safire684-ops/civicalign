@@ -366,3 +366,12 @@ def test_alignment_badge_carries_an_icon_and_does_not_rely_on_green():
     assert "#22c55e" not in rule and "green" not in rule
     assert "<span class=\"ic\" aria-hidden=\"true\">'+sp.i+'</span>" in text
     assert "i:'\\u2713'" in text and "i:'\\u2192'" in text and "i:'\\u2190'" in text
+
+
+def test_page_keeps_static_styling_in_the_external_stylesheet():
+    """Only dynamic values (track positions, computed heights) may be inline;
+    every static rule lives in civicalign.css."""
+    import re
+    inline = re.findall(r'style="([^"]*)"', DEMO.read_text())
+    static = [s for s in inline if not s.startswith("--") and not s.startswith("height:'+")]
+    assert not static, static

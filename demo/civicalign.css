@@ -375,6 +375,7 @@ select:focus-visible,button:focus-visible,summary:focus-visible{
   text-transform:uppercase;color:var(--muted)}
 .work table{border-collapse:collapse;width:100%;margin-top:12px;font-size:14.5px}
 .work td{padding:7px 10px 7px 0;border-bottom:1px solid var(--rule-soft);vertical-align:top}
+.work .src{color:var(--muted);font-size:13px}
 .work td:last-child{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap;
   font-weight:600}
 .work tr.total td{border-bottom:none;border-top:2px solid var(--ink);font-weight:700;
