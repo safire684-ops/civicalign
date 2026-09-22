@@ -23,17 +23,29 @@
     &mdash; and shows real votes and familiar bills so the distance means something.</p>
 </header>
 
+<nav class="nav" aria-label="Sections">
+  <a href="#your-senators">Your senators</a>
+  <a href="#the-senate">The Senate</a>
+  <a href="#committees">Committees</a>
+  <a href="#how-it-works">How it works</a>
+</nav>
+
+<section id="your-senators">
 <div class="picker">
   <label for="state">Choose your state</label>
   <select id="state"></select>
   <p class="statefact" id="statefact"></p>
 </div>
 
-<div class="ruler" id="ruler"></div>
-
 <div id="cards"></div>
 
-<section class="how">
+<details class="explore" id="explore">
+  <summary><span>Explore the scale</span></summary>
+  <div class="ruler" id="ruler"></div>
+</details>
+</section>
+
+<section class="how" id="how-it-works">
   <h2>How this works</h2>
   <ol>
     <li><div><b>Place your senators on a scale</b>
@@ -48,7 +60,7 @@
   </ol>
 </section>
 
-<section id="public">
+<section id="the-senate">
   <h2>How far is the Senate from the American people?</h2>
   <p class="intro">Same scale, one level up. Where the middle of the Senate sits,
     where the public sits, and how far apart they are.</p>
@@ -65,6 +77,7 @@
   <div class="stakes" id="stakes"></div>
 </section>
 
+<div id="committees">
 <section id="committee-drift-module">
   <h2>The committees: where bills go before the floor</h2>
   <p class="intro">Almost every bill is sent to a committee first. If a committee
@@ -73,7 +86,7 @@
     bills it let through actually divided the Senate.</p>
   <p class="ckey"><span class="k1"><i></i>where the members sit</span>
     <span class="k2"><i></i>where the bills it passed divided the Senate</span></p>
-  <div id="committees"></div>
+  <div id="committee-cards"></div>
   <p class="caveat" id="cmcaveat"></p>
 </section>
 
@@ -87,6 +100,7 @@
   <div id="gates"></div>
   <p class="caveat" id="gatecaveat"></p>
 </section>
+</div>
 
 <div class="limits">
   <h2>What this can and cannot tell you</h2>
@@ -189,6 +203,28 @@ const C={"medianScore":83.2,"medianGap":0.336,"crossCount":9,"moreCons":53,"more
   };
 
   $('baseline').textContent='Baseline: '+M.ideologyYear+' survey wave · Census '+M.popYear;
+
+  // ---------- navigation ----------
+  var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function goToSenators(){
+    var sec=$('your-senators');
+    sec.scrollIntoView({behavior:reduce?'auto':'smooth',block:'start'});
+    var first=sec.querySelector('.card h3');
+    if(first){first.setAttribute('tabindex','-1');first.focus({preventScroll:true});}
+  }
+  (function(){
+    var links=document.querySelectorAll('.nav a');
+    if(!links.length||typeof IntersectionObserver!=='function') return;
+    var byId={}; links.forEach(function(a){byId[a.getAttribute('href').slice(1)]=a});
+    var obs=new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if(!en.isIntersecting) return;
+        links.forEach(function(a){a.removeAttribute('aria-current')});
+        var a=byId[en.target.id]; if(a) a.setAttribute('aria-current','true');
+      });
+    },{rootMargin:'-40% 0px -55% 0px'});
+    Object.keys(byId).forEach(function(id){var t=$(id); if(t) obs.observe(t)});
+  })();
 
   // ---------- state picker ----------
   var sel=$('state');
@@ -318,7 +354,15 @@ const C={"medianScore":83.2,"medianGap":0.336,"crossCount":9,"moreCons":53,"more
     $('dots').addEventListener('focusin',function(e){var b=e.target.closest('.dot');if(b)show(b)});
     $('dots').addEventListener('mouseleave',function(){tip.hidden=true});
     $('dots').addEventListener('focusout',function(){tip.hidden=true});
-    $('dots').addEventListener('click',function(e){var b=e.target.closest('.dot');if(b){show(b);var d=byB[b.getAttribute('data-b')];if(d&&V.states[d.st]){sel.value=d.st;render(d.st);}}});
+    $('dots').addEventListener('click',function(e){
+      var b=e.target.closest('.dot'); if(!b) return;
+      show(b);
+      var d=byB[b.getAttribute('data-b')];
+      if(!(d&&V.states[d.st])) return;
+      sel.value=d.st; render(d.st);
+      tip.hidden=true;
+      goToSenators();
+    });
     $('stakes').innerHTML='<h3>Why that matters</h3><p>This gap works as a <b>structural veto</b>. A bill backed by a slim majority of the American public can fail in the Senate without any senator changing their mind, purely because of which states hold the seats. Every state gets two senators whether it has 40 million people or 600,000, and the smaller states lean Republican. The skew decides no single vote; it decides which bills are able to pass at all.</p>';
   })();
 
@@ -329,7 +373,7 @@ const C={"medianScore":83.2,"medianGap":0.336,"crossCount":9,"moreCons":53,"more
     list.sort(function(a,b){var oa=X.output[a.code]?1:0, ob=X.output[b.code]?1:0;
       return ob-oa || Math.abs(b.drift)-Math.abs(a.drift)});
     list=list.slice(0,8);
-    $('committees').innerHTML=list.map(function(c){
+    $('committee-cards').innerHTML=list.map(function(c){
       var o=X.output[c.code], right=c.drift>0;
       var l=Math.min(pos(c.median),pos(X.chMedian)), w=Math.abs(pos(c.median)-pos(X.chMedian));
       var warn = Math.abs(c.drift)>thr

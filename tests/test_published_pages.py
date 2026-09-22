@@ -116,3 +116,58 @@ def test_demo_committee_module_shows_both_references():
     assert X["usM"] is not None
     assert all("cndMedian" in c for c in X["committees"])
     assert X["output"], "expected at least one committee with output ideology"
+
+
+# ---- navigation (Pillars 4-6 page) ----
+
+def test_nav_has_the_four_sections_in_order_and_each_target_exists():
+    text = DEMO.read_text()
+    nav = re.search(r'<nav class="nav" aria-label="Sections">(.*?)</nav>', text, re.S)
+    assert nav, "navigation missing"
+    links = re.findall(r'<a href="#([\w-]+)">(.*?)</a>', nav.group(1))
+    assert links == [("your-senators", "Your senators"), ("the-senate", "The Senate"),
+                     ("committees", "Committees"), ("how-it-works", "How it works")]
+    for target, _ in links:
+        assert f'id="{target}"' in text, f"nav target #{target} has no element"
+
+
+def test_senator_cards_come_straight_after_the_state_selector():
+    text = DEMO.read_text()
+    picker, cards, explore = (text.index('<select id="state">'), text.index('<div id="cards">'),
+                              text.index('id="explore"'))
+    assert picker < cards < explore
+    between = text[picker:cards]
+    assert "ruler" not in between and "<section" not in between
+
+
+def test_ruler_is_kept_under_explore_the_scale():
+    text = DEMO.read_text()
+    m = re.search(r'<details class="explore" id="explore">\s*<summary>.*?Explore the scale.*?</summary>\s*<div class="ruler" id="ruler">', text, re.S)
+    assert m, "the six-bill ruler must live inside the Explore the scale disclosure"
+
+
+def test_clicking_a_circle_shows_that_state_and_brings_the_cards_into_view():
+    text = DEMO.read_text()
+    handler = re.search(r"\$\('dots'\)\.addEventListener\('click',(.*?)\n    \}\);", text, re.S)
+    assert handler, "dot click handler missing"
+    body = handler.group(1)
+    assert "render(d.st)" in body and "sel.value=d.st" in body
+    assert "goToSenators()" in body
+    assert "scrollIntoView" in text and "$('your-senators')" in text
+
+
+def test_no_element_id_is_duplicated():
+    """A duplicated id makes getElementById pick the wrong node. Adding the
+    #committees nav anchor once collided with the card container and silently
+    wiped out the bill-survival section."""
+    markup = DEMO.read_text().split("<script>")[0]
+    ids = re.findall(r'\bid="([\w-]+)"', markup)
+    dupes = sorted({i for i in ids if ids.count(i) > 1})
+    assert not dupes, f"duplicated ids: {dupes}"
+
+
+def test_every_id_the_script_uses_exists_in_the_markup():
+    text = DEMO.read_text()
+    markup = text.split("<script>")[0]
+    for i in sorted(set(re.findall(r"\$\('([\w-]+)'\)", text))):
+        assert f'id="{i}"' in markup, f"script targets #{i} but the markup has no such element"

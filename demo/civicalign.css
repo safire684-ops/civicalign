@@ -42,7 +42,24 @@ p{margin:0}
 .badge{font-family:var(--mono);font-size:11.5px;color:var(--muted);
   border:1px solid var(--rule);border-radius:3px;padding:4px 9px;white-space:nowrap}
 
+/* navigation: sticks under the top edge; scrolls sideways on a phone */
+.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;margin-top:28px;
+  display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;
+  background:var(--paper);padding:10px 0;border-bottom:1px solid var(--rule)}
+.nav::-webkit-scrollbar{display:none}
+.nav a{flex:none;font-size:14px;font-weight:600;color:var(--muted);
+  text-decoration:none;padding:7px 12px;border-radius:16px;white-space:nowrap}
+.nav a:hover{color:var(--ink);background:var(--rule-soft)}
+.nav a[aria-current="true"]{color:var(--ink);background:var(--surface);
+  box-shadow:inset 0 0 0 1.5px var(--ink)}
+.nav a:focus-visible{outline:3px solid var(--alert);outline-offset:2px}
+html{scroll-behavior:smooth;scroll-padding-top:64px}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+[id]{scroll-margin-top:64px}
+.card h3[tabindex]{outline-offset:4px}
+
 section{margin-top:52px}
+#your-senators{margin-top:0}
 section>.intro{margin-top:12px;color:var(--muted);font-size:15.5px;max-width:60ch}
 
 /* picker */
@@ -63,9 +80,18 @@ select:focus-visible,button:focus-visible,summary:focus-visible{
 .statefact{margin-top:14px;font-size:15px;color:var(--muted)}
 .statefact b{color:var(--ink);font-weight:600}
 
-/* ---- the shared ruler: familiar things on the scale ---- */
-.ruler{margin-top:24px;background:var(--surface);border:1px solid var(--rule);
-  padding:20px 22px 18px}
+/* ---- "Explore the scale": the ruler, folded away under the cards ---- */
+.explore{margin-top:20px;border:1px solid var(--rule);background:var(--surface)}
+.explore summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;
+  align-items:center;gap:10px;padding:14px 22px;font-family:var(--serif);
+  font-size:18px;font-weight:600}
+.explore summary::-webkit-details-marker{display:none}
+.explore summary::after{content:"show";font-family:var(--sans);font-size:12.5px;
+  font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);
+  border:1px solid var(--rule);border-radius:3px;padding:3px 9px}
+.explore[open] summary::after{content:"hide"}
+.ruler{margin-top:0;background:var(--surface);border:0;border-top:1px solid var(--rule);
+  padding:18px 22px 18px}
 .ruler h3{font-family:var(--sans);font-size:13px;font-weight:700;letter-spacing:.06em;
   text-transform:uppercase;color:var(--muted)}
 .ruler .ends{display:flex;justify-content:space-between;font-size:12.5px;
