@@ -18,142 +18,147 @@
     <span class="badge" id="baseline">Baseline: &mdash;</span>
   </div>
   <h1>How far is your senator from your state?</h1>
-  <p class="sub">Your senators and your state's voters are placed on the same scale,
-    from most liberal to most conservative. This measures the distance between them
-    &mdash; and shows real votes and familiar bills so the distance means something.</p>
+  <p class="sub">Senators and their states' voters are placed on one scale, from most
+    liberal to most conservative. This measures the distance between them.</p>
 </header>
 
-<nav class="nav" aria-label="Sections">
-  <a href="#your-senators">Your senators</a>
-  <a href="#the-senate">The Senate</a>
-  <a href="#committees">Committees</a>
-  <a href="#how-it-works">How it works</a>
+<nav class="nav" role="tablist" aria-label="Sections">
+  <a href="#your-senators" role="tab" id="tab-your-senators" aria-controls="your-senators" aria-selected="true">Your senators</a>
+  <a href="#the-senate" role="tab" id="tab-the-senate" aria-controls="the-senate" aria-selected="false" tabindex="-1">The Senate</a>
+  <a href="#committees" role="tab" id="tab-committees" aria-controls="committees" aria-selected="false" tabindex="-1">Committees</a>
+  <a href="#how-it-works" role="tab" id="tab-how-it-works" aria-controls="how-it-works" aria-selected="false" tabindex="-1">How it works</a>
 </nav>
 
-<section id="your-senators">
-<div class="picker">
-  <label for="state">Choose your state</label>
-  <select id="state"></select>
-  <p class="statefact" id="statefact"></p>
-</div>
-
-<div id="cards"></div>
-
-<details class="explore" id="explore">
-  <summary><span>Explore the scale</span></summary>
-  <div class="ruler" id="ruler"></div>
-</details>
+<!-- ============ 1. Your senators ============ -->
+<section id="your-senators" class="view" role="tabpanel" aria-labelledby="tab-your-senators" tabindex="-1">
+  <p class="takeaway" id="take-senators"></p>
+  <div class="picker">
+    <label for="state">Choose your state</label>
+    <select id="state"></select>
+    <p class="statefact" id="statefact"></p>
+  </div>
+  <div id="cards"></div>
+  <details class="explore" id="explore">
+    <summary><span>Explore the scale</span></summary>
+    <div class="ruler" id="ruler"></div>
+  </details>
+  <p class="limit">The state's position is an estimate from surveys, shown with its
+    margin of error as a shaded band. A senator inside that band counts as aligned.
+    The distance is in points on the scale, not a share of votes.</p>
 </section>
 
-<section class="how" id="how-it-works">
-  <h2>How this works</h2>
-  <ol>
-    <li><div><b>Place your senators on a scale</b>
-      <span>Every roll-call vote a senator has cast, turned into one number from
-      &minus;1 (most liberal) to +1 (most conservative).</span></div></li>
-    <li><div><b>Place your state's voters on the same scale</b>
-      <span>Large surveys of residents in every state, translated by academic
-      researchers into the exact same numbers, so the two can be compared directly.</span></div></li>
-    <li><div><b>Measure the distance, then show a vote where it mattered</b>
-      <span>Subtract one from the other. Then find a real vote where the senator
-      chose the opposite side from the one your state's position points to.</span></div></li>
-  </ol>
-</section>
-
-<section id="the-senate">
-  <h2>How far is the Senate from the American people?</h2>
-  <p class="intro">Same scale, one level up. Where the middle of the Senate sits,
-    where the public sits, and how far apart they are.</p>
+<!-- ============ 2. The Senate ============ -->
+<section id="the-senate" class="view" role="tabpanel" aria-labelledby="tab-the-senate" tabindex="-1" hidden>
+  <p class="takeaway" id="take-senate"></p>
   <div class="pubcard" id="pubcard"></div>
   <div class="gridwrap">
-    <h3>All 100 senators, against the public</h3>
-    <p class="gridnote">One circle per senator, in order from most liberal to most
-      conservative. Blue means further left than the American public; red means
-      further right. Hover or tap a circle for the senator's name and how far they
-      sit from the Senate, from the public, and from their own state.</p>
+    <h3>Every senator against the public</h3>
+    <p class="gridnote">One circle per senator, most liberal on the left. Blue sits left
+      of the American public, red sits right. Tap a circle to see that senator's
+      distances and open their state.</p>
     <div class="dots" id="dots"></div>
     <p class="gradkey"><span>Left of the public</span><i></i><span>Right of the public</span></p>
   </div>
-  <div class="stakes" id="stakes"></div>
-</section>
-
-<div id="committees">
-<section id="committee-drift-module">
-  <h2>The committees: where bills go before the floor</h2>
-  <p class="intro">Almost every bill is sent to a committee first. If a committee
-    sits well to one side of the Senate, it can stall bills the full chamber would
-    pass. Each card shows where the committee's members sit &mdash; and where the
-    bills it let through actually divided the Senate.</p>
-  <p class="ckey"><span class="k1"><i></i>where the members sit</span>
-    <span class="k2"><i></i>where the bills it passed divided the Senate</span></p>
-  <div id="committee-cards"></div>
-  <p class="caveat" id="cmcaveat"></p>
-</section>
-
-<section class="gate">
-  <h2>Which bills each committee lets through</h2>
-  <p class="intro">Most bills sent to a committee never come back out. Here we count,
-    for each committee, how many it let through to the full Senate &mdash; split by
-    whether a liberal or a conservative senator wrote them.</p>
-  <div class="stark" id="stark"></div>
-  <p class="basenote" id="basenote"></p>
-  <div id="gates"></div>
-  <p class="caveat" id="gatecaveat"></p>
-</section>
-</div>
-
-<div class="limits">
-  <h2>What this can and cannot tell you</h2>
-  <dl>
-    <dt>Your state's position is an estimate, not a headcount.</dt>
-    <dd>It comes from large academic surveys modelled down to the state level. Its
-      margin of error is drawn on every track as a shaded band, and a senator inside
-      that band is treated as aligned, not penalised for a gap too small to trust.</dd>
-    <dt>The distance is in points on the scale, not a share of votes.</dt>
-    <dd>"0.61 points further Left" is a position on the liberal&ndash;conservative
-      line. It does not mean the senator voted against the state 61% of the time.</dd>
-    <dt>The "vote where this showed" is real, but it is one vote.</dt>
-    <dd>It names an actual bill and how the senator voted on it, against the side
-      your state's position points to. What that bill would do in plain English is a
-      separate part of this project and is not claimed here.</dd>
-    <dt>Almost every senator is more extreme than their state.</dt>
-    <dd>The typical distance is <b id="medgap">&mdash;</b> points. A gap is normal in
-      today's Senate, so the useful question is not whether there is one but whether
-      it is bigger than most.</dd>
-    <dt>Committee figures are softer than senator figures.</dt>
-    <dd>A committee's members' midpoint can move sharply when one member is replaced.
-      Where the bills it passed divided the Senate rests on a handful of votes for
-      most committees. Both are shown with the count behind them.</dd>
-  </dl>
-</div>
-
-<div class="method">
-  <details>
-  <summary><h2>Check our work</h2></summary>
-  <div class="plain">
-    <div><b>How we scored the senator</b>
-      <span>We took every roll-call vote they have cast this session and compared
-      their pattern of yes and no votes against every other member of Congress.
-      That places them at one exact point on the liberal&ndash;conservative scale.</span></div>
-    <div><b>How we scored the state</b>
-      <span>We used large academic surveys of residents in every state about their
-      actual policy preferences. Researchers translate those answers onto the very
-      same scale used for senators, so the two can be compared directly.</span></div>
-    <div><b>How we placed the bills</b>
-      <span>Every floor vote has a dividing line: the point on the scale that best
-      separates the senators who voted Yes from those who voted No. A bill sits at
-      the middle of its votes' dividing lines.</span></div>
-  </div>
-  <p class="intro">Here is the arithmetic in full, for the state you picked. You
-    should be able to reproduce every number with a calculator and the files listed
-    at the end.</p>
-  <div id="workings"></div>
-  <div class="work">
-    <h3>Where each input comes from</h3>
-    <div class="srcs" id="srcs"></div>
-  </div>
+  <details class="more">
+    <summary><span>See details</span></summary>
+    <div class="stakes" id="stakes"></div>
   </details>
-</div>
+  <p class="limit">The public's position is an estimate from surveys, averaged across
+    states by population. It measures where people sit on the scale, not their view on
+    any single issue.</p>
+</section>
+
+<!-- ============ 3. Committees ============ -->
+<section id="committees" class="view" role="tabpanel" aria-labelledby="tab-committees" tabindex="-1" hidden>
+  <p class="takeaway" id="take-committee"></p>
+  <div class="picker">
+    <label for="committee">Choose a committee</label>
+    <select id="committee"></select>
+    <p class="statefact" id="cmfact"></p>
+  </div>
+  <div id="committee-drift-module">
+    <p class="ckey"><span class="k1"><i></i>where the members sit</span>
+      <span class="k2"><i></i>where the bills it passed divided the Senate</span></p>
+    <div id="committee-cards"></div>
+  </div>
+  <div class="gate">
+    <h3>Which bills each committee lets through</h3>
+    <div id="gates"></div>
+  </div>
+  <details class="more">
+    <summary><span>See details</span></summary>
+    <div class="stark" id="stark"></div>
+    <p class="basenote" id="basenote"></p>
+    <p class="caveat" id="cmcaveat"></p>
+    <p class="caveat" id="gatecaveat"></p>
+  </details>
+  <p class="limit">Committee figures are softer than senator figures. The members'
+    midpoint can move sharply when one member is replaced, and the bills-passed mark
+    rests on a handful of votes. The count behind each is shown.</p>
+</section>
+
+<!-- ============ 4. How it works ============ -->
+<section id="how-it-works" class="view" role="tabpanel" aria-labelledby="tab-how-it-works" tabindex="-1" hidden>
+  <p class="takeaway">We combine public voting records, survey estimates, and other
+    public data to make these comparisons.</p>
+  <div class="how">
+    <ol>
+      <li><div><b>Place each senator on a scale</b>
+        <span>Every roll-call vote they have cast this session, turned into one number
+        from &minus;1 (most liberal) to +1 (most conservative).</span></div></li>
+      <li><div><b>Place each state's voters on the same scale</b>
+        <span>Large academic surveys of residents, translated by researchers onto the
+        very same scale, so the two can be compared directly.</span></div></li>
+      <li><div><b>Measure the distance, then show a vote where it showed</b>
+        <span>Subtract one from the other. Then find a real vote where the senator chose
+        the opposite side from the one the state's position points to.</span></div></li>
+    </ol>
+  </div>
+  <div class="plain">
+    <div><b>How the bills are placed</b>
+      <span>Every floor vote has a dividing line: the point on the scale that best
+      separates the senators who voted Yes from those who voted No. A bill sits at the
+      middle of its votes' dividing lines.</span></div>
+    <div><b>How committees are measured</b>
+      <span>Three ways, each with its count shown: where the members sit, where the
+      bills it let through divided the Senate, and how many bills from each side it
+      let through at all.</span></div>
+  </div>
+  <div class="limits">
+    <h3>What this can and cannot tell you</h3>
+    <dl>
+      <dt>Your state's position is an estimate, not a headcount.</dt>
+      <dd>It comes from large academic surveys modelled down to the state level. Its
+        margin of error is drawn on every track as a shaded band, and a senator inside
+        that band is treated as aligned, not penalised for a gap too small to trust.</dd>
+      <dt>The distance is in points on the scale, not a share of votes.</dt>
+      <dd>"0.61 points further Left" is a position on the liberal&ndash;conservative
+        line. It does not mean the senator voted against the state 61% of the time.</dd>
+      <dt>The "vote where this showed" is real, but it is one vote.</dt>
+      <dd>It names an actual bill and how the senator voted on it, against the side
+        your state's position points to. What that bill would do in plain English is a
+        separate part of this project and is not claimed here.</dd>
+      <dt>Almost every senator is more extreme than their state.</dt>
+      <dd>The typical distance is <b id="medgap">&mdash;</b> points. A gap is normal in
+        today's Senate, so the useful question is not whether there is one but whether
+        it is bigger than most.</dd>
+      <dt>Committee figures are softer than senator figures.</dt>
+      <dd>A committee's members' midpoint can move sharply when one member is replaced.
+        Where the bills it passed divided the Senate rests on a handful of votes for
+        most committees. Both are shown with the count behind them.</dd>
+    </dl>
+  </div>
+  <details class="more method">
+    <summary><span>See details: the arithmetic and sources</span></summary>
+    <p class="intro">The arithmetic in full, for the state you picked. You should be
+      able to reproduce every number with a calculator and the files listed at the end.</p>
+    <div id="workings"></div>
+    <div class="work">
+      <h3>Where each input comes from</h3>
+      <div class="srcs" id="srcs"></div>
+    </div>
+  </details>
+</section>
 
 <footer id="foot"></footer>
 </div>
@@ -204,27 +209,38 @@ const C={"medianScore":83.2,"medianGap":0.336,"crossCount":9,"moreCons":53,"more
 
   $('baseline').textContent='Baseline: '+M.ideologyYear+' survey wave · Census '+M.popYear;
 
-  // ---------- navigation ----------
-  var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // ---------- views (four tabs, hash-routed) ----------
+  var VIEWS=['your-senators','the-senate','committees','how-it-works'];
+  var tabs=Array.prototype.slice.call(document.querySelectorAll('.nav [role="tab"]'));
+  function showView(id,focusPanel){
+    if(VIEWS.indexOf(id)<0) id=VIEWS[0];
+    VIEWS.forEach(function(v){
+      var panel=$(v), tab=$('tab-'+v), on=v===id;
+      panel.hidden=!on;
+      tab.setAttribute('aria-selected',on?'true':'false');
+      tab.setAttribute('tabindex',on?'0':'-1');
+    });
+    if(location.hash!=='#'+id) history.replaceState(null,'','#'+id);
+    var active=$('tab-'+id); if(active.scrollIntoView) active.scrollIntoView({block:'nearest',inline:'center'});
+    if(focusPanel){$(id).focus({preventScroll:true});window.scrollTo(0,0);}
+  }
+  tabs.forEach(function(tab,i){
+    tab.addEventListener('click',function(e){e.preventDefault();showView(tab.getAttribute('aria-controls'),true);});
+    tab.addEventListener('keydown',function(e){
+      var j=i;
+      if(e.key==='ArrowRight')j=(i+1)%tabs.length; else if(e.key==='ArrowLeft')j=(i-1+tabs.length)%tabs.length;
+      else if(e.key==='Home')j=0; else if(e.key==='End')j=tabs.length-1; else return;
+      e.preventDefault(); tabs[j].focus(); showView(tabs[j].getAttribute('aria-controls'),false);
+    });
+  });
+  window.addEventListener('hashchange',function(){showView(location.hash.slice(1),true)});
   function goToSenators(){
+    showView('your-senators',false);
     var sec=$('your-senators');
-    sec.scrollIntoView({behavior:reduce?'auto':'smooth',block:'start'});
+    sec.scrollIntoView({behavior:'auto',block:'start'});
     var first=sec.querySelector('.card h3');
     if(first){first.setAttribute('tabindex','-1');first.focus({preventScroll:true});}
   }
-  (function(){
-    var links=document.querySelectorAll('.nav a');
-    if(!links.length||typeof IntersectionObserver!=='function') return;
-    var byId={}; links.forEach(function(a){byId[a.getAttribute('href').slice(1)]=a});
-    var obs=new IntersectionObserver(function(entries){
-      entries.forEach(function(en){
-        if(!en.isIntersecting) return;
-        links.forEach(function(a){a.removeAttribute('aria-current')});
-        var a=byId[en.target.id]; if(a) a.setAttribute('aria-current','true');
-      });
-    },{rootMargin:'-40% 0px -55% 0px'});
-    Object.keys(byId).forEach(function(id){var t=$(id); if(t) obs.observe(t)});
-  })();
 
   // ---------- state picker ----------
   var sel=$('state');
@@ -290,7 +306,21 @@ const C={"medianScore":83.2,"medianGap":0.336,"crossCount":9,"moreCons":53,"more
   function render(code){
     var st=V.states[code], se=M.se[code]||0;
     var lean=st.center>0.15?'clearly conservative':st.center>0.05?'slightly conservative':st.center<-0.15?'clearly liberal':st.center<-0.05?'slightly liberal':'right about in the middle';
-    $('statefact').innerHTML='Surveys of '+st.name+' residents put the state <b>'+lean+'</b>. Here is how each of its senators compares.';
+    $('statefact').innerHTML='Surveys of '+st.name+' residents put the state <b>'+lean+'</b>.';
+    (function(){
+      var scored=st.senators.filter(function(s){return s.record!=null});
+      var t;
+      if(!scored.length) t='No scored senators yet for '+st.name+'.';
+      else{
+        var parts=scored.map(function(s){
+          var sp=spatial(s,st,se), last=s.name.split(' ').slice(-1)[0];
+          return sp.c==='aligned' ? last+' is aligned with '+st.name+' voters'
+               : last+' sits '+Math.abs(s.record-st.center).toFixed(2)+' points '+(s.record>st.center?'right':'left')+' of '+st.name+' voters';
+        });
+        t=parts.join('; ')+'.';
+      }
+      $('take-senators').textContent=t;
+    })();
     $('cards').innerHTML=st.senators.map(function(s,i){
       if(s.record==null) return nullCard(s);
       var sp=spatial(s,st,se), isA=sp.c==='aligned';
@@ -301,7 +331,6 @@ const C={"medianScore":83.2,"medianGap":0.336,"crossCount":9,"moreCons":53,"more
         '<div class="who"><h3>'+s.name+'</h3><span class="party '+pcls(s.party)+'">'+s.party+'</span></div>'+
         '<h3 class="alignment-score '+sp.c+'">'+sp.t+'</h3>'+
         '<p class="verdict">'+verdict(s,st,se,i)+'</p>'+
-        (s.rank<=15&&!isA?'<p class="rank">'+s.rank+ordinal(s.rank)+' widest gap of 100 senators</p>':'')+
         '<div class="scale"><div class="ends"><span>← More liberal</span><span>More conservative →</span></div>'+
         '<div class="track">'+
           (w>1.5&&!isA?'<div class="span" style="--l:'+l+'%;--w:'+w+'%"></div>':'')+
@@ -312,8 +341,12 @@ const C={"medianScore":83.2,"medianGap":0.336,"crossCount":9,"moreCons":53,"more
           '<div class="mark sen" style="--x:'+pos(s.record)+'%;--dot:'+pcol(s.party)+'"></div>'+
           '<div class="mtag bot" style="--x:'+pos(s.record)+'%;--dot:'+pcol(s.party)+'">'+last+'</div>'+
         '</div>'+
-        '<p class="legend"><i></i>shaded band = margin of error on '+st.name+'’s position (±'+se.toFixed(2)+'). The three faint ticks are well-known senators, for scale; the ruler above shows familiar bills.</p>'+
-        '</div>'+(isA?'':receipt(s,st))+'</div>';
+        '</div>'+
+        '<details class="more"><summary><span>See details</span></summary>'+
+          (s.rank<=15&&!isA?'<p class="rank">'+s.rank+ordinal(s.rank)+' widest gap of 100 senators</p>':'')+
+          (isA?'':receipt(s,st))+
+          '<p class="legend"><i></i>shaded band = margin of error on '+st.name+'’s position (±'+se.toFixed(2)+'). The three faint ticks are well-known senators, for scale; the ruler below shows familiar bills.</p>'+
+        '</details></div>';
     }).join('');
     workings(code);
   }
@@ -326,7 +359,7 @@ const C={"medianScore":83.2,"medianGap":0.336,"crossCount":9,"moreCons":53,"more
       '<div class="pubtrack">'+
         '<div class="conn'+(right?'':' left')+'" style="--l:'+l+'%;--w:'+w+'%"></div>'+
         '<div class="pm pub" style="--x:'+pos(P.usM)+'%"></div><div class="pt a" style="--x:'+pos(P.usM)+'%">The American public</div>'+
-        '<div class="pm piv" style="--x:'+pos(P.pivot)+'%"></div><div class="pt c" style="--x:'+pos(P.pivot)+'%">60th vote</div>'+
+        '<div class="pm piv" style="--x:'+pos(P.pivot)+'%"></div><div class="pt c '+(P.pivot>=P.usM?'after':'before')+'" style="--x:'+pos(P.pivot)+'%">60th vote</div>'+
         '<div class="pm sen" style="--x:'+pos(P.chM)+'%"></div><div class="pt b" style="--x:'+pos(P.chM)+'%">Middle of the Senate</div>'+
       '</div>'+
       '<div class="bignums">'+
@@ -335,6 +368,7 @@ const C={"medianScore":83.2,"medianGap":0.336,"crossCount":9,"moreCons":53,"more
         '<div><span class="k">Distance</span><span class="v">'+signed(P.gap)+'</span><span class="s">Senate sits to the '+(right?'right':'left')+' of the public</span></div>'+
         '<div><span class="k">Senators right of the public</span><span class="v">'+P.nRightOfPublic+'</span><span class="s">'+P.nLeftOfPublic+' sit to its left</span></div>'+
       '</div>';
+    $('take-senate').textContent='The middle of the Senate sits '+Math.abs(P.gap).toFixed(2)+' points to the '+(right?'right':'left')+' of the American public. '+P.nRightOfPublic+' of 100 senators sit to the public\u2019s right.';
     $('dots').innerHTML=P.dots.map(function(d){
       return '<button class="dot" type="button" style="--c:'+mix(d.vsUS)+'" data-b="'+d.b+'" aria-label="'+d.n+', '+d.st+'">'+d.st+'</button>';
     }).join('');
@@ -366,51 +400,58 @@ const C={"medianScore":83.2,"medianGap":0.336,"crossCount":9,"moreCons":53,"more
     $('stakes').innerHTML='<h3>Why that matters</h3><p>This gap works as a <b>structural veto</b>. A bill backed by a slim majority of the American public can fail in the Senate without any senator changing their mind, purely because of which states hold the seats. Every state gets two senators whether it has 40 million people or 600,000, and the smaller states lean Republican. The skew decides no single vote; it decides which bills are able to pass at all.</p>';
   })();
 
-  // ---------- committees: members + bills they passed, vs Senate and vs public ----------
-  (function(){
-    var thr=0.15;
-    var list=X.committees.filter(function(c){return X.output[c.code]||Math.abs(c.drift)>=thr});
-    list.sort(function(a,b){var oa=X.output[a.code]?1:0, ob=X.output[b.code]?1:0;
-      return ob-oa || Math.abs(b.drift)-Math.abs(a.drift)});
-    list=list.slice(0,8);
-    $('committee-cards').innerHTML=list.map(function(c){
-      var o=X.output[c.code], right=c.drift>0;
-      var l=Math.min(pos(c.median),pos(X.chMedian)), w=Math.abs(pos(c.median)-pos(X.chMedian));
-      var warn = Math.abs(c.drift)>thr
-        ? '<div class="warn '+(right?'right':'left')+'">Warning: This committee acts as a '+(right?'Conservative':'Liberal')+' Gatekeeper, pulling legislation significantly to the '+(right?'right':'left')+' of the Senate average before it reaches the floor.</div>'
-        : '<div class="warn none">Its members sit close to the Senate as a whole.</div>';
-      var pub = c.cndMedian==null?'' : ' Against the American public, its members sit <b>'+Math.abs(c.cndMedian).toFixed(2)+' to the '+(c.cndMedian>0?'right':'left')+'</b>.';
-      var out = o ? '<p class="out-line"><b>What it actually passed:</b> the bills this committee sent to the floor divided the Senate at '+signed(o.coi)+' — '+Math.abs(o.vsSen).toFixed(2)+' to the '+(o.vsSen>0?'right':'left')+' of the Senate’s middle and '+Math.abs(o.vsUS).toFixed(2)+' to the '+(o.vsUS>0?'right':'left')+' of the public, across '+o.n+' floor votes.</p>' : '';
-      return '<div class="cm"><div class="gh"><b>'+c.name+'</b><span>'+c.n+' senators · '+c.split[0]+' majority, '+c.split[1]+' minority</span></div>'+
-        '<div class="ctrack">'+
-          '<div class="conn'+(right?'':' left')+'" style="--l:'+l+'%;--w:'+w+'%"></div>'+
-          (X.usM!=null?'<div class="cmk pub" style="--x:'+pos(X.usM)+'%"></div><div class="ct p" style="--x:'+pos(X.usM)+'%">Public</div>':'')+
-          '<div class="cmk sen" style="--x:'+pos(X.chMedian)+'%"></div><div class="ct a" style="--x:'+pos(X.chMedian)+'%">Senate</div>'+
-          '<div class="cmk mem" style="--x:'+pos(c.median)+'%;--dot:'+(right?'var(--rep)':'var(--dem)')+'"></div><div class="ct b" style="--x:'+pos(c.median)+'%;--dot:'+(right?'var(--rep)':'var(--dem)')+'">Members</div>'+
-          (o?'<div class="cmk out" style="--x:'+pos(o.coi)+'%"></div><div class="ct o" style="--x:'+pos(o.coi)+'%">Bills passed</div>':'')+
-        '</div>'+warn+
-        '<p class="say">Its members’ midpoint sits <b>'+Math.abs(c.drift).toFixed(2)+' to the '+(right?'right':'left')+'</b> of the Senate’s middle.'+pub+'</p>'+out+
-        '<p class="fine">Members’ average sits at '+signed(c.mean)+' ('+Math.abs(c.meanDrift).toFixed(2)+' '+(c.meanDrift>0?'right':'left')+' of the Senate). The midpoint would move by up to '+c.shift.toFixed(2)+' if one member were replaced'+(c.phantom?', and currently falls in the gap between the two parties where no member sits':'')+'.</p>'+
-      '</div>';
-    }).join('');
-    $('cmcaveat').innerHTML='Showing committees whose members sit more than '+thr.toFixed(2)+' from the Senate’s middle, plus any with enough floor votes on the bills it reported to place them. The diamond appears only where at least 7 such votes exist; most floor action is nominations and House bills that no Senate committee reported, so most committees have too few.';
-  })();
-
-  // ---------- gatekeeping bars ----------
+  // ---------- committees: one at a time, all its measures together ----------
+  var thr=0.15;
+  function committeeCard(c){
+    var o=X.output[c.code], right=c.drift>0;
+    var l=Math.min(pos(c.median),pos(X.chMedian)), w=Math.abs(pos(c.median)-pos(X.chMedian));
+    var warn = Math.abs(c.drift)>thr
+      ? '<div class="warn '+(right?'right':'left')+'">Warning: This committee acts as a '+(right?'Conservative':'Liberal')+' Gatekeeper, pulling legislation significantly to the '+(right?'right':'left')+' of the Senate average before it reaches the floor.</div>'
+      : '<div class="warn none">Its members sit close to the Senate as a whole.</div>';
+    var pub = c.cndMedian==null?'' : ' Against the American public, its members sit <b>'+Math.abs(c.cndMedian).toFixed(2)+' to the '+(c.cndMedian>0?'right':'left')+'</b>.';
+    var out = o ? '<p class="out-line"><b>What it actually passed:</b> the bills this committee sent to the floor divided the Senate at '+signed(o.coi)+' \u2014 '+Math.abs(o.vsSen).toFixed(2)+' to the '+(o.vsSen>0?'right':'left')+' of the Senate\u2019s middle and '+Math.abs(o.vsUS).toFixed(2)+' to the '+(o.vsUS>0?'right':'left')+' of the public, across '+o.n+' floor votes.</p>' : '';
+    return '<div class="cm"><div class="gh"><b>'+c.name+'</b><span>'+c.n+' senators \u00b7 '+c.split[0]+' majority, '+c.split[1]+' minority</span></div>'+
+      '<div class="ctrack">'+
+        '<div class="conn'+(right?'':' left')+'" style="--l:'+l+'%;--w:'+w+'%"></div>'+
+        (X.usM!=null?'<div class="cmk pub" style="--x:'+pos(X.usM)+'%"></div><div class="ct p" style="--x:'+pos(X.usM)+'%">Public</div>':'')+
+        '<div class="cmk sen" style="--x:'+pos(X.chMedian)+'%"></div><div class="ct a" style="--x:'+pos(X.chMedian)+'%">Senate</div>'+
+        '<div class="cmk mem" style="--x:'+pos(c.median)+'%;--dot:'+(right?'var(--rep)':'var(--dem)')+'"></div><div class="ct b" style="--x:'+pos(c.median)+'%;--dot:'+(right?'var(--rep)':'var(--dem)')+'">Members</div>'+
+        (o?'<div class="cmk out" style="--x:'+pos(o.coi)+'%"></div><div class="ct o" style="--x:'+pos(o.coi)+'%">Bills passed</div>':'')+
+      '</div>'+warn+
+      '<p class="say">Its members\u2019 midpoint sits <b>'+Math.abs(c.drift).toFixed(2)+' to the '+(right?'right':'left')+'</b> of the Senate\u2019s middle.'+pub+'</p>'+out+
+      '<p class="fine">Members\u2019 average sits at '+signed(c.mean)+' ('+Math.abs(c.meanDrift).toFixed(2)+' '+(c.meanDrift>0?'right':'left')+' of the Senate). The midpoint would move by up to '+c.shift.toFixed(2)+' if one member were replaced'+(c.phantom?', and currently falls in the gap between the two parties where no member sits':'')+'.</p>'+
+    '</div>';
+  }
+  function survivalBars(code){
+    var c=(G.committees||[]).filter(function(g){return g.code===code})[0];
+    if(!c) return '<p class="gridnote">Not shown for this committee: fewer than 25 bills from one side, where a single bill moves the percentage by several points.</p>';
+    var max=Math.max.apply(null,G.committees.map(function(g){return Math.max(g.libPct,g.conPct)})), scale=Math.max(10,Math.ceil(max/5)*5);
+    var leanC=c.vsBase>0, mag=Math.abs(c.vsBase);
+    var say=mag<1?'Treats bills from both sides about the same as the Senate as a whole.':'Favours <b>'+(leanC?'conservative':'liberal')+'</b>-written bills <b>'+mag.toFixed(1)+' points</b> more than the Senate as a whole does.';
+    var row=function(label,cls,rep,ref,p){return '<div class="bar"><span class="lbl">'+label+'</span><div class="trk"><div class="fill '+cls+'" style="--w:'+(100*p/scale)+'%"></div></div><span class="num">'+p.toFixed(0)+'% <small>'+rep+' of '+ref+'</small></span></div>'};
+    return '<div class="gk '+(mag<1?'':(leanC?'lean-c':'lean-l'))+'"><div class="gh"><b>'+c.name+'</b><span>'+(c.libRef+c.conRef)+' bills sent here</span></div><div class="bars">'+row('By liberal senators','l',c.libRep,c.libRef,c.libPct)+row('By conservative senators','c',c.conRep,c.conRef,c.conPct)+'</div><p class="say">'+say+'</p></div>';
+  }
+  var csel=$('committee');
+  var clist=X.committees.slice().sort(function(a,b){return a.name.localeCompare(b.name)});
+  csel.innerHTML=clist.map(function(c){return '<option value="'+c.code+'">'+c.name+'</option>'}).join('');
+  function renderCommittee(code){
+    var c=clist.filter(function(x){return x.code===code})[0]; if(!c) return;
+    var right=c.drift>0, o=X.output[c.code];
+    $('take-committee').textContent='The '+c.name+' Committee\u2019s members sit '+Math.abs(c.drift).toFixed(2)+' points to the '+(right?'right':'left')+' of the Senate\u2019s middle'+(o?', and the bills it let through divided the Senate '+Math.abs(o.vsSen).toFixed(2)+' to the '+(o.vsSen>0?'right':'left')+' of it.':'.');
+    $('cmfact').innerHTML=c.n+' senators, '+c.split[0]+' from the majority and '+c.split[1]+' from the minority.';
+    $('committee-cards').innerHTML=committeeCard(c);
+    $('gates').innerHTML=survivalBars(code);
+  }
+  csel.addEventListener('change',function(){renderCommittee(csel.value)});
+  $('cmcaveat').innerHTML='A midpoint more than '+thr.toFixed(2)+' from the Senate\u2019s middle is flagged. The diamond appears only where at least 7 floor votes exist on bills the committee reported; most floor action is nominations and House bills that no Senate committee reported, so most committees have too few.';
   (function(){
     if(!G.committees||!G.committees.length)return;
     var pct=function(n,d){return d?Math.round(100*n/d):0};
-    if(G.worst) $('stark').innerHTML='<span class="big">'+G.worst.reported+' of '+G.worst.referred.toLocaleString()+'</span><p>bills sent to the <b>'+G.worst.name+' Committee</b> this Congress made it back out. Across every committee, <b>'+pct(G.totalReported,G.totalReferred)+'%</b> of bills survive — '+G.totalReported.toLocaleString()+' of '+G.totalReferred.toLocaleString()+'.</p>';
-    $('basenote').innerHTML='Across the whole Senate, bills written by conservative senators get through slightly more often — by <b>'+G.baseline.toFixed(1)+' percentage points</b>. That is simply because Republicans hold the majority, and it happens on every committee. So each committee below is judged against that baseline, not against zero.';
-    var max=Math.max.apply(null,G.committees.map(function(c){return Math.max(c.libPct,c.conPct)})), scale=Math.max(10,Math.ceil(max/5)*5);
-    $('gates').innerHTML=G.committees.slice(0,4).map(function(c){
-      var leanC=c.vsBase>0, mag=Math.abs(c.vsBase);
-      var say=mag<1?'Treats bills from both sides about the same as the Senate as a whole.':'Favours <b>'+(leanC?'conservative':'liberal')+'</b>-written bills <b>'+mag.toFixed(1)+' points</b> more than the Senate as a whole does.';
-      var row=function(label,cls,rep,ref,p){return '<div class="bar"><span class="lbl">'+label+'</span><div class="trk"><div class="fill '+cls+'" style="--w:'+(100*p/scale)+'%"></div></div><span class="num">'+p.toFixed(0)+'% <small>'+rep+' of '+ref+'</small></span></div>'};
-      return '<div class="gk '+(mag<1?'':(leanC?'lean-c':'lean-l'))+'"><div class="gh"><b>'+c.name+'</b><span>'+(c.libRef+c.conRef)+' bills sent here</span></div><div class="bars">'+row('By liberal senators','l',c.libRep,c.libRef,c.libPct)+row('By conservative senators','c',c.conRep,c.conRef,c.conPct)+'</div><p class="say">'+say+'</p></div>';
-    }).join('');
-    $('gatecaveat').innerHTML='Showing the four committees furthest from the Senate-wide pattern. Committees with fewer than 25 bills from either side are left out, because there a single bill moves the percentage by several points. A bill takes the side of the senator who wrote it, measured by that senator’s voting record.';
+    if(G.worst) $('stark').innerHTML='<span class="big">'+G.worst.reported+' of '+G.worst.referred.toLocaleString()+'</span><p>bills sent to the <b>'+G.worst.name+' Committee</b> this Congress made it back out. Across every committee, <b>'+pct(G.totalReported,G.totalReferred)+'%</b> of bills survive \u2014 '+G.totalReported.toLocaleString()+' of '+G.totalReferred.toLocaleString()+'.</p>';
+    $('basenote').innerHTML='Across the whole Senate, bills written by conservative senators get through slightly more often \u2014 by <b>'+G.baseline.toFixed(1)+' percentage points</b>. That is simply because Republicans hold the majority, and it happens on every committee. So each committee is judged against that baseline, not against zero.';
+    $('gatecaveat').innerHTML='Survival rates are shown only for committees with at least 25 bills from each side, because below that a single bill moves the percentage by several points. A bill takes the side of the senator who wrote it, measured by that senator\u2019s voting record.';
   })();
+  csel.value=clist[0].code; renderCommittee(clist[0].code);
 
   // ---------- workings + sources + footer ----------
   function workings(code){
@@ -437,6 +478,7 @@ const C={"medianScore":83.2,"medianGap":0.336,"crossCount":9,"moreCons":53,"more
 
   sel.addEventListener('change',function(){render(sel.value)});
   sel.value='GA'; render('GA');
+  showView((location.hash||'#your-senators').slice(1),false);
 })();
 </script>
 </body>

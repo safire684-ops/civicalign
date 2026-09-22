@@ -122,9 +122,9 @@ def test_demo_committee_module_shows_both_references():
 
 def test_nav_has_the_four_sections_in_order_and_each_target_exists():
     text = DEMO.read_text()
-    nav = re.search(r'<nav class="nav" aria-label="Sections">(.*?)</nav>', text, re.S)
+    nav = re.search(r'<nav class="nav"[^>]*aria-label="Sections">(.*?)</nav>', text, re.S)
     assert nav, "navigation missing"
-    links = re.findall(r'<a href="#([\w-]+)">(.*?)</a>', nav.group(1))
+    links = re.findall(r'<a href="#([\w-]+)"[^>]*>(.*?)</a>', nav.group(1))
     assert links == [("your-senators", "Your senators"), ("the-senate", "The Senate"),
                      ("committees", "Committees"), ("how-it-works", "How it works")]
     for target, _ in links:
@@ -171,3 +171,105 @@ def test_every_id_the_script_uses_exists_in_the_markup():
     markup = text.split("<script>")[0]
     for i in sorted(set(re.findall(r"\$\('([\w-]+)'\)", text))):
         assert f'id="{i}"' in markup, f"script targets #{i} but the markup has no such element"
+
+
+
+# ---- four views (Pillars 4-6 page) ----
+
+VIEWS = ["your-senators", "the-senate", "committees", "how-it-works"]
+
+
+def _markup():
+    return DEMO.read_text().split("<script>")[0]
+
+
+def test_page_is_four_views_with_only_the_first_shown_at_load():
+    m = _markup()
+    for v in VIEWS:
+        assert re.search(r'<section id="%s" class="view" role="tabpanel"[^>]*>' % v, m), v
+        assert f'aria-controls="{v}"' in m and f'id="tab-{v}"' in m
+    first, rest = VIEWS[0], VIEWS[1:]
+    assert re.search(r'<section id="%s"[^>]*(?<!hidden)>' % first, m)
+    for v in rest:
+        assert re.search(r'<section id="%s"[^>]*\bhidden>' % v, m), f"{v} should start hidden"
+    assert "role=\"tablist\"" in m
+
+
+def test_each_view_leads_with_a_takeaway_and_keeps_a_limit_visible():
+    m = _markup()
+    for v in VIEWS:
+        sec = re.search(r'<section id="%s".*?</section>' % v, m, re.S).group(0)
+        assert 'class="takeaway"' in sec, f"{v} has no takeaway"
+        assert "See details" in sec or v == "your-senators", f"{v} has no See details"
+        # limits stay outside any disclosure
+        outside = re.sub(r"<details.*?</details>", "", sec, flags=re.S)
+        assert 'class="limit"' in outside or 'class="limits"' in outside, f"{v} hides its limits"
+
+
+def test_committee_view_offers_one_committee_at_a_time():
+    text = DEMO.read_text()
+    assert '<select id="committee">' in text
+    assert "function renderCommittee(code)" in text
+    assert "$('committee-cards').innerHTML=committeeCard(c)" in text
+    assert "$('gates').innerHTML=survivalBars(code)" in text
+    # the committee list is alphabetical, not ranked
+    assert "a.name.localeCompare(b.name)" in text
+
+
+def test_no_smooth_scroll_or_hover_animation():
+    css = (DEMO.parent / "civicalign.css").read_text()
+    assert "scroll-behavior:smooth" not in css
+    assert "transform:scale" not in css.split("/* ---- Senate vs the public ---- */")[1].split("/* ---- committees")[0]
+
+
+def test_existing_measures_and_thresholds_are_preserved():
+    text = DEMO.read_text()
+    assert "var thr=0.15;" in text
+    assert "Warning: This committee acts as a " in text
+    assert "What it actually passed:" in text
+    assert "Aligned with State Consensus" in text and "points further" in text
+    assert "A vote where this gap showed" in text
+
+
+
+def test_selected_tab_is_highlighted_by_the_attribute_the_script_sets():
+    """The script marks the active tab with aria-selected; the stylesheet must key
+    its highlight to that attribute, not to aria-current."""
+    css = (DEMO.parent / "civicalign.css").read_text()
+    assert '.nav a[aria-selected="true"]' in css
+    assert 'aria-current' not in css
+    assert "setAttribute('aria-selected'" in DEMO.read_text()
+
+
+def test_how_it_works_takeaway_does_not_overclaim():
+    text = DEMO.read_text()
+    assert "We combine public voting records, survey estimates, and other" in text
+    assert "Nothing here is estimated by us" not in text
+
+
+
+def test_selected_tab_is_scrolled_into_view_in_the_nav_row():
+    """On a phone the nav scrolls sideways; the highlighted tab must not be off-screen."""
+    text = DEMO.read_text()
+    assert "inline:'center'" in text and "$('tab-'+id)" in text
+
+
+
+def test_senate_pivot_label_is_anchored_away_from_the_public_label():
+    """"60th vote" and "The American public" share the row above the track and
+    collided at phone width. The pivot label now hangs off the side of its tick
+    that faces away from the public label."""
+    text = DEMO.read_text()
+    assert "P.pivot>=P.usM?'after':'before'" in text
+    css = (DEMO.parent / "civicalign.css").read_text()
+    assert ".pubtrack .pt.c.after{transform:none" in css
+    assert ".pubtrack .pt.c.before{transform:translateX(-100%)" in css
+
+
+def test_tap_targets_meet_the_44px_minimum():
+    css = (DEMO.parent / "civicalign.css").read_text()
+    assert "min-height:44px" in css.split(".nav a{")[1].split("}")[0]
+    assert ".dot{width:44px;height:44px" in css
+    assert "min-height:48px" in css.split(".more summary{")[1].split("}")[0]
+    # the old 34px phone override is gone
+    assert ".dot{width:34px" not in css

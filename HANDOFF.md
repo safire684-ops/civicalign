@@ -1,65 +1,99 @@
 # Project handoff — CivicAlign, Pillars 4–6
 
-Saved 21 September 2026. Scope is **Pillars 4, 5 and 6 only** (math-spec
+Updated 22 September 2026. Scope is **Pillars 4, 5 and 6 only** (math-spec
 sections 2–5). Pillars 1–3 and 7 belong to someone else.
+
+## Status in one line
+
+A four-view redesign of the page is finished, tested and committed **locally
+only**. It is **not pushed and not published**: the live site, the claude.ai copy
+and the shared doc still show the previous single-page layout.
 
 ## Where things stand
 
-- Live site: https://safire684-ops.github.io/civicalign/ (GitHub Pages, rebuilt
-  every Monday by `.github/workflows/update.yml`; last run green).
-- Repo: https://github.com/safire684-ops/civicalign — 77 tests passing.
-- Shared doc (Claude Docs, hand-mirrored): https://claude.ai/code/artifact/683a9e36-3046-4827-a7af-7442b49ef7e3
-- Claude.ai copy of the page (manual republish, CSS inlined): https://claude.ai/artifact/Ft6hU6XZUnWHPhZwzwmzaj
+- Live site (previous layout): https://safire684-ops.github.io/civicalign/
+- Repo: https://github.com/safire684-ops/civicalign — `origin/main` is at `6b883f7`
+  (navigation commit); the redesign commit sits ahead of it locally.
+- Claude.ai copy (previous layout, manual republish, CSS inlined): https://claude.ai/artifact/Ft6hU6XZUnWHPhZwzwmzaj
+- Shared doc (hand-mirrored): https://claude.ai/code/artifact/683a9e36-3046-4827-a7af-7442b49ef7e3
 
-## What changed in the last round, and how it was tested
+## The unpublished change: four views
 
-| Feedback | Change | Test |
-|---|---|---|
-| A — perspective | Ruler of the six busiest bills placed at their roll-call cutpoints; a real "receipt" vote under each senator | `test_floor_votes.py`: whole-bill titles only, Yea side read from voters, receipts are genuine divergences |
-| B — Senate vs public | Own track + four figures; 100-circle grid coloured by distance from the public, hover shows vs Senate / public / state | `test_published_pages.py`: 100 dots, US_m matches pipeline |
-| C — committees | Members' midpoint vs Senate **and** public, ±0.15 gatekeeper warning; Output Ideology diamond (Budget, Appropriations, Armed Services, Veterans); survival bars kept | `test_floor_votes.py`, `test_published_pages.py` |
-| D — directives | Percentage removed; "points further Left/Right" or green "Aligned with State Consensus"; freshmen null state; real baseline badge; external stylesheet | `test_published_pages.py` |
+Three files changed. **Calculations, thresholds, data blocks and the methodology
+report were not touched and must stay unchanged.**
 
-Also: three new sources (Voteview roll calls + senator votes, GovInfo House
-bill archive), ten update agents, report template and whitepaper updated, clean
-cloud run verified end to end.
+| File | What changed |
+|---|---|
+| `demo/senator-check.html` | The long page became four views, one visible at a time, switched by real tabs (hash-routed: `#your-senators`, `#the-senate`, `#committees`, `#how-it-works`). Each leads with a one-line takeaway derived from figures already on the page. Extra detail sits behind "See details"; limits stay visible. Committees are chosen one at a time from an alphabetical list and show all their existing measures together. Clicking a senator's circle opens their state. |
+| `demo/civicalign.css` | Tab/view styles keyed to `aria-selected`; takeaway, limit and disclosure styles; consistent spacing inside views; smooth scroll and hover scaling removed; tap targets ≥ 44px; smallest visible text 12px; the Senate "60th vote" label anchored away from the public label. |
+| `tests/test_published_pages.py` | Nav test loosened for tab attributes. New tests: four tab panels with only the first shown at load; every view has a takeaway and a limit outside any disclosure; committee view is one-at-a-time and alphabetical; no smooth scroll or hover animation; existing measures and the 0.15 threshold present; highlight keyed to `aria-selected`; new How-it-works wording present and old absent; selected tab scrolled into view; pivot label anchoring; 44px tap targets. |
 
-## The feedback, verbatim
+Wording change made at the owner's request: the How-it-works takeaway now reads
+*"We combine public voting records, survey estimates, and other public data to
+make these comparisons."*
 
-> Personal: A, on the part where we see how much each senator represents the state how do voters understand what that means? They need perspective more than just Bernie Sanders and Ted Cruz they also need to see high profile bills they'd recognize and see where those are or certain issues and where those are
-> B, this has no actual data on how far the senate stands form the American people and that should look like a similar thing to what it does with the senators. Also, I'd like it if in the UI it had a senate representation with each senator being a circle and the color gradient of the senator changing based on whether he was more liberal and conservative than the American populace; and when you hovered on the circle (which would have its state inside the circle) it would give the senators name and where he lines up to the senate, the American populace as a whole, and his individual state.
-> C, For the committees it doesn't show committee drift from the senate now it only shows how biased the committee is and it does this very poorly. Once again it needs to be easily understood by voters this thing lacks perspective as in the voters don't clearly understand what they are looking at. Also, it needs to show how the committee drifts form the senate and from the American populace (tell it to reuse the report for pillar 6 I gave you).
-> D; [link below]
-> fix all these issues and update the github
+## Test results
 
-The two Gemini reports referenced:
+- `python -m pytest -q` → **93 passed**.
+- Data blocks (`V M X G L R P C`) byte-identical to the pre-redesign page.
+- Every sentence the old page rendered is still rendered identically; the new
+  page additionally renders the 11 committees the old page never showed.
+- Checked in a real mobile emulation at 375px, all four views: no horizontal
+  overflow; smallest visible text 12px; every tap target ≥ 44px; Senate labels do
+  not overlap; selected tab visible in the nav row.
+- Keyboard: roving tabindex on the tabs (exactly one in the Tab order);
+  ArrowLeft/Right/Home/End move selection, visible panel, hash and focus together.
+  Zero console errors.
 
-- Pillar 6 dual-metric framework (Output Ideology + Gatekeeping Bias Index):
-  https://gemini.google.com/share/b75123b297db?skid=4798bd3c-9d90-4f8a-a251-00429acbda75
-- System audit & execution directives (confidence band, drop the percentage,
-  receipts, freshmen, committee module):
-  https://gemini.google.com/share/82bd4fe17a76?skid=e8601a35-0fb0-4b8d-b6a8-f4b2775b7142
+## Remaining issues
 
-## Decisions approved
+- **Publish.** Nothing above is live. See next steps.
+- **Real Enter/Space activation** of tabs and circles could not be driven from the
+  browser pane (its key injection does not trigger native default actions — Enter
+  did not toggle a plain `<details>` either). Elements are native links and
+  buttons; worth one press on a real keyboard.
+- **Headless-Chrome screenshots are untrustworthy at phone widths**: headless
+  enforces a 500px minimum viewport, producing cropped images that once looked like
+  stale wording. Use the DevTools-protocol script pattern (device emulation) for
+  phone captures.
+- Earlier items unchanged: rotate the Congress.gov API key pasted into chat; the
+  2024 survey wave does not exist; two audits disagree on committee median vs mean
+  (median shown, both computed — do not resolve during interface work); Output
+  Ideology rests on 7–28 votes for four committees; the claude.ai copy and shared
+  doc do not update themselves; the whitepaper is hand-written and the weekly job
+  warns rather than blocks if its figures drift.
 
-- Publish as a public repo under `safire684-ops`; hide the personal email in history.
-- Scope is Pillars 4–6 only.
-- Committee module plots the members' **median** with the 0.15 threshold (Directive 5); the mean stays in fine print.
-- Percentage score removed (Directive 2).
-- Landmark bills = the six with the most floor votes, at their median cutpoint.
-- Receipts name the bill, vote and dividing line only — no invented "material impact".
-- No API key anywhere; GovInfo bulk archives and Voteview files are keyless.
+## Exact next steps
 
-## Still unresolved
+1. Owner reviews the fresh screenshots (four phone views at 390px, four desktop).
+2. `git push` the local commit to `origin/main`.
+3. Trigger the workflow (`gh workflow run update.yml -R safire684-ops/civicalign`)
+   and confirm `update` and `publish` both succeed.
+4. Verify the live site: nav present, only the first view shown at load, the same
+   figures as local (`/tmp/snap2.js`-style sentence comparison).
+5. Rebuild the claude.ai copy with the stylesheet inlined and republish to the
+   same URL; the shared doc needs no change (methodology untouched).
+6. If the weekly job re-dates `demo/methodology.html`, that is expected and
+   separate from this change.
 
-- **Rotate the Congress.gov API key** pasted into chat. It is unused, but it is in the transcript.
-- Directive 3's "material impact" text and Directive 4's 2024 survey wave cannot be done: the first is Pillar 1, the second does not exist.
-- Two audits disagree on median vs mean for committees; median is shown per the latest, both are computed.
-- Output Ideology rests on 7–28 votes per committee; four committees qualify.
-- The claude.ai page copy and the shared doc do not update themselves; the GitHub site does.
-- The whitepaper is hand-written; the weekly job warns, never blocks, if its figures drift.
+## The feedback that shaped this round, verbatim
 
-## Next
+> Replace the long scrolling page with four clear views: Your senators: state selector and two simple senator cards. The Senate: one main comparison, with the senator circles below. Committees: choose one committee and see its existing measures together. How it works: plain explanations, sources, and calculations. Each view should lead with a short takeaway and a clear chart. Put extra detail behind "See details," but keep important limits visible. Use readable text, consistent spacing, and clear labels. Avoid crowded charts and unnecessary animation. Scope: Pillars 4–6 only. Preserve all calculations, data, thresholds, and existing measures. Keep unresolved methodology disagreements separate. Do not add rankings, grades, or new claims.
 
-Simplify navigation and make the site easier for an average voter to understand.
-Keep methodology changes separate from that work.
+Follow-ups: make the selected tab clearly visible (CSS had keyed to `aria-current`
+while the tabs set `aria-selected`); replace the How-it-works takeaway wording; fix
+the overlapping Senate labels on phones; confirm readability and tap targets at
+phone size.
+
+## Earlier rounds (kept for context)
+
+The Gemini reports referenced in earlier rounds:
+
+- Pillar 6 dual-metric framework: https://gemini.google.com/share/b75123b297db?skid=4798bd3c-9d90-4f8a-a251-00429acbda75
+- System audit & execution directives: https://gemini.google.com/share/82bd4fe17a76?skid=e8601a35-0fb0-4b8d-b6a8-f4b2775b7142
+
+Decisions approved earlier: public repo under `safire684-ops` with the personal
+email hidden in history; Pillars 4–6 only; committee module plots the members'
+median with the 0.15 threshold and keeps the mean in fine print; the percentage
+score removed; six landmark bills at their median cutpoint; receipts name the bill,
+vote and dividing line only; no API key anywhere.
