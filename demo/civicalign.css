@@ -154,7 +154,12 @@ select:focus-visible,button:focus-visible,summary:focus-visible{
 .alignment-score{font-family:var(--sans);font-size:17px;font-weight:700;
   margin-top:14px;display:inline-block;padding:7px 12px;border-radius:6px;
   line-height:1.3}
-.alignment-score.aligned{background:#22c55e;color:#062a12}
+.alignment-score.aligned{background:var(--rule-soft);color:var(--ink);
+  box-shadow:inset 0 0 0 1px var(--ink)}
+.alignment-score .ic{display:inline-block;margin-right:7px;font-weight:700}
+/* text for screen readers where a drawn track carries the information */
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;
+  clip:rect(0,0,0,0);white-space:nowrap;border:0}
 .alignment-score.right{background:var(--alert-soft);color:var(--alert);
   box-shadow:inset 0 0 0 1px var(--alert)}
 .alignment-score.left{background:var(--alert-soft);color:var(--alert);

@@ -5,9 +5,11 @@ sections 2–5). Pillars 1–3 and 7 belong to someone else.
 
 ## Status in one line
 
-A four-view redesign of the page, and a correction removing the unsupported
-voter-support claims from the vote examples, are finished, tested and committed
-**locally only**. They are **not pushed and not published**: the live site, the
+A four-view redesign of the page, a correction removing the unsupported
+voter-support claims from the vote examples, and three presentation safeguards
+(escaped data strings, screen-reader text for every drawn track, an icon on the
+alignment badge so colour is never the only signal) are finished, tested and
+committed **locally only**. They are **not pushed and not published**: the live site, the
 claude.ai copy and the shared doc still show the previous layout and the old
 "vote where this gap showed" wording.
 

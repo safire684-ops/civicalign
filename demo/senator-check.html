@@ -204,6 +204,8 @@ const C={"medianScore":83.2,"medianGap":0.336,"crossCount":9,"moreCons":53,"more
     return t+' '+m[2]};
   var fmtDate=function(s){var d=new Date(s+'T00:00:00');
     return d.getDate()+' '+d.toLocaleString('en-GB',{month:'long'})+' '+d.getFullYear()};
+  // every string that came from a data file goes through this before it is put into HTML
+  var esc=function(v){return String(v).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')};
   var pcls=function(p){return p==='Republican'?'r':p==='Democrat'?'d':'i'};
   var pcol=function(p){return p==='Republican'?'var(--rep)':p==='Democrat'?'var(--dem)':'var(--muted)'};
   // blue (left of the public) -> grey -> red (right of the public)
@@ -250,7 +252,7 @@ const C={"medianScore":83.2,"medianGap":0.336,"crossCount":9,"moreCons":53,"more
   // ---------- state picker ----------
   var sel=$('state');
   var keys=Object.keys(V.states).sort(function(a,b){return V.states[a].name.localeCompare(V.states[b].name)});
-  sel.innerHTML=keys.map(function(k){return '<option value="'+k+'">'+V.states[k].name+'</option>'}).join('');
+  sel.innerHTML=keys.map(function(k){return '<option value="'+esc(k)+'">'+esc(V.states[k].name)+'</option>'}).join('');
 
   // ---------- the shared ruler ----------
   (function(){
@@ -270,41 +272,42 @@ const C={"medianScore":83.2,"medianGap":0.336,"crossCount":9,"moreCons":53,"more
     var nrows=Math.max.apply(null,rows)+1;
     $('ruler').innerHTML='<h3>Where familiar things sit on this scale</h3>'+
       '<div class="ends"><span>← More liberal</span><span>More conservative →</span></div>'+
-      '<div class="rtrack">'+items.map(function(it){return '<div class="rm '+it.cls+'" style="--x:'+pos(it.x)+'%"></div>'}).join('')+'</div>'+
+      '<div class="rtrack" aria-hidden="true">'+items.map(function(it){return '<div class="rm '+it.cls+'" style="--x:'+pos(it.x)+'%"></div>'}).join('')+'</div>'+
       '<div class="rlabels" style="height:'+(nrows*20+14)+'px">'+
-        items.map(function(it,i){return '<span class="rl '+it.cls+'" style="--x:'+pos(it.x)+'%;--row:'+rows[i]+'" title="'+(it.full||it.label).replace(/"/g,'&quot;')+'">'+it.label+'</span>'}).join('')+
+        items.map(function(it,i){return '<span class="rl '+it.cls+'" style="--x:'+pos(it.x)+'%;--row:'+rows[i]+'" title="'+esc(it.full||it.label)+'">'+esc(it.label)+'</span>'}).join('')+
       '</div>'+
+      '<p class="sr-only">Positions on the scale, from most liberal to most conservative: '+items.map(function(it){return esc(it.full||it.label)+' at '+signed(it.x)}).join('; ')+'.</p>'+
       '<p class="note">Orange marks are the six bills with the most floor votes this Congress, placed where their votes divided the Senate. Hover a name for the full title.</p>';
   })();
 
   // ---------- senator cards ----------
   function aligned(s,st,se){return Math.abs(s.record-st.center)<=se}
   function spatial(s,st,se){
-    if(aligned(s,st,se)) return {t:'Aligned with State Consensus',c:'aligned'};
+    if(aligned(s,st,se)) return {t:'Aligned with State Consensus',c:'aligned',i:'\u2713'};
     var gap=s.record-st.center, a=Math.abs(gap).toFixed(2);
-    return gap>0 ? {t:'+'+a+' points further Right than the state average',c:'right'}
-                 : {t:a+' points further Left than the state average',c:'left'};
+    return gap>0 ? {t:'+'+a+' points further Right than the state average',c:'right',i:'\u2192'}
+                 : {t:a+' points further Left than the state average',c:'left',i:'\u2190'};
   }
   function verdict(s,st,se,i){
-    if(aligned(s,st,se)) return 'Votes <b>statistically in line with '+st.name+'</b>. The difference is smaller than the survey’s own margin of error.';
+    if(aligned(s,st,se)) return 'Votes <b>statistically in line with '+esc(st.name)+'</b>. The difference is smaller than the survey’s own margin of error.';
     if(s.crosses){
-      var tail=i===0?' Only '+C.crossCount+' of the 100 senators are on the opposite side of the middle from their own state.':' Both of '+st.name+'’s senators are in that position.';
-      return 'Leans <b>'+s.dir+'</b> while '+st.name+' voters lean the <b>other way</b>.'+tail;
+      var tail=i===0?' Only '+C.crossCount+' of the 100 senators are on the opposite side of the middle from their own state.':' Both of '+esc(st.name)+'’s senators are in that position.';
+      return 'Leans <b>'+s.dir+'</b> while '+esc(st.name)+' voters lean the <b>other way</b>.'+tail;
     }
-    return 'Votes <b>more '+s.dir+'</b> than '+st.name+' voters do, '+(s.gap>=C.medianGap?'by a wider margin than most senators differ from their state.':'but by less than most senators differ from their state.');
+    return 'Votes <b>more '+s.dir+'</b> than '+esc(st.name)+' voters do, '+(s.gap>=C.medianGap?'by a wider margin than most senators differ from their state.':'but by less than most senators differ from their state.');
   }
   function ordinal(n){if(n%10===1&&n%100!==11)return'st';if(n%10===2&&n%100!==12)return'nd';if(n%10===3&&n%100!==13)return'rd';return'th'}
   function receipt(s){
     var r=R[s.bioguide]; if(!r) return '';
     return '<div class="receipt"><h4>One vote from the record</h4>'+
-      '<p>On <b>'+fmtBill(r.bill)+'</b>, the '+r.label+' ('+r.question.replace(/^On the /,'').replace(/^On /,'').toLowerCase()+', '+fmtDate(r.date)+'), '+
-      s.name.split(' ').slice(-1)[0]+' voted <b>'+r.voted+'</b>. <a href="'+r.url+'" target="_blank" rel="noopener">Senate roll call '+r.roll+' at Voteview</a>.</p>'+
+      '<p>On <b>'+esc(fmtBill(r.bill))+'</b>, the '+esc(r.label)+' ('+esc(r.question.replace(/^On the /,'').replace(/^On /,'').toLowerCase())+', '+fmtDate(r.date)+'), '+
+      esc(s.name.split(' ').slice(-1)[0])+' voted <b>'+esc(r.voted)+'</b>. <a href="'+esc(r.url)+'" target="_blank" rel="noopener">Senate roll call '+esc(r.roll)+' at Voteview</a>.</p>'+
       '<p class="novoters">This vote does not tell us whether the state’s voters supported the bill.</p>'+
       '<p class="fine">Shown for every senator by the same rule: their vote on the bill with the most Senate floor votes this Congress, passage vote first. What the bill would do in plain English is a separate part of this project and is not claimed here.</p></div>';
   }
   function nullCard(s){
     var d=new Date(); d.setMonth(d.getMonth()+1);
-    return '<div class="card null"><div class="who"><h3>'+s.name+'</h3><span class="party '+pcls(s.party)+'">'+s.party+'</span></div>'+
+    return '<div class="card null"><div class="who"><h3>'+esc(s.name)+'</h3><span class="party '+pcls(s.party)+'">'+esc(s.party)+'</span></div>'+
       '<div class="nulltrack"></div><div class="nullmsg">'+
       '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>'+
       '<p>Insufficient Data: This senator has not cast the 30 minimum floor votes required to calculate a statistically valid ideological position. Check back in '+d.toLocaleString('en-GB',{month:'long'})+'.</p></div></div>';
@@ -312,7 +315,7 @@ const C={"medianScore":83.2,"medianGap":0.336,"crossCount":9,"moreCons":53,"more
   function render(code){
     var st=V.states[code], se=M.se[code]||0;
     var lean=st.center>0.15?'clearly conservative':st.center>0.05?'slightly conservative':st.center<-0.15?'clearly liberal':st.center<-0.05?'slightly liberal':'right about in the middle';
-    $('statefact').innerHTML='Surveys of '+st.name+' residents put the state <b>'+lean+'</b>.';
+    $('statefact').innerHTML='Surveys of '+esc(st.name)+' residents put the state <b>'+lean+'</b>.';
     (function(){
       var scored=st.senators.filter(function(s){return s.record!=null});
       var t;
@@ -332,26 +335,30 @@ const C={"medianScore":83.2,"medianGap":0.336,"crossCount":9,"moreCons":53,"more
       var sp=spatial(s,st,se), isA=sp.c==='aligned';
       var l=Math.min(pos(st.center),pos(s.record)), w=Math.abs(pos(s.record)-pos(st.center));
       var moeW=Math.max(se*100,1.2);
-      var last=s.name.split(' ').slice(-1)[0];
+      var last=esc(s.name.split(' ').slice(-1)[0]), stName=esc(st.name);
+      var said=stName+' voters sit at '+signed(st.center)+' on the scale, with a margin of error of ±'+se.toFixed(2)+'. '+
+        last+' sits at '+signed(s.record)+', '+(isA?'inside that margin, so the two cannot be told apart.':Math.abs(s.record-st.center).toFixed(2)+' points further '+(s.record>st.center?'right':'left')+', outside that margin.')+
+        ' For scale, '+X.anchors.map(function(a){return esc(a.name)+' sits at '+signed(a.x)}).join(', ')+'.';
       return '<div class="card'+(isA?'':' flagged')+'">'+
-        '<div class="who"><h3>'+s.name+'</h3><span class="party '+pcls(s.party)+'">'+s.party+'</span></div>'+
-        '<h3 class="alignment-score '+sp.c+'">'+sp.t+'</h3>'+
+        '<div class="who"><h3>'+esc(s.name)+'</h3><span class="party '+pcls(s.party)+'">'+esc(s.party)+'</span></div>'+
+        '<h3 class="alignment-score '+sp.c+'"><span class="ic" aria-hidden="true">'+sp.i+'</span>'+sp.t+'</h3>'+
         '<p class="verdict">'+verdict(s,st,se,i)+'</p>'+
         '<div class="scale"><div class="ends"><span>← More liberal</span><span>More conservative →</span></div>'+
-        '<div class="track">'+
+        '<div class="track" aria-hidden="true">'+
           (w>1.5&&!isA?'<div class="span" style="--l:'+l+'%;--w:'+w+'%"></div>':'')+
           '<div class="mark state-error-band" style="--x:'+pos(st.center)+'%;--w:'+moeW+'%"></div>'+
-          X.anchors.map(function(a){return '<div class="anchor" style="--x:'+pos(a.x)+'%"></div><div class="atag" style="--x:'+pos(a.x)+'%">'+a.name+'</div>'}).join('')+
+          X.anchors.map(function(a){return '<div class="anchor" style="--x:'+pos(a.x)+'%"></div><div class="atag" style="--x:'+pos(a.x)+'%">'+esc(a.name)+'</div>'}).join('')+
           '<div class="mark state" style="--x:'+pos(st.center)+'%"></div>'+
-          '<div class="mtag top" style="--x:'+pos(st.center)+'%">'+st.name+' voters</div>'+
+          '<div class="mtag top" style="--x:'+pos(st.center)+'%">'+stName+' voters</div>'+
           '<div class="mark sen" style="--x:'+pos(s.record)+'%;--dot:'+pcol(s.party)+'"></div>'+
           '<div class="mtag bot" style="--x:'+pos(s.record)+'%;--dot:'+pcol(s.party)+'">'+last+'</div>'+
         '</div>'+
+        '<p class="sr-only">'+said+'</p>'+
         '</div>'+
         '<details class="more"><summary><span>See details</span></summary>'+
           (s.rank<=15&&!isA?'<p class="rank">'+s.rank+ordinal(s.rank)+' widest gap of 100 senators</p>':'')+
           receipt(s)+
-          '<p class="legend"><i></i>shaded band = margin of error on '+st.name+'’s position (±'+se.toFixed(2)+'). The three faint ticks are well-known senators, for scale; the ruler below shows familiar bills.</p>'+
+          '<p class="legend"><i></i>shaded band = margin of error on '+stName+'’s position (±'+se.toFixed(2)+'). The three faint ticks are well-known senators, for scale; the ruler below shows familiar bills.</p>'+
         '</details></div>';
     }).join('');
     workings(code);
@@ -362,12 +369,13 @@ const C={"medianScore":83.2,"medianGap":0.336,"crossCount":9,"moreCons":53,"more
     if(P.usM==null){$('pubcard').innerHTML='<p>Public position unavailable.</p>';return;}
     var l=Math.min(pos(P.usM),pos(P.chM)), w=Math.abs(pos(P.chM)-pos(P.usM)), right=P.chM>P.usM;
     $('pubcard').innerHTML=
-      '<div class="pubtrack">'+
+      '<div class="pubtrack" aria-hidden="true">'+
         '<div class="conn'+(right?'':' left')+'" style="--l:'+l+'%;--w:'+w+'%"></div>'+
         '<div class="pm pub" style="--x:'+pos(P.usM)+'%"></div><div class="pt a" style="--x:'+pos(P.usM)+'%">The American public</div>'+
         '<div class="pm piv" style="--x:'+pos(P.pivot)+'%"></div><div class="pt c '+(P.pivot>=P.usM?'after':'before')+'" style="--x:'+pos(P.pivot)+'%">60th vote</div>'+
         '<div class="pm sen" style="--x:'+pos(P.chM)+'%"></div><div class="pt b" style="--x:'+pos(P.chM)+'%">Middle of the Senate</div>'+
       '</div>'+
+      '<p class="sr-only">On the scale, the American public sits at '+signed(P.usM)+', the middle of the Senate at '+signed(P.chM)+', and the 60th vote from the left at '+signed(P.pivot)+'.</p>'+
       '<div class="bignums">'+
         '<div><span class="k">The public sits at</span><span class="v">'+signed(P.usM)+'</span><span class="s">all states, weighted by population</span></div>'+
         '<div><span class="k">The Senate’s middle</span><span class="v">'+signed(P.chM)+'</span><span class="s">the 50th and 51st senators</span></div>'+
@@ -376,15 +384,15 @@ const C={"medianScore":83.2,"medianGap":0.336,"crossCount":9,"moreCons":53,"more
       '</div>';
     $('take-senate').textContent='The middle of the Senate sits '+Math.abs(P.gap).toFixed(2)+' points to the '+(right?'right':'left')+' of the American public. '+P.nRightOfPublic+' of 100 senators sit to the public\u2019s right.';
     $('dots').innerHTML=P.dots.map(function(d){
-      return '<button class="dot" type="button" style="--c:'+mix(d.vsUS)+'" data-b="'+d.b+'" aria-label="'+d.n+', '+d.st+'">'+d.st+'</button>';
+      return '<button class="dot" type="button" style="--c:'+mix(d.vsUS)+'" data-b="'+esc(d.b)+'" aria-label="'+esc(d.n)+', '+esc(d.st)+'">'+esc(d.st)+'</button>';
     }).join('');
     var tip=$('tip'), byB={}; P.dots.forEach(function(d){byB[d.b]=d});
     function show(btn){
       var d=byB[btn.getAttribute('data-b')]; if(!d)return;
       var st=V.states[d.st]||{name:d.st};
       var dir=function(v,thing){return v==0?'level with '+thing:Math.abs(v).toFixed(2)+' '+(v>0?'right':'left')+' of '+thing};
-      tip.innerHTML='<b>'+d.n+' ('+d.st+')</b>'+
-        dir(d.vsSen,'the Senate’s middle')+'<br>'+dir(d.vsUS,'the American public')+'<br>'+dir(d.vsState,st.name+' voters');
+      tip.innerHTML='<b>'+esc(d.n)+' ('+esc(d.st)+')</b>'+
+        dir(d.vsSen,'the Senate’s middle')+'<br>'+dir(d.vsUS,'the American public')+'<br>'+dir(d.vsState,esc(st.name)+' voters');
       tip.hidden=false;
       var r=btn.getBoundingClientRect(), tw=tip.offsetWidth;
       var x=Math.max(8,Math.min(window.innerWidth-tw-8,r.left+r.width/2-tw/2));
@@ -416,14 +424,15 @@ const C={"medianScore":83.2,"medianGap":0.336,"crossCount":9,"moreCons":53,"more
       : '<div class="warn none">Its members sit close to the Senate as a whole.</div>';
     var pub = c.cndMedian==null?'' : ' Against the American public, its members sit <b>'+Math.abs(c.cndMedian).toFixed(2)+' to the '+(c.cndMedian>0?'right':'left')+'</b>.';
     var out = o ? '<p class="out-line"><b>What it actually passed:</b> the bills this committee sent to the floor divided the Senate at '+signed(o.coi)+' \u2014 '+Math.abs(o.vsSen).toFixed(2)+' to the '+(o.vsSen>0?'right':'left')+' of the Senate\u2019s middle and '+Math.abs(o.vsUS).toFixed(2)+' to the '+(o.vsUS>0?'right':'left')+' of the public, across '+o.n+' floor votes.</p>' : '';
-    return '<div class="cm"><div class="gh"><b>'+c.name+'</b><span>'+c.n+' senators \u00b7 '+c.split[0]+' majority, '+c.split[1]+' minority</span></div>'+
-      '<div class="ctrack">'+
+    var spoken='On the scale, '+(X.usM!=null?'the American public sits at '+signed(X.usM)+', ':'')+'the middle of the Senate at '+signed(X.chMedian)+', and this committee\u2019s members\u2019 midpoint at '+signed(c.median)+(o?'; the bills it passed divided the Senate at '+signed(o.coi):'')+'.';
+    return '<div class="cm"><div class="gh"><b>'+esc(c.name)+'</b><span>'+c.n+' senators \u00b7 '+c.split[0]+' majority, '+c.split[1]+' minority</span></div>'+
+      '<div class="ctrack" aria-hidden="true">'+
         '<div class="conn'+(right?'':' left')+'" style="--l:'+l+'%;--w:'+w+'%"></div>'+
         (X.usM!=null?'<div class="cmk pub" style="--x:'+pos(X.usM)+'%"></div><div class="ct p" style="--x:'+pos(X.usM)+'%">Public</div>':'')+
         '<div class="cmk sen" style="--x:'+pos(X.chMedian)+'%"></div><div class="ct a" style="--x:'+pos(X.chMedian)+'%">Senate</div>'+
         '<div class="cmk mem" style="--x:'+pos(c.median)+'%;--dot:'+(right?'var(--rep)':'var(--dem)')+'"></div><div class="ct b" style="--x:'+pos(c.median)+'%;--dot:'+(right?'var(--rep)':'var(--dem)')+'">Members</div>'+
         (o?'<div class="cmk out" style="--x:'+pos(o.coi)+'%"></div><div class="ct o" style="--x:'+pos(o.coi)+'%">Bills passed</div>':'')+
-      '</div>'+warn+
+      '</div>'+'<p class="sr-only">'+spoken+'</p>'+warn+
       '<p class="say">Its members\u2019 midpoint sits <b>'+Math.abs(c.drift).toFixed(2)+' to the '+(right?'right':'left')+'</b> of the Senate\u2019s middle.'+pub+'</p>'+out+
       '<p class="fine">Members\u2019 average sits at '+signed(c.mean)+' ('+Math.abs(c.meanDrift).toFixed(2)+' '+(c.meanDrift>0?'right':'left')+' of the Senate). The midpoint would move by up to '+c.shift.toFixed(2)+' if one member were replaced'+(c.phantom?', and currently falls in the gap between the two parties where no member sits':'')+'.</p>'+
     '</div>';
@@ -434,12 +443,12 @@ const C={"medianScore":83.2,"medianGap":0.336,"crossCount":9,"moreCons":53,"more
     var max=Math.max.apply(null,G.committees.map(function(g){return Math.max(g.libPct,g.conPct)})), scale=Math.max(10,Math.ceil(max/5)*5);
     var leanC=c.vsBase>0, mag=Math.abs(c.vsBase);
     var say=mag<1?'Treats bills from both sides about the same as the Senate as a whole.':'Favours <b>'+(leanC?'conservative':'liberal')+'</b>-written bills <b>'+mag.toFixed(1)+' points</b> more than the Senate as a whole does.';
-    var row=function(label,cls,rep,ref,p){return '<div class="bar"><span class="lbl">'+label+'</span><div class="trk"><div class="fill '+cls+'" style="--w:'+(100*p/scale)+'%"></div></div><span class="num">'+p.toFixed(0)+'% <small>'+rep+' of '+ref+'</small></span></div>'};
-    return '<div class="gk '+(mag<1?'':(leanC?'lean-c':'lean-l'))+'"><div class="gh"><b>'+c.name+'</b><span>'+(c.libRef+c.conRef)+' bills sent here</span></div><div class="bars">'+row('By liberal senators','l',c.libRep,c.libRef,c.libPct)+row('By conservative senators','c',c.conRep,c.conRef,c.conPct)+'</div><p class="say">'+say+'</p></div>';
+    var row=function(label,cls,rep,ref,p){return '<div class="bar"><span class="lbl">'+label+'</span><div class="trk" aria-hidden="true"><div class="fill '+cls+'" style="--w:'+(100*p/scale)+'%"></div></div><span class="num">'+p.toFixed(0)+'% <small>'+rep+' of '+ref+'</small></span></div>'};
+    return '<div class="gk '+(mag<1?'':(leanC?'lean-c':'lean-l'))+'"><div class="gh"><b>'+esc(c.name)+'</b><span>'+(c.libRef+c.conRef)+' bills sent here</span></div><div class="bars">'+row('By liberal senators','l',c.libRep,c.libRef,c.libPct)+row('By conservative senators','c',c.conRep,c.conRef,c.conPct)+'</div><p class="say">'+say+'</p></div>';
   }
   var csel=$('committee');
   var clist=X.committees.slice().sort(function(a,b){return a.name.localeCompare(b.name)});
-  csel.innerHTML=clist.map(function(c){return '<option value="'+c.code+'">'+c.name+'</option>'}).join('');
+  csel.innerHTML=clist.map(function(c){return '<option value="'+esc(c.code)+'">'+esc(c.name)+'</option>'}).join('');
   function renderCommittee(code){
     var c=clist.filter(function(x){return x.code===code})[0]; if(!c) return;
     var right=c.drift>0, o=X.output[c.code];
@@ -453,7 +462,7 @@ const C={"medianScore":83.2,"medianGap":0.336,"crossCount":9,"moreCons":53,"more
   (function(){
     if(!G.committees||!G.committees.length)return;
     var pct=function(n,d){return d?Math.round(100*n/d):0};
-    if(G.worst) $('stark').innerHTML='<span class="big">'+G.worst.reported+' of '+G.worst.referred.toLocaleString()+'</span><p>bills sent to the <b>'+G.worst.name+' Committee</b> this Congress made it back out. Across every committee, <b>'+pct(G.totalReported,G.totalReferred)+'%</b> of bills survive \u2014 '+G.totalReported.toLocaleString()+' of '+G.totalReferred.toLocaleString()+'.</p>';
+    if(G.worst) $('stark').innerHTML='<span class="big">'+G.worst.reported+' of '+G.worst.referred.toLocaleString()+'</span><p>bills sent to the <b>'+esc(G.worst.name)+' Committee</b> this Congress made it back out. Across every committee, <b>'+pct(G.totalReported,G.totalReferred)+'%</b> of bills survive \u2014 '+G.totalReported.toLocaleString()+' of '+G.totalReferred.toLocaleString()+'.</p>';
     $('basenote').innerHTML='Across the whole Senate, bills written by conservative senators get through slightly more often \u2014 by <b>'+G.baseline.toFixed(1)+' percentage points</b>. That is simply because Republicans hold the majority, and it happens on every committee. So each committee is judged against that baseline, not against zero.';
     $('gatecaveat').innerHTML='Survival rates are shown only for committees with at least 25 bills from each side, because below that a single bill moves the percentage by several points. A bill takes the side of the senator who wrote it, measured by that senator\u2019s voting record.';
   })();
@@ -465,8 +474,8 @@ const C={"medianScore":83.2,"medianGap":0.336,"crossCount":9,"moreCons":53,"more
     st.senators.forEach(function(s){
       if(s.record==null)return;
       var gap=s.record-st.center;
-      out+='<div class="work"><h3>'+s.name+'</h3><table>'+
-        '<tr><td>Senator’s position <b>x</b><br><span style="color:var(--muted);font-size:13px">'+M.scoreCol+', Congress '+M.congress+', id '+s.bioguide+'</span></td><td>'+signed(s.record,3)+'</td></tr>'+
+      out+='<div class="work"><h3>'+esc(s.name)+'</h3><table>'+
+        '<tr><td>Senator’s position <b>x</b><br><span style="color:var(--muted);font-size:13px">'+M.scoreCol+', Congress '+M.congress+', id '+esc(s.bioguide)+'</span></td><td>'+signed(s.record,3)+'</td></tr>'+
         '<tr><td>State’s position <b>s</b><br><span style="color:var(--muted);font-size:13px">'+M.ideologyCol+', '+M.ideologyYear+' wave, ±'+se.toFixed(3)+'</span></td><td>'+signed(st.center,3)+'</td></tr>'+
         '<tr class="total"><td>Signed distance <b>x − s</b></td><td>'+signed(gap,3)+'</td></tr></table>'+
         '<div class="formula">'+signed(s.record,3)+' − ('+signed(st.center,3)+') = '+signed(gap,3)+(Math.abs(gap)<=se?'   → inside ±'+se.toFixed(3)+', aligned':'')+'</div></div>';
@@ -478,7 +487,7 @@ const C={"medianScore":83.2,"medianGap":0.336,"crossCount":9,"moreCons":53,"more
       '<div class="formula">'+signed(M.chM,4)+' − ('+signed(M.usM,4)+') = '+signed(M.dUS,4)+'</div></div>';
     $('workings').innerHTML=out;
   }
-  $('srcs').innerHTML=M.sources.map(function(t){return '<div><b>'+t[0]+'</b><a href="https://'+t[1].replace(/^https?:\/\//,'')+'">'+t[1]+'</a><span>'+t[2]+'</span></div>'}).join('');
+  $('srcs').innerHTML=M.sources.map(function(t){return '<div><b>'+esc(t[0])+'</b><a href="https://'+esc(t[1].replace(/^https?:\/\//,''))+'">'+esc(t[1])+'</a><span>'+esc(t[2])+'</span></div>'}).join('');
   $('medgap').textContent=C.medianGap.toFixed(2);
   $('foot').textContent='Senator positions and floor votes: Voteview, University of California Los Angeles, '+M.congress+'th Congress. State voter positions: '+V.source+', '+M.ideologyYear+' wave. Bills: GovInfo bulk data. Populations: US Census Bureau vintage '+M.popYear+'.';
 

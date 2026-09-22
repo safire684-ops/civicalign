@@ -313,9 +313,56 @@ def test_vote_examples_carry_vote_bill_date_and_source_link(report):
         assert x["url"] == f"https://voteview.com/rollcall/RS{DEFAULT.congress}{x['roll']:04d}"
         assert x["date"] and x["label"] and x["question"]
     text = DEMO.read_text()
-    assert "href=\"'+r.url+'\"" in text, "the page must render the source link"
+    assert "href=\"'+esc(r.url)+'\"" in text, "the page must render the source link, escaped"
     assert "receipt(s)+" in text and "isA?'':receipt(" not in text, \
         "the example is shown for every scored senator, not only those flagged as far from their state"
     assert "This vote does not tell us whether the state\u2019s voters supported the bill." in text
     assert "function receipt(s){" in text and "st.name" not in text.split("function receipt(s){")[1].split("\n  }")[0], \
         "the example must not mention the state at all"
+
+
+# ---- presentation safeguards: escaping, text alternatives, no colour-only meaning ----
+
+def test_data_strings_are_escaped_before_html_insertion():
+    """Names, bill titles and committee names come from data files. Every place
+    the script concatenates one into HTML must go through esc(); the raw
+    concatenation forms must not reappear. textContent assignments are exempt."""
+    text = DEMO.read_text()
+    assert "var esc=function(v)" in text
+    html_lines = [ln for ln in text.splitlines() if "innerHTML" in ln or "return '<" in ln or "out+='<" in ln or "'<div" in ln or "'<p" in ln or "'<option" in ln or "'<button" in ln]
+    joined = "\n".join(html_lines)
+    for raw in ("'+s.name+'", "'+st.name+'", "'+r.label+'", "'+c.name+'", "'+d.n+'", "'+d.st+'",
+                "'+it.label+'", "'+G.worst.name+'", "'+a.name+'", "'+t[0]+'", "'+t[2]+'", "'+s.party+'"):
+        assert raw not in joined, f"unescaped data string {raw} inserted into HTML"
+    for wrapped in ("esc(s.name)", "esc(st.name)", "esc(r.label)", "esc(c.name)", "esc(d.n)", "esc(it.label)",
+                    "esc(G.worst.name)", "esc(a.name)", "esc(r.url)"):
+        assert wrapped in text, f"{wrapped} missing"
+
+
+def test_every_drawn_track_is_hidden_from_screen_readers_and_described_in_text():
+    """A row of positioned divs means nothing to a screen reader. Each track is
+    marked decorative and followed by a sentence built from the same figures."""
+    text = DEMO.read_text()
+    css = (DEMO.parent / "civicalign.css").read_text()
+    assert ".sr-only{" in css
+    for track in ('class="track" aria-hidden="true"', 'class="pubtrack" aria-hidden="true"',
+                  'class="ctrack" aria-hidden="true"', 'class="rtrack" aria-hidden="true"',
+                  'class="trk" aria-hidden="true"'):
+        assert track in text, f"{track} missing"
+    # one spoken description per chart type, each built from the real numbers
+    assert "'<p class=\"sr-only\">'+said+'</p>'" in text
+    assert "signed(st.center)" in text.split("var said=")[1].split(";")[0]
+    assert "signed(s.record)" in text.split("var said=")[1].split(";")[0]
+    assert "the middle of the Senate at '+signed(P.chM)" in text
+    assert "60th vote from the left at '+signed(P.pivot)" in text
+    assert "members\\u2019 midpoint at '+signed(c.median)" in text
+    assert "Positions on the scale, from most liberal to most conservative" in text
+
+
+def test_alignment_badge_carries_an_icon_and_does_not_rely_on_green():
+    text = DEMO.read_text()
+    css = (DEMO.parent / "civicalign.css").read_text()
+    rule = css.split(".alignment-score.aligned{")[1].split("}")[0]
+    assert "#22c55e" not in rule and "green" not in rule
+    assert "<span class=\"ic\" aria-hidden=\"true\">'+sp.i+'</span>" in text
+    assert "i:'\\u2713'" in text and "i:'\\u2192'" in text and "i:'\\u2190'" in text
