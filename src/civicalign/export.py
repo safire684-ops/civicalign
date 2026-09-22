@@ -119,13 +119,16 @@ def to_dict(r: Report) -> dict[str, Any]:
         },
         "receipts": {
             "publishable": True,
-            "note": ("one real vote per senator where they voted the opposite of the "
-                     "side their state's position sits on; the bill's consequence in "
-                     "plain English is Pillar 1's and is not supplied here"),
+            "note": ("one real vote per scored senator, chosen by a neutral rule: their "
+                     "vote on the bill with the most Senate floor votes this Congress, "
+                     "passage vote first, then cloture, then any other; the senator's "
+                     "state plays no part in the choice. This vote does not tell us "
+                     "whether the state's voters supported the bill. The bill's "
+                     "consequence in plain English is Pillar 1's and is not supplied here"),
             "by_senator": {
                 b: {"roll": x.roll, "date": x.date, "bill": x.bill, "label": x.label,
                     "question": x.question, "senator_vote": x.senator_vote,
-                    "state_implied": x.state_implied, "cutpoint": round(x.cutpoint, 3)}
+                    "url": x.url}
                 for b, x in r.receipts.items()},
         },
         "committee_output_ideology": {

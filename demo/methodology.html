@@ -73,7 +73,7 @@ table.calc tr.total td{border-bottom:none;border-top:2px solid var(--ink);
   <p class="sub">We place every US senator and every state's voters on the same
     scale, then measure the distance between them. This explains where each number
     comes from and what it can and cannot tell you.</p>
-  <p class="asof">As of 22 September 2026</p>
+  <p class="asof">As of 21 September 2026</p>
 </header>
 
 <section>
@@ -179,16 +179,22 @@ table.calc tr.total td{border-bottom:none;border-top:2px solid var(--ink);
     <tr><td>H.R. 6644 &mdash; Housing for the 21st Century Act</td><td class="n">9</td><td class="n">+0.347</td></tr>
   </table></div>
 
-  <h3>A vote where the gap showed</h3>
-  <p>For each senator the tool shows one real vote where they chose the opposite side
-    from the one their state's position points to. The dividing line of a vote tells
-    us which side a senator sitting exactly at the state's position would most likely
-    have taken; a "receipt" is a vote where the senator took the other one. The most
-    recognisable such vote is chosen: passage votes on the busiest bills first.</p>
-  <p>For Ossoff: On H.R. 1, the One Big Beautiful Bill Act (passage of the bill, 2025-07-01), Ossoff voted <b>Nay</b>. Georgia's position sits on the <b>Yea</b> side of the line that divided that vote.</p>
-  <p>Every one of the 100 senators has such a vote. What a bill would
-    <em>do</em> in plain English is a separate part of this project (Pillar 1) and is
-    not claimed here; the vote, the bill and the dividing line are all public record.</p>
+  <h3>One vote from the record</h3>
+  <p>Beside each senator the tool shows one real vote, chosen by a rule that has
+    nothing to do with the senator's state or with how they voted: their vote on the
+    bill with the most Senate floor votes this Congress, taking the passage vote where
+    there is one (then cloture, then any other vote on it), with a link to the roll
+    call at Voteview. The same rule picks the same bill for every senator who voted
+    on it.</p>
+  <p>For Ossoff: On H.R. 1, the One Big Beautiful Bill Act (passage of the bill, 2025-07-01), Ossoff voted <b>Nay</b> (<a href="https://voteview.com/rollcall/RS1190372">Senate roll call 372 at Voteview</a>).</p>
+  <p><b>This vote does not tell us whether the state&rsquo;s voters supported the bill.</b>
+    A state's survey position summarises one dimension of opinion; it cannot say how
+    the state's voters felt about any particular bill, and the tool does not infer a
+    "state side" of a vote from it. An earlier version picked votes where the senator
+    disagreed with such an inferred side; that was unsupported and has been removed.
+    What a bill would <em>do</em> in plain English is a separate part of this project
+    (Pillar 1) and is not claimed here. The vote is shown for 100 of the
+    100 senators; a senator with no scored position has none.</p>
 
   <h3>2. The Senate against the country</h3>
   <p>Same idea, one level up. The middle senator sits at <b>+0.310</b>. The American

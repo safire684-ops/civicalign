@@ -104,8 +104,8 @@ def _report_values(r: Report) -> dict[str, str]:
     rc = r.receipts.get("O000174")
     rcpt = ("" if not rc else
             f"On {_bill(rc.bill)}, the {rc.label} ({rc.question.replace('On the ', '').replace('On ', '').lower()}, "
-            f"{rc.date}), Ossoff voted <b>{rc.senator_vote}</b>. Georgia's position sits on the "
-            f"<b>{rc.state_implied}</b> side of the line that divided that vote.")
+            f"{rc.date}), Ossoff voted <b>{rc.senator_vote}</b> "
+            f'(<a href="{rc.url}">Senate roll call {rc.roll} at Voteview</a>).')
 
     oi = [o for o in r.output_ideology if o.is_reportable]
     oi_table = ('  <div class="tw"><table>\n'
@@ -301,7 +301,7 @@ def _blocks(r: Report, cfg: Config) -> dict[str, dict]:
         "L": [{"key": l.key, "label": l.label, "x": round(l.cutpoint, 3),
                "votes": l.votes, "passed": l.passed} for l in r.landmarks],
         "R": {b: {"bill": x.bill, "label": x.label, "question": x.question,
-                  "date": x.date, "voted": x.senator_vote, "state": x.state_implied}
+                  "date": x.date, "voted": x.senator_vote, "roll": x.roll, "url": x.url}
               for b, x in r.receipts.items()},
         "P": _public_block(r, cfg),
         "C": {"medianScore": round(st.median([a.spec_score for a in scored]), 1),

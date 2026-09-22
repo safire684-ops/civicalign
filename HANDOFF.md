@@ -5,9 +5,11 @@ sections 2–5). Pillars 1–3 and 7 belong to someone else.
 
 ## Status in one line
 
-A four-view redesign of the page is finished, tested and committed **locally
-only**. It is **not pushed and not published**: the live site, the claude.ai copy
-and the shared doc still show the previous single-page layout.
+A four-view redesign of the page, and a correction removing the unsupported
+voter-support claims from the vote examples, are finished, tested and committed
+**locally only**. They are **not pushed and not published**: the live site, the
+claude.ai copy and the shared doc still show the previous layout and the old
+"vote where this gap showed" wording.
 
 ## Where things stand
 
@@ -95,5 +97,9 @@ The Gemini reports referenced in earlier rounds:
 Decisions approved earlier: public repo under `safire684-ops` with the personal
 email hidden in history; Pillars 4–6 only; committee module plots the members'
 median with the 0.15 threshold and keeps the mean in fine print; the percentage
-score removed; six landmark bills at their median cutpoint; receipts name the bill,
-vote and dividing line only; no API key anywhere.
+score removed; six landmark bills at their median cutpoint; no API key anywhere.
+Superseded: "receipts name the bill, vote and dividing line only" — the vote
+example now shows the bill, question, date, the senator's own vote and a Voteview
+link, is chosen by a neutral rule (busiest bill, passage vote first), and carries
+the sentence "This vote does not tell us whether the state's voters supported the
+bill." No state side is inferred from a vote's dividing line any more.

@@ -59,23 +59,72 @@ def test_yea_side_is_found_from_the_votes_not_assumed(report):
         assert (st.fmean(yeas) > st.fmean(nays)) == rc.yea_is_right
 
 
-def test_every_receipt_is_a_genuine_divergence(report):
-    """The senator's recorded vote must be the opposite of the state-implied one,
-    and the two must be the only two values."""
+def test_receipts_name_a_real_vote_and_link_to_it(report):
+    """Bill, question, date, the senator's own recorded Yea or Nay, and a link to
+    the roll call at Voteview. No inferred state side and no cutpoint travel with
+    the example, because neither is evidence of what the state's voters wanted."""
     assert report.receipts, "expected receipts"
     for b, x in report.receipts.items():
-        assert {x.senator_vote, x.state_implied} == {"Yea", "Nay"}
-        assert x.senator_vote != x.state_implied
-        assert x.label and x.bill and x.question
-        assert -1 <= x.cutpoint <= 1
+        assert x.senator_vote in ("Yea", "Nay")
+        assert x.label and x.bill and x.question and x.date
+        assert x.url == f"https://voteview.com/rollcall/RS{DEFAULT.congress}{x.roll:04d}"
+        assert not hasattr(x, "state_implied")
+        assert not hasattr(x, "cutpoint")
 
 
-def test_receipts_prefer_passage_votes_on_prominent_bills(report):
-    """A receipt should be the most recognisable vote available, not an obscure
-    procedural motion."""
-    o = report.receipts["O000174"]
-    assert "Passage" in o.question
-    assert o.bill == "HR1"
+def test_receipts_follow_the_documented_neutral_rule(report, bills):
+    """Recompute the rule independently for every scored senator: among titled
+    bills they cast a Yea or Nay on, passage beats cloture beats anything else,
+    then the bill with the most floor votes, then the higher roll number. Which
+    way they voted and where their state sits play no part."""
+    icpsr = rollcalls.icpsr_to_bioguide(DEFAULT.members_csv, DEFAULT.congress)
+    votes = rollcalls.load_votes(DEFAULT.votes_csv, icpsr)
+    rcs = rollcalls.load_rollcalls(DEFAULT.rollcalls_csv, votes, report.scores)
+    per_bill: dict[str, int] = {}
+    for rc in rcs:
+        if rc.bill:
+            per_bill[rc.bill] = per_bill.get(rc.bill, 0) + 1
+
+    def rank(rc):
+        q = rc.question.lower()
+        return (0 if "passage" in q else 1 if "cloture" in q else 2, -per_bill[rc.bill], -rc.number)
+
+    assert set(report.receipts) == set(report.scores)
+    for b, x in report.receipts.items():
+        cands = [rc for rc in rcs if rc.bill and b in votes.get(rc.number, {})
+                 and rc.bill in bills and (bills[rc.bill].short or bills[rc.bill].title)]
+        best = min(cands, key=rank)
+        assert x.roll == best.number, f"{b}: expected roll {best.number}, got {x.roll}"
+        assert x.senator_vote == ("Yea" if votes[best.number][b] else "Nay")
+
+
+def test_receipts_are_not_filtered_by_how_the_senator_voted(report):
+    """The removed rule kept only votes that disagreed with a side inferred from
+    the state. Under the neutral rule the busiest bill's passage vote is shown for
+    everyone who cast one, so Yeas and Nays both appear on that same roll call."""
+    by_roll: dict[int, set[str]] = {}
+    for x in report.receipts.values():
+        by_roll.setdefault(x.roll, set()).add(x.senator_vote)
+    commonest = max(by_roll, key=lambda r: sum(1 for x in report.receipts.values() if x.roll == r))
+    assert by_roll[commonest] == {"Yea", "Nay"}
+
+
+def test_receipt_selection_never_reads_state_positions_or_dividing_lines():
+    """Guard at the source: the selection code must not touch the identifiers the
+    old inference used. Docstrings are ignored; only names in code count."""
+    import ast
+    from pathlib import Path
+    src = (Path(__file__).resolve().parents[1] / "src" / "civicalign" / "receipts.py").read_text()
+    names = set()
+    for node in ast.walk(ast.parse(src)):
+        if isinstance(node, ast.Name):
+            names.add(node.id)
+        elif isinstance(node, ast.Attribute):
+            names.add(node.attr)
+        elif isinstance(node, ast.arg):
+            names.add(node.arg)
+    banned = {"state_pos", "state_implied", "cutpoint", "yea_is_right", "state"}
+    assert not (names & banned), names & banned
 
 
 def test_output_ideology_only_reports_committees_with_enough_votes(report):

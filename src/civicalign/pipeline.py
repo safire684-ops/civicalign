@@ -98,8 +98,7 @@ def run(cfg: Config = DEFAULT) -> Report:
         member_votes = rollcalls.load_votes(cfg.votes_csv, icpsr)
         rcs = rollcalls.load_rollcalls(cfg.rollcalls_csv, member_votes, scores)
         lms = landmarks(rcs, bills)
-        state_pos = {b: src.state(roster[b].state) for b in scores}
-        rcpts = receipts(rcs, member_votes, bills, state_pos)
+        rcpts = receipts(rcs, member_votes, bills, scores, cfg.congress)
         oi = output_ideology(rcs, bills, ch.median, national)
 
     aligns = rank_all([

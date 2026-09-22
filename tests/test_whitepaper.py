@@ -61,6 +61,7 @@ def test_landmark_bills_and_receipt_are_current(text, report):
         assert f"| {l.votes} | " in text
     rc = report.receipts["O000174"]
     assert rc.label in text and rc.senator_vote in text
+    assert rc.url in text, "the vote example must link to its roll call"
 
 
 def test_committee_tables_are_current(text, report):

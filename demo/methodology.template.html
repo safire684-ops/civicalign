@@ -162,16 +162,22 @@ table.calc tr.total td{border-bottom:none;border-top:2px solid var(--ink);
     votes' dividing lines.</p>
 {{lm_table}}
 
-  <h3>A vote where the gap showed</h3>
-  <p>For each senator the tool shows one real vote where they chose the opposite side
-    from the one their state's position points to. The dividing line of a vote tells
-    us which side a senator sitting exactly at the state's position would most likely
-    have taken; a "receipt" is a vote where the senator took the other one. The most
-    recognisable such vote is chosen: passage votes on the busiest bills first.</p>
+  <h3>One vote from the record</h3>
+  <p>Beside each senator the tool shows one real vote, chosen by a rule that has
+    nothing to do with the senator's state or with how they voted: their vote on the
+    bill with the most Senate floor votes this Congress, taking the passage vote where
+    there is one (then cloture, then any other vote on it), with a link to the roll
+    call at Voteview. The same rule picks the same bill for every senator who voted
+    on it.</p>
   <p>For Ossoff: {{rcpt_example}}</p>
-  <p>Every one of the {{rcpt_count}} senators has such a vote. What a bill would
-    <em>do</em> in plain English is a separate part of this project (Pillar 1) and is
-    not claimed here; the vote, the bill and the dividing line are all public record.</p>
+  <p><b>This vote does not tell us whether the state&rsquo;s voters supported the bill.</b>
+    A state's survey position summarises one dimension of opinion; it cannot say how
+    the state's voters felt about any particular bill, and the tool does not infer a
+    "state side" of a vote from it. An earlier version picked votes where the senator
+    disagreed with such an inferred side; that was unsupported and has been removed.
+    What a bill would <em>do</em> in plain English is a separate part of this project
+    (Pillar 1) and is not claimed here. The vote is shown for {{rcpt_count}} of the
+    100 senators; a senator with no scored position has none.</p>
 
   <h3>2. The Senate against the country</h3>
   <p>Same idea, one level up. The middle senator sits at <b>{{ch_m}}</b>. The American

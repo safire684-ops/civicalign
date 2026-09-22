@@ -108,15 +108,18 @@ its votes' dividing lines.
 | Military Construction, Veterans Affairs, and Related Agencies Appropriations Act, 2026 | 13 | −0.110 |
 | National Defense Authorization Act for Fiscal Year 2026 | 12 | −0.217 |
 
-**A vote where the gap showed.** For each senator, one real vote where they chose
-the opposite side from the one their state's position points to. The dividing
-line says which way a senator sitting exactly at the state's position would most
-likely have voted; a receipt is a vote where the senator went the other way. The
-most recognisable such vote is chosen — passage votes on the busiest bills first.
-For Jon Ossoff: on H.R. 1, the One Big Beautiful Bill Act, passage vote of 1 July
-2025, he voted Nay; Georgia's position sits on the Yea side of that vote's line.
-Every senator has such a vote. What a bill would *do* in plain English is a
-separate part of this project and is not claimed here.
+**One vote from the record.** Beside each senator, one real vote chosen by a rule
+that has nothing to do with the senator's state or with how they voted: their vote
+on the bill with the most Senate floor votes this Congress, taking the passage vote
+where there is one (then cloture, then any other vote on it), with a link to the
+roll call at Voteview. For Jon Ossoff: on H.R. 1, the One Big Beautiful Bill Act,
+passage vote of 1 July 2025, he voted Nay
+([Senate roll call 372](https://voteview.com/rollcall/RS1190372)).
+This vote does not tell us whether the state's voters supported the bill. An
+earlier version selected votes where the senator disagreed with a "state side"
+inferred from the state's survey position and the vote's dividing line; that
+inference was unsupported and was removed. What a bill would *do* in plain English
+is a separate part of this project and is not claimed here.
 
 ## Finding 3: committees, measured three ways
 

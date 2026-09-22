@@ -228,7 +228,7 @@ def test_existing_measures_and_thresholds_are_preserved():
     assert "Warning: This committee acts as a " in text
     assert "What it actually passed:" in text
     assert "Aligned with State Consensus" in text and "points further" in text
-    assert "A vote where this gap showed" in text
+    assert "One vote from the record" in text
 
 
 
@@ -273,3 +273,49 @@ def test_tap_targets_meet_the_44px_minimum():
     assert "min-height:48px" in css.split(".more summary{")[1].split("}")[0]
     # the old 34px phone override is gone
     assert ".dot{width:34px" not in css
+
+
+# ---- the vote example must not claim to know what the state's voters wanted ----
+
+NO_VOTER_SUPPORT = "This vote does not tell us whether the state's voters supported the bill."
+VOTER_SUPPORT_CLAIMS = [
+    "A vote where this gap showed", "gap showed", "vote where this showed",
+    "state-implied", "state_implied", "side of the line", "side of that vote",
+    "position points to", "position sits on the", "opposite side from the one",
+    "would most likely have",
+]
+
+
+def _plain(t: str) -> str:
+    return t.replace("\u2019", "'").replace("&rsquo;", "'").replace("&#8217;", "'")
+
+
+@pytest.mark.parametrize("path", [DEMO, REPORT, ROOT / "demo" / "methodology.template.html",
+                                  ROOT / "WHITEPAPER.md"])
+def test_vote_examples_make_no_voter_support_claim(path):
+    """A state's survey position does not say how its voters felt about a bill.
+    No page may say a vote 'showed the gap' or that the state sat on one side of
+    the vote, and every page must carry the sentence saying so."""
+    t = _plain(path.read_text())
+    for claim in VOTER_SUPPORT_CLAIMS:
+        assert claim not in t, f"{path.name} still says {claim!r}"
+    assert NO_VOTER_SUPPORT in t, f"{path.name} lacks the no-voter-support sentence"
+
+
+def test_vote_examples_carry_vote_bill_date_and_source_link(report):
+    """Each example on the page: bill, label, question, date, the senator's own
+    vote, roll number and a Voteview link, and nothing about the state."""
+    R = _block("R")
+    assert set(R) == set(report.receipts)
+    for b, x in R.items():
+        assert set(x) == {"bill", "label", "question", "date", "voted", "roll", "url"}, b
+        assert x["voted"] in ("Yea", "Nay")
+        assert x["url"] == f"https://voteview.com/rollcall/RS{DEFAULT.congress}{x['roll']:04d}"
+        assert x["date"] and x["label"] and x["question"]
+    text = DEMO.read_text()
+    assert "href=\"'+r.url+'\"" in text, "the page must render the source link"
+    assert "receipt(s)+" in text and "isA?'':receipt(" not in text, \
+        "the example is shown for every scored senator, not only those flagged as far from their state"
+    assert "This vote does not tell us whether the state\u2019s voters supported the bill." in text
+    assert "function receipt(s){" in text and "st.name" not in text.split("function receipt(s){")[1].split("\n  }")[0], \
+        "the example must not mention the state at all"
