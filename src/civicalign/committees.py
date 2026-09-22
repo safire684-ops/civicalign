@@ -52,6 +52,7 @@ class CommitteeStats:
     chamber_mean: float
     ccd_mean: float
     mean_jackknife: float
+    cnd_mean: float | None      # committee mean minus the public's centre
 
     noise_floor: float
 
@@ -153,6 +154,7 @@ def committee_stats(
         chamber_mean=chamber_mean,
         ccd_mean=cmean - chamber_mean,
         mean_jackknife=jack,
+        cnd_mean=(cmean - national_coord) if national_coord is not None else None,
         n_scored=len(coords),
         n_members=len(members),
         median=cm,

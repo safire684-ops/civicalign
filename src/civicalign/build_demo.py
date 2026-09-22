@@ -76,17 +76,56 @@ def _report_values(r: Report) -> dict[str, str]:
 
     top = ('  <div class="tw"><table>\n'
            '    <tr><th>Senator</th><th>State</th><th class="n">Record</th>'
-           '<th class="n">Their state</th><th class="n">Gap</th><th class="n">Match</th></tr>\n'
+           '<th class="n">Their state</th><th class="n">Gap</th></tr>\n'
            + "".join(
                f'    <tr><td>{a.name}</td><td>{a.state}</td>'
                f'<td class="n">{_signed(a.senator_coord)}</td>'
                f'<td class="n">{_signed(a.state_coord)}</td>'
-               f'<td class="n">{a.abs_gap:.3f}</td><td class="n">{a.spec_score:.1f}%</td></tr>\n'
+               f'<td class="n">{a.abs_gap:.3f}</td></tr>\n'
                for a in sorted(scored, key=lambda a: -a.abs_gap)[:5])
            + '  </table></div>')
 
     cross = sum(1 for a in scored if a.crosses_over)
     d = date.today()
+
+    def _bill(k):
+        import re as _re
+        m = _re.match(r"^([A-Z]+)(\d+)$", k)
+        names = {"HR": "H.R.", "S": "S.", "HJRES": "H.J.Res.", "SJRES": "S.J.Res.",
+                 "HCONRES": "H.Con.Res.", "SCONRES": "S.Con.Res."}
+        return f"{names.get(m.group(1), m.group(1))} {m.group(2)}" if m else k
+
+    lm_table = ('  <div class="tw"><table>\n'
+                '    <tr><th>Bill</th><th class="n">Floor votes</th><th class="n">Where its votes divided the Senate</th></tr>\n'
+                + "".join(f'    <tr><td>{_bill(l.key)} &mdash; {l.label}</td><td class="n">{l.votes}</td>'
+                          f'<td class="n">{_signed(l.cutpoint)}</td></tr>\n' for l in r.landmarks)
+                + '  </table></div>')
+
+    rc = r.receipts.get("O000174")
+    rcpt = ("" if not rc else
+            f"On {_bill(rc.bill)}, the {rc.label} ({rc.question.replace('On the ', '').replace('On ', '').lower()}, "
+            f"{rc.date}), Ossoff voted <b>{rc.senator_vote}</b>. Georgia's position sits on the "
+            f"<b>{rc.state_implied}</b> side of the line that divided that vote.")
+
+    oi = [o for o in r.output_ideology if o.is_reportable]
+    oi_table = ('  <div class="tw"><table>\n'
+                '    <tr><th>Committee</th><th class="n">Floor votes on its bills</th>'
+                '<th class="n">Where they divided the Senate</th><th class="n">vs. Senate middle</th><th class="n">vs. public</th></tr>\n'
+                + "".join(f'    <tr><td>{COMMITTEE_NAMES.get(o.code, o.code)}</td><td class="n">{o.n_votes}</td>'
+                          f'<td class="n">{_signed(o.coi)}</td><td class="n">{_signed(o.vs_senate)}</td>'
+                          f'<td class="n">{_signed(o.vs_public) if o.vs_public is not None else "&mdash;"}</td></tr>\n'
+                          for o in oi)
+                + '  </table></div>')
+
+    cm = sorted(r.committees, key=lambda c: -abs(c.median - r.chamber.median))[:6]
+    cnd_table = ('  <div class="tw"><table>\n'
+                 '    <tr><th>Committee</th><th class="n">Members\' midpoint</th><th class="n">vs. Senate middle</th>'
+                 '<th class="n">vs. public</th><th class="n">Moves if one member changes</th></tr>\n'
+                 + "".join(f'    <tr><td>{COMMITTEE_NAMES.get(c.code, c.code)}</td><td class="n">{_signed(c.median)}</td>'
+                           f'<td class="n">{_signed(c.median - r.chamber.median)}</td>'
+                           f'<td class="n">{_signed(c.cnd) if c.cnd is not None else "&mdash;"}</td>'
+                           f'<td class="n">{c.stability.worst_shift:.2f}</td></tr>\n' for c in cm)
+                 + '  </table></div>')
     return {
         "asof": f"{d.day} {d.strftime('%B %Y')}",
         "os_x": _signed(os_.senator_coord), "os_s": _signed(os_.state_coord),
@@ -107,6 +146,14 @@ def _report_values(r: Report) -> dict[str, str]:
         "gk_base": f"{r.gatekeeping_baseline:.1f}",
         "gk_n_reportable": NUMBER_WORDS[len(rows)] if len(rows) < len(NUMBER_WORDS) else str(len(rows)),
         "gk_worked": worked, "gk_table": table,
+        "med_gap": f"{st.median([a.abs_gap for a in scored]):.2f}",
+        "os_signed": _signed(os_.signed_gap),
+        "lm_table": lm_table, "rcpt_example": rcpt,
+        "rcpt_count": str(len(r.receipts)),
+        "oi_table": oi_table, "oi_count": str(len(oi)),
+        "cnd_table": cnd_table,
+        "n_right": str(sum(1 for a in scored if a.senator_coord > r.chamber.national_coord)),
+        "pivot": _signed(r.chamber.pivot),
     }
 
 
@@ -218,6 +265,12 @@ def _blocks(r: Report, cfg: Config) -> dict[str, dict]:
                 ["State populations",
                  "www2.census.gov/programs-surveys/popest/datasets/2020-2024/state/totals/",
                  f"NST-EST{cfg.population_year}-ALLDATA.csv, used to weight states"],
+                ["Floor votes and their dividing lines",
+                 f"voteview.com/static/data/out/rollcalls/S{cfg.congress}_rollcalls.csv",
+                 "column nominate_mid_1 is the cutpoint; S{0}_votes.csv has each senator's vote".format(cfg.congress)],
+                ["Bills: titles and which committee reported them",
+                 f"www.govinfo.gov/bulkdata/BILLSTATUS/{cfg.congress}/",
+                 "the Senate (s) and House (hr) bulk archives"],
               ]},
         "X": {"anchors": [
                   {"name": r.senators[b].name.split()[-1],
@@ -225,8 +278,15 @@ def _blocks(r: Report, cfg: Config) -> dict[str, dict]:
                   for b in ("S000033", "C001035", "C001098") if b in r.scores],
               "chMedian": round(r.chamber.median, 3),
               "chMean": round(r.committees[0].chamber_mean, 3) if r.committees else 0.0,
+              "usM": round(r.chamber.national_coord, 3) if r.chamber.national_coord is not None else None,
+              "output": {o.code: {"coi": round(o.coi, 3), "n": o.n_votes,
+                                  "vsSen": round(o.vs_senate, 3),
+                                  "vsUS": round(o.vs_public, 3) if o.vs_public is not None else None}
+                         for o in r.output_ideology if o.is_reportable},
               "committees": sorted([
                   {"code": c.code, "name": COMMITTEE_NAMES.get(c.code, c.code),
+                   "cndMedian": round(c.cnd, 3) if c.cnd is not None else None,
+                   "cndMean": round(c.cnd_mean, 3) if c.cnd_mean is not None else None,
                    "median": round(c.median, 3),
                    "drift": round(c.median - r.chamber.median, 3),
                    "mean": round(c.mean, 3), "meanDrift": round(c.ccd_mean, 3),
@@ -238,11 +298,44 @@ def _blocks(r: Report, cfg: Config) -> dict[str, dict]:
               "popSource": getattr(r.state_source, "population_source", ""),
               "popYear": cfg.population_year},
         "G": _gatekeeping_block(r),
+        "L": [{"key": l.key, "label": l.label, "x": round(l.cutpoint, 3),
+               "votes": l.votes, "passed": l.passed} for l in r.landmarks],
+        "R": {b: {"bill": x.bill, "label": x.label, "question": x.question,
+                  "date": x.date, "voted": x.senator_vote, "state": x.state_implied}
+              for b, x in r.receipts.items()},
+        "P": _public_block(r, cfg),
         "C": {"medianScore": round(st.median([a.spec_score for a in scored]), 1),
               "medianGap": round(st.median([a.abs_gap for a in scored]), 3),
               "crossCount": sum(1 for a in scored if a.crosses_over),
               "moreCons": sum(1 for a in scored if a.signed_gap > 0),
               "moreLib": sum(1 for a in scored if a.signed_gap < 0)},
+    }
+
+
+def _public_block(r: Report, cfg: Config) -> dict:
+    """The Senate against the public, and every senator as one dot."""
+    us = r.chamber.national_coord
+    dots = []
+    for a in r.alignments:
+        if a.abs_gap is None:
+            continue
+        dots.append({
+            "b": a.bioguide, "n": a.name, "st": a.state,
+            "p": r.senators[a.bioguide].party[:1],
+            "x": round(a.senator_coord, 3),
+            "vsSen": round(a.senator_coord - r.chamber.median, 3),
+            "vsUS": round(a.senator_coord - us, 3) if us is not None else None,
+            "vsState": round(a.signed_gap, 3),
+        })
+    dots.sort(key=lambda d: d["x"])
+    n_right = sum(1 for d in dots if d["vsUS"] is not None and d["vsUS"] > 0)
+    return {
+        "chM": round(r.chamber.median, 3),
+        "usM": round(us, 3) if us is not None else None,
+        "gap": round(r.chamber.apportionment_skew, 3) if us is not None else None,
+        "pivot": round(r.chamber.pivot, 3),
+        "nRightOfPublic": n_right, "nLeftOfPublic": len(dots) - n_right,
+        "dots": dots,
     }
 
 
@@ -283,7 +376,7 @@ def build(cfg: Config = DEFAULT, path: Path = DEMO) -> dict[str, bool]:
 
     for key, value in blocks.items():
         literal = f"const {key}=" + json.dumps(value, separators=(",", ":")) + ";"
-        pattern = re.compile(r"const " + key + r"=\{.*?\};", re.S)
+        pattern = re.compile(r"const " + key + r"=[\{\[].*?[\}\]];", re.S)
         if not pattern.search(html):
             raise ValueError(f"data block {key} not found in {path.name}")
         new_html = pattern.sub(lambda _m: literal, html, count=1)

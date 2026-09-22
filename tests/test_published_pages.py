@@ -88,3 +88,31 @@ def test_report_and_demo_describe_the_same_committee_measure():
     assert "Which bills each committee lets through" in demo
     assert "Which bills each committee lets through" in rep
     assert "Committees against the Senate" not in rep, "old section still present"
+
+
+def test_demo_carries_landmarks_receipts_and_public_grid(report):
+    L = json.loads(re.search(r"const L=(\[.*?\]);", DEMO.read_text(), re.S).group(1))
+    R = _block("R")
+    P = _block("P")
+    assert len(L) == len(report.landmarks) and L[0]["label"] == report.landmarks[0].label
+    assert set(R) == set(report.receipts)
+    assert len(P["dots"]) == 100
+    assert P["usM"] == pytest.approx(report.chamber.national_coord, abs=1e-3)
+    assert P["nRightOfPublic"] + P["nLeftOfPublic"] == 100
+
+
+def test_demo_uses_the_external_stylesheet_and_no_percentage_score():
+    text = DEMO.read_text()
+    assert '<link rel="stylesheet" href="civicalign.css">' in text
+    assert (DEMO.parent / "civicalign.css").exists()
+    assert "representation match" not in text.lower(), "the percentage metric was dropped"
+    assert "points further" in text and "Aligned with State Consensus" in text
+
+
+def test_demo_committee_module_shows_both_references():
+    text = DEMO.read_text()
+    assert 'id="committee-drift-module"' in text
+    X = _block("X")
+    assert X["usM"] is not None
+    assert all("cndMedian" in c for c in X["committees"])
+    assert X["output"], "expected at least one committee with output ideology"

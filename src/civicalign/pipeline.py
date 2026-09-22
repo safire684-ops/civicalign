@@ -2,12 +2,15 @@
 from dataclasses import dataclass
 
 from .config import Config, DEFAULT
-from .sources import (billflow, elections, population, rosters, state_prefs,
-                      voteview)
+from .sources import (billflow, elections, population, rollcalls, rosters,
+                      state_prefs, voteview)
 from .alignment import Alignment, alignment, rank_all
 from .chamber import ChamberStats, chamber_stats
 from .committees import CommitteeStats, committee_stats
 from .gatekeeping import Gatekeeping, gatekeeping
+from .landmarks import Landmark, landmarks
+from .output_ideology import OutputIdeology, output_ideology
+from .receipts import Receipt, receipts
 from .representation import (ChamberLean, CommitteeLean, Fit, Representation,
                              chamber_lean, committee_lean, representations)
 
@@ -34,6 +37,12 @@ class Report:
     # Pillar 6 by revealed behaviour: which bills each committee buried.
     gatekeeping: list[Gatekeeping]
     gatekeeping_baseline: float
+
+    # Floor votes: familiar bills on the scale, one revealing vote per senator,
+    # and where each committee's reported bills divided the chamber.
+    landmarks: list[Landmark]
+    receipts: dict[str, Receipt]
+    output_ideology: list[OutputIdeology]
 
     @property
     def pillar4_available(self) -> bool:
@@ -80,6 +89,19 @@ def run(cfg: Config = DEFAULT) -> Report:
         gks, gk_base = gatekeeping(
             billflow.load_referrals(cfg.billflow_zip), scores)
 
+    lms: list[Landmark] = []
+    rcpts: dict[str, Receipt] = {}
+    oi: list[OutputIdeology] = []
+    if cfg.rollcalls_csv.exists() and cfg.votes_csv.exists():
+        bills = billflow.load_bills(cfg.billflow_zip, cfg.billflow_house_zip)
+        icpsr = rollcalls.icpsr_to_bioguide(cfg.members_csv, cfg.congress)
+        member_votes = rollcalls.load_votes(cfg.votes_csv, icpsr)
+        rcs = rollcalls.load_rollcalls(cfg.rollcalls_csv, member_votes, scores)
+        lms = landmarks(rcs, bills)
+        state_pos = {b: src.state(roster[b].state) for b in scores}
+        rcpts = receipts(rcs, member_votes, bills, state_pos)
+        oi = output_ideology(rcs, bills, ch.median, national)
+
     aligns = rank_all([
         alignment(b, roster[b].name, roster[b].state, v, src.state(roster[b].state))
         for b, v in scores.items()
@@ -91,4 +113,5 @@ def run(cfg: Config = DEFAULT) -> Report:
         chamber=ch, committees=committees, alignments=aligns, state_source=src,
         election=lean, fit=fit, chamber_lean=chlean, representation=reps,
         committee_leans=cleans, gatekeeping=gks, gatekeeping_baseline=gk_base,
+        landmarks=lms, receipts=rcpts, output_ideology=oi,
     )

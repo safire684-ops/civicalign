@@ -67,52 +67,91 @@ The skew has the same sign in all three elections examined — +4.08 in 2016, +3
 in 2020, +2.66 in 2024 — so the finding does not depend on which cycle is chosen.
 It is also declining steadily across the three, which is itself worth noting.
 
+All 100 senators are also shown as a row of circles, coloured by their distance
+from the public; the 60th senator from the left — the vote that decides whether
+most legislation can proceed — sits at +0.440.
+
 This is a statement about which electorates hold seats. It is not a statement
 about senators' opinions, and it does not imply any senator is unrepresentative of
 their own state.
 
-## Finding 2: six senators sit further from their state than chance explains
+## Finding 2: how far each senator sits from their state
 
-State election results predict senator voting records well: they explain **69%**
-of the variation across the chamber, with a fitted slope of +4.007 and a 95%
-confidence interval of [+3.472, +4.542], nowhere near zero. The relationship is
-strong and consistent, which is what makes departures from it meaningful.
+The distance is reported in points on the scale — "0.61 points further Left than
+the state average" — never as a percentage. An earlier version showed a
+percentage; readers took it for a share of votes, which it never was. A distance
+inside the state estimate's margin of error (about ±0.04) is reported as aligned
+rather than as a gap, because the survey cannot tell the two positions apart.
 
-Departures are measured against that pattern. The typical size of a departure is
-0.285, so a senator has to sit roughly **0.57** away from the fitted line before
-the gap is larger than ordinary variation. **6** of 100 senators do:
+The widest gaps in the current Senate:
 
-| senator | state | departure | significance |
-|---|---|---|---|
-| Ron Johnson | WI | +0.871 | +3.07 |
-| Rick Scott | FL | +0.787 | +2.77 |
-| Ted Cruz | TX | +0.652 | +2.30 |
-| Ted Budd | NC | +0.617 | +2.17 |
-| Jon Ossoff | GA | −0.615 | −2.17 |
-| David McCormick | PA | +0.579 | +2.04 |
+| senator | state | senator | state | gap |
+|---|---|---|---|---|
+| Rick Scott | FL | +0.926 | +0.002 | 0.924 |
+| Ron Johnson | WI | +0.897 | +0.004 | 0.893 |
+| Ted Cruz | TX | +0.865 | +0.052 | 0.813 |
+| Mike Lee | UT | +0.891 | +0.107 | 0.784 |
+| Tommy Tuberville | AL | +0.936 | +0.198 | 0.738 |
 
-A positive figure means a record further to the right than the state's own
-election results predict; negative, further to the left.
+**Perspective.** A position on its own means nothing to a reader, so the six bills
+with the most floor votes this Congress are marked on the same line. Every floor
+vote has a dividing line — the point on the scale that best separates the
+senators who voted Yes from those who voted No — and a bill sits at the middle of
+its votes' dividing lines.
 
-The remaining 94 senators sit approximately where their states' results predict. This matters for how the finding is presented: a ranked list of the ten
-or twenty "most out of step" senators would mostly consist of ordinary variation
-dressed up as a finding, and this project does not publish one.
+| bill | floor votes | where its votes divided the Senate |
+|---|---|---|
+| One Big Beautiful Bill Act | 44 | −0.003 |
+| Secure America Act | 28 | +0.077 |
+| Continuing Appropriations and Extensions Act, 2026 | 23 | −0.377 |
+| Rescissions Act of 2025 | 21 | +0.227 |
+| Military Construction, Veterans Affairs, and Related Agencies Appropriations Act, 2026 | 13 | −0.110 |
+| National Defense Authorization Act for Fiscal Year 2026 | 12 | −0.217 |
 
-Departures are also adjusted for a technical effect: a large gap is easier to
-produce by chance for senators from very safe states, because the fitted line is
-least constrained at the ends of the range. Without that adjustment, senators from
-lopsided states would be flagged merely for being at the edge of the scale.
+**A vote where the gap showed.** For each senator, one real vote where they chose
+the opposite side from the one their state's position points to. The dividing
+line says which way a senator sitting exactly at the state's position would most
+likely have voted; a receipt is a vote where the senator went the other way. The
+most recognisable such vote is chosen — passage votes on the busiest bills first.
+For Jon Ossoff: on H.R. 1, the One Big Beautiful Bill Act, passage vote of 1 July
+2025, he voted Nay; Georgia's position sits on the Yea side of that vote's line.
+Every senator has such a vote. What a bill would *do* in plain English is a
+separate part of this project and is not claimed here.
 
-**What this finding does and does not say.** It says a senator's record departs
-from the relationship that holds across the Senate as a whole. It does not say how
-far that senator is from their state's median voter in absolute terms. Those are
-different claims, and only the first is supported here: if the entire Senate
-shifted in one direction, every departure measured this way would stay the same,
-because the baseline would shift with it. An absolute distance would require
-public opinion and voting records to be placed on a single deliberately bridged
-scale, which this project does not do and does not claim to.
+## Finding 3: committees, measured three ways
 
-## Finding 3: which bills each committee lets through
+Each committee is measured against the Senate's middle (+0.310) and against the
+public (−0.027).
+
+**Where the members sit.** The midpoint of the committee's members. A midpoint
+more than 0.15 from the Senate's middle is flagged as a gatekeeper. This number is
+soft: on a committee split between two parties the midpoint can fall in the gap
+between them, and it can move sharply when one member is replaced — the last
+column says how far.
+
+| committee | members' midpoint | vs. Senate | vs. public | moves if one member changes |
+|---|---|---|---|---|
+| Environment | +0.003 | −0.307 | +0.030 | 0.29 |
+| Appropriations | +0.004 | −0.306 | +0.031 | 0.17 |
+| Foreign Relations | +0.535 | +0.225 | +0.562 | 0.06 |
+| Homeland/Govt Affairs | +0.521 | +0.211 | +0.548 | 0.34 |
+| Small Business | +0.521 | +0.211 | +0.548 | 0.34 |
+| Budget | +0.128 | −0.182 | +0.155 | 0.33 |
+
+**What it actually passed.** Take the bills a committee reported to the floor and
+the dividing lines of every floor vote on them; their median is where the
+committee's output divided the Senate. Only four committees have seven or more
+such votes — most floor action is nominations and House bills that no Senate
+committee reported.
+
+| committee | floor votes | where they divided the Senate | vs. Senate | vs. public |
+|---|---|---|---|---|
+| Budget | 28 | +0.077 | −0.233 | +0.104 |
+| Appropriations | 13 | −0.110 | −0.420 | −0.083 |
+| Armed Services | 13 | −0.161 | −0.471 | −0.134 |
+| Veterans | 7 | −0.001 | −0.311 | +0.026 |
+
+**Which bills it let through.**
 
 Committees decide which bills reach the floor, so the direct way to measure them is
 to count what they did. Every Senate bill of the 119th Congress is in the

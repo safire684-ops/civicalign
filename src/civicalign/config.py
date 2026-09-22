@@ -90,6 +90,18 @@ class Config:
         return self.raw_dir / f"BILLSTATUS-{self.congress}-s.zip"
 
     @property
+    def billflow_house_zip(self) -> Path:
+        return self.raw_dir / f"BILLSTATUS-{self.congress}-hr.zip"
+
+    @property
+    def rollcalls_csv(self) -> Path:
+        return self.raw_dir / f"S{self.congress}_rollcalls.csv"
+
+    @property
+    def votes_csv(self) -> Path:
+        return self.raw_dir / f"S{self.congress}_votes.csv"
+
+    @property
     def population_csv(self) -> Path:
         return self.raw_dir / "NST-EST2024-ALLDATA.csv"
 

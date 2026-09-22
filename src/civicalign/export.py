@@ -85,6 +85,10 @@ def to_dict(r: Report) -> dict[str, Any]:
                     "split": [c.n_majority, c.n_minority],
                     "worst_one_member_shift": round(c.stability.worst_shift, 4),
                     "median_is_phantom": c.median_is_phantom,
+                    "mean": round(c.mean, 4),
+                    "ccd_mean": round(c.ccd_mean, 4),
+                    "cnd_median": round(c.cnd, 4) if c.cnd is not None else None,
+                    "cnd_mean": round(c.cnd_mean, 4) if c.cnd_mean is not None else None,
                     "publishable": not c.is_noise,
                 }
                 for c in r.committees
@@ -106,6 +110,33 @@ def to_dict(r: Report) -> dict[str, Any]:
                 ],
                 key=lambda d: -d["gap"],
             ),
+        },
+        "landmark_bills": {
+            "publishable": True,
+            "note": "median cutpoint of each bill's floor votes; where it divided the Senate",
+            "bills": [{"key": l.key, "label": l.label, "cutpoint": round(l.cutpoint, 3),
+                       "floor_votes": l.votes, "passed": l.passed} for l in r.landmarks],
+        },
+        "receipts": {
+            "publishable": True,
+            "note": ("one real vote per senator where they voted the opposite of the "
+                     "side their state's position sits on; the bill's consequence in "
+                     "plain English is Pillar 1's and is not supplied here"),
+            "by_senator": {
+                b: {"roll": x.roll, "date": x.date, "bill": x.bill, "label": x.label,
+                    "question": x.question, "senator_vote": x.senator_vote,
+                    "state_implied": x.state_implied, "cutpoint": round(x.cutpoint, 3)}
+                for b, x in r.receipts.items()},
+        },
+        "committee_output_ideology": {
+            "publishable": True,
+            "note": "median cutpoint of floor votes on bills the committee reported out",
+            "committees": [
+                {"code": o.code, "floor_votes": o.n_votes, "coi": round(o.coi, 4),
+                 "vs_senate": round(o.vs_senate, 4),
+                 "vs_public": round(o.vs_public, 4) if o.vs_public is not None else None,
+                 "publishable": o.is_reportable}
+                for o in r.output_ideology],
         },
         "committee_gatekeeping": {
             "publishable": True,

@@ -107,6 +107,31 @@ def _elections(path: Path) -> str | None:
     return None
 
 
+def _rollcalls(path: Path) -> str | None:
+    with path.open() as fh:
+        reader = csv.DictReader(fh)
+        if reader.fieldnames is None:
+            return "no header row"
+        for col in ("rollnumber", "nominate_mid_1", "bill_number", "vote_question"):
+            if col not in reader.fieldnames:
+                return f"column {col!r} has disappeared"
+        n = sum(1 for _ in reader)
+    if n < 50:
+        return f"only {n} roll calls; expected hundreds"
+    return None
+
+
+def _votes(path: Path) -> str | None:
+    with path.open() as fh:
+        reader = csv.DictReader(fh)
+        if reader.fieldnames is None or "cast_code" not in reader.fieldnames:
+            return "cast_code column missing"
+        n = sum(1 for _ in reader)
+    if n < 5000:
+        return f"only {n} member votes; expected tens of thousands"
+    return None
+
+
 def all_agents() -> list[Agent]:
     return [
         Agent(
@@ -138,6 +163,29 @@ def all_agents() -> list[Agent]:
             validate=_bill_flow,
             min_bytes=1_000_000,
             timeout=300,
+        ),
+        Agent(
+            name="bill flow (House bills)",
+            url=f"https://www.govinfo.gov/bulkdata/BILLSTATUS/{DEFAULT.congress}/hr/"
+                f"BILLSTATUS-{DEFAULT.congress}-hr.zip",
+            target=RAW / f"BILLSTATUS-{DEFAULT.congress}-hr.zip",
+            validate=_bill_flow,
+            min_bytes=1_000_000,
+            timeout=600,
+        ),
+        Agent(
+            name="floor roll calls",
+            url=f"https://voteview.com/static/data/out/rollcalls/S{DEFAULT.congress}_rollcalls.csv",
+            target=RAW / f"S{DEFAULT.congress}_rollcalls.csv",
+            validate=_rollcalls,
+            min_bytes=10_000,
+        ),
+        Agent(
+            name="senator votes",
+            url=f"https://voteview.com/static/data/out/votes/S{DEFAULT.congress}_votes.csv",
+            target=RAW / f"S{DEFAULT.congress}_votes.csv",
+            validate=_votes,
+            min_bytes=100_000,
         ),
         Agent(
             name="state ideology",

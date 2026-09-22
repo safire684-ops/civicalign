@@ -138,35 +138,101 @@ table.calc tr.total td{border-bottom:none;border-top:2px solid var(--ink);
     <tr><td>Ossoff's voting record</td><td class="n">&minus;0.547</td></tr>
     <tr><td>Georgia voters</td><td class="n">+0.060</td></tr>
     <tr class="total"><td>Distance between them</td><td class="n">0.607</td></tr>
-    <tr class="total"><td>Representation match<br><span class="sm">(1 &minus; 0.607 &divide; 2) &times; 100</span></td><td class="n">69.6%</td></tr>
+    <tr class="total"><td>Signed distance<br><span class="sm">senator minus state</span></td><td class="n">&minus;0.607</td></tr>
   </table></div>
-  <p>The match percentage is just the distance rescaled so it reads as a percentage.
-    It is <b>not</b> a share of votes: 69.6% does not mean he voted Georgia's way 69
-    times in 100.</p>
+  <p>The tool reports that distance directly, as "0.607 points further Left than
+    the state average". An earlier version turned it into a percentage; that was
+    dropped because readers took it for a share of votes, which it never was.</p>
+  <p>A distance inside the state estimate's margin of error (about &plusmn;0.04) is
+    reported as <b>Aligned with State Consensus</b> rather than as a gap, because the
+    survey cannot tell the two positions apart.</p>
 
   <p>The widest gaps in the current Senate:</p>
   <div class="tw"><table>
-    <tr><th>Senator</th><th>State</th><th class="n">Record</th><th class="n">Their state</th><th class="n">Gap</th><th class="n">Match</th></tr>
-    <tr><td>Rick Scott</td><td>FL</td><td class="n">+0.926</td><td class="n">+0.002</td><td class="n">0.924</td><td class="n">53.8%</td></tr>
-    <tr><td>Ron Johnson</td><td>WI</td><td class="n">+0.897</td><td class="n">+0.004</td><td class="n">0.893</td><td class="n">55.4%</td></tr>
-    <tr><td>Ted Cruz</td><td>TX</td><td class="n">+0.865</td><td class="n">+0.052</td><td class="n">0.813</td><td class="n">59.4%</td></tr>
-    <tr><td>Mike Lee</td><td>UT</td><td class="n">+0.891</td><td class="n">+0.107</td><td class="n">0.784</td><td class="n">60.8%</td></tr>
-    <tr><td>Tommy Tuberville</td><td>AL</td><td class="n">+0.936</td><td class="n">+0.198</td><td class="n">0.738</td><td class="n">63.1%</td></tr>
+    <tr><th>Senator</th><th>State</th><th class="n">Record</th><th class="n">Their state</th><th class="n">Gap</th></tr>
+    <tr><td>Rick Scott</td><td>FL</td><td class="n">+0.926</td><td class="n">+0.002</td><td class="n">0.924</td></tr>
+    <tr><td>Ron Johnson</td><td>WI</td><td class="n">+0.897</td><td class="n">+0.004</td><td class="n">0.893</td></tr>
+    <tr><td>Ted Cruz</td><td>TX</td><td class="n">+0.865</td><td class="n">+0.052</td><td class="n">0.813</td></tr>
+    <tr><td>Mike Lee</td><td>UT</td><td class="n">+0.891</td><td class="n">+0.107</td><td class="n">0.784</td></tr>
+    <tr><td>Tommy Tuberville</td><td>AL</td><td class="n">+0.936</td><td class="n">+0.198</td><td class="n">0.738</td></tr>
   </table></div>
-  <p>Context that matters: the typical senator scores <b>83.2%</b>, and <b>53 of
-    100</b> sit more conservative than their state while 47 sit more liberal. A gap is
-    normal. Nine senators sit on the opposite side of centre from their own state,
-    which is the more striking finding.</p>
+  <p>Context that matters: the typical senator sits <b>0.34</b> points from their
+    state, and <b>53 of 100</b> sit more conservative than their state while
+    47 sit more liberal. A gap is normal. Nine senators sit on the
+    opposite side of centre from their own state, which is the more striking finding.</p>
+
+  <h3>Perspective: familiar bills on the same scale</h3>
+  <p>A position like +0.3 means nothing on its own, so the tool marks the bills with
+    the most floor votes this Congress on the same line. Every floor vote has a
+    dividing line &mdash; the point on the scale that best separates the senators who
+    voted Yes from those who voted No &mdash; and a bill sits at the middle of its
+    votes' dividing lines.</p>
+  <div class="tw"><table>
+    <tr><th>Bill</th><th class="n">Floor votes</th><th class="n">Where its votes divided the Senate</th></tr>
+    <tr><td>H.R. 1 &mdash; One Big Beautiful Bill Act</td><td class="n">44</td><td class="n">&minus;0.003</td></tr>
+    <tr><td>S. 2 &mdash; Secure America Act</td><td class="n">28</td><td class="n">+0.077</td></tr>
+    <tr><td>H.R. 5371 &mdash; Continuing Appropriations and Extensions Act, 2026</td><td class="n">23</td><td class="n">&minus;0.377</td></tr>
+    <tr><td>H.R. 4 &mdash; Rescissions Act of 2025</td><td class="n">21</td><td class="n">+0.227</td></tr>
+    <tr><td>H.R. 3944 &mdash; Military Construction, Veterans Affairs, and Related Agencies Appropriations Act, 2026</td><td class="n">13</td><td class="n">&minus;0.110</td></tr>
+    <tr><td>S. 2296 &mdash; National Defense Authorization Act for Fiscal Year 2026</td><td class="n">12</td><td class="n">&minus;0.217</td></tr>
+    <tr><td>S. 1582 &mdash; Guiding and Establishing National Innovation for U.S. Stablecoins Act</td><td class="n">9</td><td class="n">&minus;0.001</td></tr>
+    <tr><td>H.R. 6644 &mdash; Housing for the 21st Century Act</td><td class="n">9</td><td class="n">+0.347</td></tr>
+  </table></div>
+
+  <h3>A vote where the gap showed</h3>
+  <p>For each senator the tool shows one real vote where they chose the opposite side
+    from the one their state's position points to. The dividing line of a vote tells
+    us which side a senator sitting exactly at the state's position would most likely
+    have taken; a "receipt" is a vote where the senator took the other one. The most
+    recognisable such vote is chosen: passage votes on the busiest bills first.</p>
+  <p>For Ossoff: On H.R. 1, the One Big Beautiful Bill Act (passage of the bill, 2025-07-01), Ossoff voted <b>Nay</b>. Georgia's position sits on the <b>Yea</b> side of the line that divided that vote.</p>
+  <p>Every one of the 100 senators has such a vote. What a bill would
+    <em>do</em> in plain English is a separate part of this project (Pillar 1) and is
+    not claimed here; the vote, the bill and the dividing line are all public record.</p>
 
   <h3>2. The Senate against the country</h3>
   <p>Same idea, one level up. The middle senator sits at <b>+0.310</b>. The American
     public, averaging all states weighted by population, sits at <b>&minus;0.027</b>.
     The gap is <b>+0.337</b>.</p>
+  <p>The tool also shows all 100 senators as one row of circles, each coloured by
+    how far the senator sits from the public: <b>53</b> of them sit to the
+    public's right. The 60th senator from the left &mdash; the vote that decides
+    whether most legislation can proceed &mdash; sits at <b>+0.440</b>.</p>
   <p>That gap exists because every state elects two senators whether it holds 40
     million people or 600,000, and the smaller states lean Republican. It does not
     decide any single vote, but it shifts which bills can pass at all.</p>
 
-  <h3>3. Which bills each committee lets through</h3>
+  <h3>3. Committees: where the members sit, and what they passed</h3>
+  <p>Each committee is measured two ways, both against the Senate's middle
+    (<b>+0.310</b>) and against the public (<b>&minus;0.027</b>).</p>
+  <p><b>Where the members sit.</b> The midpoint of the committee's members on the same
+    scale. A midpoint more than 0.15 from the Senate's middle is flagged as a
+    gatekeeper. This number is soft: on a committee split between two parties the
+    midpoint can fall in the gap between them, and it can move sharply when one member
+    is replaced. The last column says how far.</p>
+  <div class="tw"><table>
+    <tr><th>Committee</th><th class="n">Members' midpoint</th><th class="n">vs. Senate middle</th><th class="n">vs. public</th><th class="n">Moves if one member changes</th></tr>
+    <tr><td>Environment</td><td class="n">+0.003</td><td class="n">&minus;0.307</td><td class="n">+0.030</td><td class="n">0.29</td></tr>
+    <tr><td>Appropriations</td><td class="n">+0.004</td><td class="n">&minus;0.306</td><td class="n">+0.031</td><td class="n">0.17</td></tr>
+    <tr><td>Foreign Relations</td><td class="n">+0.535</td><td class="n">+0.225</td><td class="n">+0.562</td><td class="n">0.06</td></tr>
+    <tr><td>Homeland/Govt Affairs</td><td class="n">+0.521</td><td class="n">+0.211</td><td class="n">+0.548</td><td class="n">0.34</td></tr>
+    <tr><td>Small Business</td><td class="n">+0.521</td><td class="n">+0.211</td><td class="n">+0.548</td><td class="n">0.34</td></tr>
+    <tr><td>Budget</td><td class="n">+0.128</td><td class="n">&minus;0.182</td><td class="n">+0.155</td><td class="n">0.33</td></tr>
+  </table></div>
+  <p><b>What it actually passed.</b> Take the bills a committee reported to the floor,
+    and the dividing lines of every floor vote on them. Their median is where the
+    committee's output divided the Senate. Only 4 committees have seven or
+    more such votes; most floor action is nominations and House bills that no Senate
+    committee reported.</p>
+  <div class="tw"><table>
+    <tr><th>Committee</th><th class="n">Floor votes on its bills</th><th class="n">Where they divided the Senate</th><th class="n">vs. Senate middle</th><th class="n">vs. public</th></tr>
+    <tr><td>Budget</td><td class="n">28</td><td class="n">+0.077</td><td class="n">&minus;0.233</td><td class="n">+0.104</td></tr>
+    <tr><td>Appropriations</td><td class="n">13</td><td class="n">&minus;0.110</td><td class="n">&minus;0.420</td><td class="n">&minus;0.083</td></tr>
+    <tr><td>Armed Services</td><td class="n">13</td><td class="n">&minus;0.161</td><td class="n">&minus;0.471</td><td class="n">&minus;0.134</td></tr>
+    <tr><td>Veterans</td><td class="n">7</td><td class="n">&minus;0.001</td><td class="n">&minus;0.311</td><td class="n">+0.026</td></tr>
+  </table></div>
+
+  <h3>4. Which bills each committee lets through</h3>
   <p>Almost every bill goes to a committee before the full Senate can vote on it,
     and most never come back out. So instead of asking who sits on a committee, we
     look at what it actually did: of the bills sent to it, how many did it let
@@ -203,12 +269,9 @@ table.calc tr.total td{border-bottom:none;border-top:2px solid var(--ink);
   <p>Committees with fewer than 25 bills from either side are left out, because
     there a single bill moves the percentage by several points. Thirteen of the
     committees have enough bills to report.</p>
-  <p><b>Why this replaced the earlier committee measure.</b> The first approach
-    compared the political position of a committee's members to the Senate's. On a
-    committee split between two parties, the middle member can land in the empty
-    space between them, where no actual senator sits, and the number swings when one
-    member is replaced. Counting which bills got through avoids that entirely: it
-    measures what the committee did, not who happened to be seated on it.</p>
+  <p><b>Why three measures.</b> Members tell you who sits there; the bills passed tell
+    you what it did; survival rates tell you what it buried. Each has a weakness the
+    others do not, so the tool shows all three with the count behind each.</p>
 </section>
 
 <section class="limits">

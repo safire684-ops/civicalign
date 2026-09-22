@@ -44,42 +44,35 @@ def test_apportionment_skew_figures(text, report):
         assert_quoted(text, f"{v * 100:+.2f}".lstrip("+"), f"{y} skew")
 
 
-def test_fit_figures(text, report):
-    f = report.fit
-    lo, hi = f.slope_ci95
-    assert_quoted(text, f"{f.r_squared * 100:.0f}%", "r-squared as a percentage")
-    assert_quoted(text, f"{f.slope:+.3f}", "slope")
-    assert_quoted(text, f"[{lo:+.3f}, {hi:+.3f}]", "slope confidence interval")
-    assert_quoted(text, f"{f.residual_se:.3f}", "residual standard error")
-    assert_quoted(text, f"{2 * f.residual_se:.2f}", "significance threshold")
+def test_widest_gaps_table_is_current(text, report):
+    """The five widest senator-to-state gaps, with both positions and the gap."""
+    scored = sorted((a for a in report.alignments if a.abs_gap is not None),
+                    key=lambda a: -a.abs_gap)[:5]
+    for a in scored:
+        assert a.name in text, f"{a.name} should be in the widest-gaps table"
+        row = f"| {a.name} | {a.state} | {a.senator_coord:+.3f} | {a.state_coord:+.3f} | {a.abs_gap:.3f} |"
+        assert row in text, f"row for {a.name} has moved: {row}"
 
 
-def test_significant_senators_are_listed_exactly(text, report):
-    """The named senators, their states and their figures must all still hold.
+def test_landmark_bills_and_receipt_are_current(text, report):
+    """Familiar bills on the scale, and the one real vote shown for Ossoff."""
+    for l in report.landmarks[:6]:
+        assert l.label in text, f"landmark {l.label} missing"
+        assert f"| {l.votes} | " in text
+    rc = report.receipts["O000174"]
+    assert rc.label in text and rc.senator_vote in text
 
-    This is the highest-risk content in the document: named people with numbers
-    attached. A senator leaving office or a data refresh must break this test
-    rather than silently leave a false claim in print.
-    """
-    sig = [x for x in report.representation if x.is_significant]
-    assert_quoted(text, f"**{len(sig)}** of", "count of significant senators")
 
-    for x in sig:
-        assert x.name in text, f"{x.name} is significant but not named in WHITEPAPER.md"
-        assert_quoted(text, f"{x.residual:+.3f}".replace("-", "−"), f"{x.name} residual")
-        assert_quoted(text, f"{x.t_stat:+.2f}".replace("-", "−"), f"{x.name} t-stat")
-
-    # and nobody insignificant is presented as a finding
-    names_in_table = [
-        line for line in text.splitlines()
-        if line.startswith("| ") and " | " in line
-    ]
-    table_blob = "\n".join(names_in_table)
-    for x in report.representation:
-        if not x.is_significant and abs(x.t_stat) > 1.5:
-            assert x.name not in table_blob, (
-                f"{x.name} is below the significance bar but appears in a table"
-            )
+def test_committee_tables_are_current(text, report):
+    """Members vs Senate and public, and where the bills passed divided the Senate."""
+    ch = report.chamber
+    for c in sorted(report.committees, key=lambda c: -abs(c.median - ch.median))[:6]:
+        assert f"| {c.median:+.3f} | {c.median - ch.median:+.3f} | {c.cnd:+.3f} | {c.stability.worst_shift:.2f} |".replace("-", "−") in text \
+            or f"| {c.median:+.3f} | {c.median - ch.median:+.3f} | {c.cnd:+.3f} | {c.stability.worst_shift:.2f} |" in text
+    for o in report.output_ideology:
+        if o.is_reportable:
+            assert f"| {o.n_votes} | " in text
+            assert f"{o.coi:+.3f}".replace("-", "−") in text or f"{o.coi:+.3f}" in text
 
 
 def test_committee_claim_matches_the_code(text, report):

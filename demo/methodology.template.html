@@ -138,28 +138,70 @@ table.calc tr.total td{border-bottom:none;border-top:2px solid var(--ink);
     <tr><td>Ossoff's voting record</td><td class="n">{{os_x}}</td></tr>
     <tr><td>Georgia voters</td><td class="n">{{os_s}}</td></tr>
     <tr class="total"><td>Distance between them</td><td class="n">{{os_gap}}</td></tr>
-    <tr class="total"><td>Representation match<br><span class="sm">(1 &minus; {{os_gap}} &divide; 2) &times; 100</span></td><td class="n">{{os_as}}%</td></tr>
+    <tr class="total"><td>Signed distance<br><span class="sm">senator minus state</span></td><td class="n">{{os_signed}}</td></tr>
   </table></div>
-  <p>The match percentage is just the distance rescaled so it reads as a percentage.
-    It is <b>not</b> a share of votes: {{os_as}}% does not mean he voted Georgia's way {{os_as_int}}
-    times in 100.</p>
+  <p>The tool reports that distance directly, as "{{os_gap}} points further Left than
+    the state average". An earlier version turned it into a percentage; that was
+    dropped because readers took it for a share of votes, which it never was.</p>
+  <p>A distance inside the state estimate's margin of error (about &plusmn;0.04) is
+    reported as <b>Aligned with State Consensus</b> rather than as a gap, because the
+    survey cannot tell the two positions apart.</p>
 
   <p>The widest gaps in the current Senate:</p>
 {{top_table}}
-  <p>Context that matters: the typical senator scores <b>{{med_as}}%</b>, and <b>{{more_cons}} of
-    100</b> sit more conservative than their state while {{more_lib}} sit more liberal. A gap is
-    normal. {{cross_word}} senators sit on the opposite side of centre from their own state,
-    which is the more striking finding.</p>
+  <p>Context that matters: the typical senator sits <b>{{med_gap}}</b> points from their
+    state, and <b>{{more_cons}} of 100</b> sit more conservative than their state while
+    {{more_lib}} sit more liberal. A gap is normal. {{cross_word}} senators sit on the
+    opposite side of centre from their own state, which is the more striking finding.</p>
+
+  <h3>Perspective: familiar bills on the same scale</h3>
+  <p>A position like +0.3 means nothing on its own, so the tool marks the bills with
+    the most floor votes this Congress on the same line. Every floor vote has a
+    dividing line &mdash; the point on the scale that best separates the senators who
+    voted Yes from those who voted No &mdash; and a bill sits at the middle of its
+    votes' dividing lines.</p>
+{{lm_table}}
+
+  <h3>A vote where the gap showed</h3>
+  <p>For each senator the tool shows one real vote where they chose the opposite side
+    from the one their state's position points to. The dividing line of a vote tells
+    us which side a senator sitting exactly at the state's position would most likely
+    have taken; a "receipt" is a vote where the senator took the other one. The most
+    recognisable such vote is chosen: passage votes on the busiest bills first.</p>
+  <p>For Ossoff: {{rcpt_example}}</p>
+  <p>Every one of the {{rcpt_count}} senators has such a vote. What a bill would
+    <em>do</em> in plain English is a separate part of this project (Pillar 1) and is
+    not claimed here; the vote, the bill and the dividing line are all public record.</p>
 
   <h3>2. The Senate against the country</h3>
   <p>Same idea, one level up. The middle senator sits at <b>{{ch_m}}</b>. The American
     public, averaging all states weighted by population, sits at <b>{{us_m}}</b>.
     The gap is <b>{{d_us}}</b>.</p>
+  <p>The tool also shows all 100 senators as one row of circles, each coloured by
+    how far the senator sits from the public: <b>{{n_right}}</b> of them sit to the
+    public's right. The 60th senator from the left &mdash; the vote that decides
+    whether most legislation can proceed &mdash; sits at <b>{{pivot}}</b>.</p>
   <p>That gap exists because every state elects two senators whether it holds 40
     million people or 600,000, and the smaller states lean Republican. It does not
     decide any single vote, but it shifts which bills can pass at all.</p>
 
-  <h3>3. Which bills each committee lets through</h3>
+  <h3>3. Committees: where the members sit, and what they passed</h3>
+  <p>Each committee is measured two ways, both against the Senate's middle
+    (<b>{{ch_m}}</b>) and against the public (<b>{{us_m}}</b>).</p>
+  <p><b>Where the members sit.</b> The midpoint of the committee's members on the same
+    scale. A midpoint more than 0.15 from the Senate's middle is flagged as a
+    gatekeeper. This number is soft: on a committee split between two parties the
+    midpoint can fall in the gap between them, and it can move sharply when one member
+    is replaced. The last column says how far.</p>
+{{cnd_table}}
+  <p><b>What it actually passed.</b> Take the bills a committee reported to the floor,
+    and the dividing lines of every floor vote on them. Their median is where the
+    committee's output divided the Senate. Only {{oi_count}} committees have seven or
+    more such votes; most floor action is nominations and House bills that no Senate
+    committee reported.</p>
+{{oi_table}}
+
+  <h3>4. Which bills each committee lets through</h3>
   <p>Almost every bill goes to a committee before the full Senate can vote on it,
     and most never come back out. So instead of asking who sits on a committee, we
     look at what it actually did: of the bills sent to it, how many did it let
@@ -184,12 +226,9 @@ table.calc tr.total td{border-bottom:none;border-top:2px solid var(--ink);
   <p>Committees with fewer than 25 bills from either side are left out, because
     there a single bill moves the percentage by several points. {{gk_n_reportable}} of the
     committees have enough bills to report.</p>
-  <p><b>Why this replaced the earlier committee measure.</b> The first approach
-    compared the political position of a committee's members to the Senate's. On a
-    committee split between two parties, the middle member can land in the empty
-    space between them, where no actual senator sits, and the number swings when one
-    member is replaced. Counting which bills got through avoids that entirely: it
-    measures what the committee did, not who happened to be seated on it.</p>
+  <p><b>Why three measures.</b> Members tell you who sits there; the bills passed tell
+    you what it did; survival rates tell you what it buried. Each has a weakness the
+    others do not, so the tool shows all three with the count behind each.</p>
 </section>
 
 <section class="limits">
