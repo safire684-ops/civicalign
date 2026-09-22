@@ -5,23 +5,20 @@ sections 2–5). Pillars 1–3 and 7 belong to someone else.
 
 ## Status in one line
 
-A four-view redesign of the page, a correction removing the unsupported
-voter-support claims from the vote examples, and three presentation safeguards
-(escaped data strings, screen-reader text for every drawn track, an icon on the
-alignment badge so colour is never the only signal) are finished, tested and
-committed **locally only**. They are **not pushed and not published**: the live site, the
-claude.ai copy and the shared doc still show the previous layout and the old
-"vote where this gap showed" wording.
+Everything below is **published** as of 22 September 2026: the four-view layout,
+the vote-example correction and the presentation safeguards are on the live site,
+`origin/main` is at the same commit, and the claude.ai copy (version 12) was
+rebuilt from the same page with the stylesheet inlined. The weekly workflow ran
+green (`update` and `publish` both succeeded) and only re-dated the report.
 
 ## Where things stand
 
-- Live site (previous layout): https://safire684-ops.github.io/civicalign/
-- Repo: https://github.com/safire684-ops/civicalign — `origin/main` is at `6b883f7`
-  (navigation commit); the redesign commit sits ahead of it locally.
-- Claude.ai copy (previous layout, manual republish, CSS inlined): https://claude.ai/artifact/Ft6hU6XZUnWHPhZwzwmzaj
+- Live site: https://safire684-ops.github.io/civicalign/
+- Repo: https://github.com/safire684-ops/civicalign — `origin/main` matches local `main`.
+- Claude.ai copy (manual republish, CSS inlined; does not update itself): https://claude.ai/artifact/Ft6hU6XZUnWHPhZwzwmzaj
 - Shared doc (hand-mirrored): https://claude.ai/code/artifact/683a9e36-3046-4827-a7af-7442b49ef7e3
 
-## The unpublished change: four views
+## The four-view layout (published)
 
 Three files changed. **Calculations, thresholds, data blocks and the methodology
 report were not touched and must stay unchanged.**
@@ -51,7 +48,6 @@ make these comparisons."*
 
 ## Remaining issues
 
-- **Publish.** Nothing above is live. See next steps.
 - **Real Enter/Space activation** of tabs and circles could not be driven from the
   browser pane (its key injection does not trigger native default actions — Enter
   did not toggle a plain `<details>` either). Elements are native links and
