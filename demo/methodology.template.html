@@ -154,30 +154,22 @@ table.calc tr.total td{border-bottom:none;border-top:2px solid var(--ink);
     {{more_lib}} sit more liberal. A gap is normal. {{cross_word}} senators sit on the
     opposite side of centre from their own state, which is the more striking finding.</p>
 
-  <h3>Perspective: familiar bills on the same scale</h3>
-  <p>A position like +0.3 means nothing on its own, so the tool marks the bills with
-    the most floor votes this Congress on the same line. Every floor vote has a
-    dividing line &mdash; the point on the scale that best separates the senators who
-    voted Yes from those who voted No &mdash; and a bill sits at the middle of its
-    votes' dividing lines.</p>
-{{lm_table}}
-
-  <h3>One vote from the record</h3>
-  <p>Beside each senator the tool shows one real vote, chosen by a rule that has
-    nothing to do with the senator's state or with how they voted: their vote on the
-    bill with the most Senate floor votes this Congress, taking the passage vote where
-    there is one (then cloture, then any other vote on it), with a link to the roll
-    call at Voteview. The same rule picks the same bill for every senator who voted
-    on it.</p>
-  <p>For Ossoff: {{rcpt_example}}</p>
-  <p><b>This vote does not tell us whether the state&rsquo;s voters supported the bill.</b>
-    A state's survey position summarises one dimension of opinion; it cannot say how
-    the state's voters felt about any particular bill, and the tool does not infer a
-    "state side" of a vote from it. An earlier version picked votes where the senator
-    disagreed with such an inferred side; that was unsupported and has been removed.
-    What a bill would <em>do</em> in plain English is a separate part of this project
-    (Pillar 1) and is not claimed here. The vote is shown for {{rcpt_count}} of the
-    100 senators; a senator with no scored position has none.</p>
+  <h3>Perspective: what a distance like that means</h3>
+  <p>A position like +0.3 means nothing on its own, so the tool puts landmarks on
+    the same line: the middle Democrat (<b>{{dem_m}}</b>), the middle Republican
+    (<b>{{rep_m}}</b>), the Senate's middle, the American public, and eight familiar
+    senators at their real positions. A gap is also expressed as a share of the whole
+    scale (Ossoff's {{os_gap}} is about {{os_pct}}% of it), as the distance between the
+    two named senators who sit that far apart, and against the typical senator's
+    distance from their own state.</p>
+{{anchor_table}}
+  <p>The tool marks no bills on the scale. A floor vote's dividing line says where a
+    coalition split, not what a state's voters wanted, so it cannot stand in for
+    either. The senator's number comes from every roll-call vote they have cast this
+    Congress (Ossoff: {{os_votes}}), compared vote by vote with every other senator;
+    the state's number comes from large surveys asking residents where they stand on
+    many policy questions. The gap says how far apart the two sit overall. It cannot
+    say which issues make up the difference.</p>
 
   <h3>2. The Senate against the country</h3>
   <p>Same idea, one level up. The middle senator sits at <b>{{ch_m}}</b>. The American

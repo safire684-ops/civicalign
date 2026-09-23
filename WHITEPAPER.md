@@ -93,33 +93,17 @@ The widest gaps in the current Senate:
 | Mike Lee | UT | +0.891 | +0.107 | 0.784 |
 | Tommy Tuberville | AL | +0.936 | +0.198 | 0.738 |
 
-**Perspective.** A position on its own means nothing to a reader, so the six bills
-with the most floor votes this Congress are marked on the same line. Every floor
-vote has a dividing line — the point on the scale that best separates the
-senators who voted Yes from those who voted No — and a bill sits at the middle of
-its votes' dividing lines.
-
-| bill | floor votes | where its votes divided the Senate |
-|---|---|---|
-| One Big Beautiful Bill Act | 44 | −0.003 |
-| Secure America Act | 28 | +0.077 |
-| Continuing Appropriations and Extensions Act, 2026 | 23 | −0.377 |
-| Rescissions Act of 2025 | 21 | +0.227 |
-| Military Construction, Veterans Affairs, and Related Agencies Appropriations Act, 2026 | 13 | −0.110 |
-| National Defense Authorization Act for Fiscal Year 2026 | 12 | −0.217 |
-
-**One vote from the record.** Beside each senator, one real vote chosen by a rule
-that has nothing to do with the senator's state or with how they voted: their vote
-on the bill with the most Senate floor votes this Congress, taking the passage vote
-where there is one (then cloture, then any other vote on it), with a link to the
-roll call at Voteview. For Jon Ossoff: on H.R. 1, the One Big Beautiful Bill Act,
-passage vote of 1 July 2025, he voted Nay
-([Senate roll call 372](https://voteview.com/rollcall/RS1190372)).
-This vote does not tell us whether the state's voters supported the bill. An
-earlier version selected votes where the senator disagreed with a "state side"
-inferred from the state's survey position and the vote's dividing line; that
-inference was unsupported and was removed. What a bill would *do* in plain English
-is a separate part of this project and is not claimed here.
+**Perspective.** A position on its own means nothing to a reader, so the tool
+marks landmarks on the same line: the middle Democrat (−0.378), the middle
+Republican (+0.564), the Senate's middle, the American public, and eight familiar
+senators at their real positions. A gap is also expressed as a share of the whole
+scale, as the distance between the two named senators who sit that far apart, and
+against the typical senator's distance from their own state. No bills are marked:
+a floor vote's dividing line says where a coalition split, not what a state's
+voters wanted. The senator's number comes from every roll-call vote they have cast
+this Congress; the state's from surveys asking residents where they stand on many
+policy questions. The gap says how far apart they sit overall and cannot say which
+issues make up the difference.
 
 ## Finding 3: committees, measured three ways
 

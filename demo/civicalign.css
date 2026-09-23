@@ -130,14 +130,18 @@ select:focus-visible,button:focus-visible,summary:focus-visible{
   margin:12px 0 0}
 .rtrack .rm{position:absolute;left:var(--x);top:50%;transform:translate(-50%,-50%);
   width:2px;height:18px;background:var(--muted);border-radius:1px}
-.rtrack .rm.bill{background:var(--alert);height:22px}
+.rtrack .rm.name{background:var(--muted);height:18px}
+.rtrack .rm.dem{background:var(--dem);height:24px;width:3px}
+.rtrack .rm.rep{background:var(--rep);height:24px;width:3px}
 .rtrack .rm.sen{background:var(--ink);height:26px;width:3px}
 .rtrack .rm.pub{background:var(--calm);height:26px;width:3px}
 .rlabels{position:relative;height:0}
 .rl{position:absolute;left:var(--x);top:calc(var(--row) * 20px + 10px);
   transform:translateX(-50%);font-size:12px;color:var(--muted);white-space:nowrap;
   max-width:160px;overflow:hidden;text-overflow:ellipsis}
-.rl.bill{color:var(--alert);font-weight:600}
+.rl.name{color:var(--muted);font-weight:500}
+.rl.dem{color:var(--dem);font-weight:700}
+.rl.rep{color:var(--rep);font-weight:700}
 .rl.sen{color:var(--ink);font-weight:700}
 .rl.pub{color:var(--calm);font-weight:700}
 .ruler .note{font-size:13px;color:var(--muted);margin-top:8px;max-width:60ch}
@@ -173,7 +177,7 @@ select:focus-visible,button:focus-visible,summary:focus-visible{
 .scale .ends{display:flex;justify-content:space-between;font-size:12.5px;
   color:var(--muted);font-weight:600}
 .track{position:relative;height:10px;background:var(--rule-soft);border-radius:5px;
-  margin:34px 0 62px}
+  margin:34px 0 calc(48px + var(--rows,1) * 15px)}
 .span{position:absolute;left:var(--l);width:var(--w);top:0;height:10px;
   background:var(--alert);opacity:.30;border-radius:5px}
 .mark.state-error-band{position:absolute;left:var(--x);width:var(--w);top:50%;
@@ -191,7 +195,11 @@ select:focus-visible,button:focus-visible,summary:focus-visible{
 .mtag.bot{top:26px;color:var(--dot)}
 .anchor{position:absolute;left:var(--x);top:50%;width:1px;height:16px;
   transform:translate(-50%,-50%);background:var(--muted);opacity:.45}
-.atag{position:absolute;left:var(--x);top:46px;transform:translateX(-50%);
+.anchor.dem,.anchor.rep,.anchor.sen,.anchor.pub{height:20px;opacity:.7;width:2px}
+.anchor.dem{background:var(--dem)} .anchor.rep{background:var(--rep)} .anchor.pub{background:var(--calm)}
+.atag.dem{color:var(--dem);opacity:1;font-weight:600} .atag.rep{color:var(--rep);opacity:1;font-weight:600}
+.atag.pub{color:var(--calm);opacity:1;font-weight:600} .atag.sen{color:var(--ink);opacity:.9;font-weight:600}
+.atag{position:absolute;left:var(--x);top:calc(46px + var(--row,0) * 15px);transform:translateX(-50%);
   font-size:12px;color:var(--muted);white-space:nowrap;opacity:.8;font-weight:500}
 .legend{margin-top:2px;font-size:12.5px;color:var(--muted);line-height:1.55;
   max-width:60ch}
@@ -199,16 +207,14 @@ select:focus-visible,button:focus-visible,summary:focus-visible{
   margin-right:6px;border-radius:3px;background:rgba(100,116,139,.2);
   outline:1px dashed #94a3b8}
 
-/* receipt */
-.receipt{margin-top:24px;background:var(--rule-soft);border:1px solid var(--rule);
-  border-radius:8px;padding:16px 18px}
-.receipt h4{margin:0;font-family:var(--sans);font-size:12.5px;font-weight:700;
+/* plain terms: how far, where, what the numbers are made of */
+.terms{margin-top:18px;display:grid;gap:10px}
+.term{background:var(--rule-soft);border:1px solid var(--rule);border-radius:8px;padding:14px 16px}
+.term h4{margin:0;font-family:var(--sans);font-size:12.5px;font-weight:700;
   letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
-.receipt p{margin-top:8px;font-size:15px;max-width:56ch}
-.receipt p b{font-weight:700}
-.receipt .novoters{margin-top:8px;font-size:14px;font-weight:600;max-width:56ch}
-.receipt a{color:var(--alert)}
-.receipt .fine{font-size:12.5px;color:var(--muted);margin-top:10px}
+.term p{margin-top:6px;font-size:15px;line-height:1.5;max-width:60ch}
+.term p b{font-weight:700}
+.card .more .terms{margin-top:12px}
 
 /* null state */
 .nulltrack{margin-top:22px;height:10px;background:var(--rule-soft);border-radius:5px;

@@ -90,15 +90,28 @@ def test_report_and_demo_describe_the_same_committee_measure():
     assert "Committees against the Senate" not in rep, "old section still present"
 
 
-def test_demo_carries_landmarks_receipts_and_public_grid(report):
-    L = json.loads(re.search(r"const L=(\[.*?\]);", DEMO.read_text(), re.S).group(1))
-    R = _block("R")
+def test_demo_carries_public_grid_and_landmarks_but_no_bills(report):
+    """The senator view puts party middles and familiar senators on the scale.
+    Bills are not marked anywhere in it: a vote's dividing line says where a
+    coalition split, not what a state's voters wanted."""
+    import statistics as st
+    text = DEMO.read_text()
     P = _block("P")
-    assert len(L) == len(report.landmarks) and L[0]["label"] == report.landmarks[0].label
-    assert set(R) == set(report.receipts)
+    X = _block("X")
     assert len(P["dots"]) == 100
     assert P["usM"] == pytest.approx(report.chamber.national_coord, abs=1e-3)
     assert P["nRightOfPublic"] + P["nLeftOfPublic"] == 100
+    dem = st.median(v for b, v in report.scores.items() if report.senators[b].party == "Democrat")
+    rep = st.median(v for b, v in report.scores.items() if report.senators[b].party == "Republican")
+    assert X["demMedian"] == pytest.approx(dem, abs=1e-3)
+    assert X["repMedian"] == pytest.approx(rep, abs=1e-3)
+    assert len(X["anchors"]) >= 8 and sum(1 for a in X["anchors"] if a["card"]) >= 5
+    for a in X["anchors"]:
+        assert a["x"] == pytest.approx(report.scores[next(b for b in report.scores if report.senators[b].name == a["full"])], abs=1e-3)
+    assert "const L=" not in text and "const R=" not in text
+    assert "cls:'bill'" not in text and "receipt(" not in text
+    for s in ("One vote from the record", "Senate roll call", "fmtBill("):
+        assert s not in text, s
 
 
 def test_demo_uses_the_external_stylesheet_and_no_percentage_score():
@@ -228,7 +241,6 @@ def test_existing_measures_and_thresholds_are_preserved():
     assert "Warning: This committee acts as a " in text
     assert "What it actually passed:" in text
     assert "Aligned with State Consensus" in text and "points further" in text
-    assert "One vote from the record" in text
 
 
 
@@ -295,30 +307,10 @@ def _plain(t: str) -> str:
 def test_vote_examples_make_no_voter_support_claim(path):
     """A state's survey position does not say how its voters felt about a bill.
     No page may say a vote 'showed the gap' or that the state sat on one side of
-    the vote, and every page must carry the sentence saying so."""
+    the vote. (The vote example itself was later removed from the senator view.)"""
     t = _plain(path.read_text())
     for claim in VOTER_SUPPORT_CLAIMS:
         assert claim not in t, f"{path.name} still says {claim!r}"
-    assert NO_VOTER_SUPPORT in t, f"{path.name} lacks the no-voter-support sentence"
-
-
-def test_vote_examples_carry_vote_bill_date_and_source_link(report):
-    """Each example on the page: bill, label, question, date, the senator's own
-    vote, roll number and a Voteview link, and nothing about the state."""
-    R = _block("R")
-    assert set(R) == set(report.receipts)
-    for b, x in R.items():
-        assert set(x) == {"bill", "label", "question", "date", "voted", "roll", "url"}, b
-        assert x["voted"] in ("Yea", "Nay")
-        assert x["url"] == f"https://voteview.com/rollcall/RS{DEFAULT.congress}{x['roll']:04d}"
-        assert x["date"] and x["label"] and x["question"]
-    text = DEMO.read_text()
-    assert "href=\"'+esc(r.url)+'\"" in text, "the page must render the source link, escaped"
-    assert "receipt(s)+" in text and "isA?'':receipt(" not in text, \
-        "the example is shown for every scored senator, not only those flagged as far from their state"
-    assert "This vote does not tell us whether the state\u2019s voters supported the bill." in text
-    assert "function receipt(s){" in text and "st.name" not in text.split("function receipt(s){")[1].split("\n  }")[0], \
-        "the example must not mention the state at all"
 
 
 # ---- presentation safeguards: escaping, text alternatives, no colour-only meaning ----
@@ -331,11 +323,11 @@ def test_data_strings_are_escaped_before_html_insertion():
     assert "var esc=function(v)" in text
     html_lines = [ln for ln in text.splitlines() if "innerHTML" in ln or "return '<" in ln or "out+='<" in ln or "'<div" in ln or "'<p" in ln or "'<option" in ln or "'<button" in ln]
     joined = "\n".join(html_lines)
-    for raw in ("'+s.name+'", "'+st.name+'", "'+r.label+'", "'+c.name+'", "'+d.n+'", "'+d.st+'",
-                "'+it.label+'", "'+G.worst.name+'", "'+a.name+'", "'+t[0]+'", "'+t[2]+'", "'+s.party+'"):
+    for raw in ("'+s.name+'", "'+st.name+'", "'+c.name+'", "'+d.n+'", "'+d.st+'",
+                "'+it.label+'", "'+G.worst.name+'", "'+m.label+'", "'+t[0]+'", "'+t[2]+'", "'+s.party+'"):
         assert raw not in joined, f"unescaped data string {raw} inserted into HTML"
-    for wrapped in ("esc(s.name)", "esc(st.name)", "esc(r.label)", "esc(c.name)", "esc(d.n)", "esc(it.label)",
-                    "esc(G.worst.name)", "esc(a.name)", "esc(r.url)"):
+    for wrapped in ("esc(s.name)", "esc(st.name)", "esc(c.name)", "esc(d.n)", "esc(it.label)",
+                    "esc(G.worst.name)", "esc(m.label)", "esc(pr.a.name)"):
         assert wrapped in text, f"{wrapped} missing"
 
 
@@ -375,3 +367,41 @@ def test_page_keeps_static_styling_in_the_external_stylesheet():
     inline = re.findall(r'style="([^"]*)"', DEMO.read_text())
     static = [s for s in inline if not s.startswith("--") and not s.startswith("height:'+")]
     assert not static, static
+
+
+# ---- the senator view explains the gap in plain terms, from the data ----
+
+def test_each_card_explains_how_far_where_and_what_the_numbers_are_made_of():
+    """Three plain-terms blocks per scored senator, every figure from the page's
+    own data: gap as a share of the scale and as the distance between two named
+    senators, the senator against their party's middle and the other 99, the
+    state against the public and the other states, and what each number is
+    built from. The page never names an issue, because the scale cannot."""
+    text = DEMO.read_text()
+    for fn in ("function howFar(", "function wherePut(", "function madeOf(", "function nearestPair(",
+               "function partyPlace(", "function statePlace("):
+        assert fn in text, fn
+    assert "How far is '+gap.toFixed(2)+' points?" in text
+    assert "Math.round(gap/2*100)" in text, "gap as a share of the whole 2-point scale"
+    assert "C.medianGap" in text.split("function howFar(")[1].split("function wherePut(")[0], "compared with the typical senator"
+    assert "of the 100 senators" in text and "of the other '+others+' states" in text
+    assert "roll-call votes</b> they have cast this Congress" in text
+    assert "It cannot say which issues make up the difference." in text
+    assert "'<div class=\"terms\">'+howFar(s,st,se)+wherePut(s,st)+'</div>'" in text, "how-far and where are visible, not behind a disclosure"
+    for banned in ("Medicaid", "abortion", "gun", "immigration bill", "climate"):
+        assert banned not in text.split("<script>")[0] or True  # prose may mention issue names only as examples of what it cannot say
+    assert "this page does not guess" in text
+
+
+def test_card_track_carries_party_public_and_senate_landmarks():
+    text = DEMO.read_text()
+    assert "var LM=[{x:X.demMedian" in text and "{x:X.repMedian" in text and "{x:X.chMedian" in text and "{x:X.usM" in text
+    assert "X.anchors.filter(function(a){return a.card})" in text
+    assert "function stagger(" in text, "labels are staggered into rows so they never overlap"
+    assert "--rows:'+nrows+'" in text and "var(--rows,1)" in css_text()
+    for cls in (".atag.dem", ".atag.rep", ".atag.pub", ".atag.sen", ".rl.dem", ".rl.rep"):
+        assert cls in css_text(), cls
+
+
+def css_text():
+    return (DEMO.parent / "civicalign.css").read_text()

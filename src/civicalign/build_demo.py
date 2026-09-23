@@ -95,17 +95,15 @@ def _report_values(r: Report) -> dict[str, str]:
                  "HCONRES": "H.Con.Res.", "SCONRES": "S.Con.Res."}
         return f"{names.get(m.group(1), m.group(1))} {m.group(2)}" if m else k
 
-    lm_table = ('  <div class="tw"><table>\n'
-                '    <tr><th>Bill</th><th class="n">Floor votes</th><th class="n">Where its votes divided the Senate</th></tr>\n'
-                + "".join(f'    <tr><td>{_bill(l.key)} &mdash; {l.label}</td><td class="n">{l.votes}</td>'
-                          f'<td class="n">{_signed(l.cutpoint)}</td></tr>\n' for l in r.landmarks)
-                + '  </table></div>')
-
-    rc = r.receipts.get("O000174")
-    rcpt = ("" if not rc else
-            f"On {_bill(rc.bill)}, the {rc.label} ({rc.question.replace('On the ', '').replace('On ', '').lower()}, "
-            f"{rc.date}), Ossoff voted <b>{rc.senator_vote}</b> "
-            f'(<a href="{rc.url}">Senate roll call {rc.roll} at Voteview</a>).')
+    dem_m = st.median([v for b, v in r.scores.items() if r.senators[b].party == "Democrat"])
+    rep_m = st.median([v for b, v in r.scores.items() if r.senators[b].party == "Republican"])
+    anchor_table = ('  <div class="tw"><table>\n'
+                    '    <tr><th>Landmark</th><th class="n">Position</th></tr>\n'
+                    + "".join(f'    <tr><td>{r.senators[b].name}</td><td class="n">{_signed(r.scores[b])}</td></tr>\n'
+                              for b in ANCHOR_NAMES if b in r.scores)
+                    + f'    <tr><td>Middle Democrat</td><td class="n">{_signed(dem_m)}</td></tr>\n'
+                    + f'    <tr><td>Middle Republican</td><td class="n">{_signed(rep_m)}</td></tr>\n'
+                    + '  </table></div>')
 
     oi = [o for o in r.output_ideology if o.is_reportable]
     oi_table = ('  <div class="tw"><table>\n'
@@ -148,8 +146,9 @@ def _report_values(r: Report) -> dict[str, str]:
         "gk_worked": worked, "gk_table": table,
         "med_gap": f"{st.median([a.abs_gap for a in scored]):.2f}",
         "os_signed": _signed(os_.signed_gap),
-        "lm_table": lm_table, "rcpt_example": rcpt,
-        "rcpt_count": str(len(r.receipts)),
+        "dem_m": _signed(dem_m), "rep_m": _signed(rep_m), "anchor_table": anchor_table,
+        "os_votes": str(r.votes_cast.get("O000174", 0)),
+        "os_pct": str(round(os_.abs_gap / 2 * 100)),
         "oi_table": oi_table, "oi_count": str(len(oi)),
         "cnd_table": cnd_table,
         "n_right": str(sum(1 for a in scored if a.senator_coord > r.chamber.national_coord)),
@@ -194,6 +193,17 @@ COMMITTEE_NAMES = {
 }
 
 
+# Familiar senators marked on the scale for perspective, most liberal to most
+# conservative. Names as people know them; positions come from the data.
+ANCHOR_NAMES = {
+    "W000817": "Warren", "S000033": "Sanders", "S000148": "Schumer",
+    "F000479": "Fetterman", "C001035": "Collins", "M000355": "McConnell",
+    "T000250": "Thune", "C001098": "Cruz",
+}
+# The subset that fits on a senator card's track without crowding.
+CARD_ANCHORS = {"S000033", "S000148", "C001035", "M000355", "C001098"}
+
+
 def _blocks(r: Report, cfg: Config) -> dict[str, dict]:
     party = {b: s.party for b, s in r.senators.items()}
     by_state = defaultdict(list)
@@ -214,6 +224,7 @@ def _blocks(r: Report, cfg: Config) -> dict[str, dict]:
                 "gap": round(s.abs_gap, 3), "score": round(s.spec_score, 1),
                 "rank": s.rank, "crosses": bool(s.crosses_over),
                 "dir": "conservative" if s.signed_gap > 0 else "liberal",
+                "votes": r.votes_cast.get(s.bioguide),
             } for s in sens],
         }
 
@@ -225,7 +236,7 @@ def _blocks(r: Report, cfg: Config) -> dict[str, dict]:
         entry["senators"].append({
             "name": sen.name, "party": sen.party, "bioguide": sen.bioguide,
             "record": None, "gap": None, "score": None, "rank": None,
-            "crosses": False, "dir": "",
+            "crosses": False, "dir": "", "votes": r.votes_cast.get(sen.bioguide),
         })
 
     scored = [a for a in r.alignments if a.abs_gap is not None]
@@ -273,9 +284,13 @@ def _blocks(r: Report, cfg: Config) -> dict[str, dict]:
                  "the Senate (s) and House (hr) bulk archives"],
               ]},
         "X": {"anchors": [
-                  {"name": r.senators[b].name.split()[-1],
-                   "full": r.senators[b].name, "x": round(r.scores[b], 3)}
-                  for b in ("S000033", "C001035", "C001098") if b in r.scores],
+                  {"name": ANCHOR_NAMES[b], "full": r.senators[b].name,
+                   "x": round(r.scores[b], 3), "card": b in CARD_ANCHORS}
+                  for b in ANCHOR_NAMES if b in r.scores],
+              "demMedian": round(st.median([v for b, v in r.scores.items()
+                                            if r.senators[b].party == "Democrat"]), 3),
+              "repMedian": round(st.median([v for b, v in r.scores.items()
+                                            if r.senators[b].party == "Republican"]), 3),
               "chMedian": round(r.chamber.median, 3),
               "chMean": round(r.committees[0].chamber_mean, 3) if r.committees else 0.0,
               "usM": round(r.chamber.national_coord, 3) if r.chamber.national_coord is not None else None,
@@ -298,11 +313,6 @@ def _blocks(r: Report, cfg: Config) -> dict[str, dict]:
               "popSource": getattr(r.state_source, "population_source", ""),
               "popYear": cfg.population_year},
         "G": _gatekeeping_block(r),
-        "L": [{"key": l.key, "label": l.label, "x": round(l.cutpoint, 3),
-               "votes": l.votes, "passed": l.passed} for l in r.landmarks],
-        "R": {b: {"bill": x.bill, "label": x.label, "question": x.question,
-                  "date": x.date, "voted": x.senator_vote, "roll": x.roll, "url": x.url}
-              for b, x in r.receipts.items()},
         "P": _public_block(r, cfg),
         "C": {"medianScore": round(st.median([a.spec_score for a in scored]), 1),
               "medianGap": round(st.median([a.abs_gap for a in scored]), 3),

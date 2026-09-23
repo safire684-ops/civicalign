@@ -5,6 +5,16 @@ sections 2–5). Pillars 1–3 and 7 belong to someone else.
 
 ## Status in one line
 
+Latest change (22 September 2026, published): the senator view shows **no
+bills**. Each card explains the gap in plain terms from the page's own data: how
+far it is (share of the scale, the distance between two familiar senators, and
+against the typical senator's gap), where the senator sits against their party's
+middle and the other 99 senators, where the state sits against the public and the
+other states, and what each number is made of. The track and the "Explore the
+scale" ruler carry landmarks (middle Democrat, middle Republican, Senate middle,
+public, familiar senators). The page states it cannot say which issues make up
+the difference and never guesses.
+
 Everything below is **published** as of 22 September 2026: the four-view layout,
 the vote-example correction and the presentation safeguards are on the live site,
 `origin/main` is at the same commit, and the claude.ai copy (version 12) was

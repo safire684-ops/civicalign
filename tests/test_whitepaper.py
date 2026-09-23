@@ -54,14 +54,14 @@ def test_widest_gaps_table_is_current(text, report):
         assert row in text, f"row for {a.name} has moved: {row}"
 
 
-def test_landmark_bills_and_receipt_are_current(text, report):
-    """Familiar bills on the scale, and the one real vote shown for Ossoff."""
-    for l in report.landmarks[:6]:
-        assert l.label in text, f"landmark {l.label} missing"
-        assert f"| {l.votes} | " in text
-    rc = report.receipts["O000174"]
-    assert rc.label in text and rc.senator_vote in text
-    assert rc.url in text, "the vote example must link to its roll call"
+def test_party_landmarks_are_current(text, report):
+    """The middle Democrat and Republican quoted as landmarks must be live."""
+    import statistics as st
+    dem = st.median(v for b, v in report.scores.items() if report.senators[b].party == "Democrat")
+    rep = st.median(v for b, v in report.scores.items() if report.senators[b].party == "Republican")
+    assert f"{dem:+.3f}".replace("-", "−") in text
+    assert f"{rep:+.3f}" in text
+    assert "No bills are marked" in text
 
 
 def test_committee_tables_are_current(text, report):
