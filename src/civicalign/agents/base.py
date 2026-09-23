@@ -203,14 +203,17 @@ def run_snapshot(agents: list[Agent], raw_dir: Path, now: datetime | None = None
             if prev:
                 records.append({**prev, "checked_utc": stamp, "note": f"refresh failed this run: {f.message}"})
             continue
-        if a.target.exists():
+        # Compare with the last ACCEPTED snapshot's content key, which is committed
+        # to the repo. On a fresh checkout the raw files are absent, and without
+        # this a re-download of identical content would look like a change.
+        old_key = prev.get("content_key", "")
+        prev_bytes = int(prev.get("bytes") or 0)
+        if not old_key and a.target.exists():
             try:
-                old_key = prev.get("content_key") or a.content_key(a.target)
+                old_key = a.content_key(a.target)
             except Exception:
                 old_key = ""
             prev_bytes = a.target.stat().st_size
-        else:
-            old_key, prev_bytes = "", 0
         changed = f.content_key != old_key
         a.target.parent.mkdir(parents=True, exist_ok=True)
         shutil.move(str(f.staged), str(a.target))   # install; every critical source reached this point

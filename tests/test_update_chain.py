@@ -137,3 +137,19 @@ def test_guardrail_tests_are_permanent_and_run_every_week():
                  "test_g4_", "test_g5_", "test_g6_", "test_2_never_calls_a_cutpoint_bill_ideology",
                  "test_5_sponsor_ideology_is_not_bill_ideology", "test_4_pending_bills_are_not_called_dead"):
         assert name in t, name
+
+
+def test_fresh_checkout_compares_with_the_committed_snapshot_not_the_missing_file(tmp_path):
+    """On CI the raw files are not in git; only SNAPSHOT.json is. Identical
+    content re-downloaded there must count as unchanged, keeping its earlier
+    content-changed date."""
+    src, raw = tmp_path / "src", tmp_path / "raw"
+    src.mkdir(); raw.mkdir()
+    (src / "a.txt").write_text("v1")
+    run_snapshot([_agent("a", src / "a.txt", raw)], raw, now=datetime(2026, 9, 21, tzinfo=timezone.utc))
+    (raw / "a.txt").unlink()                     # fresh checkout: file gone, snapshot kept
+    snap = run_snapshot([_agent("a", src / "a.txt", raw)], raw, now=datetime(2026, 9, 28, tzinfo=timezone.utc))
+    assert snap.accepted and snap.changed == []
+    rec = load_snapshot(raw)["sources"][0]
+    assert rec["content_changed_utc"].startswith("2026-09-21") and rec["checked_utc"].startswith("2026-09-28")
+    assert (raw / "a.txt").read_text() == "v1"
