@@ -62,10 +62,12 @@ class AmericanIdeologyProject(StateCoordinateSource):
     presidential vote estimates (v2022)", Harvard Dataverse doi:10.7910/DVN/BQKU4M,
     file aip_states_ideology_v2022a.tab, column `mrp_ideology`.
 
-    These are multilevel regression and poststratification estimates that place
-    state publics on the same ideological dimension as congressional roll-call
-    scores, which is what makes the absolute distance in Pillar 4 a legal
-    subtraction rather than two different rulers.
+    These are multilevel regression and poststratification estimates of state
+    publics' ideology. CAVEAT: the project's codebook says the survey ideal points
+    "lack an absolute scale" and are standardised to mean 0, standard deviation 1
+    on their own; nothing ties that scale to Voteview's Nokken-Poole scores. Both
+    happen to fall inside [-1, +1], so the tool puts them on one line as an
+    approximation and labels the distance a rough comparison, not a measurement.
 
     Both sides sit inside the metric space X = [-1, +1]. State publics are far
     more tightly clustered (-0.47 to +0.35) than senators (-0.74 to +0.94), which

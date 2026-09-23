@@ -119,7 +119,7 @@ def test_demo_uses_the_external_stylesheet_and_no_percentage_score():
     assert '<link rel="stylesheet" href="civicalign.css">' in text
     assert (DEMO.parent / "civicalign.css").exists()
     assert "representation match" not in text.lower(), "the percentage metric was dropped"
-    assert "points further" in text and "Aligned with State Consensus" in text
+    assert "points further" in text and "Too close to tell apart" in text
 
 
 def test_demo_committee_module_shows_both_references():
@@ -224,7 +224,7 @@ def test_committee_view_offers_one_committee_at_a_time():
     assert '<select id="committee">' in text
     assert "function renderCommittee(code)" in text
     assert "$('committee-cards').innerHTML=committeeCard(c)" in text
-    assert "$('gates').innerHTML=survivalBars(code)" in text
+    assert "$('gates').innerHTML=sentOnBars(code)" in text
     # the committee list is alphabetical, not ranked
     assert "a.name.localeCompare(b.name)" in text
 
@@ -239,8 +239,8 @@ def test_existing_measures_and_thresholds_are_preserved():
     text = DEMO.read_text()
     assert "var thr=0.15;" in text
     assert "Warning: This committee acts as a " in text
-    assert "What it actually passed:" in text
-    assert "Aligned with State Consensus" in text and "points further" in text
+    assert "Where the Senate split on its bills:" in text
+    assert "Too close to tell apart" in text and "points further" in text
 
 
 
@@ -357,7 +357,7 @@ def test_alignment_badge_carries_an_icon_and_does_not_rely_on_green():
     rule = css.split(".alignment-score.aligned{")[1].split("}")[0]
     assert "#22c55e" not in rule and "green" not in rule
     assert "<span class=\"ic\" aria-hidden=\"true\">'+sp.i+'</span>" in text
-    assert "i:'\\u2713'" in text and "i:'\\u2192'" in text and "i:'\\u2190'" in text
+    assert "i:'\\u2248'" in text and "i:'\\u2192'" in text and "i:'\\u2190'" in text
 
 
 def test_page_keeps_static_styling_in_the_external_stylesheet():
@@ -405,3 +405,62 @@ def test_card_track_carries_party_public_and_senate_landmarks():
 
 def css_text():
     return (DEMO.parent / "civicalign.css").read_text()
+
+
+# ---- the five methodology concerns, fixed in wording and counts ----
+
+def _prose(path):
+    """Page text with the data blocks removed, so bill titles cannot trip a check."""
+    import re
+    return re.sub(r"const [A-Z]=[\{\[].*?[\}\]];", "", path.read_text(), flags=re.S)
+
+
+@pytest.mark.parametrize("path", [DEMO, REPORT, ROOT / "demo" / "methodology.template.html"])
+def test_scales_are_described_as_different_rulers_not_the_same_scale(path):
+    t = _prose(path)
+    for claim in ("exact same scale", "very same scale", "compared directly", "same ideological dimension"):
+        assert claim not in t, f"{path.name} still claims {claim!r}"
+    assert "different rulers" in t and "rough comparison" in t
+
+
+def test_splits_are_not_presented_as_bill_ideology():
+    t = _prose(DEMO)
+    assert "not whether the bills themselves were liberal or conservative" in t
+    assert "What it actually passed" not in t
+    assert "Bills passed</div>" not in t
+    r = REPORT.read_text()
+    assert "Where the Senate split on its bills" in r and "not</em> whether the bills themselves" in r
+
+
+@pytest.mark.parametrize("path", [DEMO, REPORT, ROOT / "WHITEPAPER.md"])
+def test_pending_bills_are_not_described_as_dead(path):
+    t = _prose(path)
+    words = ["survive", "survival", "buried", "bury ", "made it back out", "came back out",
+             "bills die", "legislation dies", "graveyard", "killed"]
+    if path.name == "WHITEPAPER.md":
+        words = [w for w in words if w != "survive"]  # it says a *measure* survives validation
+    for word in words:
+        assert word not in t, f"{path.name} says {word!r}"
+    assert "not" in t and ("pending" in t or "not yet" in t or "not as dead" in t)
+
+
+def test_senate_wide_totals_count_distinct_bills(report):
+    G = _block("G")
+    assert G["uniqueBills"] == report.bills_referred_unique
+    assert G["uniqueReported"] == report.bills_reported_unique
+    assert G["uniqueBills"] < G["totalReferred"], "referrals exceed distinct bills; the page must say which is which"
+    text = DEMO.read_text()
+    assert "distinct bills" in text and "uR.toLocaleString()+' of '+uB.toLocaleString()" in text
+    r = REPORT.read_text()
+    assert f"<b>{report.bills_referred_unique:,}</b> distinct bills" in r
+    assert f"{sum(g.referred for g in report.gatekeeping):,} referrals" in r
+
+
+def test_band_label_does_not_overstate_one_standard_error():
+    t = _prose(DEMO)
+    assert "Aligned with State Consensus" not in t and "Statistically Aligned" not in t
+    assert "Too close to tell apart" in t
+    assert "one standard error" in t
+    assert "not the same as agree" in t
+    r = REPORT.read_text()
+    assert "Too close to tell apart" in r and "one standard error" in r and "not 95%" in r

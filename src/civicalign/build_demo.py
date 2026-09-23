@@ -137,8 +137,9 @@ def _report_values(r: Report) -> dict[str, str]:
         "ch_m": _signed(r.chamber.median),
         "us_m": _signed(r.chamber.national_coord),
         "d_us": _signed(r.chamber.apportionment_skew),
-        "gk_referred": f"{ref:,}", "gk_reported": str(rep),
-        "gk_pct": str(round(100 * rep / ref)),
+        "gk_referrals": f"{ref:,}",
+        "gk_referred": f"{r.bills_referred_unique:,}", "gk_reported": str(r.bills_reported_unique),
+        "gk_pct": str(round(100 * r.bills_reported_unique / r.bills_referred_unique)) if r.bills_referred_unique else "0",
         "gk_worst_name": COMMITTEE_NAMES.get(worst.code, worst.code),
         "gk_worst_rep": str(worst.reported), "gk_worst_ref": str(worst.referred),
         "gk_base": f"{r.gatekeeping_baseline:.1f}",
@@ -350,7 +351,9 @@ def _public_block(r: Report, cfg: Config) -> dict:
 
 
 def _gatekeeping_block(r: Report) -> dict:
-    """Pillar 6 by behaviour: which bills each committee let through."""
+    """Pillar 6 by behaviour: which bills each committee has sent on so far.
+    totalReferred counts referrals (a bill sent to two committees counts twice);
+    uniqueBills counts distinct bills."""
     rows = [g for g in r.gatekeeping if g.is_reportable]
     total_ref = sum(g.referred for g in r.gatekeeping)
     total_rep = sum(g.reported for g in r.gatekeeping)
@@ -360,6 +363,8 @@ def _gatekeeping_block(r: Report) -> dict:
         "baseline": round(r.gatekeeping_baseline, 1),
         "totalReferred": total_ref,
         "totalReported": total_rep,
+        "uniqueBills": r.bills_referred_unique,
+        "uniqueReported": r.bills_reported_unique,
         "worst": ({"name": COMMITTEE_NAMES.get(worst.code, worst.code),
                    "reported": worst.reported, "referred": worst.referred}
                   if worst else None),

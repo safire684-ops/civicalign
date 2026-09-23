@@ -133,7 +133,8 @@ def to_dict(r: Report) -> dict[str, Any]:
         },
         "committee_output_ideology": {
             "publishable": True,
-            "note": "median cutpoint of floor votes on bills the committee reported out",
+            "note": ("median cutpoint of floor votes on bills the committee reported out: "
+                     "where the Senate split on those bills, not a measure of the bills' content"),
             "committees": [
                 {"code": o.code, "floor_votes": o.n_votes, "coi": round(o.coi, 4),
                  "vs_senate": round(o.vs_senate, 4),
@@ -143,9 +144,9 @@ def to_dict(r: Report) -> dict[str, Any]:
         },
         "committee_gatekeeping": {
             "publishable": True,
-            "note": ("survival rate of conservative-sponsored minus "
-                     "liberal-sponsored bills, in percentage points; publish "
-                     "gbi_vs_baseline, not gbi"),
+            "note": ("share of conservative-sponsored bills sent on so far minus the "
+                     "share of liberal-sponsored ones, in percentage points; a bill not "
+                     "yet reported is pending, not dead; publish gbi_vs_baseline, not gbi"),
             "baseline_points": round(r.gatekeeping_baseline, 3),
             "baseline_note": ("chamber-wide gap from majority control; already "
                               "subtracted in gbi_vs_baseline"),

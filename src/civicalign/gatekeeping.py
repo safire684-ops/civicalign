@@ -1,4 +1,7 @@
-"""Pillar 6 by revealed behaviour: which bills a committee buries.
+"""Pillar 6 by revealed behaviour: which bills a committee has sent on so far.
+
+A bill that has not been reported is counted as "not sent on yet", never as dead:
+the Congress is still running and a pending bill may yet move.
 
 Every bill inherits the ideological position of the senator who sponsored it.
 For each committee we then ask how often a liberal-sponsored bill survives versus

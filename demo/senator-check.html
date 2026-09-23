@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Distance From Your State</title>
-<meta name="description" content="Pick your state and see how far your two senators sit from its voters, on the same scale — with real votes and familiar bills for perspective.">
+<meta name="description" content="Pick your state and see roughly how far your two senators sit from its voters, on one liberal-to-conservative line, with familiar senators for perspective.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Public+Sans:wght@400;500;600;700&display=swap">
@@ -42,10 +42,12 @@
     <summary><span>Explore the scale</span></summary>
     <div class="ruler" id="ruler"></div>
   </details>
-  <p class="limit">The state's position is an estimate from surveys, shown with its
-    margin of error as a shaded band. A senator inside that band counts as aligned.
-    The distance is in points on the scale, not a share of votes, and it says how far
-    apart the two sit overall, not which issues make the difference.</p>
+  <p class="limit">The two numbers come from different rulers, so every distance here
+    is a rough comparison. The state's position is a survey estimate, shown with one
+    standard error as a shaded band; a senator inside it is "too close to tell apart",
+    which is not the same as agreement. The distance is in points on the scale, not a
+    share of votes, and says how far apart the two sit overall, not which issues make
+    the difference.</p>
 </section>
 
 <!-- ============ 2. The Senate ============ -->
@@ -79,7 +81,7 @@
   </div>
   <div id="committee-drift-module">
     <p class="ckey"><span class="k1"><i></i>where the members sit</span>
-      <span class="k2"><i></i>where the bills it passed divided the Senate</span></p>
+      <span class="k2"><i></i>where the Senate split on the bills it sent to the floor</span></p>
     <div id="committee-cards"></div>
   </div>
   <div class="gate">
@@ -94,8 +96,9 @@
     <p class="caveat" id="gatecaveat"></p>
   </details>
   <p class="limit">Committee figures are softer than senator figures. The members'
-    midpoint can move sharply when one member is replaced, and the bills-passed mark
-    rests on a handful of votes. The count behind each is shown.</p>
+    midpoint can move sharply when one member is replaced, and the split-on-its-bills
+    mark rests on a handful of votes. Bills still in committee are counted as not sent
+    on yet, not as dead. The count behind each is shown.</p>
 </section>
 
 <!-- ============ 4. How it works ============ -->
@@ -107,9 +110,11 @@
       <li><div><b>Place each senator on a scale</b>
         <span>Every roll-call vote they have cast this session, turned into one number
         from &minus;1 (most liberal) to +1 (most conservative).</span></div></li>
-      <li><div><b>Place each state's voters on the same scale</b>
-        <span>Large academic surveys of residents, translated by researchers onto the
-        very same scale, so the two can be compared directly.</span></div></li>
+      <li><div><b>Place each state's voters on a similar scale</b>
+        <span>Large academic surveys of residents, summarised by researchers as one
+        number per state from most liberal to most conservative. This scale was built
+        separately from the senators' scale, so putting the two on one line is an
+        approximation.</span></div></li>
       <li><div><b>Measure the distance, and put it in context</b>
         <span>Subtract one from the other. Then show where each sits against the
         middle Democrat, the middle Republican, the Senate's middle, the American
@@ -127,16 +132,26 @@
       split, not what a state's voters wanted.</span></div>
     <div><b>How committees are measured</b>
       <span>Three ways, each with its count shown: where the members sit, where the
-      bills it let through divided the Senate, and how many bills from each side it
-      let through at all.</span></div>
+      Senate split on the bills it sent to the floor (which says where the Yes and No
+      sides divided, not whether the bills were liberal or conservative), and how many
+      bills from each side it has sent on so far. A bill still in committee counts as
+      "not yet", not as dead.</span></div>
   </div>
   <div class="limits">
     <h3>What this can and cannot tell you</h3>
     <dl>
+      <dt>The two numbers come from different rulers.</dt>
+      <dd>The senator's number is built from votes and the state's from survey answers,
+        and nobody has tied the two rulers together exactly. So every distance here is a
+        rough comparison: trust the direction and the rough size, not the second
+        decimal.</dd>
       <dt>Your state's position is an estimate, not a headcount.</dt>
       <dd>It comes from large academic surveys modelled down to the state level. Its
-        margin of error is drawn on every track as a shaded band, and a senator inside
-        that band is treated as aligned, not penalised for a gap too small to trust.</dd>
+        uncertainty is drawn on every track as a shaded band: one standard error, about
+        0.04, which is a modest band. A senator inside it is shown as "too close to tell
+        apart" rather than given a gap too small to trust. That is not the same as
+        agreement: a state's number is an average of many people who disagree with each
+        other. The senator scores have error too, which is not published.</dd>
       <dt>The distance is in points on the scale, not a share of votes.</dt>
       <dd>"0.61 points further Left" is a position on the liberal&ndash;conservative
         line. It does not mean the senator voted against the state 61% of the time.</dd>
@@ -151,8 +166,8 @@
         it is bigger than most.</dd>
       <dt>Committee figures are softer than senator figures.</dt>
       <dd>A committee's members' midpoint can move sharply when one member is replaced.
-        Where the bills it passed divided the Senate rests on a handful of votes for
-        most committees. Both are shown with the count behind them.</dd>
+        Where the Senate split on the bills it sent to the floor rests on a handful of
+        votes for most committees. Both are shown with the count behind them.</dd>
     </dl>
   </div>
   <details class="more method">
@@ -182,7 +197,7 @@ const M={"congress":119,"scoreCol":"nokken_poole_dim1","ideologyYear":2020,"ideo
 const X={"anchors":[{"name":"Warren","full":"Elizabeth Warren","x":-0.722,"card":false},{"name":"Sanders","full":"Bernard Sanders","x":-0.696,"card":true},{"name":"Schumer","full":"Charles E. Schumer","x":-0.404,"card":true},{"name":"Fetterman","full":"John Fetterman","x":-0.163,"card":false},{"name":"Collins","full":"Susan M. Collins","x":0.17,"card":true},{"name":"McConnell","full":"Mitch McConnell","x":0.328,"card":true},{"name":"Thune","full":"John Thune","x":0.359,"card":false},{"name":"Cruz","full":"Ted Cruz","x":0.865,"card":true}],"demMedian":-0.378,"repMedian":0.564,"chMedian":0.31,"chMean":0.121,"usM":-0.027,"output":{"SSBU":{"coi":0.077,"n":28,"vsSen":-0.233,"vsUS":0.104},"SSAP":{"coi":-0.11,"n":13,"vsSen":-0.42,"vsUS":-0.083},"SSAS":{"coi":-0.161,"n":13,"vsSen":-0.471,"vsUS":-0.134},"SSVA":{"coi":-0.001,"n":7,"vsSen":-0.311,"vsUS":0.026}},"committees":[{"code":"SSEV","name":"Environment","cndMedian":0.03,"cndMean":0.041,"median":0.003,"drift":-0.307,"mean":0.014,"meanDrift":-0.107,"shift":0.289,"meanShift":0.051,"split":[9,9],"n":18},{"code":"SSAP","name":"Appropriations","cndMedian":0.031,"cndMean":0.063,"median":0.004,"drift":-0.306,"mean":0.036,"meanDrift":-0.084,"shift":0.166,"meanShift":0.026,"split":[14,14],"n":28},{"code":"SSFR","name":"Foreign Relations","cndMedian":0.562,"cndMean":0.244,"median":0.535,"drift":0.225,"mean":0.217,"meanDrift":0.097,"shift":0.06,"meanShift":0.035,"split":[12,10],"n":22},{"code":"SSGA","name":"Homeland/Govt Affairs","cndMedian":0.548,"cndMean":0.253,"median":0.521,"drift":0.211,"mean":0.226,"meanDrift":0.105,"shift":0.342,"meanShift":0.05,"split":[8,7],"n":15},{"code":"SSSB","name":"Small Business","cndMedian":0.548,"cndMean":0.166,"median":0.521,"drift":0.211,"mean":0.139,"meanDrift":0.018,"shift":0.342,"meanShift":0.049,"split":[10,9],"n":19},{"code":"SSBU","name":"Budget","cndMedian":0.155,"cndMean":0.146,"median":0.128,"drift":-0.182,"mean":0.119,"meanDrift":-0.002,"shift":0.333,"meanShift":0.043,"split":[10,10],"n":20},{"code":"SLET","name":"Ethics (select)","cndMedian":0.166,"cndMean":0.152,"median":0.139,"drift":-0.171,"mean":0.125,"meanDrift":0.005,"shift":0.301,"meanShift":0.111,"split":[3,3],"n":6},{"code":"SSHR","name":"HELP","cndMedian":0.197,"cndMean":0.105,"median":0.17,"drift":-0.14,"mean":0.078,"meanDrift":-0.042,"shift":0.188,"meanShift":0.039,"split":[12,11],"n":23},{"code":"SLIN","name":"Intelligence (select)","cndMedian":0.197,"cndMean":0.113,"median":0.17,"drift":-0.14,"mean":0.086,"meanDrift":-0.035,"shift":0.175,"meanShift":0.032,"split":[11,10],"n":21},{"code":"SLIA","name":"Indian Affairs (select)","cndMedian":0.203,"cndMean":0.088,"median":0.176,"drift":-0.134,"mean":0.062,"meanDrift":-0.059,"shift":0.254,"meanShift":0.059,"split":[6,5],"n":11},{"code":"SSBK","name":"Banking","cndMedian":0.411,"cndMean":0.155,"median":0.384,"drift":0.074,"mean":0.128,"meanDrift":0.008,"shift":0.024,"meanShift":0.037,"split":[13,11],"n":24},{"code":"SSJU","name":"Judiciary","cndMedian":0.388,"cndMean":0.18,"median":0.361,"drift":0.051,"mean":0.153,"meanDrift":0.033,"shift":0.307,"meanShift":0.037,"split":[11,10],"n":21},{"code":"SSFI","name":"Finance","cndMedian":0.386,"cndMean":0.116,"median":0.359,"drift":0.049,"mean":0.089,"meanDrift":-0.032,"shift":0.282,"meanShift":0.031,"split":[14,13],"n":27},{"code":"SSAF","name":"Agriculture","cndMedian":0.355,"cndMean":0.113,"median":0.328,"drift":0.018,"mean":0.086,"meanDrift":-0.035,"shift":0.245,"meanShift":0.039,"split":[12,11],"n":23},{"code":"SSRA","name":"Rules","cndMedian":0.355,"cndMean":0.117,"median":0.328,"drift":0.018,"mean":0.09,"meanDrift":-0.03,"shift":0.29,"meanShift":0.048,"split":[9,8],"n":17},{"code":"SSVA","name":"Veterans","cndMedian":0.319,"cndMean":0.117,"median":0.292,"drift":-0.018,"mean":0.091,"meanDrift":-0.03,"shift":0.236,"meanShift":0.047,"split":[10,9],"n":19},{"code":"SSAS","name":"Armed Services","cndMedian":0.319,"cndMean":0.17,"median":0.292,"drift":-0.018,"mean":0.143,"meanDrift":0.022,"shift":0.227,"meanShift":0.033,"split":[14,13],"n":27},{"code":"SSCM","name":"Commerce","cndMedian":0.352,"cndMean":0.158,"median":0.326,"drift":0.016,"mean":0.131,"meanDrift":0.01,"shift":0.034,"meanShift":0.032,"split":[15,13],"n":28},{"code":"SSEG","name":"Energy","cndMedian":0.328,"cndMean":0.162,"median":0.301,"drift":-0.009,"mean":0.135,"meanDrift":0.015,"shift":0.125,"meanShift":0.04,"split":[11,9],"n":20}],"popSource":"Census Bureau vintage 2024 estimates","popYear":2024};
 </script>
 <script>
-const G={"baseline":2.4,"totalReferred":5368,"totalReported":421,"worst":{"name":"Finance","reported":1,"referred":872},"committees":[{"code":"SSSB","name":"Small Business","libRef":37,"libRep":4,"conRef":35,"conRep":7,"libPct":10.8,"conPct":20.0,"gap":9.2,"vsBase":6.8},{"code":"SSFR","name":"Foreign Relations","libRef":123,"libRep":31,"conRef":147,"conRep":31,"libPct":25.2,"conPct":21.1,"gap":-4.1,"vsBase":-6.5},{"code":"SSHR","name":"HELP","libRef":425,"libRep":13,"conRef":296,"conRep":28,"libPct":3.1,"conPct":9.5,"gap":6.4,"vsBase":4.0},{"code":"SSAF","name":"Agriculture","libRef":194,"libRep":4,"conRef":148,"conRep":10,"libPct":2.1,"conPct":6.8,"gap":4.7,"vsBase":2.3},{"code":"SSFI","name":"Finance","libRef":392,"libRep":0,"conRef":480,"conRep":1,"libPct":0.0,"conPct":0.2,"gap":0.2,"vsBase":-2.2},{"code":"SSCM","name":"Commerce","libRef":225,"libRep":34,"conRef":250,"conRep":49,"libPct":15.1,"conPct":19.6,"gap":4.5,"vsBase":2.1},{"code":"SSVA","name":"Veterans","libRef":88,"libRep":4,"conRef":116,"conRep":10,"libPct":4.5,"conPct":8.6,"gap":4.1,"vsBase":1.7},{"code":"SSGA","name":"Homeland/Govt Affairs","libRef":197,"libRep":19,"conRef":234,"conRep":25,"libPct":9.6,"conPct":10.7,"gap":1.0,"vsBase":-1.4},{"code":"SSBK","name":"Banking","libRef":177,"libRep":0,"conRef":215,"conRep":3,"libPct":0.0,"conPct":1.4,"gap":1.4,"vsBase":-1.0},{"code":"SSEV","name":"Environment","libRef":102,"libRep":6,"conRef":104,"conRep":8,"libPct":5.9,"conPct":7.7,"gap":1.8,"vsBase":-0.6},{"code":"SSJU","name":"Judiciary","libRef":306,"libRep":13,"conRef":349,"conRep":25,"libPct":4.2,"conPct":7.2,"gap":2.9,"vsBase":0.5},{"code":"SSAS","name":"Armed Services","libRef":93,"libRep":0,"conRef":103,"conRep":2,"libPct":0.0,"conPct":1.9,"gap":1.9,"vsBase":-0.5},{"code":"SSEG","name":"Energy","libRef":183,"libRep":32,"conRef":157,"conRep":31,"libPct":17.5,"conPct":19.7,"gap":2.3,"vsBase":-0.2}]};
+const G={"baseline":2.4,"totalReferred":5368,"totalReported":421,"uniqueBills":5333,"uniqueReported":421,"worst":{"name":"Finance","reported":1,"referred":872},"committees":[{"code":"SSSB","name":"Small Business","libRef":37,"libRep":4,"conRef":35,"conRep":7,"libPct":10.8,"conPct":20.0,"gap":9.2,"vsBase":6.8},{"code":"SSFR","name":"Foreign Relations","libRef":123,"libRep":31,"conRef":147,"conRep":31,"libPct":25.2,"conPct":21.1,"gap":-4.1,"vsBase":-6.5},{"code":"SSHR","name":"HELP","libRef":425,"libRep":13,"conRef":296,"conRep":28,"libPct":3.1,"conPct":9.5,"gap":6.4,"vsBase":4.0},{"code":"SSAF","name":"Agriculture","libRef":194,"libRep":4,"conRef":148,"conRep":10,"libPct":2.1,"conPct":6.8,"gap":4.7,"vsBase":2.3},{"code":"SSFI","name":"Finance","libRef":392,"libRep":0,"conRef":480,"conRep":1,"libPct":0.0,"conPct":0.2,"gap":0.2,"vsBase":-2.2},{"code":"SSCM","name":"Commerce","libRef":225,"libRep":34,"conRef":250,"conRep":49,"libPct":15.1,"conPct":19.6,"gap":4.5,"vsBase":2.1},{"code":"SSVA","name":"Veterans","libRef":88,"libRep":4,"conRef":116,"conRep":10,"libPct":4.5,"conPct":8.6,"gap":4.1,"vsBase":1.7},{"code":"SSGA","name":"Homeland/Govt Affairs","libRef":197,"libRep":19,"conRef":234,"conRep":25,"libPct":9.6,"conPct":10.7,"gap":1.0,"vsBase":-1.4},{"code":"SSBK","name":"Banking","libRef":177,"libRep":0,"conRef":215,"conRep":3,"libPct":0.0,"conPct":1.4,"gap":1.4,"vsBase":-1.0},{"code":"SSEV","name":"Environment","libRef":102,"libRep":6,"conRef":104,"conRep":8,"libPct":5.9,"conPct":7.7,"gap":1.8,"vsBase":-0.6},{"code":"SSJU","name":"Judiciary","libRef":306,"libRep":13,"conRef":349,"conRep":25,"libPct":4.2,"conPct":7.2,"gap":2.9,"vsBase":0.5},{"code":"SSAS","name":"Armed Services","libRef":93,"libRep":0,"conRef":103,"conRep":2,"libPct":0.0,"conPct":1.9,"gap":1.9,"vsBase":-0.5},{"code":"SSEG","name":"Energy","libRef":183,"libRep":32,"conRef":157,"conRep":31,"libPct":17.5,"conPct":19.7,"gap":2.3,"vsBase":-0.2}]};
 </script>
 <script>
 const P={"chM":0.31,"usM":-0.027,"gap":0.337,"pivot":0.44,"nRightOfPublic":53,"nLeftOfPublic":47,"dots":[{"b":"M000133","n":"Edward J. Markey","st":"MA","p":"D","x":-0.744,"vsSen":-1.054,"vsUS":-0.717,"vsState":-0.455},{"b":"W000817","n":"Elizabeth Warren","st":"MA","p":"D","x":-0.722,"vsSen":-1.032,"vsUS":-0.695,"vsState":-0.433},{"b":"S000033","n":"Bernard Sanders","st":"VT","p":"I","x":-0.696,"vsSen":-1.006,"vsUS":-0.669,"vsState":-0.41},{"b":"P000145","n":"Alex Padilla","st":"CA","p":"D","x":-0.569,"vsSen":-0.879,"vsUS":-0.542,"vsState":-0.371},{"b":"O000174","n":"Jon Ossoff","st":"GA","p":"D","x":-0.547,"vsSen":-0.857,"vsUS":-0.52,"vsState":-0.607},{"b":"M001169","n":"Christopher Murphy","st":"CT","p":"D","x":-0.51,"vsSen":-0.82,"vsUS":-0.483,"vsState":-0.329},{"b":"H001042","n":"Mazie K. Hirono","st":"HI","p":"D","x":-0.5,"vsSen":-0.81,"vsUS":-0.473,"vsState":-0.291},{"b":"M001176","n":"Jeff Merkley","st":"OR","p":"D","x":-0.491,"vsSen":-0.801,"vsUS":-0.464,"vsState":-0.331},{"b":"L000570","n":"Ben Ray Luj\u00e1n","st":"NM","p":"D","x":-0.488,"vsSen":-0.798,"vsUS":-0.461,"vsState":-0.498},{"b":"B001288","n":"Cory A. Booker","st":"NJ","p":"D","x":-0.485,"vsSen":-0.795,"vsUS":-0.458,"vsState":-0.323},{"b":"V000128","n":"Chris Van Hollen","st":"MD","p":"D","x":-0.476,"vsSen":-0.786,"vsUS":-0.449,"vsState":-0.312},{"b":"W000790","n":"Raphael G. Warnock","st":"GA","p":"D","x":-0.467,"vsSen":-0.777,"vsUS":-0.44,"vsState":-0.527},{"b":"B001303","n":"Lisa Blunt Rochester","st":"DE","p":"D","x":-0.465,"vsSen":-0.775,"vsUS":-0.438,"vsState":-0.394},{"b":"S001203","n":"Tina Smith","st":"MN","p":"D","x":-0.462,"vsSen":-0.772,"vsUS":-0.435,"vsState":-0.42},{"b":"M001111","n":"Patty Murray","st":"WA","p":"D","x":-0.456,"vsSen":-0.766,"vsUS":-0.429,"vsState":-0.28},{"b":"W000779","n":"Ron Wyden","st":"OR","p":"D","x":-0.453,"vsSen":-0.763,"vsUS":-0.426,"vsState":-0.293},{"b":"K000394","n":"Andy Kim","st":"NJ","p":"D","x":-0.45,"vsSen":-0.76,"vsUS":-0.423,"vsState":-0.288},{"b":"A000382","n":"Angela D. Alsobrooks","st":"MD","p":"D","x":-0.445,"vsSen":-0.755,"vsUS":-0.418,"vsState":-0.281},{"b":"S001194","n":"Brian Schatz","st":"HI","p":"D","x":-0.431,"vsSen":-0.741,"vsUS":-0.404,"vsState":-0.222},{"b":"B001277","n":"Richard Blumenthal","st":"CT","p":"D","x":-0.414,"vsSen":-0.724,"vsUS":-0.387,"vsState":-0.233},{"b":"S000148","n":"Charles E. Schumer","st":"NY","p":"D","x":-0.404,"vsSen":-0.714,"vsUS":-0.377,"vsState":-0.197},{"b":"D000622","n":"Tammy Duckworth","st":"IL","p":"D","x":-0.399,"vsSen":-0.709,"vsUS":-0.372,"vsState":-0.278},{"b":"B001230","n":"Tammy Baldwin","st":"WI","p":"D","x":-0.392,"vsSen":-0.702,"vsUS":-0.365,"vsState":-0.396},{"b":"S001150","n":"Adam B. Schiff","st":"CA","p":"D","x":-0.378,"vsSen":-0.688,"vsUS":-0.351,"vsState":-0.18},{"b":"S001208","n":"Elissa Slotkin","st":"MI","p":"D","x":-0.373,"vsSen":-0.683,"vsUS":-0.346,"vsState":-0.363},{"b":"G000555","n":"Kirsten E. Gillibrand","st":"NY","p":"D","x":-0.361,"vsSen":-0.671,"vsUS":-0.334,"vsState":-0.154},{"b":"C000127","n":"Maria Cantwell","st":"WA","p":"D","x":-0.35,"vsSen":-0.66,"vsUS":-0.323,"vsState":-0.174},{"b":"W000800","n":"Peter Welch","st":"VT","p":"D","x":-0.345,"vsSen":-0.655,"vsUS":-0.318,"vsState":-0.059},{"b":"H001046","n":"Martin Heinrich","st":"NM","p":"D","x":-0.34,"vsSen":-0.65,"vsUS":-0.313,"vsState":-0.35},{"b":"C001113","n":"Catherine Cortez Masto","st":"NV","p":"D","x":-0.332,"vsSen":-0.642,"vsUS":-0.305,"vsState":-0.301},{"b":"H000273","n":"John W. Hickenlooper","st":"CO","p":"D","x":-0.32,"vsSen":-0.63,"vsUS":-0.293,"vsState":-0.263},{"b":"B001267","n":"Michael F. Bennet","st":"CO","p":"D","x":-0.309,"vsSen":-0.619,"vsUS":-0.282,"vsState":-0.252},{"b":"G000574","n":"Ruben Gallego","st":"AZ","p":"D","x":-0.307,"vsSen":-0.617,"vsUS":-0.28,"vsState":-0.344},{"b":"R000122","n":"Jack Reed","st":"RI","p":"D","x":-0.303,"vsSen":-0.613,"vsUS":-0.276,"vsState":-0.103},{"b":"K000377","n":"Mark Kelly","st":"AZ","p":"D","x":-0.299,"vsSen":-0.609,"vsUS":-0.272,"vsState":-0.336},{"b":"W000802","n":"Sheldon Whitehouse","st":"RI","p":"D","x":-0.286,"vsSen":-0.596,"vsUS":-0.259,"vsState":-0.086},{"b":"P000595","n":"Gary C. Peters","st":"MI","p":"D","x":-0.283,"vsSen":-0.593,"vsUS":-0.256,"vsState":-0.273},{"b":"R000608","n":"Jacky Rosen","st":"NV","p":"D","x":-0.28,"vsSen":-0.59,"vsUS":-0.253,"vsState":-0.249},{"b":"K000367","n":"Amy Klobuchar","st":"MN","p":"D","x":-0.264,"vsSen":-0.574,"vsUS":-0.237,"vsState":-0.222},{"b":"C001088","n":"Christopher A. Coons","st":"DE","p":"D","x":-0.263,"vsSen":-0.573,"vsUS":-0.236,"vsState":-0.192},{"b":"D000563","n":"Richard J. Durbin","st":"IL","p":"D","x":-0.254,"vsSen":-0.564,"vsUS":-0.227,"vsState":-0.133},{"b":"W000805","n":"Mark R. Warner","st":"VA","p":"D","x":-0.252,"vsSen":-0.562,"vsUS":-0.225,"vsState":-0.227},{"b":"H001076","n":"Margaret Wood Hassan","st":"NH","p":"D","x":-0.206,"vsSen":-0.516,"vsUS":-0.179,"vsState":-0.134},{"b":"K000384","n":"Tim Kaine","st":"VA","p":"D","x":-0.205,"vsSen":-0.515,"vsUS":-0.178,"vsState":-0.18},{"b":"K000383","n":"Angus S. King, Jr.","st":"ME","p":"I","x":-0.18,"vsSen":-0.49,"vsUS":-0.153,"vsState":-0.135},{"b":"F000479","n":"John Fetterman","st":"PA","p":"D","x":-0.163,"vsSen":-0.473,"vsUS":-0.136,"vsState":-0.172},{"b":"S001181","n":"Jeanne Shaheen","st":"NH","p":"D","x":-0.162,"vsSen":-0.472,"vsUS":-0.135,"vsState":-0.09},{"b":"C001035","n":"Susan M. Collins","st":"ME","p":"R","x":0.17,"vsSen":-0.14,"vsUS":0.197,"vsState":0.215},{"b":"M001153","n":"Lisa Murkowski","st":"AK","p":"R","x":0.176,"vsSen":-0.134,"vsUS":0.203,"vsState":0.0},{"b":"S001198","n":"Dan Sullivan","st":"AK","p":"R","x":0.292,"vsSen":-0.018,"vsUS":0.319,"vsState":0.116},{"b":"M000355","n":"Mitch McConnell","st":"KY","p":"R","x":0.328,"vsSen":0.018,"vsUS":0.355,"vsState":0.193},{"b":"T000250","n":"John Thune","st":"SD","p":"R","x":0.359,"vsSen":0.049,"vsUS":0.386,"vsState":0.131},{"b":"T000476","n":"Thom Tillis","st":"NC","p":"R","x":0.361,"vsSen":0.051,"vsUS":0.388,"vsState":0.314},{"b":"M000934","n":"Jerry Moran","st":"KS","p":"R","x":0.375,"vsSen":0.065,"vsUS":0.402,"vsState":0.306},{"b":"B001236","n":"John Boozman","st":"AR","p":"R","x":0.399,"vsSen":0.089,"vsUS":0.426,"vsState":0.215},{"b":"R000605","n":"Mike Rounds","st":"SD","p":"R","x":0.408,"vsSen":0.098,"vsUS":0.435,"vsState":0.18},{"b":"C001047","n":"Shelley Moore Capito","st":"WV","p":"R","x":0.412,"vsSen":0.102,"vsUS":0.439,"vsState":0.211},{"b":"W000437","n":"Roger F. Wicker","st":"MS","p":"R","x":0.414,"vsSen":0.104,"vsUS":0.441,"vsState":0.192},{"b":"C001075","n":"Bill Cassidy","st":"LA","p":"R","x":0.426,"vsSen":0.116,"vsUS":0.453,"vsState":0.25},{"b":"F000463","n":"Deb Fischer","st":"NE","p":"R","x":0.44,"vsSen":0.13,"vsUS":0.467,"vsState":0.338},{"b":"H001079","n":"Cindy Hyde-Smith","st":"MS","p":"R","x":0.45,"vsSen":0.14,"vsUS":0.477,"vsState":0.228},{"b":"G000386","n":"Chuck Grassley","st":"IA","p":"R","x":0.461,"vsSen":0.151,"vsUS":0.488,"vsState":0.418},{"b":"R000618","n":"Pete Ricketts","st":"NE","p":"R","x":0.475,"vsSen":0.165,"vsUS":0.502,"vsState":0.373},{"b":"G000608","n":"Darline Graham","st":"SC","p":"R","x":0.483,"vsSen":0.173,"vsUS":0.51,"vsState":0.354},{"b":"C001096","n":"Kevin Cramer","st":"ND","p":"R","x":0.49,"vsSen":0.18,"vsUS":0.517,"vsState":0.316},{"b":"H001061","n":"John Hoeven","st":"ND","p":"R","x":0.512,"vsSen":0.202,"vsUS":0.539,"vsState":0.338},{"b":"C001095","n":"Tom Cotton","st":"AR","p":"R","x":0.52,"vsSen":0.21,"vsUS":0.547,"vsState":0.336},{"b":"H001089","n":"Josh Hawley","st":"MO","p":"R","x":0.521,"vsSen":0.211,"vsUS":0.548,"vsState":0.407},{"b":"L000575","n":"James Lankford","st":"OK","p":"R","x":0.527,"vsSen":0.217,"vsUS":0.554,"vsState":0.37},{"b":"S001184","n":"Tim Scott","st":"SC","p":"R","x":0.53,"vsSen":0.22,"vsUS":0.557,"vsState":0.401},{"b":"Y000064","n":"Todd Young","st":"IN","p":"R","x":0.546,"vsSen":0.236,"vsUS":0.573,"vsState":0.455},{"b":"E000295","n":"Joni Ernst","st":"IA","p":"R","x":0.555,"vsSen":0.245,"vsUS":0.582,"vsState":0.512},{"b":"C000880","n":"Mike Crapo","st":"ID","p":"R","x":0.562,"vsSen":0.252,"vsUS":0.589,"vsState":0.289},{"b":"J000312","n":"James C. Justice","st":"WV","p":"R","x":0.564,"vsSen":0.254,"vsUS":0.591,"vsState":0.363},{"b":"H001104","n":"Jon Husted","st":"OH","p":"R","x":0.586,"vsSen":0.276,"vsUS":0.613,"vsState":0.548},{"b":"M001198","n":"Roger Marshall","st":"KS","p":"R","x":0.586,"vsSen":0.276,"vsUS":0.613,"vsState":0.517},{"b":"C001056","n":"John Cornyn","st":"TX","p":"R","x":0.595,"vsSen":0.285,"vsUS":0.622,"vsState":0.543},{"b":"M001243","n":"David McCormick","st":"PA","p":"R","x":0.607,"vsSen":0.297,"vsUS":0.634,"vsState":0.598},{"b":"M001244","n":"Ashley Moody","st":"FL","p":"R","x":0.617,"vsSen":0.307,"vsUS":0.644,"vsState":0.615},{"b":"D000618","n":"Steve Daines","st":"MT","p":"R","x":0.617,"vsSen":0.307,"vsUS":0.644,"vsState":0.416},{"b":"K000393","n":"John Kennedy","st":"LA","p":"R","x":0.628,"vsSen":0.318,"vsUS":0.655,"vsState":0.452},{"b":"R000584","n":"James E. Risch","st":"ID","p":"R","x":0.64,"vsSen":0.33,"vsUS":0.667,"vsState":0.367},{"b":"S001232","n":"Tim Sheehy","st":"MT","p":"R","x":0.643,"vsSen":0.333,"vsUS":0.67,"vsState":0.442},{"b":"B001243","n":"Marsha Blackburn","st":"TN","p":"R","x":0.651,"vsSen":0.341,"vsUS":0.678,"vsState":0.498},{"b":"A000383","n":"Alan Armstrong","st":"OK","p":"R","x":0.652,"vsSen":0.342,"vsUS":0.679,"vsState":0.495},{"b":"B001261","n":"John Barrasso","st":"WY","p":"R","x":0.652,"vsSen":0.342,"vsUS":0.679,"vsState":0.301},{"b":"C001114","n":"John R. Curtis","st":"UT","p":"R","x":0.671,"vsSen":0.361,"vsUS":0.698,"vsState":0.564},{"b":"B001319","n":"Katie Boyd Britt","st":"AL","p":"R","x":0.671,"vsSen":0.361,"vsUS":0.698,"vsState":0.473},{"b":"B001299","n":"Jim Banks","st":"IN","p":"R","x":0.679,"vsSen":0.369,"vsUS":0.706,"vsState":0.588},{"b":"B001305","n":"Ted Budd","st":"NC","p":"R","x":0.693,"vsSen":0.383,"vsUS":0.72,"vsState":0.646},{"b":"S001227","n":"Eric Schmitt","st":"MO","p":"R","x":0.72,"vsSen":0.41,"vsUS":0.747,"vsState":0.606},{"b":"M001242","n":"Bernie Moreno","st":"OH","p":"R","x":0.725,"vsSen":0.415,"vsUS":0.752,"vsState":0.687},{"b":"H000601","n":"Bill Hagerty","st":"TN","p":"R","x":0.735,"vsSen":0.425,"vsUS":0.762,"vsState":0.582},{"b":"P000603","n":"Rand Paul","st":"KY","p":"R","x":0.812,"vsSen":0.502,"vsUS":0.839,"vsState":0.677},{"b":"C001098","n":"Ted Cruz","st":"TX","p":"R","x":0.865,"vsSen":0.555,"vsUS":0.892,"vsState":0.813},{"b":"L000571","n":"Cynthia M. Lummis","st":"WY","p":"R","x":0.886,"vsSen":0.576,"vsUS":0.913,"vsState":0.535},{"b":"L000577","n":"Mike Lee","st":"UT","p":"R","x":0.891,"vsSen":0.581,"vsUS":0.918,"vsState":0.784},{"b":"J000293","n":"Ron Johnson","st":"WI","p":"R","x":0.897,"vsSen":0.587,"vsUS":0.924,"vsState":0.893},{"b":"S001217","n":"Rick Scott","st":"FL","p":"R","x":0.926,"vsSen":0.616,"vsUS":0.953,"vsState":0.924},{"b":"T000278","n":"Tommy Tuberville","st":"AL","p":"R","x":0.936,"vsSen":0.626,"vsUS":0.963,"vsState":0.738}]};
@@ -280,13 +295,13 @@ const C={"medianScore":83.2,"medianGap":0.336,"crossCount":9,"moreCons":53,"more
   // ---------- senator cards ----------
   function aligned(s,st,se){return Math.abs(s.record-st.center)<=se}
   function spatial(s,st,se){
-    if(aligned(s,st,se)) return {t:'Aligned with State Consensus',c:'aligned',i:'\u2713'};
+    if(aligned(s,st,se)) return {t:'Too close to tell apart',c:'aligned',i:'\u2248'};
     var gap=s.record-st.center, a=Math.abs(gap).toFixed(2);
     return gap>0 ? {t:'+'+a+' points further Right than the state average',c:'right',i:'\u2192'}
                  : {t:a+' points further Left than the state average',c:'left',i:'\u2190'};
   }
   function verdict(s,st,se,i){
-    if(aligned(s,st,se)) return 'Votes <b>statistically in line with '+esc(st.name)+'</b>. The difference is smaller than the survey’s own margin of error.';
+    if(aligned(s,st,se)) return 'The difference between '+esc(surname(s.name))+' and '+esc(st.name)+' voters is <b>smaller than the survey’s own uncertainty</b>, so the two cannot be told apart. That is not the same as agreeing with everyone in '+esc(st.name)+': the state’s number is an average of people who disagree with each other.';
     if(s.crosses){
       var tail=i===0?' Only '+C.crossCount+' of the 100 senators are on the opposite side of the middle from their own state.':' Both of '+esc(st.name)+'’s senators are in that position.';
       return 'Leans <b>'+s.dir+'</b> while '+esc(st.name)+' voters lean the <b>other way</b>.'+tail;
@@ -338,7 +353,7 @@ const C={"medianScore":83.2,"medianGap":0.336,"crossCount":9,"moreCons":53,"more
   }
   function madeOf(s,st){
     var last=esc(surname(s.name)), stName=esc(st.name);
-    return '<div class="term"><h4>What the two numbers are made of</h4><p>'+last+'’s number comes from all <b>'+(s.votes||'the')+' roll-call votes</b> they have cast this Congress, on taxes, spending, nominations and everything else that reached the floor, compared vote by vote with every other senator. '+stName+'’s number comes from large surveys asking residents where they stand on many policy questions, placed on the same line by researchers. The gap says how far apart the two sit overall. It cannot say which issues make up the difference.</p></div>';
+    return '<div class="term"><h4>What the two numbers are made of</h4><p>'+last+'’s number comes from all <b>'+(s.votes||'the')+' roll-call votes</b> they have cast this Congress, on taxes, spending, nominations and everything else that reached the floor, compared vote by vote with every other senator. '+stName+'’s number comes from large surveys asking residents where they stand on many policy questions. The two scales were built separately, so putting them on one line is an approximation: the gap is a rough comparison of how far apart the two sit overall. It cannot say which issues make up the difference.</p></div>';
   }
   function nullCard(s){
     var d=new Date(); d.setMonth(d.getMonth()+1);
@@ -358,7 +373,7 @@ const C={"medianScore":83.2,"medianGap":0.336,"crossCount":9,"moreCons":53,"more
       else{
         var parts=scored.map(function(s){
           var sp=spatial(s,st,se), last=surname(s.name), gap=Math.abs(s.record-st.center);
-          if(sp.c==='aligned') return last+' is aligned with '+st.name+' voters';
+          if(sp.c==='aligned') return last+' is too close to '+st.name+' voters to tell apart';
           var pr=nearestPair(gap);
           return last+' sits '+gap.toFixed(2)+' points '+(s.record>st.center?'right':'left')+' of '+st.name+' voters, about the distance between '+pr.a.name+' and '+pr.b.name;
         });
@@ -375,7 +390,7 @@ const C={"medianScore":83.2,"medianGap":0.336,"crossCount":9,"moreCons":53,"more
       var l=Math.min(pos(st.center),pos(s.record)), w=Math.abs(pos(s.record)-pos(st.center));
       var moeW=Math.max(se*100,1.2);
       var last=esc(surname(s.name)), stName=esc(st.name);
-      var said=stName+' voters sit at '+signed(st.center)+' on the scale, with a margin of error of ±'+se.toFixed(2)+'. '+
+      var said=stName+' voters sit at '+signed(st.center)+' on the scale, give or take one standard error of '+se.toFixed(2)+'. '+
         last+' sits at '+signed(s.record)+', '+(isA?'inside that margin, so the two cannot be told apart.':Math.abs(s.record-st.center).toFixed(2)+' points further '+(s.record>st.center?'right':'left')+', outside that margin.')+
         ' Landmarks: '+marks.map(function(m){return esc(m.label)+' at '+signed(m.x)}).join(', ')+'.';
       return '<div class="card'+(isA?'':' flagged')+'">'+
@@ -398,7 +413,7 @@ const C={"medianScore":83.2,"medianGap":0.336,"crossCount":9,"moreCons":53,"more
         '<details class="more"><summary><span>See details</span></summary>'+
           (s.rank<=15&&!isA?'<p class="rank">'+s.rank+ordinal(s.rank)+' widest gap of 100 senators</p>':'')+
           '<div class="terms">'+madeOf(s,st)+'</div>'+
-          '<p class="legend"><i></i>shaded band = margin of error on '+stName+'’s position (±'+se.toFixed(2)+'). The faint ticks are landmarks at their real positions: the middle senator of each party, the Senate’s middle, the American public, and familiar senators. Open “Explore the scale” below for more.</p>'+
+          '<p class="legend"><i></i>shaded band = one standard error on '+stName+'’s position (±'+se.toFixed(2)+'), a modest band. The faint ticks are landmarks at their real positions: the middle senator of each party, the Senate’s middle, the American public, and familiar senators. Open “Explore the scale” below for more.</p>'+
         '</details></div>';
     }).join('');
     workings(code);
@@ -464,21 +479,21 @@ const C={"medianScore":83.2,"medianGap":0.336,"crossCount":9,"moreCons":53,"more
       ? '<div class="warn '+(right?'right':'left')+'">Warning: This committee acts as a '+(right?'Conservative':'Liberal')+' Gatekeeper, pulling legislation significantly to the '+(right?'right':'left')+' of the Senate average before it reaches the floor.</div>'
       : '<div class="warn none">Its members sit close to the Senate as a whole.</div>';
     var pub = c.cndMedian==null?'' : ' Against the American public, its members sit <b>'+Math.abs(c.cndMedian).toFixed(2)+' to the '+(c.cndMedian>0?'right':'left')+'</b>.';
-    var out = o ? '<p class="out-line"><b>What it actually passed:</b> the bills this committee sent to the floor divided the Senate at '+signed(o.coi)+' \u2014 '+Math.abs(o.vsSen).toFixed(2)+' to the '+(o.vsSen>0?'right':'left')+' of the Senate\u2019s middle and '+Math.abs(o.vsUS).toFixed(2)+' to the '+(o.vsUS>0?'right':'left')+' of the public, across '+o.n+' floor votes.</p>' : '';
-    var spoken='On the scale, '+(X.usM!=null?'the American public sits at '+signed(X.usM)+', ':'')+'the middle of the Senate at '+signed(X.chMedian)+', and this committee\u2019s members\u2019 midpoint at '+signed(c.median)+(o?'; the bills it passed divided the Senate at '+signed(o.coi):'')+'.';
+    var out = o ? '<p class="out-line"><b>Where the Senate split on its bills:</b> the votes on the bills this committee sent to the floor split the Senate at '+signed(o.coi)+' \u2014 '+Math.abs(o.vsSen).toFixed(2)+' to the '+(o.vsSen>0?'right':'left')+' of the Senate\u2019s middle and '+Math.abs(o.vsUS).toFixed(2)+' to the '+(o.vsUS>0?'right':'left')+' of the public, across '+o.n+' floor votes. This says where the Yes and No sides divided, not whether the bills themselves were liberal or conservative.</p>' : '';
+    var spoken='On the scale, '+(X.usM!=null?'the American public sits at '+signed(X.usM)+', ':'')+'the middle of the Senate at '+signed(X.chMedian)+', and this committee\u2019s members\u2019 midpoint at '+signed(c.median)+(o?'; the votes on the bills it sent to the floor split the Senate at '+signed(o.coi):'')+'.';
     return '<div class="cm"><div class="gh"><b>'+esc(c.name)+'</b><span>'+c.n+' senators \u00b7 '+c.split[0]+' majority, '+c.split[1]+' minority</span></div>'+
       '<div class="ctrack" aria-hidden="true">'+
         '<div class="conn'+(right?'':' left')+'" style="--l:'+l+'%;--w:'+w+'%"></div>'+
         (X.usM!=null?'<div class="cmk pub" style="--x:'+pos(X.usM)+'%"></div><div class="ct p" style="--x:'+pos(X.usM)+'%">Public</div>':'')+
         '<div class="cmk sen" style="--x:'+pos(X.chMedian)+'%"></div><div class="ct a" style="--x:'+pos(X.chMedian)+'%">Senate</div>'+
         '<div class="cmk mem" style="--x:'+pos(c.median)+'%;--dot:'+(right?'var(--rep)':'var(--dem)')+'"></div><div class="ct b" style="--x:'+pos(c.median)+'%;--dot:'+(right?'var(--rep)':'var(--dem)')+'">Members</div>'+
-        (o?'<div class="cmk out" style="--x:'+pos(o.coi)+'%"></div><div class="ct o" style="--x:'+pos(o.coi)+'%">Bills passed</div>':'')+
+        (o?'<div class="cmk out" style="--x:'+pos(o.coi)+'%"></div><div class="ct o" style="--x:'+pos(o.coi)+'%">Split on its bills</div>':'')+
       '</div>'+'<p class="sr-only">'+spoken+'</p>'+warn+
       '<p class="say">Its members\u2019 midpoint sits <b>'+Math.abs(c.drift).toFixed(2)+' to the '+(right?'right':'left')+'</b> of the Senate\u2019s middle.'+pub+'</p>'+out+
       '<p class="fine">Members\u2019 average sits at '+signed(c.mean)+' ('+Math.abs(c.meanDrift).toFixed(2)+' '+(c.meanDrift>0?'right':'left')+' of the Senate). The midpoint would move by up to '+c.shift.toFixed(2)+' if one member were replaced'+(c.phantom?', and currently falls in the gap between the two parties where no member sits':'')+'.</p>'+
     '</div>';
   }
-  function survivalBars(code){
+  function sentOnBars(code){
     var c=(G.committees||[]).filter(function(g){return g.code===code})[0];
     if(!c) return '<p class="gridnote">Not shown for this committee: fewer than 25 bills from one side, where a single bill moves the percentage by several points.</p>';
     var max=Math.max.apply(null,G.committees.map(function(g){return Math.max(g.libPct,g.conPct)})), scale=Math.max(10,Math.ceil(max/5)*5);
@@ -493,19 +508,20 @@ const C={"medianScore":83.2,"medianGap":0.336,"crossCount":9,"moreCons":53,"more
   function renderCommittee(code){
     var c=clist.filter(function(x){return x.code===code})[0]; if(!c) return;
     var right=c.drift>0, o=X.output[c.code];
-    $('take-committee').textContent='The '+c.name+' Committee\u2019s members sit '+Math.abs(c.drift).toFixed(2)+' points to the '+(right?'right':'left')+' of the Senate\u2019s middle'+(o?', and the bills it let through divided the Senate '+Math.abs(o.vsSen).toFixed(2)+' to the '+(o.vsSen>0?'right':'left')+' of it.':'.');
+    $('take-committee').textContent='The '+c.name+' Committee\u2019s members sit '+Math.abs(c.drift).toFixed(2)+' points to the '+(right?'right':'left')+' of the Senate\u2019s middle'+(o?', and the votes on the bills it sent to the floor split the Senate '+Math.abs(o.vsSen).toFixed(2)+' to the '+(o.vsSen>0?'right':'left')+' of its middle.':'.');
     $('cmfact').innerHTML=c.n+' senators, '+c.split[0]+' from the majority and '+c.split[1]+' from the minority.';
     $('committee-cards').innerHTML=committeeCard(c);
-    $('gates').innerHTML=survivalBars(code);
+    $('gates').innerHTML=sentOnBars(code);
   }
   csel.addEventListener('change',function(){renderCommittee(csel.value)});
   $('cmcaveat').innerHTML='A midpoint more than '+thr.toFixed(2)+' from the Senate\u2019s middle is flagged. The diamond appears only where at least 7 floor votes exist on bills the committee reported; most floor action is nominations and House bills that no Senate committee reported, so most committees have too few.';
   (function(){
     if(!G.committees||!G.committees.length)return;
     var pct=function(n,d){return d?Math.round(100*n/d):0};
-    if(G.worst) $('stark').innerHTML='<span class="big">'+G.worst.reported+' of '+G.worst.referred.toLocaleString()+'</span><p>bills sent to the <b>'+esc(G.worst.name)+' Committee</b> this Congress made it back out. Across every committee, <b>'+pct(G.totalReported,G.totalReferred)+'%</b> of bills survive \u2014 '+G.totalReported.toLocaleString()+' of '+G.totalReferred.toLocaleString()+'.</p>';
-    $('basenote').innerHTML='Across the whole Senate, bills written by conservative senators get through slightly more often \u2014 by <b>'+G.baseline.toFixed(1)+' percentage points</b>. That is simply because Republicans hold the majority, and it happens on every committee. So each committee is judged against that baseline, not against zero.';
-    $('gatecaveat').innerHTML='Survival rates are shown only for committees with at least 25 bills from each side, because below that a single bill moves the percentage by several points. A bill takes the side of the senator who wrote it, measured by that senator\u2019s voting record.';
+    var uB=G.uniqueBills||G.totalReferred, uR=G.uniqueReported||G.totalReported;
+    if(G.worst) $('stark').innerHTML='<span class="big">'+G.worst.reported+' of '+G.worst.referred.toLocaleString()+'</span><p>bills sent to the <b>'+esc(G.worst.name)+' Committee</b> this Congress have been sent on to the full Senate so far. Across all committees, <b>'+pct(uR,uB)+'%</b> of bills have been sent on \u2014 '+uR.toLocaleString()+' of '+uB.toLocaleString()+' distinct bills (some bills go to more than one committee, so committee counts add up to '+G.totalReferred.toLocaleString()+'). The rest are still in committee: this Congress is not over, and some will still move.</p>';
+    $('basenote').innerHTML='Across the whole Senate, bills written by conservative senators have been sent on slightly more often \u2014 by <b>'+G.baseline.toFixed(1)+' percentage points</b>. That is simply because Republicans hold the majority, and it happens on every committee. So each committee is judged against that baseline, not against zero.';
+    $('gatecaveat').innerHTML='These rates are shown only for committees with at least 25 bills from each side, because below that a single bill moves the percentage by several points. A bill takes the side of the senator who wrote it, measured by that senator\u2019s voting record. A bill not yet sent on counts as pending, not dead.';
   })();
   csel.value=clist[0].code; renderCommittee(clist[0].code);
 
@@ -519,7 +535,7 @@ const C={"medianScore":83.2,"medianGap":0.336,"crossCount":9,"moreCons":53,"more
         '<tr><td>Senator’s position <b>x</b><br><span class="src">'+M.scoreCol+', Congress '+M.congress+', id '+esc(s.bioguide)+'</span></td><td>'+signed(s.record,3)+'</td></tr>'+
         '<tr><td>State’s position <b>s</b><br><span class="src">'+M.ideologyCol+', '+M.ideologyYear+' wave, ±'+se.toFixed(3)+'</span></td><td>'+signed(st.center,3)+'</td></tr>'+
         '<tr class="total"><td>Signed distance <b>x − s</b></td><td>'+signed(gap,3)+'</td></tr></table>'+
-        '<div class="formula">'+signed(s.record,3)+' − ('+signed(st.center,3)+') = '+signed(gap,3)+(Math.abs(gap)<=se?'   → inside ±'+se.toFixed(3)+', aligned':'')+'</div></div>';
+        '<div class="formula">'+signed(s.record,3)+' − ('+signed(st.center,3)+') = '+signed(gap,3)+(Math.abs(gap)<=se?'   → inside ±'+se.toFixed(3)+' (one standard error), too close to tell apart':'')+'</div></div>';
     });
     out+='<div class="work"><h3>The Senate against the country</h3><table>'+
       '<tr><td>Middle senator of 100 <b>Ch</b></td><td>'+signed(M.chM,4)+'</td></tr>'+

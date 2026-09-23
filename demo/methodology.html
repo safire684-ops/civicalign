@@ -73,7 +73,7 @@ table.calc tr.total td{border-bottom:none;border-top:2px solid var(--ink);
   <p class="sub">We place every US senator and every state's voters on the same
     scale, then measure the distance between them. This explains where each number
     comes from and what it can and cannot tell you.</p>
-  <p class="asof">As of 23 September 2026</p>
+  <p class="asof">As of 22 September 2026</p>
 </header>
 
 <section>
@@ -91,11 +91,14 @@ table.calc tr.total td{border-bottom:none;border-top:2px solid var(--ink);
     they tell a survey. Those are two different rulers with two different zero
     points, so subtracting one from the other is like subtracting Celsius from
     Fahrenheit: you get a number, and it means nothing.</p>
-  <p>The fix is to use data where somebody has already done the work of putting both
-    on one ruler. Academic researchers take large surveys of state residents and
-    translate the answers onto the exact same scale that congressional voting records
-    use. That translation is the whole reason the comparison is legitimate, and it is
-    why we use their published estimates rather than any poll we could find.</p>
+  <p>We use the best available data for each side: Voteview's scores for senators,
+    and academic researchers' survey-based estimates for each state's residents. Both
+    run from liberal to conservative and both fall between &minus;1 and +1. But they
+    were built separately, and nobody has tied the two rulers together exactly. The
+    survey scale is set to its own average and spread; the senator scale comes from
+    votes. So when the tool puts the two on one line and subtracts, the result is a
+    <b>rough comparison</b>, good for direction and rough size, not a precise
+    measurement. Every distance on the tool should be read that way.</p>
   <p>Everything sits on one line running from &minus;1.0 (most liberal) to +1.0
     (most conservative). Senators and state publics both land somewhere on it. Then
     subtraction is allowed.</p>
@@ -143,9 +146,14 @@ table.calc tr.total td{border-bottom:none;border-top:2px solid var(--ink);
   <p>The tool reports that distance directly, as "0.607 points further Left than
     the state average". An earlier version turned it into a percentage; that was
     dropped because readers took it for a share of votes, which it never was.</p>
-  <p>A distance inside the state estimate's margin of error (about &plusmn;0.04) is
-    reported as <b>Aligned with State Consensus</b> rather than as a gap, because the
-    survey cannot tell the two positions apart.</p>
+  <p>A distance smaller than the state estimate's own uncertainty is reported as
+    <b>Too close to tell apart</b> rather than as a gap. That band is one standard
+    error of the state estimate, about &plusmn;0.04. It is a modest bar: a one-standard-error
+    band covers roughly two thirds of the likely values, not 95%, and the senator
+    score's own error is not published, so it is not included. "Too close to tell
+    apart" therefore means the survey cannot separate the two positions. It does
+    not mean the state's voters agree with the senator, or with each other: a state's
+    number is an average of many people who disagree.</p>
 
   <p>The widest gaps in the current Senate:</p>
   <div class="tw"><table>
@@ -219,11 +227,14 @@ table.calc tr.total td{border-bottom:none;border-top:2px solid var(--ink);
     <tr><td>Small Business</td><td class="n">+0.521</td><td class="n">+0.211</td><td class="n">+0.548</td><td class="n">0.34</td></tr>
     <tr><td>Budget</td><td class="n">+0.128</td><td class="n">&minus;0.182</td><td class="n">+0.155</td><td class="n">0.33</td></tr>
   </table></div>
-  <p><b>What it actually passed.</b> Take the bills a committee reported to the floor,
-    and the dividing lines of every floor vote on them. Their median is where the
-    committee's output divided the Senate. Only 4 committees have seven or
-    more such votes; most floor action is nominations and House bills that no Senate
-    committee reported.</p>
+  <p><b>Where the Senate split on its bills.</b> Take the bills a committee sent to
+    the floor, and the dividing line of every floor vote on them: the point on the
+    scale that best separates the senators who voted Yes from those who voted No.
+    Their median is where the Senate split on that committee's bills. This says where
+    the Yes and No sides divided, <em>not</em> whether the bills themselves were
+    liberal or conservative: a party-line vote on any bill splits the Senate near the
+    middle. Only 4 committees have seven or more such votes; most floor
+    action is nominations and House bills that no Senate committee reported.</p>
   <div class="tw"><table>
     <tr><th>Committee</th><th class="n">Floor votes on its bills</th><th class="n">Where they divided the Senate</th><th class="n">vs. Senate middle</th><th class="n">vs. public</th></tr>
     <tr><td>Budget</td><td class="n">28</td><td class="n">+0.077</td><td class="n">&minus;0.233</td><td class="n">+0.104</td></tr>
@@ -234,15 +245,18 @@ table.calc tr.total td{border-bottom:none;border-top:2px solid var(--ink);
 
   <h3>4. Which bills each committee lets through</h3>
   <p>Almost every bill goes to a committee before the full Senate can vote on it,
-    and most never come back out. So instead of asking who sits on a committee, we
-    look at what it actually did: of the bills sent to it, how many did it let
-    through?</p>
+    and most are still sitting there. So instead of asking who sits on a committee, we
+    look at what it has actually done: of the bills sent to it, how many has it sent
+    on to the full Senate so far? A bill that has not been sent on is counted as
+    "not yet", never as dead: this Congress is not over, and some will still move.</p>
   <p>Each bill takes the side of the senator who wrote it, using that senator's
     voting record. A bill by a senator with a liberal record counts as liberal. Then,
     for every committee, we compare how often each side's bills got through.</p>
-  <p>The survival rates are stark on their own. Of <b>5,368</b> bills sent to
-    committees this Congress, only <b>421</b> came back out &mdash; about 8%. The
-    Finance Committee let through <b>1 of 872</b>.</p>
+  <p>The rates are stark on their own. Of <b>5,333</b> distinct bills sent to
+    a committee this Congress, <b>421</b> have been sent on so far &mdash; about 8%.
+    (Some bills go to more than one committee, so the committee-by-committee counts add
+    up to 5,368 referrals.) The Finance Committee has sent on
+    <b>1 of 872</b>.</p>
 
   <p><b>The adjustment that matters.</b> Across the whole Senate, bills by
     conservative senators get through <b>2.4 percentage points</b> more often than
@@ -269,9 +283,10 @@ table.calc tr.total td{border-bottom:none;border-top:2px solid var(--ink);
   <p>Committees with fewer than 25 bills from either side are left out, because
     there a single bill moves the percentage by several points. Thirteen of the
     committees have enough bills to report.</p>
-  <p><b>Why three measures.</b> Members tell you who sits there; the bills passed tell
-    you what it did; survival rates tell you what it buried. Each has a weakness the
-    others do not, so the tool shows all three with the count behind each.</p>
+  <p><b>Why three measures.</b> Members tell you who sits there; the split on its
+    bills tells you how the Senate divided over what it sent on; the rates tell you
+    what it has and has not sent on so far. Each has a weakness the others do not, so
+    the tool shows all three with the count behind each.</p>
 </section>
 
 <section class="limits">
@@ -285,10 +300,16 @@ table.calc tr.total td{border-bottom:none;border-top:2px solid var(--ink);
     <dd>A single liberal-to-conservative axis describes congressional voting well,
       because most roll-call votes split along it. It describes voters less well, since
       people's economic and social views do not line up as neatly.</dd>
+    <dt>The two numbers come from different rulers.</dt>
+    <dd>The senator scale is built from votes and the state scale from survey answers,
+      each on its own footing, and nobody has tied them together exactly. Treat every
+      distance as a rough comparison: the direction and the rough size are informative,
+      the second decimal is not.</dd>
     <dt>The state figures are estimates.</dt>
-    <dd>They carry a margin of error of about 0.04, which varies a little by state and
-      is drawn on the tool as a dashed band around the state's mark. It is small next
-      to gaps of 0.6 or 0.9, but it is not zero. The senator scores have their own
+    <dd>They carry one standard error of about 0.04, which varies a little by state and
+      is drawn on the tool as a dashed band around the state's mark. One standard error
+      is a modest band, covering roughly two thirds of the likely values. It is small
+      next to gaps of 0.6 or 0.9, but it is not zero. The senator scores have their own
       error too, which Voteview does not publish, so we cannot carry it through &mdash;
       that is the largest remaining hole in the method.</dd>
     <dt>The survey data lags.</dt>
@@ -300,11 +321,11 @@ table.calc tr.total td{border-bottom:none;border-top:2px solid var(--ink);
       who wrote it. That is a reasonable stand-in, but a moderate bill written by a
       conservative senator counts as conservative. Reading the bills themselves would
       be more precise, and is part of a separate piece of this project.</dd>
-    <dt>A committee can bury a bill for reasons other than politics.</dt>
+    <dt>A bill can sit in committee for reasons other than politics.</dt>
     <dd>Many bills are duplicates, symbolic, or folded into larger bills rather than
-      passed on their own. The low survival rates reflect that as much as any
-      gatekeeping. The comparison between the two sides is what carries the finding,
-      not the raw rate.</dd>
+      passed on their own, and this Congress is not over. The low rates reflect that as
+      much as any gatekeeping. The comparison between the two sides is what carries
+      the finding, not the raw rate.</dd>
   </dl>
 </section>
 

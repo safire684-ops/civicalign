@@ -34,9 +34,14 @@ class Report:
     representation: list[Representation]
     committee_leans: list[CommitteeLean]
 
-    # Pillar 6 by revealed behaviour: which bills each committee buried.
+    # Pillar 6 by revealed behaviour: which bills each committee has sent on so far.
     gatekeeping: list[Gatekeeping]
     gatekeeping_baseline: float
+    # Distinct bills behind the gatekeeping counts (a bill sent to two committees
+    # is two referrals but one bill). Only bills whose sponsor has a score count,
+    # matching the gatekeeping rows.
+    bills_referred_unique: int
+    bills_reported_unique: int
 
     # Floor votes: familiar bills on the scale, one revealing vote per senator,
     # and where each committee's reported bills divided the chamber.
@@ -85,9 +90,13 @@ def run(cfg: Config = DEFAULT) -> Report:
 
     gks: list[Gatekeeping] = []
     gk_base = 0.0
+    n_bills = n_reported = 0
     if cfg.billflow_zip.exists():
-        gks, gk_base = gatekeeping(
-            billflow.load_referrals(cfg.billflow_zip), scores)
+        refs = billflow.load_referrals(cfg.billflow_zip)
+        gks, gk_base = gatekeeping(refs, scores)
+        scored_refs = [x for x in refs if x.sponsor in scores]
+        n_bills = len({x.bill for x in scored_refs})
+        n_reported = len({x.bill for x in scored_refs if x.reported})
 
     lms: list[Landmark] = []
     rcpts: dict[str, Receipt] = {}
@@ -112,5 +121,6 @@ def run(cfg: Config = DEFAULT) -> Report:
         chamber=ch, committees=committees, alignments=aligns, state_source=src,
         election=lean, fit=fit, chamber_lean=chlean, representation=reps,
         committee_leans=cleans, gatekeeping=gks, gatekeeping_baseline=gk_base,
+        bills_referred_unique=n_bills, bills_reported_unique=n_reported,
         landmarks=lms, receipts=rcpts, output_ideology=oi,
     )

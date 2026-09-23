@@ -5,7 +5,18 @@ sections 2–5). Pillars 1–3 and 7 belong to someone else.
 
 ## Status in one line
 
-Latest change (22 September 2026, published): the senator view shows **no
+Five methodology concerns fixed in wording and counts (22 September 2026,
+published): (1) the page and report no longer claim the survey and senator scales
+are the same; they say the two rulers were built separately and every distance is a
+rough comparison; (2) committee "output" is described as where the Senate split on
+its bills, explicitly not bill ideology; (3) bills not yet reported are "pending" or
+"not yet sent on", never buried, dead or survivors; (4) Senate-wide totals count
+distinct bills (5,333) with referrals (5,368) named separately, via new Report fields
+`bills_referred_unique` / `bills_reported_unique`; (5) the alignment badge is "Too
+close to tell apart" with the band described as one standard error and "not the same
+as agreement". The 1-SE threshold itself is unchanged.
+
+Earlier the same day (published): the senator view shows **no
 bills**. Each card explains the gap in plain terms from the page's own data: how
 far it is (share of the scale, the distance between two familiar senators, and
 against the typical senator's gap), where the senator sits against their party's

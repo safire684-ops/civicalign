@@ -125,11 +125,12 @@ column says how far.
 | Small Business | +0.521 | +0.211 | +0.548 | 0.34 |
 | Budget | +0.128 | −0.182 | +0.155 | 0.33 |
 
-**What it actually passed.** Take the bills a committee reported to the floor and
-the dividing lines of every floor vote on them; their median is where the
-committee's output divided the Senate. Only four committees have seven or more
-such votes — most floor action is nominations and House bills that no Senate
-committee reported.
+**Where the Senate split on its bills.** Take the bills a committee sent to the
+floor and the dividing lines of every floor vote on them; their median is where
+the Senate split on that committee's bills. This says where the Yes and No sides
+divided, not whether the bills themselves were liberal or conservative. Only four
+committees have seven or more such votes — most floor action is nominations and
+House bills that no Senate committee reported.
 
 | committee | floor votes | where they divided the Senate | vs. Senate | vs. public |
 |---|---|---|---|---|
@@ -145,8 +146,10 @@ to count what they did. Every Senate bill of the 119th Congress is in the
 government's own bulk release, with its author and every committee it was sent to.
 Each bill takes the side of the senator who wrote it.
 
-Survival is rare on its own: of 5,368 bills sent to committees, 420 came back out.
-The Finance Committee let through 1 of 872.
+Being sent on is rare so far: of 5,333 distinct bills sent to a committee (5,368
+referrals, since some bills go to two committees), 421 have been sent on to the
+floor. The Finance Committee has sent on 1 of 872. A bill not yet sent on is
+counted as pending, not dead; the Congress is still running.
 
 Across the whole Senate, bills by conservative senators get through 2.4 percentage
 points more often than bills by liberal senators. That is majority control and it
@@ -164,14 +167,14 @@ Committees with fewer than 25 bills from either side are not reported; there one
 bill moves the rate by several points. Thirteen committees have enough.
 
 A bill's side comes from its author's record, not its content, so a moderate bill
-by a conservative senator counts as conservative. And bills die for reasons other
+by a conservative senator counts as conservative. And bills stall for reasons other
 than politics — duplicates, symbolic bills, bills folded into larger ones — which is
 why the comparison between the two sides carries the finding, not the raw rate.
 
 ## Why the first committee measure was dropped
 
 Committees decide which bills reach the floor, so an unrepresentative committee is
-a plausible explanation for why legislation dies. The obvious way to measure this
+a plausible explanation for why legislation stalls. The obvious way to measure this
 is to compare a committee's ideological midpoint with the chamber's. That measure
 does not work, and this project reports it for **0 of 19** committees.
 

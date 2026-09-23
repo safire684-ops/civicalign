@@ -132,3 +132,10 @@ def test_json_export_marks_the_dead_metric(report):
     # per-committee flags too, so a consumer iterating the list is also safe
     assert all(c["publishable"] is False for c in d["committee_drift"]["committees"])
     assert d["state_alignment"]["n_significant"] == len(d["state_alignment"]["significant"])
+
+
+def test_distinct_bill_counts_are_current(text, report):
+    assert f"{report.bills_referred_unique:,} distinct bills" in text
+    assert f"{sum(g.referred for g in report.gatekeeping):,}\nreferrals" in text or \
+           f"{sum(g.referred for g in report.gatekeeping):,} referrals" in text.replace("\n", " ")
+    assert f"{report.bills_reported_unique} have been sent on" in text

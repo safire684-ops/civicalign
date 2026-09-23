@@ -111,7 +111,7 @@ def main() -> int:
         print(f"    {x.name[:24]:24s} {x.state:2s} residual {x.residual:+.3f}  t {x.t_stat:+.2f}")
 
     if r.gatekeeping:
-        print("\n-- Pillar 6 by behaviour: which bills each committee buried ----")
+        print("\n-- Pillar 6 by behaviour: which bills each committee has sent on so far ----")
         print(f"  Every bill takes its sponsor's position. Chamber-wide, "
               f"conservative-sponsored")
         print(f"  bills are reported out {r.gatekeeping_baseline:+.1f} points more often "

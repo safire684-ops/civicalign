@@ -3,7 +3,8 @@
 WHY THIS EXISTS
 ---------------
 Counting who sits on a committee measures its membership. This measures what the
-committee actually DID: which bills it let out and which it buried. That is the
+committee actually DID: which bills it has sent on and which are still sitting
+there (not yet reported is not the same as dead while the Congress runs). That is the
 power a committee holds, and it is observable.
 
 SOURCE, AND WHY NO API KEY IS NEEDED
@@ -94,7 +95,7 @@ def load_referrals(zip_path: Path) -> list[BillReferral]:
     """Parse the bulk release into one row per bill-committee pair.
 
     A bill referred to two committees yields two rows: each committee had its own
-    chance to bury it.
+    decision to make. Count distinct bills separately when quoting totals.
     """
     out: list[BillReferral] = []
     with zipfile.ZipFile(zip_path) as z:
