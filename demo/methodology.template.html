@@ -147,66 +147,61 @@ table.calc tr.total td{border-bottom:none;border-top:2px solid var(--ink);
   <h2>The three measurements</h2>
 
   <h3>1. A senator against their own state</h3>
-  <p>Subtract the two positions. Jon Ossoff of Georgia, worked through:</p>
+  <p>Both marks are drawn on one 0-to-100 line and the tool says which side of the
+    state estimate the senator's voting pattern falls on. It does <b>not</b> subtract
+    the two. They come from different methods and have not been tied together, so a
+    distance between them would not be a validated measurement. Jon Ossoff of Georgia,
+    worked through:</p>
   <div class="tw"><table class="calc">
-    <tr><td>Ossoff's voting record<br><span class="sm">raw score {{os_x_raw}}</span></td><td class="n">{{os_x}}</td></tr>
-    <tr><td>Georgia voters<br><span class="sm">raw score {{os_s_raw}}</span></td><td class="n">{{os_s}}</td></tr>
-    <tr class="total"><td>Distance between them<br><span class="sm">raw {{os_gap_raw}}</span></td><td class="n">{{os_gap}} points</td></tr>
-    <tr class="total"><td>Signed distance<br><span class="sm">senator minus state</span></td><td class="n">{{os_signed}} points</td></tr>
+    <tr><td>Ossoff's voting pattern<br><span class="sm">raw score {{os_x_raw}}, shown as score &times; 50 + 50</span></td><td class="n">{{os_x}}</td></tr>
+    <tr><td>Georgia voter estimate<br><span class="sm">raw score {{os_s_raw}}, one standard error &plusmn;{{os_se_raw}}</span></td><td class="n">{{os_s}} &plusmn; {{os_se}}</td></tr>
+    <tr class="total"><td>What the tool says</td><td class="n">{{os_side}}</td></tr>
   </table></div>
-  <p>The tool puts that in words first ("{{os_words}} to the left of Georgia's
-    voters", judged against the typical senator's {{med_gap}}-point gap) and shows the
-    gap beneath, rounded to {{os_gap_label}} points. An earlier version turned it into a
-    percentage; that was dropped because readers took it for a share of votes, which it
-    never was.</p>
-  <p>A distance smaller than the state estimate's own uncertainty is reported as
-    <b>Too close to distinguish with this estimate</b> rather than as a gap. That band is one standard
-    error of the state estimate, about &plusmn;2 points. It is a modest bar: a one-standard-error
-    band covers roughly two thirds of the likely values, not 95%, and the senator
-    score's own error is not published, so it is not included. "Too close to
-    distinguish" therefore means the survey cannot separate the two positions. It does
-    not mean the state's voters agree with the senator, or with each other: a state's
-    number is an average of many people who disagree.</p>
+  <p>When the senator's mark falls inside the state estimate's own uncertainty band,
+    the tool says <b>Within the estimated range</b> instead. That band is one standard
+    error of the state estimate, about &plusmn;2 points on the 0-to-100 line. It is a
+    modest bar: a one-standard-error band covers roughly two thirds of the likely
+    values, not 95%, and the senator score's own error is not published, so it is not
+    included. "Within the estimated range" therefore means the survey cannot separate
+    the two positions. It does not mean the state's voters agree with the senator, or
+    with each other: a state's number is an average of many people who disagree.</p>
+  <p>Earlier versions reported a numeric distance between the two marks, then a
+    percentage. Both were dropped: the percentage because readers took it for a share
+    of votes, and the distance because the two scales are not bridged, so the number
+    had no validated meaning.</p>
 
-  <p>The widest gaps in the current Senate:</p>
-{{top_table}}
-  <p>Context that matters: the typical senator sits <b>{{med_gap}}</b> points from their
-    state, and <b>{{more_cons}} of 100</b> sit more conservative than their state while
-    {{more_lib}} sit more liberal. A gap is normal. {{cross_word}} senators sit on the
-    opposite side of centre from their own state, which is the more striking finding.</p>
-
-  <h3>Perspective: what a distance like that means</h3>
-  <p>A position like 65 means nothing on its own, so the tool puts landmarks on
-    the same line: the middle Democrat (<b>{{dem_m}}</b>), the middle Republican
-    (<b>{{rep_m}}</b>), the Senate's middle, the American public, and eight familiar
-    senators at their real positions. A gap is also expressed as a share of the whole
-    scale (Ossoff's {{os_gap}} points out of 100), as the distance between the
-    two named senators who sit that far apart, and against the typical senator's
-    distance from their own state.</p>
+  <h3>Perspective: landmarks on the senators' own scale</h3>
+  <p>A position like 65 means nothing on its own, so the tool can show landmarks that
+    sit on the same scale as the senator: the middle Democrat (<b>{{dem_m}}</b>), the
+    middle Republican (<b>{{rep_m}}</b>), the Senate's middle, and eight familiar
+    senators at their real positions. These are senator-to-senator comparisons, all
+    from Voteview, so they are on one scale and can be stated in points.</p>
 {{anchor_table}}
   <p>The tool marks no bills on the scale. A floor vote's dividing line says where a
     coalition split, not what a state's voters wanted, so it cannot stand in for
     either. The senator's number comes from every roll-call vote they have cast this
     Congress (Ossoff: {{os_votes}}), compared vote by vote with every other senator;
     the state's number comes from large surveys asking residents where they stand on
-    many policy questions. The gap says how far apart the two sit overall. It cannot
-    say which issues make up the difference.</p>
+    many policy questions. Neither number says which issues make up any difference.</p>
 
   <h3>2. The Senate against the country</h3>
-  <p>Same idea, one level up. The middle senator sits at <b>{{ch_m}}</b>. The American
-    public, averaging all states weighted by population, sits at <b>{{us_m}}</b>.
-    The gap is <b>{{d_us}} points</b>.</p>
+  <p>Same idea, one level up. The middle senator's voting pattern sits at
+    <b>{{ch_m}}</b> on the 0-to-100 line. The national voter estimate, averaging all
+    states weighted by population, is drawn at <b>{{us_m}}</b>. In this rough
+    comparison the Senate's pattern appears to the more {{senate_side}} side of the
+    national estimate; no distance between the two is computed, for the reason above.</p>
   <p>The tool also shows all 100 senators as one row of circles, each coloured by
-    how far the senator sits from the public: <b>{{n_right}}</b> of them sit to the
-    public's right. The 60th senator from the left &mdash; the vote that decides
-    whether most legislation can proceed &mdash; sits at <b>{{pivot}}</b>.</p>
-  <p>That gap exists because every state elects two senators whether it holds 40
-    million people or 600,000, and the smaller states lean Republican. It does not
-    decide any single vote, but it shifts which bills can pass at all.</p>
+    which side of the national estimate the senator's pattern falls on. The 60th
+    senator from the left &mdash; the vote that decides whether most legislation can
+    proceed &mdash; sits at <b>{{pivot}}</b>, a senator-to-senator figure.</p>
+  <p>Every state elects two senators whether it holds 40 million people or 600,000,
+    and the smaller states lean Republican, so the Senate as a body can lean
+    differently from the country as a whole. That does not decide any single vote,
+    but it shifts which bills can pass at all.</p>
 
   <h3>3. Committees: where the members sit, and what they passed</h3>
-  <p>Each committee is measured two ways, both against the Senate's middle
-    (<b>{{ch_m}}</b>) and against the public (<b>{{us_m}}</b>).</p>
+  <p>Each committee is measured against the Senate's middle (<b>{{ch_m}}</b>). Both
+    sides of that comparison come from Voteview, so it is stated in points.</p>
   <p><b>Where the members sit.</b> The midpoint of the committee's members on the same
     scale. A midpoint more than 7.5 points from the Senate's middle is flagged as a
     gatekeeper. This number is soft: on a committee split between two parties the

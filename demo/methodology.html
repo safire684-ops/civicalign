@@ -73,7 +73,7 @@ table.calc tr.total td{border-bottom:none;border-top:2px solid var(--ink);
   <p class="sub">We place every US senator and every state's voters on the same
     scale, then measure the distance between them. This explains where each number
     comes from and what it can and cannot tell you.</p>
-  <p class="asof">As of 23 September 2026</p>
+  <p class="asof">As of 22 September 2026</p>
 </header>
 
 <section>
@@ -147,49 +147,35 @@ table.calc tr.total td{border-bottom:none;border-top:2px solid var(--ink);
   <h2>The three measurements</h2>
 
   <h3>1. A senator against their own state</h3>
-  <p>Subtract the two positions. Jon Ossoff of Georgia, worked through:</p>
+  <p>Both marks are drawn on one 0-to-100 line and the tool says which side of the
+    state estimate the senator's voting pattern falls on. It does <b>not</b> subtract
+    the two. They come from different methods and have not been tied together, so a
+    distance between them would not be a validated measurement. Jon Ossoff of Georgia,
+    worked through:</p>
   <div class="tw"><table class="calc">
-    <tr><td>Ossoff's voting record<br><span class="sm">raw score &minus;0.547</span></td><td class="n">22.6</td></tr>
-    <tr><td>Georgia voters<br><span class="sm">raw score +0.060</span></td><td class="n">53.0</td></tr>
-    <tr class="total"><td>Distance between them<br><span class="sm">raw 0.607</span></td><td class="n">30.4 points</td></tr>
-    <tr class="total"><td>Signed distance<br><span class="sm">senator minus state</span></td><td class="n">&minus;30.4 points</td></tr>
+    <tr><td>Ossoff's voting pattern<br><span class="sm">raw score &minus;0.547, shown as score &times; 50 + 50</span></td><td class="n">22.6</td></tr>
+    <tr><td>Georgia voter estimate<br><span class="sm">raw score +0.060, one standard error &plusmn;0.035</span></td><td class="n">53.0 &plusmn; 2</td></tr>
+    <tr class="total"><td>What the tool says</td><td class="n">on the more liberal side of the state estimate</td></tr>
   </table></div>
-  <p>The tool puts that in words first ("well to the left of Georgia's
-    voters", judged against the typical senator's 17-point gap) and shows the
-    gap beneath, rounded to 30 points. An earlier version turned it into a
-    percentage; that was dropped because readers took it for a share of votes, which it
-    never was.</p>
-  <p>A distance smaller than the state estimate's own uncertainty is reported as
-    <b>Too close to distinguish with this estimate</b> rather than as a gap. That band is one standard
-    error of the state estimate, about &plusmn;2 points. It is a modest bar: a one-standard-error
-    band covers roughly two thirds of the likely values, not 95%, and the senator
-    score's own error is not published, so it is not included. "Too close to
-    distinguish" therefore means the survey cannot separate the two positions. It does
-    not mean the state's voters agree with the senator, or with each other: a state's
-    number is an average of many people who disagree.</p>
+  <p>When the senator's mark falls inside the state estimate's own uncertainty band,
+    the tool says <b>Within the estimated range</b> instead. That band is one standard
+    error of the state estimate, about &plusmn;2 points on the 0-to-100 line. It is a
+    modest bar: a one-standard-error band covers roughly two thirds of the likely
+    values, not 95%, and the senator score's own error is not published, so it is not
+    included. "Within the estimated range" therefore means the survey cannot separate
+    the two positions. It does not mean the state's voters agree with the senator, or
+    with each other: a state's number is an average of many people who disagree.</p>
+  <p>Earlier versions reported a numeric distance between the two marks, then a
+    percentage. Both were dropped: the percentage because readers took it for a share
+    of votes, and the distance because the two scales are not bridged, so the number
+    had no validated meaning.</p>
 
-  <p>The widest gaps in the current Senate:</p>
-  <div class="tw"><table>
-    <tr><th>Senator</th><th>State</th><th class="n">Record</th><th class="n">Their state</th><th class="n">Gap</th></tr>
-    <tr><td>Rick Scott</td><td>FL</td><td class="n">96.3</td><td class="n">50.1</td><td class="n">46.2</td></tr>
-    <tr><td>Ron Johnson</td><td>WI</td><td class="n">94.8</td><td class="n">50.2</td><td class="n">44.6</td></tr>
-    <tr><td>Ted Cruz</td><td>TX</td><td class="n">93.2</td><td class="n">52.6</td><td class="n">40.6</td></tr>
-    <tr><td>Mike Lee</td><td>UT</td><td class="n">94.5</td><td class="n">55.3</td><td class="n">39.2</td></tr>
-    <tr><td>Tommy Tuberville</td><td>AL</td><td class="n">96.8</td><td class="n">59.9</td><td class="n">36.9</td></tr>
-  </table></div>
-  <p>Context that matters: the typical senator sits <b>17</b> points from their
-    state, and <b>53 of 100</b> sit more conservative than their state while
-    47 sit more liberal. A gap is normal. Nine senators sit on the
-    opposite side of centre from their own state, which is the more striking finding.</p>
-
-  <h3>Perspective: what a distance like that means</h3>
-  <p>A position like 65 means nothing on its own, so the tool puts landmarks on
-    the same line: the middle Democrat (<b>31</b>), the middle Republican
-    (<b>78</b>), the Senate's middle, the American public, and eight familiar
-    senators at their real positions. A gap is also expressed as a share of the whole
-    scale (Ossoff's 30.4 points out of 100), as the distance between the
-    two named senators who sit that far apart, and against the typical senator's
-    distance from their own state.</p>
+  <h3>Perspective: landmarks on the senators' own scale</h3>
+  <p>A position like 65 means nothing on its own, so the tool can show landmarks that
+    sit on the same scale as the senator: the middle Democrat (<b>31</b>), the
+    middle Republican (<b>78</b>), the Senate's middle, and eight familiar
+    senators at their real positions. These are senator-to-senator comparisons, all
+    from Voteview, so they are on one scale and can be stated in points.</p>
   <div class="tw"><table>
     <tr><th>Landmark</th><th class="n">Position</th></tr>
     <tr><td>Elizabeth Warren</td><td class="n">14</td></tr>
@@ -208,37 +194,39 @@ table.calc tr.total td{border-bottom:none;border-top:2px solid var(--ink);
     either. The senator's number comes from every roll-call vote they have cast this
     Congress (Ossoff: 842), compared vote by vote with every other senator;
     the state's number comes from large surveys asking residents where they stand on
-    many policy questions. The gap says how far apart the two sit overall. It cannot
-    say which issues make up the difference.</p>
+    many policy questions. Neither number says which issues make up any difference.</p>
 
   <h3>2. The Senate against the country</h3>
-  <p>Same idea, one level up. The middle senator sits at <b>65.5</b>. The American
-    public, averaging all states weighted by population, sits at <b>48.7</b>.
-    The gap is <b>16.8 points</b>.</p>
+  <p>Same idea, one level up. The middle senator's voting pattern sits at
+    <b>65.5</b> on the 0-to-100 line. The national voter estimate, averaging all
+    states weighted by population, is drawn at <b>48.7</b>. In this rough
+    comparison the Senate's pattern appears to the more conservative side of the
+    national estimate; no distance between the two is computed, for the reason above.</p>
   <p>The tool also shows all 100 senators as one row of circles, each coloured by
-    how far the senator sits from the public: <b>53</b> of them sit to the
-    public's right. The 60th senator from the left &mdash; the vote that decides
-    whether most legislation can proceed &mdash; sits at <b>72.0</b>.</p>
-  <p>That gap exists because every state elects two senators whether it holds 40
-    million people or 600,000, and the smaller states lean Republican. It does not
-    decide any single vote, but it shifts which bills can pass at all.</p>
+    which side of the national estimate the senator's pattern falls on. The 60th
+    senator from the left &mdash; the vote that decides whether most legislation can
+    proceed &mdash; sits at <b>72.0</b>, a senator-to-senator figure.</p>
+  <p>Every state elects two senators whether it holds 40 million people or 600,000,
+    and the smaller states lean Republican, so the Senate as a body can lean
+    differently from the country as a whole. That does not decide any single vote,
+    but it shifts which bills can pass at all.</p>
 
   <h3>3. Committees: where the members sit, and what they passed</h3>
-  <p>Each committee is measured two ways, both against the Senate's middle
-    (<b>65.5</b>) and against the public (<b>48.7</b>).</p>
+  <p>Each committee is measured against the Senate's middle (<b>65.5</b>). Both
+    sides of that comparison come from Voteview, so it is stated in points.</p>
   <p><b>Where the members sit.</b> The midpoint of the committee's members on the same
     scale. A midpoint more than 7.5 points from the Senate's middle is flagged as a
     gatekeeper. This number is soft: on a committee split between two parties the
     midpoint can fall in the gap between them, and it can move sharply when one member
     is replaced. The last column says how far.</p>
   <div class="tw"><table>
-    <tr><th>Committee</th><th class="n">Members' midpoint</th><th class="n">vs. Senate middle</th><th class="n">vs. public</th><th class="n">Moves if one member changes</th></tr>
-    <tr><td>Environment</td><td class="n">50.1</td><td class="n">&minus;15.3</td><td class="n">+1.5</td><td class="n">14.4</td></tr>
-    <tr><td>Appropriations</td><td class="n">50.2</td><td class="n">&minus;15.3</td><td class="n">+1.5</td><td class="n">8.3</td></tr>
-    <tr><td>Foreign Relations</td><td class="n">76.8</td><td class="n">+11.2</td><td class="n">+28.1</td><td class="n">3.0</td></tr>
-    <tr><td>Homeland/Govt Affairs</td><td class="n">76.0</td><td class="n">+10.6</td><td class="n">+27.4</td><td class="n">17.1</td></tr>
-    <tr><td>Small Business</td><td class="n">76.0</td><td class="n">+10.6</td><td class="n">+27.4</td><td class="n">17.1</td></tr>
-    <tr><td>Budget</td><td class="n">56.4</td><td class="n">&minus;9.1</td><td class="n">+7.7</td><td class="n">16.7</td></tr>
+    <tr><th>Committee</th><th class="n">Members' midpoint</th><th class="n">vs. Senate middle</th><th class="n">Moves if one member changes</th></tr>
+    <tr><td>Environment</td><td class="n">50.1</td><td class="n">&minus;15.3</td><td class="n">14.4</td></tr>
+    <tr><td>Appropriations</td><td class="n">50.2</td><td class="n">&minus;15.3</td><td class="n">8.3</td></tr>
+    <tr><td>Foreign Relations</td><td class="n">76.8</td><td class="n">+11.2</td><td class="n">3.0</td></tr>
+    <tr><td>Homeland/Govt Affairs</td><td class="n">76.0</td><td class="n">+10.6</td><td class="n">17.1</td></tr>
+    <tr><td>Small Business</td><td class="n">76.0</td><td class="n">+10.6</td><td class="n">17.1</td></tr>
+    <tr><td>Budget</td><td class="n">56.4</td><td class="n">&minus;9.1</td><td class="n">16.7</td></tr>
   </table></div>
   <p><b>Where the Senate split on its bills.</b> Take the bills a committee sent to
     the floor, and the dividing line of every floor vote on them: the point on the
@@ -249,11 +237,11 @@ table.calc tr.total td{border-bottom:none;border-top:2px solid var(--ink);
     middle. Only 4 committees have seven or more such votes; most floor
     action is nominations and House bills that no Senate committee reported.</p>
   <div class="tw"><table>
-    <tr><th>Committee</th><th class="n">Floor votes on its bills</th><th class="n">Where they divided the Senate</th><th class="n">vs. Senate middle</th><th class="n">vs. public</th></tr>
-    <tr><td>Budget</td><td class="n">28</td><td class="n">53.9</td><td class="n">&minus;11.6</td><td class="n">+5.2</td></tr>
-    <tr><td>Appropriations</td><td class="n">13</td><td class="n">44.5</td><td class="n">&minus;21.0</td><td class="n">&minus;4.2</td></tr>
-    <tr><td>Armed Services</td><td class="n">13</td><td class="n">42.0</td><td class="n">&minus;23.5</td><td class="n">&minus;6.7</td></tr>
-    <tr><td>Veterans</td><td class="n">7</td><td class="n">50.0</td><td class="n">&minus;15.6</td><td class="n">+1.3</td></tr>
+    <tr><th>Committee</th><th class="n">Floor votes on its bills</th><th class="n">Where they divided the Senate</th><th class="n">vs. Senate middle</th></tr>
+    <tr><td>Budget</td><td class="n">28</td><td class="n">53.9</td><td class="n">&minus;11.6</td></tr>
+    <tr><td>Appropriations</td><td class="n">13</td><td class="n">44.5</td><td class="n">&minus;21.0</td></tr>
+    <tr><td>Armed Services</td><td class="n">13</td><td class="n">42.0</td><td class="n">&minus;23.5</td></tr>
+    <tr><td>Veterans</td><td class="n">7</td><td class="n">50.0</td><td class="n">&minus;15.6</td></tr>
   </table></div>
 
   <h3>4. What each committee has sent forward</h3>
@@ -298,7 +286,7 @@ table.calc tr.total td{border-bottom:none;border-top:2px solid var(--ink);
     single bill moves the percentage by several points. Thirteen of the
     committees clear that bar.</p>
   <p><b>What is counted, exactly.</b> Senate bills written by current senators, as
-    recorded in the government's bill-status files downloaded on 23 September 2026. "Sent on"
+    recorded in the government's bill-status files downloaded on 21 September 2026. "Sent on"
     means the committee formally reported the bill to the full Senate. A bill approved
     at a markup meeting but not yet formally reported does not count yet, and House
     bills sent to Senate committees are not counted, because their authors have no

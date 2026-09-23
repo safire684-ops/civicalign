@@ -123,20 +123,18 @@ def _report_values(r: Report) -> dict[str, str]:
     oi = [o for o in r.output_ideology if o.is_reportable]
     oi_table = ('  <div class="tw"><table>\n'
                 '    <tr><th>Committee</th><th class="n">Floor votes on its bills</th>'
-                '<th class="n">Where they divided the Senate</th><th class="n">vs. Senate middle</th><th class="n">vs. public</th></tr>\n'
+                '<th class="n">Where they divided the Senate</th><th class="n">vs. Senate middle</th></tr>\n'
                 + "".join(f'    <tr><td>{COMMITTEE_NAMES.get(o.code, o.code)}</td><td class="n">{o.n_votes}</td>'
-                          f'<td class="n">{_p100(o.coi)}</td><td class="n">{_sd100(o.vs_senate)}</td>'
-                          f'<td class="n">{_sd100(o.vs_public) if o.vs_public is not None else "&mdash;"}</td></tr>\n'
+                          f'<td class="n">{_p100(o.coi)}</td><td class="n">{_sd100(o.vs_senate)}</td></tr>\n'
                           for o in oi)
                 + '  </table></div>')
 
     cm = sorted(r.committees, key=lambda c: -abs(c.median - r.chamber.median))[:6]
     cnd_table = ('  <div class="tw"><table>\n'
                  '    <tr><th>Committee</th><th class="n">Members\' midpoint</th><th class="n">vs. Senate middle</th>'
-                 '<th class="n">vs. public</th><th class="n">Moves if one member changes</th></tr>\n'
+                 '<th class="n">Moves if one member changes</th></tr>\n'
                  + "".join(f'    <tr><td>{COMMITTEE_NAMES.get(c.code, c.code)}</td><td class="n">{_p100(c.median)}</td>'
                            f'<td class="n">{_sd100(c.median - r.chamber.median)}</td>'
-                           f'<td class="n">{_sd100(c.cnd) if c.cnd is not None else "&mdash;"}</td>'
                            f'<td class="n">{_d100(c.stability.worst_shift)}</td></tr>\n' for c in cm)
                  + '  </table></div>')
     return {
@@ -144,6 +142,11 @@ def _report_values(r: Report) -> dict[str, str]:
         "os_x": _p100(os_.senator_coord), "os_s": _p100(os_.state_coord),
         "os_x_raw": _signed(os_.senator_coord), "os_s_raw": _signed(os_.state_coord),
         "os_gap_raw": f"{os_.abs_gap:.3f}", "os_gap_label": _d100(os_.abs_gap, 0),
+        "os_se_raw": f"{r.state_source.state_se(os_.state) or 0:.3f}",
+        "os_se": _d100(r.state_source.state_se(os_.state) or 0, 0),
+        "os_side": ("within the estimated range" if os_.abs_gap <= (r.state_source.state_se(os_.state) or 0)
+                    else "on the more " + ("conservative" if os_.signed_gap > 0 else "liberal") + " side of the state estimate"),
+        "senate_side": "conservative" if r.chamber.apportionment_skew > 0 else "liberal",
         "os_words": ("well" if os_.abs_gap / st.median([a.abs_gap for a in scored]) >= 1.25
                      else "somewhat" if os_.abs_gap / st.median([a.abs_gap for a in scored]) >= 0.75
                      else "a little"),

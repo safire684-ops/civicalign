@@ -5,6 +5,18 @@ sections 2–5). Pillars 1–3 and 7 belong to someone else.
 
 ## Status in one line
 
+No cross-scale arithmetic (22 September 2026, published): nothing a reader sees
+subtracts a Voteview figure from an American Ideology Project estimate. The card
+says which side of the state estimate the senator's pattern falls on, or that it
+falls within the estimated range; no "points apart", no typical-gap ratios, no
+named-senator distances, no widest-gap ranks, no "one of the most liberal". The
+Senate view says which side of the national estimate the Senate's pattern falls
+on; the gap figure and "senators right of the country" count are gone. Committee
+versus public columns removed from the report and whitepaper. Senator-to-senator
+and committee-to-Senate figures (one scale) remain in points. Headline is now
+"How does your senator's voting pattern compare with your state?". A regression
+test bans the cross-scale phrases and expressions. Tests: 132 pass.
+
 Plain-language redesign (22 September 2026, published): each view answers one
 question with one sentence, one simple picture, one short caveat and a "See
 details" fold. The senator card shows only the state's estimated range, the

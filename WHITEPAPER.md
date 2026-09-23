@@ -107,8 +107,9 @@ issues make up the difference.
 
 ## Finding 3: committees, measured three ways
 
-Each committee is measured against the Senate's middle (+0.310) and against the
-public (−0.027).
+Each committee is measured against the Senate's middle (+0.310). Both sides of
+that comparison come from Voteview, so it can be stated in points; no committee
+figure is subtracted from the survey-based public estimate.
 
 **Where the members sit.** The midpoint of the committee's members. A midpoint
 more than 0.15 from the Senate's middle is flagged as a gatekeeper. This number is
@@ -116,14 +117,14 @@ soft: on a committee split between two parties the midpoint can fall in the gap
 between them, and it can move sharply when one member is replaced — the last
 column says how far.
 
-| committee | members' midpoint | vs. Senate | vs. public | moves if one member changes |
-|---|---|---|---|---|
-| Environment | +0.003 | −0.307 | +0.030 | 0.29 |
-| Appropriations | +0.004 | −0.306 | +0.031 | 0.17 |
-| Foreign Relations | +0.535 | +0.225 | +0.562 | 0.06 |
-| Homeland/Govt Affairs | +0.521 | +0.211 | +0.548 | 0.34 |
-| Small Business | +0.521 | +0.211 | +0.548 | 0.34 |
-| Budget | +0.128 | −0.182 | +0.155 | 0.33 |
+| committee | members' midpoint | vs. Senate | moves if one member changes |
+|---|---|---|---|
+| Environment | +0.003 | −0.307 | 0.29 |
+| Appropriations | +0.004 | −0.306 | 0.17 |
+| Foreign Relations | +0.535 | +0.225 | 0.06 |
+| Homeland/Govt Affairs | +0.521 | +0.211 | 0.34 |
+| Small Business | +0.521 | +0.211 | 0.34 |
+| Budget | +0.128 | −0.182 | 0.33 |
 
 **Where the Senate split on its bills.** Take the bills a committee sent to the
 floor and the dividing lines of every floor vote on them; their median is where
@@ -132,12 +133,12 @@ divided, not whether the bills themselves were liberal or conservative. Only fou
 committees have seven or more such votes — most floor action is nominations and
 House bills that no Senate committee reported.
 
-| committee | floor votes | where they divided the Senate | vs. Senate | vs. public |
-|---|---|---|---|---|
-| Budget | 28 | +0.077 | −0.233 | +0.104 |
-| Appropriations | 13 | −0.110 | −0.420 | −0.083 |
-| Armed Services | 13 | −0.161 | −0.471 | −0.134 |
-| Veterans | 7 | −0.001 | −0.311 | +0.026 |
+| committee | floor votes | where they divided the Senate | vs. Senate |
+|---|---|---|---|
+| Budget | 28 | +0.077 | −0.233 |
+| Appropriations | 13 | −0.110 | −0.420 |
+| Armed Services | 13 | −0.161 | −0.471 |
+| Veterans | 7 | −0.001 | −0.311 |
 
 **Which bills it let through.**
 

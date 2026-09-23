@@ -120,7 +120,7 @@ def test_demo_uses_the_external_stylesheet_and_no_percentage_score():
     assert '<link rel="stylesheet" href="civicalign.css">' in text
     assert (DEMO.parent / "civicalign.css").exists()
     assert "representation match" not in text.lower(), "the percentage metric was dropped"
-    assert "’s voters" in text and "Too close to distinguish with this estimate" in text
+    assert "side of the state estimate" in text and "Within the estimated range" in text
 
 
 def test_demo_committee_module_shows_both_references():
@@ -241,7 +241,7 @@ def test_existing_measures_and_thresholds_are_preserved():
     assert "var thr=0.15;" in text
     assert "the position a '+(right?'conservative':'liberal')+' gatekeeper would sit in" in text
     assert "Where senators divided on these votes:" in text
-    assert "Too close to distinguish with this estimate" in text and "to the left of" in text
+    assert "Within the estimated range" in text and "more liberal side" in text
 
 
 
@@ -317,7 +317,7 @@ def test_data_strings_are_escaped_before_html_insertion():
                 "'+it.label+'", "'+G.worst.name+'", "'+t.who+'", "'+t.url+'", "'+t.use+'", "'+s.party+'"):
         assert raw not in joined, f"unescaped data string {raw} inserted into HTML"
     for wrapped in ("esc(s.name)", "esc(st.name)", "esc(c.name)", "esc(d.n)", "esc(it.label)",
-                    "esc(G.worst.name)", "esc(pr.a.name)", "esc(t.who)", "esc(t.url)"):
+                    "esc(G.worst.name)", "esc(t.who)", "esc(t.url)"):
         assert wrapped in text, f"{wrapped} missing"
 
 
@@ -360,30 +360,6 @@ def test_page_keeps_static_styling_in_the_external_stylesheet():
 
 
 # ---- the senator view explains the gap in plain terms, from the data ----
-
-def test_each_card_explains_how_far_where_and_what_the_numbers_are_made_of():
-    """Three plain-terms blocks per scored senator, every figure from the page's
-    own data: gap as a share of the scale and as the distance between two named
-    senators, the senator against their party's middle and the other 99, the
-    state against the public and the other states, and what each number is
-    built from. The page never names an issue, because the scale cannot."""
-    text = DEMO.read_text()
-    for fn in ("function howFar(", "function wherePut(", "function madeOf(", "function nearestPair(",
-               "function partyPlace(", "function statePlace("):
-        assert fn in text, fn
-    assert "How far is '+d100(gap)+' points?" in text
-    assert "On a 0-to-100 scale where 50 is the middle" in text
-    assert "C.medianGap" in text.split("function howFar(")[1].split("function wherePut(")[0], "compared with the typical senator"
-    assert "of the 100 senators" in text and "of the other '+others+' states" in text
-    assert "roll-call votes</b> they have cast this Congress" in text
-    assert "It cannot say which issues make up the difference." in text
-    assert "'<p class=\"gapline\">'+gapline+'</p>'" in text, "one plain gap line is visible"
-    assert "Roughly '+round5(d100(gap))+' points apart" in text, "the visible distance is rounded and marked approximate"
-    assert "plainTerms(s,st,se)+howFar(s,st,se)+wherePut(s,st)+madeOf(s,st)" in text, "the fuller explanation sits behind See details"
-    for banned in ("Medicaid", "abortion", "gun", "immigration bill", "climate"):
-        assert banned not in text.split("<script>")[0] or True  # prose may mention issue names only as examples of what it cannot say
-    assert "this page does not guess" in text
-
 
 def test_card_track_carries_party_public_and_senate_landmarks():
     text = DEMO.read_text()
@@ -456,11 +432,11 @@ def test_senate_wide_totals_count_distinct_bills(report):
 def test_band_label_does_not_overstate_one_standard_error():
     t = _prose(DEMO)
     assert "Aligned with State Consensus" not in t and "Statistically Aligned" not in t
-    assert "Too close to distinguish with this estimate" in t
+    assert "Within the estimated range" in t
     assert "one standard error" in t
     assert "not the same as agree" in t
     r = REPORT.read_text()
-    assert "Too close to distinguish with this estimate" in r and "one standard error" in r and "not 95%" in r
+    assert "Within the estimated range" in r and "one standard error" in r and "not 95%" in r
 
 
 # ---- the reader's scale is 0 to 100 with 50 in the middle; the maths is unchanged ----
@@ -478,7 +454,7 @@ def test_page_displays_the_0_to_100_scale_but_keeps_raw_data(report):
     assert M["chM"] == pytest.approx(report.chamber.median, abs=1e-4)
     assert -1 <= M["chM"] <= 1
     # the arithmetic section shows both
-    assert "Shown on the 0–100 scale" in text and "signed(s.record,3)" in text
+    assert "shown as x × 50 + 50" in text and "signed(s.record,3)" in text
     assert 'href="methodology.html"' in text
 
 
@@ -487,11 +463,10 @@ def test_report_uses_the_0_to_100_scale_with_raw_beside_it(report):
     os_ = next(a for a in report.alignments if a.bioguide == "O000174")
     assert "The scale you see is 0 to 100." in r
     assert f'<td class="n">{os_.senator_coord * 50 + 50:.1f}</td>' in r
-    assert f'<td class="n">{os_.state_coord * 50 + 50:.1f}</td>' in r
+    assert f'<td class="n">{os_.state_coord * 50 + 50:.1f} &plusmn;' in r
     assert f"raw score {'+' if os_.senator_coord >= 0 else '&minus;'}{abs(os_.senator_coord):.3f}" in r
-    assert f"rounded to {abs(os_.abs_gap) * 50:.0f} points" in r
+    assert ("within the estimated range" in r) or ("side of the state estimate" in r)
     assert f"<b>{report.chamber.median * 50 + 50:.1f}</b>" in r
-    assert f"<b>{abs(report.chamber.apportionment_skew) * 50:.1f} points</b>" in r
     assert "more than 7.5 points" in r
 
 
@@ -564,7 +539,7 @@ def test_7_and_8_every_view_answers_one_question_with_a_plain_takeaway():
     for view in ("your-senators", "the-senate", "committees", "how-it-works"):
         panel = t.split(f'<section id="{view}"')[1].split("</section>")[0]
         assert 'class="takeaway"' in panel, view
-    assert "Does your senator vote the way your state leans?" in t
+    assert "How does your senator's voting pattern compare with your state?" in t
     # generated takeaways are plain sentences without raw decimals
     for fn in ("$('take-senators').textContent=t", "$('take-senate').textContent=", "$('take-committee').textContent="):
         assert fn in t
@@ -583,7 +558,7 @@ def test_10_default_card_is_not_overloaded_with_benchmarks():
     before_details = card.split("<details class=\"more\">")[0]
     for secondary in ("X.demMedian", "X.repMedian", "X.chMedian", "X.usM", "X.anchors", "s.rank", "howFar(", "wherePut(", "madeOf("):
         assert secondary not in before_details, secondary
-    assert "'<div class=\"terms\">'+plainTerms(s,st,se)+howFar(s,st,se)+wherePut(s,st)+madeOf(s,st)+'</div>'" in card
+    assert "'<div class=\"terms\">'+madeOf(s,st)+'</div>'" in card
 
 
 def test_11_technical_terms_stay_out_of_the_default_experience():
@@ -620,3 +595,52 @@ def test_sources_are_credible_publishers_with_full_links(report):
         assert any(h in s["url"] for h in ok_hosts) and any(h in s["file"] for h in ok_hosts), s["what"]
     text = DEMO.read_text()
     assert "<h3>Sources</h3>" in text and "M.sources.map(srcRow)" in text
+
+
+# ---- no arithmetic across the two unbridged scales, anywhere a reader can see ----
+
+CROSS_SCALE_PHRASES = [
+    "points apart", "gap of ", "times the typical senator", "distance from their state",
+    "distance from their own state", "widest gap", "points further", "further left than",
+    "further right than", "points to the right of the american public", "points to the left of the american public",
+    "points to the right of the public", "points to the left of the public",
+    "points to the right of the country", "points to the left of the country",
+    "points right of the country", "points left of the country", "points from their state",
+    "one of the most liberal", "one of the most conservative", "% match", "senators right of the public",
+    "senators to the right of the country", "gap: ",
+]
+
+
+def test_no_user_facing_arithmetic_across_the_two_scales():
+    """A Voteview senator or chamber figure is never subtracted from an American
+    Ideology Project voter estimate in anything a reader sees: page prose, the
+    script that writes the page, the screen-reader text, the report, the README.
+    Senator-to-senator and committee-to-Senate figures (one scale) are allowed."""
+    page = re.sub(r"const [A-Z]=[\{\[].*?[\}\]];", "", DEMO.read_text(), flags=re.S).lower()
+    report = REPORT.read_text().lower()
+    readme = (ROOT / "README.md").read_text().lower()
+    for phrase in CROSS_SCALE_PHRASES:
+        assert phrase not in page, f"page: {phrase!r}"
+        assert phrase not in report, f"report: {phrase!r}"
+    for phrase in ("points apart", "widest gap", "gap of ", "one of the most liberal"):
+        assert phrase not in readme, f"readme: {phrase!r}"
+    # the script never renders a subtraction of the two coordinates as a number
+    js = "".join(re.findall(r"<script>(.*?)</script>", DEMO.read_text(), re.S))
+    for expr in ("d100(s.record-st.center)", "d100(gap)", "d100(P.gap)", "d100(c.cndMedian)", "d100(o.vsUS)",
+                 "d100(d.vsUS)", "d100(d.vsState)", "P.nRightOfPublic", "C.medianGap", "s.rank", "amongSenators("):
+        assert expr not in js, expr
+    # the report's committee tables compare committees with the Senate only
+    assert "vs. public" not in report and "against the public" not in report
+    wp = (ROOT / "WHITEPAPER.md").read_text()
+    assert "vs. public" not in wp
+
+
+def test_direction_only_wording_is_what_the_reader_sees():
+    js = "".join(re.findall(r"<script>(.*?)</script>", DEMO.read_text(), re.S))
+    assert "On the more conservative side of the state estimate" in js
+    assert "On the more liberal side of the state estimate" in js
+    assert "Within the estimated range" in js
+    assert "in this rough comparison" in js
+    assert "side of the national voter estimate" in js
+    t = DEMO.read_text()
+    assert "compare their\n    general direction, not the exact distance" in t or "compare their general direction, not the exact distance" in re.sub(r"\s+", " ", t)

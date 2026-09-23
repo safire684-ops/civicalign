@@ -68,8 +68,8 @@ def test_committee_tables_are_current(text, report):
     """Members vs Senate and public, and where the bills passed divided the Senate."""
     ch = report.chamber
     for c in sorted(report.committees, key=lambda c: -abs(c.median - ch.median))[:6]:
-        assert f"| {c.median:+.3f} | {c.median - ch.median:+.3f} | {c.cnd:+.3f} | {c.stability.worst_shift:.2f} |".replace("-", "−") in text \
-            or f"| {c.median:+.3f} | {c.median - ch.median:+.3f} | {c.cnd:+.3f} | {c.stability.worst_shift:.2f} |" in text
+        assert f"| {c.median:+.3f} | {c.median - ch.median:+.3f} | {c.stability.worst_shift:.2f} |".replace("-", "−") in text \
+            or f"| {c.median:+.3f} | {c.median - ch.median:+.3f} | {c.stability.worst_shift:.2f} |" in text
     for o in report.output_ideology:
         if o.is_reportable:
             assert f"| {o.n_votes} | " in text
