@@ -211,8 +211,20 @@ def checks(report: Report, cfg: Config = DEFAULT, page: Path | None = None) -> l
             out.append(Check("page: every senator's position", ok, f"{len(recs)} senators on the page"))
             ok = all(abs(V["states"][k]["center"] - states[k][0]) < 1e-3 for k in V["states"] if V["states"][k]["se"] > 0)
             out.append(Check("page: every state's position", ok))
-            ok = len(P["dots"]) == 100 and all(abs((P["usM"] + d["vsUS"]) - scores[d["b"]]) < 2e-3 for d in P["dots"])
+            ok = len(P["dots"]) == 100 and all(abs((P["chM"] + d["vsSen"]) - scores[d["b"]]) < 2e-3 for d in P["dots"])
             out.append(Check("page: 100 circles at the right positions", ok))
+            forbidden = {"gap", "score", "rank", "crosses", "dir", "vsState", "vsUS", "nRightOfPublic",
+                         "nLeftOfPublic", "medianGap", "skew", "dUS", "cndMedian", "cndMean", "crossCount", "moreCons", "moreLib"}
+            def keys(o):
+                if isinstance(o, dict):
+                    for k, v in o.items():
+                        yield k
+                        yield from keys(v)
+                elif isinstance(o, list):
+                    for v in o:
+                        yield from keys(v)
+            found = sorted({k for blk in (M, V, P, G, X) for k in keys(blk) if k in forbidden})
+            out.append(Check("page: no cross-scale derived fields in the public payload", not found, f"found {found}" if found else ""))
             ok = (G["uniqueBills"], G["uniqueReported"]) == (report.bills_referred_unique, report.bills_reported_unique)
             out.append(Check("page: distinct-bill totals", ok, f"{G['uniqueBills']} / {G['uniqueReported']}"))
             dem = statistics.median(v for b, v in scores.items() if roster[b]["party"] == "Democrat")
@@ -221,16 +233,6 @@ def checks(report: Report, cfg: Config = DEFAULT, page: Path | None = None) -> l
             out.append(Check("page: party middles", ok, f"{X['demMedian']} / {X['repMedian']}"))
             ok = all(abs(a["x"] - scores[next(b for b in scores if b in roster and _name_matches(a, b, cfg))]) < 1e-3 for a in X["anchors"]) if X["anchors"] else False
             out.append(Check("page: familiar senators at their real positions", ok, f"{len(X['anchors'])} anchors"))
-            C = block("C")
-            gaps = {b: scores[b] - states[roster[b]["state"]][0] for b in scores if roster[b]["state"] in states}
-            cross = sum(1 for b, g in gaps.items() if (scores[b] > 0) != (states[roster[b]["state"]][0] > 0))
-            more_cons = sum(1 for g in gaps.values() if g > 0)
-            med_gap = statistics.median(abs(g) for g in gaps.values())
-            n_right = sum(1 for v in scores.values() if v > us) if pops else None
-            ok = C is not None and C["crossCount"] == cross and C["moreCons"] == more_cons \
-                and abs(C["medianGap"] - med_gap) < 1e-3 and (n_right is None or P["nRightOfPublic"] == n_right)
-            out.append(Check("page: summary counts (crossers, typical gap, right of public)", ok,
-                             f"{cross} cross, typical gap {med_gap:.3f}, {n_right} right of public"))
         else:
             out.append(Check("page data blocks present", False, "a block is missing from the page"))
     return out

@@ -5,6 +5,25 @@ sections 2–5). Pillars 1–3 and 7 belong to someone else.
 
 ## Status in one line
 
+Two measures, shown separately (22 September 2026, published): the page no
+longer compares a senator's Voteview score with the state's survey estimate in
+any way, not even the sign. Each senator card shows the voting pattern against
+the Senate middle on the senators' scale ("More liberal than the Senate middle
+(43 points)"); one state card shows the voter estimate against the national
+estimate on the voters' scale ("Estimated slightly conservative on the voter
+measure"); one line says the two use different methods and are shown separately.
+The Senate view shows the Senate middle and 60-vote point on one line and the
+national estimate (with every state as a faint tick) on another, not compared.
+Public payload carries no cross-scale fields (gap, score, rank, crosses, dir,
+vsUS, vsState, nRightOfPublic, medianGap, skew, dUS, cndMedian, cndMean, C block
+gone); the supervisor and six new tests enforce that no public code subtracts,
+compares, band-tests or ranks across the two scales. Headline: "See your
+senator's voting pattern and your state's voter estimate". Report and README
+state that a direct senator-versus-state measure needs a validated bridge that
+CivicAlign does not currently have; method A (regression) stays separate. The
+pipeline still computes the old alignment diagnostics privately (CLI, JSON
+export, supervisor) but nothing public uses them. Tests: 138 pass.
+
 No cross-scale arithmetic (22 September 2026, published): nothing a reader sees
 subtracts a Voteview figure from an American Ideology Project estimate. The card
 says which side of the state estimate the senator's pattern falls on, or that it

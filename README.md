@@ -51,15 +51,18 @@ Two different Pillar 4 questions live in this repo, and they are not the same
 metric:
 
 - **A. Relative to the state's election result** (this README and WHITEPAPER.md):
-  fit senator ideology against presidential vote share and read the residual. No
-  bridging is needed because the two scales are never subtracted.
-- **B. Approximate senator-vs-state survey positioning** (the live page,
-  `demo/senator-check.html`, and `demo/methodology.html`): place the senator's
-  Nokken-Poole score and the state's American Ideology Project survey estimate
-  (2020 wave) on one 0-to-100 line and describe the direction and rough size of
-  the gap. The two measures were built differently and are not tied together
-  exactly, so the page presents this as a rough comparison, not a validated
-  shared ruler.
+  fit senator ideology against presidential vote share and read the residual. It
+  answers: *how does this senator compare with the voting pattern typically
+  associated with states that vote similarly?* No bridging is needed because the
+  two scales are never subtracted.
+- **B. The live page** (`demo/senator-check.html`, `demo/methodology.html`) shows
+  the senator's Nokken-Poole score against the Senate middle, on the senators'
+  scale, and the state's American Ideology Project estimate (2020 wave) against
+  the national estimate, on the voters' scale. It does **not** compare the two:
+  a direct senator-versus-state alignment measure requires a validated
+  statistical bridge between voter and legislator scales, and CivicAlign does
+  not currently have that bridge. The two methods are kept separate and are not
+  the same metric.
 
 ## What works today, and what does not
 

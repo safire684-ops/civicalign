@@ -96,16 +96,18 @@ table.calc tr.total td{border-bottom:none;border-top:2px solid var(--ink);
     run from liberal to conservative and both fall between &minus;1 and +1. But they
     were built separately, and nobody has tied the two rulers together exactly. The
     survey scale is set to its own average and spread; the senator scale comes from
-    votes. So when the tool puts the two on one line and subtracts, the result is a
-    <b>rough comparison</b>, good for direction and rough size, not a precise
-    measurement. Every distance on the tool should be read that way.</p>
-  <p><b>The scale you see is 0 to 100.</b> 0 is most liberal, 100 most conservative,
-    50 the middle. Senators and state publics both land somewhere on it, and the
-    distance between two points is just the difference in their numbers. Under the
-    hood the researchers' numbers run from &minus;1 to +1; we show the same line
-    rescaled (position &times; 50 + 50, so a distance of 0.10 becomes 5 points)
-    because 0 to 100 is easier to read. The raw numbers are in the tool under "See
-    details: the arithmetic".</p>
+    votes. So the tool does <b>not</b> put the two on one line, subtract them, or
+    say which side of the state a senator falls on. A direct senator-versus-state
+    alignment measure requires a validated statistical bridge between voter and
+    legislator scales. CivicAlign does not currently have that bridge, so it shows the
+    two measures separately: the senator against the Senate middle on the senators'
+    scale, and the state against the national estimate on the voters' scale.</p>
+  <p><b>Each scale you see runs from 0 to 100.</b> 0 is most liberal, 100 most
+    conservative, 50 the middle. Under the hood both sets of numbers run from
+    &minus;1 to +1; we show each rescaled (position &times; 50 + 50, so a
+    difference of 0.10 becomes 5 points) because 0 to 100 is easier to read. They
+    remain two different scales. The raw numbers are in the tool under "Show the
+    math".</p>
 </section>
 
 <section>
@@ -146,29 +148,34 @@ table.calc tr.total td{border-bottom:none;border-top:2px solid var(--ink);
 <section>
   <h2>The three measurements</h2>
 
-  <h3>1. A senator against their own state</h3>
-  <p>Both marks are drawn on one 0-to-100 line and the tool says which side of the
-    state estimate the senator's voting pattern falls on. It does <b>not</b> subtract
-    the two. They come from different methods and have not been tied together, so a
-    distance between them would not be a validated measurement. Jon Ossoff of Georgia,
-    worked through:</p>
+  <h3>1. Your senator, and your state, shown separately</h3>
+  <p>Two worked examples for Georgia, each staying on one scale.</p>
+  <p><b>The senator, on the senators' scale.</b> Jon Ossoff's voting pattern against
+    the Senate middle. Both figures are Voteview scores, so the subtraction is valid:</p>
   <div class="tw"><table class="calc">
     <tr><td>Ossoff's voting pattern<br><span class="sm">raw score {{os_x_raw}}, shown as score &times; 50 + 50</span></td><td class="n">{{os_x}}</td></tr>
-    <tr><td>Georgia voter estimate<br><span class="sm">raw score {{os_s_raw}}, one standard error &plusmn;{{os_se_raw}}</span></td><td class="n">{{os_s}} &plusmn; {{os_se}}</td></tr>
-    <tr class="total"><td>What the tool says</td><td class="n">{{os_side}}</td></tr>
+    <tr><td>Senate middle<br><span class="sm">median of the 100 scores</span></td><td class="n">{{ch_m}}</td></tr>
+    <tr class="total"><td>Difference, in points</td><td class="n">{{os_vs_senate}}</td></tr>
   </table></div>
-  <p>When the senator's mark falls inside the state estimate's own uncertainty band,
-    the tool says <b>Within the estimated range</b> instead. That band is one standard
-    error of the state estimate, about &plusmn;2 points on the 0-to-100 line. It is a
-    modest bar: a one-standard-error band covers roughly two thirds of the likely
-    values, not 95%, and the senator score's own error is not published, so it is not
-    included. "Within the estimated range" therefore means the survey cannot separate
-    the two positions. It does not mean the state's voters agree with the senator, or
-    with each other: a state's number is an average of many people who disagree.</p>
-  <p>Earlier versions reported a numeric distance between the two marks, then a
-    percentage. Both were dropped: the percentage because readers took it for a share
-    of votes, and the distance because the two scales are not bridged, so the number
-    had no validated meaning.</p>
+  <p>The tool says: "{{os_vs_senate_words}}".</p>
+  <p><b>The state, on the voters' scale.</b> Georgia's voter estimate against the
+    national estimate. Both are survey estimates from the same project, so this
+    subtraction is valid too:</p>
+  <div class="tw"><table class="calc">
+    <tr><td>Georgia voter estimate<br><span class="sm">raw score {{os_s_raw}}, one standard error &plusmn;{{os_se_raw}}</span></td><td class="n">{{os_s}} &plusmn; {{os_se}}</td></tr>
+    <tr><td>National voter estimate<br><span class="sm">all states, weighted by population</span></td><td class="n">{{us_m}}</td></tr>
+    <tr class="total"><td>Difference, in points</td><td class="n">{{ga_vs_us}}</td></tr>
+  </table></div>
+  <p>The tool says: "Estimated {{ga_words}} on the voter measure". The shaded area on
+    the chart is the estimate's own uncertainty, one standard error, about
+    &plusmn;2 points. That is a modest band: it covers roughly two thirds of the
+    likely values, not 95%. A state's number is an average of many people who
+    disagree with each other.</p>
+  <p><b>What the tool does not do</b> is subtract Ossoff's score from Georgia's
+    estimate, or say which side of Georgia he falls on. Earlier versions did, first as
+    a percentage, then as a distance, then as a direction. All three were dropped:
+    the two scales are not bridged, so even the sign of that comparison is not a
+    validated finding.</p>
 
   <h3>Perspective: landmarks on the senators' own scale</h3>
   <p>A position like 65 means nothing on its own, so the tool can show landmarks that
@@ -184,20 +191,19 @@ table.calc tr.total td{border-bottom:none;border-top:2px solid var(--ink);
     the state's number comes from large surveys asking residents where they stand on
     many policy questions. Neither number says which issues make up any difference.</p>
 
-  <h3>2. The Senate against the country</h3>
-  <p>Same idea, one level up. The middle senator's voting pattern sits at
-    <b>{{ch_m}}</b> on the 0-to-100 line. The national voter estimate, averaging all
-    states weighted by population, is drawn at <b>{{us_m}}</b>. In this rough
-    comparison the Senate's pattern appears to the more {{senate_side}} side of the
-    national estimate; no distance between the two is computed, for the reason above.</p>
+  <h3>2. The Senate's voting center, and the country's voter estimate</h3>
+  <p>The middle senator's voting pattern sits at <b>{{ch_m}}</b> on the senators'
+    scale, and the 60th senator from the left &mdash; the vote that decides whether
+    most legislation can proceed &mdash; at <b>{{pivot}}</b>. The national voter
+    estimate, averaging all states weighted by population, is <b>{{us_m}}</b> on the
+    voters' scale. The two scales come from different measurement systems and are
+    not directly compared.</p>
   <p>The tool also shows all 100 senators as one row of circles, each coloured by
-    which side of the national estimate the senator's pattern falls on. The 60th
-    senator from the left &mdash; the vote that decides whether most legislation can
-    proceed &mdash; sits at <b>{{pivot}}</b>, a senator-to-senator figure.</p>
+    which side of the Senate middle the senator's pattern falls on: a
+    senator-to-senator comparison.</p>
   <p>Every state elects two senators whether it holds 40 million people or 600,000,
-    and the smaller states lean Republican, so the Senate as a body can lean
-    differently from the country as a whole. That does not decide any single vote,
-    but it shifts which bills can pass at all.</p>
+    so the Senate does not represent people in proportion to where they live. That
+    does not decide any single vote, but it shapes which bills can pass at all.</p>
 
   <h3>3. Committees: where the members sit, and what they passed</h3>
   <p>Each committee is measured against the Senate's middle (<b>{{ch_m}}</b>). Both
@@ -272,11 +278,13 @@ table.calc tr.total td{border-bottom:none;border-top:2px solid var(--ink);
     <dd>A single liberal-to-conservative axis describes congressional voting well,
       because most roll-call votes split along it. It describes voters less well, since
       people's economic and social views do not line up as neatly.</dd>
-    <dt>The two numbers come from different rulers.</dt>
+    <dt>The two measures are not compared with each other.</dt>
     <dd>The senator scale is built from votes and the state scale from survey answers,
-      each on its own footing, and nobody has tied them together exactly. Treat every
-      distance as a rough comparison: the direction and the rough size are informative,
-      the second decimal is not.</dd>
+      each on its own footing, and nobody has tied them together. A direct
+      senator-versus-state alignment measure requires a validated statistical bridge
+      between voter and legislator scales. CivicAlign does not currently have that
+      bridge, so it makes no claim about whether a senator sits left or right of their
+      state.</dd>
     <dt>The state figures are estimates.</dt>
     <dd>They carry one standard error of about 2 points, which varies a little by state and
       is drawn on the tool as a dashed band around the state's mark. One standard error
@@ -303,10 +311,11 @@ table.calc tr.total td{border-bottom:none;border-top:2px solid var(--ink);
 
 <section>
   <h2>How to check it</h2>
-  <p>Every figure here can be reproduced with a calculator. Download the two files in
-    the table above, find a senator in the Voteview file and read their
-    <code>nokken_poole_dim1</code>, find their state in the ideology file and read its
-    <code>mrp_ideology</code>, and subtract. That is the entire calculation.</p>
+  <p>Every figure here can be reproduced with a calculator. Download the files in the
+    table above. For a senator, read their <code>nokken_poole_dim1</code> in the
+    Voteview file and subtract the median of the 100 senators. For a state, read its
+    <code>mrp_ideology</code> in the ideology file and subtract the population-weighted
+    national figure. Never subtract across the two files; the tool does not.</p>
   <p>The code that produces these numbers is checked by a test suite that recomputes
     every published figure straight from the downloaded files, using nothing from the
     code it is testing &mdash; so a bug in the pipeline cannot hide behind a test that
@@ -316,8 +325,7 @@ table.calc tr.total td{border-bottom:none;border-top:2px solid var(--ink);
     rather than the arithmetic: whether one liberal-to-conservative line is a fair
     summary of politics, whether 2020 survey data is close enough for a 2026
     judgement, and whether a bill's author is a fair guide to which side the bill is
-    on. Those are real questions. The subtraction is not in
-    doubt.</p>
+    on. Those are real questions. The arithmetic is not in doubt.</p>
 </section>
 </div>
 

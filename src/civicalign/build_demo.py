@@ -144,9 +144,13 @@ def _report_values(r: Report) -> dict[str, str]:
         "os_gap_raw": f"{os_.abs_gap:.3f}", "os_gap_label": _d100(os_.abs_gap, 0),
         "os_se_raw": f"{r.state_source.state_se(os_.state) or 0:.3f}",
         "os_se": _d100(r.state_source.state_se(os_.state) or 0, 0),
-        "os_side": ("within the estimated range" if os_.abs_gap <= (r.state_source.state_se(os_.state) or 0)
-                    else "on the more " + ("conservative" if os_.signed_gap > 0 else "liberal") + " side of the state estimate"),
-        "senate_side": "conservative" if r.chamber.apportionment_skew > 0 else "liberal",
+        "os_vs_senate": _sd100(os_.senator_coord - r.chamber.median),
+        "os_vs_senate_words": ("more liberal than" if os_.senator_coord < r.chamber.median else "more conservative than")
+                              + " the Senate middle",
+        "ga_vs_us": _sd100(os_.state_coord - r.chamber.national_coord) if r.chamber.national_coord is not None else "&mdash;",
+        "ga_words": ("slightly conservative" if 0.05 < os_.state_coord <= 0.15 else "clearly conservative" if os_.state_coord > 0.15
+                     else "slightly liberal" if -0.15 <= os_.state_coord < -0.05 else "clearly liberal" if os_.state_coord < -0.15
+                     else "about in the middle"),
         "os_words": ("well" if os_.abs_gap / st.median([a.abs_gap for a in scored]) >= 1.25
                      else "somewhat" if os_.abs_gap / st.median([a.abs_gap for a in scored]) >= 0.75
                      else "a little"),
@@ -246,9 +250,6 @@ def _blocks(r: Report, cfg: Config) -> dict[str, dict]:
             "senators": [{
                 "name": s.name, "party": party.get(s.bioguide, "?"),
                 "bioguide": s.bioguide, "record": round(s.senator_coord, 3),
-                "gap": round(s.abs_gap, 3), "score": round(s.spec_score, 1),
-                "rank": s.rank, "crosses": bool(s.crosses_over),
-                "dir": "conservative" if s.signed_gap > 0 else "liberal",
                 "votes": r.votes_cast.get(s.bioguide),
             } for s in sens],
         }
@@ -260,8 +261,7 @@ def _blocks(r: Report, cfg: Config) -> dict[str, dict]:
             "se": 0.0, "senators": []})
         entry["senators"].append({
             "name": sen.name, "party": sen.party, "bioguide": sen.bioguide,
-            "record": None, "gap": None, "score": None, "rank": None,
-            "crosses": False, "dir": "", "votes": r.votes_cast.get(sen.bioguide),
+            "record": None, "votes": r.votes_cast.get(sen.bioguide),
         })
 
     scored = [a for a in r.alignments if a.abs_gap is not None]
@@ -275,10 +275,8 @@ def _blocks(r: Report, cfg: Config) -> dict[str, dict]:
 
     return {
         "V": {"states": states,
-              "medianGap": round(st.median([a.abs_gap for a in scored]), 3),
               "usM": round(r.chamber.national_coord, 3),
               "chM": round(r.chamber.median, 3),
-              "skew": round(r.chamber.apportionment_skew, 3),
               "congress": cfg.congress, "ideologyYear": cfg.ideology_year,
               "source": r.state_source.citation},
         "M": {"congress": cfg.congress, "scoreCol": cfg.score_column,
@@ -286,7 +284,6 @@ def _blocks(r: Report, cfg: Config) -> dict[str, dict]:
               "se": se_map,
               "chM": round(r.chamber.median, 4),
               "usM": round(r.chamber.national_coord, 4),
-              "dUS": round(r.chamber.apportionment_skew, 4),
               "popYear": cfg.population_year,
               "sources": [
                 {"what": "Senator voting records", "who": "Voteview, University of California, Los Angeles",
@@ -326,15 +323,11 @@ def _blocks(r: Report, cfg: Config) -> dict[str, dict]:
                                             if r.senators[b].party == "Republican"]), 3),
               "chMedian": round(r.chamber.median, 3),
               "chMean": round(r.committees[0].chamber_mean, 3) if r.committees else 0.0,
-              "usM": round(r.chamber.national_coord, 3) if r.chamber.national_coord is not None else None,
               "output": {o.code: {"coi": round(o.coi, 3), "n": o.n_votes,
-                                  "vsSen": round(o.vs_senate, 3),
-                                  "vsUS": round(o.vs_public, 3) if o.vs_public is not None else None}
+                                  "vsSen": round(o.vs_senate, 3)}
                          for o in r.output_ideology if o.is_reportable},
               "committees": sorted([
                   {"code": c.code, "name": COMMITTEE_NAMES.get(c.code, c.code),
-                   "cndMedian": round(c.cnd, 3) if c.cnd is not None else None,
-                   "cndMean": round(c.cnd_mean, 3) if c.cnd_mean is not None else None,
                    "median": round(c.median, 3),
                    "drift": round(c.median - r.chamber.median, 3),
                    "mean": round(c.mean, 3), "meanDrift": round(c.ccd_mean, 3),
@@ -347,16 +340,12 @@ def _blocks(r: Report, cfg: Config) -> dict[str, dict]:
               "popYear": cfg.population_year},
         "G": _gatekeeping_block(r, cfg),
         "P": _public_block(r, cfg),
-        "C": {"medianScore": round(st.median([a.spec_score for a in scored]), 1),
-              "medianGap": round(st.median([a.abs_gap for a in scored]), 3),
-              "crossCount": sum(1 for a in scored if a.crosses_over),
-              "moreCons": sum(1 for a in scored if a.signed_gap > 0),
-              "moreLib": sum(1 for a in scored if a.signed_gap < 0)},
     }
 
 
 def _public_block(r: Report, cfg: Config) -> dict:
-    """The Senate against the public, and every senator as one dot."""
+    """The Senate's own figures and every senator as one dot, plus the voter
+    estimates on their own scale. Nothing here compares the two systems."""
     us = r.chamber.national_coord
     dots = []
     for a in r.alignments:
@@ -367,17 +356,16 @@ def _public_block(r: Report, cfg: Config) -> dict:
             "p": r.senators[a.bioguide].party[:1],
             "x": round(a.senator_coord, 3),
             "vsSen": round(a.senator_coord - r.chamber.median, 3),
-            "vsUS": round(a.senator_coord - us, 3) if us is not None else None,
-            "vsState": round(a.signed_gap, 3),
         })
     dots.sort(key=lambda d: d["x"])
-    n_right = sum(1 for d in dots if d["vsUS"] is not None and d["vsUS"] > 0)
+    # state voter estimates on their own scale, for the voter-side chart
+    states = sorted({a.state for a in r.alignments if a.abs_gap is not None})
     return {
         "chM": round(r.chamber.median, 3),
         "usM": round(us, 3) if us is not None else None,
-        "gap": round(r.chamber.apportionment_skew, 3) if us is not None else None,
         "pivot": round(r.chamber.pivot, 3),
-        "nRightOfPublic": n_right, "nLeftOfPublic": len(dots) - n_right,
+        "stateEstimates": [round(r.state_source.state(s), 3) for s in states
+                           if r.state_source.state(s) is not None],
         "dots": dots,
     }
 

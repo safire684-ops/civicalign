@@ -34,7 +34,7 @@ def test_demo_national_figures_are_current(report):
     M = _block("M")
     assert M["chM"] == pytest.approx(report.chamber.median, abs=1e-4)
     assert M["usM"] == pytest.approx(report.chamber.national_coord, abs=1e-4)
-    assert M["dUS"] == pytest.approx(report.chamber.apportionment_skew, abs=1e-4)
+    assert "dUS" not in M, "the cross-scale gap is not shipped"
 
 
 def test_demo_bill_survival_is_current(report):
@@ -101,7 +101,7 @@ def test_demo_carries_public_grid_and_landmarks_but_no_bills(report):
     X = _block("X")
     assert len(P["dots"]) == 100
     assert P["usM"] == pytest.approx(report.chamber.national_coord, abs=1e-3)
-    assert P["nRightOfPublic"] + P["nLeftOfPublic"] == 100
+    assert "nRightOfPublic" not in P and "gap" not in P
     dem = st.median(v for b, v in report.scores.items() if report.senators[b].party == "Democrat")
     rep = st.median(v for b, v in report.scores.items() if report.senators[b].party == "Republican")
     assert X["demMedian"] == pytest.approx(dem, abs=1e-3)
@@ -120,15 +120,15 @@ def test_demo_uses_the_external_stylesheet_and_no_percentage_score():
     assert '<link rel="stylesheet" href="civicalign.css">' in text
     assert (DEMO.parent / "civicalign.css").exists()
     assert "representation match" not in text.lower(), "the percentage metric was dropped"
-    assert "side of the state estimate" in text and "Within the estimated range" in text
+    assert "than the Senate middle" in text and "on the voter measure" in text
 
 
 def test_demo_committee_module_shows_both_references():
     text = DEMO.read_text()
     assert 'id="committee-drift-module"' in text
     X = _block("X")
-    assert X["usM"] is not None
-    assert all("cndMedian" in c for c in X["committees"])
+    assert "usM" not in X, "the voter estimate is not drawn on the senators' scale"
+    assert all("cndMedian" not in c and "cndMean" not in c for c in X["committees"])
     assert X["output"], "expected at least one committee with output ideology"
 
 
@@ -241,7 +241,7 @@ def test_existing_measures_and_thresholds_are_preserved():
     assert "var thr=0.15;" in text
     assert "the position a '+(right?'conservative':'liberal')+' gatekeeper would sit in" in text
     assert "Where senators divided on these votes:" in text
-    assert "Within the estimated range" in text and "more liberal side" in text
+    assert "than the Senate middle" in text
 
 
 
@@ -332,22 +332,24 @@ def test_every_drawn_track_is_hidden_from_screen_readers_and_described_in_text()
                   'class="trk" aria-hidden="true"'):
         assert track in text, f"{track} missing"
     # one spoken description per chart type, each built from the real numbers
-    assert "'<p class=\"sr-only\">'+said+'</p>'" in text
-    assert "p100(st.center)" in text.split("var said=")[1].split(";")[0]
-    assert "p100(s.record)" in text.split("var said=")[1].split(";")[0]
-    assert "the middle of the Senate at '+p100(P.chM)" in text
+    assert text.count("<p class=\"sr-only\">") >= 4
+    sen = text.split("function senatorTrack(")[1].split("\n  }")[0]
+    sta = text.split("function stateTrack(")[1].split("\n  }")[0]
+    assert "p100(s.record)" in sen and "st.center" not in sen
+    assert "p100(st.center)" in sta and "s.record" not in sta
+    assert "the middle of the Senate is at '+p100(P.chM)" in text
     assert "60th vote from the left at '+p100(P.pivot)" in text
     assert "members\\u2019 midpoint at '+p100(c.median)" in text
     assert "Positions on the 0-to-100 scale, from most liberal to most conservative" in text
 
 
-def test_alignment_badge_carries_an_icon_and_does_not_rely_on_green():
+def test_pill_carries_an_icon_and_does_not_rely_on_green():
     text = DEMO.read_text()
     css = (DEMO.parent / "civicalign.css").read_text()
-    rule = css.split(".alignment-score.aligned{")[1].split("}")[0]
+    rule = css.split(".pill.aligned,.pill.neutral{")[1].split("}")[0]
     assert "#22c55e" not in rule and "green" not in rule
     assert "<span class=\"ic\" aria-hidden=\"true\">'+sp.i+'</span>" in text
-    assert "i:'\\u2248'" in text and "i:'\\u2192'" in text and "i:'\\u2190'" in text
+    assert "i:'\\u2248'" in text and "i:d>0?'\\u2192':'\\u2190'" in text
 
 
 def test_page_keeps_static_styling_in_the_external_stylesheet():
@@ -361,19 +363,18 @@ def test_page_keeps_static_styling_in_the_external_stylesheet():
 
 # ---- the senator view explains the gap in plain terms, from the data ----
 
-def test_card_track_carries_party_public_and_senate_landmarks():
+def test_each_measure_has_its_own_chart_with_only_its_own_scale():
+    """The senator's chart carries only Voteview marks (the senator and the Senate
+    middle); the state's chart carries only survey marks (the state estimate, its
+    range, the national estimate). Neither draws the other."""
     text = DEMO.read_text()
-    assert "var LM=[{x:X.demMedian" in text and "{x:X.repMedian" in text and "{x:X.chMedian" in text and "{x:X.usM" in text
-    # the default card carries only the state, the senator and the estimated range;
-    # party middles, the Senate's middle, the country and familiar senators live in the ruler
-    card = text.split("function render(code){")[1].split("window.addEventListener('resize'")[0]
-    assert "X.demMedian" not in card and "X.anchors" not in card and "X.chMedian" not in card
-    assert "estimated range" in card
+    sen = text.split("function senatorTrack(")[1].split("\n  }")[0]
+    sta = text.split("function stateTrack(")[1].split("\n  }")[0]
+    assert "X.chMedian" in sen and "st." not in sen and "P.usM" not in sen
+    assert "P.usM" in sta and "state-error-band" in sta and "s.record" not in sta and "X.chMedian" not in sta
     assert "{x:X.demMedian,label:'Middle Democrat',cls:'dem'}" in text
-    assert "function stagger(" in text, "labels are staggered into rows so they never overlap"
-    assert "var(--rows,1)" in css_text()
-    for cls in (".atag.dem", ".atag.rep", ".atag.pub", ".atag.sen", ".rl.dem", ".rl.rep"):
-        assert cls in css_text(), cls
+    assert "The American public" not in text
+    assert "function stagger(" in text and "var(--rows,1)" in css_text()
 
 
 def css_text():
@@ -389,11 +390,13 @@ def _prose(path):
 
 
 @pytest.mark.parametrize("path", [DEMO, REPORT, ROOT / "demo" / "methodology.template.html"])
-def test_scales_are_described_as_different_rulers_not_the_same_scale(path):
+def test_scales_are_described_as_separate_and_uncompared(path):
     t = _prose(path)
-    for claim in ("exact same scale", "very same scale", "compared directly", "same ideological dimension"):
-        assert claim not in t, f"{path.name} still claims {claim!r}"
-    assert "different rulers" in t and "rough comparison" in t
+    for claim in ("exact same scale", "very same scale", "compared directly", "same ideological dimension",
+                  "rough comparison", "one 0-to-100 line", "on one line and subtract"):
+        assert claim not in t, f"{path.name} still says {claim!r}"
+    assert "different rulers" in t or "different measurement systems" in t or "different kinds of data" in t
+    assert "not directly compared" in t or "not compared" in t or "does not currently have that bridge" in t
 
 
 def test_splits_are_not_presented_as_bill_ideology():
@@ -429,17 +432,14 @@ def test_senate_wide_totals_count_distinct_bills(report):
     assert f"{sum(g.referred for g in report.gatekeeping):,} referrals" in r
 
 
-def test_band_label_does_not_overstate_one_standard_error():
+def test_no_alignment_label_survives():
     t = _prose(DEMO)
-    assert "Aligned with State Consensus" not in t and "Statistically Aligned" not in t
-    assert "Within the estimated range" in t
-    assert "one standard error" in t
-    assert "not the same as agree" in t
+    for label in ("Aligned with State Consensus", "Statistically Aligned", "Too close to", "Within the estimated range",
+                  "side of the state estimate", "left of the state", "right of the state"):
+        assert label not in t, label
     r = REPORT.read_text()
-    assert "Within the estimated range" in r and "one standard error" in r and "not 95%" in r
+    assert "one standard error" in r and "not 95%" in r
 
-
-# ---- the reader's scale is 0 to 100 with 50 in the middle; the maths is unchanged ----
 
 def test_page_displays_the_0_to_100_scale_but_keeps_raw_data(report):
     text = DEMO.read_text()
@@ -461,12 +461,12 @@ def test_page_displays_the_0_to_100_scale_but_keeps_raw_data(report):
 def test_report_uses_the_0_to_100_scale_with_raw_beside_it(report):
     r = REPORT.read_text()
     os_ = next(a for a in report.alignments if a.bioguide == "O000174")
-    assert "The scale you see is 0 to 100." in r
+    assert "Each scale you see runs from 0 to 100." in r
     assert f'<td class="n">{os_.senator_coord * 50 + 50:.1f}</td>' in r
     assert f'<td class="n">{os_.state_coord * 50 + 50:.1f} &plusmn;' in r
     assert f"raw score {'+' if os_.senator_coord >= 0 else '&minus;'}{abs(os_.senator_coord):.3f}" in r
-    assert ("within the estimated range" in r) or ("side of the state estimate" in r)
     assert f"<b>{report.chamber.median * 50 + 50:.1f}</b>" in r
+    assert "shown separately" in r
     assert "more than 7.5 points" in r
 
 
@@ -539,7 +539,7 @@ def test_7_and_8_every_view_answers_one_question_with_a_plain_takeaway():
     for view in ("your-senators", "the-senate", "committees", "how-it-works"):
         panel = t.split(f'<section id="{view}"')[1].split("</section>")[0]
         assert 'class="takeaway"' in panel, view
-    assert "How does your senator's voting pattern compare with your state?" in t
+    assert "See your senator's voting pattern and your state's voter estimate" in t
     # generated takeaways are plain sentences without raw decimals
     for fn in ("$('take-senators').textContent=t", "$('take-senate').textContent=", "$('take-committee').textContent="):
         assert fn in t
@@ -556,9 +556,9 @@ def test_9_every_view_has_one_short_visible_caveat():
 def test_10_default_card_is_not_overloaded_with_benchmarks():
     card = DEMO.read_text().split("function render(code){")[1].split("window.addEventListener('resize'")[0]
     before_details = card.split("<details class=\"more\">")[0]
-    for secondary in ("X.demMedian", "X.repMedian", "X.chMedian", "X.usM", "X.anchors", "s.rank", "howFar(", "wherePut(", "madeOf("):
+    for secondary in ("X.demMedian", "X.repMedian", "X.anchors", "s.rank", "howFar(", "wherePut("):
         assert secondary not in before_details, secondary
-    assert "'<div class=\"terms\">'+madeOf(s,st)+'</div>'" in card
+    assert "'<div class=\"terms\">'+madeOf(s)+'</div>'" in card
 
 
 def test_11_technical_terms_stay_out_of_the_default_experience():
@@ -572,7 +572,7 @@ def test_11_technical_terms_stay_out_of_the_default_experience():
     stakes = js.split("$('stakes').innerHTML=")[1].split(";\n")[0]
     assert "cloture threshold" in stakes
     assert "cloture" not in js.replace(stakes, "")
-    for fn in ("function spatial(", "function verdict(", "function driftWords(", "function sentOnBars(", "function floorSplit("):
+    for fn in ("function senatorPos(", "function senatorTrack(", "function stateTrack(", "function stateVsNation(", "function driftWords(", "function sentOnBars(", "function floorSplit("):
         body = js.split(fn)[1].split("\n  }")[0]
         for term in ("Nokken", "MRP", "cutpoint", "standard error", "cloture", "ideal point"):
             assert term not in body, f"{term} in {fn}"
@@ -607,7 +607,9 @@ CROSS_SCALE_PHRASES = [
     "points to the right of the country", "points to the left of the country",
     "points right of the country", "points left of the country", "points from their state",
     "one of the most liberal", "one of the most conservative", "% match", "senators right of the public",
-    "senators to the right of the country", "gap: ",
+    "senators to the right of the country", "gap: ", "side of the state estimate", "left of the state",
+    "right of the state", "within the estimated range", "too close to", "crosses over", "alignment score",
+    "distance from your state", "gap between senator and state",
 ]
 
 
@@ -627,7 +629,8 @@ def test_no_user_facing_arithmetic_across_the_two_scales():
     # the script never renders a subtraction of the two coordinates as a number
     js = "".join(re.findall(r"<script>(.*?)</script>", DEMO.read_text(), re.S))
     for expr in ("d100(s.record-st.center)", "d100(gap)", "d100(P.gap)", "d100(c.cndMedian)", "d100(o.vsUS)",
-                 "d100(d.vsUS)", "d100(d.vsState)", "P.nRightOfPublic", "C.medianGap", "s.rank", "amongSenators("):
+                 "d100(d.vsUS)", "d100(d.vsState)", "P.nRightOfPublic", "C.medianGap", "s.rank", "amongSenators(",
+                 "aligned(", "M.dUS", "X.usM"):
         assert expr not in js, expr
     # the report's committee tables compare committees with the Senate only
     assert "vs. public" not in report and "against the public" not in report
@@ -635,12 +638,80 @@ def test_no_user_facing_arithmetic_across_the_two_scales():
     assert "vs. public" not in wp
 
 
-def test_direction_only_wording_is_what_the_reader_sees():
+def test_separate_measures_wording_is_what_the_reader_sees():
     js = "".join(re.findall(r"<script>(.*?)</script>", DEMO.read_text(), re.S))
-    assert "On the more conservative side of the state estimate" in js
-    assert "On the more liberal side of the state estimate" in js
-    assert "Within the estimated range" in js
-    assert "in this rough comparison" in js
-    assert "side of the national voter estimate" in js
-    t = DEMO.read_text()
-    assert "compare their\n    general direction, not the exact distance" in t or "compare their general direction, not the exact distance" in re.sub(r"\s+", " ", t)
+    assert "than the Senate middle" in js and "about at the Senate middle" in js
+    assert "on the voter measure" in js
+    assert "are shown on separate scales" in js and "not directly compared" in js
+    t = re.sub(r"\s+", " ", DEMO.read_text())
+    assert "shown separately and no distance between them is calculated" in t
+
+
+
+
+# ---- the six guarantees: no senator-versus-state operation of any kind in public code ----
+
+def _js():
+    return "".join(re.findall(r"<script>(.*?)</script>", DEMO.read_text(), re.S))
+
+
+def test_g1_public_code_never_subtracts_a_voter_estimate_from_a_legislator_score():
+    js = _js()
+    for pat in (r"record\s*-\s*st\.center", r"st\.center\s*-\s*s\.record", r"record\s*-\s*(P|V|M)\.usM",
+                r"(P|M|X)\.chM(edian)?\s*-\s*(P|M|V)\.usM", r"(P|M|V)\.usM\s*-\s*(P|M|X)\.chM",
+                r"c\.median\s*-\s*(P|M|X)\.usM", r"o\.coi\s*-\s*(P|M|X)\.usM"):
+        assert not re.search(pat, js), pat
+    # and the builder never ships such a difference
+    src = (ROOT / "src" / "civicalign" / "build_demo.py").read_text()
+    blocks = src.split("def _blocks(")[1].split("\ndef build(")[0]
+    for pat in (r"senator_coord\s*-\s*[\w.]*(national_coord|state_coord)", r"round\([^)]*(signed_gap|abs_gap)", r"\.cnd\b", r"vs_public", r"spec_score", r"\.rank\b", r"crosses_over"):
+        assert not re.search(pat, blocks), pat
+
+
+def test_g2_public_code_never_compares_the_two_scales_with_greater_or_less_than():
+    js = _js()
+    for pat in (r"record\s*[<>]=?\s*st\.center", r"st\.center\s*[<>]=?\s*s\.record", r"chM\s*[<>]=?\s*(P|M|V)\.usM",
+                r"(P|M|V)\.usM\s*[<>]=?\s*(P|M|X)\.chM", r"record\s*[<>]=?\s*(P|V|M)\.usM"):
+        assert not re.search(pat, js), pat
+
+
+def test_g3_no_senator_is_classified_left_or_right_of_their_state():
+    t = re.sub(r"const [A-Z]=[\{\[].*?[\}\]];", "", DEMO.read_text(), flags=re.S).lower()
+    for phrase in ("left of the state", "right of the state", "side of the state", "left of georgia", "right of georgia",
+                   "more liberal than the state", "more conservative than the state", "than their state", "than the state estimate"):
+        assert phrase not in t, phrase
+
+
+def test_g4_no_check_of_a_senator_against_the_state_uncertainty_band():
+    js = _js()
+    assert "aligned(" not in js and "<=se" not in js.replace(" ", "") and "M.se[code]" in js, "the band is drawn, never tested against a senator"
+    assert not re.search(r"Math\.abs\(s\.record\s*-\s*st\.center\)", js)
+
+
+def test_g5_no_ranking_of_senators_by_senator_versus_state_distance():
+    V = _block("V")
+    for st in V["states"].values():
+        for s in st["senators"]:
+            assert not ({"rank", "gap", "score", "crosses", "dir"} & set(s)), s
+    t = DEMO.read_text().lower()
+    assert "widest gap" not in t and "th widest" not in t
+
+
+def test_g6_no_cross_scale_derived_fields_in_the_public_payload():
+    forbidden = {"gap", "score", "rank", "crosses", "dir", "vsState", "vsUS", "nRightOfPublic", "nLeftOfPublic",
+                 "medianGap", "skew", "dUS", "cndMedian", "cndMean", "crossCount", "moreCons", "moreLib"}
+
+    def keys(o):
+        if isinstance(o, dict):
+            for k, v in o.items():
+                yield k
+                yield from keys(v)
+        elif isinstance(o, list):
+            for v in o:
+                yield from keys(v)
+    text = DEMO.read_text()
+    assert "const C=" not in text
+    found = {k for name in "VMXPG" for k in keys(_block(name)) if k in forbidden}
+    assert not found, found
+    # the state estimates ride along on their own scale only
+    assert len(_block("P")["stateEstimates"]) == 50
