@@ -14,6 +14,10 @@ class Senator:
     name: str
     state: str
     party: str  # "Republican" | "Democrat" | "Independent"
+    # The caucus the roster records for an Independent ("Democrat" for Sanders
+    # and King today); None for members of the two parties and for anyone whose
+    # term carries no caucus field. Read, never inferred.
+    caucus: str | None = None
 
 
 @dataclass(frozen=True)
@@ -36,6 +40,7 @@ def load_current_senators(path: Path) -> dict[str, Senator]:
             name=p["name"].get("official_full") or p["name"]["last"],
             state=term["state"],
             party=term.get("party", "Unknown"),
+            caucus=term.get("caucus"),
         )
     return out
 

@@ -70,8 +70,8 @@ table.calc tr.total td{border-bottom:none;border-top:2px solid var(--ink);
 <header>
   <p class="eyebrow">Methodology &middot; 119th Congress</p>
   <h1>How we measure Senate representation</h1>
-  <p class="sub">We compare each senator's voting record with same-party senators
-    representing states that voted similarly in recent presidential elections,
+  <p class="sub">We compare each senator's voting record with senators in the same
+    caucus group representing states that voted similarly in recent presidential elections,
     measure how equal representation of states shapes the Senate, and read each
     committee against the Senate overall. This explains where each number comes from and what it can and
     cannot tell you.</p>
@@ -106,7 +106,7 @@ table.calc tr.total td{border-bottom:none;border-top:2px solid var(--ink);
     between voter and legislator scales, and CivicAlign does not have one.</p>
   <p><b>The way round it</b> is to use a public measure that needs no survey and no
     bridge: how the state actually voted. That lets the tool pick, for each senator,
-    the comparable senators: same party, other states, similar recent presidential
+    the comparable senators: same caucus group, other states, similar recent presidential
     vote. The senator is then compared with those peers on the senators' own scale
     (section 1). The survey estimate of a state's voters is still shown, on its own
     scale, as separate context (section 1b).</p>
@@ -159,19 +159,30 @@ table.calc tr.total td{border-bottom:none;border-top:2px solid var(--ink);
 <section>
   <h2>The three measurements</h2>
 
-  <h3>1. Your senator, against same-party senators from similarly voting states</h3>
+  <h3>1. Your senator, against senators in the same caucus group from similarly voting states</h3>
   <p>This is the tool's primary result for a senator. It compares senators with
     senators, on one scale, and its reference group is something a reader can see.</p>
   <p><b>The rule, fixed.</b> A senator's peers are the current senators who (1) belong
-    to the same party group (Republicans; or Democrats together with the Independents
-    who caucus with them) and (2) represent a <em>different</em> state whose average
+    to the same caucus group and (2) represent a <em>different</em> state whose average
     two-party presidential vote across 2016, 2020, 2024 (MIT Election Data and Science Lab)
     is within &plusmn;4 points of the senator's state. The senator's own state
     is excluded entirely, so the two senators from one state never serve as each
-    other's peers; two same-party senators from one state are compared with the same
+    other's peers; two same-caucus senators from one state are compared with the same
     pool of other states. A conclusion is published only with at least 6
     peers, and only if it is the same at every one of &plusmn;2, &plusmn;3, &plusmn;4, &plusmn;5 points that also
     meets the minimum. Nothing widens the window to find peers.</p>
+  <p><b>Caucus groups, exactly.</b> There are two: the Republican caucus, and the
+    Democratic caucus, meaning Democrats plus the Independents who caucus with them.
+    "Same party" would be the wrong phrase, because the Senate's two Independents are
+    not Democrats; they are shown as Independents and placed in the Democratic caucus
+    only for this comparison. The placement is read, not assumed: the current Senate
+    roster (congress-legislators) records a <code>caucus</code> for each Independent,
+    and the tool uses that field. A Republican or a Democrat is placed by party. Any
+    other party value, or an Independent whose roster entry carries no caucus, gets no
+    group: the tool shows "no verified caucus group" for that senator and never uses
+    them as anyone's peer. The independent check that runs before every update
+    rebuilds this grouping from the roster file with its own code and fails if any
+    senator's group differs (0 without a group today).</p>
   <p><b>Why &plusmn;4 and 6.</b> A sensitivity run over windows of
     &plusmn;2, &plusmn;3, &plusmn;4 and &plusmn;5 points and minimums of 5, 6 and 8 found that
     &plusmn;2 leaves 17 senators without six peers and &plusmn;3 leaves 11, most of them
@@ -190,13 +201,13 @@ table.calc tr.total td{border-bottom:none;border-top:2px solid var(--ink);
     few peers (Susan M. Collins (ME); Cynthia M. Lummis (WY); John Barrasso (WY)). No senator is ranked, and the peer senators
     are listed by state, never ordered by position.</p>
   <p><b>Worked example: Georgia.</b> Georgia's two-party vote ran 2016: 52.7%, 2020: 49.9%, 2024: 51.1%,
-    average 51.2% Republican. Jon Ossoff's peers are the 12 Democratic
-    senators from Arizona, Michigan, Minnesota, New Hampshire, Nevada, Pennsylvania, Wisconsin. Their records run from <b>27.1</b> to
+    average 51.2% Republican. Jon Ossoff's peers are the 12 senators
+    in the Democratic caucus from Arizona, Michigan, Minnesota, New Hampshire, Nevada, Pennsylvania, Wisconsin. Their records run from <b>27.1</b> to
     <b>41.9</b> on the display line, middle 35.4; Ossoff's is
     22.9. The tool says: "Ossoff’s voting record falls outside that peer range on the more liberal side." Across the windows the conclusion is
     &plusmn;2: outside liberal; &plusmn;3: outside liberal; &plusmn;4: outside liberal; &plusmn;5: outside liberal. For Raphael Warnock, with the same peer pool, it says: "Warnock’s voting record falls outside that peer range on the more liberal side."</p>
-  <p><b>What this does and does not answer.</b> It answers: compared with same-party
-    senators representing states with a similar recent presidential vote, where does
+  <p><b>What this does and does not answer.</b> It answers: compared with senators in
+    the same caucus group representing states with a similar recent presidential vote, where does
     this senator's overall record sit? It does not answer whether the senator agrees
     with, matches, or represents the state's voters; nothing about voters enters the
     comparison. It does not say what any senator should do. And it is only as good as
@@ -427,7 +438,7 @@ table.calc tr.total td{border-bottom:none;border-top:2px solid var(--ink);
       because most roll-call votes split along it. It describes voters less well, since
       people's economic and social views do not line up as neatly.</dd>
     <dt>The peer comparison is about senators, not voters.</dt>
-    <dd>It says where a record sits among same-party senators from states with a
+    <dd>It says where a record sits among senators in the same caucus group from states with a
       similar recent presidential vote. It does not say whether a senator agrees with,
       matches or represents the state's voters, and it does not say what a senator
       should do. Where there are too few peers, or the answer depends on which nearby
@@ -469,8 +480,8 @@ table.calc tr.total td{border-bottom:none;border-top:2px solid var(--ink);
     the files in the table above. For the peer comparison, take each senator's
     <code>nokken_poole_dim1</code> from the Voteview file and their state's two-party
     presidential share from the MIT file (Republican votes divided by Republican plus
-    Democratic, averaged over the three elections); for a senator, list the same-party
-    senators from other states within 4 points of that share, and see whether the
+    Democratic, averaged over the three elections); for a senator, list the senators in
+    the same caucus group from other states within 4 points of that share, and see whether the
     senator's score falls inside their lowest-to-highest range. For the seat comparison, average
     the 100 seats' state shares and subtract the national share. For a senator's place
     in the Senate, subtract the median of the 100 scores. For a state's survey estimate,

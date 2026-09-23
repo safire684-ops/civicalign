@@ -50,14 +50,16 @@ def peer_words(status: str, last: str) -> str:
     """The one sentence for the peer comparison. Status comes from peers.py; this
     only puts it into words. Mirrored by peerWords() in the page."""
     if status == "within":
-        return f"{last}\u2019s voting record falls within the observed range of same-party senators from similarly voting states."
+        return f"{last}\u2019s voting record falls within the observed range of senators in the same caucus group from similarly voting states."
     if status == "outside_liberal":
         return f"{last}\u2019s voting record falls outside that peer range on the more liberal side."
     if status == "outside_conservative":
         return f"{last}\u2019s voting record falls outside that peer range on the more conservative side."
     if status == "unstable":
         return "The comparison changes depending on which nearby states are included, so CivicAlign does not show a simple peer-range conclusion."
-    return "There are not enough comparable same-party senators from similarly voting states for a stable comparison."
+    if status == "unsupported":
+        return "CivicAlign does not have a verified caucus group for this senator, so no peer comparison is shown."
+    return "There are not enough comparable senators in the same caucus group from similarly voting states for a stable comparison."
 
 
 def regression_audit(r: Report) -> dict:
@@ -203,6 +205,7 @@ def _report_values(r: Report) -> dict[str, str]:
         "ga_gop": f"{100 * ga.gop_two_party:.1f}" if ga else "&mdash;",
         "ga_by_year": ", ".join(f"{y}: {100 * v:.1f}%" for y, v in sorted(ga.by_year.items())) if ga else "&mdash;",
         "pr_window": f"{PEER_WINDOW * 100:g}", "pr_min": str(PEER_MIN), "pr_windows": ", ".join(f"&plusmn;{w * 100:g}" for w in PEER_WINDOWS),
+        "pr_unsupported": str(counts["unsupported"]),
         "pr_within": str(counts["within"]), "pr_outside": str(counts["outside_liberal"] + counts["outside_conservative"]),
         "pr_unstable": str(counts["unstable"]), "pr_insufficient": str(counts["insufficient"]),
         "pr_unstable_list": _name_list([c for c in r.peers if c.status == "unstable"]),
@@ -418,7 +421,7 @@ def _blocks(r: Report, cfg: Config) -> dict[str, dict]:
 
 
 def _state_relative_block(r: Report, cfg: Config) -> dict:
-    """Pillar 4 as published: each senator against same-party senators from other
+    """Pillar 4 as published: each senator against senators in the same caucus group from other
     states with a similar recent presidential vote, on the senators' (Voteview)
     scale throughout. Status comes from peers.py; the page only draws and words
     it. Peer senators are listed by state, never ordered by score. No survey
@@ -432,7 +435,7 @@ def _state_relative_block(r: Report, cfg: Config) -> dict:
     senators = {}
     for c in r.peers:
         senators[c.bioguide] = {
-            "st": c.state, "group": c.group, "independent": c.party == "Independent",
+            "st": c.state, "group": c.group, "party": c.party, "independent": c.party == "Independent",
             "actual": round(c.score, 3), "n": c.n,
             "low": round(c.low, 3) if c.low is not None else None,
             "high": round(c.high, 3) if c.high is not None else None,
@@ -444,7 +447,7 @@ def _state_relative_block(r: Report, cfg: Config) -> dict:
     return {
         "rule": {"window": WINDOW, "minPeers": MIN_PEERS, "windows": list(WINDOWS),
                  "years": list(r.election.years),
-                 "grouping": "Republican senators form one group; Democrats and the Independents who caucus with them form the other",
+                 "grouping": "two caucus groups: the Republican caucus, and the Democratic caucus (Democrats plus Independents whose roster entry records that they caucus with the Democrats); a senator with no verified caucus group gets no comparison",
                  "source": "MIT Election Data and Science Lab, U.S. President 1976-2024, two-party share"},
         "states": states, "senators": senators,
     }

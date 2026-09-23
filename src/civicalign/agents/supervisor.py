@@ -19,7 +19,9 @@ It checks, from the raw files:
     every senator's expected position, residual and typical range
   * the seat-weighted vote share against the national vote
   * every senator's Yea or Nay on the published floor votes
-  * every senator's same-party peer group from similarly voting other states,
+  * every senator's same-caucus peer group from similarly voting other states,
+  * the caucus grouping itself: every party value recognised, every Independent's
+    caucus read from the roster, nothing inferred
     its count, lowest, highest and middle record, the published conclusion, and
     the cross-window sensitivity behind it
 and, once the page is built, that the page's data blocks say the same.
@@ -62,7 +64,7 @@ def _roster(cfg: Config) -> dict[str, dict]:
     for p in people:
         term = p["terms"][-1]
         if term["type"] == "sen":
-            out[p["id"]["bioguide"]] = {"state": term["state"], "party": term.get("party", "")}
+            out[p["id"]["bioguide"]] = {"state": term["state"], "party": term.get("party", ""), "caucus": term.get("caucus")}
     return out
 
 
@@ -217,19 +219,31 @@ def _votes_for_rolls(cfg: Config, rolls: set[int]) -> dict[int, dict[str, str]]:
 
 def _peer_results(roster: dict, scores: dict[str, float], avg: dict[str, float],
                   window: float, min_peers: int, windows: tuple) -> dict[str, dict]:
-    """The peer comparison rebuilt with its own loop: same party group, other
+    """The peer comparison rebuilt with its own loop: same caucus group, other
     states only, state share within the window, conclusion per window, and the
     published status from the cross-window agreement rule."""
-    grp = lambda b: "Republican" if roster[b]["party"] == "Republican" else "Democratic"
+    def grp(b):
+        p, c = roster[b]["party"], roster[b].get("caucus")
+        if p == "Republican":
+            return "Republican"
+        if p == "Democrat":
+            return "Democratic"
+        if p == "Independent":
+            return {"Democrat": "Democratic", "Republican": "Republican"}.get(c or "")
+        return None
     out = {}
     for b, y in scores.items():
         stt = roster[b]["state"]
         if stt not in avg:
             continue
         x = avg[stt]
+        if grp(b) is None:
+            out[b] = {"n": 0, "states": [], "ids": [], "low": None, "high": None, "median": None,
+                      "status": "unsupported", "sens": {w: "unsupported" for w in windows}, "group": None}
+            continue
         def peers_at(w):
             return sorted([(roster[q]["state"], q, scores[q]) for q in scores
-                           if roster[q]["state"] != stt and grp(q) == grp(b) and roster[q]["state"] in avg
+                           if roster[q]["state"] != stt and grp(q) is not None and grp(q) == grp(b) and roster[q]["state"] in avg
                            and abs(avg[roster[q]["state"]] - x) <= w + 1e-12])
         def concl(w):
             ps = peers_at(w)
@@ -247,7 +261,7 @@ def _peer_results(roster: dict, scores: dict[str, float], avg: dict[str, float],
         ys = [p[2] for p in ps]
         out[b] = {"n": len(ps), "states": sorted({p[0] for p in ps}), "ids": [p[1] for p in ps],
                   "low": min(ys) if ys else None, "high": max(ys) if ys else None,
-                  "median": statistics.median(ys) if ys else None, "status": status, "sens": sens}
+                  "median": statistics.median(ys) if ys else None, "status": status, "sens": sens, "group": grp(b)}
     return out
 
 
@@ -352,10 +366,18 @@ def checks(report: Report, cfg: Config = DEFAULT, page: Path | None = None) -> l
                     or (d["n"] and (abs(c.low - d["low"]) > TOL or abs(c.high - d["high"]) > TOL or abs(c.median - d["median"]) > TOL)):
                 bad.append(b)
         own = [b for b, c in by_b.items() if any(p.state == c.state for p in c.peers)]
-        cross = [b for b, c in by_b.items() if any(("Republican" if report.senators[p.bioguide].party == "Republican" else "Democratic") != c.group for p in c.peers)]
+        cross = [b for b, c in by_b.items() if any(pr[p.bioguide]["group"] != c.group for p in c.peers)]
+        # the grouping itself: recognised parties only, Independents placed by the roster's caucus field
+        unknown = sorted({roster[b]["party"] for b in scores} - {"Republican", "Democrat", "Independent"})
+        inds = {b: roster[b].get("caucus") for b in scores if roster[b]["party"] == "Independent"}
+        bad_grp = [b for b, d in pr.items() if by_b[b].group != d["group"]]
+        dem_as_ind = [b for b, c in by_b.items() if c.party == "Independent" and c.group == "Democratic" and roster[b].get("caucus") != "Democrat"]
+        out.append(Check("caucus grouping explicit: no unrecognised party, Independents by roster caucus", not unknown and not bad_grp and not dem_as_ind
+                         and all(v in ("Democrat", "Republican") for v in inds.values()),
+                         f"Independents {inds}" + (f"; unrecognised parties {unknown}" if unknown else "") + (f"; group mismatches {bad_grp}" if bad_grp else "")))
         out.append(Check("every senator's peer group, range, status and sensitivity", not bad and not own and not cross and len(pr) == len(by_b),
                          f"{len(pr)} senators rebuilt" + (f"; mismatches {bad}" if bad else "") + (f"; own-state peers {own}" if own else "") + (f"; cross-party peers {cross}" if cross else "")))
-        counts = {s: sum(1 for d in pr.values() if d["status"] == s) for s in ("within", "outside_liberal", "outside_conservative", "unstable", "insufficient")}
+        counts = {s: sum(1 for d in pr.values() if d["status"] == s) for s in ("within", "outside_liberal", "outside_conservative", "unstable", "insufficient", "unsupported")}
         out.append(Check("peer rule: fixed window, minimum and cross-window check", WINDOW == 0.04 and MIN_PEERS == 6 and WINDOWS == (0.02, 0.03, 0.04, 0.05),
                          f"±{WINDOW*100:g} pts, min {MIN_PEERS}, windows {[w*100 for w in WINDOWS]}; statuses {counts}"))
 
@@ -407,7 +429,7 @@ def checks(report: Report, cfg: Config = DEFAULT, page: Path | None = None) -> l
             bad = []
             for b, s in R["senators"].items():
                 d = pr.get(b)
-                if d is None or abs(s["actual"] - scores[b]) > 1e-3 or s["n"] != d["n"] or s["states"] != d["states"] or s["status"] != d["status"] \
+                if d is None or abs(s["actual"] - scores[b]) > 1e-3 or s["n"] != d["n"] or s["states"] != d["states"] or s["status"] != d["status"] or s["group"] != d["group"] \
                         or s["sensitivity"] != {f"{w*100:g}": v for w, v in d["sens"].items()} \
                         or [p["b"] for p in s["peers"]] != sorted(d["ids"], key=lambda q: (roster[q]["state"], report.senators[q].name)) \
                         or any(p["st"] == s["st"] for p in s["peers"]) \

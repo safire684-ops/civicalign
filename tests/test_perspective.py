@@ -54,7 +54,7 @@ def test_1_primary_senator_result_is_state_relative():
     assert "peerWords(pc.status,last)" in before
     assert "senatorPos(s).w" not in before and "sp.w" not in before, "the Senate-middle sentence is not the headline"
     assert "Where they sit in the Senate" in card and "'+sp.w+'" in card.split("Where they sit in the Senate")[1]
-    assert "takeaway(st)" in _js() and "comparable '+g+' senators" in _fn("takeaway")
+    assert "takeaway(st)" in _js() and "comparable senators in the '+g" in _fn("takeaway")
     sec = _markup().split('<section id="your-senators"')[1].split("</section>")[0]
     assert sec.index('id="stateinput"') < sec.index('id="cards"') < sec.index('id="stateblock"')
 
@@ -157,7 +157,7 @@ def test_9_state_election_input_is_shown(report):
 
 # 10. the fixed rule and its uncertainty states drive the wording
 def test_10_rule_drives_the_wording(report):
-    assert peer_words("within", "Kaine") == f"Kaine{A}s voting record falls within the observed range of same-party senators from similarly voting states."
+    assert peer_words("within", "Kaine") == f"Kaine{A}s voting record falls within the observed range of senators in the same caucus group from similarly voting states."
     assert peer_words("outside_liberal", "Warnock") == f"Warnock{A}s voting record falls outside that peer range on the more liberal side."
     assert peer_words("outside_conservative", "Scott") == f"Scott{A}s voting record falls outside that peer range on the more conservative side."
     R = _block("R")

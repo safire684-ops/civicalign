@@ -35,7 +35,9 @@ What never changes without a deliberate decision:
    committee vs Senate middle, 60-vote point vs Senate middle, state vs national
    voter estimate, seats' vote share vs national vote share.
 1b. **The primary senator result is a peer comparison** (`peers.py`): same
-   party group (Republicans; Democrats with the two Independents), other states
+   caucus group (Republican caucus; Democratic caucus = Democrats plus the
+   Independents whose roster `caucus` field says Democrat; any other party value
+   or a missing caucus -> status `unsupported`, never a peer), other states
    only, state two-party presidential share (2016/2020/2024, MIT) within ±4
    points, minimum six peers, conclusion published only if it agrees at ±2, ±3,
    ±4 and ±5. Five statuses: within / outside_liberal / outside_conservative /
@@ -87,18 +89,19 @@ All seven are enforced by tests that run in the weekly job.
   compared with the senators." / "Senate data updated: <date> · Voter estimate:
   2020 wave".
 - **Your senators (Pillar 4).** Takeaway ("Both Ossoff's and Warnock's voting
-  records fall outside the observed range of comparable Democratic senators, on
-  the more liberal side."), state picker, "YOUR SENATORS — How do
-  their voting records compare with same-party senators from states that voted
-  similarly?", "Georgia recent presidential vote used for peer matching: 2016 ·
+  records fall outside the observed range of comparable senators in the
+  Democratic caucus, on the more liberal side."), state picker, "YOUR SENATORS — How do
+  their voting records compare with senators in the same caucus group from
+  states that voted similarly?", "Georgia recent presidential vote used for peer matching: 2016 ·
   2020 · 2024. Both senators are compared with the same pool of other states."
-  Then a card per senator: "Compared with 12 Democratic senators from 7 other
-  states with similar recent presidential voting (i)", SENATE VOTING SCALE with
+  Then a card per senator: "Compared with 12 senators in the Democratic caucus
+  from 7 other states with similar recent presidential voting (i)", SENATE VOTING SCALE with
   the observed peer range bar, the "Peer middle" tick and the senator's dot, the
   decoder ("Bar: lowest to highest peer record · Tick: peer middle · Dot: …"),
   the one sentence from the backend status, "This compares the senator with
-  same-party senators from states with similar recent presidential voting. It
-  does not measure whether the senator agrees with the state's voters.", the vote
+  senators in the same caucus group from states with similar recent presidential
+  voting. It does not measure whether the senator agrees with the state's
+  voters.", the vote
   count, then folds: "How were these peers chosen?" (the rule, the state's three
   shares and the average, peer states with shares, peer senators by state,
   conclusion at each window, the numbers), "Recent votes in this record",
@@ -166,7 +169,8 @@ nothing, and leaves the previously verified site live.
 
 Roster changes (resignations, appointments, deaths, new members) flow through
 the roster join; a senator with fewer than 30 roll calls gets the
-"Insufficient data" card, never a predecessor's score. The seat de-duplication
+"waits until a senator has at least 30 recorded floor votes" card (a display
+rule, not a validity claim), never a predecessor's score. The seat de-duplication
 guard (104 Voteview rows for 100 seats) is in `sources/voteview.py`.
 
 ## Routine tasks
@@ -216,7 +220,7 @@ guard (104 Voteview rows for 100 seats) is in `sources/voteview.py`.
   `test_supervisor.py`, `test_independent.py` (raw-file recomputation),
   `test_floor_votes.py`, `test_math.py`, `test_regressions.py`,
   `test_representation.py`, `test_uncertainty.py`, `test_whitepaper.py`.
-  214 pass as of this handoff; supervisor 33/33; verify 12/12.
+  219 pass as of this handoff; supervisor 34/34; verify 12/12.
 
 ## Open items
 

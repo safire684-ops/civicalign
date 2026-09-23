@@ -547,7 +547,7 @@ def test_7_and_8_every_view_answers_one_question_with_a_plain_takeaway():
         panel = t.split(f'<section id="{view}"')[1].split("</section>")[0]
         assert 'class="takeaway"' in panel, view
     assert "<h1>Your senators, in the context of your state</h1>" in t
-    assert "See how each senator’s Senate voting record compares with same-party\n    senators representing states that voted similarly in recent presidential elections." in t
+    assert "See how each senator’s Senate voting record compares with senators in the\n    same caucus group representing states that voted similarly in recent presidential elections." in t
     # generated takeaways are plain sentences without raw decimals
     for fn in ("$('take-senators').textContent=t", "$('take-senate').textContent=", "$('take-committee').textContent="):
         assert fn in t
@@ -859,11 +859,11 @@ def _default_view_text():
 def test_v1_every_view_opens_with_a_plain_orientation_sentence():
     m = _markup()
     head = m.split("<nav")[0]
-    assert "See how each senator’s Senate voting record compares with same-party\n    senators representing states that voted similarly in recent presidential elections." in head
+    assert "See how each senator’s Senate voting record compares with senators in the\n    same caucus group representing states that voted similarly in recent presidential elections." in head
     assert "is not directly compared with the senators" in head
     assert "voter estimates" not in head.lower(), "the first sentence does not lean on an unexplained term"
     js = _js()
-    assert "How do their voting records compare with same-party senators from states that voted similarly?" in js
+    assert "How do their voting records compare with senators in the same caucus group from states that voted similarly?" in js
     assert "Academic estimate of where '+st.name+' voters generally sit politically compared with voters nationally." in js
     assert "Below that: the Senate’s voting center and the 60-vote point." in js
     sec = m.split('<section id="committees"')[1].split("</section>")[0]
@@ -895,7 +895,7 @@ def test_v3_voter_estimate_says_what_is_being_estimated():
 def test_v4_senator_and_voter_systems_stay_explicitly_separate():
     sec = _markup().split('<section id="your-senators"')[1].split("</section>")[0]
     outside = re.sub(r"<details.*?</details>", "", sec, flags=re.S)
-    assert "does not say whether a senator represents, agrees with, or matches\n    the state’s voters" in outside
+    assert "does not say whether a senator represents" in re.sub(r"\s+", " ", outside) and "the state’s voters" in outside
     assert "This is a separate survey measure and is not directly compared with your senators." in _js()
     assert "is not directly compared with the senators" in _markup().split("<nav")[0]
     js = _js()

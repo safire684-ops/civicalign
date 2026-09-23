@@ -48,8 +48,9 @@ src/civicalign/
 ## What the live page shows
 
 The live page (`demo/senator-check.html`, `demo/methodology.html`) leads with a
-**peer comparison** (`peers.py`): each senator against same-party senators
-(Republicans; or Democrats with the Independents who caucus with them) from
+**peer comparison** (`peers.py`): each senator against senators in the same
+caucus group (the Republican caucus; or the Democratic caucus, meaning Democrats
+plus the Independents whose roster entry records that they caucus with them) from
 *other* states whose two-party presidential vote, averaged over 2016/2020/2024,
 is within ±4 points of the senator's state. The page shows the observed lowest,
 highest and middle peer record and the senator's own record, all on the

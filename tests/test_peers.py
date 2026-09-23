@@ -7,8 +7,8 @@ import pytest
 
 from civicalign.build_demo import peer_words
 from civicalign.config import DEFAULT
-from civicalign.peers import (INSUFFICIENT, MIN_PEERS, UNSTABLE, WINDOW, WINDOWS, conclusion,
-                              group, peer_comparisons, status_from)
+from civicalign.peers import (INSUFFICIENT, MIN_PEERS, UNSTABLE, UNSUPPORTED, WINDOW, WINDOWS, PARTY_CAUCUS,
+                              INDEPENDENT_CAUCUS, caucus_group, conclusion, peer_comparisons, status_from)
 from civicalign.pipeline import run
 from civicalign.sources import elections
 from civicalign.sources.rosters import Senator
@@ -39,7 +39,7 @@ def _fn(name):
 def _toy():
     roster = {"A": Senator("A", "A Dem", "GA", "Democrat"), "B": Senator("B", "B Dem", "GA", "Democrat"),
               "C": Senator("C", "C Dem", "AZ", "Democrat"), "D": Senator("D", "D Dem", "MI", "Democrat"),
-              "E": Senator("E", "E Ind", "NV", "Independent"), "F": Senator("F", "F Dem", "PA", "Democrat"),
+              "E": Senator("E", "E Ind", "NV", "Independent", "Democrat"), "F": Senator("F", "F Dem", "PA", "Democrat"),
               "G": Senator("G", "G Dem", "WI", "Democrat"), "H": Senator("H", "H Dem", "NH", "Democrat"),
               "I": Senator("I", "I Rep", "NC", "Republican"), "J": Senator("J", "J Dem", "CA", "Democrat")}
     shares = {"GA": .51, "AZ": .515, "MI": .50, "NV": .497, "PA": .502, "WI": .502, "NH": .48, "NC": .514, "CA": .36}
@@ -50,11 +50,13 @@ def _toy():
     return roster, lean, scores
 
 
-# 1. same-party peers only
-def test_1_same_party_only(report):
+# 1. same-caucus peers only
+def test_1_same_caucus_only(report):
     for c in report.peers:
-        assert all(group(report.senators[p.bioguide].party) == c.group for p in c.peers), c.name
-    assert group("Independent") == "Democratic" and group("Democrat") == "Democratic" and group("Republican") == "Republican"
+        assert all(caucus_group(report.senators[p.bioguide]) == c.group for p in c.peers), c.name
+    assert caucus_group(Senator("x", "x", "XX", "Democrat")) == "Democratic"
+    assert caucus_group(Senator("x", "x", "XX", "Republican")) == "Republican"
+    assert caucus_group(Senator("x", "x", "XX", "Independent", "Democrat")) == "Democratic"
 
 
 # 2. focal state excluded; 3. the two senators of a state never peer each other
@@ -119,7 +121,7 @@ def test_8_and_9_sensitivity_and_unstable_wording(report):
 
 # 10. insufficient groups degrade honestly
 def test_10_insufficient_degrades_honestly(report):
-    assert peer_words(INSUFFICIENT, "X") == "There are not enough comparable same-party senators from similarly voting states for a stable comparison."
+    assert peer_words(INSUFFICIENT, "X") == "There are not enough comparable senators in the same caucus group from similarly voting states for a stable comparison."
     R = _block("R")
     for c in report.peers:
         if c.status == INSUFFICIENT:
@@ -179,7 +181,7 @@ def test_17_peer_states_and_count_inspectable(report):
         s = R["senators"][c.bioguide]
         assert s["n"] == c.n and s["states"] == c.peer_states
     card = _fn("senatorCard")
-    assert "pc.n+' '+groupLabel(pc)+' senator'" in card and "pc.states.length+' other state'" in card
+    assert "pc.n+' senator'+(pc.n===1?'':'s')+' in the '+groupLabel(pc)" in card and "pc.states.length+' other state'" in card
     assert "Peer states ('+pc.states.length+')" in _fn("peerWhy")
     assert "recent presidential vote used for peer matching" in _js()
 
@@ -229,3 +231,65 @@ def test_georgia_reads_as_the_audit_found(report):
         assert c.status == "outside_liberal" and c.n >= MIN_PEERS
         assert set(c.sensitivity.values()) == {"outside_liberal"}
         assert peer_words(c.status, "X").endswith("on the more liberal side.")
+
+
+# ---- caucus-group terminology and fail-closed grouping ----
+
+def _public_text():
+    t = re.sub(r"const [A-Z]=[\{\[].*?[\}\]];", "", DEMO.read_text(), flags=re.S)
+    return t + REPORT.read_text()
+
+
+def test_c1_no_public_text_says_same_party():
+    t = _public_text().lower()
+    assert "same-party" not in t and "same party" not in t.replace("\"same party\" would be the wrong phrase", "")
+    assert "senators in the same caucus group" in t
+
+
+def test_c2_independents_are_never_displayed_as_democrats(report):
+    R = _block("R")
+    for c in report.peers:
+        if c.party == "Independent":
+            assert R["senators"][c.bioguide]["party"] == "Independent" and R["senators"][c.bioguide]["independent"] is True
+    js = _js()
+    assert "esc(s.party)" in _fn("senatorCard"), "the badge shows the roster party"
+    assert "groupLabel(pc)" in _fn("senatorCard") and "'Democratic caucus'" in _fn("groupLabel")
+    assert "is an Independent who caucuses with the Democrats" in _fn("peerWhy")
+    assert "Democrats plus the\n      Independents who caucus with them" in DEMO.read_text().split("<script>")[0]
+
+
+def test_c3_unknown_party_cannot_become_a_caucus():
+    for party in ("Libertarian", "Unknown", "", "Green", "democrat"):
+        assert caucus_group(Senator("x", "x", "XX", party)) is None, party
+    assert caucus_group(Senator("x", "x", "XX", "Independent")) is None, "no caucus field -> no group"
+    assert caucus_group(Senator("x", "x", "XX", "Independent", "Green")) is None
+    roster, lean, scores = _toy()
+    roster["E"] = Senator("E", "E Odd", "NV", "Libertarian")
+    cs = {c.bioguide: c for c in peer_comparisons(scores, roster, lean)}
+    assert cs["E"].status == UNSUPPORTED and cs["E"].group is None and cs["E"].peers == ()
+    assert all("E" not in {p.bioguide for p in c.peers} for c in cs.values()), "an unsupported senator is nobody's peer"
+    assert peer_words(UNSUPPORTED, "X") == "CivicAlign does not have a verified caucus group for this senator, so no peer comparison is shown."
+    assert "status==='unsupported'" in _fn("peerWords")
+
+
+def test_c4_current_caucus_mapping_is_explicit(report):
+    assert PARTY_CAUCUS == {"Republican": "Republican", "Democrat": "Democratic"}
+    assert INDEPENDENT_CAUCUS == {"Democrat": "Democratic", "Republican": "Republican"}
+    inds = [s for s in report.senators.values() if s.party == "Independent"]
+    assert inds and all(s.caucus == "Democrat" for s in inds), [(s.name, s.caucus) for s in inds]
+    assert all(s.party in ("Republican", "Democrat", "Independent") for s in report.senators.values())
+    assert not [c for c in report.peers if c.status == UNSUPPORTED]
+    from civicalign.agents.supervisor import checks
+    names = {c.name: c for c in checks(report, DEFAULT, DEMO)}
+    n = "caucus grouping explicit: no unrecognised party, Independents by roster caucus"
+    assert n in names and names[n].ok
+    src = (ROOT / "src" / "civicalign" / "peers.py").read_text().split('"""')[2]
+    assert 'else "Democratic"' not in src and "else 'Democratic'" not in src, "no silent default"
+
+
+def test_c5_thirty_votes_is_a_display_rule_not_a_validity_claim():
+    t = _public_text().lower()
+    for w in ("statistically valid", "minimum floor votes", "statistical validity"):
+        assert w not in t, w
+    assert "waits until a senator has at least 30 recorded floor votes before showing a voting-position estimate" in t
+    assert "this senator has not reached that threshold yet" in t

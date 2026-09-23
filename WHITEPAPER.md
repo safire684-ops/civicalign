@@ -87,12 +87,12 @@ bridge. Earlier versions reported such a distance, first as a percentage, then i
 points, then as a direction; all three were withdrawn as invalid.
 
 What the tool leads with instead is a peer comparison with election results as
-the matching input: each senator against same-party senators from other states
+the matching input: each senator against senators in the same caucus group from other states
 whose recent presidential two-party vote is within four points, shown as the
 observed peer range and middle on the senators' scale, with a conclusion only
 where at least six peers exist and the answer is the same across nearby
 windows. It answers a relative question about senators: how does this record
-compare with same-party senators representing similarly voting states? An
+compare with same-caucus senators representing similarly voting states? An
 earlier version led with the regression of senator position on state vote
 share; an audit found that its line mostly measures the party split and falls,
 for competitive states, in a gap where no senator sits, so it was retired from
