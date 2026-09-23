@@ -42,12 +42,10 @@
     <summary><span>Explore the scale</span></summary>
     <div class="ruler" id="ruler"></div>
   </details>
-  <p class="limit">The two numbers come from different rulers, so every distance here
-    is a rough comparison. The state's position is a survey estimate, shown with one
-    standard error as a shaded band; a senator inside it is "too close to tell apart",
-    which is not the same as agreement. The distance is in points on the scale, not a
-    share of votes, and says how far apart the two sit overall, not which issues make
-    the difference.</p>
+  <p class="limit">The two numbers come from different rulers, so treat every distance
+    as a rough comparison. It says how far apart the two sit overall, not which issues
+    make the difference. "Too close to tell apart" means the survey cannot separate
+    them, not that they agree.</p>
 </section>
 
 <!-- ============ 2. The Senate ============ -->
@@ -95,10 +93,9 @@
     <p class="caveat" id="cmcaveat"></p>
     <p class="caveat" id="gatecaveat"></p>
   </details>
-  <p class="limit">Committee figures are softer than senator figures. The members'
-    midpoint can move sharply when one member is replaced, and the split-on-its-bills
-    mark rests on a handful of votes. Bills still in committee are counted as not sent
-    on yet, not as dead. The count behind each is shown.</p>
+  <p class="limit">Committee figures are softer than senator figures: the members'
+    midpoint can move sharply when one member is replaced, and the split mark rests on
+    a handful of votes. A bill still in committee is "not yet", not dead.</p>
 </section>
 
 <!-- ============ 4. How it works ============ -->
@@ -146,12 +143,10 @@
         rough comparison: trust the direction and the rough size, not the second
         decimal.</dd>
       <dt>Your state's position is an estimate, not a headcount.</dt>
-      <dd>It comes from large academic surveys modelled down to the state level. Its
-        uncertainty is drawn on every track as a shaded band: one standard error, about
-        0.04, which is a modest band. A senator inside it is shown as "too close to tell
-        apart" rather than given a gap too small to trust. That is not the same as
-        agreement: a state's number is an average of many people who disagree with each
-        other. The senator scores have error too, which is not published.</dd>
+      <dd>It comes from large academic surveys modelled down to the state level. The
+        shaded band on each track is one standard error, about 0.04. A senator inside it
+        is "too close to tell apart", which is not agreement: a state's number is an
+        average of many people who disagree with each other.</dd>
       <dt>The distance is in points on the scale, not a share of votes.</dt>
       <dd>"0.61 points further Left" is a position on the liberal&ndash;conservative
         line. It does not mean the senator voted against the state 61% of the time.</dd>
@@ -301,7 +296,7 @@ const C={"medianScore":83.2,"medianGap":0.336,"crossCount":9,"moreCons":53,"more
                  : {t:a+' points further Left than the state average',c:'left',i:'\u2190'};
   }
   function verdict(s,st,se,i){
-    if(aligned(s,st,se)) return 'The difference between '+esc(surname(s.name))+' and '+esc(st.name)+' voters is <b>smaller than the survey’s own uncertainty</b>, so the two cannot be told apart. That is not the same as agreeing with everyone in '+esc(st.name)+': the state’s number is an average of people who disagree with each other.';
+    if(aligned(s,st,se)) return 'The gap is <b>smaller than the survey’s own uncertainty</b>, so the two cannot be told apart. That is not the same as agreement.';
     if(s.crosses){
       var tail=i===0?' Only '+C.crossCount+' of the 100 senators are on the opposite side of the middle from their own state.':' Both of '+esc(st.name)+'’s senators are in that position.';
       return 'Leans <b>'+s.dir+'</b> while '+esc(st.name)+' voters lean the <b>other way</b>.'+tail;
@@ -332,6 +327,13 @@ const C={"medianScore":83.2,"medianGap":0.336,"crossCount":9,"moreCons":53,"more
   function statePlace(st){
     var d=st.center-X.usM;
     return Math.abs(d)<=0.05?'about where the American public as a whole sits':Math.abs(d).toFixed(2)+' points to the '+(d>0?'right':'left')+' of the American public';
+  }
+  function plainTerms(s,st,se){
+    var gap=Math.abs(s.record-st.center), last=esc(surname(s.name)), stName=esc(st.name);
+    if(gap<=se) return '';
+    var pr=nearestPair(gap), ratio=gap/C.medianGap;
+    var typ=ratio>=1.15?'about '+ratio.toFixed(1)+' times the typical senator’s gap from their state':ratio<=0.85?'less than the typical senator’s gap from their state':'about the same as the typical senator’s gap from their state';
+    return '<div class="term"><h4>In plain terms</h4><p>'+gap.toFixed(2)+' points is about <b>'+Math.round(gap/2*100)+'%</b> of the whole scale, roughly the distance between <b>'+esc(pr.a.name)+'</b> and <b>'+esc(pr.b.name)+'</b>, and '+typ+'. '+last+'’s record sits '+partyPlace(s)+'; '+stName+'’s voters sit '+statePlace(st)+'.</p></div>';
   }
   function howFar(s,st,se){
     var gap=Math.abs(s.record-st.center), last=esc(surname(s.name)), stName=esc(st.name);
@@ -409,10 +411,10 @@ const C={"medianScore":83.2,"medianGap":0.336,"crossCount":9,"moreCons":53,"more
         '</div>'+
         '<p class="sr-only">'+said+'</p>'+
         '</div>'+
-        '<div class="terms">'+howFar(s,st,se)+wherePut(s,st)+'</div>'+
+        '<div class="terms">'+plainTerms(s,st,se)+'</div>'+
         '<details class="more"><summary><span>See details</span></summary>'+
           (s.rank<=15&&!isA?'<p class="rank">'+s.rank+ordinal(s.rank)+' widest gap of 100 senators</p>':'')+
-          '<div class="terms">'+madeOf(s,st)+'</div>'+
+          '<div class="terms">'+howFar(s,st,se)+wherePut(s,st)+madeOf(s,st)+'</div>'+
           '<p class="legend"><i></i>shaded band = one standard error on '+stName+'’s position (±'+se.toFixed(2)+'), a modest band. The faint ticks are landmarks at their real positions: the middle senator of each party, the Senate’s middle, the American public, and familiar senators. Open “Explore the scale” below for more.</p>'+
         '</details></div>';
     }).join('');

@@ -387,7 +387,8 @@ def test_each_card_explains_how_far_where_and_what_the_numbers_are_made_of():
     assert "of the 100 senators" in text and "of the other '+others+' states" in text
     assert "roll-call votes</b> they have cast this Congress" in text
     assert "It cannot say which issues make up the difference." in text
-    assert "'<div class=\"terms\">'+howFar(s,st,se)+wherePut(s,st)+'</div>'" in text, "how-far and where are visible, not behind a disclosure"
+    assert "'<div class=\"terms\">'+plainTerms(s,st,se)+'</div>'" in text, "one short plain-terms box is visible"
+    assert "howFar(s,st,se)+wherePut(s,st)+madeOf(s,st)" in text, "the fuller explanation sits behind See details"
     for banned in ("Medicaid", "abortion", "gun", "immigration bill", "climate"):
         assert banned not in text.split("<script>")[0] or True  # prose may mention issue names only as examples of what it cannot say
     assert "this page does not guess" in text
