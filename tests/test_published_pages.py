@@ -460,7 +460,7 @@ def test_page_displays_the_0_to_100_scale_but_keeps_raw_data(report):
 
 def test_report_uses_the_0_to_100_scale_with_raw_beside_it(report):
     r = REPORT.read_text()
-    os_ = next(a for a in report.alignments if a.bioguide == "O000174")
+    os_ = next(a for a in report.positions if a.bioguide == "O000174")
     assert "Each scale you see runs from 0 to 100." in r
     assert f'<td class="n">{os_.senator_coord * 50 + 50:.1f}</td>' in r
     assert f'<td class="n">{os_.state_coord * 50 + 50:.1f} &plusmn;' in r

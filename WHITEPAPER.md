@@ -75,23 +75,23 @@ This is a statement about which electorates hold seats. It is not a statement
 about senators' opinions, and it does not imply any senator is unrepresentative of
 their own state.
 
-## Finding 2: how far each senator sits from their state
+## Finding 2: the senator and the state, on separate scales
 
-The distance is reported in points on the scale — "0.61 points further Left than
-the state average" — never as a percentage. An earlier version showed a
-percentage; readers took it for a share of votes, which it never was. A distance
-inside the state estimate's margin of error (about ±0.04) is reported as aligned
-rather than as a gap, because the survey cannot tell the two positions apart.
+A senator's position comes from roll-call votes (Voteview) and a state's from
+survey answers (the American Ideology Project). Those are two measurement
+systems without a validated bridge, so this project reports no distance between
+a senator and their state's survey estimate, not even its sign. A direct
+senator-versus-state alignment measure requires a validated statistical bridge
+between voter and legislator scales. CivicAlign does not currently have that
+bridge. Earlier versions reported such a distance, first as a percentage, then in
+points, then as a direction; all three were withdrawn as invalid.
 
-The widest gaps in the current Senate:
-
-| senator | state | senator | state | gap |
-|---|---|---|---|---|
-| Rick Scott | FL | +0.926 | +0.002 | 0.924 |
-| Ron Johnson | WI | +0.897 | +0.004 | 0.893 |
-| Ted Cruz | TX | +0.865 | +0.052 | 0.813 |
-| Mike Lee | UT | +0.891 | +0.107 | 0.784 |
-| Tommy Tuberville | AL | +0.936 | +0.198 | 0.738 |
+What the tool shows instead stays within one system each: a senator against the
+Senate's middle, on the senators' scale, and a state's estimate against the
+national estimate, on the voters' scale. The regression in Finding 1 is the
+project's only senator-to-state statement, and it answers a different question
+with election results on both sides: how does this senator compare with the
+voting pattern typically associated with states that vote similarly?
 
 **Perspective.** A position on its own means nothing to a reader, so the tool
 marks landmarks on the same line: the middle Democrat (−0.378), the middle

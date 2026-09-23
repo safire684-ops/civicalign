@@ -52,7 +52,7 @@ def _sd100(v: float, places: int = 1) -> str:
 def _report_values(r: Report) -> dict[str, str]:
     from datetime import date
 
-    scored = [a for a in r.alignments if a.abs_gap is not None]
+    scored = [a for a in r.positions if a.state_coord is not None]
     os_ = next(a for a in scored if a.bioguide == "O000174")
 
     rows = [g for g in r.gatekeeping if g.is_reportable]
@@ -89,18 +89,6 @@ def _report_values(r: Report) -> dict[str, str]:
                  for g in rows[:4])
              + '  </table></div>')
 
-    top = ('  <div class="tw"><table>\n'
-           '    <tr><th>Senator</th><th>State</th><th class="n">Record</th>'
-           '<th class="n">Their state</th><th class="n">Gap</th></tr>\n'
-           + "".join(
-               f'    <tr><td>{a.name}</td><td>{a.state}</td>'
-               f'<td class="n">{_p100(a.senator_coord)}</td>'
-               f'<td class="n">{_p100(a.state_coord)}</td>'
-               f'<td class="n">{_d100(a.abs_gap)}</td></tr>\n'
-               for a in sorted(scored, key=lambda a: -a.abs_gap)[:5])
-           + '  </table></div>')
-
-    cross = sum(1 for a in scored if a.crosses_over)
     d = date.today()
 
     def _bill(k):
@@ -141,7 +129,6 @@ def _report_values(r: Report) -> dict[str, str]:
         "asof": f"{d.day} {d.strftime('%B %Y')}",
         "os_x": _p100(os_.senator_coord), "os_s": _p100(os_.state_coord),
         "os_x_raw": _signed(os_.senator_coord), "os_s_raw": _signed(os_.state_coord),
-        "os_gap_raw": f"{os_.abs_gap:.3f}", "os_gap_label": _d100(os_.abs_gap, 0),
         "os_se_raw": f"{r.state_source.state_se(os_.state) or 0:.3f}",
         "os_se": _d100(r.state_source.state_se(os_.state) or 0, 0),
         "os_vs_senate": _sd100(os_.senator_coord - r.chamber.median),
@@ -151,19 +138,8 @@ def _report_values(r: Report) -> dict[str, str]:
         "ga_words": ("slightly conservative" if 0.05 < os_.state_coord <= 0.15 else "clearly conservative" if os_.state_coord > 0.15
                      else "slightly liberal" if -0.15 <= os_.state_coord < -0.05 else "clearly liberal" if os_.state_coord < -0.15
                      else "about in the middle"),
-        "os_words": ("well" if os_.abs_gap / st.median([a.abs_gap for a in scored]) >= 1.25
-                     else "somewhat" if os_.abs_gap / st.median([a.abs_gap for a in scored]) >= 0.75
-                     else "a little"),
-        "os_gap": _d100(os_.abs_gap), "os_as": f"{os_.spec_score:.1f}",
-        "os_as_int": str(int(os_.spec_score)),
-        "med_as": f"{st.median([a.spec_score for a in scored]):.1f}",
-        "more_cons": str(sum(1 for a in scored if a.signed_gap > 0)),
-        "more_lib": str(sum(1 for a in scored if a.signed_gap < 0)),
-        "cross_word": NUMBER_WORDS[cross] if cross < len(NUMBER_WORDS) else str(cross),
-        "top_table": top,
         "ch_m": _p100(r.chamber.median),
         "us_m": _p100(r.chamber.national_coord),
-        "d_us": _d100(r.chamber.apportionment_skew),
         "gk_referrals": f"{ref:,}",
         "gk_referred": f"{r.bills_referred_unique:,}", "gk_reported": str(r.bills_reported_unique),
         "gk_pct": str(round(100 * r.bills_reported_unique / r.bills_referred_unique)) if r.bills_referred_unique else "0",
@@ -173,14 +149,10 @@ def _report_values(r: Report) -> dict[str, str]:
         "gk_n_reportable": NUMBER_WORDS[len(rows)] if len(rows) < len(NUMBER_WORDS) else str(len(rows)),
         "gk_asof": _billflow_asof(r.config) or "the last data refresh",
         "gk_worked": worked, "gk_table": table,
-        "med_gap": _d100(st.median([a.abs_gap for a in scored]), 0),
-        "os_signed": _sd100(os_.signed_gap),
         "dem_m": _p100(dem_m, 0), "rep_m": _p100(rep_m, 0), "anchor_table": anchor_table,
         "os_votes": str(r.votes_cast.get("O000174", 0)),
-        "os_pct": str(round(os_.abs_gap / 2 * 100)),
         "oi_table": oi_table, "oi_count": str(len(oi)),
         "cnd_table": cnd_table,
-        "n_right": str(sum(1 for a in scored if a.senator_coord > r.chamber.national_coord)),
         "pivot": _p100(r.chamber.pivot),
     }
 
@@ -236,8 +208,8 @@ CARD_ANCHORS = {"S000033", "S000148", "C001035", "M000355", "C001098"}
 def _blocks(r: Report, cfg: Config) -> dict[str, dict]:
     party = {b: s.party for b, s in r.senators.items()}
     by_state = defaultdict(list)
-    for a in r.alignments:
-        if a.abs_gap is not None:
+    for a in r.positions:
+        if a.state_coord is not None:
             by_state[a.state].append(a)
 
     states = {}
@@ -264,7 +236,7 @@ def _blocks(r: Report, cfg: Config) -> dict[str, dict]:
             "record": None, "votes": r.votes_cast.get(sen.bioguide),
         })
 
-    scored = [a for a in r.alignments if a.abs_gap is not None]
+    scored = [a for a in r.positions if a.state_coord is not None]
     f = r.fit
 
     se_map = {}
@@ -348,8 +320,8 @@ def _public_block(r: Report, cfg: Config) -> dict:
     estimates on their own scale. Nothing here compares the two systems."""
     us = r.chamber.national_coord
     dots = []
-    for a in r.alignments:
-        if a.abs_gap is None:
+    for a in r.positions:
+        if a.state_coord is None:
             continue
         dots.append({
             "b": a.bioguide, "n": a.name, "st": a.state,
@@ -359,7 +331,7 @@ def _public_block(r: Report, cfg: Config) -> dict:
         })
     dots.sort(key=lambda d: d["x"])
     # state voter estimates on their own scale, for the voter-side chart
-    states = sorted({a.state for a in r.alignments if a.abs_gap is not None})
+    states = sorted({a.state for a in r.positions if a.state_coord is not None})
     return {
         "chM": round(r.chamber.median, 3),
         "usM": round(us, 3) if us is not None else None,

@@ -12,7 +12,7 @@ It checks, from the raw files:
   * the roster (100 seated senators) and which of them carry a score
   * every senator's score, the Senate's middle and the 60th vote
   * every state's survey estimate and its standard error
-  * the national public figure (population-weighted) and the Senate-public gap
+  * the national public figure (population-weighted), on its own survey scale
   * every committee's bills-sent-on counts, the baseline, and the distinct-bill totals
 and, once the page is built, that the page's data blocks say the same.
 
@@ -160,7 +160,7 @@ def checks(report: Report, cfg: Config = DEFAULT, page: Path | None = None) -> l
                          f"{piv:+.4f} vs pipeline {report.chamber.pivot:+.4f}" if piv is not None else "fewer than 60 scored"))
 
     states = _states(cfg)
-    bad = [a.state for a in report.alignments if a.abs_gap is not None
+    bad = [a.state for a in report.positions if a.state_coord is not None
            and (a.state not in states or abs(states[a.state][0] - a.state_coord) > TOL
                 or abs(states[a.state][1] - (report.state_source.state_se(a.state) or 0)) > TOL)]
     out.append(Check("every state estimate and its standard error", not bad, f"mismatches: {bad}" if bad else f"{len(states)} states read"))
@@ -172,9 +172,6 @@ def checks(report: Report, cfg: Config = DEFAULT, page: Path | None = None) -> l
         out.append(Check("national public (population-weighted, incl. DC)",
                          abs(us - report.chamber.national_coord) < TOL and len(keys) == 51,
                          f"{us:+.4f} over {len(keys)} areas vs pipeline {report.chamber.national_coord:+.4f}"))
-        skew = report.chamber.median - us
-        out.append(Check("Senate-public gap", abs(skew - report.chamber.apportionment_skew) < TOL,
-                         f"{skew:+.4f} vs pipeline {report.chamber.apportionment_skew:+.4f}"))
 
     if cfg.billflow_zip.exists() and scores:
         g = _gatekeeping(cfg, scores)

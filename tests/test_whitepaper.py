@@ -44,16 +44,10 @@ def test_apportionment_skew_figures(text, report):
         assert_quoted(text, f"{v * 100:+.2f}".lstrip("+"), f"{y} skew")
 
 
-def test_widest_gaps_table_is_current(text, report):
-    """The five widest senator-to-state gaps, with both positions and the gap."""
-    scored = sorted((a for a in report.alignments if a.abs_gap is not None),
-                    key=lambda a: -a.abs_gap)[:5]
-    for a in scored:
-        assert a.name in text, f"{a.name} should be in the widest-gaps table"
-        row = f"| {a.name} | {a.state} | {a.senator_coord:+.3f} | {a.state_coord:+.3f} | {a.abs_gap:.3f} |"
-        assert row in text, f"row for {a.name} has moved: {row}"
-
-
+def test_whitepaper_states_the_bridge_requirement_and_shows_no_gap_table(text):
+    assert "validated statistical bridge" in text
+    assert "| senator | state | senator | state | gap |" not in text
+    assert "points further Left" not in text
 def test_party_landmarks_are_current(text, report):
     """The middle Democrat and Republican quoted as landmarks must be live."""
     import statistics as st

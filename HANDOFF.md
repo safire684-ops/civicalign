@@ -5,6 +5,20 @@ sections 2–5). Pillars 1–3 and 7 belong to someone else.
 
 ## Status in one line
 
+Backend cleanup (23 September 2026, published): the obsolete cross-scale
+metrics were deleted, not hidden. `alignment.py` now only carries `Positions`
+(senator Voteview score and state survey estimate side by side); removed:
+abs_gap, signed_gap, spec_score, rank, crosses_over, rank_all;
+`ChamberStats.apportionment_skew` (median minus national estimate);
+`CommitteeStats.cnd`/`cnd_mean`; `OutputIdeology.vs_public`. The CLI prints the
+two scales separately with no distance; the JSON export gains
+`senator_positions` and `state_voter_estimates` (each labelled with its own
+scale) and lost cnd_median, cnd_mean, vs_public and crosses_over; the supervisor
+no longer verifies a "Senate-public gap". Nothing in src/ subtracts a Voteview
+coordinate from a survey coordinate. The election-result regression (method A,
+`representation.py`, JSON `state_alignment`) stays, documented as answering a
+different question. Tests: 133 pass; supervisor 18/18.
+
 Two measures, shown separately (22 September 2026, published): the page no
 longer compares a senator's Voteview score with the state's survey estimate in
 any way, not even the sign. Each senator card shows the voting pattern against

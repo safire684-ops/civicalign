@@ -38,13 +38,12 @@ def main() -> int:
     print(f"  minority median               {ch.minority_median:+.4f}")
     print(f"  party gap (polarization)       {ch.party_gap:.4f}")
     cl = r.chamber_lean
-    if ch.apportionment_skew is not None:
-        print(f"\n  NATIONAL APPORTIONMENT SKEW  (spec section 4)")
-        print(f"    chamber median  Ch_m                 {ch.median:+.4f}")
-        print(f"    national centre US_m                 {ch.national_coord:+.4f}")
-        print(f"    skew  d_US = Ch_m - US_m             {ch.apportionment_skew:+.4f}")
+    if ch.national_coord is not None:
+        print(f"\n  national voter estimate (survey scale)   {ch.national_coord:+.4f}")
         print(f"    source: {r.state_source.citation}")
-    print(f"\n  supporting check, same gap in {r.election.label} vote share")
+        print("    shown on its own scale; NOT subtracted from the chamber median,")
+        print("    because the two measurement systems are not bridged.")
+    print(f"\n  apportionment skew in {r.election.label} vote share")
     print(f"  (election results on both sides, no scaling involved):")
     print(f"    avg state vote share per Senate seat   {cl.senate_lean * 100:6.2f}%")
     print(f"    national vote share                    {cl.national_lean * 100:6.2f}%")
@@ -80,21 +79,21 @@ def main() -> int:
         print(f"  {code:5s} {COMMITTEE_NAMES.get(code, '?'):22s} chair {cc:+.3f}  "
               f"majority median {mm:+.3f}  gap {cc - mm:+.3f}")
 
-    print("\n-- Section 3 / Pillar 4: senator vs. state ---------------------")
+    print("\n-- Section 3 / Pillar 4: senator and state, on separate scales ----")
+    print("  No senator-versus-state distance is computed: the Voteview and survey")
+    print("  scales are not bridged. Each figure is compared only within its own system.")
     if r.pillar4_available:
-        print(f"  ABSOLUTE DISTANCE  d_State(i,k) = |x_i - s_k|   on X = [-1, +1]")
-        print(f"  state centres: {r.state_source.citation}")
-        print(f"  alignment score AS_i = (1 - d/2) x 100")
-        print(f"\n  {'':5s} {'senator':24s} {'st':2s} {'x_i':>7s} {'s_k':>7s} {'gap':>6s} {'AS':>7s}")
-        for a in r.alignments[:10]:
-            if a.abs_gap is None:
+        print(f"  state estimates: {r.state_source.citation}")
+        print(f"\n  {'senator':24s} {'st':2s} {'x_i':>7s} {'x-Ch':>7s}   {'s_k':>7s} {'s-US':>7s}")
+        us, ch_median = r.chamber.national_coord, r.chamber.median
+        for a in sorted(r.positions, key=lambda a: a.senator_coord)[:10]:
+            if a.state_coord is None:
                 continue
-            x = "  crosses over" if a.crosses_over else ""
-            print(f"  #{a.rank:<4d} {a.name[:24]:24s} {a.state:2s} {a.senator_coord:+7.3f} "
-                  f"{a.state_coord:+7.3f} {a.abs_gap:6.3f} {a.spec_score:6.1f}%{x}")
-        best = r.alignments[len([a for a in r.alignments if a.abs_gap is not None]) - 1]
-        print(f"  ... best aligned: {best.name} ({best.state}), gap {best.abs_gap:.3f}, "
-              f"AS {best.spec_score:.1f}%")
+            s_us = f"{a.state_coord - us:+7.3f}" if us is not None else "    n/a"
+            print(f"  {a.name[:24]:24s} {a.state:2s} {a.senator_coord:+7.3f} "
+                  f"{a.senator_coord - ch_median:+7.3f}   {a.state_coord:+7.3f} {s_us}")
+        print("  x-Ch: senator minus Senate median (Voteview). s-US: state minus national")
+        print("  estimate (survey). The two columns are never combined.")
     else:
         print(f"  UNAVAILABLE -- state source is '{r.state_source.name}'")
 

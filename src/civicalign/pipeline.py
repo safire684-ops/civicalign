@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from .config import Config, DEFAULT
 from .sources import (billflow, elections, population, rollcalls, rosters,
                       state_prefs, voteview)
-from .alignment import Alignment, alignment, rank_all
+from .alignment import Positions, positions
 from .chamber import ChamberStats, chamber_stats
 from .committees import CommitteeStats, committee_stats
 from .gatekeeping import Gatekeeping, gatekeeping
@@ -24,7 +24,7 @@ class Report:
     votes_cast: dict[str, int]
     chamber: ChamberStats
     committees: list[CommitteeStats]
-    alignments: list[Alignment]
+    positions: list[Positions]   # senator (Voteview) and state (survey) side by side, never combined
     state_source: state_prefs.StateCoordinateSource
 
     # Pillar 4 via regression on real election results -- no bridging required.
@@ -51,7 +51,7 @@ class Report:
 
     @property
     def pillar4_available(self) -> bool:
-        return any(a.abs_gap is not None for a in self.alignments)
+        return any(a.state_coord is not None for a in self.positions)
 
 
 def run(cfg: Config = DEFAULT) -> Report:
@@ -65,6 +65,8 @@ def run(cfg: Config = DEFAULT) -> Report:
     src = state_prefs.build(cfg.state_source, cfg.ideology_tab, cfg.ideology_year, pops)
     national = src.national(cfg.electorate)
 
+    # `national` is the survey-scale national estimate. It is carried for the
+    # voter-side chart only; nothing below subtracts it from a Voteview figure.
     ch = chamber_stats(scores, roster, majority, cfg.cloture_threshold, national)
     chamber_mean = __import__("statistics").fmean(scores.values())
 
@@ -81,7 +83,7 @@ def run(cfg: Config = DEFAULT) -> Report:
     for code, members in cmte_rosters.items():
         cs = committee_stats(
             code, members, scores, roster, ch.median, chamber_mean, majority,
-            national_coord=national, noise_floor=cfg.ccd_noise_floor,
+            noise_floor=cfg.ccd_noise_floor,
         )
         if cs:
             committees.append(cs)
@@ -108,17 +110,15 @@ def run(cfg: Config = DEFAULT) -> Report:
         rcs = rollcalls.load_rollcalls(cfg.rollcalls_csv, member_votes, scores)
         lms = landmarks(rcs, bills)
         rcpts = receipts(rcs, member_votes, bills, scores, cfg.congress)
-        oi = output_ideology(rcs, bills, ch.median, national)
+        oi = output_ideology(rcs, bills, ch.median)
 
-    aligns = rank_all([
-        alignment(b, roster[b].name, roster[b].state, v, src.state(roster[b].state))
-        for b, v in scores.items()
-    ])
+    pos = [positions(b, roster[b].name, roster[b].state, v, src.state(roster[b].state))
+           for b, v in scores.items()]
 
     return Report(
         config=cfg, senators=roster, scores=scores,
         unscored=voteview.unscored(roster, scores), votes_cast=votes_cast,
-        chamber=ch, committees=committees, alignments=aligns, state_source=src,
+        chamber=ch, committees=committees, positions=pos, state_source=src,
         election=lean, fit=fit, chamber_lean=chlean, representation=reps,
         committee_leans=cleans, gatekeeping=gks, gatekeeping_baseline=gk_base,
         bills_referred_unique=n_bills, bills_reported_unique=n_reported,

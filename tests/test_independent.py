@@ -95,11 +95,6 @@ def test_national_centre_matches_a_hand_computation(raw, report):
     assert report.chamber.national_coord == pytest.approx(_us_m(raw))
 
 
-def test_apportionment_skew_is_the_difference_of_those_two(raw, report):
-    expected = st.median(raw["x"].values()) - _us_m(raw)
-    assert report.chamber.apportionment_skew == pytest.approx(expected)
-
-
 def test_population_weights_are_current_not_decennial(raw, report):
     """Weighting by the file's static 2020 counts would give a different answer.
 
@@ -116,34 +111,29 @@ def test_population_weights_are_current_not_decennial(raw, report):
     assert report.chamber.national_coord != pytest.approx(stale, abs=1e-6)
 
 
-def test_every_alignment_gap_and_score_is_correct(raw, report):
-    """d_State(i,k) = |x_i - s_k| and AS_i = (1 - d/2) x 100, for all 100."""
+def test_every_position_is_the_raw_file_value(raw, report):
+    """Each senator's coordinate is the Voteview value and each state's is the
+    survey value, carried side by side. Nothing is computed between them."""
     checked = 0
-    for a in report.alignments:
-        if a.abs_gap is None:
+    for a in report.positions:
+        if a.state_coord is None:
             continue
-        xi = raw["x"][a.bioguide]
-        sk = raw["s"][a.state]
-        assert a.senator_coord == pytest.approx(xi)
-        assert a.state_coord == pytest.approx(sk)
-        assert a.abs_gap == pytest.approx(abs(xi - sk))
-        assert a.spec_score == pytest.approx((1 - abs(xi - sk) / 2) * 100)
+        assert a.senator_coord == pytest.approx(raw["x"][a.bioguide])
+        assert a.state_coord == pytest.approx(raw["s"][a.state])
         checked += 1
     assert checked == 100
 
 
-def test_alignment_ranking_is_ordered_by_gap(report):
-    ranked = [a for a in report.alignments if a.rank]
-    gaps = [a.abs_gap for a in sorted(ranked, key=lambda a: a.rank)]
-    assert gaps == sorted(gaps, reverse=True)
-
-
-def test_crosses_over_means_opposite_sides_of_centre(raw, report):
-    for a in report.alignments:
-        if a.state_coord is None:
-            continue
-        expected = (a.senator_coord > 0) != (a.state_coord > 0)
-        assert a.crosses_over == expected
+def test_nothing_in_the_report_subtracts_a_voter_estimate_from_a_senator_score(report):
+    """The chamber, committee and output-ideology figures carry no field derived
+    from a Voteview coordinate minus a survey coordinate."""
+    assert not hasattr(report.chamber, "apportionment_skew")
+    for c in report.committees:
+        assert not hasattr(c, "cnd") and not hasattr(c, "cnd_mean")
+    for o in report.output_ideology:
+        assert not hasattr(o, "vs_public")
+    for a in report.positions:
+        assert not hasattr(a, "abs_gap") and not hasattr(a, "rank")
 
 
 def test_committee_means_match_a_hand_computation(raw, report):

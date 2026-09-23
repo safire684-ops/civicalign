@@ -25,7 +25,6 @@ class CommitteeStats:
     # away from the nearest real senator. Those are the committees where CCD
     # means least, not most. `is_noise` now catches this.
     ccd: float
-    cnd: float | None   # committee median - national median (needs bridging)
 
     # The chair, not the median, is the gatekeeper: the chair decides what gets a
     # hearing, and Pillar 6's stated purpose is explaining where bills get stuck.
@@ -52,7 +51,6 @@ class CommitteeStats:
     chamber_mean: float
     ccd_mean: float
     mean_jackknife: float
-    cnd_mean: float | None      # committee mean minus the public's centre
 
     noise_floor: float
 
@@ -124,7 +122,6 @@ def committee_stats(
     chamber_median: float,
     chamber_mean: float,
     majority: str,
-    national_coord: float | None = None,
     noise_floor: float = 0.10,
     min_scored: int = 5,
 ) -> CommitteeStats | None:
@@ -154,12 +151,10 @@ def committee_stats(
         chamber_mean=chamber_mean,
         ccd_mean=cmean - chamber_mean,
         mean_jackknife=jack,
-        cnd_mean=(cmean - national_coord) if national_coord is not None else None,
         n_scored=len(coords),
         n_members=len(members),
         median=cm,
         ccd=cm - chamber_median,
-        cnd=(cm - national_coord) if national_coord is not None else None,
         chair_coord=chair_coord,
         majority_median=median(maj) if maj else None,
         spread=max(coords) - min(coords),

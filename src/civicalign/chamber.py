@@ -24,8 +24,9 @@ class ChamberStats:
 
     # Signed. Positive => the chamber sits conservative of the nation.
     # None until a bridged national coordinate exists -- see sources/state_prefs.
+    # Survey-scale national estimate, carried for the voter-side chart only. It is
+    # never subtracted from the (Voteview-scale) median: the scales are not bridged.
     national_coord: float | None
-    apportionment_skew: float | None
 
     @property
     def party_gap(self) -> float:
@@ -45,7 +46,6 @@ def chamber_stats(
     minor = [v for b, v in scores.items() if roster[b].party != majority]
 
     ch_median = median(vals)
-    skew = (ch_median - national_coord) if national_coord is not None else None
 
     return ChamberStats(
         n=len(vals),
@@ -56,5 +56,4 @@ def chamber_stats(
         majority_median=median(maj),
         minority_median=median(minor),
         national_coord=national_coord,
-        apportionment_skew=skew,
     )

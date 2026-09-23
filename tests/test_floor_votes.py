@@ -133,12 +133,5 @@ def test_output_ideology_only_reports_committees_with_enough_votes(report):
     assert all(o.n_votes >= 7 for o in reportable)
     for o in report.output_ideology:
         assert o.vs_senate == pytest.approx(o.coi - report.chamber.median)
-        if o.vs_public is not None:
-            assert o.vs_public == pytest.approx(o.coi - report.chamber.national_coord)
 
 
-def test_committee_distance_from_public_is_reported_alongside_distance_from_senate(report):
-    for c in report.committees:
-        assert c.cnd is not None and c.cnd_mean is not None
-        assert c.cnd == pytest.approx(c.median - report.chamber.national_coord)
-        assert c.cnd_mean == pytest.approx(c.mean - report.chamber.national_coord)

@@ -64,13 +64,36 @@ def to_dict(r: Report) -> dict[str, Any]:
                     "predicted": round(x.predicted, 4),
                     "residual": round(x.residual, 4),
                     "t_stat": round(x.t_stat, 3),
-                    "crosses_over": None,
                 }
                 for x in sig
             ],
             "n_significant": len(sig),
-            "caveat": ("relative to the Senate-wide pattern, not an absolute "
-                       "distance from the median voter"),
+            "caveat": ("election-result regression: how a senator compares with the "
+                       "voting pattern typically associated with states that vote "
+                       "similarly. Not a distance from the median voter, and not a "
+                       "comparison with the survey-based state estimate."),
+        },
+        "senator_positions": {
+            "publishable": True,
+            "scale": "Voteview Nokken-Poole, -1 to +1; compare only with other Voteview figures",
+            "senate_median": round(ch.median, 4),
+            "by_senator": {a.bioguide: {"name": a.name, "state": a.state,
+                                        "score": round(a.senator_coord, 4),
+                                        "vs_senate_median": round(a.senator_coord - ch.median, 4)}
+                           for a in r.positions},
+        },
+        "state_voter_estimates": {
+            "publishable": True,
+            "scale": ("American Ideology Project survey estimate, -1 to +1; compare only "
+                      "with other survey estimates. Never subtract from a senator score: "
+                      "the two scales are not bridged."),
+            "wave": r.config.ideology_year,
+            "national_estimate": round(ch.national_coord, 4) if ch.national_coord is not None else None,
+            "by_state": {a.state: {"estimate": round(a.state_coord, 4),
+                                   "standard_error": round(r.state_source.state_se(a.state) or 0, 4),
+                                   "vs_national": (round(a.state_coord - ch.national_coord, 4)
+                                                   if ch.national_coord is not None else None)}
+                         for a in r.positions if a.state_coord is not None},
         },
         "committee_drift": {
             "publishable": False,
@@ -87,8 +110,6 @@ def to_dict(r: Report) -> dict[str, Any]:
                     "median_is_phantom": c.median_is_phantom,
                     "mean": round(c.mean, 4),
                     "ccd_mean": round(c.ccd_mean, 4),
-                    "cnd_median": round(c.cnd, 4) if c.cnd is not None else None,
-                    "cnd_mean": round(c.cnd_mean, 4) if c.cnd_mean is not None else None,
                     "publishable": not c.is_noise,
                 }
                 for c in r.committees
@@ -138,7 +159,6 @@ def to_dict(r: Report) -> dict[str, Any]:
             "committees": [
                 {"code": o.code, "floor_votes": o.n_votes, "coi": round(o.coi, 4),
                  "vs_senate": round(o.vs_senate, 4),
-                 "vs_public": round(o.vs_public, 4) if o.vs_public is not None else None,
                  "publishable": o.is_reportable}
                 for o in r.output_ideology],
         },
