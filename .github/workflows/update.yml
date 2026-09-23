@@ -80,13 +80,18 @@ jobs:
           fi
 
       - name: Commit the rebuilt pages and provenance if anything substantive changed
+        # A week where no source's CONTENT changed produces identical pages and
+        # an unchanged provenance log; only the snapshot's "last checked" stamp
+        # moves, and a timestamp alone is not worth a commit.
         run: |
           git config user.name  "civicalign-bot"
           git config user.email "civicalign-bot@users.noreply.github.com"
-          git add demo/senator-check.html demo/methodology.html data/raw/PROVENANCE.tsv data/raw/SNAPSHOT.json
+          git add demo/senator-check.html demo/methodology.html data/raw/PROVENANCE.tsv
           if git diff --cached --quiet; then
-            echo "No figures moved this week."
+            echo "No figures moved this week; the snapshot's check stamp alone is not committed."
+            git checkout -- data/raw/SNAPSHOT.json
           else
+            git add data/raw/SNAPSHOT.json
             git commit -m "Weekly update: figures refreshed from a verified source snapshot"
             git push
           fi

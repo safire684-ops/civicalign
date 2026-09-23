@@ -113,7 +113,7 @@ def test_workflow_gates_publication_on_every_check():
     assert "|| echo" not in y and "FETCH_FAILED" not in y, "a fetch failure must fail the job"
     order = ["python -m civicalign.agents\n", "civicalign.agents.verify", "--ignore=tests/test_published_pages.py",
              "civicalign.build_demo", "pytest -q tests/test_published_pages.py", "civicalign.agents.supervisor",
-             "git add demo/senator-check.html demo/methodology.html data/raw/PROVENANCE.tsv data/raw/SNAPSHOT.json",
+             "git add demo/senator-check.html demo/methodology.html data/raw/PROVENANCE.tsv",
              "upload-pages-artifact"]
     pos = [y.index(s) for s in order]
     assert pos == sorted(pos), "steps must run fetch -> verify -> data tests -> rebuild -> page tests -> supervisor -> commit -> upload"
@@ -153,3 +153,9 @@ def test_fresh_checkout_compares_with_the_committed_snapshot_not_the_missing_fil
     rec = load_snapshot(raw)["sources"][0]
     assert rec["content_changed_utc"].startswith("2026-09-21") and rec["checked_utc"].startswith("2026-09-28")
     assert (raw / "a.txt").read_text() == "v1"
+
+
+def test_a_no_change_week_commits_nothing():
+    y = WORKFLOW.read_text()
+    assert 'git checkout -- data/raw/SNAPSHOT.json' in y, "a check-stamp-only change is discarded, not committed"
+    assert y.index("git diff --cached --quiet") < y.index("git add data/raw/SNAPSHOT.json")
