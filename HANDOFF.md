@@ -12,7 +12,7 @@ in step.
 - Repo: https://github.com/safire684-ops/civicalign (branch `main`; the weekly
   job commits as `civicalign-bot`)
 - Claude.ai copy (manual republish, stylesheet inlined, does not update itself):
-  https://claude.ai/artifact/Ft6hU6XZUnWHPhZwzwmzaj (version 23)
+  https://claude.ai/artifact/Ft6hU6XZUnWHPhZwzwmzaj (version 24)
 - Shared doc (hand-mirrored, methodology only):
   https://claude.ai/code/artifact/683a9e36-3046-4827-a7af-7442b49ef7e3
 
