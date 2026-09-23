@@ -320,6 +320,38 @@ select:focus-visible,button:focus-visible,summary:focus-visible{
 .tip b{display:block;font-size:14px;margin-bottom:4px}
 .tip[hidden]{display:none}
 
+/* micro-help: a small "i" beside an unfamiliar term; one plain sentence appears inline */
+.hb{display:inline-grid;place-items:center;width:18px;height:18px;border-radius:50%;
+  border:1.5px solid var(--muted);background:none;color:var(--muted);
+  font:italic 700 11px/1 var(--serif);cursor:pointer;padding:0;margin-left:7px;
+  vertical-align:1px;position:relative}
+.hb::after{content:"";position:absolute;inset:-13px}
+.hb:hover,.hb[aria-expanded="true"]{border-color:var(--ink);color:var(--ink)}
+.hint{display:block;margin-top:8px;font:400 14px/1.5 var(--sans);letter-spacing:0;
+  text-transform:none;color:var(--ink);background:var(--rule-soft);
+  border-left:3px solid var(--muted);padding:7px 11px;max-width:60ch}
+
+/* bill flow: sent to committee -> formally sent forward -> full Senate */
+.flow{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:8px;align-items:stretch;margin-top:4px}
+.flow .step{background:var(--surface);border:1px solid var(--rule);padding:12px 14px;border-radius:6px;min-width:0}
+.flow .step.end{background:var(--rule-soft);border-style:dashed}
+.flow .k{display:block;font-size:12.5px;color:var(--muted)}
+.flow .v{display:block;font-family:var(--serif);font-size:26px;font-weight:700;margin-top:2px;letter-spacing:-.01em}
+.flow .s{display:block;font-size:12.5px;color:var(--muted);margin-top:6px}
+.flow .arr{align-self:center;color:var(--muted);font-size:20px;line-height:1}
+.flow .arr::before{content:"\2192"}
+.gk .rest{margin-top:12px;font-size:14px;color:var(--muted);max-width:60ch}
+.gk .rest b{color:var(--ink);font-family:var(--serif);font-size:17px}
+.gk .verdict{margin-top:10px}
+.gk .ends{display:flex;justify-content:space-between;font-size:11.5px;color:var(--muted);font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-top:12px}
+.gk details.more{margin-top:12px}
+
+/* how it works, as questions */
+.faq{margin-top:18px;display:grid;gap:12px}
+.faq div{background:var(--surface);border:1px solid var(--rule);padding:16px 18px;border-radius:6px}
+.faq h3{font-family:var(--serif);font-size:18px;font-weight:600}
+.faq p{margin-top:6px;color:var(--muted);font-size:15px;max-width:60ch}
+
 /* ---- committees ---- */
 .cm{background:var(--surface);border:1px solid var(--rule);margin-top:12px;
   padding:20px 22px 22px}
@@ -444,6 +476,9 @@ footer p{margin-top:12px}
 .srcs .who a{color:var(--ink);font-weight:600}
 
 @media (max-width:520px){
+  .flow{grid-template-columns:1fr}
+  .flow .arr{justify-self:center}
+  .flow .arr::before{content:"\2193"}
   .bar{grid-template-columns:1fr auto}
   .bar .trk{grid-column:1 / -1;order:3}
   .rl{max-width:120px;font-size:12px}

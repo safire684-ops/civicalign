@@ -86,7 +86,7 @@ def test_report_and_demo_describe_the_same_committee_measure():
     """They drifted once: the report quoted member averages while the page plotted
     bill survival. Both must now describe bill survival."""
     demo, rep = DEMO.read_text(), REPORT.read_text()
-    assert "What has it sent forward to the full Senate?" in demo
+    assert "What has this committee sent to the full Senate?" in demo
     assert "What each committee has sent forward" in rep
     assert "Committees against the Senate" not in rep, "old section still present"
 
@@ -240,7 +240,7 @@ def test_existing_measures_and_thresholds_are_preserved():
     text = DEMO.read_text()
     assert "var thr=0.15;" in text
     assert "the position a '+(right?'conservative':'liberal')+' gatekeeper would sit in" in text
-    assert "the split between Yes and No senators fell <b>" in text
+    assert "The split between Yes and No senators fell <b>" in text
     assert "function relWords(" in text
 
 
@@ -511,7 +511,10 @@ def test_2_never_calls_a_cutpoint_bill_ideology():
 def test_3_survey_vintage_is_visible_on_the_first_screen():
     v = _visible()
     first = v.split('id="the-senate"')[0]
-    assert "American Ideology Project" in first and "2020 wave" in first
+    assert "voter estimates" in first, "the first screen names the voter estimate"
+    # the vintage is printed on the state card itself, which the script draws on load
+    card = _js().split("$('stateblock').innerHTML=")[1].split('<details class="more">')[0]
+    assert "American Ideology Project, '+M.ideologyYear+' wave." in card and _block("M")["ideologyYear"] == 2020
 
 
 def test_4_pending_bills_are_not_called_dead(report):
@@ -523,13 +526,14 @@ def test_4_pending_bills_are_not_called_dead(report):
 
 def test_5_sponsor_ideology_is_not_bill_ideology():
     t = DEMO.read_text()
-    assert "Grouped by the voting record of each bill\\u2019s sponsor" in t
-    assert "does not necessarily tell us the ideology of the bill" in t
+    assert "Sponsor = the senator who introduced the bill" in t
+    assert "grouped by whether their sponsor has a more liberal or a more conservative voting record" in t
+    assert "The sponsor’s voting record does not tell us whether the bill itself is liberal or conservative." in t
 
 
 def test_6_small_samples_show_caution_or_withhold_conclusions():
     t = DEMO.read_text()
-    assert "Early signal" in t and "too little for a strong conclusion" in t
+    assert "Early signal" in t and "too little data for a strong conclusion" in t
     assert "Not enough data yet" in t and "Limited data" in t
     assert "weak=o.n<15" in t
 
@@ -581,7 +585,7 @@ def test_11_technical_terms_stay_out_of_the_default_experience():
 def test_12_detailed_methodology_remains_available():
     t = DEMO.read_text()
     assert 'href="methodology.html"' in t
-    assert "Show the math" in t and 'id="workings"' in t and 'id="srcs"' in t
+    assert "Show the technical methodology" in t and 'id="workings"' in t and 'id="srcs"' in t
     assert "signed(s.record,3)" in t, "raw arithmetic is still shown in full"
 
 
@@ -642,7 +646,7 @@ def test_separate_measures_wording_is_what_the_reader_sees():
     js = "".join(re.findall(r"<script>(.*?)</script>", DEMO.read_text(), re.S))
     assert "side of the '+ref" in js and "near the '+ref" in js
     assert "national voter estimate" in js
-    assert "are shown on separate scales" in js and "not directly compared" in js
+    assert "shown on a separate scale" in js and "not directly compared" in js
     t = re.sub(r"\s+", " ", DEMO.read_text())
     assert "These are different measures and are shown separately." in t
 
@@ -727,7 +731,7 @@ def test_p1_senator_card_leads_with_words_not_display_numbers():
     for num in ("p100(", "d100(", "sp.pts", "points"):
         assert num not in card, num
     assert "’s voting record is <b>'+sp.w+'</b>" in card
-    assert "Senator voting pattern <span class=\"kick2\">compared with the Senate middle</span>" in card
+    assert "How '+last+' votes <span class=\"kick2\">compared with the Senate middle</span>" in card
 
 
 def test_p2_state_card_leads_with_words_not_display_numbers():
@@ -738,7 +742,7 @@ def test_p2_state_card_leads_with_words_not_display_numbers():
     assert "’s voter estimate is <b>'+spst.w+'</b>" in card
     assert "Voter estimate <span class=\"kick2\">compared with the national voter estimate</span>" in card
     assert "Estimated political position of '+stName+' voters" in card
-    assert "Shaded area: estimated range." in js
+    assert "Shaded area = estimated range." in js
 
 
 def test_p3_committee_and_senate_lead_with_words():
@@ -748,7 +752,7 @@ def test_p3_committee_and_senate_lead_with_words():
     first = body.split("var sw=")[1].split("<p class=\"fine\">")[0]
     assert "p100(" not in first and "d100(" not in first and "sw.w" in first
     senate = js.split("$('pubcard').innerHTML=")[1].split("$('take-senate')")[0]
-    assert "The 60-vote point sits <b>'+piv.w+'</b>" in senate and "Many Senate actions need 60 votes to advance." in senate
+    assert "The 60-vote point sits <b>'+piv.w+'</b>" in senate and "Why 60? Many Senate actions need 60 votes to move forward." in senate
     visible_senate = re.sub(r"<p class=\"sr-only\">.*?</p>", "", senate)
     assert "p100(" not in visible_senate and "d100(" not in visible_senate
 
@@ -821,3 +825,175 @@ def test_p10_wording_rule_is_one_deterministic_rule_shared_by_page_and_report():
     for page in (DEMO.read_text(), r):
         for word in ("somewhat on the", "clearly on the", '"somewhat"', '"clearly"', "\u201csomewhat\u201d", "\u201cclearly\u201d"):
             assert word not in page, word
+
+
+# ---- the average-voter pass: fifteen guarantees a first-time visitor relies on ----
+
+def _literals(body):
+    """The text a reader can see in a JS function: its string literals only."""
+    return " ".join(m.group(0)[1:-1] for m in re.finditer(r"'(?:[^'\\]|\\.)*'", body))
+
+
+def _default_view_text():
+    """Everything rendered without opening a disclosure: the markup outside
+    <details>, plus the string literals of the functions that draw the default
+    cards, cut at their own <details>."""
+    js = _js()
+    # How it works may name the sources after explaining them; the three data views may not
+    parts = [_visible().split('<section id="how-it-works"')[0]]
+    for fn in ("senatorTrack", "stateTrack", "committeeCard", "sentOnBars", "floorSplit"):
+        body = re.sub(r"<p class=\"sr-only\">.*?</p>", "", _fn(js, fn).split('<details class="more">')[0])
+        parts.append(_literals(body))
+    parts.append(_literals(js.split("function render(code){")[1].split("window.addEventListener('resize'")[0].split('<details class="more">')[0]))
+    parts.append(_literals(js.split("$('pubcard').innerHTML=")[1].split("$('take-senate')")[0]))
+    parts.append(_literals(js.split("var HELP={")[1].split("};")[0]))
+    return re.sub(r"<[^>]+>", " ", "\n".join(parts))
+
+
+def test_v1_every_view_opens_with_a_plain_orientation_sentence():
+    m = _markup()
+    assert "Use this to see where your senators sit within the Senate and where\n    your state sits among voter estimates." in m
+    js = _js()
+    assert "Below: how each of '+stName+'’s senators votes compared with the Senate, then where '+stName+'’s voters are estimated to sit." in js
+    assert "This shows the middle of current Senate voting patterns and where the 60-vote point falls." in js
+    sec = m.split('<section id="committees"')[1].split("</section>")[0]
+    assert "Senate committees review bills before many of them can go to the\n    full Senate." in sec
+    assert "Plain answers to the questions people ask most." in m.split('<section id="how-it-works"')[1]
+
+
+def test_v2_senate_middle_is_explained_in_plain_words():
+    js = _js()
+    assert "middle:'Senate middle = the midpoint of current senators’ voting patterns.'" in js
+    assert js.count("help('What is the Senate middle?',HELP.middle)") == 2, "on the senator card and on the Senate view"
+    faq = _markup().split('<section id="how-it-works"')[1]
+    assert "<h3>What is the Senate middle?</h3>" in faq and "midpoint of current senators’ voting patterns" in faq
+    for word in ("median", "50th and 51st"):
+        assert word not in _default_view_text(), word
+
+
+def test_v3_voter_estimate_says_what_is_being_estimated():
+    js = _js()
+    assert "Estimated political position of '+stName+' voters" in js
+    assert "Academic survey estimate, American Ideology Project, '+M.ideologyYear+' wave." in js
+    what = _fn(js, "stateWhat")
+    assert "where voters in '+stName+' generally sit" in what
+    for not_this in ("not a current poll", "an election result", "party registration", "an approval rating", "opinion on any one issue"):
+        assert not_this in what, not_this
+
+
+def test_v4_senator_and_voter_systems_stay_explicitly_separate():
+    sec = _markup().split('<section id="your-senators"')[1].split("</section>")[0]
+    outside = re.sub(r"<details.*?</details>", "", sec, flags=re.S)
+    assert "These show two different things: how the senator votes within the\n    Senate, and where the state’s voters are estimated to sit among voter estimates.\n    They are not directly compared." in outside
+    js = _js()
+    assert "These are different measures and are shown separately." in js
+    assert "the two are not directly compared" in js
+
+
+def test_v5_committee_purpose_is_explained_before_any_measure():
+    sec = _markup().split('<section id="committees"')[1].split("</section>")[0]
+    why = sec.index("Senate committees review bills before many of them can go to the")
+    assert why < sec.index("1. Who is on this committee?") < sec.index("2. What has this committee sent to the full Senate?") < sec.index("3. What happened when those bills reached the full Senate?")
+
+
+def test_v6_sent_forward_is_defined_where_it_is_used():
+    js = _js()
+    bars = _fn(js, "sentOnBars")
+    assert "sent:'Sent forward = the committee formally reported the bill to the full Senate.'" in js
+    assert "help('What does sent forward mean?',HELP.sent)" in bars
+    assert "Sent forward means the committee formally reported the bill to the full Senate" in bars
+    assert "Bills sent to this committee" in bars and "Formally sent forward" in bars and "Full Senate" in bars
+    assert 'class="flow"' in bars and "still in committee" in bars
+
+
+def test_v7_sponsor_is_explained_where_it_is_used():
+    bars = _fn(_js(), "sentOnBars")
+    assert "Sponsor = the senator who introduced the bill." in bars
+    assert bars.index("Sponsor = the senator who introduced the bill.") < bars.index("Sponsor with a liberal record")
+    assert "does not tell us whether the bill itself is liberal or conservative" in bars
+
+
+def test_v8_sample_size_warnings_are_plain_english():
+    js = _js()
+    fs = _fn(js, "floorSplit")
+    assert "Only '+o.n+' Senate votes on these bills so far, so this is too little data for a strong conclusion." in fs
+    assert "Based on '+o.n+' Senate votes on these bills." in fs
+    assert "Fewer than 7 Senate votes so far on bills this committee sent forward" in fs
+    text = _default_view_text()
+    for jargon in ("N =", "n =", "sample size", "statistically significant", "confidence interval"):
+        assert jargon not in text, jargon
+
+
+def test_v9_default_views_carry_no_unexplained_academic_terms():
+    text = _default_view_text()
+    for term in ("Nokken", "DW-NOMINATE", "MRP", "cutpoint", "ideal point", "CCD", "CND", "GBI", "COI",
+                 "skew", "drift", "jackknife", "standard error", "coordinate", "latent", "median", "percentile",
+                 "display-scale", "Voteview"):
+        assert term not in text, term
+
+
+def test_v10_abstract_coordinates_stay_behind_details():
+    js = _js()
+    for fn in ("committeeCard", "floorSplit"):
+        body = _fn(js, fn)
+        before, after = body.split('<details class="more">')
+        before = re.sub(r"<p class=\"sr-only\">.*?</p>", "", before)   # the spoken chart keeps its figures
+        before = re.sub(r"var spoken=.*?;\n", "", before)
+        assert "p100(" not in before and "d100(" not in before, fn
+        assert "p100(" in after, fn
+    assert "SCALE_NOTE" in _fn(js, "floorSplit").split('<details class="more">')[1]
+
+
+def test_v11_the_60_vote_point_is_explained_before_cloture_is_named():
+    js = _js()
+    assert js.index("Why 60? Many Senate actions need 60 votes to move forward.") < js.index("cloture threshold")
+    assert "sixty:'Where the 60th senator falls when senators are ordered by voting pattern" in js
+    assert "help('What is the 60-vote point?',HELP.sixty)" in js
+    assert "cloture" not in _default_view_text()
+    stakes = js.split("$('stakes').innerHTML=")[1].split(";\n")[0]
+    assert stakes.index("need 60 votes to move forward") < stakes.index("cloture threshold")
+    assert "though not every bill does" in stakes
+
+
+def test_v12_uncertainty_is_an_estimated_range_on_the_default_view():
+    js = _js()
+    sta = _fn(js, "stateTrack")
+    assert "Shaded area = estimated range." in sta and "standard error" not in sta
+    what = _fn(js, "stateWhat")
+    assert "there is uncertainty around the exact position" in what and "standard error" not in what
+    assert "one standard error" in _fn(js, "stateNumbers"), "the technical term stays available under details"
+
+
+def test_v13_no_rankings_grades_or_recommendations():
+    t = re.sub(r"const [A-Z]=[\{\[].*?[\}\]];", "", DEMO.read_text(), flags=re.S).lower()
+    for w in ("should vote", "vote for", "vote against", "better senator", "represents you well", "endorse",
+              "aligned with", "misaligned", "out of step", "in step with", "scorecard", "report card", "grade:",
+              "who is better", "more representative"):
+        assert w not in t, w
+    faq = _markup().split('<section id="how-it-works"')[1]
+    assert "Is this telling me whether my senator represents me?" in faq
+    assert "No. CivicAlign shows voting patterns and voter estimates." in faq
+
+
+def test_v14_mobile_layout_stacks_the_flow_and_keeps_targets():
+    css = css_text()
+    phone = css.split("@media (max-width:520px){")[1].split("\n}")[0]
+    assert ".flow{grid-template-columns:1fr}" in phone and '.flow .arr::before{content:"\\2193"}' in phone
+    assert ".hb::after{content:\"\";position:absolute;inset:-13px}" in css, "the help button keeps a 44px hit area"
+    assert 'name="viewport" content="width=device-width, initial-scale=1' in DEMO.read_text()
+    assert "overflow-x:auto" in css.split(".work{")[1].split("}")[0]
+
+
+def test_v15_methodological_guardrails_are_unchanged():
+    js = _js()
+    assert "var thr=0.15;" in js and "var REL={near:0.05};" in js and "weak=o.n<15" in js
+    assert "fewer than 25 from one side" in js and "Fewer than 7 Senate votes" in js
+    from civicalign.build_demo import REL_NEAR
+    assert REL_NEAR == 0.05
+    for fn in (test_g1_public_code_never_subtracts_a_voter_estimate_from_a_legislator_score,
+               test_g2_public_code_never_compares_the_two_scales_with_greater_or_less_than,
+               test_g3_no_senator_is_classified_left_or_right_of_their_state,
+               test_g4_no_check_of_a_senator_against_the_state_uncertainty_band,
+               test_g5_no_ranking_of_senators_by_senator_versus_state_distance,
+               test_g6_no_cross_scale_derived_fields_in_the_public_payload):
+        fn()
