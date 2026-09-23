@@ -1,5 +1,5 @@
 {
- "run_utc": "2026-09-23T13:10:23Z",
+ "run_utc": "2026-09-23T16:54:21Z",
  "accepted": true,
  "sources": [
   {
@@ -14,7 +14,7 @@
    "content_key": "c2d2b2b44e5406faf4e2129d58a4c957742ade222ffbcdcd4173adfaac5de871",
    "changed": false,
    "content_changed_utc": "2026-09-23T13:05:55Z",
-   "checked_utc": "2026-09-23T13:10:23Z"
+   "checked_utc": "2026-09-23T16:54:21Z"
   },
   {
    "name": "seated senators",
@@ -28,7 +28,7 @@
    "content_key": "19b49014bfbfb0defd3bc7b6ba8e279a63931427af9464b0f014a9bfb541ec5d",
    "changed": false,
    "content_changed_utc": "2026-09-23T13:05:55Z",
-   "checked_utc": "2026-09-23T13:10:23Z"
+   "checked_utc": "2026-09-23T16:54:21Z"
   },
   {
    "name": "committee rosters",
@@ -42,7 +42,7 @@
    "content_key": "b478738edf3b3b13bfa4057a1e04e8ea1f53d4e1f7adaf8f446db20102c22b2c",
    "changed": false,
    "content_changed_utc": "2026-09-23T13:05:55Z",
-   "checked_utc": "2026-09-23T13:10:23Z"
+   "checked_utc": "2026-09-23T16:54:21Z"
   },
   {
    "name": "bill flow",
@@ -50,13 +50,13 @@
    "file": "BILLSTATUS-119-s.zip",
    "critical": true,
    "vintage": "current Congress; GovInfo republishes daily",
-   "bytes": 12885129,
+   "bytes": 12886736,
    "previous_bytes": 12885129,
-   "sha256": "dc8fa63be203140dc45611ab3865d8d33463ff922a06589939c6c6b36e3dfd2e",
-   "content_key": "8f7a3960441c7e3d1c9794bfc085d73edead50c80f2f9aba02f8cb0358840df3",
-   "changed": false,
-   "content_changed_utc": "2026-09-23T13:05:55Z",
-   "checked_utc": "2026-09-23T13:10:23Z"
+   "sha256": "9f0c032c5c1d1844f972f45355debf58eecbcea2cd0ac1822189374fbdf45f46",
+   "content_key": "17230c37676b867ac56c8f71c2b24f0c29e7b0e1cdf6deeb2abdc873cc779b7e",
+   "changed": true,
+   "content_changed_utc": "2026-09-23T16:54:21Z",
+   "checked_utc": "2026-09-23T16:54:21Z"
   },
   {
    "name": "bill flow (House bills)",
@@ -64,13 +64,13 @@
    "file": "BILLSTATUS-119-hr.zip",
    "critical": true,
    "vintage": "current Congress; GovInfo republishes daily",
-   "bytes": 31758842,
+   "bytes": 31763756,
    "previous_bytes": 31758842,
-   "sha256": "f8c06c49360f3789bdd0cf106a3d4fcdcd13a2283e9775987ccd61f8020fa604",
-   "content_key": "0025faeb8f20792d57a8839fe571c8f0c14c4c6adac6295b563de1496e6f9dc2",
-   "changed": false,
-   "content_changed_utc": "2026-09-23T13:05:55Z",
-   "checked_utc": "2026-09-23T13:10:23Z"
+   "sha256": "bcf086c4780a496bc184d0d3b7642dfdee9ae8d436ffd692770d79879f495dba",
+   "content_key": "12240b906f6901964c18877a3a3383796737b9ba8b5b38f5f5520e07166ddcfb",
+   "changed": true,
+   "content_changed_utc": "2026-09-23T16:54:21Z",
+   "checked_utc": "2026-09-23T16:54:21Z"
   },
   {
    "name": "floor roll calls",
@@ -84,7 +84,7 @@
    "content_key": "d3bff6948067d7a261cb7aadeae0a56bebf7d89c2ebb108ec2a8797a4f02d6ba",
    "changed": false,
    "content_changed_utc": "2026-09-23T13:05:55Z",
-   "checked_utc": "2026-09-23T13:10:23Z"
+   "checked_utc": "2026-09-23T16:54:21Z"
   },
   {
    "name": "senator votes",
@@ -98,7 +98,7 @@
    "content_key": "bbb79179205500a3ff6260524d5fe20d898e4144f70f99cfe4d587ed9232c7f5",
    "changed": false,
    "content_changed_utc": "2026-09-23T13:05:55Z",
-   "checked_utc": "2026-09-23T13:10:23Z"
+   "checked_utc": "2026-09-23T16:54:21Z"
   },
   {
    "name": "state ideology",
@@ -112,7 +112,7 @@
    "content_key": "3ba4d42dc321fb717f2f86e09074136858753a64a0a546e0c5a468f739cb87e6",
    "changed": false,
    "content_changed_utc": "2026-09-23T13:05:55Z",
-   "checked_utc": "2026-09-23T13:10:23Z"
+   "checked_utc": "2026-09-23T16:54:21Z"
   },
   {
    "name": "election results",
@@ -126,7 +126,7 @@
    "content_key": "9936410a6dd4ecc8be7fe202c6dff5b5f8fee59d88f35ab542ed12879941dcb7",
    "changed": false,
    "content_changed_utc": "2026-09-23T13:05:55Z",
-   "checked_utc": "2026-09-23T13:10:23Z"
+   "checked_utc": "2026-09-23T16:54:21Z"
   },
   {
    "name": "state populations",
@@ -140,7 +140,7 @@
    "content_key": "b8b50bd345d8a5f33d5c8a28c95aeaa0a50971356f000d9b48276a65fd9022a7",
    "changed": false,
    "content_changed_utc": "2026-09-23T13:05:55Z",
-   "checked_utc": "2026-09-23T13:10:23Z"
+   "checked_utc": "2026-09-23T16:54:21Z"
   }
  ]
 }
