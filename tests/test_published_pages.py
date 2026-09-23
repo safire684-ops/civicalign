@@ -964,8 +964,8 @@ def test_v11_the_60_vote_point_is_explained_before_cloture_is_named():
     assert "help('What is the 60-vote point?',HELP.sixty)" in js
     assert "cloture" not in _default_view_text()
     stakes = js.split("$('stakes').innerHTML=")[1].split(";\n")[0]
-    assert stakes.index("need 60 votes to move forward") < stakes.index("called cloture")
-    assert "though not every bill does" in stakes
+    assert stakes.index("ending debate generally requires three-fifths of the Senate") < stakes.index("called cloture")
+    assert "Final passage itself usually requires a simple majority." in stakes
 
 
 def test_v12_uncertainty_is_an_estimated_range_on_the_default_view():
@@ -1019,7 +1019,8 @@ def test_v16_sixty_votes_is_explained_without_claiming_every_bill_needs_it():
     assert "most legislation generally requires three-fifths of senators" in t
     assert "Not every bill needs\n      60 votes." in t
     js = _js()
-    assert "though not every bill does" in js.split("$('stakes').innerHTML=")[1].split(";\n")[0]
+    stakes = js.split("$('stakes').innerHTML=")[1].split(";\n")[0]
+    assert "Final passage itself usually requires a simple majority." in stakes and "every bill" not in stakes
 
 
 def test_v17_the_two_rulers_are_labelled_as_separate_scales():
