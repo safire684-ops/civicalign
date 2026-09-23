@@ -19,6 +19,9 @@ It checks, from the raw files:
     every senator's expected position, residual and typical range
   * the seat-weighted vote share against the national vote
   * every senator's Yea or Nay on the published floor votes
+  * every senator's same-party peer group from similarly voting other states,
+    its count, lowest, highest and middle record, the published conclusion, and
+    the cross-window sensitivity behind it
 and, once the page is built, that the page's data blocks say the same.
 
 Run:  PYTHONPATH=src python -m civicalign.agents.supervisor
@@ -212,6 +215,42 @@ def _votes_for_rolls(cfg: Config, rolls: set[int]) -> dict[int, dict[str, str]]:
     return out
 
 
+def _peer_results(roster: dict, scores: dict[str, float], avg: dict[str, float],
+                  window: float, min_peers: int, windows: tuple) -> dict[str, dict]:
+    """The peer comparison rebuilt with its own loop: same party group, other
+    states only, state share within the window, conclusion per window, and the
+    published status from the cross-window agreement rule."""
+    grp = lambda b: "Republican" if roster[b]["party"] == "Republican" else "Democratic"
+    out = {}
+    for b, y in scores.items():
+        stt = roster[b]["state"]
+        if stt not in avg:
+            continue
+        x = avg[stt]
+        def peers_at(w):
+            return sorted([(roster[q]["state"], q, scores[q]) for q in scores
+                           if roster[q]["state"] != stt and grp(q) == grp(b) and roster[q]["state"] in avg
+                           and abs(avg[roster[q]["state"]] - x) <= w + 1e-12])
+        def concl(w):
+            ps = peers_at(w)
+            if len(ps) < min_peers:
+                return "insufficient"
+            ys = [p[2] for p in ps]
+            return "outside_liberal" if y < min(ys) else "outside_conservative" if y > max(ys) else "within"
+        sens = {w: concl(w) for w in windows}
+        if sens[window] == "insufficient":
+            status = "insufficient"
+        else:
+            seen = {v for v in sens.values() if v != "insufficient"}
+            status = "unstable" if len(seen) > 1 else sens[window]
+        ps = peers_at(window)
+        ys = [p[2] for p in ps]
+        out[b] = {"n": len(ps), "states": sorted({p[0] for p in ps}), "ids": [p[1] for p in ps],
+                  "low": min(ys) if ys else None, "high": max(ys) if ys else None,
+                  "median": statistics.median(ys) if ys else None, "status": status, "sens": sens}
+    return out
+
+
 # ---- the comparison ------------------------------------------------------------
 
 def checks(report: Report, cfg: Config = DEFAULT, page: Path | None = None) -> list[Check]:
@@ -301,6 +340,24 @@ def checks(report: Report, cfg: Config = DEFAULT, page: Path | None = None) -> l
                 bad.append(b)
         out.append(Check("every senator's expected position, residual, range, zone", not bad,
                          f"{len(pts)} senators recomputed" + (f"; mismatches {bad}" if bad else "")))
+        from ..peers import WINDOW, MIN_PEERS, WINDOWS
+        pr = _peer_results(roster, scores, el["avg"], WINDOW, MIN_PEERS, WINDOWS)
+        by_b = {c.bioguide: c for c in report.peers}
+        bad = []
+        for b, d in pr.items():
+            c = by_b.get(b)
+            if c is None or c.n != d["n"] or c.peer_states != d["states"] or c.status != d["status"] \
+                    or [p.bioguide for p in c.peers] != sorted(d["ids"], key=lambda q: (roster[q]["state"], report.senators[q].name)) \
+                    or {w: v for w, v in c.sensitivity.items()} != d["sens"] \
+                    or (d["n"] and (abs(c.low - d["low"]) > TOL or abs(c.high - d["high"]) > TOL or abs(c.median - d["median"]) > TOL)):
+                bad.append(b)
+        own = [b for b, c in by_b.items() if any(p.state == c.state for p in c.peers)]
+        cross = [b for b, c in by_b.items() if any(("Republican" if report.senators[p.bioguide].party == "Republican" else "Democratic") != c.group for p in c.peers)]
+        out.append(Check("every senator's peer group, range, status and sensitivity", not bad and not own and not cross and len(pr) == len(by_b),
+                         f"{len(pr)} senators rebuilt" + (f"; mismatches {bad}" if bad else "") + (f"; own-state peers {own}" if own else "") + (f"; cross-party peers {cross}" if cross else "")))
+        counts = {s: sum(1 for d in pr.values() if d["status"] == s) for s in ("within", "outside_liberal", "outside_conservative", "unstable", "insufficient")}
+        out.append(Check("peer rule: fixed window, minimum and cross-window check", WINDOW == 0.04 and MIN_PEERS == 6 and WINDOWS == (0.02, 0.03, 0.04, 0.05),
+                         f"±{WINDOW*100:g} pts, min {MIN_PEERS}, windows {[w*100 for w in WINDOWS]}; statuses {counts}"))
 
     if page is not None and page.exists():
         html = page.read_text()
@@ -345,24 +402,24 @@ def checks(report: Report, cfg: Config = DEFAULT, page: Path | None = None) -> l
 
         R, E, F = block("R"), block("E"), block("F")
         if R and E and F and el is not None:
-            a, bslope = R["fit"]["intercept"], R["fit"]["slope"]
+            from ..peers import WINDOW, MIN_PEERS, WINDOWS
+            pr = _peer_results(roster, scores, el["avg"], WINDOW, MIN_PEERS, WINDOWS)
             bad = []
             for b, s in R["senators"].items():
-                stt = s["st"]
-                if b not in scores or abs(s["actual"] - scores[b]) > 1e-3:
-                    bad.append(b); continue
-                x = R["states"][stt]["gop"]
-                if abs(x - el["avg"][stt]) > 1e-4 or abs(s["expected"] - (a + bslope * x)) > 2e-3 \
-                        or abs(s["residual"] - (s["actual"] - s["expected"])) > 2e-3 \
-                        or abs(s["expected"] - R["states"][stt]["expected"]) > 1e-9 or abs(s["band"] - R["states"][stt]["band"]) > 1e-9:
+                d = pr.get(b)
+                if d is None or abs(s["actual"] - scores[b]) > 1e-3 or s["n"] != d["n"] or s["states"] != d["states"] or s["status"] != d["status"] \
+                        or s["sensitivity"] != {f"{w*100:g}": v for w, v in d["sens"].items()} \
+                        or [p["b"] for p in s["peers"]] != sorted(d["ids"], key=lambda q: (roster[q]["state"], report.senators[q].name)) \
+                        or any(p["st"] == s["st"] for p in s["peers"]) \
+                        or (d["n"] and (abs(s["low"] - d["low"]) > 1e-3 or abs(s["high"] - d["high"]) > 1e-3 or abs(s["median"] - d["median"]) > 1e-3)) \
+                        or abs(R["states"][s["st"]]["gop"] - el["avg"][s["st"]]) > 1e-4:
                     bad.append(b)
-            out.append(Check("page: every senator against their state's expected position", not bad and len(R["senators"]) == len(scores),
+            out.append(Check("page: every senator's peer comparison rebuilt from raw files", not bad and len(R["senators"]) == len(scores),
                              f"{len(R['senators'])} senators" + (f"; mismatches {bad}" if bad else "")))
-            by_state: dict[str, set] = {}
-            for b, s in R["senators"].items():
-                by_state.setdefault(s["st"], set()).add((s["expected"], s["band"]))
-            ok = all(len(v) == 1 for v in by_state.values())
-            out.append(Check("page: both senators of a state share one state input", ok, f"{len(by_state)} states"))
+            ok = R["rule"]["window"] == WINDOW and R["rule"]["minPeers"] == MIN_PEERS and R["rule"]["windows"] == list(WINDOWS)
+            out.append(Check("page: the peer rule shown is the rule used", ok, f"{R['rule']['window']}, {R['rule']['minPeers']}, {R['rule']['windows']}"))
+            ranked = any(list(p["x"] for p in s["peers"]) == sorted(p["x"] for p in s["peers"]) and len(s["peers"]) > 3 for s in R["senators"].values())
+            out.append(Check("page: peer lists are by state, not ordered by position", not ranked))
             ok = all(abs(R["states"][s]["byYear"][str(y)] - el["share"][y][s]) < 1e-4 for s in R["states"] for y in el["share"])
             out.append(Check("page: each state's election results by year", ok))
             ok = abs(E["seatsMinusNational"] - report.chamber_lean.skew_points) < 0.01 and abs(E["nationalGop"] - el["national_avg"]) < 1e-4

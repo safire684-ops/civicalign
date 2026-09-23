@@ -10,6 +10,7 @@ from .committees import CommitteeStats, committee_stats
 from .gatekeeping import Gatekeeping, gatekeeping
 from .landmarks import Landmark, landmarks
 from .output_ideology import OutputIdeology, output_ideology
+from .peers import PeerComparison, peer_comparisons
 from .receipts import FloorVote, Receipt, receipts, recent_floor_votes
 from .representation import (ChamberLean, CommitteeLean, Fit, Representation,
                              chamber_lean, committee_lean, representations)
@@ -27,7 +28,11 @@ class Report:
     positions: list[Positions]   # senator (Voteview) and state (survey) side by side, never combined
     state_source: state_prefs.StateCoordinateSource
 
-    # Pillar 4 via regression on real election results -- no bridging required.
+    # Pillar 4 as published: same-party peers from similarly voting states.
+    peers: list[PeerComparison]
+
+    # The regression on state election results: kept for diagnostics and the
+    # methodology's audit figures, no longer the page's primary result.
     election: elections.ElectionLean
     fit: Fit
     chamber_lean: ChamberLean
@@ -76,6 +81,7 @@ def run(cfg: Config = DEFAULT) -> Report:
     lean = elections.load_mit_president(cfg.elections_csv, cfg.election_years)
     fit, reps = representations(scores, roster, lean)
     chlean = chamber_lean(scores, roster, lean)
+    prs = peer_comparisons(scores, roster, lean)
 
     committees, cleans = [], []
     cmte_rosters = rosters.load_senate_committees(cfg.committees_json)
@@ -124,7 +130,7 @@ def run(cfg: Config = DEFAULT) -> Report:
         config=cfg, senators=roster, scores=scores,
         unscored=voteview.unscored(roster, scores), votes_cast=votes_cast,
         chamber=ch, committees=committees, positions=pos, state_source=src,
-        election=lean, fit=fit, chamber_lean=chlean, representation=reps,
+        peers=prs, election=lean, fit=fit, chamber_lean=chlean, representation=reps,
         committee_leans=cleans, gatekeeping=gks, gatekeeping_baseline=gk_base,
         bills_referred_unique=n_bills, bills_reported_unique=n_reported,
         landmarks=lms, receipts=rcpts, output_ideology=oi, floor_votes=fvs,

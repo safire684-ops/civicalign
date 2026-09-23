@@ -112,7 +112,7 @@ def test_demo_carries_public_grid_and_landmarks_but_no_bills(report):
     assert "const L=" not in text
     assert "cls:'bill'" not in text and "receipt(" not in text
     R = _block("R")
-    assert set(R) == {"years", "fit", "states", "senators", "source"}, "R is the state-relative block, not the old receipts block"
+    assert set(R) == {"rule", "states", "senators"}, "R is the peer-comparison block, not the old receipts block"
     for s in ("One vote from the record", "Senate roll call", "fmtBill("):
         assert s not in text, s
 
@@ -513,7 +513,7 @@ def test_2_never_calls_a_cutpoint_bill_ideology():
 def test_3_survey_vintage_is_visible_on_the_first_screen():
     v = _visible()
     first = v.split('id="the-senate"')[0]
-    assert "states that vote like yours" in first
+    assert "states that voted similarly in recent presidential elections" in first
     assert "sit politically compared with voters nationally" in _js().split("$('qsub-voters').textContent=")[1].split(";\n")[0]
     # the vintage is printed on the state card itself, which the script draws on load
     card = _js().split("$('stateblock').innerHTML=")[1].split('<details class="more">')[0]
@@ -547,7 +547,7 @@ def test_7_and_8_every_view_answers_one_question_with_a_plain_takeaway():
         panel = t.split(f'<section id="{view}"')[1].split("</section>")[0]
         assert 'class="takeaway"' in panel, view
     assert "<h1>Your senators, in the context of your state</h1>" in t
-    assert "See how each senator’s Senate voting record compares with what we\n    typically see from senators representing states that vote like yours." in t
+    assert "See how each senator’s Senate voting record compares with same-party\n    senators representing states that voted similarly in recent presidential elections." in t
     # generated takeaways are plain sentences without raw decimals
     for fn in ("$('take-senators').textContent=t", "$('take-senate').textContent=", "$('take-committee').textContent="):
         assert fn in t
@@ -734,7 +734,7 @@ def test_p1_senator_card_leads_with_words_not_display_numbers():
     card = _fn(js, "senatorCard").split("<details class=\"more\">")[0]
     for num in ("p100(", "d100(", "sp.pts", "points"):
         assert num not in card, num
-    assert "esc(words.w)" in card and "stateRelWords(rr,last,st.name)" in card
+    assert "esc(words.w)" in card and "peerWords(pc.status,last)" in card
     assert "How '+esc(s.name)+' votes <span class=\"kick2\">compared with the Senate</span>" in _fn(js, "senatorCard")
 
 
@@ -859,11 +859,11 @@ def _default_view_text():
 def test_v1_every_view_opens_with_a_plain_orientation_sentence():
     m = _markup()
     head = m.split("<nav")[0]
-    assert "See how each senator’s Senate voting record compares with what we\n    typically see from senators representing states that vote like yours." in head
+    assert "See how each senator’s Senate voting record compares with same-party\n    senators representing states that voted similarly in recent presidential elections." in head
     assert "is not directly compared with the senators" in head
     assert "voter estimates" not in head.lower(), "the first sentence does not lean on an unexplained term"
     js = _js()
-    assert "How do their Senate voting records compare with what '+st.name+'’s recent presidential voting would normally predict?" in js
+    assert "How do their voting records compare with same-party senators from states that voted similarly?" in js
     assert "Academic estimate of where '+st.name+' voters generally sit politically compared with voters nationally." in js
     assert "Below that: the Senate’s voting center and the 60-vote point." in js
     sec = m.split('<section id="committees"')[1].split("</section>")[0]
@@ -895,7 +895,7 @@ def test_v3_voter_estimate_says_what_is_being_estimated():
 def test_v4_senator_and_voter_systems_stay_explicitly_separate():
     sec = _markup().split('<section id="your-senators"')[1].split("</section>")[0]
     outside = re.sub(r"<details.*?</details>", "", sec, flags=re.S)
-    assert "not a poll of the state’s voters" in outside
+    assert "does not say whether a senator represents, agrees with, or matches\n    the state’s voters" in outside
     assert "This is a separate survey measure and is not directly compared with your senators." in _js()
     assert "is not directly compared with the senators" in _markup().split("<nav")[0]
     js = _js()

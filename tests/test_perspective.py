@@ -11,13 +11,14 @@ from pathlib import Path
 
 import pytest
 
-from civicalign.build_demo import state_rel_words
+from civicalign.build_demo import peer_words
 from civicalign.config import DEFAULT
 from civicalign.pipeline import run
 from civicalign.representation import Representation, representations, state_expectation
 from civicalign.sources import elections
 from civicalign.sources.rosters import Senator
 
+A = "\u2019"
 ROOT = Path(__file__).resolve().parents[1]
 DEMO = ROOT / "demo" / "senator-check.html"
 REPORT = ROOT / "demo" / "methodology.html"
@@ -50,45 +51,44 @@ def _markup():
 def test_1_primary_senator_result_is_state_relative():
     card = _fn("senatorCard")
     before = card.split('<details class="more">')[0]
-    assert "stateRelWords(rr,last,st.name)" in before
+    assert "peerWords(pc.status,last)" in before
     assert "senatorPos(s).w" not in before and "sp.w" not in before, "the Senate-middle sentence is not the headline"
     assert "Where they sit in the Senate" in card and "'+sp.w+'" in card.split("Where they sit in the Senate")[1]
-    assert "takeaway(st)" in _js() and "the typical range based on '+st.name+'’s recent presidential voting" in _fn("takeaway")
+    assert "takeaway(st)" in _js() and "comparable '+g+' senators" in _fn("takeaway")
     sec = _markup().split('<section id="your-senators"')[1].split("</section>")[0]
-    assert sec.index('id="stateref"') < sec.index('id="cards"') < sec.index('id="stateblock"')
+    assert sec.index('id="stateinput"') < sec.index('id="cards"') < sec.index('id="stateblock"')
 
 
-# 2. the state comparison is the election regression, not survey subtraction
-def test_2_state_comparison_uses_the_election_regression(report):
+# 2. the state comparison is the peer rule on election results, not survey subtraction
+def test_2_state_comparison_uses_election_peers_not_survey(report):
     R = _block("R")
-    assert R["source"].startswith("MIT Election Data and Science Lab")
-    assert R["fit"]["n"] == report.fit.n and R["fit"]["slope"] == pytest.approx(report.fit.slope, abs=1e-4)
+    assert R["rule"]["source"].startswith("MIT Election Data and Science Lab")
     for b, s in R["senators"].items():
-        x = R["states"][s["st"]]["gop"]
-        assert s["expected"] == pytest.approx(R["fit"]["intercept"] + R["fit"]["slope"] * x, abs=2e-3)
-        assert s["residual"] == pytest.approx(s["actual"] - s["expected"], abs=2e-3)
-    ref = _fn("stateRefCard")
-    assert "R.states" in ref and "st.center" not in ref and "P.usM" not in ref and "M.usM" not in ref
+        assert s["st"] == report.senators[b].state
+        for p in s["peers"]:
+            assert p["st"] != s["st"] and abs(R["states"][p["st"]]["gop"] - R["states"][s["st"]]["gop"]) <= R["rule"]["window"] + 1e-9
+    track = _fn("peerTrack")
+    assert "pc.low" in track and "st.center" not in track and "P.usM" not in track and "M.usM" not in track
 
 
 # 3. the survey estimate stays visually and mathematically separate
 def test_3_survey_estimate_stays_separate():
     js = _js()
-    for fn in ("stateRefCard", "stateRefWhy", "senatorCard", "votesList", "takeaway", "stateRelWords"):
+    for fn in ("peerTrack", "peerWhy", "senatorCard", "votesList", "takeaway", "peerWords"):
         body = _fn(fn)
         assert "st.center" not in body and "usM" not in body and "V.states[code].center" not in body, fn
     render = js.split("function render(code){")[1].split("window.addEventListener('resize'")[0]
     assert "This is a separate survey measure and is not directly compared with your senators." in render
     assert "stateTrack(st,se)" in render and "R." not in _fn("stateTrack")
     R = _block("R")
-    assert "center" not in json.dumps(R) and "mrp" not in json.dumps(R)
+    assert "center" not in json.dumps(R) and "mrp" not in json.dumps(R) and "expected" not in json.dumps(R)
 
 
 # 4. no Voteview-vs-survey arithmetic returns
 def test_4_no_cross_scale_arithmetic_returns():
     js = _js()
     for pat in (r"record\s*-\s*st\.center", r"st\.center\s*-\s*s\.record", r"record\s*-\s*(P|V|M)\.usM",
-                r"expected\s*-\s*st\.center", r"st\.center\s*-\s*rr\.", r"actual\s*-\s*(P|V|M)\.usM"):
+                r"low\s*-\s*st\.center", r"st\.center\s*-\s*pc\.", r"actual\s*-\s*(P|V|M)\.usM"):
         assert not re.search(pat, js), pat
     src = "".join(p.read_text() for p in (ROOT / "src" / "civicalign").glob("*.py"))
     for pat in (r"senator_coord\s*-\s*[\w.]*state_coord", r"state_coord\s*-\s*[\w.]*senator_coord",
@@ -109,26 +109,27 @@ def test_5_no_ranking_or_score_in_the_payload_or_page():
         assert w not in t, w
 
 
-# 6. expected position comes from the backend, not UI logic
-def test_6_expected_position_is_not_computed_in_the_page():
+# 6. the classification comes from the backend, not UI logic
+def test_6_status_is_not_computed_in_the_page():
     js = _js()
-    assert "R.fit.slope*" not in js.replace(" ", "") and "intercept+" not in js.replace(" ", "")
-    for fn in ("stateRefCard", "senatorCard", "stateRelWords", "takeaway"):
+    for fn in ("peerWords", "senatorCard", "takeaway"):
         body = _fn(fn)
-        assert "rs.expected" in body or "rr.zone" in body or "rr.residual" in body or "stateRelWords(rr" in body, fn
-        assert "slope" not in body and "intercept" not in body, fn
-    assert "rr.zone==='within'" in _fn("stateRelWords") and "rr.zone==='clear'" in _fn("stateRelWords")
+        assert "pc.status" in body or "status===" in body, fn
+    for fn in ("peerWords", "peerTrack", "senatorCard", "takeaway"):
+        body = _fn(fn)
+        assert "Math.min(" not in body and "Math.max(" not in body and "median" not in body.replace("pc.median", ""), fn
+    assert "status==='within'" in _fn("peerWords") and "status==='unstable'" in _fn("peerWords")
 
 
-# 7. both senators from a state use the same state-election input
+# 7. both senators from a state use the same state-election input and the same pool
 def test_7_both_senators_share_the_state_input(report):
     R = _block("R")
-    by_state = {}
-    for b, s in R["senators"].items():
-        by_state.setdefault(s["st"], set()).add((s["expected"], s["band"]))
-    assert len(by_state) == 50 and all(len(v) == 1 for v in by_state.values())
-    ga = [x for x in report.representation if x.state == "GA"]
-    assert len(ga) == 2 and ga[0].state_lean == ga[1].state_lean == report.election.lean("GA")
+    for c in report.peers:
+        assert R["states"][c.state]["gop"] == pytest.approx(c.state_lean, abs=1e-4)
+    ga = [x for x in report.peers if x.state == "GA"]
+    assert len(ga) == 2 and ga[0].state_lean == ga[1].state_lean
+    assert [p.bioguide for p in ga[0].peers] == [p.bioguide for p in ga[1].peers]
+    assert "Both senators are compared with the same pool of other states." in _js()
 
 
 # 8. actual senator coordinates are the live Voteview scores (rebuilt weekly)
@@ -148,38 +149,25 @@ def test_9_state_election_input_is_shown(report):
         if usps in R["states"]:
             assert R["states"][usps]["gop"] == pytest.approx(sl.gop_two_party, abs=1e-4)
             assert set(R["states"][usps]["byYear"]) == {str(y) for y in report.election.years}
-    why = _fn("stateRefWhy")
-    assert "recent presidential voting" in why and "rs.byYear[y]" in why and "Average used by CivicAlign" in why
-    assert "Why this reference?" in _fn("stateRefCard")
-    assert "Based on presidential elections: '+Object.keys(rs.byYear).sort().join(' · ')" in _fn("stateRefCard")
+    why = _fn("peerWhy")
+    assert "recent presidential vote" in why and "rs.byYear[y]" in why and "Average used for matching" in why
+    assert "How were these peers chosen?" in _fn("senatorCard")
+    assert "recent presidential vote used for peer matching: '+(R.rule?R.rule.years.join(' · ')" in _js()
 
 
-# 10. regression uncertainty drives the wording
-def test_10_uncertainty_drives_the_wording(report):
-    assert state_rel_words("within", -0.1, "Kaine", "Virginia") == \
-        "Kaine’s voting record is within the typical range based on Virginia’s recent presidential voting."
-    assert state_rel_words("beyond", -0.5, "Warnock", "Georgia") == \
-        "Warnock’s voting record is more liberal than the typical range based on Georgia’s recent presidential voting."
-    assert state_rel_words("clear", 0.8, "Johnson", "Wisconsin") == \
-        "Johnson’s voting record is well outside the typical range based on Wisconsin’s recent presidential voting, on the more conservative side."
-    for x in report.representation:
-        if abs(x.residual) <= x.band:
-            assert x.zone == "within"
-        elif abs(x.t_stat) > 2:
-            assert x.zone == "clear"
-        else:
-            assert x.zone == "beyond"
+# 10. the fixed rule and its uncertainty states drive the wording
+def test_10_rule_drives_the_wording(report):
+    assert peer_words("within", "Kaine") == f"Kaine{A}s voting record falls within the observed range of same-party senators from similarly voting states."
+    assert peer_words("outside_liberal", "Warnock") == f"Warnock{A}s voting record falls outside that peer range on the more liberal side."
+    assert peer_words("outside_conservative", "Scott") == f"Scott{A}s voting record falls outside that peer range on the more conservative side."
     R = _block("R")
-    for b, s in R["senators"].items():
-        exp = "within" if abs(s["residual"]) <= s["band"] else ("clear" if abs(s["t"]) > 2 else "beyond")
-        assert s["zone"] == exp, b
-    js = _fn("stateRelWords")
-    assert "is within '+ref+'" in js and "is well outside '+ref+'" in js and "more '+side+' than '+ref+'" in js
-    page = DEMO.read_text()
-    r = REPORT.read_text()
-    for w in ("chance would explain", "statistically significant", "significant difference"):
-        assert w not in page and w not in r, w
-    assert "well outside the typical range" in r
+    for c in report.peers:
+        assert R["senators"][c.bioguide]["status"] == c.status
+    page = DEMO.read_text(); r = REPORT.read_text()
+    for w in ("chance would explain", "statistically significant", "typical position based on", "typical range based on", "Expected for"):
+        assert w not in page, w
+    assert "typical position" not in page.split("<script>")[0].lower()
+    assert "observed range" in r and "peer" in r
 
 
 # 11. policy receipts never claim voter disagreement
@@ -199,7 +187,7 @@ def test_11_votes_make_no_voter_claim():
 # 12. Senate context is secondary on the senator card
 def test_12_senate_context_is_secondary():
     card = _fn("senatorCard")
-    i_state = card.index("stateRelWords(rr,last,st.name)")
+    i_state = card.index("peerWords(pc.status,last)")
     i_votes = card.index("Recent votes in this record")
     i_senate = card.index("Where they sit in the Senate")
     assert i_state < i_votes < i_senate
@@ -271,10 +259,9 @@ def test_18_safeguards_remain(report):
 # 19. mobile first view remains easy to understand
 def test_19_mobile_first_view_stays_light():
     css = (ROOT / "demo" / "civicalign.css").read_text()
-    assert ".mtag.bot{top:calc(26px + var(--row,0) * 16px)" in css, "senator labels stagger instead of colliding"
-    assert ".atag.exp.edge-r{transform:translateX(-100%)" in css and ".atag.exp.edge-l{transform:none" in css
-    ref = _fn("stateRefCard")
-    assert "edge-r" in ref and "rows=" in ref
+    assert ".mark.peerrange{" in css and ".atag.peer{" in css
+    track = _fn("peerTrack")
+    assert "Peer middle" in track and "scalename" in track
     sec = _markup().split('<section id="your-senators"')[1].split("</section>")[0]
     outside = re.sub(r"<details.*?</details>", "", sec, flags=re.S)
     assert outside.count('class="limit"') == 1
@@ -283,10 +270,9 @@ def test_19_mobile_first_view_stays_light():
 # 20. every primary visual answers "compared with what?"
 def test_20_every_primary_visual_names_its_reference():
     js = _js()
-    ref = _fn("stateRefCard")
-    assert "Typical position based on '+stName+'’s presidential voting" in ref
-    assert "Shaded area: typical range based on '+stName+'’s recent presidential voting" in ref and "Dots: your senators’ Senate voting records" in ref
-    assert "Expected for" not in ref
+    track = _fn("peerTrack")
+    assert "Bar: lowest to highest peer record · Tick: peer middle" in track and "Dot: '+last+'’s Senate voting record" in track
+    assert "Compared with <span class=\"kick2\">'+cmp+'</span>" in _fn("senatorCard")
     assert "National vote: '+pct(E.nationalGop)" in js and "Average across Senate seats" in js
     assert "Senate middle" in _fn("committeeCard") and "Senate middle" in _fn("floorSplit") and "Senate middle" in _fn("senatorTrack")
     assert "National voter estimate" in _fn("stateTrack")
@@ -321,12 +307,12 @@ def test_correction_pass_hierarchy_and_defensibility():
     first = m.split('<section id="your-senators"')[1].split("</section>")[0]
     assert 'id="explore"' not in first and 'id="explore"' in m.split('<section id="the-senate"')[1].split("</section>")[0]
     assert '<details class="more context" id="voterctx">' in first and "<summary><span>Additional voter context</span></summary>" in first
-    assert first.index('id="stateref"') < first.index('id="cards"') < first.index('id="voterctx"')
+    assert first.index('id="stateinput"') < first.index('id="cards"') < first.index('id="voterctx"')
     js = _js()
     assert "is not directly compared with your senators" in js.split("$('qsub-voters').textContent=")[1].split(";\n")[0]
     base = js.split("$('basenote').innerHTML=")[1].split(";\n")[0]
     assert "Republicans hold the majority" not in base and "because" not in base
     assert "compares each committee with that Senate-wide pattern rather than with zero" in base
-    for w in ("Republicans hold the majority", "majority control", "chance would explain", "Expected for a state like", "Expected for states with"):
+    for w in ("Republicans hold the majority", "majority control", "chance would explain", "Expected for a state like", "Expected for states with", "typical range based on"):
         assert w not in page, w
     assert "Republicans hold the majority" not in REPORT.read_text() and "majority control" not in REPORT.read_text()

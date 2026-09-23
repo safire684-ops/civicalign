@@ -70,10 +70,10 @@ table.calc tr.total td{border-bottom:none;border-top:2px solid var(--ink);
 <header>
   <p class="eyebrow">Methodology &middot; 119th Congress</p>
   <h1>How we measure Senate representation</h1>
-  <p class="sub">We compare each senator's voting record with the pattern typically
-    seen from senators representing states that vote like theirs, measure how equal
-    representation of states shapes the Senate, and read each committee against the
-    Senate overall. This explains where each number comes from and what it can and
+  <p class="sub">We compare each senator's voting record with same-party senators
+    representing states that voted similarly in recent presidential elections,
+    measure how equal representation of states shapes the Senate, and read each
+    committee against the Senate overall. This explains where each number comes from and what it can and
     cannot tell you.</p>
   <p class="asof">As of 23 September 2026</p>
 </header>
@@ -105,12 +105,11 @@ table.calc tr.total td{border-bottom:none;border-top:2px solid var(--ink);
     alignment measure on those two scales requires a validated statistical bridge
     between voter and legislator scales, and CivicAlign does not have one.</p>
   <p><b>The way round it</b> is to use a public measure that needs no survey and no
-    bridge: how the state actually voted. Across all 100 current senators, a state's
-    recent presidential vote and its senator's voting position line up strongly. That
-    relationship gives an expected voting position for a state with any given result,
-    on the senators' own scale, so the senator and the expectation can be compared
-    directly (section 1). The survey estimate of a state's voters is still shown, on
-    its own scale, as separate context (section 1b).</p>
+    bridge: how the state actually voted. That lets the tool pick, for each senator,
+    the comparable senators: same party, other states, similar recent presidential
+    vote. The senator is then compared with those peers on the senators' own scale
+    (section 1). The survey estimate of a state's voters is still shown, on its own
+    scale, as separate context (section 1b).</p>
   <p><b>Each scale you see runs from 0 to 100.</b> 0 is most liberal, 100 most
     conservative, 50 the middle. Under the hood both sets of numbers run from
     &minus;1 to +1; we show each rescaled (position &times; 50 + 50, so a
@@ -160,56 +159,67 @@ table.calc tr.total td{border-bottom:none;border-top:2px solid var(--ink);
 <section>
   <h2>The three measurements</h2>
 
-  <h3>1. Your senator, against the pattern for states that vote like yours</h3>
-  <p>This is the tool's primary result for a senator, and it never subtracts a
-    survey figure from a voting score. Instead it uses election results, which are
-    public behaviour measured directly. For each of the 100 current senators with
-    a score, take two numbers: the senator's Voteview voting position, and their
-    state's share of the two-party presidential vote averaged equally over
-    2016, 2020, 2024 (MIT Election Data and Science Lab). Fit one straight line through all
-    100 points: <em>position = &minus;1.982 + 4.003 &times; state share</em>.
-    The line says what voting position a state's recent presidential vote typically
-    goes with; the state pattern accounts for 0.69 of the variation in senators'
-    records (r&sup2;), and the slope's 95% interval, 3.47 to 4.54,
-    is far from zero.</p>
-  <p><b>Expected position and typical range.</b> Reading the line at a state's share
-    gives the <em>expected position</em> for a state that votes like it. The
-    <em>typical range</em> around it is one standard error of prediction
-    (residual standard error 0.285, about 14 display-scale
-    units, widened slightly at the ends of the vote-share range); roughly two thirds of
-    senators sit inside it. Both senators from a state are compared with the same
-    expected position, because the input is the state's vote, not the senator's party.</p>
-  <p><b>The words follow one rule</b>, driven by the model's own uncertainty, not by
-    hand-picked buckets. On the tool the expected position is called the "typical
-    position based on the state's recent presidential voting". A senator inside the
-    typical range is "within the typical range" (73 of 100 today). Outside
-    it, the record is "more liberal" or "more conservative than the typical range"
-    (21 today). When the residual divided by its own standard error, corrected
-    for leverage, also exceeds 2, the tool says the record is "well outside the typical
-    range" (6 today); it makes no claim about chance or significance on the
-    page, because the model omits party and pairs two senators per state, which the
-    standard errors do not account for. No senator is ranked or scored.</p>
+  <h3>1. Your senator, against same-party senators from similarly voting states</h3>
+  <p>This is the tool's primary result for a senator. It compares senators with
+    senators, on one scale, and its reference group is something a reader can see.</p>
+  <p><b>The rule, fixed.</b> A senator's peers are the current senators who (1) belong
+    to the same party group (Republicans; or Democrats together with the Independents
+    who caucus with them) and (2) represent a <em>different</em> state whose average
+    two-party presidential vote across 2016, 2020, 2024 (MIT Election Data and Science Lab)
+    is within &plusmn;4 points of the senator's state. The senator's own state
+    is excluded entirely, so the two senators from one state never serve as each
+    other's peers; two same-party senators from one state are compared with the same
+    pool of other states. A conclusion is published only with at least 6
+    peers, and only if it is the same at every one of &plusmn;2, &plusmn;3, &plusmn;4, &plusmn;5 points that also
+    meets the minimum. Nothing widens the window to find peers.</p>
+  <p><b>Why &plusmn;4 and 6.</b> A sensitivity run over windows of
+    &plusmn;2, &plusmn;3, &plusmn;4 and &plusmn;5 points and minimums of 5, 6 and 8 found that
+    &plusmn;2 leaves 17 senators without six peers and &plusmn;3 leaves 11, most of them
+    senators from competitive states, which are the ones a reader most wants to see;
+    &plusmn;4 leaves three (both Wyoming senators and Maine's Republican) while peer
+    states still span only about five points of vote share; &plusmn;5 adds little
+    coverage and widens the group. The cross-window check exists so that the choice of
+    window cannot manufacture a result: nine senators' conclusions change between
+    windows, and the tool says so for each of them rather than picking one.</p>
+  <p><b>What is published.</b> For each senator: the observed lowest and highest peer
+    record and the peer middle (median) on the senators' scale, the senator's own
+    record, and one of five sentences: within the observed range; outside it on the
+    more liberal side; outside it on the more conservative side; the comparison changes
+    with the window; too few peers. Today: 75 within, 13 outside,
+    9 window-dependent (Adam B. Schiff (CA); Richard J. Durbin (IL); Jerry Moran (KS); Tina Smith (MN); Eric Schmitt (MO); Thom Tillis (NC); John Fetterman (PA); John R. Curtis (UT); Mike Lee (UT)), 3 with too
+    few peers (Susan M. Collins (ME); Cynthia M. Lummis (WY); John Barrasso (WY)). No senator is ranked, and the peer senators
+    are listed by state, never ordered by position.</p>
   <p><b>Worked example: Georgia.</b> Georgia's two-party vote ran 2016: 52.7%, 2020: 49.9%, 2024: 51.1%,
-    average 51.2% Republican. On the line that gives an expected position of
-    <b>53.4</b> (raw +0.068) with a typical range of about
-    &plusmn;14 display-scale units (raw &plusmn;0.287). Jon Ossoff's
-    record is 22.9 (raw &minus;0.541), a difference of <b>&minus;30.5</b>
-    display-scale units (raw &minus;0.609; leverage-corrected t = -2.15). The tool
-    says: "Ossoff’s voting record is well outside the typical range based on Georgia’s recent presidential voting, on the more liberal side." For Raphael Warnock, from the same Georgia input, it
-    says: "Warnock’s voting record is more liberal than the typical range based on Georgia’s recent presidential voting."</p>
-  <p><b>What this does and does not answer.</b> It answers: how does this senator's
-    overall record compare with what senators from states with a similar recent
-    presidential vote typically look like? It does not answer how far a senator sits
-    from their state's voters in absolute terms; that still needs a validated bridge
-    between the voter and legislator scales, which does not exist. Three limits are
-    worth knowing. The pattern is relative: if every senator moved together, no
-    residual would change. The line ignores party, so in a closely divided state the
-    expected position sits between the two parties and senators of both parties tend
-    to fall on their own side of it; averaged across the Senate, Democrats' records sit
-    &minus;7.2 and Republicans' +6.3 display-scale units from the line.
-    And two senators share each state's input, so the 100 observations are not fully
-    independent; the standard errors treat them as if they were, which slightly
-    overstates certainty. None of this is a judgement about any senator.</p>
+    average 51.2% Republican. Jon Ossoff's peers are the 12 Democratic
+    senators from Arizona, Michigan, Minnesota, New Hampshire, Nevada, Pennsylvania, Wisconsin. Their records run from <b>27.1</b> to
+    <b>41.9</b> on the display line, middle 35.4; Ossoff's is
+    22.9. The tool says: "Ossoff’s voting record falls outside that peer range on the more liberal side." Across the windows the conclusion is
+    &plusmn;2: outside liberal; &plusmn;3: outside liberal; &plusmn;4: outside liberal; &plusmn;5: outside liberal. For Raphael Warnock, with the same peer pool, it says: "Warnock’s voting record falls outside that peer range on the more liberal side."</p>
+  <p><b>What this does and does not answer.</b> It answers: compared with same-party
+    senators representing states with a similar recent presidential vote, where does
+    this senator's overall record sit? It does not answer whether the senator agrees
+    with, matches, or represents the state's voters; nothing about voters enters the
+    comparison. It does not say what any senator should do. And it is only as good as
+    the peer group: where peers are few or the conclusion depends on the window, the
+    tool says so instead of concluding.</p>
+  <p><b>The regression that was retired from the page.</b> Until this version the
+    page led with a line fitted through all 100 senators, position on the state's
+    presidential vote, and called the line's value the "typical position" for a state
+    that votes like yours. An audit found that the line mostly measures the party
+    split. Its r&sup2; is 0.69 and its slope 4.00, but the residuals
+    split by party (Democrats &minus;7.1, Republicans +6.3
+    display-scale units on average), and within a party the state's vote explains
+    little: the within-party slope is 1.31 for Democrats (correlation
+    0.54) and 0.18 for Republicans (correlation 0.06).
+    Worse, for an evenly divided state the line predicts 51.0 with a one-error
+    band of &plusmn;14 units, and only 12 of 100 senators sit inside
+    that band: the "typical position" fell in a gap between the two parties where
+    almost nobody sits, so 14 of the 24 senators from
+    competitive states were "outside the typical range" by construction. Adding party
+    to the model changed the classification of 39 senators. A fitted line that behaves
+    this way should not be a public headline about a person; the peer comparison
+    above replaces it. The regression code is kept for diagnostics and for this
+    audit, and is not used for any published classification.</p>
   <p><b>The actual votes.</b> Each senator card lists their recorded Yea or Nay on the
     most recent Senate votes on passing a bill, the same votes for every senator,
     newest first, with a link to the roll call at Voteview. They show what the record
@@ -416,12 +426,12 @@ table.calc tr.total td{border-bottom:none;border-top:2px solid var(--ink);
     <dd>A single liberal-to-conservative axis describes congressional voting well,
       because most roll-call votes split along it. It describes voters less well, since
       people's economic and social views do not line up as neatly.</dd>
-    <dt>The state comparison is relative, and it is not a poll.</dt>
-    <dd>The "typical position based on your state's recent presidential voting" is a
-      pattern across all 100 current senators, read from election results. It says how a senator compares with that
-      pattern, not how far they sit from their own state's voters, and it does not say
-      whether a senator is right or wrong. A departure from the pattern has many
-      possible causes, party first among them.</dd>
+    <dt>The peer comparison is about senators, not voters.</dt>
+    <dd>It says where a record sits among same-party senators from states with a
+      similar recent presidential vote. It does not say whether a senator agrees with,
+      matches or represents the state's voters, and it does not say what a senator
+      should do. Where there are too few peers, or the answer depends on which nearby
+      states are included, the tool says so instead of concluding.</dd>
     <dt>The voter survey and the voting scores are not compared with each other.</dt>
     <dd>The senator scale is built from votes and the state survey scale from survey
       answers, each on its own footing, and nobody has tied them together. A direct
@@ -456,11 +466,12 @@ table.calc tr.total td{border-bottom:none;border-top:2px solid var(--ink);
 <section>
   <h2>How to check it</h2>
   <p>Every figure here can be reproduced with a calculator and a spreadsheet. Download
-    the files in the table above. For the state comparison, take each senator's
+    the files in the table above. For the peer comparison, take each senator's
     <code>nokken_poole_dim1</code> from the Voteview file and their state's two-party
     presidential share from the MIT file (Republican votes divided by Republican plus
-    Democratic, averaged over the three elections), fit a straight line through the 100
-    points, and read each senator's distance from it. For the seat comparison, average
+    Democratic, averaged over the three elections); for a senator, list the same-party
+    senators from other states within 4 points of that share, and see whether the
+    senator's score falls inside their lowest-to-highest range. For the seat comparison, average
     the 100 seats' state shares and subtract the national share. For a senator's place
     in the Senate, subtract the median of the 100 scores. For a state's survey estimate,
     read its <code>mrp_ideology</code> in the ideology file and subtract the

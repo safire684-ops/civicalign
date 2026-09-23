@@ -34,18 +34,17 @@ What never changes without a deliberate decision:
    vs the expected position for their state (below), senator vs Senate middle,
    committee vs Senate middle, 60-vote point vs Senate middle, state vs national
    voter estimate, seats' vote share vs national vote share.
-1b. **The primary senator result is state-relative, via election results.**
-   `representation.py` fits senator score against the state's presidential
-   two-party share (2016/2020/2024, equal weights, MIT Election Lab) across all
-   current senators. Each senator is shown against the expected position for a
-   state that votes like theirs, with the one-standard-error prediction band as
-   the typical range; both are on the senators' scale. Zone comes from the model
-   (`Representation.zone`: within / beyond / clear, the last meaning |t| > 2 with
-   leverage correction); the page only words it (`stateRelWords` /
-   `state_rel_words`: within / more liberal or conservative than / well outside
-   the typical range; no "chance" or significance wording on the page). No party
-   term, no ranking, no score. The survey estimate is
-   separate context and never enters this comparison.
+1b. **The primary senator result is a peer comparison** (`peers.py`): same
+   party group (Republicans; Democrats with the two Independents), other states
+   only, state two-party presidential share (2016/2020/2024, MIT) within ±4
+   points, minimum six peers, conclusion published only if it agrees at ±2, ±3,
+   ±4 and ±5. Five statuses: within / outside_liberal / outside_conservative /
+   unstable / insufficient. Nothing widens the window; peers are listed by state,
+   never ordered by position; no ranking. The page only words the backend status
+   (`peerWords` / `peer_words`). The regression (`representation.py`) is kept for
+   diagnostics and the methodology's audit, and is not used for any published
+   classification (it mostly measured the party split; in competitive states its
+   line fell where no senator sits). The survey estimate never enters this.
 2. **No bill ideology.** A roll-call dividing line says where senators split, not
    what the bill was. A sponsor's record does not make a bill liberal or
    conservative. The page says both.
@@ -87,26 +86,26 @@ All seven are enforced by tests that run in the weekly job.
   estimate of your state's voters appears further down and is not directly
   compared with the senators." / "Senate data updated: <date> · Voter estimate:
   2020 wave".
-- **Your senators (Pillar 4).** Takeaway ("Both Ossoff and Warnock vote more
-  liberal than the typical range based on Georgia's recent presidential
-  voting."), state picker, "YOUR SENATORS — How do their Senate voting records
-  compare with what Georgia's recent presidential voting would normally predict?"
-  Then one shared reference card: "Georgia's recent voting context (i)", SENATE
-  VOTING SCALE, the shaded typical range, the "Typical position based on
-  Georgia's presidential voting" tick and both senators' dots, the decoder
-  ("Shaded area: typical range based on Georgia's recent presidential voting ·
-  Dots: your senators' Senate voting records"), "Based on presidential elections:
-  2016 · 2020 · 2024", and "Why this reference?" (how it is built, the three
-  two-party shares and the average used, the numbers). Then a card per senator:
-  the one sentence from the model (within / more liberal or conservative than /
-  well outside the typical range; no chance or significance wording), "Based on
-  844 recorded Senate votes…", "Recent votes in this record" (the most recent
-  passage votes with their Yea/Nay and a Voteview link; "they do not on their own
-  explain the comparison above, and they do not say what the state's voters
-  wanted"), "Where they sit in the Senate" (the Senate-middle ruler and sentence,
-  demoted). Then a collapsed "Additional voter context" fold holding the survey
-  card on the VOTER ESTIMATE SCALE, "This is a separate survey measure and is not
-  directly compared with your senators."
+- **Your senators (Pillar 4).** Takeaway ("Both Ossoff's and Warnock's voting
+  records fall outside the observed range of comparable Democratic senators, on
+  the more liberal side."), state picker, "YOUR SENATORS — How do
+  their voting records compare with same-party senators from states that voted
+  similarly?", "Georgia recent presidential vote used for peer matching: 2016 ·
+  2020 · 2024. Both senators are compared with the same pool of other states."
+  Then a card per senator: "Compared with 12 Democratic senators from 7 other
+  states with similar recent presidential voting (i)", SENATE VOTING SCALE with
+  the observed peer range bar, the "Peer middle" tick and the senator's dot, the
+  decoder ("Bar: lowest to highest peer record · Tick: peer middle · Dot: …"),
+  the one sentence from the backend status, "This compares the senator with
+  same-party senators from states with similar recent presidential voting. It
+  does not measure whether the senator agrees with the state's voters.", the vote
+  count, then folds: "How were these peers chosen?" (the rule, the state's three
+  shares and the average, peer states with shares, peer senators by state,
+  conclusion at each window, the numbers), "Recent votes in this record",
+  "Where they sit in the Senate" (demoted Senate-middle ruler). Below the cards:
+  "A peer comparison says where a voting record sits among comparable senators.
+  It does not say whether a senator represents, agrees with, or matches the
+  state's voters." Then the collapsed "Additional voter context" survey fold.
 - **The Senate (Pillar 5).** Leads with "How Senate seats represent the country's
   vote": a vote-share ruler (Even split, National vote 49.1% R, Average across
   Senate seats 52.5% R) and "The mix of states represented by Senate seats is 3.4
@@ -155,12 +154,13 @@ nothing, and leaves the previously verified site live.
    blocks and `demo/methodology.html` from the template.
 5. **Page tests** (`tests/test_published_pages.py`): the public-claim contract.
 6. **Supervisor** (`python -m civicalign.agents.supervisor`): separate code
-   re-reads the raw files and reproduces 30 figures: scores, middle, 60th vote,
+   re-reads the raw files and reproduces 35 figures: scores, middle, 60th vote,
    survey estimates, bill counts, every state's three-cycle two-party share, the
    national shares, the seats-minus-nation figure, the fitted line (own OLS from
-   sums), every senator's expected position, residual, band and zone, every
-   senator's vote on the published floor votes; and checks the payload carries no
-   cross-scale, ranking or unverified-summary field.
+   sums; diagnostics only), every senator's peer group, range, status and
+   per-window sensitivity with its own loop, the rule itself, every senator's
+   vote on the published floor votes; and checks the payload carries no
+   cross-scale, ranking or unverified-summary field and lists peers by state.
 7. **Commit** only if the pages or the provenance log changed (a check-stamp-only
    snapshot change is discarded). **Publish** only if every step passed.
 
@@ -183,8 +183,10 @@ guard (104 Voteview rows for 100 seats) is in `sources/voteview.py`.
 ## Code map (Pillars 4–6)
 
 - `src/civicalign/pipeline.py` — `run()` builds the `Report`.
-- `representation.py` — the Pillar 4 model (`Fit`, `Representation` with
-  `band` and `zone`, `state_expectation`) and the Pillar 5 `ChamberLean`;
+- `peers.py` — the published Pillar 4 rule (`WINDOW`, `MIN_PEERS`, `WINDOWS`,
+  `peer_comparisons`, `status_from`). `representation.py` — the retired
+  regression (`Fit`, `Representation` with `band` and `zone`), kept for
+  diagnostics and the methodology audit, and the Pillar 5 `ChamberLean`;
   `uncertainty.py` — analytic OLS errors, `leverage`, `prediction_band`,
   `studentized`. `receipts.py` — `recent_floor_votes` (fixed neutral rule).
 - `alignment.py` — `Positions`: senator score and state estimate side by side,
@@ -195,11 +197,12 @@ guard (104 Voteview rows for 100 seats) is in `sources/voteview.py`.
   `representation.py` — method A, the election-result regression (answers "how
   does this senator compare with the pattern typical of states that vote
   similarly?"), kept separate from the page.
-- `build_demo.py` — data blocks `V M X P G` plus `R` (state-relative: fit,
-  each state's shares and expected position/band, each senator's actual,
-  expected, residual, band, t, zone), `E` (seats vs nation by election), `F`
-  (recent passage votes with every senator's Yea/Nay); report placeholders;
-  sources list; wording rules (`rel_words`, `state_rel_words`).
+- `build_demo.py` — data blocks `V M X P G` plus `R` (peers: the rule, each
+  state's shares, each senator's group, record, peer count/states/low/high/
+  median, status, per-window sensitivity, peer senators by state), `E` (seats vs
+  nation by election), `F` (recent passage votes with every senator's Yea/Nay);
+  report placeholders including `regression_audit`; sources list; wording rules
+  (`rel_words`, `peer_words`).
 - `agents/` — `base.py` (snapshot), `sources.py` (ten agents with validators and
   vintages), `verify.py`, `supervisor.py`. `whitepaper.py` — figure refresher.
 - Tests: `test_published_pages.py` (contract: no cross-scale arithmetic G1–G6,
@@ -218,11 +221,10 @@ guard (104 Voteview rows for 100 seats) is in `sources/voteview.py`.
 ## Open items
 
 - The 2024 survey wave does not exist; 2020 is the newest. The page says so.
-- The Pillar 4 line ignores party: in a closely divided state the expected
-  position sits between the parties and both parties' senators fall on their own
-  side of it (Democrats average −7, Republicans +6 display-scale units from the
-  line). Documented in the report as a limitation; a party term would answer a
-  different question and was not added.
+- The peer rule leaves three senators without a comparison (both Wyoming
+  senators; Maine's Republican) and nine with window-dependent conclusions; the
+  page says so for each. The retired regression's problems (party split, phantom
+  middle) are documented in the report with live figures.
 - Pillar 1 bill summaries do not exist in this repo; `FloorVote.summary` is the
   integration point and stays empty. Do not invent summaries.
 - Two audits disagree on committee median vs mean; the median is shown and the
@@ -265,7 +267,8 @@ guard (104 Voteview rows for 100 seats) is in `sources/voteview.py`.
   Pillar 4 result (shared reference ruler, typical range, model-driven words,
   actual votes as evidence), the Senate view leads with seats vs nation,
   committees are read against the Senate-wide baseline, blocks R/E/F added and
-  supervised. Earlier still, the final
+  supervised. Then the statistical audit (same day) retired the regression
+  from the page: block R now carries the peer comparison. Earlier still, the final
   comprehension pass: new header and freshness line, "Your senators" / "Voters in
   <State>" sections, SENATE VOTING SCALE / VOTER ESTIMATE SCALE labels on every
   ruler, the legislative flow, the three-fifths explanation of 60, FAQ reordered

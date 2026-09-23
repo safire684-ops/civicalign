@@ -46,17 +46,53 @@ def rel_words(d: float, ref: str) -> str:
     return f"on the more {side} side of the {ref}"
 
 
-def state_rel_words(zone: str, residual: float, last: str, state: str) -> str:
-    """The one sentence for a senator against the pattern for states that vote
-    like theirs. Zone comes from the model (representation.Representation.zone);
-    this only puts it into words. Mirrored by stateRelWords() in the page."""
-    ref = f"the typical range based on {state}\u2019s recent presidential voting"
-    if zone == "within":
-        return f"{last}\u2019s voting record is within {ref}."
-    side = "conservative" if residual > 0 else "liberal"
-    if zone == "clear":
-        return f"{last}\u2019s voting record is well outside {ref}, on the more {side} side."
-    return f"{last}\u2019s voting record is more {side} than {ref}."
+def peer_words(status: str, last: str) -> str:
+    """The one sentence for the peer comparison. Status comes from peers.py; this
+    only puts it into words. Mirrored by peerWords() in the page."""
+    if status == "within":
+        return f"{last}\u2019s voting record falls within the observed range of same-party senators from similarly voting states."
+    if status == "outside_liberal":
+        return f"{last}\u2019s voting record falls outside that peer range on the more liberal side."
+    if status == "outside_conservative":
+        return f"{last}\u2019s voting record falls outside that peer range on the more conservative side."
+    if status == "unstable":
+        return "The comparison changes depending on which nearby states are included, so CivicAlign does not show a simple peer-range conclusion."
+    return "There are not enough comparable same-party senators from similarly voting states for a stable comparison."
+
+
+def regression_audit(r: Report) -> dict:
+    """Live figures for the methodology's account of why the regression was
+    retired from the page: Model A's fit, its residuals by party, the within-party
+    slopes, and the phantom-middle counts."""
+    rows = [(r.senators[b].party, r.election.lean(r.senators[b].state), v) for b, v in r.scores.items()]
+    f = r.fit
+    res = {x.bioguide: x.residual for x in r.representation}
+    party_mean = {g: st.fmean([res[b] for b in r.scores if (r.senators[b].party == "Republican") == (g == "R")] or [0.0]) for g in ("D", "R")}
+    slopes = {}
+    for g in ("D", "R"):
+        pts = [(x, y) for pty, x, y in rows if (pty == "Republican") == (g == "R")]
+        slope, _ = st.linear_regression([p[0] for p in pts], [p[1] for p in pts])
+        xs, ys = [p[0] for p in pts], [p[1] for p in pts]
+        mx, my = st.fmean(xs), st.fmean(ys)
+        num = sum((a - mx) * (b - my) for a, b in zip(xs, ys))
+        den = (sum((a - mx) ** 2 for a in xs) * sum((b - my) ** 2 for b in ys)) ** 0.5
+        slopes[g] = (slope, num / den if den else 0.0)
+    p50 = f.predict(0.5)
+    inside50 = sum(1 for _, _, y in rows if abs(y - p50) <= f.residual_se)
+    comp = [x for x in r.representation if abs(x.state_lean - 0.5) < 0.04]
+    comp_out = sum(1 for x in comp if abs(x.residual) > x.band)
+    return {
+        "aud_r2": f"{f.r_squared:.2f}", "aud_slope": f"{f.slope:.2f}",
+        "aud_dem_resid": _sd100(party_mean["D"]), "aud_rep_resid": _sd100(party_mean["R"]),
+        "aud_dem_slope": f"{slopes['D'][0]:.2f}", "aud_dem_r": f"{slopes['D'][1]:.2f}",
+        "aud_rep_slope": f"{slopes['R'][0]:.2f}", "aud_rep_r": f"{slopes['R'][1]:.2f}",
+        "aud_inside50": str(inside50), "aud_comp_n": str(len(comp)), "aud_comp_out": str(comp_out),
+        "aud_p50": _p100(p50), "aud_band": _d100(f.residual_se, 0),
+    }
+
+
+def _name_list(cs) -> str:
+    return "; ".join(f"{c.name} ({c.state})" for c in cs) if cs else "none"
 
 
 def _p100(v: float, places: int = 1) -> str:
@@ -151,35 +187,35 @@ def _report_values(r: Report) -> dict[str, str]:
                            f'<td class="n">{_d100(c.stability.worst_shift)}</td></tr>\n' for c in cm)
                  + '  </table></div>')
     f = r.fit
-    reps = {x.bioguide: x for x in r.representation}
-    os_r, wn_r = reps.get("O000174"), reps.get("W000790")
     ga = r.election.state_lean("GA")
+    from .peers import WINDOW as PEER_WINDOW, MIN_PEERS as PEER_MIN, WINDOWS as PEER_WINDOWS
+    from collections import Counter
+    counts = Counter(c.status for c in r.peers)
+    by_b = {c.bioguide: c for c in r.peers}
+    os_p, wn_p = by_b.get("O000174"), by_b.get("W000790")
     cl = r.chamber_lean
-    zones = {z: sum(1 for x in r.representation if x.zone == z) for z in ("within", "beyond", "clear")}
-    party_resid = {pty: st.fmean([x.residual for x in r.representation if x.party == pty] or [0.0])
-                   for pty in ("Democrat", "Republican")}
     lo, hi = cl.skew_range_points
     surname = lambda n: n.replace(",", "").split()[-1]
     return {
         "asof": f"{d.day} {d.strftime('%B %Y')}",
         "r_years": r.election.label.replace("/", ", "),
-        "r_n": str(f.n), "r_r2": f"{f.r_squared:.2f}", "r_slope": f"{f.slope:.3f}",
-        "r_intercept": _signed(f.intercept), "r_resid_se": f"{f.residual_se:.3f}",
-        "r_resid_se_100": _d100(f.residual_se, 0),
-        "r_slope_lo": f"{f.slope_ci95[0]:.2f}", "r_slope_hi": f"{f.slope_ci95[1]:.2f}",
-        "r_within": str(zones["within"]), "r_beyond": str(zones["beyond"]), "r_clear": str(zones["clear"]),
-        "r_dem_resid": _sd100(party_resid["Democrat"]), "r_rep_resid": _sd100(party_resid["Republican"]),
+        "r_n": str(f.n), "r_r2": f"{f.r_squared:.2f}",
         "ga_gop": f"{100 * ga.gop_two_party:.1f}" if ga else "&mdash;",
         "ga_by_year": ", ".join(f"{y}: {100 * v:.1f}%" for y, v in sorted(ga.by_year.items())) if ga else "&mdash;",
-        "os_expected": _p100(os_r.predicted) if os_r else "&mdash;",
-        "os_expected_raw": _signed(os_r.predicted) if os_r else "&mdash;",
-        "os_band": _d100(os_r.band, 0) if os_r else "&mdash;",
-        "os_band_raw": f"{os_r.band:.3f}" if os_r else "&mdash;",
-        "os_resid": _sd100(os_r.residual) if os_r else "&mdash;",
-        "os_resid_raw": _signed(os_r.residual) if os_r else "&mdash;",
-        "os_t": f"{os_r.t_stat:+.2f}" if os_r else "&mdash;",
-        "os_state_words": state_rel_words(os_r.zone, os_r.residual, surname(os_r.name), "Georgia") if os_r else "",
-        "wn_state_words": state_rel_words(wn_r.zone, wn_r.residual, surname(wn_r.name), "Georgia") if wn_r else "",
+        "pr_window": f"{PEER_WINDOW * 100:g}", "pr_min": str(PEER_MIN), "pr_windows": ", ".join(f"&plusmn;{w * 100:g}" for w in PEER_WINDOWS),
+        "pr_within": str(counts["within"]), "pr_outside": str(counts["outside_liberal"] + counts["outside_conservative"]),
+        "pr_unstable": str(counts["unstable"]), "pr_insufficient": str(counts["insufficient"]),
+        "pr_unstable_list": _name_list([c for c in r.peers if c.status == "unstable"]),
+        "pr_insufficient_list": _name_list([c for c in r.peers if c.status == "insufficient"]),
+        "os_peer_n": str(os_p.n) if os_p else "&mdash;",
+        "os_peer_states": ", ".join(STATES.get(s, s) for s in os_p.peer_states) if os_p else "&mdash;",
+        "os_peer_low": _p100(os_p.low) if os_p and os_p.low is not None else "&mdash;",
+        "os_peer_high": _p100(os_p.high) if os_p and os_p.high is not None else "&mdash;",
+        "os_peer_median": _p100(os_p.median) if os_p and os_p.median is not None else "&mdash;",
+        "os_peer_words": peer_words(os_p.status, surname(os_p.name)) if os_p else "",
+        "wn_peer_words": peer_words(wn_p.status, surname(wn_p.name)) if wn_p else "",
+        "os_sens": "; ".join(f"&plusmn;{w * 100:g}: {v.replace('_', ' ')}" for w, v in sorted(os_p.sensitivity.items())) if os_p else "",
+        **regression_audit(r),
         "sk_points": f"{cl.skew_points:.1f}", "sk_lo": f"{lo:.1f}", "sk_hi": f"{hi:.1f}",
         "sk_side": "Republican" if cl.skew > 0 else "Democratic",
         "nat_gop": f"{100 * cl.national_lean:.1f}", "seats_gop": f"{100 * cl.senate_lean:.1f}",
@@ -382,36 +418,35 @@ def _blocks(r: Report, cfg: Config) -> dict[str, dict]:
 
 
 def _state_relative_block(r: Report, cfg: Config) -> dict:
-    """Pillar 4 as published: each senator against the position the fitted line
-    expects for a state with their state's recent presidential vote, on the
-    senators' (Voteview) scale throughout. The expected position and the typical
-    range come from the backend model; the page only draws and words them. No
-    survey figure enters this block, and no senator is ranked."""
-    from .representation import state_expectation
-    f = r.fit
-    xs = [x.state_lean for x in r.representation]
+    """Pillar 4 as published: each senator against same-party senators from other
+    states with a similar recent presidential vote, on the senators' (Voteview)
+    scale throughout. Status comes from peers.py; the page only draws and words
+    it. Peer senators are listed by state, never ordered by score. No survey
+    figure enters this block, and no senator is ranked."""
+    from .peers import WINDOW, MIN_PEERS, WINDOWS
     states = {}
     for usps, sl in sorted(r.election.states.items()):
-        if usps not in STATES:
-            continue
-        exp, band = state_expectation(f, xs, sl.gop_two_party)
-        states[usps] = {
-            "gop": round(sl.gop_two_party, 4),
-            "byYear": {str(y): round(v, 4) for y, v in sorted(sl.by_year.items())},
-            "expected": round(exp, 3), "band": round(band, 3),
+        if usps in STATES:
+            states[usps] = {"gop": round(sl.gop_two_party, 4),
+                            "byYear": {str(y): round(v, 4) for y, v in sorted(sl.by_year.items())}}
+    senators = {}
+    for c in r.peers:
+        senators[c.bioguide] = {
+            "st": c.state, "group": c.group, "independent": c.party == "Independent",
+            "actual": round(c.score, 3), "n": c.n,
+            "low": round(c.low, 3) if c.low is not None else None,
+            "high": round(c.high, 3) if c.high is not None else None,
+            "median": round(c.median, 3) if c.median is not None else None,
+            "states": c.peer_states, "status": c.status,
+            "sensitivity": {f"{w * 100:g}": v for w, v in sorted(c.sensitivity.items())},
+            "peers": [{"b": p.bioguide, "name": p.name, "st": p.state, "x": round(p.score, 3)} for p in c.peers],
         }
-    senators = {
-        x.bioguide: {"st": x.state, "actual": round(x.ideology, 3),
-                     "expected": round(x.predicted, 3), "residual": round(x.residual, 3),
-                     "band": round(x.band, 3), "t": round(x.t_stat, 2), "zone": x.zone}
-        for x in r.representation
-    }
     return {
-        "years": list(r.election.years),
-        "fit": {"slope": round(f.slope, 4), "intercept": round(f.intercept, 4),
-                "r2": round(f.r_squared, 3), "n": f.n, "residualSe": round(f.residual_se, 4)},
+        "rule": {"window": WINDOW, "minPeers": MIN_PEERS, "windows": list(WINDOWS),
+                 "years": list(r.election.years),
+                 "grouping": "Republican senators form one group; Democrats and the Independents who caucus with them form the other",
+                 "source": "MIT Election Data and Science Lab, U.S. President 1976-2024, two-party share"},
         "states": states, "senators": senators,
-        "source": "MIT Election Data and Science Lab, U.S. President 1976-2024, two-party share",
     }
 
 

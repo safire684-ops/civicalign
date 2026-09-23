@@ -248,7 +248,13 @@ select:focus-visible,button:focus-visible,summary:focus-visible{
 .atag.pub{color:var(--calm);opacity:1;font-weight:600} .atag.sen{color:var(--ink);opacity:.9;font-weight:600}
 .atag{position:absolute;left:var(--x);top:calc(46px + var(--row,0) * 15px);transform:translateX(-50%);
   font-size:12px;color:var(--muted);white-space:nowrap;opacity:.8;font-weight:500}
-/* the state reference: expected position and typical range, senators' scale */
+/* the peer comparison: observed range of comparable senators, senators' scale */
+.mark.peerrange{position:absolute;left:var(--l);width:var(--w);top:50%;height:16px;
+  transform:translateY(-50%);background:rgba(100,116,139,.28);border-radius:8px;z-index:1}
+.anchor.peer{height:24px;width:2px;opacity:.9;background:var(--ink)}
+.atag.peer{top:-30px;color:var(--ink);opacity:1;font-weight:600;font-size:12.5px}
+.stateinput{margin-top:6px}
+/* (legacy) the state reference: expected position and typical range, senators' scale */
 .refcard{border-left:4px solid var(--ink)}
 .mark.typical{position:absolute;left:var(--x);width:var(--w);top:50%;height:24px;
   transform:translate(-50%,-50%);background:rgba(100,116,139,.2);

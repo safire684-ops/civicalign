@@ -47,25 +47,30 @@ src/civicalign/
 
 ## What the live page shows
 
-The live page (`demo/senator-check.html`, `demo/methodology.html`) leads with
-**method A**, the state-relative comparison: senator ideology is fitted against
-the state's presidential two-party vote share (2016, 2020, 2024, equal weights)
-across all current senators, and each senator is shown against the expected
-position for a state that votes like theirs, with the model's one-standard-error
-prediction band as the "typical range". Both sides are on the senators' scale, so
-no bridging is needed. The words are driven by the model: inside the band,
-"within the typical range"; outside it, "more liberal/conservative than the
-typical range"; when the leverage-corrected residual also exceeds 2 standard
-errors, "well outside the typical range". The page makes no significance claim. The senator's recorded Yea/Nay on the
-most recent passage votes sits under each card as the evidence.
+The live page (`demo/senator-check.html`, `demo/methodology.html`) leads with a
+**peer comparison** (`peers.py`): each senator against same-party senators
+(Republicans; or Democrats with the Independents who caucus with them) from
+*other* states whose two-party presidential vote, averaged over 2016/2020/2024,
+is within ±4 points of the senator's state. The page shows the observed lowest,
+highest and middle peer record and the senator's own record, all on the
+Voteview scale, and one of five sentences: within the observed range; outside it
+on the more liberal side; outside it on the more conservative side; the
+conclusion changes with the window (checked at ±2, ±3, ±4, ±5); too few peers
+(minimum six). Nothing widens the window, nothing ranks anyone, and the survey
+estimate never enters the comparison. The most recent passage votes with each
+senator's Yea/Nay sit under the card as evidence.
+
+The regression of senator position on state vote share (method A below,
+`representation.py`) is retained for diagnostics and for the methodology's
+audit of why it was retired from the page: its fitted line mostly measures the
+party split and, in competitive states, falls in a gap where no senator sits.
+It is no longer used for any published classification.
 
 The senator's position against the Senate middle is secondary context, and the
 American Ideology Project estimate (2020 wave) is shown separately on the
 voters' scale. The page never subtracts the survey estimate from a voting score:
 a direct senator-versus-state measure on those two scales requires a validated
-statistical bridge, which CivicAlign does not have. `representation.py` holds
-the model; `build_demo._state_relative_block` publishes it; the supervisor
-refits the line with separate arithmetic before anything is published.
+statistical bridge, which CivicAlign does not have.
 
 ## What works today, and what does not
 
