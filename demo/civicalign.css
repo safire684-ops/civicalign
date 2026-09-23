@@ -254,7 +254,13 @@ select:focus-visible,button:focus-visible,summary:focus-visible{
   transform:translate(-50%,-50%);background:rgba(100,116,139,.2);
   border-left:1px dashed #94a3b8;border-right:1px dashed #94a3b8;border-radius:4px;z-index:1}
 .anchor.exp{height:22px;width:2px;opacity:.9;background:var(--ink)}
-.atag.exp{top:-34px;color:var(--ink);opacity:1;font-weight:600;font-size:12.5px}
+.atag.exp{top:-50px;color:var(--ink);opacity:1;font-weight:600;font-size:12.5px;white-space:normal;
+  max-width:210px;text-align:center;line-height:1.25}
+.refcard .track{margin-top:56px}
+.atag.exp.edge-r{text-align:right} .atag.exp.edge-l{text-align:left}
+.caption .dotkey{display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--dem);vertical-align:-1px;margin:0 6px 0 2px}
+.more.context summary{font-size:14px;color:var(--muted)}
+.more.context>.qsub{margin:0 18px 12px}
 .atag.exp.edge-r{transform:translateX(-100%);margin-left:6px}
 .atag.exp.edge-l{transform:none;margin-left:-6px}
 .card .say{margin-top:12px;font-size:15.5px;max-width:56ch}

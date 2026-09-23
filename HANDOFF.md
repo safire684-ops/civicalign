@@ -42,7 +42,9 @@ What never changes without a deliberate decision:
    the typical range; both are on the senators' scale. Zone comes from the model
    (`Representation.zone`: within / beyond / clear, the last meaning |t| > 2 with
    leverage correction); the page only words it (`stateRelWords` /
-   `state_rel_words`). No party term, no ranking, no score. The survey estimate is
+   `state_rel_words`: within / more liberal or conservative than / well outside
+   the typical range; no "chance" or significance wording on the page). No party
+   term, no ranking, no score. The survey estimate is
    separate context and never enters this comparison.
 2. **No bill ideology.** A roll-call dividing line says where senators split, not
    what the bill was. A sponsor's record does not make a bill liberal or
@@ -86,32 +88,39 @@ All seven are enforced by tests that run in the weekly job.
   compared with the senators." / "Senate data updated: <date> · Voter estimate:
   2020 wave".
 - **Your senators (Pillar 4).** Takeaway ("Both Ossoff and Warnock vote more
-  liberal than the typical range for states that vote like Georgia."), state
-  picker, "YOUR SENATORS — How do their Senate voting records compare with what
-  Georgia's recent presidential voting would normally predict?" Then one shared
-  reference card: "Expected for states with Georgia's recent voting pattern (i)",
-  SENATE VOTING SCALE, the shaded typical range, the "Expected for a state like
-  Georgia" tick and both senators' dots; "Why this is the Georgia reference"
-  (how the reference is built, the 2016/2020/2024 two-party shares and the
-  average used, the numbers). Then a card per senator: the one sentence from the
-  model, "Based on 844 recorded Senate votes…", "See their actual votes" (the
-  most recent passage votes with their Yea/Nay and a Voteview link, "They do not
-  say what the state's voters wanted"), "Where they sit in the Senate" (the
-  Senate-middle ruler and sentence, demoted). Then "ABOUT GEORGIA VOTERS", the
-  survey card on the VOTER ESTIMATE SCALE, "This is a separate survey measure and
-  is not directly compared with the senators above."
+  liberal than the typical range based on Georgia's recent presidential
+  voting."), state picker, "YOUR SENATORS — How do their Senate voting records
+  compare with what Georgia's recent presidential voting would normally predict?"
+  Then one shared reference card: "Georgia's recent voting context (i)", SENATE
+  VOTING SCALE, the shaded typical range, the "Typical position based on
+  Georgia's presidential voting" tick and both senators' dots, the decoder
+  ("Shaded area: typical range based on Georgia's recent presidential voting ·
+  Dots: your senators' Senate voting records"), "Based on presidential elections:
+  2016 · 2020 · 2024", and "Why this reference?" (how it is built, the three
+  two-party shares and the average used, the numbers). Then a card per senator:
+  the one sentence from the model (within / more liberal or conservative than /
+  well outside the typical range; no chance or significance wording), "Based on
+  844 recorded Senate votes…", "Recent votes in this record" (the most recent
+  passage votes with their Yea/Nay and a Voteview link; "they do not on their own
+  explain the comparison above, and they do not say what the state's voters
+  wanted"), "Where they sit in the Senate" (the Senate-middle ruler and sentence,
+  demoted). Then a collapsed "Additional voter context" fold holding the survey
+  card on the VOTER ESTIMATE SCALE, "This is a separate survey measure and is not
+  directly compared with your senators."
 - **The Senate (Pillar 5).** Leads with "How Senate seats represent the country's
   vote": a vote-share ruler (Even split, National vote 49.1% R, Average across
   Senate seats 52.5% R) and "The mix of states represented by Senate seats is 3.4
   percentage points more Republican than the national presidential vote", by
   election under a fold. Then "How the Senate votes": Senate middle and 60-vote
-  point, "Why 60?", and the state survey estimates on their own scale.
+  point, "Why 60?", and the state survey estimates on their own scale; "Where
+  familiar senators sit" (party middles and eight named senators) lives here,
+  folded, not on the first view.
 - **Committees (Pillar 6).** Legislative flow, then one committee at a time
   against the Senate overall: who sits on it (ruler vs Senate middle); what it has
   sent to the full Senate (flow, sponsor definition, "This describes the sponsor,
   not the ideology of the bill", and "Compared with the Senate overall":
   Senate-wide difference beside this committee's difference, in percentage
-  points); where the Yes/No split fell on its bills, with the count of qualifying
+  points; the baseline is described without a cause); where the Yes/No split fell on its bills, with the count of qualifying
   votes and "Early signal" / "Not enough data yet".
 - **How it works.** Plain questions and answers, including "What does 'expected
   for a state like mine' mean?", "Where do the election results come from?",

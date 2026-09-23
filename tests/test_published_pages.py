@@ -745,7 +745,7 @@ def test_p2_state_card_leads_with_words_not_display_numbers():
         assert num not in card, num
     assert "’s voter estimate is <b>'+spst.w+'</b>" in card
     assert "Compared with voters nationally <span class=\"kick2\">the national voter estimate</span>" in card
-    assert "$('q-voters').textContent='About '+st.name+' voters'" in js
+    assert "Academic estimate of where '+st.name+' voters generally sit politically compared with voters nationally." in js
     assert "Estimated political position of '+stName+' voters" in card
     assert "Shaded area = estimated range." in js
 
@@ -864,7 +864,7 @@ def test_v1_every_view_opens_with_a_plain_orientation_sentence():
     assert "voter estimates" not in head.lower(), "the first sentence does not lean on an unexplained term"
     js = _js()
     assert "How do their Senate voting records compare with what '+st.name+'’s recent presidential voting would normally predict?" in js
-    assert "A separate academic survey estimate of where '+st.name+' voters generally sit politically compared with voters nationally." in js
+    assert "Academic estimate of where '+st.name+' voters generally sit politically compared with voters nationally." in js
     assert "Below that: the Senate’s voting center and the 60-vote point." in js
     sec = m.split('<section id="committees"')[1].split("</section>")[0]
     assert "Senate committees review bills before many of them can go to the\n    full Senate." in sec
@@ -896,7 +896,7 @@ def test_v4_senator_and_voter_systems_stay_explicitly_separate():
     sec = _markup().split('<section id="your-senators"')[1].split("</section>")[0]
     outside = re.sub(r"<details.*?</details>", "", sec, flags=re.S)
     assert "not a poll of the state’s voters" in outside
-    assert "This is a separate survey measure and is not directly compared with the senators above." in _js()
+    assert "This is a separate survey measure and is not directly compared with your senators." in _js()
     assert "is not directly compared with the senators" in _markup().split("<nav")[0]
     js = _js()
     assert "These are different measures and are shown separately." in js

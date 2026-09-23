@@ -180,21 +180,23 @@ table.calc tr.total td{border-bottom:none;border-top:2px solid var(--ink);
     senators sit inside it. Both senators from a state are compared with the same
     expected position, because the input is the state's vote, not the senator's party.</p>
   <p><b>The words follow one rule</b>, driven by the model's own uncertainty, not by
-    hand-picked buckets. A senator inside the typical range is "within the typical
-    range for states that vote like" theirs (73 of 100 today). Outside it,
-    the record is "more liberal" or "more conservative than the typical range"
-    (21 today). When the departure is also larger than chance would
-    comfortably explain (the residual divided by its own standard error, corrected for
-    leverage, exceeds 2), the sentence adds "That difference is larger than chance would
-    explain" (6 today). No senator is ranked or scored.</p>
+    hand-picked buckets. On the tool the expected position is called the "typical
+    position based on the state's recent presidential voting". A senator inside the
+    typical range is "within the typical range" (73 of 100 today). Outside
+    it, the record is "more liberal" or "more conservative than the typical range"
+    (21 today). When the residual divided by its own standard error, corrected
+    for leverage, also exceeds 2, the tool says the record is "well outside the typical
+    range" (6 today); it makes no claim about chance or significance on the
+    page, because the model omits party and pairs two senators per state, which the
+    standard errors do not account for. No senator is ranked or scored.</p>
   <p><b>Worked example: Georgia.</b> Georgia's two-party vote ran 2016: 52.7%, 2020: 49.9%, 2024: 51.1%,
     average 51.2% Republican. On the line that gives an expected position of
     <b>53.4</b> (raw +0.068) with a typical range of about
     &plusmn;14 display-scale units (raw &plusmn;0.287). Jon Ossoff's
     record is 22.9 (raw &minus;0.541), a difference of <b>&minus;30.5</b>
     display-scale units (raw &minus;0.609; leverage-corrected t = -2.15). The tool
-    says: "Ossoff’s voting record is more liberal than the typical range for states that vote like Georgia. That difference is larger than chance would explain." For Raphael Warnock, from the same Georgia input, it
-    says: "Warnock’s voting record is more liberal than the typical range for states that vote like Georgia."</p>
+    says: "Ossoff’s voting record is well outside the typical range based on Georgia’s recent presidential voting, on the more liberal side." For Raphael Warnock, from the same Georgia input, it
+    says: "Warnock’s voting record is more liberal than the typical range based on Georgia’s recent presidential voting."</p>
   <p><b>What this does and does not answer.</b> It answers: how does this senator's
     overall record compare with what senators from states with a similar recent
     presidential vote typically look like? It does not answer how far a senator sits
@@ -364,10 +366,11 @@ table.calc tr.total td{border-bottom:none;border-top:2px solid var(--ink);
 
   <p><b>The adjustment that matters.</b> Across the whole Senate, bills by
     conservative senators get through <b>2.4 percentage points</b> more often than
-    bills by liberal senators. That happens on almost every committee, because
-    Republicans hold the majority. If we left it in, nearly every committee would look
-    biased the same way and the measure would say nothing. So each committee is
-    judged against that 2.4-point baseline, not against zero.</p>
+    bills by liberal senators. Whatever its causes, that Senate-wide difference is the
+    pattern every committee shares. If we compared with zero instead, nearly every
+    committee would look the same way and the measure would say nothing about any one
+    of them. So each committee is compared with that 2.4-point Senate-wide
+    pattern, not with zero.</p>
   <div class="tw"><table class="calc">
     <tr><td>Small Business: bills by conservative-record sponsors sent forward</td><td class="n">7 of 35 = 20.0%</td></tr>
     <tr><td>Small Business: bills by liberal-record sponsors sent forward</td><td class="n">4 of 37 = 10.8%</td></tr>
@@ -414,8 +417,8 @@ table.calc tr.total td{border-bottom:none;border-top:2px solid var(--ink);
       because most roll-call votes split along it. It describes voters less well, since
       people's economic and social views do not line up as neatly.</dd>
     <dt>The state comparison is relative, and it is not a poll.</dt>
-    <dd>"Expected for a state like yours" is a pattern across all 100 current
-      senators, read from election results. It says how a senator compares with that
+    <dd>The "typical position based on your state's recent presidential voting" is a
+      pattern across all 100 current senators, read from election results. It says how a senator compares with that
       pattern, not how far they sit from their own state's voters, and it does not say
       whether a senator is right or wrong. A departure from the pattern has many
       possible causes, party first among them.</dd>

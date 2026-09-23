@@ -50,13 +50,13 @@ def state_rel_words(zone: str, residual: float, last: str, state: str) -> str:
     """The one sentence for a senator against the pattern for states that vote
     like theirs. Zone comes from the model (representation.Representation.zone);
     this only puts it into words. Mirrored by stateRelWords() in the page."""
+    ref = f"the typical range based on {state}\u2019s recent presidential voting"
     if zone == "within":
-        return f"{last}\u2019s voting record is within the typical range for states that vote like {state}."
+        return f"{last}\u2019s voting record is within {ref}."
     side = "conservative" if residual > 0 else "liberal"
-    s = f"{last}\u2019s voting record is more {side} than the typical range for states that vote like {state}."
     if zone == "clear":
-        s += " That difference is larger than chance would explain."
-    return s
+        return f"{last}\u2019s voting record is well outside {ref}, on the more {side} side."
+    return f"{last}\u2019s voting record is more {side} than {ref}."
 
 
 def _p100(v: float, places: int = 1) -> str:

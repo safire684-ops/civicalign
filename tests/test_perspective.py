@@ -53,7 +53,7 @@ def test_1_primary_senator_result_is_state_relative():
     assert "stateRelWords(rr,last,st.name)" in before
     assert "senatorPos(s).w" not in before and "sp.w" not in before, "the Senate-middle sentence is not the headline"
     assert "Where they sit in the Senate" in card and "'+sp.w+'" in card.split("Where they sit in the Senate")[1]
-    assert "takeaway(st)" in _js() and "typical range for states that vote like" in _fn("takeaway")
+    assert "takeaway(st)" in _js() and "the typical range based on '+st.name+'’s recent presidential voting" in _fn("takeaway")
     sec = _markup().split('<section id="your-senators"')[1].split("</section>")[0]
     assert sec.index('id="stateref"') < sec.index('id="cards"') < sec.index('id="stateblock"')
 
@@ -78,7 +78,7 @@ def test_3_survey_estimate_stays_separate():
         body = _fn(fn)
         assert "st.center" not in body and "usM" not in body and "V.states[code].center" not in body, fn
     render = js.split("function render(code){")[1].split("window.addEventListener('resize'")[0]
-    assert "This is a separate survey measure and is not directly compared with the senators above." in render
+    assert "This is a separate survey measure and is not directly compared with your senators." in render
     assert "stateTrack(st,se)" in render and "R." not in _fn("stateTrack")
     R = _block("R")
     assert "center" not in json.dumps(R) and "mrp" not in json.dumps(R)
@@ -150,16 +150,18 @@ def test_9_state_election_input_is_shown(report):
             assert set(R["states"][usps]["byYear"]) == {str(y) for y in report.election.years}
     why = _fn("stateRefWhy")
     assert "recent presidential voting" in why and "rs.byYear[y]" in why and "Average used by CivicAlign" in why
-    assert "Why this is the '+stName+' reference" in _fn("stateRefCard")
+    assert "Why this reference?" in _fn("stateRefCard")
+    assert "Based on presidential elections: '+Object.keys(rs.byYear).sort().join(' · ')" in _fn("stateRefCard")
 
 
 # 10. regression uncertainty drives the wording
 def test_10_uncertainty_drives_the_wording(report):
     assert state_rel_words("within", -0.1, "Kaine", "Virginia") == \
-        "Kaine’s voting record is within the typical range for states that vote like Virginia."
+        "Kaine’s voting record is within the typical range based on Virginia’s recent presidential voting."
     assert state_rel_words("beyond", -0.5, "Warnock", "Georgia") == \
-        "Warnock’s voting record is more liberal than the typical range for states that vote like Georgia."
-    assert state_rel_words("clear", 0.8, "Johnson", "Wisconsin").endswith("That difference is larger than chance would explain.")
+        "Warnock’s voting record is more liberal than the typical range based on Georgia’s recent presidential voting."
+    assert state_rel_words("clear", 0.8, "Johnson", "Wisconsin") == \
+        "Johnson’s voting record is well outside the typical range based on Wisconsin’s recent presidential voting, on the more conservative side."
     for x in report.representation:
         if abs(x.residual) <= x.band:
             assert x.zone == "within"
@@ -172,9 +174,12 @@ def test_10_uncertainty_drives_the_wording(report):
         exp = "within" if abs(s["residual"]) <= s["band"] else ("clear" if abs(s["t"]) > 2 else "beyond")
         assert s["zone"] == exp, b
     js = _fn("stateRelWords")
-    assert "within the typical range" in js and "larger than chance would explain" in js
+    assert "is within '+ref+'" in js and "is well outside '+ref+'" in js and "more '+side+' than '+ref+'" in js
+    page = DEMO.read_text()
     r = REPORT.read_text()
-    assert "typical range" in r and "larger than chance would explain" in r
+    for w in ("chance would explain", "statistically significant", "significant difference"):
+        assert w not in page and w not in r, w
+    assert "well outside the typical range" in r
 
 
 # 11. policy receipts never claim voter disagreement
@@ -183,7 +188,9 @@ def test_11_votes_make_no_voter_claim():
     assert F["votes"] and all(v["summary"] == "" for v in F["votes"])
     assert all(set(v["votes"].values()) <= {"Yea", "Nay"} for v in F["votes"])
     vl = _fn("votesList")
-    assert "They do not say what the state’s voters wanted." in vl
+    assert "they do not say what the state’s voters wanted." in vl
+    assert "These are recent recorded votes that contribute to '+last+'’s overall voting record" in vl
+    assert "do not on their own explain the comparison above" in vl
     for w in ("voters opposed", "voters supported", "against the state", "why the senator differs", "explains the difference"):
         assert w not in vl.lower(), w
     assert "voteview.com/rollcall" in F["votes"][0]["url"]
@@ -193,7 +200,7 @@ def test_11_votes_make_no_voter_claim():
 def test_12_senate_context_is_secondary():
     card = _fn("senatorCard")
     i_state = card.index("stateRelWords(rr,last,st.name)")
-    i_votes = card.index("See their actual votes")
+    i_votes = card.index("Recent votes in this record")
     i_senate = card.index("Where they sit in the Senate")
     assert i_state < i_votes < i_senate
     assert "senatorTrack(s)" in card.split("Where they sit in the Senate")[1]
@@ -276,8 +283,10 @@ def test_19_mobile_first_view_stays_light():
 # 20. every primary visual answers "compared with what?"
 def test_20_every_primary_visual_names_its_reference():
     js = _js()
-    assert "Expected for a state like '+stName+'" in _fn("stateRefCard")
-    assert "typical range for states with a similar voting pattern" in _fn("stateRefCard")
+    ref = _fn("stateRefCard")
+    assert "Typical position based on '+stName+'’s presidential voting" in ref
+    assert "Shaded area: typical range based on '+stName+'’s recent presidential voting" in ref and "Dots: your senators’ Senate voting records" in ref
+    assert "Expected for" not in ref
     assert "National vote: '+pct(E.nationalGop)" in js and "Average across Senate seats" in js
     assert "Senate middle" in _fn("committeeCard") and "Senate middle" in _fn("floorSplit") and "Senate middle" in _fn("senatorTrack")
     assert "National voter estimate" in _fn("stateTrack")
@@ -301,3 +310,23 @@ def test_relative_residual_property_still_holds():
         assert a.residual == pytest.approx(b.residual) and a.band == pytest.approx(b.band) and a.zone == b.zone
     exp, band = state_expectation(f1, [x.state_lean for x in r1], .51)
     assert exp == pytest.approx(f1.predict(.51)) and band > 0
+
+
+def test_correction_pass_hierarchy_and_defensibility():
+    """The targeted correction: no normative or significance wording, the survey
+    context collapsed and demoted, the familiar-senators fold off the first view,
+    and the committee baseline described without a cause."""
+    page = DEMO.read_text()
+    m = _markup()
+    first = m.split('<section id="your-senators"')[1].split("</section>")[0]
+    assert 'id="explore"' not in first and 'id="explore"' in m.split('<section id="the-senate"')[1].split("</section>")[0]
+    assert '<details class="more context" id="voterctx">' in first and "<summary><span>Additional voter context</span></summary>" in first
+    assert first.index('id="stateref"') < first.index('id="cards"') < first.index('id="voterctx"')
+    js = _js()
+    assert "is not directly compared with your senators" in js.split("$('qsub-voters').textContent=")[1].split(";\n")[0]
+    base = js.split("$('basenote').innerHTML=")[1].split(";\n")[0]
+    assert "Republicans hold the majority" not in base and "because" not in base
+    assert "compares each committee with that Senate-wide pattern rather than with zero" in base
+    for w in ("Republicans hold the majority", "majority control", "chance would explain", "Expected for a state like", "Expected for states with"):
+        assert w not in page, w
+    assert "Republicans hold the majority" not in REPORT.read_text() and "majority control" not in REPORT.read_text()

@@ -157,9 +157,9 @@ the floor. The Finance Committee has sent on 1 of 876. A bill not yet sent on is
 counted as pending, not dead; the Congress is still running.
 
 Across the whole Senate, bills by conservative senators get through 2.4 percentage
-points more often than bills by liberal senators. That is majority control and it
-appears on almost every committee, so each committee is measured against it rather
-than against zero:
+points more often than bills by liberal senators. Whatever its causes, that
+Senate-wide pattern appears on almost every committee, so each committee is
+measured against it rather than against zero:
 
 | committee | liberal-record sponsors: sent forward | conservative-record sponsors: sent forward | beyond baseline |
 |---|---|---|---|

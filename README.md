@@ -56,7 +56,7 @@ prediction band as the "typical range". Both sides are on the senators' scale, s
 no bridging is needed. The words are driven by the model: inside the band,
 "within the typical range"; outside it, "more liberal/conservative than the
 typical range"; when the leverage-corrected residual also exceeds 2 standard
-errors, "larger than chance would explain". The senator's recorded Yea/Nay on the
+errors, "well outside the typical range". The page makes no significance claim. The senator's recorded Yea/Nay on the
 most recent passage votes sits under each card as the evidence.
 
 The senator's position against the Senate middle is secondary context, and the

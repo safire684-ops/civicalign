@@ -40,15 +40,13 @@
   <p class="qsub" id="qsub-senators"></p>
   <div id="stateref"></div>
   <div id="cards"></div>
-  <p class="limit">The expected position is a statistical pattern across all 100 current
-    senators, not a poll of the state’s voters, and it does not say whether any
-    senator is right or wrong.</p>
-  <h3 class="q" id="q-voters"></h3>
-  <p class="qsub" id="qsub-voters"></p>
-  <div id="stateblock"></div>
-  <details class="explore" id="explore">
-    <summary><span>Where familiar senators sit</span></summary>
-    <div class="ruler" id="ruler"></div>
+  <p class="limit">The typical position is a statistical pattern across all 100 current
+    senators, not a poll of the state’s voters, and it does not say where any senator
+    should sit.</p>
+  <details class="more context" id="voterctx">
+    <summary><span>Additional voter context</span></summary>
+    <p class="qsub" id="qsub-voters"></p>
+    <div id="stateblock"></div>
   </details>
 </section>
 
@@ -79,6 +77,10 @@
   <details class="more">
     <summary><span>The numbers</span></summary>
     <div id="pubnums"></div>
+  </details>
+  <details class="explore" id="explore">
+    <summary><span>Where familiar senators sit</span></summary>
+    <div class="ruler" id="ruler"></div>
   </details>
 </section>
 
@@ -138,15 +140,15 @@
       <p>From their actual Senate votes, collected and scored by Voteview, a university
       project. Every vote a senator has cast this Congress is boiled down to one overall
       voting pattern, from more liberal to more conservative.</p></div>
-    <div><h3>What does “expected for a state like mine” mean?</h3>
+    <div><h3>What does “typical position based on my state’s presidential voting” mean?</h3>
       <p>CivicAlign looks at how every state voted in the last three presidential
       elections and how its current senators vote in the Senate. Across all 100
-      senators, that relationship gives an expected voting position for a state with
-      your state’s recent voting pattern, and a typical range around it. A senator
-      inside the range is where that pattern would predict; outside it, their record
-      is more liberal or more conservative than the pattern. It is a statistical
-      expectation, not a poll of your state’s voters, and it does not say whether a
-      senator is right or wrong.</p></div>
+      senators, that relationship gives a typical Senate voting position for a state
+      with your state’s recent presidential voting, and a typical range around it. A
+      senator inside the range is where that pattern would predict; outside it, their
+      record is more liberal or more conservative than the pattern. It is a statistical
+      pattern, not a poll of your state’s voters, and it does not say where a senator
+      should sit or whether a senator is right or wrong.</p></div>
     <div><h3>Where do the election results come from?</h3>
       <p>The MIT Election Data and Science Lab’s official presidential returns.
       CivicAlign uses each state’s two-party share (Republican and Democratic
@@ -287,7 +289,7 @@ const F={"congress":119,"rule":"the most recent votes on passage of a titled bil
   var pct=function(v,d){return (100*v).toFixed(d==null?1:d)+'%'};
   var fmtDate=function(iso){var d=new Date(iso+'T00:00:00');return isNaN(d)?esc(iso):d.toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'})};
   var HELP={
-    expected:'CivicAlign looks at how states voted in recent presidential elections and how their senators vote in the Senate. That pattern gives a reference point for a state like this one. It is not a poll of the state’s voters.',
+    expected:'CivicAlign looks at how states voted in recent presidential elections and how their senators vote in the Senate. That pattern gives a typical Senate voting position for a state with this state’s recent presidential voting. It is not a poll of the state’s voters.',
     seats:'Every state has two seats. Averaging each seat’s state presidential vote and comparing it with the national vote shows how equal representation of states changes the political mix of the Senate.',
     middle:'Senate middle = the center of current senators’ voting patterns.',
     national:'National voter estimate = all the state estimates combined, weighted by population.',
@@ -439,11 +441,11 @@ const F={"congress":119,"rule":"the most recent votes on passage of a titled bil
   // zone, expected position and typical range come from the backend model (block R);
   // this only puts them into words. Mirrored by state_rel_words() in build_demo.py.
   function stateRelWords(rr,last,stName){
-    if(rr.zone==='within') return {w:last+'’s voting record is within the typical range for states that vote like '+stName+'.',i:'\u2248'};
+    var ref='the typical range based on '+stName+'’s recent presidential voting';
+    if(rr.zone==='within') return {w:last+'’s voting record is within '+ref+'.',i:'\u2248'};
     var side=rr.residual>0?'conservative':'liberal';
-    var w=last+'’s voting record is more '+side+' than the typical range for states that vote like '+stName+'.';
-    if(rr.zone==='clear') w+=' That difference is larger than chance would explain.';
-    return {w:w,i:rr.residual>0?'\u2192':'\u2190'};
+    if(rr.zone==='clear') return {w:last+'’s voting record is well outside '+ref+', on the more '+side+' side.',i:rr.residual>0?'\u2192':'\u2190'};
+    return {w:last+'’s voting record is more '+side+' than '+ref+'.',i:rr.residual>0?'\u2192':'\u2190'};
   }
   function scoredSenators(st){return st.senators.filter(function(s){return s.record!=null&&R.senators&&R.senators[s.bioguide]})}
   function stateRefCard(code){
@@ -453,35 +455,36 @@ const F={"congress":119,"rule":"the most recent votes on passage of a titled bil
     var rows=sens.map(function(s,i){return i>0&&Math.abs(pos(s.record)-pos(sens[i-1].record))<16?1:0});
     var edge=xe>72?' edge-r':(xe<28?' edge-l':'');
     return '<div class="card refcard">'+
-      '<p class="kicker">Expected for states with '+stName+'’s recent voting pattern'+help('What does expected mean?',HELP.expected)+'</p>'+
+      '<p class="kicker">'+stName+'’s recent voting context'+help('What creates this reference?',HELP.expected)+'</p>'+
       '<div class="scale"><p class="scalename">Senate voting scale</p><div class="ends"><span>← More liberal</span><span>More conservative →</span></div>'+
       '<div class="track" aria-hidden="true" style="--rows:'+(Math.max.apply(null,rows.concat([0]))+1)+'">'+
         '<div class="mark typical" style="--x:'+xe+'%;--w:'+w+'%"></div>'+
-        '<div class="anchor exp" style="--x:'+xe+'%"></div><div class="atag exp'+edge+'" style="--x:'+xe+'%">Expected for a state like '+stName+'</div>'+
+        '<div class="anchor exp" style="--x:'+xe+'%"></div><div class="atag exp'+edge+'" style="--x:'+xe+'%">Typical position based on '+stName+'’s presidential voting</div>'+
         sens.map(function(s,i){return '<div class="mark sen" style="--x:'+pos(s.record)+'%;--dot:'+pcol(s.party)+'"></div><div class="mtag bot" style="--x:'+pos(s.record)+'%;--dot:'+pcol(s.party)+';--row:'+rows[i]+'">'+esc(surname(s.name))+'</div>'}).join('')+
       '</div>'+
-      '<p class="caption"><i class="swatch"></i>Shaded area = typical range for states with a similar voting pattern.</p>'+
-      '<p class="sr-only">Chart: the expected position for a state that votes like '+stName+' is '+p100(rs.expected)+' on the display line, with a typical range from '+p100(rs.expected-rs.band)+' to '+p100(rs.expected+rs.band)+'. '+sens.map(function(s){return esc(surname(s.name))+' is at '+p100(s.record)}).join('; ')+'.</p></div>'+
-      '<details class="more"><summary><span>Why this is the '+stName+' reference</span></summary>'+stateRefWhy(code)+'</details>'+
+      '<p class="caption"><i class="swatch"></i>Shaded area: typical range based on '+stName+'’s recent presidential voting · <i class="dotkey"></i>Dots: your senators’ Senate voting records</p>'+
+      '<p class="caption">Based on presidential elections: '+Object.keys(rs.byYear).sort().join(' · ')+'</p>'+
+      '<p class="sr-only">Chart: the typical position based on '+stName+'’s recent presidential voting is '+p100(rs.expected)+' on the display line, with a typical range from '+p100(rs.expected-rs.band)+' to '+p100(rs.expected+rs.band)+'. '+sens.map(function(s){return esc(surname(s.name))+' is at '+p100(s.record)}).join('; ')+'.</p></div>'+
+      '<details class="more"><summary><span>Why this reference?</span></summary>'+stateRefWhy(code)+'</details>'+
     '</div>';
   }
   function stateRefWhy(code){
     var st=V.states[code], stName=esc(st.name), rs=R.states[code], sens=scoredSenators(st);
     var years=Object.keys(rs.byYear).sort();
     return '<div class="terms">'+
-      '<div class="term"><h4>How the reference is built</h4><p>CivicAlign looks at how each state voted in the last three presidential elections ('+years.join(', ')+') and how its current senators vote in the Senate. Across all '+R.fit.n+' senators, that relationship gives an expected position for a state that votes like '+stName+', and a typical range around it. It is a statistical expectation based on that relationship. It is not a poll of '+stName+' voters, and it does not say whether a senator is right or wrong.</p></div>'+
+      '<div class="term"><h4>How the reference is built</h4><p>CivicAlign looks at how each state voted in the last three presidential elections ('+years.join(', ')+') and how its current senators vote in the Senate. Across all '+R.fit.n+' senators, that relationship gives a typical Senate voting position for a state with '+stName+'’s recent presidential voting, and a typical range around it. It is a statistical pattern, not a judgement about where a senator should sit. It is not a poll of '+stName+' voters, and it does not say whether a senator is right or wrong.</p></div>'+
       '<div class="term"><h4>'+stName+'’s recent presidential voting</h4><table class="years">'+
         years.map(function(y){var g=rs.byYear[y];return '<tr><td>'+y+'</td><td>'+pct(g)+' Republican · '+pct(1-g)+' Democratic</td></tr>'}).join('')+
         '<tr class="total"><td>Average used by CivicAlign</td><td>'+pct(rs.gop)+' Republican</td></tr></table>'+
         '<p class="fine">Share of the two-party presidential vote (Republican and Democratic candidates only), each election weighted equally. Source: MIT Election Data and Science Lab.</p></div>'+
-      '<div class="term"><h4>The numbers</h4><p>'+SCALE_NOTE+' Expected position for '+stName+': '+p100(rs.expected)+'; typical range about ±'+d100(rs.band)+' display-scale units around it. '+
-        sens.map(function(s){var rr=R.senators[s.bioguide];return esc(surname(s.name))+' is at '+p100(s.record)+', '+sd100(rr.residual)+' display-scale units from the expected position'}).join('; ')+'. Across the Senate, the state pattern accounts for about '+Math.round(R.fit.r2*100)+'% of the variation in senators’ records; the rest, including party, is what the range and these differences describe.</p></div>'+
+      '<div class="term"><h4>The numbers</h4><p>'+SCALE_NOTE+' Typical position for '+stName+': '+p100(rs.expected)+'; typical range about ±'+d100(rs.band)+' display-scale units around it. '+
+        sens.map(function(s){var rr=R.senators[s.bioguide];return esc(surname(s.name))+' is at '+p100(s.record)+', '+sd100(rr.residual)+' display-scale units from the typical position'}).join('; ')+'. Across the Senate, the state pattern accounts for about '+Math.round(R.fit.r2*100)+'% of the variation in senators’ records; the rest, including party, is what the range and these differences describe.</p></div>'+
     '</div>';
   }
   function votesList(s){
     var last=esc(surname(s.name)), mine=(F.votes||[]).filter(function(v){return v.votes&&v.votes[s.bioguide]}).slice(0,5);
     if(!mine.length) return '<p class="fine">No recorded votes on passing a bill yet for '+last+'.</p>';
-    return '<p class="fine">The most recent Senate votes on passing a bill, newest first, with '+last+'’s recorded vote. They show what the record is made of. They do not say what the state’s voters wanted.</p>'+
+    return '<p class="fine">These are recent recorded votes that contribute to '+last+'’s overall voting record: the most recent Senate votes on passing a bill, newest first. They do not on their own explain the comparison above, and they do not say what the state’s voters wanted.</p>'+
       '<ul class="votes">'+mine.map(function(v){var my=v.votes[s.bioguide];return '<li><span class="vb">'+esc(v.bill.replace(/^([A-Z]+)(\d+)$/,'$1 $2'))+' · '+esc(v.label)+'</span><span class="vd">'+fmtDate(v.date)+' · '+esc(v.question)+' · '+esc(v.result)+'</span><span class="vv '+(my==='Yea'?'yea':'nay')+'">'+last+' voted '+esc(my)+'</span>'+(v.summary?'<span class="vs">What this vote did: '+esc(v.summary)+'</span>':'')+'<a href="'+esc(v.url)+'" target="_blank" rel="noopener">Roll call at Voteview</a></li>'}).join('')+'</ul>';
   }
   function senatorCard(s,code){
@@ -491,13 +494,13 @@ const F={"congress":119,"rule":"the most recent votes on passage of a titled bil
       '<div class="who"><h3>'+esc(s.name)+'</h3><span class="party '+pcls(s.party)+'">'+esc(s.party)+'</span></div>'+
       '<p class="verdict"><span class="ic" aria-hidden="true">'+words.i+'</span>'+esc(words.w)+'</p>'+
       '<p class="caption">Based on '+(s.votes?s.votes+' ':'')+'recorded Senate votes during the current Congress.</p>'+
-      '<details class="more"><summary><span>See their actual votes</span></summary>'+votesList(s)+'</details>'+
+      '<details class="more"><summary><span>Recent votes in this record</span></summary>'+votesList(s)+'</details>'+
       '<details class="more"><summary><span>Where they sit in the Senate</span></summary>'+
         '<p class="kicker">How '+esc(s.name)+' votes <span class="kick2">compared with the Senate</span></p>'+
         senatorTrack(s)+
         '<p class="say">Within the Senate itself, '+last+'’s voting record is <b>'+sp.w+'</b>.'+help('What is the Senate middle?',HELP.middle)+'</p>'+
         '<div class="terms">'+senatorNumbers(s)+madeOf(s)+'</div>'+
-        '<p class="legend">Scored by Voteview, a university project, from every recorded vote. Open “Where familiar senators sit” below to see the typical Democrat, the typical Republican and a few well-known senators on this same line.</p>'+
+        '<p class="legend">Scored by Voteview, a university project, from every recorded vote. “Where familiar senators sit”, on The Senate tab, shows the typical Democrat, the typical Republican and a few well-known senators on this same line.</p>'+
       '</details>'+
     '</div>';
   }
@@ -505,7 +508,8 @@ const F={"congress":119,"rule":"the most recent votes on passage of a titled bil
     var sens=scoredSenators(st);
     if(!sens.length) return 'No scored senators yet for '+st.name+'.';
     var parts=sens.map(function(s){var rr=R.senators[s.bioguide];return {last:surname(s.name),z:rr.zone,side:rr.residual>0?'conservative':'liberal'}});
-    var phrase=function(p){return p.z==='within'?'within the typical range for states that vote like '+st.name:'more '+p.side+' than the typical range for states that vote like '+st.name};
+    var ref='the typical range based on '+st.name+'’s recent presidential voting';
+    var phrase=function(p){return p.z==='within'?'within '+ref:p.z==='clear'?'well outside '+ref+', on the more '+p.side+' side':'more '+p.side+' than '+ref};
     if(parts.length===2&&phrase(parts[0])===phrase(parts[1])) return 'Both '+parts[0].last+' and '+parts[1].last+' vote '+phrase(parts[0])+'.';
     return parts.map(function(p){return p.last+' votes '+phrase(p)}).join('; ')+'.';
   }
@@ -515,14 +519,13 @@ const F={"congress":119,"rule":"the most recent votes on passage of a titled bil
     $('qsub-senators').textContent='How do their Senate voting records compare with what '+st.name+'’s recent presidential voting would normally predict?';
     $('stateref').innerHTML=stateRefCard(code);
     $('cards').innerHTML=st.senators.map(function(s){return s.record==null?nullCard(s):senatorCard(s,code)}).join('');
-    $('q-voters').textContent='About '+st.name+' voters';
-    $('qsub-voters').textContent='A separate academic survey estimate of where '+st.name+' voters generally sit politically compared with voters nationally.';
+    $('qsub-voters').textContent='Academic estimate of where '+st.name+' voters generally sit politically compared with voters nationally. This is a separate survey measure and is not directly compared with your senators.';
     $('stateblock').innerHTML='<div class="card statecard">'+
       '<div class="who"><h3>Estimated political position of '+stName+' voters</h3></div>'+
       '<p class="kicker">Compared with voters nationally <span class="kick2">the national voter estimate</span>'+help('What is the national voter estimate?',HELP.national)+'</p>'+
       stateTrack(st,se)+
       '<p class="verdict"><span class="ic" aria-hidden="true">'+spst.i+'</span>'+stName+'’s voter estimate is <b>'+spst.w+'</b>.</p>'+
-      '<p class="caption">Academic survey estimate, American Ideology Project, '+M.ideologyYear+' wave. This is a separate survey measure and is not directly compared with the senators above.</p>'+
+      '<p class="caption">Academic survey estimate, American Ideology Project, '+M.ideologyYear+' wave. This is a separate survey measure and is not directly compared with your senators.</p>'+
       '<details class="more"><summary><span>See details</span></summary>'+
         '<div class="terms">'+stateWhat(st)+stateNumbers(st,se)+'</div>'+
       '</details></div>';
@@ -693,7 +696,7 @@ const F={"congress":119,"rule":"the most recent votes on passage of a titled bil
     var pct=function(n,d){return d?Math.round(100*n/d):0};
     var uB=G.uniqueBills||G.totalReferred, uR=G.uniqueReported||G.totalReported;
     if(G.worst) $('stark').innerHTML='<span class="big">'+G.worst.reported+' of '+G.worst.referred.toLocaleString()+'</span><p>bills sent to the <b>'+esc(G.worst.name)+' Committee</b> this Congress have been formally sent forward so far. Across all committees, <b>'+pct(uR,uB)+'%</b> of bills have been sent forward \u2014 '+uR.toLocaleString()+' of '+uB.toLocaleString()+' distinct bills (some bills go to more than one committee, so committee counts add up to '+G.totalReferred.toLocaleString()+'). The rest are still in committee: this Congress is not over, and some will still move.</p>';
-    $('basenote').innerHTML='Across the whole Senate, bills whose sponsors have conservative records have been sent forward slightly more often \u2014 by <b>'+G.baseline.toFixed(1)+' percentage points</b>. That is simply because Republicans hold the majority, and it happens on every committee. So each committee is judged against that baseline, not against zero.';
+    $('basenote').innerHTML='Across the Senate, the current difference between the two sponsor groups is <b>'+Math.abs(G.baseline).toFixed(1)+' percentage points</b> (bills from senators with '+(G.baseline>0?'conservative':'liberal')+' records sent forward more often). CivicAlign compares each committee with that Senate-wide pattern rather than with zero. This describes the sponsor, not the ideology of the bill.';
     $('gatecaveat').innerHTML='Counts Senate bills written by current senators, as recorded in the official bill-status files on '+esc(G.asOf||'the last data refresh')+'. \u201cSent forward\u201d means the committee formally reported the bill to the full Senate; a bill approved at a markup but not yet reported does not count yet, and House bills sent to Senate committees are not counted. The two sponsor groups are compared only for committees with at least 25 bills from each group, because below that a single bill moves the percentage by several points. A bill not yet sent forward counts as pending, not dead.';
   })();
   csel.value=clist[0].code; renderCommittee(clist[0].code);
