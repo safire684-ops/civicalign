@@ -23,6 +23,15 @@ and when it was last checked; `PROVENANCE.tsv` logs each content change.
 
 ## Status in one line
 
+Words before numbers (23 September 2026, published): every same-scale position
+is described by one fixed rule (`relWords` on the page, `rel_words` in
+build_demo.py: near < 0.05 underlying, somewhat < 0.15, clearly beyond;
+documented in the report under "Words for positions"). Cards lead with the
+picture and the sentence; display-line coordinates and differences appear only
+under See details, labelled "display-scale units" and preceded by the scale
+note; bill-flow differences are "percentage points". No ranking words. Senate
+view leads with the 60-vote point in words. Tests: 155 pass.
+
 Weekly chain hardened (23 September 2026, published): fetch is all-or-nothing
 (`agents/base.py: run_snapshot`), a pre-build `agents/verify.py` checks the
 roster, join keys and record counts, the workflow gates every step and publishes

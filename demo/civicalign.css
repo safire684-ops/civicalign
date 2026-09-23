@@ -149,7 +149,7 @@ select:focus-visible,button:focus-visible,summary:focus-visible{
 
 /* ---- senator cards ---- */
 .card{background:var(--surface);border:1px solid var(--rule);margin-top:20px;
-  padding:24px 22px 26px}
+  padding:26px 24px 26px;border-radius:8px}
 .card.flagged{border-left:4px solid var(--alert)}
 .card.null{opacity:.85}
 .who{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
@@ -176,6 +176,10 @@ select:focus-visible,button:focus-visible,summary:focus-visible{
   box-shadow:inset 0 0 0 1px var(--alert)}
 .pill.left{background:var(--alert-soft);color:var(--alert);
   box-shadow:inset 0 0 0 1px var(--alert)}
+.verdict .ic{display:inline-block;margin-right:8px;font-weight:700;color:var(--muted)}
+.caption{margin-top:8px;font-size:13.5px;color:var(--muted);max-width:60ch}
+.caption .swatch{display:inline-block;width:16px;height:9px;vertical-align:-1px;margin-right:6px;border-radius:3px;background:rgba(100,116,139,.2);outline:1px dashed #94a3b8}
+.scale .caption{margin-top:0}
 .verdict{margin-top:12px;font-size:17.5px;line-height:1.45;max-width:50ch;
   font-family:var(--serif)}
 .verdict b{font-weight:700}
@@ -199,15 +203,17 @@ select:focus-visible,button:focus-visible,summary:focus-visible{
 .gk .counts .v{display:block;font-family:var(--serif);font-size:24px;font-weight:700;margin-top:2px}
 .gk .grouped{margin-top:12px;font-size:13.5px;color:var(--muted);max-width:60ch}
 .pubcard .verdict{margin-top:8px}
-.pubcard .ends{display:flex;justify-content:space-between;font-size:12.5px;color:var(--muted);font-weight:600}
-.cm .ends{display:flex;justify-content:space-between;font-size:12.5px;color:var(--muted);font-weight:600;margin-top:10px}
+.pubcard .ends,.cm .ends{display:flex;justify-content:space-between;font-size:11.5px;color:var(--muted);font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.cm .ends{margin-top:10px}
+.pubcard .caption{margin-top:6px}
+.pubcard .kicker+.ends{margin-top:10px}
 .pubtrack{margin-top:40px}
 .gapline b{color:var(--ink)}
 .cm details.more{margin-top:12px}
 
 .scale{margin-top:26px}
-.scale .ends{display:flex;justify-content:space-between;font-size:12.5px;
-  color:var(--muted);font-weight:600}
+.scale .ends{display:flex;justify-content:space-between;font-size:11.5px;
+  color:var(--muted);font-weight:700;letter-spacing:.06em;text-transform:uppercase}
 .track{position:relative;height:10px;background:var(--rule-soft);border-radius:5px;
   margin:34px 0 calc(48px + var(--rows,1) * 15px)}
 .span{position:absolute;left:var(--l);width:var(--w);top:0;height:10px;
@@ -277,7 +283,7 @@ select:focus-visible,button:focus-visible,summary:focus-visible{
   width:3px;height:30px;border-radius:2px}
 .pubtrack .pm.pub{background:var(--calm)}
 .pubtrack .pm.sen{background:var(--ink)}
-.pubtrack .pm.piv{background:var(--muted);height:18px;width:2px}
+.pubtrack .pm.piv{width:16px;height:16px;border-radius:50%;background:var(--ink);border:3px solid var(--surface)}
 .pubtrack .pt{position:absolute;left:var(--x);transform:translateX(-50%);
   white-space:nowrap;font-size:13px;font-weight:700}
 .pubtrack .pt.a{top:-38px;color:var(--calm)}

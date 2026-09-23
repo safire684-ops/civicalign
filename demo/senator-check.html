@@ -42,8 +42,7 @@
     means more conservative.</p>
   <div id="cards"></div>
   <div id="stateblock"></div>
-  <p class="limit">These measures use different methods, so they are shown separately
-    and no distance between them is calculated. Senator record:
+  <p class="limit">These are different measures and are shown separately. Senator record:
     <a href="https://voteview.com/data" target="_blank" rel="noopener">Voteview</a>,
     every vote this Congress. State voter estimate:
     <a href="https://doi.org/10.7910/DVN/BQKU4M" target="_blank" rel="noopener">American Ideology Project</a>, 2020 wave.</p>
@@ -70,9 +69,9 @@
   <details class="more">
     <summary><span>See all 100 senators</span></summary>
     <div class="gridwrap">
-      <p class="gridnote">Each circle is one senator, from most liberal to most
-        conservative. Blue means more liberal than the Senate middle, red means more
-        conservative. Tap a circle to see that senator.</p>
+      <p class="gridnote">Each circle is one senator, arranged from the liberal end to
+        the conservative end. Blue means on the more liberal side of the Senate middle,
+        red means on the more conservative side. Tap a circle to see that senator.</p>
       <div class="dots" id="dots"></div>
       <p class="gradkey"><span>More liberal than the Senate middle</span><i></i><span>More conservative</span></p>
     </div>
@@ -139,7 +138,7 @@
     <div><b>Two lines, left to right</b>
       <span>On these charts, left means more liberal and right means more
       conservative. Each line runs
-      from 0 (most liberal) to 100 (most conservative). The senator scores and the
+      from 0 (the liberal end) to 100 (the conservative end). The senator scores and the
       voter estimates are each published on a &minus;1 to +1 scale; we show both as
       0 to 100 because it is easier to read, but they remain two different scales.</span></div>
     <div><b>Why the two are shown separately</b>
@@ -164,6 +163,7 @@
     <li>A bill's sponsor having a liberal or conservative record does not make the bill liberal or conservative.</li>
     <li>Bills still in committee are not automatically dead.</li>
     <li>Small samples deserve weak conclusions.</li>
+    <li>Words like "near", "somewhat" and "clearly" follow one fixed rule (in the methodology report) and describe position relative to a reference point. They are not grades.</li>
   </ul>
   <p class="limit">Every figure on this site is recomputed from the source files by an
     independent check before each weekly update is published.</p>
@@ -171,8 +171,11 @@
     written to be checked by anyone.</p>
   <details class="more method">
     <summary><span>Show the math</span></summary>
-    <p class="intro">The arithmetic in full, for the state you picked. You should be
-      able to reproduce every number with a calculator and the files listed at the end.</p>
+    <p class="intro">CivicAlign converts Voteview's academic voting-position scale, and
+      the survey's voter scale, into easier-to-display lines from 0 to 100. A number is a
+      position on that line; it is not a percentage, a vote total, an approval rating or
+      a grade. Differences on one line are given in display-scale units. Everything
+      below can be reproduced with a calculator and the files listed at the end.</p>
     <div id="workings"></div>
     <div class="work">
       <h3>Where each input comes from</h3>
@@ -287,45 +290,64 @@ const P={"chM":0.31,"usM":-0.027,"pivot":0.44,"stateEstimates":[0.176,0.198,0.18
       '<div class="rlabels" style="height:'+(nrows*20+14)+'px">'+
         items.map(function(it,i){return '<span class="rl '+it.cls+'" style="--x:'+pos(it.x)+'%;--row:'+rows[i]+'" title="'+esc(it.full||it.label)+'">'+esc(it.label)+'</span>'}).join('')+
       '</div>'+
-      '<p class="sr-only">Positions on the 0-to-100 scale, from most liberal to most conservative: '+items.map(function(it){return esc(it.full||it.label)+' at '+p100(it.x)}).join('; ')+'.</p>'+
+      '<p class="sr-only">Positions on the display line, from the liberal end to the conservative end: '+items.map(function(it){return esc(it.full||it.label)+' at '+p100(it.x)}).join('; ')+'.</p>'+
       '<p class="note">Every mark is a real position from Voteview: the middle senator of each party, the middle of the whole Senate, and familiar senators. Hover a name for the full name.</p>';
   }
   renderRuler();
 
   // ---------- senator cards ----------
   // ---- the senator, on the senators' scale (Voteview only) ----
-  function senatorPos(s){var d=s.record-X.chMedian, pts=d100(d);return pts<2?{w:'about at the Senate middle',c:'neutral',i:'\u2248'}:{w:'more '+(d>0?'conservative':'liberal')+' than the Senate middle',pts:pts,c:d>0?'right':'left',i:d>0?'\u2192':'\u2190'}}
+  // ONE deterministic rule for putting a same-scale difference into words.
+  // d is position minus reference point, in the underlying -1..+1 units.
+  // Thresholds are documented in the methodology report and mirrored in build_demo.py.
+  var REL={near:0.05, somewhat:0.15};
+  function relWords(d,ref){
+    var a=Math.abs(d), side=d>0?'conservative':'liberal';
+    if(a<REL.near) return {w:'near the '+ref,deg:'near',c:'neutral',i:'\u2248'};
+    var deg=a<REL.somewhat?'somewhat':'clearly';
+    return {w:deg+' on the more '+side+' side of the '+ref,deg:deg,c:d>0?'right':'left',i:d>0?'\u2192':'\u2190'};
+  }
+  function senatorPos(s){return relWords(s.record-X.chMedian,'Senate middle')}
   function cap(s){return s.charAt(0).toUpperCase()+s.slice(1)}
   function senatorTrack(s){
-    var last=esc(surname(s.name));
+    var last=esc(surname(s.name)), sp=senatorPos(s);
     return '<div class="scale"><div class="ends"><span>← More liberal</span><span>More conservative →</span></div>'+
       '<div class="track" aria-hidden="true" style="--rows:1">'+
         '<div class="anchor sen" style="--x:'+pos(X.chMedian)+'%"></div><div class="atag sen" style="--x:'+pos(X.chMedian)+'%">Senate middle</div>'+
         '<div class="mark sen" style="--x:'+pos(s.record)+'%;--dot:'+pcol(s.party)+'"></div>'+
         '<div class="mtag bot" style="--x:'+pos(s.record)+'%;--dot:'+pcol(s.party)+'">'+last+'</div>'+
       '</div>'+
-      '<p class="sr-only">On the senators’ 0-to-100 voting scale, '+last+'’s voting pattern is drawn at '+p100(s.record)+' and the Senate middle at '+p100(X.chMedian)+'.</p></div>';
+      '<p class="sr-only">Chart: '+last+'’s voting record is '+sp.w+'. On the display line '+last+' is at '+p100(s.record)+' and the Senate middle at '+p100(X.chMedian)+'.</p></div>';
   }
   // ---- the state, on the voters' scale (survey estimates only) ----
-  function leanWords(st){return st.center>0.15?'clearly conservative':st.center>0.05?'slightly conservative':st.center<-0.15?'clearly liberal':st.center<-0.05?'slightly liberal':'about in the middle'}
-  function stateLean(st){return 'are estimated '+leanWords(st)+' on the voter measure'}
+  function statePos(st){return P.usM==null?{w:'shown on the voter scale',deg:'',c:'neutral',i:'\u25C6'}:relWords(st.center-P.usM,'national voter estimate')}
   function stateTrack(st,se){
-    var stName=esc(st.name), moeW=Math.max(se*100,1.2);
+    var stName=esc(st.name), moeW=Math.max(se*100,1.2), sp=statePos(st);
     return '<div class="scale"><div class="ends"><span>← More liberal</span><span>More conservative →</span></div>'+
       '<div class="track" aria-hidden="true" style="--rows:1">'+
-        (P.usM!=null?'<div class="anchor pub" style="--x:'+pos(P.usM)+'%"></div><div class="atag pub" style="--x:'+pos(P.usM)+'%">National estimate</div>':'')+
+        (P.usM!=null?'<div class="anchor pub" style="--x:'+pos(P.usM)+'%"></div><div class="atag pub" style="--x:'+pos(P.usM)+'%">National voter estimate</div>':'')+
         '<div class="mark state-error-band" style="--x:'+pos(st.center)+'%;--w:'+moeW+'%"></div>'+
         '<div class="mark state" style="--x:'+pos(st.center)+'%"></div>'+
-        '<div class="mtag top" style="--x:'+pos(st.center)+'%">'+stName+' voters (estimate)</div>'+
+        '<div class="mtag top" style="--x:'+pos(st.center)+'%">'+stName+'</div>'+
       '</div>'+
-      '<p class="sr-only">On the voters’ 0-to-100 scale, '+stName+'’s voters are estimated at '+p100(st.center)+', give or take about '+d100(se)+' points'+(P.usM!=null?'; the national estimate is at '+p100(P.usM):'')+'.</p></div>';
+      '<p class="caption"><i class="swatch"></i>Shaded area: estimated range.</p>'+
+      '<p class="sr-only">Chart: '+stName+'’s voter estimate is '+sp.w+', with a shaded estimated range around it. On the display line '+stName+' is at '+p100(st.center)+(P.usM!=null?' and the national voter estimate at '+p100(P.usM):'')+'.</p></div>';
   }
-  function stateVsNation(st){if(P.usM==null)return '';var d=st.center-P.usM,pts=d100(d);return pts<2?'About the same as the national estimate.':pts+' points to the '+(d>0?'right':'left')+' of the national estimate, on the same voter scale.'}
   function ordinal(n){if(n%10===1&&n%100!==11)return'st';if(n%10===2&&n%100!==12)return'nd';if(n%10===3&&n%100!==13)return'rd';return'th'}
-  // ---------- what the number is made of (behind See details) ----------
+  // ---------- behind See details: the number, explained before it is shown ----------
+  var SCALE_NOTE='CivicAlign converts Voteview’s academic voting-position scale into an easier-to-display line. The number is a position on that line; it is not a percentage, a vote total, an approval rating or a grade.';
+  function senatorNumbers(s){
+    var last=esc(surname(s.name)), d=s.record-X.chMedian;
+    return '<div class="term"><h4>The number behind the picture</h4><p>'+SCALE_NOTE+' '+last+' is at '+p100(s.record)+' on that line and the Senate middle at '+p100(X.chMedian)+': a difference of '+d100(d)+' display-scale units, on the '+(d>0?'conservative':'liberal')+' side.</p></div>';
+  }
   function madeOf(s){
     var last=esc(surname(s.name));
     return '<div class="term"><h4>What this number is made of</h4><p>'+last+'’s number comes from all <b>'+(s.votes||'the')+' roll-call votes</b> they have cast this Congress, on taxes, spending, nominations and everything else that reached the floor, compared vote by vote with every other senator. It is compared only with other senators, never with the state’s survey estimate, because the two come from different measurement systems. It cannot say which issues make up any difference.</p></div>';
+  }
+  function stateNumbers(st,se){
+    var stName=esc(st.name);
+    return '<div class="term"><h4>The number behind the picture</h4><p>The shaded area shows uncertainty around the estimate (one standard error, about ±'+d100(se)+' display-scale units). On the display line '+stName+'’s estimate is at '+p100(st.center)+(P.usM!=null?' and the national voter estimate at '+p100(P.usM)+': a difference of '+d100(st.center-P.usM)+' display-scale units':'')+'. The number is a position on that line, not a percentage or a share of voters.</p></div>'+
+      '<div class="term"><h4>What this number is made of</h4><p>Large academic surveys ask residents where they stand on many policy questions; researchers combine the answers into one estimate per state. It is compared only with other states and the national estimate, never with a senator’s voting score.</p></div>';
   }
   function nullCard(s){
     var d=new Date(); d.setMonth(d.getMonth()+1);
@@ -335,8 +357,8 @@ const P={"chM":0.31,"usM":-0.027,"pivot":0.44,"stateEstimates":[0.176,0.198,0.18
       '<p>Insufficient Data: This senator has not cast the 30 minimum floor votes required to calculate a statistically valid ideological position. Check back in '+d.toLocaleString('en-GB',{month:'long'})+'.</p></div></div>';
   }
   function render(code){
-    var st=V.states[code], se=M.se[code]||0, stName=esc(st.name);
-    $('statefact').innerHTML=stName+'’s voters <b>'+stateLean(st)+'</b>.';
+    var st=V.states[code], se=M.se[code]||0, stName=esc(st.name), spst=statePos(st);
+    $('statefact').innerHTML=stName+'’s voter estimate is <b>'+spst.w+'</b>.';
     (function(){
       var scored=st.senators.filter(function(s){return s.record!=null});
       var t;
@@ -346,30 +368,30 @@ const P={"chM":0.31,"usM":-0.027,"pivot":0.44,"stateEstimates":[0.176,0.198,0.18
         if(parts.length===2&&parts[0].w===parts[1].w) t='Both '+parts[0].last+' and '+parts[1].last+' vote '+parts[0].w+'.';
         else t=parts.map(function(p){return p.last+' votes '+p.w}).join('; ')+'.';
       }
-      $('take-senators').textContent=t+' '+st.name+'’s voters '+stateLean(st)+'.';
+      $('take-senators').textContent=t+' '+st.name+'’s voter estimate is '+spst.w+'.';
     })();
     $('cards').innerHTML=st.senators.map(function(s){
       if(s.record==null) return nullCard(s);
       var sp=senatorPos(s), last=esc(surname(s.name));
       return '<div class="card">'+
         '<div class="who"><h3>'+esc(s.name)+'</h3><span class="party '+pcls(s.party)+'">'+esc(s.party)+'</span></div>'+
-        '<p class="kicker">Voting pattern</p>'+
-        '<h3 class="pill '+sp.c+'"><span class="ic" aria-hidden="true">'+sp.i+'</span>'+cap(sp.w)+(sp.pts?' ('+sp.pts+' points)':'')+'</h3>'+
+        '<p class="kicker">Senator voting pattern <span class="kick2">compared with the Senate middle</span></p>'+
         senatorTrack(s)+
-        '<p class="verdict">Based on all '+(s.votes||'the')+' votes '+last+' has cast this Congress, scored by Voteview.</p>'+
+        '<p class="verdict"><span class="ic" aria-hidden="true">'+sp.i+'</span>'+last+'’s voting record is <b>'+sp.w+'</b>.</p>'+
+        '<p class="caption">Based on all '+(s.votes||'the')+' votes '+last+' has cast this Congress, scored by Voteview.</p>'+
         '<details class="more"><summary><span>See details</span></summary>'+
-          '<div class="terms">'+madeOf(s)+'</div>'+
-          '<p class="legend">The tick marks the Senate middle: the 50th and 51st senators. Open “Where familiar senators sit” below to see the typical Democrat, the typical Republican and a few well-known senators on this same scale.</p>'+
+          '<div class="terms">'+senatorNumbers(s)+madeOf(s)+'</div>'+
+          '<p class="legend">The tick marks the Senate middle: the 50th and 51st senators. Open “Where familiar senators sit” below to see the typical Democrat, the typical Republican and a few well-known senators on this same line.</p>'+
         '</details></div>';
     }).join('');
     $('stateblock').innerHTML='<div class="card statecard">'+
       '<div class="who"><h3>'+stName+' voters</h3><span class="party i">Academic voter estimate</span></div>'+
-      '<p class="kicker">Voter estimate</p>'+
-      '<h3 class="pill neutral"><span class="ic" aria-hidden="true">\u25C6</span>Estimated '+leanWords(st)+' on the voter measure</h3>'+
+      '<p class="kicker">State voter estimate <span class="kick2">compared with the national voter estimate</span></p>'+
       stateTrack(st,se)+
-      '<p class="verdict">'+stateVsNation(st)+' Shaded area: the estimate’s uncertainty (about ±'+d100(se)+' points). American Ideology Project, '+M.ideologyYear+' wave.</p>'+
+      '<p class="verdict"><span class="ic" aria-hidden="true">'+spst.i+'</span>'+stName+'’s voter estimate is <b>'+spst.w+'</b>.</p>'+
+      '<p class="caption">Based on the American Ideology Project, '+M.ideologyYear+' wave.</p>'+
       '<details class="more"><summary><span>See details</span></summary>'+
-        '<div class="terms"><div class="term"><h4>What this number is made of</h4><p>Large academic surveys ask residents where they stand on many policy questions; researchers combine the answers into one estimate per state, with a margin of uncertainty (one standard error). It is compared only with other states and the national estimate, never with a senator’s voting score.</p></div></div>'+
+        '<div class="terms">'+stateNumbers(st,se)+'</div>'+
       '</details></div>';
     workings(code);
   }
@@ -378,27 +400,30 @@ const P={"chM":0.31,"usM":-0.027,"pivot":0.44,"stateEstimates":[0.176,0.198,0.18
   // ---------- the Senate, and the country: shown separately ----------
   (function(){
     var ticks=(P.stateEstimates||[]).map(function(x){return '<div class="stick" style="--x:'+pos(x)+'%"></div>'}).join('');
+    var piv=relWords(P.pivot-P.chM,'Senate middle');
     $('pubcard').innerHTML=
-      '<p class="kicker">Senate voting center <span class="kick2">senators’ scale</span></p>'+
+      '<p class="kicker">Senate voting pattern <span class="kick2">senators’ scale</span></p>'+
       '<div class="ends"><span>← More liberal</span><span>More conservative →</span></div>'+
       '<div class="pubtrack" aria-hidden="true">'+
-        '<div class="pm piv" style="--x:'+pos(P.pivot)+'%"></div><div class="pt c after" style="--x:'+pos(P.pivot)+'%">60-vote point</div>'+
         '<div class="pm sen" style="--x:'+pos(P.chM)+'%"></div><div class="pt b" style="--x:'+pos(P.chM)+'%">Senate middle</div>'+
+        '<div class="pm piv" style="--x:'+pos(P.pivot)+'%"></div><div class="pt c after" style="--x:'+pos(P.pivot)+'%">60-vote point</div>'+
       '</div>'+
-      '<p class="sr-only">On the senators’ 0-to-100 voting scale, the middle of the Senate is at '+p100(P.chM)+' and the 60th vote from the left at '+p100(P.pivot)+'.</p>'+
-      '<p class="verdict">The Senate middle sits at '+p100(P.chM)+' on the senators’ scale; the 60-vote point at '+p100(P.pivot)+'.</p>'+
+      '<p class="sr-only">Chart: the 60-vote point is '+piv.w+'. On the display line the middle of the Senate is at '+p100(P.chM)+' and the 60th vote from the left at '+p100(P.pivot)+'.</p>'+
+      '<p class="verdict">The 60-vote point sits <b>'+piv.w+'</b>.</p>'+
+      '<p class="caption">Many Senate actions need 60 votes to advance.</p>'+
       (P.usM==null?'':'<p class="kicker">National voter estimate <span class="kick2">voters’ scale</span></p>'+
       '<div class="ends"><span>← More liberal</span><span>More conservative →</span></div>'+
       '<div class="pubtrack voters" aria-hidden="true">'+ticks+
-        '<div class="pm pub" style="--x:'+pos(P.usM)+'%"></div><div class="pt a" style="--x:'+pos(P.usM)+'%">National estimate</div>'+
+        '<div class="pm pub" style="--x:'+pos(P.usM)+'%"></div><div class="pt a" style="--x:'+pos(P.usM)+'%">National voter estimate</div>'+
       '</div>'+
-      '<p class="sr-only">On the voters’ 0-to-100 scale, the national voter estimate is at '+p100(P.usM)+'; each faint tick is one state’s estimate.</p>'+
-      '<p class="verdict">The national voter estimate is '+p100(P.usM)+' on the voters’ scale; each faint tick is one state. These two scales come from different measurement systems and are not directly compared.</p>');
-    $('take-senate').textContent='The Senate’s voting center and the country’s voter estimate are shown on separate scales. They are not directly compared.';
-    $('pubnums').innerHTML='<div class="bignums">'+
-        '<div><span class="k">The Senate’s middle</span><span class="v">'+p100(P.chM)+'</span><span class="s">senators’ scale; the middle senator’s voting pattern</span></div>'+
-        '<div><span class="k">The 60-vote point</span><span class="v">'+p100(P.pivot)+'</span><span class="s">senators’ scale; the 60th senator counting from the most liberal</span></div>'+
-        (P.usM==null?'':'<div><span class="k">National voter estimate</span><span class="v">'+p100(P.usM)+'</span><span class="s">voters’ scale; survey estimate, all states weighted by population</span></div>')+
+      '<p class="sr-only">Chart: the national voter estimate on the voter scale, at '+p100(P.usM)+' on the display line, with each state’s estimate as a faint tick around it.</p>'+
+      '<p class="verdict">Each faint tick is one state’s voter estimate; the green mark is the national voter estimate.</p>'+
+      '<p class="caption">These are different measures and are shown separately.</p>');
+    $('take-senate').textContent='The Senate’s voting pattern and the country’s voter estimate are shown on separate scales. They are not directly compared.';
+    $('pubnums').innerHTML='<p class="fine">'+SCALE_NOTE+'</p><div class="bignums">'+
+        '<div><span class="k">The Senate’s middle</span><span class="v">'+p100(P.chM)+'</span><span class="s">display line, senators’ scale; the middle senator’s voting pattern</span></div>'+
+        '<div><span class="k">The 60-vote point</span><span class="v">'+p100(P.pivot)+'</span><span class="s">display line, senators’ scale; the 60th senator counting from the liberal end</span></div>'+
+        (P.usM==null?'':'<div><span class="k">National voter estimate</span><span class="v">'+p100(P.usM)+'</span><span class="s">display line, voters’ scale; survey estimate, all states weighted by population</span></div>')+
       '</div><p class="fine">The two scales come from different measurement systems and are not directly compared.</p>';
     $('dots').innerHTML=P.dots.map(function(d){
       return '<button class="dot" type="button" style="--c:'+mix(d.vsSen)+'" data-b="'+esc(d.b)+'" aria-label="'+esc(d.n)+', '+esc(d.st)+'">'+esc(d.st)+'</button>';
@@ -406,7 +431,7 @@ const P={"chM":0.31,"usM":-0.027,"pivot":0.44,"stateEstimates":[0.176,0.198,0.18
     var tip=$('tip'), byB={}; P.dots.forEach(function(d){byB[d.b]=d});
     function show(btn){
       var d=byB[btn.getAttribute('data-b')]; if(!d)return;
-      tip.innerHTML='<b>'+esc(d.n)+' ('+esc(d.st)+')</b>'+(d.vsSen==0?'at the Senate’s middle':d100(d.vsSen)+' points '+(d.vsSen>0?'right':'left')+' of the Senate’s middle');
+      tip.innerHTML='<b>'+esc(d.n)+' ('+esc(d.st)+')</b>'+relWords(d.vsSen,'Senate middle').w;
       tip.hidden=false;
       var r=btn.getBoundingClientRect(), tw=tip.offsetWidth;
       var x=Math.max(8,Math.min(window.innerWidth-tw-8,r.left+r.width/2-tw/2));
@@ -426,26 +451,26 @@ const P={"chM":0.31,"usM":-0.027,"pivot":0.44,"stateEstimates":[0.176,0.198,0.18
       goToSenators();
     });
     $('stakes').innerHTML='<p>Every state gets two senators whether it has 40 million people or 600,000. So the Senate does not represent people in proportion to where they live, and a bill backed by a slim majority of the country can fail in the Senate without any senator changing their mind.</p>'+
-      '<p>Many Senate measures need 60 votes to move forward. So the senator around that 60-vote point can matter more than the mathematical middle of the Senate. Counting from the most liberal end, that 60th senator sits at roughly '+p100(P.pivot)+' on the senators\u2019 scale, to the right of the Senate\u2019s middle. (In Senate procedure this is called the cloture threshold.)</p>';
+      '<p>Many Senate measures need 60 votes to move forward. So the senator around that 60-vote point can matter more than the mathematical middle of the Senate. Counting from the liberal end, that 60th senator sits '+piv.w+'. (In Senate procedure this is called the cloture threshold.)</p>';
   })();
 
   // ---------- committees: one at a time, all its measures together ----------
   var thr=0.15;
-  function driftWords(v){var d=d100(v);return d<2?'close to the Senate overall':(Math.abs(v)>thr?'well':'somewhat')+' to the '+(v>0?'right':'left')+' of the Senate overall'}
+  function driftWords(v){return relWords(v,'Senate middle').w}
   function committeeCard(c){
     var right=c.drift>0;
     var l=Math.min(pos(c.median),pos(X.chMedian)), w=Math.abs(pos(c.median)-pos(X.chMedian));
-    var spoken='On the 0-to-100 line, the middle of the Senate sits at '+p100(X.chMedian)+' and this committee\u2019s members\u2019 midpoint at '+p100(c.median)+'.';
+    var spoken='Chart: this committee\u2019s members sit '+driftWords(c.drift)+'. On the display line the middle of the Senate is at '+p100(X.chMedian)+' and this committee\u2019s members\u2019 midpoint at '+p100(c.median)+'.';
     return '<div class="cm"><div class="gh"><b>'+esc(c.name)+'</b><span>'+c.n+' senators \u00b7 '+c.split[0]+' from the majority party, '+c.split[1]+' from the minority</span></div>'+
       '<div class="ends"><span>← More liberal</span><span>More conservative →</span></div>'+
       '<div class="ctrack" aria-hidden="true">'+
         '<div class="conn'+(right?'':' left')+'" style="--l:'+l+'%;--w:'+w+'%"></div>'+
-        '<div class="cmk sen" style="--x:'+pos(X.chMedian)+'%"></div><div class="ct a" style="--x:'+pos(X.chMedian)+'%">The whole Senate</div>'+
+        '<div class="cmk sen" style="--x:'+pos(X.chMedian)+'%"></div><div class="ct a" style="--x:'+pos(X.chMedian)+'%">Senate middle</div>'+
         '<div class="cmk mem" style="--x:'+pos(c.median)+'%;--dot:'+(right?'var(--rep)':'var(--dem)')+'"></div><div class="ct b" style="--x:'+pos(c.median)+'%;--dot:'+(right?'var(--rep)':'var(--dem)')+'">This committee</div>'+
       '</div>'+'<p class="sr-only">'+spoken+'</p>'+
-      '<p class="say">This committee\u2019s members generally sit <b>'+driftWords(c.drift)+'</b>.</p>'+
+      '<p class="say">This committee\u2019s members sit <b>'+driftWords(c.drift)+'</b>.</p>'+
       '<details class="more"><summary><span>More about this committee</span></summary>'+
-      '<p class="fine">Members\u2019 midpoint: roughly '+p100(c.median)+' out of 100, against '+p100(X.chMedian)+' for the whole Senate. Members\u2019 average: '+p100(c.mean)+'. The midpoint would move by up to '+d100(c.shift)+' points if one member were replaced'+(c.phantom?', and currently falls in the gap between the two parties where no member sits':'')+'. A committee is flagged as sitting well to one side when its midpoint is more than '+(thr*50)+' points from the Senate\u2019s middle'+(Math.abs(c.drift)>thr?'; this one is. That is the position a '+(right?'conservative':'liberal')+' gatekeeper would sit in, but on its own it does not prove bills were pulled that way':'')+'.</p></details>'+
+      '<p class="fine">'+SCALE_NOTE+' Members\u2019 midpoint: '+p100(c.median)+' on that line, against '+p100(X.chMedian)+' for the Senate middle, a difference of '+d100(c.drift)+' display-scale units. Members\u2019 average: '+p100(c.mean)+'. The midpoint would move by up to '+d100(c.shift)+' display-scale units if one member were replaced'+(c.phantom?', and currently falls in the gap between the two parties where no member sits':'')+'. A committee is flagged as sitting well to one side when its midpoint is more than '+(thr*50)+' display-scale units from the Senate\u2019s middle'+(Math.abs(c.drift)>thr?'; this one is. That is the position a '+(right?'conservative':'liberal')+' gatekeeper would sit in, but on its own it does not prove bills were pulled that way':'')+'.</p></details>'+
     '</div>';
   }
   function sentOnBars(code){
@@ -456,7 +481,7 @@ const P={"chM":0.31,"usM":-0.027,"pivot":0.44,"stateEstimates":[0.176,0.198,0.18
     var leanC=c.vsBase>0, mag=Math.abs(c.vsBase), ref=c.libRef+c.conRef, rep=c.libRep+c.conRep;
     var say=!c.ok?'<span class="tag weak">Limited data</span> Too few bills to compare the two sides fairly (fewer than 25 from one side), so the counts are shown without a conclusion.'
            :mag<1?'Sends forward bills from both groups about as often as the Senate overall does.'
-           :'Sends forward bills by '+(leanC?'conservative':'liberal')+'-record sponsors '+(mag<5?'a bit':'noticeably')+' more often than the Senate overall does ('+mag.toFixed(1)+' percentage points).';
+           :'Sends forward bills by '+(leanC?'conservative':'liberal')+'-record sponsors '+(mag<5?'a bit':'noticeably')+' more often than the Senate overall does, by '+mag.toFixed(1)+' percentage points.';
     var row=function(label,cls,rep,ref,p){return '<div class="bar"><span class="lbl">'+label+'</span><div class="trk" aria-hidden="true"><div class="fill '+cls+'" style="--w:'+(100*p/scale)+'%"></div></div><span class="num">'+p.toFixed(0)+'% <small>'+rep+' of '+ref+'</small></span></div>'};
     return '<div class="gk '+(!c.ok?'weak':(mag<1?'':(leanC?'lean-c':'lean-l')))+'">'+
       '<div class="counts"><div><span class="k">Bills referred to this committee</span><span class="v">'+ref.toLocaleString()+'</span></div>'+
@@ -469,9 +494,10 @@ const P={"chM":0.31,"usM":-0.027,"pivot":0.44,"stateEstimates":[0.176,0.198,0.18
     var o=X.output[code];
     if(!o) return '<div class="gk weak"><p class="say"><span class="tag weak">Not enough data yet</span> Fewer than 7 qualifying floor votes so far on bills this committee sent forward, so there is nothing to show yet.</p><p class="fine">Most floor action is on nominations and House bills that no Senate committee reported, so most committees have few qualifying votes.</p></div>';
     var weak=o.n<15;
-    return '<div class="gk'+(weak?' weak':'')+'"><p class="say"><b>Where senators divided on these votes:</b> roughly '+p100(o.coi)+' on the 0-to-100 line, '+d100(o.vsSen)+' points to the '+(o.vsSen>0?'right':'left')+' of the Senate\u2019s middle.</p>'+
+    var sw=relWords(o.vsSen,'Senate middle');
+    return '<div class="gk'+(weak?' weak':'')+'"><p class="say"><b>Where senators divided on these votes:</b> '+sw.w+'.</p>'+
       '<p class="say">'+(weak?'<span class="tag weak">Early signal</span> Only '+o.n+' qualifying votes so far. That is too little for a strong conclusion.':o.n+' qualifying floor votes so far.')+'</p>'+
-      '<p class="fine">This shows where the Yes and No sides split on those votes. It does not tell us whether the bill itself was liberal or conservative.</p></div>';
+      '<p class="fine">This shows where the Yes and No sides split on those votes. It does not tell us whether the bill itself was liberal or conservative. On the display line the split point is at '+p100(o.coi)+', '+d100(o.vsSen)+' display-scale units from the Senate middle at '+p100(X.chMedian)+'.</p></div>';
   }
   var csel=$('committee');
   var clist=X.committees.slice().sort(function(a,b){return a.name.localeCompare(b.name)});
@@ -487,7 +513,7 @@ const P={"chM":0.31,"usM":-0.027,"pivot":0.44,"stateEstimates":[0.176,0.198,0.18
     $('floorsplit').innerHTML=floorSplit(code);
   }
   csel.addEventListener('change',function(){renderCommittee(csel.value)});
-  $('cmcaveat').innerHTML='A committee is flagged as sitting well to one side when its members\u2019 midpoint sits more than '+(thr*50)+' points from the Senate\u2019s middle. The floor-vote figure appears only where at least 7 floor votes exist on bills the committee formally sent forward.';
+  $('cmcaveat').innerHTML='Words follow one rule: “near” within '+(REL.near*50)+' display-scale units of the reference point, “somewhat” within '+(REL.somewhat*50)+', “clearly” beyond that. A committee “clearly” to one side is the position a gatekeeper would sit in; on its own that does not prove bills were pulled that way. The floor-vote figure appears only where at least 7 floor votes exist on bills the committee formally sent forward.';
   (function(){
     if(!G.committees||!G.committees.length)return;
     var pct=function(n,d){return d?Math.round(100*n/d):0};
@@ -507,14 +533,14 @@ const P={"chM":0.31,"usM":-0.027,"pivot":0.44,"stateEstimates":[0.176,0.198,0.18
       out+='<div class="work"><h3>'+esc(s.name)+' — senators’ scale (Voteview)</h3><table>'+
         '<tr><td>Senator’s voting pattern <b>x</b><br><span class="src">'+M.scoreCol+', Congress '+M.congress+', id '+esc(s.bioguide)+'; shown as x × 50 + 50</span></td><td>'+signed(s.record,3)+' → '+p100(s.record)+'</td></tr>'+
         '<tr><td>Senate middle <b>Ch</b><br><span class="src">median of the 100 voting patterns</span></td><td>'+signed(M.chM,4)+' → '+p100(M.chM)+'</td></tr>'+
-        '<tr class="total"><td>Difference <b>x − Ch</b>, in points</td><td>'+signed(d,3)+' → '+sd100(d)+'</td></tr></table>'+
+        '<tr class="total"><td>Difference <b>x − Ch</b>, display-scale units</td><td>'+signed(d,3)+' → '+sd100(d)+'</td></tr></table>'+
         '<div class="formula">'+signed(s.record,3)+' − ('+signed(M.chM,4)+') = '+signed(d,3)+'. Both figures are Voteview scores, so this subtraction stays on one scale.</div></div>';
     });
     var dus=P.usM==null?null:st.center-P.usM;
     out+='<div class="work"><h3>'+esc(st.name)+' voters — voters’ scale (survey estimate)</h3><table>'+
       '<tr><td>State voter estimate <b>s</b>, with its range<br><span class="src">'+M.ideologyCol+', '+M.ideologyYear+' wave, one standard error ±'+se.toFixed(3)+'; shown as s × 50 + 50</span></td><td>'+signed(st.center,3)+' ± '+se.toFixed(3)+' → '+p100(st.center)+'</td></tr>'+
       (P.usM==null?'':'<tr><td>National voter estimate <b>US</b><br><span class="src">all 51 state estimates, weighted by Census '+M.popYear+' population</span></td><td>'+signed(P.usM,4)+' → '+p100(P.usM)+'</td></tr>'+
-      '<tr class="total"><td>Difference <b>s − US</b>, in points</td><td>'+signed(dus,3)+' → '+sd100(dus)+'</td></tr>')+'</table>'+
+      '<tr class="total"><td>Difference <b>s − US</b>, display-scale units</td><td>'+signed(dus,3)+' → '+sd100(dus)+'</td></tr>')+'</table>'+
       '<div class="formula">Both figures are survey estimates, so this subtraction stays on one scale. No calculation on this page subtracts a senator’s score from a voter estimate: the two scales have not been bridged.</div></div>';
     $('workings').innerHTML=out;
   }

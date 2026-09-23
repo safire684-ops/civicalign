@@ -120,7 +120,7 @@ def test_demo_uses_the_external_stylesheet_and_no_percentage_score():
     assert '<link rel="stylesheet" href="civicalign.css">' in text
     assert (DEMO.parent / "civicalign.css").exists()
     assert "representation match" not in text.lower(), "the percentage metric was dropped"
-    assert "than the Senate middle" in text and "on the voter measure" in text
+    assert "side of the Senate middle" in text and "national voter estimate" in text
 
 
 def test_demo_committee_module_shows_both_references():
@@ -241,7 +241,7 @@ def test_existing_measures_and_thresholds_are_preserved():
     assert "var thr=0.15;" in text
     assert "the position a '+(right?'conservative':'liberal')+' gatekeeper would sit in" in text
     assert "Where senators divided on these votes:" in text
-    assert "than the Senate middle" in text
+    assert "function relWords(" in text
 
 
 
@@ -340,7 +340,7 @@ def test_every_drawn_track_is_hidden_from_screen_readers_and_described_in_text()
     assert "the middle of the Senate is at '+p100(P.chM)" in text
     assert "60th vote from the left at '+p100(P.pivot)" in text
     assert "members\\u2019 midpoint at '+p100(c.median)" in text
-    assert "Positions on the 0-to-100 scale, from most liberal to most conservative" in text
+    assert "Positions on the display line, from the liberal end to the conservative end" in text
 
 
 def test_pill_carries_an_icon_and_does_not_rely_on_green():
@@ -446,7 +446,7 @@ def test_page_displays_the_0_to_100_scale_but_keeps_raw_data(report):
     assert "var p100=function(v){return Math.round(v*50+50)}" in text
     assert "var d100=function(v){return Math.round(Math.abs(v)*50)}" in text
     prose = _prose(text if False else DEMO)
-    assert "from 0 (most liberal) to 100 (most conservative)" in prose
+    assert "from 0 (the liberal end) to 100 (the conservative end)" in prose
     assert "&minus;1 (most liberal)" not in prose
     assert "← More liberal" in prose and "More conservative →" in prose
     # the data blocks still carry the raw -1..+1 figures, unchanged
@@ -467,7 +467,7 @@ def test_report_uses_the_0_to_100_scale_with_raw_beside_it(report):
     assert f"raw score {'+' if os_.senator_coord >= 0 else '&minus;'}{abs(os_.senator_coord):.3f}" in r
     assert f"<b>{report.chamber.median * 50 + 50:.1f}</b>" in r
     assert "shown separately" in r
-    assert "more than 7.5 points" in r
+    assert "more than 7.5 display-scale units" in r
 
 
 def test_small_committees_show_counts_without_a_verdict():
@@ -558,7 +558,7 @@ def test_10_default_card_is_not_overloaded_with_benchmarks():
     before_details = card.split("<details class=\"more\">")[0]
     for secondary in ("X.demMedian", "X.repMedian", "X.anchors", "s.rank", "howFar(", "wherePut("):
         assert secondary not in before_details, secondary
-    assert "'<div class=\"terms\">'+madeOf(s)+'</div>'" in card
+    assert "'<div class=\"terms\">'+senatorNumbers(s)+madeOf(s)+'</div>'" in card
 
 
 def test_11_technical_terms_stay_out_of_the_default_experience():
@@ -572,7 +572,7 @@ def test_11_technical_terms_stay_out_of_the_default_experience():
     stakes = js.split("$('stakes').innerHTML=")[1].split(";\n")[0]
     assert "cloture threshold" in stakes
     assert "cloture" not in js.replace(stakes, "")
-    for fn in ("function senatorPos(", "function senatorTrack(", "function stateTrack(", "function stateVsNation(", "function driftWords(", "function sentOnBars(", "function floorSplit("):
+    for fn in ("function relWords(", "function senatorTrack(", "function stateTrack(", "function statePos(", "function driftWords(", "function sentOnBars(", "function floorSplit("):
         body = js.split(fn)[1].split("\n  }")[0]
         for term in ("Nokken", "MRP", "cutpoint", "standard error", "cloture", "ideal point"):
             assert term not in body, f"{term} in {fn}"
@@ -640,13 +640,11 @@ def test_no_user_facing_arithmetic_across_the_two_scales():
 
 def test_separate_measures_wording_is_what_the_reader_sees():
     js = "".join(re.findall(r"<script>(.*?)</script>", DEMO.read_text(), re.S))
-    assert "than the Senate middle" in js and "about at the Senate middle" in js
-    assert "on the voter measure" in js
+    assert "side of the '+ref" in js and "near the '+ref" in js
+    assert "national voter estimate" in js
     assert "are shown on separate scales" in js and "not directly compared" in js
     t = re.sub(r"\s+", " ", DEMO.read_text())
-    assert "shown separately and no distance between them is calculated" in t
-
-
+    assert "These are different measures and are shown separately." in t
 
 
 # ---- the six guarantees: no senator-versus-state operation of any kind in public code ----
@@ -715,3 +713,106 @@ def test_g6_no_cross_scale_derived_fields_in_the_public_payload():
     assert not found, found
     # the state estimates ride along on their own scale only
     assert len(_block("P")["stateEstimates"]) == 50
+
+
+# ---- meaning before numbers: the ten presentation guarantees ----
+
+def _fn(js, name):
+    return js.split("function " + name + "(")[1].split("\n  }")[0]
+
+
+def test_p1_senator_card_leads_with_words_not_display_numbers():
+    js = _js()
+    card = js.split("function render(code){")[1].split("$('stateblock').innerHTML=")[0].split("<details class=\"more\">")[0]
+    for num in ("p100(", "d100(", "sp.pts", "points"):
+        assert num not in card, num
+    assert "’s voting record is <b>'+sp.w+'</b>" in card
+    assert "Senator voting pattern <span class=\"kick2\">compared with the Senate middle</span>" in card
+
+
+def test_p2_state_card_leads_with_words_not_display_numbers():
+    js = _js()
+    card = js.split("$('stateblock').innerHTML=")[1].split("<details class=\"more\">")[0]
+    for num in ("p100(", "d100(", "points"):
+        assert num not in card, num
+    assert "’s voter estimate is <b>'+spst.w+'</b>" in card
+    assert "State voter estimate <span class=\"kick2\">compared with the national voter estimate</span>" in card
+    assert "Shaded area: estimated range." in js
+
+
+def test_p3_committee_and_senate_lead_with_words():
+    js = _js()
+    assert "members sit <b>'+driftWords(c.drift)+'</b>" in js
+    body = _fn(js, "floorSplit")
+    first = body.split("var sw=")[1].split("<p class=\"fine\">")[0]
+    assert "p100(" not in first and "d100(" not in first and "sw.w" in first
+    senate = js.split("$('pubcard').innerHTML=")[1].split("$('take-senate')")[0]
+    assert "The 60-vote point sits <b>'+piv.w+'</b>" in senate and "Many Senate actions need 60 votes to advance." in senate
+    visible_senate = re.sub(r"<p class=\"sr-only\">.*?</p>", "", senate)
+    assert "p100(" not in visible_senate and "d100(" not in visible_senate
+
+
+def test_p4_exact_coordinates_remain_under_details_and_in_the_report():
+    js = _js()
+    for fn in ("senatorNumbers", "stateNumbers", "workings"):
+        body = _fn(js, fn)
+        assert "p100(" in body and "display-scale units" in body, fn
+    assert "SCALE_NOTE" in js and "not a percentage, a vote total, an approval rating or a grade" in js
+    r = REPORT.read_text()
+    assert "display-scale units" in r and "Words for positions: one fixed rule" in r
+
+
+def test_p5_percentage_points_are_named_and_never_confused_with_scale_units():
+    js = _js()
+    bars = _fn(js, "sentOnBars")
+    assert "percentage points" in bars and "display-scale units" not in bars
+    assert "percentage points" in js.split("$('basenote').innerHTML=")[1].split(";\n")[0]
+    visible = re.sub(r"<p class=\"sr-only\">.*?</p>", "", js).replace("percentage points", "")
+    assert not re.search(r"\+'\s*points\b", visible), "a display-scale difference labelled with bare 'points'"
+
+
+def test_p6_senator_and_voter_scales_stay_visibly_separate():
+    t = DEMO.read_text()
+    assert "compared with the Senate middle" in t and "compared with the national voter estimate" in t
+    assert "These are different measures and are shown separately." in t
+    js = _js()
+    assert "P.usM" not in _fn(js, "senatorTrack") and "X.chMedian" not in _fn(js, "stateTrack")
+
+
+def test_p7_every_ruler_has_plain_end_labels_and_its_reference_point():
+    js = _js()
+    for fn, ref in (("senatorTrack", "Senate middle"), ("stateTrack", "National voter estimate"), ("committeeCard", "Senate middle")):
+        body = _fn(js, fn)
+        assert "← More liberal" in body and "More conservative →" in body, fn
+        assert ref in body, (fn, ref)
+    senate = js.split("$('pubcard').innerHTML=")[1].split("$('take-senate')")[0]
+    assert senate.count("← More liberal") == 2 and "Senate middle" in senate and "National voter estimate" in senate
+
+
+def test_p8_no_ranking_or_grade_language():
+    t = re.sub(r"const [A-Z]=[\{\[].*?[\}\]];", "", DEMO.read_text(), flags=re.S).lower()
+    for w in ("most liberal", "most conservative", "extreme", "moderate", " best ", " worst ", "rank"):
+        assert w not in t, w
+    assert "a grade" not in re.sub(r"(rating or\s+a grade|not grades)", "", t), "grade language outside the disclaimer"
+    assert "not grades" in t
+
+
+def test_p9_accessibility_text_explains_the_relationship_in_words():
+    js = _js()
+    for fn in ("senatorTrack", "stateTrack"):
+        sr = _fn(js, fn).split("sr-only")[1]
+        assert "'+sp.w+'" in sr, fn
+    assert "Chart: the 60-vote point is '+piv.w+'" in js
+    assert "Chart: this committee\\u2019s members sit '+driftWords(c.drift)+'" in js
+
+
+def test_p10_wording_rule_is_one_deterministic_rule_shared_by_page_and_report():
+    from civicalign.build_demo import REL_NEAR, REL_SOMEWHAT, rel_words
+    js = _js()
+    m = re.search(r"var REL=\{near:([0-9.]+), somewhat:([0-9.]+)\}", js)
+    assert m and float(m.group(1)) == REL_NEAR and float(m.group(2)) == REL_SOMEWHAT
+    assert rel_words(0.01, "Senate middle") == "near the Senate middle"
+    assert rel_words(-0.1, "Senate middle") == "somewhat on the more liberal side of the Senate middle"
+    assert rel_words(0.4, "national voter estimate") == "clearly on the more conservative side of the national voter estimate"
+    r = REPORT.read_text()
+    assert f"{REL_NEAR:.2f}" in r and f"{REL_SOMEWHAT:.2f}" in r

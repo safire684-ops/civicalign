@@ -155,20 +155,20 @@ table.calc tr.total td{border-bottom:none;border-top:2px solid var(--ink);
   <div class="tw"><table class="calc">
     <tr><td>Ossoff's voting pattern<br><span class="sm">raw score &minus;0.541, shown as score &times; 50 + 50</span></td><td class="n">22.9</td></tr>
     <tr><td>Senate middle<br><span class="sm">median of the 100 scores</span></td><td class="n">65.5</td></tr>
-    <tr class="total"><td>Difference, in points</td><td class="n">&minus;42.5</td></tr>
+    <tr class="total"><td>Difference, display-scale units</td><td class="n">&minus;42.5</td></tr>
   </table></div>
-  <p>The tool says: "more liberal than the Senate middle".</p>
+  <p>The tool says: "Ossoff's voting record is clearly on the more liberal side of the Senate middle".</p>
   <p><b>The state, on the voters' scale.</b> Georgia's voter estimate against the
     national estimate. Both are survey estimates from the same project, so this
     subtraction is valid too:</p>
   <div class="tw"><table class="calc">
     <tr><td>Georgia voter estimate<br><span class="sm">raw score +0.060, one standard error &plusmn;0.035</span></td><td class="n">53.0 &plusmn; 2</td></tr>
     <tr><td>National voter estimate<br><span class="sm">all states, weighted by population</span></td><td class="n">48.7</td></tr>
-    <tr class="total"><td>Difference, in points</td><td class="n">+4.4</td></tr>
+    <tr class="total"><td>Difference, display-scale units</td><td class="n">+4.4</td></tr>
   </table></div>
-  <p>The tool says: "Estimated slightly conservative on the voter measure". The shaded area on
+  <p>The tool says: "Georgia's voter estimate is slightly conservative". The shaded area on
     the chart is the estimate's own uncertainty, one standard error, about
-    &plusmn;2 points. That is a modest band: it covers roughly two thirds of the
+    &plusmn;2 display-scale units. That is a modest band: it covers roughly two thirds of the
     likely values, not 95%. A state's number is an average of many people who
     disagree with each other.</p>
   <p><b>What the tool does not do</b> is subtract Ossoff's score from Georgia's
@@ -176,6 +176,22 @@ table.calc tr.total td{border-bottom:none;border-top:2px solid var(--ink);
     a percentage, then as a distance, then as a direction. All three were dropped:
     the two scales are not bridged, so even the sign of that comparison is not a
     validated finding.</p>
+
+  <h3>Words for positions: one fixed rule</h3>
+  <p>The tool describes every same-scale position in words before any number, and
+    the words follow one rule. Take the difference between a position and its
+    reference point on the underlying scale: within 0.05 (2.5 display-scale
+    units) the position is <b>"near"</b> the reference; within 0.15 (7.5
+    units) it is <b>"somewhat"</b> on the more liberal or more conservative side; beyond
+    that it is <b>"clearly"</b> on that side. The same rule is used for a senator
+    against the Senate middle, a state's estimate against the national voter estimate,
+    a committee's members against the Senate middle, and the 60-vote point. They are
+    neutral descriptions of relative position, not grades; no senator is ranked.</p>
+  <p><b>Units.</b> Both scales are shown on a 0-to-100 display line. A number is a
+    position on that line; it is not a percentage, a vote total, an approval rating or
+    a grade. Differences along one line are given in "display-scale units"
+    (underlying difference &times; 50). Bill-flow rates are genuine percentages and their
+    differences are "percentage points"; the two are never mixed.</p>
 
   <h3>Perspective: landmarks on the senators' own scale</h3>
   <p>A position like 65 means nothing on its own, so the tool can show landmarks that
@@ -221,7 +237,7 @@ table.calc tr.total td{border-bottom:none;border-top:2px solid var(--ink);
   <p>Each committee is measured against the Senate's middle (<b>65.5</b>). Both
     sides of that comparison come from Voteview, so it is stated in points.</p>
   <p><b>Where the members sit.</b> The midpoint of the committee's members on the same
-    scale. A midpoint more than 7.5 points from the Senate's middle is flagged as a
+    scale. A midpoint more than 7.5 display-scale units (0.15 underlying) from the Senate's middle is described as "clearly" to one side, the position of a
     gatekeeper. This number is soft: on a committee split between two parties the
     midpoint can fall in the gap between them, and it can move sharply when one member
     is replaced. The last column says how far.</p>
