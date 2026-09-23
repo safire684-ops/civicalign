@@ -10,7 +10,7 @@ from .committees import CommitteeStats, committee_stats
 from .gatekeeping import Gatekeeping, gatekeeping
 from .landmarks import Landmark, landmarks
 from .output_ideology import OutputIdeology, output_ideology
-from .receipts import Receipt, receipts
+from .receipts import FloorVote, Receipt, receipts, recent_floor_votes
 from .representation import (ChamberLean, CommitteeLean, Fit, Representation,
                              chamber_lean, committee_lean, representations)
 
@@ -48,6 +48,9 @@ class Report:
     landmarks: list[Landmark]
     receipts: dict[str, Receipt]
     output_ideology: list[OutputIdeology]
+    # The evidence behind the records: the most recent passage votes, every
+    # senator's Yea or Nay on each. No claim about the state's voters.
+    floor_votes: list[FloorVote]
 
     @property
     def pillar4_available(self) -> bool:
@@ -103,6 +106,7 @@ def run(cfg: Config = DEFAULT) -> Report:
     lms: list[Landmark] = []
     rcpts: dict[str, Receipt] = {}
     oi: list[OutputIdeology] = []
+    fvs: list[FloorVote] = []
     if cfg.rollcalls_csv.exists() and cfg.votes_csv.exists():
         bills = billflow.load_bills(cfg.billflow_zip, cfg.billflow_house_zip)
         icpsr = rollcalls.icpsr_to_bioguide(cfg.members_csv, cfg.congress)
@@ -111,6 +115,7 @@ def run(cfg: Config = DEFAULT) -> Report:
         lms = landmarks(rcs, bills)
         rcpts = receipts(rcs, member_votes, bills, scores, cfg.congress)
         oi = output_ideology(rcs, bills, ch.median)
+        fvs = recent_floor_votes(rcs, member_votes, bills, cfg.congress)
 
     pos = [positions(b, roster[b].name, roster[b].state, v, src.state(roster[b].state))
            for b, v in scores.items()]
@@ -122,5 +127,5 @@ def run(cfg: Config = DEFAULT) -> Report:
         election=lean, fit=fit, chamber_lean=chlean, representation=reps,
         committee_leans=cleans, gatekeeping=gks, gatekeeping_baseline=gk_base,
         bills_referred_unique=n_bills, bills_reported_unique=n_reported,
-        landmarks=lms, receipts=rcpts, output_ideology=oi,
+        landmarks=lms, receipts=rcpts, output_ideology=oi, floor_votes=fvs,
     )

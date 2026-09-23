@@ -28,7 +28,7 @@ from dataclasses import dataclass
 
 from .sources.elections import ElectionLean
 from .sources.rosters import CommitteeMember, Senator
-from .uncertainty import FitUncertainty, fit_uncertainty, studentized
+from .uncertainty import FitUncertainty, fit_uncertainty, prediction_band, studentized
 
 
 @dataclass(frozen=True)
@@ -67,6 +67,9 @@ class Representation:
     # line is least constrained, so senators from very safe states would
     # otherwise be flagged just for sitting at the end of the scale.
     t_stat: float
+    # Half-width of the one-standard-error prediction band at this state's vote
+    # share: the typical range for senators from states that vote like this one.
+    band: float = 0.0
     rank: int | None = None
     of: int | None = None
 
@@ -79,6 +82,16 @@ class Representation:
     @property
     def direction(self) -> str:
         return "more conservative than state" if self.residual > 0 else "more liberal than state"
+
+    @property
+    def zone(self) -> str:
+        """The one published classification, from the model's own uncertainty:
+        "within"  -- |residual| <= band: inside the typical range
+        "beyond"  -- outside the typical range, in `direction`
+        "clear"   -- outside it AND |t| > 2: larger than chance would explain."""
+        if abs(self.residual) <= self.band:
+            return "within"
+        return "clear" if self.is_significant else "beyond"
 
 
 def fit_model(scores: dict[str, float], roster: dict[str, Senator],
@@ -116,14 +129,21 @@ def representations(scores: dict[str, float], roster: dict[str, Senator],
             party=roster[b].party, ideology=ideology, state_lean=sl,
             predicted=pred, residual=resid,
             t_stat=studentized(resid, sl, xs, fit.residual_se),
+            band=prediction_band(sl, xs, fit.residual_se),
         ))
     out.sort(key=lambda r: -abs(r.t_stat))
     return fit, [
         Representation(r.bioguide, r.name, r.state, r.party, r.ideology,
-                       r.state_lean, r.predicted, r.residual, r.t_stat,
+                       r.state_lean, r.predicted, r.residual, r.t_stat, r.band,
                        rank=i + 1, of=len(out))
         for i, r in enumerate(out)
     ]
+
+
+def state_expectation(fit: Fit, xs, lean: float) -> tuple[float, float]:
+    """(expected position, typical-range half-width) for a state's vote share.
+    The same two numbers every senator from that state is compared with."""
+    return fit.predict(lean), prediction_band(lean, xs, fit.residual_se)
 
 
 @dataclass(frozen=True)

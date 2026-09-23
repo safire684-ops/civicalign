@@ -106,6 +106,24 @@ def fit_uncertainty(xs, ys, slope: float, intercept: float) -> FitUncertainty:
     )
 
 
+def leverage(x: float, xs) -> float:
+    """How much one x value pulls the fitted line: 1/n + (x - xbar)^2 / Sxx."""
+    n = len(xs)
+    xbar = st.fmean(xs)
+    sxx = sum((v - xbar) ** 2 for v in xs)
+    return 1 / n + (x - xbar) ** 2 / sxx if sxx else 1 / n
+
+
+def prediction_band(x: float, xs, residual_se: float) -> float:
+    """Half-width of the one-standard-error prediction band at x.
+
+    The typical spread of senators around the fitted line at this state's vote
+    share: residual_se * sqrt(1 + leverage). About two thirds of senators sit
+    inside it. It is the honest "typical range for states that vote like this".
+    """
+    return residual_se * (1 + leverage(x, xs)) ** 0.5
+
+
 def studentized(residual: float, x: float, xs, residual_se: float) -> float:
     """Residual scaled by its own standard error.
 

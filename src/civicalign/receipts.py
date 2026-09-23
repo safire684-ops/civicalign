@@ -86,3 +86,47 @@ def receipts(rollcalls: list[RollCall], votes: dict[int, dict[str, bool]],
             url=VOTEVIEW_ROLLCALL.format(congress=congress, roll=rc.number),
         )
     return out
+
+
+@dataclass(frozen=True)
+class FloorVote:
+    """One recorded Senate vote, with every senator's Yea or Nay on it.
+
+    The evidence behind a voting pattern: what the record is made of, shown
+    without any claim about what the state's voters wanted. Descriptions of what
+    a bill did are Pillar 1's job and are not produced here; `summary` stays empty
+    until a verified summary source exists."""
+    roll: int
+    date: str
+    bill: str
+    label: str
+    question: str
+    result: str
+    url: str
+    votes: dict[str, str]     # bioguide -> "Yea" / "Nay"
+    summary: str = ""
+
+
+def recent_floor_votes(rollcalls: list[RollCall], votes: dict[int, dict[str, bool]],
+                       bills: dict[str, Bill], congress: int, limit: int = 8,
+                       ) -> list[FloorVote]:
+    """The most recent passage votes on titled bills, newest first.
+
+    The rule is fixed and blind to outcome: every "On Passage" roll call on a bill
+    with a title, ordered by date then roll number, the newest `limit`. Nothing
+    about who voted which way enters the choice, so every senator is shown the
+    same votes."""
+    picked = [rc for rc in rollcalls
+              if rc.bill and "passage" in rc.question.lower()
+              and rc.bill in bills and (bills[rc.bill].short or bills[rc.bill].title)]
+    picked.sort(key=lambda rc: (rc.date, rc.number), reverse=True)
+    out = []
+    for rc in picked[:limit]:
+        b = bills[rc.bill]
+        out.append(FloorVote(
+            roll=rc.number, date=rc.date, bill=rc.bill, label=b.short or b.title,
+            question=rc.question, result=rc.result,
+            url=VOTEVIEW_ROLLCALL.format(congress=congress, roll=rc.number),
+            votes={bg: ("Yea" if yea else "Nay") for bg, yea in votes.get(rc.number, {}).items()},
+        ))
+    return out

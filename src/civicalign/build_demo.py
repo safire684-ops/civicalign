@@ -46,6 +46,19 @@ def rel_words(d: float, ref: str) -> str:
     return f"on the more {side} side of the {ref}"
 
 
+def state_rel_words(zone: str, residual: float, last: str, state: str) -> str:
+    """The one sentence for a senator against the pattern for states that vote
+    like theirs. Zone comes from the model (representation.Representation.zone);
+    this only puts it into words. Mirrored by stateRelWords() in the page."""
+    if zone == "within":
+        return f"{last}\u2019s voting record is within the typical range for states that vote like {state}."
+    side = "conservative" if residual > 0 else "liberal"
+    s = f"{last}\u2019s voting record is more {side} than the typical range for states that vote like {state}."
+    if zone == "clear":
+        s += " That difference is larger than chance would explain."
+    return s
+
+
 def _p100(v: float, places: int = 1) -> str:
     """A position on the reader's 0-100 scale: score * 50 + 50."""
     return f"{v * 50 + 50:.{places}f}"
@@ -137,8 +150,39 @@ def _report_values(r: Report) -> dict[str, str]:
                            f'<td class="n">{_sd100(c.median - r.chamber.median)}</td>'
                            f'<td class="n">{_d100(c.stability.worst_shift)}</td></tr>\n' for c in cm)
                  + '  </table></div>')
+    f = r.fit
+    reps = {x.bioguide: x for x in r.representation}
+    os_r, wn_r = reps.get("O000174"), reps.get("W000790")
+    ga = r.election.state_lean("GA")
+    cl = r.chamber_lean
+    zones = {z: sum(1 for x in r.representation if x.zone == z) for z in ("within", "beyond", "clear")}
+    party_resid = {pty: st.fmean([x.residual for x in r.representation if x.party == pty] or [0.0])
+                   for pty in ("Democrat", "Republican")}
+    lo, hi = cl.skew_range_points
+    surname = lambda n: n.replace(",", "").split()[-1]
     return {
         "asof": f"{d.day} {d.strftime('%B %Y')}",
+        "r_years": r.election.label.replace("/", ", "),
+        "r_n": str(f.n), "r_r2": f"{f.r_squared:.2f}", "r_slope": f"{f.slope:.3f}",
+        "r_intercept": _signed(f.intercept), "r_resid_se": f"{f.residual_se:.3f}",
+        "r_resid_se_100": _d100(f.residual_se, 0),
+        "r_slope_lo": f"{f.slope_ci95[0]:.2f}", "r_slope_hi": f"{f.slope_ci95[1]:.2f}",
+        "r_within": str(zones["within"]), "r_beyond": str(zones["beyond"]), "r_clear": str(zones["clear"]),
+        "r_dem_resid": _sd100(party_resid["Democrat"]), "r_rep_resid": _sd100(party_resid["Republican"]),
+        "ga_gop": f"{100 * ga.gop_two_party:.1f}" if ga else "&mdash;",
+        "ga_by_year": ", ".join(f"{y}: {100 * v:.1f}%" for y, v in sorted(ga.by_year.items())) if ga else "&mdash;",
+        "os_expected": _p100(os_r.predicted) if os_r else "&mdash;",
+        "os_expected_raw": _signed(os_r.predicted) if os_r else "&mdash;",
+        "os_band": _d100(os_r.band, 0) if os_r else "&mdash;",
+        "os_band_raw": f"{os_r.band:.3f}" if os_r else "&mdash;",
+        "os_resid": _sd100(os_r.residual) if os_r else "&mdash;",
+        "os_resid_raw": _signed(os_r.residual) if os_r else "&mdash;",
+        "os_t": f"{os_r.t_stat:+.2f}" if os_r else "&mdash;",
+        "os_state_words": state_rel_words(os_r.zone, os_r.residual, surname(os_r.name), "Georgia") if os_r else "",
+        "wn_state_words": state_rel_words(wn_r.zone, wn_r.residual, surname(wn_r.name), "Georgia") if wn_r else "",
+        "sk_points": f"{cl.skew_points:.1f}", "sk_lo": f"{lo:.1f}", "sk_hi": f"{hi:.1f}",
+        "sk_side": "Republican" if cl.skew > 0 else "Democratic",
+        "nat_gop": f"{100 * cl.national_lean:.1f}", "seats_gop": f"{100 * cl.senate_lean:.1f}",
         "os_x": _p100(os_.senator_coord), "os_s": _p100(os_.state_coord),
         "os_x_raw": _signed(os_.senator_coord), "os_s_raw": _signed(os_.state_coord),
         "os_se_raw": f"{r.state_source.state_se(os_.state) or 0:.3f}",
@@ -282,6 +326,10 @@ def _blocks(r: Report, cfg: Config) -> dict[str, dict]:
                  "url": "https://doi.org/10.7910/DVN/BQKU4M", "file": "https://dataverse.harvard.edu/api/access/datafile/6690212",
                  "use": f"file aip_states_ideology_v2022a.tab, column mrp_ideology and its standard error, {cfg.ideology_year} wave",
                  "asof": _asof(cfg, "aip_states_ideology_v2022a.tab"), "vintage": _vintage(cfg, "aip_states_ideology_v2022a.tab")},
+                {"what": "State election results", "who": "MIT Election Data and Science Lab, Harvard Dataverse",
+                 "url": "https://doi.org/10.7910/DVN/42MVDX", "file": "https://dataverse.harvard.edu/api/access/datafile/13887042",
+                 "use": f"file 1976-2024-president.csv, two-party presidential share per state, {r.election.label} averaged equally",
+                 "asof": _asof(cfg, "mit_president_1976_2024.csv"), "vintage": _vintage(cfg, "mit_president_1976_2024.csv")},
                 {"what": "State populations", "who": "U.S. Census Bureau, population estimates",
                  "url": "https://www.census.gov/programs-surveys/popest.html",
                  "file": f"https://www2.census.gov/programs-surveys/popest/datasets/2020-{cfg.population_year}/state/totals/NST-EST{cfg.population_year}-ALLDATA.csv",
@@ -327,6 +375,71 @@ def _blocks(r: Report, cfg: Config) -> dict[str, dict]:
               "popYear": cfg.population_year},
         "G": _gatekeeping_block(r, cfg),
         "P": _public_block(r, cfg),
+        "R": _state_relative_block(r, cfg),
+        "E": _seats_block(r, cfg),
+        "F": _floor_votes_block(r, cfg),
+    }
+
+
+def _state_relative_block(r: Report, cfg: Config) -> dict:
+    """Pillar 4 as published: each senator against the position the fitted line
+    expects for a state with their state's recent presidential vote, on the
+    senators' (Voteview) scale throughout. The expected position and the typical
+    range come from the backend model; the page only draws and words them. No
+    survey figure enters this block, and no senator is ranked."""
+    from .representation import state_expectation
+    f = r.fit
+    xs = [x.state_lean for x in r.representation]
+    states = {}
+    for usps, sl in sorted(r.election.states.items()):
+        if usps not in STATES:
+            continue
+        exp, band = state_expectation(f, xs, sl.gop_two_party)
+        states[usps] = {
+            "gop": round(sl.gop_two_party, 4),
+            "byYear": {str(y): round(v, 4) for y, v in sorted(sl.by_year.items())},
+            "expected": round(exp, 3), "band": round(band, 3),
+        }
+    senators = {
+        x.bioguide: {"st": x.state, "actual": round(x.ideology, 3),
+                     "expected": round(x.predicted, 3), "residual": round(x.residual, 3),
+                     "band": round(x.band, 3), "t": round(x.t_stat, 2), "zone": x.zone}
+        for x in r.representation
+    }
+    return {
+        "years": list(r.election.years),
+        "fit": {"slope": round(f.slope, 4), "intercept": round(f.intercept, 4),
+                "r2": round(f.r_squared, 3), "n": f.n, "residualSe": round(f.residual_se, 4)},
+        "states": states, "senators": senators,
+        "source": "MIT Election Data and Science Lab, U.S. President 1976-2024, two-party share",
+    }
+
+
+def _seats_block(r: Report, cfg: Config) -> dict:
+    """Pillar 5 as published: the presidential two-party vote averaged across the
+    100 Senate seats against the national vote. Election results on both sides."""
+    cl, e = r.chamber_lean, r.election
+    seats_by_year = {y: cl.by_year[y] + e.national_by_year[y] for y in e.years}
+    return {
+        "years": list(e.years), "nSeats": cl.n_seats,
+        "nationalGop": round(cl.national_lean, 4), "seatsGop": round(cl.senate_lean, 4),
+        "seatsMinusNational": round(cl.skew_points, 2),
+        "byYear": {str(y): {"national": round(e.national_by_year[y], 4),
+                            "seats": round(seats_by_year[y], 4),
+                            "diff": round(100 * cl.by_year[y], 2)} for y in e.years},
+    }
+
+
+def _floor_votes_block(r: Report, cfg: Config) -> dict:
+    """The evidence: the most recent passage votes and every senator's Yea or Nay.
+    No description of what a bill did is generated here (that is Pillar 1's job
+    and needs a verified source); `summary` stays empty until one exists."""
+    return {
+        "congress": cfg.congress,
+        "rule": "the most recent votes on passage of a titled bill, newest first; the same votes for every senator",
+        "votes": [{"roll": v.roll, "date": v.date, "bill": v.bill, "label": v.label,
+                   "question": v.question, "result": v.result, "url": v.url,
+                   "summary": v.summary, "votes": v.votes} for v in r.floor_votes],
     }
 
 

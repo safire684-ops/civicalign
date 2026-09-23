@@ -70,19 +70,23 @@ table.calc tr.total td{border-bottom:none;border-top:2px solid var(--ink);
 <header>
   <p class="eyebrow">Methodology &middot; 119th Congress</p>
   <h1>How we measure Senate representation</h1>
-  <p class="sub">We place every US senator and every state's voters on the same
-    scale, then measure the distance between them. This explains where each number
-    comes from and what it can and cannot tell you.</p>
+  <p class="sub">We compare each senator's voting record with the pattern typically
+    seen from senators representing states that vote like theirs, measure how equal
+    representation of states shapes the Senate, and read each committee against the
+    Senate overall. This explains where each number comes from and what it can and
+    cannot tell you.</p>
   <p class="asof">As of {{asof}}</p>
 </header>
 
 <section>
   <h2>The question</h2>
-  <p>Does a senator vote the way their state's voters actually lean?</p>
-  <p>That sounds simple, and the answer is genuinely useful: a senator who sits far
-    from their own state is being sent to Washington by one set of people and voting
-    like a different set. But answering it properly turns out to be harder than it
-    looks, and most of the work goes into one specific obstacle.</p>
+  <p>How does the voting record of the people representing you compare with the
+    political context of the state they represent?</p>
+  <p>The useful form of that question is relative: given how a state has voted in
+    recent presidential elections, is its senator's overall Senate voting record about
+    what senators from states like it typically show, or does it differ from that
+    pattern? Answering even that properly turns out to be harder than it looks, and
+    most of the work goes into one specific obstacle.</p>
 </section>
 
 <section>
@@ -98,10 +102,15 @@ table.calc tr.total td{border-bottom:none;border-top:2px solid var(--ink);
     survey scale is set to its own average and spread; the senator scale comes from
     votes. So the tool does <b>not</b> put the two on one line, subtract them, or
     say which side of the state a senator falls on. A direct senator-versus-state
-    alignment measure requires a validated statistical bridge between voter and
-    legislator scales. CivicAlign does not currently have that bridge, so it shows the
-    two measures separately: the senator against the Senate middle on the senators'
-    scale, and the state against the national estimate on the voters' scale.</p>
+    alignment measure on those two scales requires a validated statistical bridge
+    between voter and legislator scales, and CivicAlign does not have one.</p>
+  <p><b>The way round it</b> is to use a public measure that needs no survey and no
+    bridge: how the state actually voted. Across all 100 current senators, a state's
+    recent presidential vote and its senator's voting position line up strongly. That
+    relationship gives an expected voting position for a state with any given result,
+    on the senators' own scale, so the senator and the expectation can be compared
+    directly (section 1). The survey estimate of a state's voters is still shown, on
+    its own scale, as separate context (section 1b).</p>
   <p><b>Each scale you see runs from 0 to 100.</b> 0 is most liberal, 100 most
     conservative, 50 the middle. Under the hood both sets of numbers run from
     &minus;1 to +1; we show each rescaled (position &times; 50 + 50, so a
@@ -112,7 +121,7 @@ table.calc tr.total td{border-bottom:none;border-top:2px solid var(--ink);
 
 <section>
   <h2>Where the numbers come from</h2>
-  <p>Six public datasets, all free to download. Nothing here is proprietary. The
+  <p>Seven public datasets, all free to download. Nothing here is proprietary. The
     only arithmetic is ours: medians, population-weighted averages, counts and
     distances, all shown in full further down.</p>
   <div class="tw"><table>
@@ -124,6 +133,9 @@ table.calc tr.total td{border-bottom:none;border-top:2px solid var(--ink);
     <tr><td>State voter positions</td>
         <td><a href="https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/BQKU4M">American Ideology Project</a>, Tausanovitch &amp; Warshaw</td>
         <td>Column <code>mrp_ideology</code>, 2020 wave, from surveys run 2017&ndash;2021</td></tr>
+    <tr><td>State election results</td>
+        <td><a href="https://doi.org/10.7910/DVN/42MVDX">MIT Election Data and Science Lab</a>, Harvard Dataverse</td>
+        <td>File <code>1976-2024-president.csv</code>; two-party presidential share per state, 2016, 2020 and 2024 averaged equally</td></tr>
     <tr><td>Who holds each seat</td>
         <td><a href="https://unitedstates.github.io/congress-legislators/">congress-legislators</a></td>
         <td>Joined by each member's official ID</td></tr>
@@ -148,10 +160,65 @@ table.calc tr.total td{border-bottom:none;border-top:2px solid var(--ink);
 <section>
   <h2>The three measurements</h2>
 
-  <h3>1. Your senator, and your state, shown separately</h3>
-  <p>Two worked examples for Georgia, each staying on one scale.</p>
+  <h3>1. Your senator, against the pattern for states that vote like yours</h3>
+  <p>This is the tool's primary result for a senator, and it never subtracts a
+    survey figure from a voting score. Instead it uses election results, which are
+    public behaviour measured directly. For each of the {{r_n}} current senators with
+    a score, take two numbers: the senator's Voteview voting position, and their
+    state's share of the two-party presidential vote averaged equally over
+    {{r_years}} (MIT Election Data and Science Lab). Fit one straight line through all
+    {{r_n}} points: <em>position = {{r_intercept}} + {{r_slope}} &times; state share</em>.
+    The line says what voting position a state's recent presidential vote typically
+    goes with; the state pattern accounts for {{r_r2}} of the variation in senators'
+    records (r&sup2;), and the slope's 95% interval, {{r_slope_lo}} to {{r_slope_hi}},
+    is far from zero.</p>
+  <p><b>Expected position and typical range.</b> Reading the line at a state's share
+    gives the <em>expected position</em> for a state that votes like it. The
+    <em>typical range</em> around it is one standard error of prediction
+    (residual standard error {{r_resid_se}}, about {{r_resid_se_100}} display-scale
+    units, widened slightly at the ends of the vote-share range); roughly two thirds of
+    senators sit inside it. Both senators from a state are compared with the same
+    expected position, because the input is the state's vote, not the senator's party.</p>
+  <p><b>The words follow one rule</b>, driven by the model's own uncertainty, not by
+    hand-picked buckets. A senator inside the typical range is "within the typical
+    range for states that vote like" theirs ({{r_within}} of {{r_n}} today). Outside it,
+    the record is "more liberal" or "more conservative than the typical range"
+    ({{r_beyond}} today). When the departure is also larger than chance would
+    comfortably explain (the residual divided by its own standard error, corrected for
+    leverage, exceeds 2), the sentence adds "That difference is larger than chance would
+    explain" ({{r_clear}} today). No senator is ranked or scored.</p>
+  <p><b>Worked example: Georgia.</b> Georgia's two-party vote ran {{ga_by_year}},
+    average {{ga_gop}}% Republican. On the line that gives an expected position of
+    <b>{{os_expected}}</b> (raw {{os_expected_raw}}) with a typical range of about
+    &plusmn;{{os_band}} display-scale units (raw &plusmn;{{os_band_raw}}). Jon Ossoff's
+    record is {{os_x}} (raw {{os_x_raw}}), a difference of <b>{{os_resid}}</b>
+    display-scale units (raw {{os_resid_raw}}; leverage-corrected t = {{os_t}}). The tool
+    says: "{{os_state_words}}" For Raphael Warnock, from the same Georgia input, it
+    says: "{{wn_state_words}}"</p>
+  <p><b>What this does and does not answer.</b> It answers: how does this senator's
+    overall record compare with what senators from states with a similar recent
+    presidential vote typically look like? It does not answer how far a senator sits
+    from their state's voters in absolute terms; that still needs a validated bridge
+    between the voter and legislator scales, which does not exist. Three limits are
+    worth knowing. The pattern is relative: if every senator moved together, no
+    residual would change. The line ignores party, so in a closely divided state the
+    expected position sits between the two parties and senators of both parties tend
+    to fall on their own side of it; averaged across the Senate, Democrats' records sit
+    {{r_dem_resid}} and Republicans' {{r_rep_resid}} display-scale units from the line.
+    And two senators share each state's input, so the 100 observations are not fully
+    independent; the standard errors treat them as if they were, which slightly
+    overstates certainty. None of this is a judgement about any senator.</p>
+  <p><b>The actual votes.</b> Each senator card lists their recorded Yea or Nay on the
+    most recent Senate votes on passing a bill, the same votes for every senator,
+    newest first, with a link to the roll call at Voteview. They show what the record
+    is made of. They carry no description of what a bill did (that needs a verified
+    summary source, which is a separate piece of this project) and no claim about what
+    the state's voters wanted.</p>
+
+  <h3>1b. Within the Senate, and the state's voters, shown separately</h3>
   <p><b>The senator, on the senators' scale.</b> Jon Ossoff's voting pattern against
-    the Senate middle. Both figures are Voteview scores, so the subtraction is valid:</p>
+    the Senate middle, shown under "Where they sit in the Senate". Both figures are
+    Voteview scores, so the subtraction is valid:</p>
   <div class="tw"><table class="calc">
     <tr><td>Ossoff's voting pattern<br><span class="sm">raw score {{os_x_raw}}, shown as score &times; 50 + 50</span></td><td class="n">{{os_x}}</td></tr>
     <tr><td>Senate middle<br><span class="sm">median of the 100 scores</span></td><td class="n">{{ch_m}}</td></tr>
@@ -208,7 +275,20 @@ table.calc tr.total td{border-bottom:none;border-top:2px solid var(--ink);
     the state's number comes from large surveys asking residents where they stand on
     many policy questions. Neither number says which issues make up any difference.</p>
 
-  <h3>2. The Senate's voting center, and the country's voter estimate</h3>
+  <h3>2. How Senate seats represent the country's vote</h3>
+  <p>Every state elects two senators whether it holds 40 million people or 600,000,
+    so a Senate seat represents states equally, not people equally. How much that
+    changes the Senate's political mix can be measured with election results on both
+    sides, so no ideology scale is involved: average each seat's state share of the
+    two-party presidential vote ({{r_years}}, each election weighted equally) and
+    compare it with the national share. Across the 100 seats the average state voted
+    <b>{{seats_gop}}%</b> Republican; the country voted <b>{{nat_gop}}%</b>. The mix
+    of states represented by Senate seats is therefore <b>{{sk_points}} percentage
+    points more {{sk_side}}</b> than the national vote. Taken one election at a time
+    the figure runs from {{sk_lo}} to {{sk_hi}} points, so it does not depend on which
+    cycle is chosen. This is a fact about which states hold seats, not about any
+    senator's opinions, and the tool describes it without calling it fair or unfair.</p>
+  <h3>2b. The Senate's voting center, and the country's voter estimate</h3>
   <p>The middle senator's voting pattern sits at <b>{{ch_m}}</b> on the senators'
     scale, and the 60th senator from the left &mdash; the vote that decides whether
     most legislation can proceed &mdash; at <b>{{pivot}}</b>. The national voter
@@ -295,13 +375,19 @@ table.calc tr.total td{border-bottom:none;border-top:2px solid var(--ink);
     <dd>A single liberal-to-conservative axis describes congressional voting well,
       because most roll-call votes split along it. It describes voters less well, since
       people's economic and social views do not line up as neatly.</dd>
-    <dt>The two measures are not compared with each other.</dt>
-    <dd>The senator scale is built from votes and the state scale from survey answers,
-      each on its own footing, and nobody has tied them together. A direct
-      senator-versus-state alignment measure requires a validated statistical bridge
-      between voter and legislator scales. CivicAlign does not currently have that
-      bridge, so it makes no claim about whether a senator sits left or right of their
-      state.</dd>
+    <dt>The state comparison is relative, and it is not a poll.</dt>
+    <dd>"Expected for a state like yours" is a pattern across all 100 current
+      senators, read from election results. It says how a senator compares with that
+      pattern, not how far they sit from their own state's voters, and it does not say
+      whether a senator is right or wrong. A departure from the pattern has many
+      possible causes, party first among them.</dd>
+    <dt>The voter survey and the voting scores are not compared with each other.</dt>
+    <dd>The senator scale is built from votes and the state survey scale from survey
+      answers, each on its own footing, and nobody has tied them together. A direct
+      senator-versus-state alignment measure on those two scales requires a validated
+      statistical bridge between voter and legislator scales. CivicAlign does not
+      currently have that bridge, so it makes no such claim; the state comparison it
+      does make uses election results, on the senators' scale throughout.</dd>
     <dt>The state figures are estimates.</dt>
     <dd>They carry one standard error of about 2 points, which varies a little by state and
       is drawn on the tool as a dashed band around the state's mark. One standard error
@@ -328,11 +414,17 @@ table.calc tr.total td{border-bottom:none;border-top:2px solid var(--ink);
 
 <section>
   <h2>How to check it</h2>
-  <p>Every figure here can be reproduced with a calculator. Download the files in the
-    table above. For a senator, read their <code>nokken_poole_dim1</code> in the
-    Voteview file and subtract the median of the 100 senators. For a state, read its
-    <code>mrp_ideology</code> in the ideology file and subtract the population-weighted
-    national figure. Never subtract across the two files; the tool does not.</p>
+  <p>Every figure here can be reproduced with a calculator and a spreadsheet. Download
+    the files in the table above. For the state comparison, take each senator's
+    <code>nokken_poole_dim1</code> from the Voteview file and their state's two-party
+    presidential share from the MIT file (Republican votes divided by Republican plus
+    Democratic, averaged over the three elections), fit a straight line through the 100
+    points, and read each senator's distance from it. For the seat comparison, average
+    the 100 seats' state shares and subtract the national share. For a senator's place
+    in the Senate, subtract the median of the 100 scores. For a state's survey estimate,
+    read its <code>mrp_ideology</code> in the ideology file and subtract the
+    population-weighted national figure. Never subtract the ideology file from the
+    Voteview file; the tool does not.</p>
   <p>The code that produces these numbers is checked by a test suite that recomputes
     every published figure straight from the downloaded files, using nothing from the
     code it is testing &mdash; so a bug in the pipeline cannot hide behind a test that

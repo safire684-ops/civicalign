@@ -86,12 +86,16 @@ between voter and legislator scales. CivicAlign does not currently have that
 bridge. Earlier versions reported such a distance, first as a percentage, then in
 points, then as a direction; all three were withdrawn as invalid.
 
-What the tool shows instead stays within one system each: a senator against the
-Senate's middle, on the senators' scale, and a state's estimate against the
-national estimate, on the voters' scale. The regression in Finding 1 is the
-project's only senator-to-state statement, and it answers a different question
-with election results on both sides: how does this senator compare with the
-voting pattern typically associated with states that vote similarly?
+What the tool leads with instead is the election-result regression: senator
+ideology fitted against the state's presidential two-party vote across all
+current senators, with each senator shown against the expected position for a
+state that votes like theirs and the model's one-standard-error prediction band
+as the typical range. That is the project's only senator-to-state statement, and
+it answers a relative question with election results as the state input: how does
+this senator compare with the voting pattern typically associated with states
+that vote similarly? Beneath it, the tool still shows a senator against the
+Senate's middle, on the senators' scale, and a state's survey estimate against
+the national estimate, on the voters' scale, each within its own system.
 
 **Perspective.** A position on its own means nothing to a reader, so the tool
 marks landmarks on the same line: the middle Democrat (−0.379), the middle

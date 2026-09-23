@@ -148,7 +148,7 @@ def load_mit_president(path: Path, years: tuple[int, ...] = DEFAULT_YEARS) -> El
 
     # keep only states present in every included election, so the average is
     # over a consistent set rather than silently mixing 2-year and 3-year means
-    common = set.intersection(*(set(per_year_share[y]) for y in years))
+    common = sorted(set.intersection(*(set(per_year_share[y]) for y in years)))
     states = {
         usps: StateLean(
             usps=usps,

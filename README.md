@@ -45,24 +45,27 @@ src/civicalign/
     state_prefs.py     the bridging interface — THE swappable part
 ```
 
-## What the live page shows, and what the regression is
+## What the live page shows
 
-Two different Pillar 4 questions live in this repo, and they are not the same
-metric:
+The live page (`demo/senator-check.html`, `demo/methodology.html`) leads with
+**method A**, the state-relative comparison: senator ideology is fitted against
+the state's presidential two-party vote share (2016, 2020, 2024, equal weights)
+across all current senators, and each senator is shown against the expected
+position for a state that votes like theirs, with the model's one-standard-error
+prediction band as the "typical range". Both sides are on the senators' scale, so
+no bridging is needed. The words are driven by the model: inside the band,
+"within the typical range"; outside it, "more liberal/conservative than the
+typical range"; when the leverage-corrected residual also exceeds 2 standard
+errors, "larger than chance would explain". The senator's recorded Yea/Nay on the
+most recent passage votes sits under each card as the evidence.
 
-- **A. Relative to the state's election result** (this README and WHITEPAPER.md):
-  fit senator ideology against presidential vote share and read the residual. It
-  answers: *how does this senator compare with the voting pattern typically
-  associated with states that vote similarly?* No bridging is needed because the
-  two scales are never subtracted.
-- **B. The live page** (`demo/senator-check.html`, `demo/methodology.html`) shows
-  the senator's Nokken-Poole score against the Senate middle, on the senators'
-  scale, and the state's American Ideology Project estimate (2020 wave) against
-  the national estimate, on the voters' scale. It does **not** compare the two:
-  a direct senator-versus-state alignment measure requires a validated
-  statistical bridge between voter and legislator scales, and CivicAlign does
-  not currently have that bridge. The two methods are kept separate and are not
-  the same metric.
+The senator's position against the Senate middle is secondary context, and the
+American Ideology Project estimate (2020 wave) is shown separately on the
+voters' scale. The page never subtracts the survey estimate from a voting score:
+a direct senator-versus-state measure on those two scales requires a validated
+statistical bridge, which CivicAlign does not have. `representation.py` holds
+the model; `build_demo._state_relative_block` publishes it; the supervisor
+refits the line with separate arithmetic before anything is published.
 
 ## What works today, and what does not
 
