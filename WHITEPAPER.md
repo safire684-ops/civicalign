@@ -156,7 +156,7 @@ points more often than bills by liberal senators. That is majority control and i
 appears on almost every committee, so each committee is measured against it rather
 than against zero:
 
-| committee | liberal bills through | conservative bills through | beyond baseline |
+| committee | liberal-record sponsors: sent forward | conservative-record sponsors: sent forward | beyond baseline |
 |---|---|---|---|
 | Small Business | 4 of 37 | 7 of 35 | +6.8 |
 | Foreign Relations | 31 of 123 | 31 of 147 | −6.5 |

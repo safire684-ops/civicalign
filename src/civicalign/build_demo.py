@@ -67,20 +67,20 @@ def _report_values(r: Report) -> dict[str, str]:
 
     worked = (
         '  <div class="tw"><table class="calc">\n'
-        f'    <tr><td>{COMMITTEE_NAMES[ex.code]}: conservative bills through</td>'
+        f'    <tr><td>{COMMITTEE_NAMES[ex.code]}: bills by conservative-record sponsors sent forward</td>'
         f'<td class="n">{ex.con_reported} of {ex.con_referred} = {ex.survival_conservative:.1f}%</td></tr>\n'
-        f'    <tr><td>{COMMITTEE_NAMES[ex.code]}: liberal bills through</td>'
+        f'    <tr><td>{COMMITTEE_NAMES[ex.code]}: bills by liberal-record sponsors sent forward</td>'
         f'<td class="n">{ex.lib_reported} of {ex.lib_referred} = {ex.survival_liberal:.1f}%</td></tr>\n'
         f'    <tr><td>Gap</td><td class="n">{_signed(ex.gbi, 1)} points</td></tr>\n'
         f'    <tr><td>Minus the Senate-wide baseline</td>'
         f'<td class="n">&minus;{r.gatekeeping_baseline:.1f} points</td></tr>\n'
-        f'    <tr class="total"><td>Favours conservative bills beyond the baseline by</td>'
+        f'    <tr class="total"><td>Favours conservative-record sponsors beyond the baseline by</td>'
         f'<td class="n">{_signed(ex.gbi_vs_baseline, 1)} points</td></tr>\n'
         '  </table></div>')
 
     table = ('  <div class="tw"><table>\n'
-             '    <tr><th>Committee</th><th class="n">Liberal bills through</th>'
-             '<th class="n">Conservative bills through</th><th class="n">Beyond baseline</th></tr>\n'
+             '    <tr><th>Committee</th><th class="n">Liberal-record sponsors: sent forward</th>'
+             '<th class="n">Conservative-record sponsors: sent forward</th><th class="n">Beyond baseline</th></tr>\n'
              + "".join(
                  f'    <tr><td>{COMMITTEE_NAMES.get(g.code, g.code)}</td>'
                  f'<td class="n">{g.lib_reported} of {g.lib_referred} ({g.survival_liberal:.1f}%)</td>'
@@ -144,6 +144,9 @@ def _report_values(r: Report) -> dict[str, str]:
         "os_x": _p100(os_.senator_coord), "os_s": _p100(os_.state_coord),
         "os_x_raw": _signed(os_.senator_coord), "os_s_raw": _signed(os_.state_coord),
         "os_gap_raw": f"{os_.abs_gap:.3f}", "os_gap_label": _d100(os_.abs_gap, 0),
+        "os_words": ("well" if os_.abs_gap / st.median([a.abs_gap for a in scored]) >= 1.25
+                     else "somewhat" if os_.abs_gap / st.median([a.abs_gap for a in scored]) >= 0.75
+                     else "a little"),
         "os_gap": _d100(os_.abs_gap), "os_as": f"{os_.spec_score:.1f}",
         "os_as_int": str(int(os_.spec_score)),
         "med_as": f"{st.median([a.spec_score for a in scored]):.1f}",
@@ -283,24 +286,32 @@ def _blocks(r: Report, cfg: Config) -> dict[str, dict]:
               "dUS": round(r.chamber.apportionment_skew, 4),
               "popYear": cfg.population_year,
               "sources": [
-                ["Senator positions",
-                 "voteview.com/static/data/out/members/HSall_members.csv",
-                 f"column {cfg.score_column}, rows where congress={cfg.congress} and chamber=Senate"],
-                ["Who holds each seat",
-                 "unitedstates.github.io/congress-legislators/legislators-current.json",
-                 "joined on bioguide id"],
-                ["State voter positions",
-                 "dataverse.harvard.edu doi:10.7910/DVN/BQKU4M",
-                 f"file aip_states_ideology_v2022a.tab, column mrp_ideology, {cfg.ideology_year} wave"],
-                ["State populations",
-                 "www2.census.gov/programs-surveys/popest/datasets/2020-2024/state/totals/",
-                 f"NST-EST{cfg.population_year}-ALLDATA.csv, used to weight states"],
-                ["Floor votes and their dividing lines",
-                 f"voteview.com/static/data/out/rollcalls/S{cfg.congress}_rollcalls.csv",
-                 "column nominate_mid_1 is the cutpoint; S{0}_votes.csv has each senator's vote".format(cfg.congress)],
-                ["Bills: titles and which committee reported them",
-                 f"www.govinfo.gov/bulkdata/BILLSTATUS/{cfg.congress}/",
-                 "the Senate (s) and House (hr) bulk archives"],
+                {"what": "Senator voting records", "who": "Voteview, University of California, Los Angeles",
+                 "url": "https://voteview.com/data", "file": "https://voteview.com/static/data/out/members/HSall_members.csv",
+                 "use": f"column {cfg.score_column}, rows for the {cfg.congress}th Congress, Senate",
+                 "asof": _asof(cfg, "HSall_members.csv")},
+                {"what": "Who currently holds each seat", "who": "congress-legislators, the @unitedstates project",
+                 "url": "https://github.com/unitedstates/congress-legislators", "file": "https://unitedstates.github.io/congress-legislators/legislators-current.json",
+                 "use": "joined on each member's Bioguide ID", "asof": _asof(cfg, "legislators-current.json")},
+                {"what": "State voter estimates", "who": "American Ideology Project, Tausanovitch & Warshaw, Harvard Dataverse",
+                 "url": "https://doi.org/10.7910/DVN/BQKU4M", "file": "https://dataverse.harvard.edu/api/access/datafile/6690212",
+                 "use": f"file aip_states_ideology_v2022a.tab, column mrp_ideology and its standard error, {cfg.ideology_year} wave",
+                 "asof": _asof(cfg, "aip_states_ideology_v2022a.tab")},
+                {"what": "State populations", "who": "U.S. Census Bureau, population estimates",
+                 "url": "https://www.census.gov/programs-surveys/popest.html",
+                 "file": f"https://www2.census.gov/programs-surveys/popest/datasets/2020-{cfg.population_year}/state/totals/NST-EST{cfg.population_year}-ALLDATA.csv",
+                 "use": f"column POPESTIMATE{cfg.population_year}, used to weight states", "asof": _asof(cfg, f"NST-EST{cfg.population_year}-ALLDATA.csv")},
+                {"what": "Floor votes", "who": "Voteview, University of California, Los Angeles",
+                 "url": "https://voteview.com/data", "file": f"https://voteview.com/static/data/out/rollcalls/S{cfg.congress}_rollcalls.csv",
+                 "use": f"each roll call's dividing line (nominate_mid_1) and, in S{cfg.congress}_votes.csv, each senator's vote",
+                 "asof": _asof(cfg, f"S{cfg.congress}_rollcalls.csv")},
+                {"what": "Bills and committee actions", "who": "GovInfo bulk data, U.S. Government Publishing Office",
+                 "url": f"https://www.govinfo.gov/bulkdata/BILLSTATUS/{cfg.congress}", "file": f"https://www.govinfo.gov/bulkdata/BILLSTATUS/{cfg.congress}/s/BILLSTATUS-{cfg.congress}-s.zip",
+                 "use": "each bill's sponsor, the committees it was referred to, and whether each formally reported it",
+                 "asof": _asof(cfg, f"BILLSTATUS-{cfg.congress}-s.zip")},
+                {"what": "Committee rosters", "who": "congress-legislators, the @unitedstates project",
+                 "url": "https://github.com/unitedstates/congress-legislators", "file": "https://unitedstates.github.io/congress-legislators/committee-membership-current.json",
+                 "use": "current membership of each Senate committee", "asof": _asof(cfg, "committee-membership-current.json")},
               ]},
         "X": {"anchors": [
                   {"name": ANCHOR_NAMES[b], "full": r.senators[b].name,
@@ -368,21 +379,25 @@ def _public_block(r: Report, cfg: Config) -> dict:
     }
 
 
-def _billflow_asof(cfg: Config) -> str:
-    """Date the Senate bill-status archive was downloaded, from the provenance log."""
+def _asof(cfg: Config, filename: str) -> str:
+    """Date a raw file was last downloaded, from the provenance log (latest entry)."""
     prov = cfg.raw_dir / "PROVENANCE.tsv"
     if not prov.exists():
         return ""
     stamp = ""
     for line in prov.read_text().splitlines():
         parts = line.split("\t")
-        if len(parts) >= 2 and parts[1] == cfg.billflow_zip.name:
+        if len(parts) >= 2 and parts[1] == filename:
             stamp = parts[0]
     if not stamp:
         return ""
     from datetime import datetime
     d = datetime.strptime(stamp[:10], "%Y-%m-%d")
     return f"{d.day} {d.strftime('%B %Y')}"
+
+
+def _billflow_asof(cfg: Config) -> str:
+    return _asof(cfg, cfg.billflow_zip.name)
 
 
 def _gatekeeping_block(r: Report, cfg: Config = DEFAULT) -> dict:

@@ -86,8 +86,8 @@ def test_report_and_demo_describe_the_same_committee_measure():
     """They drifted once: the report quoted member averages while the page plotted
     bill survival. Both must now describe bill survival."""
     demo, rep = DEMO.read_text(), REPORT.read_text()
-    assert "Which bills each committee lets through" in demo
-    assert "Which bills each committee lets through" in rep
+    assert "What has it sent forward?" in demo
+    assert "What each committee has sent forward" in rep
     assert "Committees against the Senate" not in rep, "old section still present"
 
 
@@ -120,7 +120,7 @@ def test_demo_uses_the_external_stylesheet_and_no_percentage_score():
     assert '<link rel="stylesheet" href="civicalign.css">' in text
     assert (DEMO.parent / "civicalign.css").exists()
     assert "representation match" not in text.lower(), "the percentage metric was dropped"
-    assert "points further" in text and "Too close to tell apart" in text
+    assert "’s voters" in text and "Too close to distinguish with this estimate" in text
 
 
 def test_demo_committee_module_shows_both_references():
@@ -156,8 +156,8 @@ def test_senator_cards_come_straight_after_the_state_selector():
 
 def test_ruler_is_kept_under_explore_the_scale():
     text = DEMO.read_text()
-    m = re.search(r'<details class="explore" id="explore">\s*<summary>.*?Explore the scale.*?</summary>\s*<div class="ruler" id="ruler">', text, re.S)
-    assert m, "the six-bill ruler must live inside the Explore the scale disclosure"
+    m = re.search(r'<details class="explore" id="explore">\s*<summary>.*?Where familiar senators sit.*?</summary>\s*<div class="ruler" id="ruler">', text, re.S)
+    assert m, "the landmark ruler must live inside its own disclosure under the cards"
 
 
 def test_clicking_a_circle_shows_that_state_and_brings_the_cards_into_view():
@@ -214,7 +214,7 @@ def test_each_view_leads_with_a_takeaway_and_keeps_a_limit_visible():
     for v in VIEWS:
         sec = re.search(r'<section id="%s".*?</section>' % v, m, re.S).group(0)
         assert 'class="takeaway"' in sec, f"{v} has no takeaway"
-        assert "See details" in sec or v == "your-senators", f"{v} has no See details"
+        assert '<details class="more' in sec or v == "your-senators", f"{v} has no disclosure"
         # limits stay outside any disclosure
         outside = re.sub(r"<details.*?</details>", "", sec, flags=re.S)
         assert 'class="limit"' in outside or 'class="limits"' in outside, f"{v} hides its limits"
@@ -239,9 +239,9 @@ def test_no_smooth_scroll_or_hover_animation():
 def test_existing_measures_and_thresholds_are_preserved():
     text = DEMO.read_text()
     assert "var thr=0.15;" in text
-    assert "That is where a '+(right?'conservative':'liberal')+' gatekeeper would sit" in text
-    assert "Where the Senate split on its bills:" in text
-    assert "Too close to tell apart" in text and "points further" in text
+    assert "the position a '+(right?'conservative':'liberal')+' gatekeeper would sit in" in text
+    assert "Where senators divided on these votes:" in text
+    assert "Too close to distinguish with this estimate" in text and "to the left of" in text
 
 
 
@@ -266,17 +266,6 @@ def test_selected_tab_is_scrolled_into_view_in_the_nav_row():
     text = DEMO.read_text()
     assert "inline:'center'" in text and "$('tab-'+id)" in text
 
-
-
-def test_senate_pivot_label_is_anchored_away_from_the_public_label():
-    """"60th vote" and "The American public" share the row above the track and
-    collided at phone width. The pivot label now hangs off the side of its tick
-    that faces away from the public label."""
-    text = DEMO.read_text()
-    assert "P.pivot>=P.usM?'after':'before'" in text
-    css = (DEMO.parent / "civicalign.css").read_text()
-    assert ".pubtrack .pt.c.after{transform:none" in css
-    assert ".pubtrack .pt.c.before{transform:translateX(-100%)" in css
 
 
 def test_tap_targets_meet_the_44px_minimum():
@@ -325,10 +314,10 @@ def test_data_strings_are_escaped_before_html_insertion():
     html_lines = [ln for ln in text.splitlines() if "innerHTML" in ln or "return '<" in ln or "out+='<" in ln or "'<div" in ln or "'<p" in ln or "'<option" in ln or "'<button" in ln]
     joined = "\n".join(html_lines)
     for raw in ("'+s.name+'", "'+st.name+'", "'+c.name+'", "'+d.n+'", "'+d.st+'",
-                "'+it.label+'", "'+G.worst.name+'", "'+m.label+'", "'+t[0]+'", "'+t[2]+'", "'+s.party+'"):
+                "'+it.label+'", "'+G.worst.name+'", "'+t.who+'", "'+t.url+'", "'+t.use+'", "'+s.party+'"):
         assert raw not in joined, f"unescaped data string {raw} inserted into HTML"
     for wrapped in ("esc(s.name)", "esc(st.name)", "esc(c.name)", "esc(d.n)", "esc(it.label)",
-                    "esc(G.worst.name)", "esc(m.label)", "esc(pr.a.name)"):
+                    "esc(G.worst.name)", "esc(pr.a.name)", "esc(t.who)", "esc(t.url)"):
         assert wrapped in text, f"{wrapped} missing"
 
 
@@ -388,8 +377,9 @@ def test_each_card_explains_how_far_where_and_what_the_numbers_are_made_of():
     assert "of the 100 senators" in text and "of the other '+others+' states" in text
     assert "roll-call votes</b> they have cast this Congress" in text
     assert "It cannot say which issues make up the difference." in text
-    assert "'<div class=\"terms\">'+plainTerms(s,st,se)+'</div>'" in text, "one short plain-terms box is visible"
-    assert "howFar(s,st,se)+wherePut(s,st)+madeOf(s,st)" in text, "the fuller explanation sits behind See details"
+    assert "'<p class=\"gapline\">'+gapline+'</p>'" in text, "one plain gap line is visible"
+    assert "Roughly '+round5(d100(gap))+' points apart" in text, "the visible distance is rounded and marked approximate"
+    assert "plainTerms(s,st,se)+howFar(s,st,se)+wherePut(s,st)+madeOf(s,st)" in text, "the fuller explanation sits behind See details"
     for banned in ("Medicaid", "abortion", "gun", "immigration bill", "climate"):
         assert banned not in text.split("<script>")[0] or True  # prose may mention issue names only as examples of what it cannot say
     assert "this page does not guess" in text
@@ -398,9 +388,14 @@ def test_each_card_explains_how_far_where_and_what_the_numbers_are_made_of():
 def test_card_track_carries_party_public_and_senate_landmarks():
     text = DEMO.read_text()
     assert "var LM=[{x:X.demMedian" in text and "{x:X.repMedian" in text and "{x:X.chMedian" in text and "{x:X.usM" in text
-    assert "X.anchors.filter(function(a){return a.card})" in text
+    # the default card carries only the state, the senator and the estimated range;
+    # party middles, the Senate's middle, the country and familiar senators live in the ruler
+    card = text.split("function render(code){")[1].split("window.addEventListener('resize'")[0]
+    assert "X.demMedian" not in card and "X.anchors" not in card and "X.chMedian" not in card
+    assert "estimated range" in card
+    assert "{x:X.demMedian,label:'Middle Democrat',cls:'dem'}" in text
     assert "function stagger(" in text, "labels are staggered into rows so they never overlap"
-    assert "--rows:'+nrows+'" in text and "var(--rows,1)" in css_text()
+    assert "var(--rows,1)" in css_text()
     for cls in (".atag.dem", ".atag.rep", ".atag.pub", ".atag.sen", ".rl.dem", ".rl.rep"):
         assert cls in css_text(), cls
 
@@ -427,7 +422,7 @@ def test_scales_are_described_as_different_rulers_not_the_same_scale(path):
 
 def test_splits_are_not_presented_as_bill_ideology():
     t = _prose(DEMO)
-    assert "not whether the bills themselves were liberal or conservative" in t
+    assert "whether the bill itself was liberal or conservative" in t
     assert "What it actually passed" not in t
     assert "Bills passed</div>" not in t
     r = REPORT.read_text()
@@ -461,11 +456,11 @@ def test_senate_wide_totals_count_distinct_bills(report):
 def test_band_label_does_not_overstate_one_standard_error():
     t = _prose(DEMO)
     assert "Aligned with State Consensus" not in t and "Statistically Aligned" not in t
-    assert "Too close to tell apart" in t
+    assert "Too close to distinguish with this estimate" in t
     assert "one standard error" in t
     assert "not the same as agree" in t
     r = REPORT.read_text()
-    assert "Too close to tell apart" in r and "one standard error" in r and "not 95%" in r
+    assert "Too close to distinguish with this estimate" in r and "one standard error" in r and "not 95%" in r
 
 
 # ---- the reader's scale is 0 to 100 with 50 in the middle; the maths is unchanged ----
@@ -475,9 +470,9 @@ def test_page_displays_the_0_to_100_scale_but_keeps_raw_data(report):
     assert "var p100=function(v){return Math.round(v*50+50)}" in text
     assert "var d100=function(v){return Math.round(Math.abs(v)*50)}" in text
     prose = _prose(text if False else DEMO)
-    assert "0 (most liberal) to 100 (most conservative), with 50 in the middle" in prose
+    assert "from 0 (most liberal) to 100 (most conservative)" in prose
     assert "&minus;1 (most liberal)" not in prose
-    assert "0 &nbsp;← More liberal" in prose and "More conservative →&nbsp; 100" in prose
+    assert "← More liberal" in prose and "More conservative →" in prose
     # the data blocks still carry the raw -1..+1 figures, unchanged
     M = _block("M")
     assert M["chM"] == pytest.approx(report.chamber.median, abs=1e-4)
@@ -494,7 +489,7 @@ def test_report_uses_the_0_to_100_scale_with_raw_beside_it(report):
     assert f'<td class="n">{os_.senator_coord * 50 + 50:.1f}</td>' in r
     assert f'<td class="n">{os_.state_coord * 50 + 50:.1f}</td>' in r
     assert f"raw score {'+' if os_.senator_coord >= 0 else '&minus;'}{abs(os_.senator_coord):.3f}" in r
-    assert f"{abs(os_.abs_gap) * 50:.0f} points further" in r
+    assert f"rounded to {abs(os_.abs_gap) * 50:.0f} points" in r
     assert f"<b>{report.chamber.median * 50 + 50:.1f}</b>" in r
     assert f"<b>{abs(report.chamber.apportionment_skew) * 50:.1f} points</b>" in r
     assert "more than 7.5 points" in r
@@ -502,7 +497,7 @@ def test_report_uses_the_0_to_100_scale_with_raw_beside_it(report):
 
 def test_small_committees_show_counts_without_a_verdict():
     text = DEMO.read_text()
-    assert "Too few bills from one side to compare the two fairly" in text
+    assert "Too few bills to compare the two sides fairly" in text and "Limited data" in text
     assert "Not shown for this committee" not in text
     assert "formally reported the bill to the full Senate" in text
     assert "House bills sent to Senate committees are not counted" in text
@@ -511,3 +506,117 @@ def test_small_committees_show_counts_without_a_verdict():
     assert any(not c["ok"] for c in G["committees"]), "small committees are listed too"
     r = REPORT.read_text()
     assert "What is counted, exactly." in r and G["asOf"] in r
+
+
+# ---- the brief's twelve guarantees: simple on the surface, rigorous underneath ----
+
+def _visible(path=None):
+    """Page prose outside the data blocks and outside any <details> disclosure."""
+    text = (path or DEMO).read_text()
+    text = re.sub(r"<script>.*?</script>", "", text, flags=re.S)
+    return re.sub(r"<details.*?</details>", "", text, flags=re.S)
+
+
+def test_1_never_claims_a_validated_common_scale():
+    t = _prose(DEMO) + REPORT.read_text() + (ROOT / "README.md").read_text()
+    for claim in ("validated common scale", "same scale, so the two can be compared directly",
+                  "exact same scale", "very same scale", "on one 0-to-100 scale:", "This measures the distance between them"):
+        assert claim not in t, claim
+    assert "approximate comparison" in t.lower() and "measured differently" in t or "built differently" in t
+
+
+def test_2_never_calls_a_cutpoint_bill_ideology():
+    t = (_prose(DEMO) + REPORT.read_text()).lower()
+    assert "it does not tell us whether the bill itself was liberal or conservative" in t
+    t = t.replace("does not necessarily tell us the ideology of the bill", "")
+    for claim in ("bill ideology", "liberal bill", "conservative bill", "ideology of the bill"):
+        assert claim not in t, claim
+
+
+def test_3_survey_vintage_is_visible_on_the_first_screen():
+    v = _visible()
+    first = v.split('id="the-senate"')[0]
+    assert "American Ideology Project" in first and "2020 wave" in first
+
+
+def test_4_pending_bills_are_not_called_dead(report):
+    v = _prose(DEMO).lower()
+    for w in ("killed", "buried", "graveyard", "suppress", "dead bills", "bills die"):
+        assert w not in v, w
+    assert "not dead" in v and "not yet sent forward" in v
+
+
+def test_5_sponsor_ideology_is_not_bill_ideology():
+    t = DEMO.read_text()
+    assert "Grouped by the voting record of each bill\\u2019s sponsor" in t
+    assert "does not necessarily tell us the ideology of the bill" in t
+
+
+def test_6_small_samples_show_caution_or_withhold_conclusions():
+    t = DEMO.read_text()
+    assert "Early signal" in t and "too little for a strong conclusion" in t
+    assert "Not enough data yet" in t and "Limited data" in t
+    assert "weak=o.n<15" in t
+
+
+def test_7_and_8_every_view_answers_one_question_with_a_plain_takeaway():
+    t = DEMO.read_text()
+    for view in ("your-senators", "the-senate", "committees", "how-it-works"):
+        panel = t.split(f'<section id="{view}"')[1].split("</section>")[0]
+        assert 'class="takeaway"' in panel, view
+    assert "Does your senator vote the way your state leans?" in t
+    # generated takeaways are plain sentences without raw decimals
+    for fn in ("$('take-senators').textContent=t", "$('take-senate').textContent=", "$('take-committee').textContent="):
+        assert fn in t
+
+
+def test_9_every_view_has_one_short_visible_caveat():
+    t = DEMO.read_text()
+    for view in ("your-senators", "the-senate", "committees"):
+        panel = t.split(f'<section id="{view}"')[1].split("</section>")[0]
+        outside = re.sub(r"<details.*?</details>", "", panel, flags=re.S)
+        assert outside.count('class="limit"') == 1, view
+
+
+def test_10_default_card_is_not_overloaded_with_benchmarks():
+    card = DEMO.read_text().split("function render(code){")[1].split("window.addEventListener('resize'")[0]
+    before_details = card.split("<details class=\"more\">")[0]
+    for secondary in ("X.demMedian", "X.repMedian", "X.chMedian", "X.usM", "X.anchors", "s.rank", "howFar(", "wherePut(", "madeOf("):
+        assert secondary not in before_details, secondary
+    assert "'<div class=\"terms\">'+plainTerms(s,st,se)+howFar(s,st,se)+wherePut(s,st)+madeOf(s,st)+'</div>'" in card
+
+
+def test_11_technical_terms_stay_out_of_the_default_experience():
+    v = _visible()
+    for term in ("DW-NOMINATE", "Nokken", "MRP", "cloture", "cutpoint", "CCD", "CND", "COI", "GBI",
+                 "median drift", "mean drift", "ideal point", "standard error", "apportionment skew"):
+        assert term not in v, term
+    # the generated text on the first screen avoids them too; the technical names
+    # live only in disclosures ("Why does this happen?", See details) and the report
+    js = "".join(re.findall(r"<script>(.*?)</script>", DEMO.read_text(), re.S))
+    stakes = js.split("$('stakes').innerHTML=")[1].split(";\n")[0]
+    assert "cloture threshold" in stakes
+    assert "cloture" not in js.replace(stakes, "")
+    for fn in ("function spatial(", "function verdict(", "function driftWords(", "function sentOnBars(", "function floorSplit("):
+        body = js.split(fn)[1].split("\n  }")[0]
+        for term in ("Nokken", "MRP", "cutpoint", "standard error", "cloture", "ideal point"):
+            assert term not in body, f"{term} in {fn}"
+
+
+def test_12_detailed_methodology_remains_available():
+    t = DEMO.read_text()
+    assert 'href="methodology.html"' in t
+    assert "Show the math" in t and 'id="workings"' in t and 'id="srcs"' in t
+    assert "signed(s.record,3)" in t, "raw arithmetic is still shown in full"
+
+
+def test_sources_are_credible_publishers_with_full_links(report):
+    M = _block("M")
+    assert len(M["sources"]) >= 6
+    ok_hosts = ("voteview.com", "github.com/unitedstates", "unitedstates.github.io", "doi.org", "dataverse.harvard.edu", "census.gov", "govinfo.gov")
+    for s in M["sources"]:
+        assert set(s) >= {"what", "who", "url", "file", "use"}, s
+        assert s["url"].startswith("https://") and s["file"].startswith("https://"), s["what"]
+        assert any(h in s["url"] for h in ok_hosts) and any(h in s["file"] for h in ok_hosts), s["what"]
+    text = DEMO.read_text()
+    assert "<h3>Sources</h3>" in text and "M.sources.map(srcRow)" in text

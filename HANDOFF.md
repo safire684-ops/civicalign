@@ -5,6 +5,23 @@ sections 2–5). Pillars 1–3 and 7 belong to someone else.
 
 ## Status in one line
 
+Plain-language redesign (22 September 2026, published): each view answers one
+question with one sentence, one simple picture, one short caveat and a "See
+details" fold. The senator card shows only the state's estimated range, the
+state's mark and the senator's dot; party middles, the Senate's middle, the
+country and familiar senators moved into "Where familiar senators sit" and
+See details. Verdicts are words ("well to the left of Georgia's voters"), the
+visible distance is rounded to 5 and marked approximate, the survey vintage
+(2020 wave) is on the first screen, the Senate view is two dots and a sentence
+with "Why does this happen?" / "See all 100 senators" / "The numbers" folded,
+and the committee view answers three questions (who is on it, what has it sent
+forward, where senators divided on its bills) with "Limited data" / "Early
+signal" tags below 25 bills per side or 15 floor votes. README now separates the
+regression method (A) from the live survey comparison (B). Sources are a neat
+linked list with download dates; all eight were re-fetched live and matched the
+local files (the bill archive differs only because GovInfo republishes daily).
+Tests: 131 pass, including the brief's twelve guarantees.
+
 Reader scale is now 0 to 100 (22 September 2026, published): every displayed
 position is score × 50 + 50 and every distance × 50; the data blocks and the
 pipeline stay on −1 to +1, and the arithmetic section shows both. The report shows

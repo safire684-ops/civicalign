@@ -154,15 +154,17 @@ table.calc tr.total td{border-bottom:none;border-top:2px solid var(--ink);
     <tr class="total"><td>Distance between them<br><span class="sm">raw {{os_gap_raw}}</span></td><td class="n">{{os_gap}} points</td></tr>
     <tr class="total"><td>Signed distance<br><span class="sm">senator minus state</span></td><td class="n">{{os_signed}} points</td></tr>
   </table></div>
-  <p>The tool reports that distance directly, rounded, as "{{os_gap_label}} points further
-    Left than the state average". An earlier version turned it into a percentage; that was
-    dropped because readers took it for a share of votes, which it never was.</p>
+  <p>The tool puts that in words first ("{{os_words}} to the left of Georgia's
+    voters", judged against the typical senator's {{med_gap}}-point gap) and shows the
+    gap beneath, rounded to {{os_gap_label}} points. An earlier version turned it into a
+    percentage; that was dropped because readers took it for a share of votes, which it
+    never was.</p>
   <p>A distance smaller than the state estimate's own uncertainty is reported as
-    <b>Too close to tell apart</b> rather than as a gap. That band is one standard
+    <b>Too close to distinguish with this estimate</b> rather than as a gap. That band is one standard
     error of the state estimate, about &plusmn;2 points. It is a modest bar: a one-standard-error
     band covers roughly two thirds of the likely values, not 95%, and the senator
-    score's own error is not published, so it is not included. "Too close to tell
-    apart" therefore means the survey cannot separate the two positions. It does
+    score's own error is not published, so it is not included. "Too close to
+    distinguish" therefore means the survey cannot separate the two positions. It does
     not mean the state's voters agree with the senator, or with each other: a state's
     number is an average of many people who disagree.</p>
 
@@ -221,7 +223,7 @@ table.calc tr.total td{border-bottom:none;border-top:2px solid var(--ink);
     action is nominations and House bills that no Senate committee reported.</p>
 {{oi_table}}
 
-  <h3>4. Which bills each committee lets through</h3>
+  <h3>4. What each committee has sent forward</h3>
   <p>Almost every bill goes to a committee before the full Senate can vote on it,
     and most are still sitting there. So instead of asking who sits on a committee, we
     look at what it has actually done: of the bills sent to it, how many has it sent

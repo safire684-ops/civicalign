@@ -45,6 +45,22 @@ src/civicalign/
     state_prefs.py     the bridging interface — THE swappable part
 ```
 
+## What the live page shows, and what the regression is
+
+Two different Pillar 4 questions live in this repo, and they are not the same
+metric:
+
+- **A. Relative to the state's election result** (this README and WHITEPAPER.md):
+  fit senator ideology against presidential vote share and read the residual. No
+  bridging is needed because the two scales are never subtracted.
+- **B. Approximate senator-vs-state survey positioning** (the live page,
+  `demo/senator-check.html`, and `demo/methodology.html`): place the senator's
+  Nokken-Poole score and the state's American Ideology Project survey estimate
+  (2020 wave) on one 0-to-100 line and describe the direction and rough size of
+  the gap. The two measures were built differently and are not tied together
+  exactly, so the page presents this as a rough comparison, not a validated
+  shared ruler.
+
 ## What works today, and what does not
 
 **Working, on real 119th Congress data.**
