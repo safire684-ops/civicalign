@@ -36,17 +36,14 @@ def _signed(v: float, places: int = 3) -> str:
 
 # ONE deterministic rule for putting a same-scale difference into words. The page's
 # JavaScript (REL in senator-check.html) uses the same thresholds; a test keeps them equal.
-REL_NEAR = 0.05       # within this (underlying units) -> "near the <reference>"
-REL_SOMEWHAT = 0.15   # within this -> "somewhat ..."; beyond -> "clearly ..."
+REL_NEAR = 0.05       # within this (underlying units) -> "near the <reference>"; beyond -> "on the more ... side of the <reference>"
 
 
 def rel_words(d: float, ref: str) -> str:
-    a = abs(d)
-    if a < REL_NEAR:
+    if abs(d) < REL_NEAR:
         return f"near the {ref}"
-    deg = "somewhat" if a < REL_SOMEWHAT else "clearly"
     side = "conservative" if d > 0 else "liberal"
-    return f"{deg} on the more {side} side of the {ref}"
+    return f"on the more {side} side of the {ref}"
 
 
 def _p100(v: float, places: int = 1) -> str:
@@ -151,18 +148,7 @@ def _report_values(r: Report) -> dict[str, str]:
         "ga_vs_us": _sd100(os_.state_coord - r.chamber.national_coord) if r.chamber.national_coord is not None else "&mdash;",
         "ga_words": (rel_words(os_.state_coord - r.chamber.national_coord, "national voter estimate")
                      if r.chamber.national_coord is not None else "shown on the voter scale"),
-        "rel_near": f"{REL_NEAR * 50:g}", "rel_somewhat": f"{REL_SOMEWHAT * 50:g}",
-        "rel_near_raw": f"{REL_NEAR:.2f}", "rel_somewhat_raw": f"{REL_SOMEWHAT:.2f}",
-        "os_x": _p100(os_.senator_coord), "os_s": _p100(os_.state_coord),
-        "os_x_raw": _signed(os_.senator_coord), "os_s_raw": _signed(os_.state_coord),
-        "os_se_raw": f"{r.state_source.state_se(os_.state) or 0:.3f}",
-        "os_se": _d100(r.state_source.state_se(os_.state) or 0, 0),
-        "os_vs_senate": _sd100(os_.senator_coord - r.chamber.median),
-        "os_vs_senate_words": rel_words(os_.senator_coord - r.chamber.median, "Senate middle"),
-        "ga_vs_us": _sd100(os_.state_coord - r.chamber.national_coord) if r.chamber.national_coord is not None else "&mdash;",
-        "ga_words": ("slightly conservative" if 0.05 < os_.state_coord <= 0.15 else "clearly conservative" if os_.state_coord > 0.15
-                     else "slightly liberal" if -0.15 <= os_.state_coord < -0.05 else "clearly liberal" if os_.state_coord < -0.15
-                     else "about in the middle"),
+        "rel_near": f"{REL_NEAR * 50:g}", "rel_near_raw": f"{REL_NEAR:.2f}",
         "ch_m": _p100(r.chamber.median),
         "us_m": _p100(r.chamber.national_coord),
         "gk_referrals": f"{ref:,}",

@@ -157,7 +157,7 @@ table.calc tr.total td{border-bottom:none;border-top:2px solid var(--ink);
     <tr><td>Senate middle<br><span class="sm">median of the 100 scores</span></td><td class="n">65.5</td></tr>
     <tr class="total"><td>Difference, display-scale units</td><td class="n">&minus;42.5</td></tr>
   </table></div>
-  <p>The tool says: "Ossoff's voting record is clearly on the more liberal side of the Senate middle".</p>
+  <p>The tool says: "Ossoff's voting record is on the more liberal side of the Senate middle".</p>
   <p><b>The state, on the voters' scale.</b> Georgia's voter estimate against the
     national estimate. Both are survey estimates from the same project, so this
     subtraction is valid too:</p>
@@ -166,7 +166,7 @@ table.calc tr.total td{border-bottom:none;border-top:2px solid var(--ink);
     <tr><td>National voter estimate<br><span class="sm">all states, weighted by population</span></td><td class="n">48.7</td></tr>
     <tr class="total"><td>Difference, display-scale units</td><td class="n">+4.4</td></tr>
   </table></div>
-  <p>The tool says: "Georgia's voter estimate is slightly conservative". The shaded area on
+  <p>The tool says: "Georgia's voter estimate is on the more conservative side of the national voter estimate". The shaded area on
     the chart is the estimate's own uncertainty, one standard error, about
     &plusmn;2 display-scale units. That is a modest band: it covers roughly two thirds of the
     likely values, not 95%. A state's number is an average of many people who
@@ -181,9 +181,10 @@ table.calc tr.total td{border-bottom:none;border-top:2px solid var(--ink);
   <p>The tool describes every same-scale position in words before any number, and
     the words follow one rule. Take the difference between a position and its
     reference point on the underlying scale: within 0.05 (2.5 display-scale
-    units) the position is <b>"near"</b> the reference; within 0.15 (7.5
-    units) it is <b>"somewhat"</b> on the more liberal or more conservative side; beyond
-    that it is <b>"clearly"</b> on that side. The same rule is used for a senator
+    units) the position is <b>"near"</b> the reference; beyond that it is <b>"on the
+    more liberal side"</b> or <b>"on the more conservative side"</b> of the reference.
+    The words give the direction; the chart shows how far, and the exact distance is
+    under "See details". The same rule is used for a senator
     against the Senate middle, a state's estimate against the national voter estimate,
     a committee's members against the Senate middle, and the 60-vote point. They are
     neutral descriptions of relative position, not grades; no senator is ranked.</p>
@@ -237,7 +238,7 @@ table.calc tr.total td{border-bottom:none;border-top:2px solid var(--ink);
   <p>Each committee is measured against the Senate's middle (<b>65.5</b>). Both
     sides of that comparison come from Voteview, so it is stated in points.</p>
   <p><b>Where the members sit.</b> The midpoint of the committee's members on the same
-    scale. A midpoint more than 7.5 display-scale units (0.15 underlying) from the Senate's middle is described as "clearly" to one side, the position of a
+    scale. A midpoint more than 7.5 display-scale units (0.15 underlying) from the Senate's middle is flagged, under "More about this committee", as sitting well to one side: the position of a
     gatekeeper. This number is soft: on a committee split between two parties the
     midpoint can fall in the gap between them, and it can move sharply when one member
     is replaced. The last column says how far.</p>

@@ -86,7 +86,7 @@ def test_report_and_demo_describe_the_same_committee_measure():
     """They drifted once: the report quoted member averages while the page plotted
     bill survival. Both must now describe bill survival."""
     demo, rep = DEMO.read_text(), REPORT.read_text()
-    assert "What has it sent forward?" in demo
+    assert "What has it sent forward to the full Senate?" in demo
     assert "What each committee has sent forward" in rep
     assert "Committees against the Senate" not in rep, "old section still present"
 
@@ -240,7 +240,7 @@ def test_existing_measures_and_thresholds_are_preserved():
     text = DEMO.read_text()
     assert "var thr=0.15;" in text
     assert "the position a '+(right?'conservative':'liberal')+' gatekeeper would sit in" in text
-    assert "Where senators divided on these votes:" in text
+    assert "the split between Yes and No senators fell <b>" in text
     assert "function relWords(" in text
 
 
@@ -736,7 +736,8 @@ def test_p2_state_card_leads_with_words_not_display_numbers():
     for num in ("p100(", "d100(", "points"):
         assert num not in card, num
     assert "’s voter estimate is <b>'+spst.w+'</b>" in card
-    assert "State voter estimate <span class=\"kick2\">compared with the national voter estimate</span>" in card
+    assert "Voter estimate <span class=\"kick2\">compared with the national voter estimate</span>" in card
+    assert "Estimated political position of '+stName+' voters" in card
     assert "Shaded area: estimated range." in js
 
 
@@ -807,12 +808,16 @@ def test_p9_accessibility_text_explains_the_relationship_in_words():
 
 
 def test_p10_wording_rule_is_one_deterministic_rule_shared_by_page_and_report():
-    from civicalign.build_demo import REL_NEAR, REL_SOMEWHAT, rel_words
+    from civicalign.build_demo import REL_NEAR, rel_words
     js = _js()
-    m = re.search(r"var REL=\{near:([0-9.]+), somewhat:([0-9.]+)\}", js)
-    assert m and float(m.group(1)) == REL_NEAR and float(m.group(2)) == REL_SOMEWHAT
+    m = re.search(r"var REL=\{near:([0-9.]+)\}", js)
+    assert m and float(m.group(1)) == REL_NEAR
     assert rel_words(0.01, "Senate middle") == "near the Senate middle"
-    assert rel_words(-0.1, "Senate middle") == "somewhat on the more liberal side of the Senate middle"
-    assert rel_words(0.4, "national voter estimate") == "clearly on the more conservative side of the national voter estimate"
+    assert rel_words(-0.1, "Senate middle") == "on the more liberal side of the Senate middle"
+    assert rel_words(0.4, "national voter estimate") == "on the more conservative side of the national voter estimate"
     r = REPORT.read_text()
-    assert f"{REL_NEAR:.2f}" in r and f"{REL_SOMEWHAT:.2f}" in r
+    assert f"{REL_NEAR:.2f}" in r
+    # direction words only: no graded categories for the reader to learn
+    for page in (DEMO.read_text(), r):
+        for word in ("somewhat on the", "clearly on the", '"somewhat"', '"clearly"', "\u201csomewhat\u201d", "\u201cclearly\u201d"):
+            assert word not in page, word

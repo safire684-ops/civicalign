@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Your Senator and Your State</title>
-<meta name="description" content="Pick your state and see roughly how far your two senators sit from its voters, on one liberal-to-conservative line, with familiar senators for perspective.">
+<meta name="description" content="Pick your state to see where each senator's voting pattern sits within the Senate, and where the state's voters are estimated to sit compared with the national estimate. The two are shown separately.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Public+Sans:wght@400;500;600;700&display=swap">
@@ -18,8 +18,8 @@
     <span class="badge" id="baseline">Baseline: &mdash;</span>
   </div>
   <h1>See your senator's voting pattern and your state's voter estimate</h1>
-  <p class="sub">These come from different kinds of data, so we show them separately
-    rather than calculating a distance between them.</p>
+  <p class="sub">Use this to see where your senator sits within the Senate and where
+    your state sits within the voter estimates.</p>
   <p class="updated" id="updated"></p>
 </header>
 
@@ -44,7 +44,7 @@
   <div id="stateblock"></div>
   <p class="limit">These are different measures and are shown separately. Senator record:
     <a href="https://voteview.com/data" target="_blank" rel="noopener">Voteview</a>,
-    every vote this Congress. State voter estimate:
+    every vote this Congress. Voter estimate:
     <a href="https://doi.org/10.7910/DVN/BQKU4M" target="_blank" rel="noopener">American Ideology Project</a>, 2020 wave.</p>
   <details class="explore" id="explore">
     <summary><span>Where familiar senators sit</span></summary>
@@ -85,7 +85,7 @@
 <!-- ============ 3. Committees ============ -->
 <section id="committees" class="view" role="tabpanel" aria-labelledby="tab-committees" tabindex="-1" hidden>
   <p class="takeaway" id="take-committee"></p>
-  <p class="why">Senate committees review legislation before much of it can reach the
+  <p class="why">A Senate committee reviews bills before many of them can go to the
     full Senate.</p>
   <div class="picker">
     <label for="committee">Committee</label>
@@ -97,11 +97,11 @@
     <div id="committee-cards"></div>
   </div>
   <div class="gate">
-    <h3 class="q">2. What has it sent forward?</h3>
+    <h3 class="q">2. What has it sent forward to the full Senate?</h3>
     <div id="gates"></div>
   </div>
   <div class="gate">
-    <h3 class="q">3. What happened when its legislation reached the Senate?</h3>
+    <h3 class="q">3. What happened when those bills reached the full Senate?</h3>
     <div id="floorsplit"></div>
   </div>
   <p class="limit">Limited data can make committee patterns unstable. A bill still in
@@ -163,7 +163,7 @@
     <li>A bill's sponsor having a liberal or conservative record does not make the bill liberal or conservative.</li>
     <li>Bills still in committee are not automatically dead.</li>
     <li>Small samples deserve weak conclusions.</li>
-    <li>Words like "near", "somewhat" and "clearly" follow one fixed rule (in the methodology report) and describe position relative to a reference point. They are not grades.</li>
+    <li>"Near" and "on the more liberal (or conservative) side" describe where something sits relative to a reference point, by one fixed rule in the methodology report. They are not grades.</li>
   </ul>
   <p class="limit">Every figure on this site is recomputed from the source files by an
     independent check before each weekly update is published.</p>
@@ -300,12 +300,11 @@ const P={"chM":0.31,"usM":-0.027,"pivot":0.44,"stateEstimates":[0.176,0.198,0.18
   // ONE deterministic rule for putting a same-scale difference into words.
   // d is position minus reference point, in the underlying -1..+1 units.
   // Thresholds are documented in the methodology report and mirrored in build_demo.py.
-  var REL={near:0.05, somewhat:0.15};
+  var REL={near:0.05};
   function relWords(d,ref){
-    var a=Math.abs(d), side=d>0?'conservative':'liberal';
-    if(a<REL.near) return {w:'near the '+ref,deg:'near',c:'neutral',i:'\u2248'};
-    var deg=a<REL.somewhat?'somewhat':'clearly';
-    return {w:deg+' on the more '+side+' side of the '+ref,deg:deg,c:d>0?'right':'left',i:d>0?'\u2192':'\u2190'};
+    var side=d>0?'conservative':'liberal';
+    if(Math.abs(d)<REL.near) return {w:'near the '+ref,c:'neutral',i:'\u2248'};
+    return {w:'on the more '+side+' side of the '+ref,c:d>0?'right':'left',i:d>0?'\u2192':'\u2190'};
   }
   function senatorPos(s){return relWords(s.record-X.chMedian,'Senate middle')}
   function cap(s){return s.charAt(0).toUpperCase()+s.slice(1)}
@@ -320,7 +319,7 @@ const P={"chM":0.31,"usM":-0.027,"pivot":0.44,"stateEstimates":[0.176,0.198,0.18
       '<p class="sr-only">Chart: '+last+'’s voting record is '+sp.w+'. On the display line '+last+' is at '+p100(s.record)+' and the Senate middle at '+p100(X.chMedian)+'.</p></div>';
   }
   // ---- the state, on the voters' scale (survey estimates only) ----
-  function statePos(st){return P.usM==null?{w:'shown on the voter scale',deg:'',c:'neutral',i:'\u25C6'}:relWords(st.center-P.usM,'national voter estimate')}
+  function statePos(st){return P.usM==null?{w:'shown on the voter scale',c:'neutral',i:'\u25C6'}:relWords(st.center-P.usM,'national voter estimate')}
   function stateTrack(st,se){
     var stName=esc(st.name), moeW=Math.max(se*100,1.2), sp=statePos(st);
     return '<div class="scale"><div class="ends"><span>← More liberal</span><span>More conservative →</span></div>'+
@@ -385,8 +384,8 @@ const P={"chM":0.31,"usM":-0.027,"pivot":0.44,"stateEstimates":[0.176,0.198,0.18
         '</details></div>';
     }).join('');
     $('stateblock').innerHTML='<div class="card statecard">'+
-      '<div class="who"><h3>'+stName+' voters</h3><span class="party i">Academic voter estimate</span></div>'+
-      '<p class="kicker">State voter estimate <span class="kick2">compared with the national voter estimate</span></p>'+
+      '<div class="who"><h3>Estimated political position of '+stName+' voters</h3><span class="party i">Academic survey estimate</span></div>'+
+      '<p class="kicker">Voter estimate <span class="kick2">compared with the national voter estimate</span></p>'+
       stateTrack(st,se)+
       '<p class="verdict"><span class="ic" aria-hidden="true">'+spst.i+'</span>'+stName+'’s voter estimate is <b>'+spst.w+'</b>.</p>'+
       '<p class="caption">Based on the American Ideology Project, '+M.ideologyYear+' wave.</p>'+
@@ -485,9 +484,9 @@ const P={"chM":0.31,"usM":-0.027,"pivot":0.44,"stateEstimates":[0.176,0.198,0.18
     var row=function(label,cls,rep,ref,p){return '<div class="bar"><span class="lbl">'+label+'</span><div class="trk" aria-hidden="true"><div class="fill '+cls+'" style="--w:'+(100*p/scale)+'%"></div></div><span class="num">'+p.toFixed(0)+'% <small>'+rep+' of '+ref+'</small></span></div>'};
     return '<div class="gk '+(!c.ok?'weak':(mag<1?'':(leanC?'lean-c':'lean-l')))+'">'+
       '<div class="counts"><div><span class="k">Bills referred to this committee</span><span class="v">'+ref.toLocaleString()+'</span></div>'+
-      '<div><span class="k">Formally sent forward</span><span class="v">'+rep+'</span></div>'+
+      '<div><span class="k">Sent forward (formally reported to the full Senate)</span><span class="v">'+rep+'</span></div>'+
       '<div><span class="k">Not yet sent forward</span><span class="v">'+(ref-rep).toLocaleString()+'</span></div></div>'+
-      '<p class="grouped">Grouped by the voting record of each bill\u2019s sponsor. A sponsor\u2019s political position does not necessarily tell us the ideology of the bill.</p>'+
+      '<p class="grouped">Grouped by the voting record of each bill\u2019s sponsor, the senator who introduced it. A sponsor\u2019s political position does not necessarily tell us the ideology of the bill.</p>'+
       '<div class="bars">'+row('Sponsor with a liberal record','l',c.libRep,c.libRef,c.libPct)+row('Sponsor with a conservative record','c',c.conRep,c.conRef,c.conPct)+'</div><p class="say">'+say+'</p></div>';
   }
   function floorSplit(code){
@@ -495,7 +494,7 @@ const P={"chM":0.31,"usM":-0.027,"pivot":0.44,"stateEstimates":[0.176,0.198,0.18
     if(!o) return '<div class="gk weak"><p class="say"><span class="tag weak">Not enough data yet</span> Fewer than 7 qualifying floor votes so far on bills this committee sent forward, so there is nothing to show yet.</p><p class="fine">Most floor action is on nominations and House bills that no Senate committee reported, so most committees have few qualifying votes.</p></div>';
     var weak=o.n<15;
     var sw=relWords(o.vsSen,'Senate middle');
-    return '<div class="gk'+(weak?' weak':'')+'"><p class="say"><b>Where senators divided on these votes:</b> '+sw.w+'.</p>'+
+    return '<div class="gk'+(weak?' weak':'')+'"><p class="say">On floor votes about these bills, the split between Yes and No senators fell <b>'+sw.w+'</b>.</p>'+
       '<p class="say">'+(weak?'<span class="tag weak">Early signal</span> Only '+o.n+' qualifying votes so far. That is too little for a strong conclusion.':o.n+' qualifying floor votes so far.')+'</p>'+
       '<p class="fine">This shows where the Yes and No sides split on those votes. It does not tell us whether the bill itself was liberal or conservative. On the display line the split point is at '+p100(o.coi)+', '+d100(o.vsSen)+' display-scale units from the Senate middle at '+p100(X.chMedian)+'.</p></div>';
   }
@@ -513,7 +512,7 @@ const P={"chM":0.31,"usM":-0.027,"pivot":0.44,"stateEstimates":[0.176,0.198,0.18
     $('floorsplit').innerHTML=floorSplit(code);
   }
   csel.addEventListener('change',function(){renderCommittee(csel.value)});
-  $('cmcaveat').innerHTML='Words follow one rule: “near” within '+(REL.near*50)+' display-scale units of the reference point, “somewhat” within '+(REL.somewhat*50)+', “clearly” beyond that. A committee “clearly” to one side is the position a gatekeeper would sit in; on its own that does not prove bills were pulled that way. The floor-vote figure appears only where at least 7 floor votes exist on bills the committee formally sent forward.';
+  $('cmcaveat').innerHTML='Words follow one rule: “near the Senate middle” means within '+(REL.near*50)+' display-scale units of it; otherwise the members are described as on the more liberal or the more conservative side. Where a committee sits does not, on its own, prove bills were pulled that way. The floor-vote figure appears only where at least 7 floor votes exist on bills the committee formally sent forward.';
   (function(){
     if(!G.committees||!G.committees.length)return;
     var pct=function(n,d){return d?Math.round(100*n/d):0};

@@ -41,12 +41,14 @@ What never changes without a deliberate decision:
    never buried, killed or dead. The Congress is running.
 4. **Thresholds.** Two-side bill-flow comparison only with ≥ 25 bills per sponsor
    group; floor-vote split only with ≥ 7 qualifying votes, tagged "Early signal"
-   below 15; a committee is "clearly" to one side beyond 0.15 underlying units.
+   below 15; a committee is flagged (under "More about this committee") as sitting
+   well to one side beyond 0.15 underlying units.
 5. **Words follow one rule.** Every same-scale position is described by
    `relWords` (page) / `rel_words` (`build_demo.py`): within 0.05 underlying
-   units "near the …", within 0.15 "somewhat on the more liberal/conservative
-   side of the …", beyond that "clearly …". Neutral descriptions, not grades; no
-   "most liberal", "extreme", "moderate", ranks or scores.
+   units "near the …", otherwise "on the more liberal/conservative side of
+   the …". Words give the direction, the chart shows how far, the number is
+   under details. No graded categories ("somewhat", "clearly" were removed
+   23 Sept 2026); no "most liberal", "extreme", "moderate", ranks or scores.
 6. **Meaning before numbers.** Cards lead with a ruler and a sentence.
    Coordinates appear only under "See details", introduced by the scale note
    ("a position on that line; not a percentage, a vote total, an approval rating
@@ -59,28 +61,32 @@ All seven are enforced by tests that run in the weekly job.
 
 ## What the page shows
 
-- **Your senators.** State picker; one line: "Georgia's voter estimate is somewhat
-  on the more conservative side of the national voter estimate." Each senator card:
+- **Header.** One purpose sentence: "Use this to see where your senator sits
+  within the Senate and where your state sits within the voter estimates."
+- **Your senators.** State picker; one line: "Georgia's voter estimate is on the
+  more conservative side of the national voter estimate." Each senator card:
   "Senator voting pattern, compared with the Senate middle", a ruler (MORE LIBERAL
   ← → MORE CONSERVATIVE, Senate-middle tick, senator dot), "Ossoff's voting record
-  is clearly on the more liberal side of the Senate middle.", the vote count and
-  source. One state card: "State voter estimate, compared with the national voter
-  estimate", ruler with the shaded estimated range, the sentence, "Based on the
-  American Ideology Project, 2020 wave." Between them: "These are different
-  measures and are shown separately." "Where familiar senators sit" (folded) puts
+  is on the more liberal side of the Senate middle.", the vote count and
+  source. One state card, "Estimated political position of Georgia voters":
+  "Voter estimate, compared with the national voter estimate", ruler with the
+  shaded estimated range, the sentence, "Based on the American Ideology Project,
+  2020 wave." Below them: "These are different measures and are shown separately." "Where familiar senators sit" (folded) puts
   the middle Democrat, middle Republican, Senate middle and eight named senators on
   the senators' line.
 - **The Senate.** Senate middle and 60-vote point on the senators' line ("The
-  60-vote point sits somewhat on the more conservative side of the Senate middle.
+  60-vote point sits on the more conservative side of the Senate middle.
   Many Senate actions need 60 votes to advance."); the national voter estimate on
   its own line with every state as a faint tick. Folded: why it matters (two
   senators per state; cloture named after the explanation), all 100 circles
   coloured by side of the Senate middle, the numbers.
-- **Committees.** One committee at a time, three questions: who is on it (ruler,
-  sentence), what it has sent forward (referred / formally sent forward / not yet,
-  bars grouped by sponsor record with the sponsor-is-not-bill caveat, "Limited
-  data" below 25 per group), where senators divided on its bills (sentence, sample
-  size, "Early signal" or "Not enough data yet").
+- **Committees.** "A Senate committee reviews bills before many of them can go to
+  the full Senate." One committee at a time, three questions: who is on it (ruler,
+  sentence), what it has sent forward to the full Senate (referred / sent forward,
+  "formally reported to the full Senate" / not yet, bars grouped by sponsor record
+  with the sponsor-is-not-bill caveat, "Limited data" below 25 per group), what
+  happened when those bills reached the full Senate ("the split between Yes and No
+  senators fell …", sample size, "Early signal" or "Not enough data yet").
 - **How it works.** Where the information comes from, how we compare (two lines,
   why they are shown separately), important limits, "Show the math" (raw values,
   same-scale arithmetic, sources with exact files), link to the report.
@@ -188,7 +194,9 @@ guard (104 Voteview rows for 100 seats) is in `sources/voteview.py`.
 - Weekly chain hardened: all-or-nothing snapshot, verify step, gated publish,
   content-based change detection, provenance with vintage and retrieval dates.
 - Presentation: one wording rule, words before numbers, percentage points vs
-  display-scale units, no ranking language.
+  display-scale units, no ranking language. 23 Sept: graded words dropped
+  (direction only), purpose sentence in the header, "Estimated political
+  position of <State> voters", committee questions reworded in plain English.
 
 Reference reports from earlier rounds (Gemini): Pillar 6 dual-metric framework
 https://gemini.google.com/share/b75123b297db?skid=4798bd3c-9d90-4f8a-a251-00429acbda75 ;

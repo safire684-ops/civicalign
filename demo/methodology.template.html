@@ -181,9 +181,10 @@ table.calc tr.total td{border-bottom:none;border-top:2px solid var(--ink);
   <p>The tool describes every same-scale position in words before any number, and
     the words follow one rule. Take the difference between a position and its
     reference point on the underlying scale: within {{rel_near_raw}} ({{rel_near}} display-scale
-    units) the position is <b>"near"</b> the reference; within {{rel_somewhat_raw}} ({{rel_somewhat}}
-    units) it is <b>"somewhat"</b> on the more liberal or more conservative side; beyond
-    that it is <b>"clearly"</b> on that side. The same rule is used for a senator
+    units) the position is <b>"near"</b> the reference; beyond that it is <b>"on the
+    more liberal side"</b> or <b>"on the more conservative side"</b> of the reference.
+    The words give the direction; the chart shows how far, and the exact distance is
+    under "See details". The same rule is used for a senator
     against the Senate middle, a state's estimate against the national voter estimate,
     a committee's members against the Senate middle, and the 60-vote point. They are
     neutral descriptions of relative position, not grades; no senator is ranked.</p>
@@ -225,7 +226,7 @@ table.calc tr.total td{border-bottom:none;border-top:2px solid var(--ink);
   <p>Each committee is measured against the Senate's middle (<b>{{ch_m}}</b>). Both
     sides of that comparison come from Voteview, so it is stated in points.</p>
   <p><b>Where the members sit.</b> The midpoint of the committee's members on the same
-    scale. A midpoint more than 7.5 display-scale units (0.15 underlying) from the Senate's middle is described as "clearly" to one side, the position of a
+    scale. A midpoint more than 7.5 display-scale units (0.15 underlying) from the Senate's middle is flagged, under "More about this committee", as sitting well to one side: the position of a
     gatekeeper. This number is soft: on a committee split between two parties the
     midpoint can fall in the gap between them, and it can move sharply when one member
     is replaced. The last column says how far.</p>
