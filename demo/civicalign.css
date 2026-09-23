@@ -348,6 +348,7 @@ select:focus-visible,button:focus-visible,summary:focus-visible{
 .bar .num{font-variant-numeric:tabular-nums;white-space:nowrap;font-weight:600}
 .bar .num small{font-weight:400;color:var(--muted);font-size:12.5px}
 .gk .say{margin-top:12px;font-size:15px;max-width:54ch}
+.gk .fine{margin-top:10px;font-size:12.5px;color:var(--muted);max-width:62ch}
 .caveat{margin-top:16px;font-size:14px;color:var(--muted);max-width:60ch;
   border-left:3px solid var(--rule);padding-left:14px}
 .stakes{margin-top:0;background:var(--alert-soft);border:1px solid var(--alert);
@@ -375,6 +376,8 @@ select:focus-visible,button:focus-visible,summary:focus-visible{
 .plain div{background:var(--calm-soft);border-left:3px solid var(--calm);padding:14px 16px}
 .plain b{display:block;font-size:15px}
 .plain span{color:var(--muted);font-size:14.5px}
+.report-link{margin-top:18px;font-size:15px}
+.report-link a{color:var(--alert);font-weight:600}
 .work{margin-top:20px;background:var(--surface);border:1px solid var(--rule);
   padding:18px 20px;overflow-x:auto}
 .work h3{font-family:var(--sans);font-size:13px;font-weight:700;letter-spacing:.06em;

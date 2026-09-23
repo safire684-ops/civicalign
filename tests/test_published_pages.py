@@ -42,10 +42,11 @@ def test_demo_bill_survival_is_current(report):
         pytest.skip("bill flow archive not downloaded")
     G = _block("G")
     assert G["baseline"] == pytest.approx(report.gatekeeping_baseline, abs=0.05)
-    live = {g.code: g for g in report.gatekeeping if g.is_reportable}
-    assert {c["code"] for c in G["committees"]} == set(live)
+    live = {g.code: g for g in report.gatekeeping if g.referred > 0}
+    assert {c["code"] for c in G["committees"]} == set(live), "every committee with referrals is listed"
     for c in G["committees"]:
         g = live[c["code"]]
+        assert c["ok"] == g.is_reportable
         assert (c["libRep"], c["libRef"]) == (g.lib_reported, g.lib_referred)
         assert (c["conRep"], c["conRef"]) == (g.con_reported, g.con_referred)
         assert c["vsBase"] == pytest.approx(g.gbi_vs_baseline, abs=0.05)
@@ -238,7 +239,7 @@ def test_no_smooth_scroll_or_hover_animation():
 def test_existing_measures_and_thresholds_are_preserved():
     text = DEMO.read_text()
     assert "var thr=0.15;" in text
-    assert "Warning: This committee acts as a " in text
+    assert "That is where a '+(right?'conservative':'liberal')+' gatekeeper would sit" in text
     assert "Where the Senate split on its bills:" in text
     assert "Too close to tell apart" in text and "points further" in text
 
@@ -343,12 +344,12 @@ def test_every_drawn_track_is_hidden_from_screen_readers_and_described_in_text()
         assert track in text, f"{track} missing"
     # one spoken description per chart type, each built from the real numbers
     assert "'<p class=\"sr-only\">'+said+'</p>'" in text
-    assert "signed(st.center)" in text.split("var said=")[1].split(";")[0]
-    assert "signed(s.record)" in text.split("var said=")[1].split(";")[0]
-    assert "the middle of the Senate at '+signed(P.chM)" in text
-    assert "60th vote from the left at '+signed(P.pivot)" in text
-    assert "members\\u2019 midpoint at '+signed(c.median)" in text
-    assert "Positions on the scale, from most liberal to most conservative" in text
+    assert "p100(st.center)" in text.split("var said=")[1].split(";")[0]
+    assert "p100(s.record)" in text.split("var said=")[1].split(";")[0]
+    assert "the middle of the Senate at '+p100(P.chM)" in text
+    assert "60th vote from the left at '+p100(P.pivot)" in text
+    assert "members\\u2019 midpoint at '+p100(c.median)" in text
+    assert "Positions on the 0-to-100 scale, from most liberal to most conservative" in text
 
 
 def test_alignment_badge_carries_an_icon_and_does_not_rely_on_green():
@@ -381,8 +382,8 @@ def test_each_card_explains_how_far_where_and_what_the_numbers_are_made_of():
     for fn in ("function howFar(", "function wherePut(", "function madeOf(", "function nearestPair(",
                "function partyPlace(", "function statePlace("):
         assert fn in text, fn
-    assert "How far is '+gap.toFixed(2)+' points?" in text
-    assert "Math.round(gap/2*100)" in text, "gap as a share of the whole 2-point scale"
+    assert "How far is '+d100(gap)+' points?" in text
+    assert "On a 0-to-100 scale where 50 is the middle" in text
     assert "C.medianGap" in text.split("function howFar(")[1].split("function wherePut(")[0], "compared with the typical senator"
     assert "of the 100 senators" in text and "of the other '+others+' states" in text
     assert "roll-call votes</b> they have cast this Congress" in text
@@ -465,3 +466,48 @@ def test_band_label_does_not_overstate_one_standard_error():
     assert "not the same as agree" in t
     r = REPORT.read_text()
     assert "Too close to tell apart" in r and "one standard error" in r and "not 95%" in r
+
+
+# ---- the reader's scale is 0 to 100 with 50 in the middle; the maths is unchanged ----
+
+def test_page_displays_the_0_to_100_scale_but_keeps_raw_data(report):
+    text = DEMO.read_text()
+    assert "var p100=function(v){return Math.round(v*50+50)}" in text
+    assert "var d100=function(v){return Math.round(Math.abs(v)*50)}" in text
+    prose = _prose(text if False else DEMO)
+    assert "0 (most liberal) to 100 (most conservative), with 50 in the middle" in prose
+    assert "&minus;1 (most liberal)" not in prose
+    assert "0 &nbsp;← More liberal" in prose and "More conservative →&nbsp; 100" in prose
+    # the data blocks still carry the raw -1..+1 figures, unchanged
+    M = _block("M")
+    assert M["chM"] == pytest.approx(report.chamber.median, abs=1e-4)
+    assert -1 <= M["chM"] <= 1
+    # the arithmetic section shows both
+    assert "Shown on the 0–100 scale" in text and "signed(s.record,3)" in text
+    assert 'href="methodology.html"' in text
+
+
+def test_report_uses_the_0_to_100_scale_with_raw_beside_it(report):
+    r = REPORT.read_text()
+    os_ = next(a for a in report.alignments if a.bioguide == "O000174")
+    assert "The scale you see is 0 to 100." in r
+    assert f'<td class="n">{os_.senator_coord * 50 + 50:.1f}</td>' in r
+    assert f'<td class="n">{os_.state_coord * 50 + 50:.1f}</td>' in r
+    assert f"raw score {'+' if os_.senator_coord >= 0 else '&minus;'}{abs(os_.senator_coord):.3f}" in r
+    assert f"{abs(os_.abs_gap) * 50:.0f} points further" in r
+    assert f"<b>{report.chamber.median * 50 + 50:.1f}</b>" in r
+    assert f"<b>{abs(report.chamber.apportionment_skew) * 50:.1f} points</b>" in r
+    assert "more than 7.5 points" in r
+
+
+def test_small_committees_show_counts_without_a_verdict():
+    text = DEMO.read_text()
+    assert "Too few bills from one side to compare the two fairly" in text
+    assert "Not shown for this committee" not in text
+    assert "formally reported the bill to the full Senate" in text
+    assert "House bills sent to Senate committees are not counted" in text
+    G = _block("G")
+    assert G["asOf"], "the bill-status download date must be shown"
+    assert any(not c["ok"] for c in G["committees"]), "small committees are listed too"
+    r = REPORT.read_text()
+    assert "What is counted, exactly." in r and G["asOf"] in r

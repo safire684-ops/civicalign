@@ -99,15 +99,20 @@ table.calc tr.total td{border-bottom:none;border-top:2px solid var(--ink);
     votes. So when the tool puts the two on one line and subtracts, the result is a
     <b>rough comparison</b>, good for direction and rough size, not a precise
     measurement. Every distance on the tool should be read that way.</p>
-  <p>Everything sits on one line running from &minus;1.0 (most liberal) to +1.0
-    (most conservative). Senators and state publics both land somewhere on it. Then
-    subtraction is allowed.</p>
+  <p><b>The scale you see is 0 to 100.</b> 0 is most liberal, 100 most conservative,
+    50 the middle. Senators and state publics both land somewhere on it, and the
+    distance between two points is just the difference in their numbers. Under the
+    hood the researchers' numbers run from &minus;1 to +1; we show the same line
+    rescaled (position &times; 50 + 50, so a distance of 0.10 becomes 5 points)
+    because 0 to 100 is easier to read. The raw numbers are in the tool under "See
+    details: the arithmetic".</p>
 </section>
 
 <section>
   <h2>Where the numbers come from</h2>
-  <p>Four public datasets, all free to download. Nothing here is proprietary and
-    nothing is estimated by us.</p>
+  <p>Six public datasets, all free to download. Nothing here is proprietary. The
+    only arithmetic is ours: medians, population-weighted averages, counts and
+    distances, all shown in full further down.</p>
   <div class="tw"><table>
     <tr><th>What</th><th>Source</th><th>Exactly which numbers</th></tr>
     <tr><td>Senator positions</td>
@@ -123,6 +128,12 @@ table.calc tr.total td{border-bottom:none;border-top:2px solid var(--ink);
     <tr><td>State populations</td>
         <td><a href="https://www2.census.gov/programs-surveys/popest/datasets/2020-2024/state/totals/">US Census Bureau</a>, vintage 2024</td>
         <td>Used to weight states when averaging the country</td></tr>
+    <tr><td>Committee rosters</td>
+        <td><a href="https://unitedstates.github.io/congress-legislators/">congress-legislators</a></td>
+        <td>Current membership of each Senate committee</td></tr>
+    <tr><td>Bills and committee actions</td>
+        <td><a href="https://www.govinfo.gov/bulkdata/BILLSTATUS/119/">GovInfo bulk data</a>, Government Publishing Office</td>
+        <td>Every bill's sponsor, the committees it went to, and whether each reported it</td></tr>
   </table></div>
   <p>Two details that sound small and are not. We use the per-Congress version of the
     senator score, because the better-known version is a single number fixed for a
@@ -138,17 +149,17 @@ table.calc tr.total td{border-bottom:none;border-top:2px solid var(--ink);
   <h3>1. A senator against their own state</h3>
   <p>Subtract the two positions. Jon Ossoff of Georgia, worked through:</p>
   <div class="tw"><table class="calc">
-    <tr><td>Ossoff's voting record</td><td class="n">{{os_x}}</td></tr>
-    <tr><td>Georgia voters</td><td class="n">{{os_s}}</td></tr>
-    <tr class="total"><td>Distance between them</td><td class="n">{{os_gap}}</td></tr>
-    <tr class="total"><td>Signed distance<br><span class="sm">senator minus state</span></td><td class="n">{{os_signed}}</td></tr>
+    <tr><td>Ossoff's voting record<br><span class="sm">raw score {{os_x_raw}}</span></td><td class="n">{{os_x}}</td></tr>
+    <tr><td>Georgia voters<br><span class="sm">raw score {{os_s_raw}}</span></td><td class="n">{{os_s}}</td></tr>
+    <tr class="total"><td>Distance between them<br><span class="sm">raw {{os_gap_raw}}</span></td><td class="n">{{os_gap}} points</td></tr>
+    <tr class="total"><td>Signed distance<br><span class="sm">senator minus state</span></td><td class="n">{{os_signed}} points</td></tr>
   </table></div>
-  <p>The tool reports that distance directly, as "{{os_gap}} points further Left than
-    the state average". An earlier version turned it into a percentage; that was
+  <p>The tool reports that distance directly, rounded, as "{{os_gap_label}} points further
+    Left than the state average". An earlier version turned it into a percentage; that was
     dropped because readers took it for a share of votes, which it never was.</p>
   <p>A distance smaller than the state estimate's own uncertainty is reported as
     <b>Too close to tell apart</b> rather than as a gap. That band is one standard
-    error of the state estimate, about &plusmn;0.04. It is a modest bar: a one-standard-error
+    error of the state estimate, about &plusmn;2 points. It is a modest bar: a one-standard-error
     band covers roughly two thirds of the likely values, not 95%, and the senator
     score's own error is not published, so it is not included. "Too close to tell
     apart" therefore means the survey cannot separate the two positions. It does
@@ -163,11 +174,11 @@ table.calc tr.total td{border-bottom:none;border-top:2px solid var(--ink);
     opposite side of centre from their own state, which is the more striking finding.</p>
 
   <h3>Perspective: what a distance like that means</h3>
-  <p>A position like +0.3 means nothing on its own, so the tool puts landmarks on
+  <p>A position like 65 means nothing on its own, so the tool puts landmarks on
     the same line: the middle Democrat (<b>{{dem_m}}</b>), the middle Republican
     (<b>{{rep_m}}</b>), the Senate's middle, the American public, and eight familiar
     senators at their real positions. A gap is also expressed as a share of the whole
-    scale (Ossoff's {{os_gap}} is about {{os_pct}}% of it), as the distance between the
+    scale (Ossoff's {{os_gap}} points out of 100), as the distance between the
     two named senators who sit that far apart, and against the typical senator's
     distance from their own state.</p>
 {{anchor_table}}
@@ -182,7 +193,7 @@ table.calc tr.total td{border-bottom:none;border-top:2px solid var(--ink);
   <h3>2. The Senate against the country</h3>
   <p>Same idea, one level up. The middle senator sits at <b>{{ch_m}}</b>. The American
     public, averaging all states weighted by population, sits at <b>{{us_m}}</b>.
-    The gap is <b>{{d_us}}</b>.</p>
+    The gap is <b>{{d_us}} points</b>.</p>
   <p>The tool also shows all 100 senators as one row of circles, each coloured by
     how far the senator sits from the public: <b>{{n_right}}</b> of them sit to the
     public's right. The 60th senator from the left &mdash; the vote that decides
@@ -195,7 +206,7 @@ table.calc tr.total td{border-bottom:none;border-top:2px solid var(--ink);
   <p>Each committee is measured two ways, both against the Senate's middle
     (<b>{{ch_m}}</b>) and against the public (<b>{{us_m}}</b>).</p>
   <p><b>Where the members sit.</b> The midpoint of the committee's members on the same
-    scale. A midpoint more than 0.15 from the Senate's middle is flagged as a
+    scale. A midpoint more than 7.5 points from the Senate's middle is flagged as a
     gatekeeper. This number is soft: on a committee split between two parties the
     midpoint can fall in the gap between them, and it can move sharply when one member
     is replaced. The last column says how far.</p>
@@ -235,9 +246,18 @@ table.calc tr.total td{border-bottom:none;border-top:2px solid var(--ink);
 
   <p>The committees furthest from the Senate-wide pattern:</p>
 {{gk_table}}
-  <p>Committees with fewer than 25 bills from either side are left out, because
-    there a single bill moves the percentage by several points. {{gk_n_reportable}} of the
-    committees have enough bills to report.</p>
+  <p>Every committee's counts are shown on the tool, but the two sides are only
+    <em>compared</em> where each side has at least 25 bills, because below that a
+    single bill moves the percentage by several points. {{gk_n_reportable}} of the
+    committees clear that bar.</p>
+  <p><b>What is counted, exactly.</b> Senate bills written by current senators, as
+    recorded in the government's bill-status files downloaded on {{gk_asof}}. "Sent on"
+    means the committee formally reported the bill to the full Senate. A bill approved
+    at a markup meeting but not yet formally reported does not count yet, and House
+    bills sent to Senate committees are not counted, because their authors have no
+    Senate voting record to place them by. So these counts can run below a committee's
+    own tally of bills it has "advanced"; they can be checked bill by bill on
+    Congress.gov.</p>
   <p><b>Why three measures.</b> Members tell you who sits there; the split on its
     bills tells you how the Senate divided over what it sent on; the rates tell you
     what it has and has not sent on so far. Each has a weakness the others do not, so
@@ -261,10 +281,10 @@ table.calc tr.total td{border-bottom:none;border-top:2px solid var(--ink);
       distance as a rough comparison: the direction and the rough size are informative,
       the second decimal is not.</dd>
     <dt>The state figures are estimates.</dt>
-    <dd>They carry one standard error of about 0.04, which varies a little by state and
+    <dd>They carry one standard error of about 2 points, which varies a little by state and
       is drawn on the tool as a dashed band around the state's mark. One standard error
       is a modest band, covering roughly two thirds of the likely values. It is small
-      next to gaps of 0.6 or 0.9, but it is not zero. The senator scores have their own
+      next to gaps of 30 or 45 points, but it is not zero. The senator scores have their own
       error too, which Voteview does not publish, so we cannot carry it through &mdash;
       that is the largest remaining hole in the method.</dd>
     <dt>The survey data lags.</dt>

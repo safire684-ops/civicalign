@@ -94,7 +94,7 @@ def run(cfg: Config = DEFAULT) -> Report:
     if cfg.billflow_zip.exists():
         refs = billflow.load_referrals(cfg.billflow_zip)
         gks, gk_base = gatekeeping(refs, scores)
-        scored_refs = [x for x in refs if x.sponsor in scores]
+        scored_refs = [x for x in refs if x.sponsor in scores and x.committee.startswith("S")]
         n_bills = len({x.bill for x in scored_refs})
         n_reported = len({x.bill for x in scored_refs if x.reported})
 

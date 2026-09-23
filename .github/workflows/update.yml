@@ -57,6 +57,11 @@ jobs:
       - name: 4/4 Confirm the rebuilt pages
         run: python -m pytest -q tests/test_published_pages.py
 
+      - name: 5/5 Supervisor -- independent recount of every published figure
+        # Separate code re-reads the raw files and recomputes each figure the
+        # pages show. Any disagreement stops the publish.
+        run: PYTHONPATH=src python -m civicalign.agents.supervisor
+
       - name: Check the hand-written whitepaper (warns, never blocks)
         # WHITEPAPER.md is prose a person wrote. If its figures have moved it
         # needs a person, but a stale essay is no reason to hold back a correct,

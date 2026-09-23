@@ -34,6 +34,21 @@ def _signed(v: float, places: int = 3) -> str:
     return ("+" if v >= 0 else "&minus;") + text
 
 
+def _p100(v: float, places: int = 1) -> str:
+    """A position on the reader's 0-100 scale: score * 50 + 50."""
+    return f"{v * 50 + 50:.{places}f}"
+
+
+def _d100(v: float, places: int = 1) -> str:
+    """A distance on the reader's 0-100 scale: raw distance * 50, unsigned."""
+    return f"{abs(v) * 50:.{places}f}"
+
+
+def _sd100(v: float, places: int = 1) -> str:
+    """A signed distance on the 0-100 scale, with the report's minus sign."""
+    return ("+" if v >= 0 else "&minus;") + _d100(v, places)
+
+
 def _report_values(r: Report) -> dict[str, str]:
     from datetime import date
 
@@ -79,9 +94,9 @@ def _report_values(r: Report) -> dict[str, str]:
            '<th class="n">Their state</th><th class="n">Gap</th></tr>\n'
            + "".join(
                f'    <tr><td>{a.name}</td><td>{a.state}</td>'
-               f'<td class="n">{_signed(a.senator_coord)}</td>'
-               f'<td class="n">{_signed(a.state_coord)}</td>'
-               f'<td class="n">{a.abs_gap:.3f}</td></tr>\n'
+               f'<td class="n">{_p100(a.senator_coord)}</td>'
+               f'<td class="n">{_p100(a.state_coord)}</td>'
+               f'<td class="n">{_d100(a.abs_gap)}</td></tr>\n'
                for a in sorted(scored, key=lambda a: -a.abs_gap)[:5])
            + '  </table></div>')
 
@@ -99,10 +114,10 @@ def _report_values(r: Report) -> dict[str, str]:
     rep_m = st.median([v for b, v in r.scores.items() if r.senators[b].party == "Republican"])
     anchor_table = ('  <div class="tw"><table>\n'
                     '    <tr><th>Landmark</th><th class="n">Position</th></tr>\n'
-                    + "".join(f'    <tr><td>{r.senators[b].name}</td><td class="n">{_signed(r.scores[b])}</td></tr>\n'
+                    + "".join(f'    <tr><td>{r.senators[b].name}</td><td class="n">{_p100(r.scores[b], 0)}</td></tr>\n'
                               for b in ANCHOR_NAMES if b in r.scores)
-                    + f'    <tr><td>Middle Democrat</td><td class="n">{_signed(dem_m)}</td></tr>\n'
-                    + f'    <tr><td>Middle Republican</td><td class="n">{_signed(rep_m)}</td></tr>\n'
+                    + f'    <tr><td>Middle Democrat</td><td class="n">{_p100(dem_m, 0)}</td></tr>\n'
+                    + f'    <tr><td>Middle Republican</td><td class="n">{_p100(rep_m, 0)}</td></tr>\n'
                     + '  </table></div>')
 
     oi = [o for o in r.output_ideology if o.is_reportable]
@@ -110,8 +125,8 @@ def _report_values(r: Report) -> dict[str, str]:
                 '    <tr><th>Committee</th><th class="n">Floor votes on its bills</th>'
                 '<th class="n">Where they divided the Senate</th><th class="n">vs. Senate middle</th><th class="n">vs. public</th></tr>\n'
                 + "".join(f'    <tr><td>{COMMITTEE_NAMES.get(o.code, o.code)}</td><td class="n">{o.n_votes}</td>'
-                          f'<td class="n">{_signed(o.coi)}</td><td class="n">{_signed(o.vs_senate)}</td>'
-                          f'<td class="n">{_signed(o.vs_public) if o.vs_public is not None else "&mdash;"}</td></tr>\n'
+                          f'<td class="n">{_p100(o.coi)}</td><td class="n">{_sd100(o.vs_senate)}</td>'
+                          f'<td class="n">{_sd100(o.vs_public) if o.vs_public is not None else "&mdash;"}</td></tr>\n'
                           for o in oi)
                 + '  </table></div>')
 
@@ -119,24 +134,26 @@ def _report_values(r: Report) -> dict[str, str]:
     cnd_table = ('  <div class="tw"><table>\n'
                  '    <tr><th>Committee</th><th class="n">Members\' midpoint</th><th class="n">vs. Senate middle</th>'
                  '<th class="n">vs. public</th><th class="n">Moves if one member changes</th></tr>\n'
-                 + "".join(f'    <tr><td>{COMMITTEE_NAMES.get(c.code, c.code)}</td><td class="n">{_signed(c.median)}</td>'
-                           f'<td class="n">{_signed(c.median - r.chamber.median)}</td>'
-                           f'<td class="n">{_signed(c.cnd) if c.cnd is not None else "&mdash;"}</td>'
-                           f'<td class="n">{c.stability.worst_shift:.2f}</td></tr>\n' for c in cm)
+                 + "".join(f'    <tr><td>{COMMITTEE_NAMES.get(c.code, c.code)}</td><td class="n">{_p100(c.median)}</td>'
+                           f'<td class="n">{_sd100(c.median - r.chamber.median)}</td>'
+                           f'<td class="n">{_sd100(c.cnd) if c.cnd is not None else "&mdash;"}</td>'
+                           f'<td class="n">{_d100(c.stability.worst_shift)}</td></tr>\n' for c in cm)
                  + '  </table></div>')
     return {
         "asof": f"{d.day} {d.strftime('%B %Y')}",
-        "os_x": _signed(os_.senator_coord), "os_s": _signed(os_.state_coord),
-        "os_gap": f"{os_.abs_gap:.3f}", "os_as": f"{os_.spec_score:.1f}",
+        "os_x": _p100(os_.senator_coord), "os_s": _p100(os_.state_coord),
+        "os_x_raw": _signed(os_.senator_coord), "os_s_raw": _signed(os_.state_coord),
+        "os_gap_raw": f"{os_.abs_gap:.3f}", "os_gap_label": _d100(os_.abs_gap, 0),
+        "os_gap": _d100(os_.abs_gap), "os_as": f"{os_.spec_score:.1f}",
         "os_as_int": str(int(os_.spec_score)),
         "med_as": f"{st.median([a.spec_score for a in scored]):.1f}",
         "more_cons": str(sum(1 for a in scored if a.signed_gap > 0)),
         "more_lib": str(sum(1 for a in scored if a.signed_gap < 0)),
         "cross_word": NUMBER_WORDS[cross] if cross < len(NUMBER_WORDS) else str(cross),
         "top_table": top,
-        "ch_m": _signed(r.chamber.median),
-        "us_m": _signed(r.chamber.national_coord),
-        "d_us": _signed(r.chamber.apportionment_skew),
+        "ch_m": _p100(r.chamber.median),
+        "us_m": _p100(r.chamber.national_coord),
+        "d_us": _d100(r.chamber.apportionment_skew),
         "gk_referrals": f"{ref:,}",
         "gk_referred": f"{r.bills_referred_unique:,}", "gk_reported": str(r.bills_reported_unique),
         "gk_pct": str(round(100 * r.bills_reported_unique / r.bills_referred_unique)) if r.bills_referred_unique else "0",
@@ -144,16 +161,17 @@ def _report_values(r: Report) -> dict[str, str]:
         "gk_worst_rep": str(worst.reported), "gk_worst_ref": str(worst.referred),
         "gk_base": f"{r.gatekeeping_baseline:.1f}",
         "gk_n_reportable": NUMBER_WORDS[len(rows)] if len(rows) < len(NUMBER_WORDS) else str(len(rows)),
+        "gk_asof": _billflow_asof(r.config) or "the last data refresh",
         "gk_worked": worked, "gk_table": table,
-        "med_gap": f"{st.median([a.abs_gap for a in scored]):.2f}",
-        "os_signed": _signed(os_.signed_gap),
-        "dem_m": _signed(dem_m), "rep_m": _signed(rep_m), "anchor_table": anchor_table,
+        "med_gap": _d100(st.median([a.abs_gap for a in scored]), 0),
+        "os_signed": _sd100(os_.signed_gap),
+        "dem_m": _p100(dem_m, 0), "rep_m": _p100(rep_m, 0), "anchor_table": anchor_table,
         "os_votes": str(r.votes_cast.get("O000174", 0)),
         "os_pct": str(round(os_.abs_gap / 2 * 100)),
         "oi_table": oi_table, "oi_count": str(len(oi)),
         "cnd_table": cnd_table,
         "n_right": str(sum(1 for a in scored if a.senator_coord > r.chamber.national_coord)),
-        "pivot": _signed(r.chamber.pivot),
+        "pivot": _p100(r.chamber.pivot),
     }
 
 
@@ -313,7 +331,7 @@ def _blocks(r: Report, cfg: Config) -> dict[str, dict]:
                   key=lambda d: -abs(d["drift"])),
               "popSource": getattr(r.state_source, "population_source", ""),
               "popYear": cfg.population_year},
-        "G": _gatekeeping_block(r),
+        "G": _gatekeeping_block(r, cfg),
         "P": _public_block(r, cfg),
         "C": {"medianScore": round(st.median([a.spec_score for a in scored]), 1),
               "medianGap": round(st.median([a.abs_gap for a in scored]), 3),
@@ -350,8 +368,27 @@ def _public_block(r: Report, cfg: Config) -> dict:
     }
 
 
-def _gatekeeping_block(r: Report) -> dict:
+def _billflow_asof(cfg: Config) -> str:
+    """Date the Senate bill-status archive was downloaded, from the provenance log."""
+    prov = cfg.raw_dir / "PROVENANCE.tsv"
+    if not prov.exists():
+        return ""
+    stamp = ""
+    for line in prov.read_text().splitlines():
+        parts = line.split("\t")
+        if len(parts) >= 2 and parts[1] == cfg.billflow_zip.name:
+            stamp = parts[0]
+    if not stamp:
+        return ""
+    from datetime import datetime
+    d = datetime.strptime(stamp[:10], "%Y-%m-%d")
+    return f"{d.day} {d.strftime('%B %Y')}"
+
+
+def _gatekeeping_block(r: Report, cfg: Config = DEFAULT) -> dict:
     """Pillar 6 by behaviour: which bills each committee has sent on so far.
+    Every committee with referrals is listed with its counts; `ok` says whether
+    both sides have at least 25 bills, the bar for comparing the two sides.
     totalReferred counts referrals (a bill sent to two committees counts twice);
     uniqueBills counts distinct bills."""
     rows = [g for g in r.gatekeeping if g.is_reportable]
@@ -365,6 +402,7 @@ def _gatekeeping_block(r: Report) -> dict:
         "totalReported": total_rep,
         "uniqueBills": r.bills_referred_unique,
         "uniqueReported": r.bills_reported_unique,
+        "asOf": _billflow_asof(cfg),
         "worst": ({"name": COMMITTEE_NAMES.get(worst.code, worst.code),
                    "reported": worst.reported, "referred": worst.referred}
                   if worst else None),
@@ -374,8 +412,10 @@ def _gatekeeping_block(r: Report) -> dict:
              "conRef": g.con_referred, "conRep": g.con_reported,
              "libPct": round(g.survival_liberal, 1),
              "conPct": round(g.survival_conservative, 1),
-             "gap": round(g.gbi, 1), "vsBase": round(g.gbi_vs_baseline, 1)}
-            for g in sorted(rows, key=lambda g: -abs(g.gbi_vs_baseline))
+             "vsBase": round(g.gbi_vs_baseline, 1),
+             "ok": g.is_reportable}
+            for g in sorted(r.gatekeeping, key=lambda g: (-g.is_reportable, -abs(g.gbi_vs_baseline)))
+            if g.referred > 0
         ],
     }
 

@@ -5,6 +5,26 @@ sections 2–5). Pillars 1–3 and 7 belong to someone else.
 
 ## Status in one line
 
+Reader scale is now 0 to 100 (22 September 2026, published): every displayed
+position is score × 50 + 50 and every distance × 50; the data blocks and the
+pipeline stay on −1 to +1, and the arithmetic section shows both. The report shows
+0–100 with raw values beside the worked example.
+
+Supervisor agent added (`src/civicalign/agents/supervisor.py`, step 5/5 in
+`scripts/update.sh` and the workflow): separate code re-reads the raw files and
+recomputes 19 published figures (scores, medians, 60th vote, state estimates,
+national public, every committee's counts, distinct-bill totals, page blocks,
+party middles, anchors, summary counts). Any disagreement fails the update.
+`tests/test_supervisor.py` also proves it catches a sabotaged page figure.
+
+Accuracy fixes found in review: referrals of Senate bills to House committees
+(7 rows) no longer count toward Senate totals; every committee's counts are shown
+with the two-side comparison withheld below 25 per side; the page states exactly
+what "sent on" counts (formally reported; markups not yet reported and House bills
+excluded) with the data date; two causal phrasings softened (gatekeeper warning,
+"structural veto"); the report's source list now names all six datasets and no
+longer says "nothing is estimated by us".
+
 Five methodology concerns fixed in wording and counts (22 September 2026,
 published): (1) the page and report no longer claim the survey and senator scales
 are the same; they say the two rulers were built separately and every distance is a

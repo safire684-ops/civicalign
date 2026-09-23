@@ -39,6 +39,10 @@ echo
 echo "4/4  confirming the rebuilt pages"
 $PY -m pytest -q tests/test_published_pages.py || exit 4
 
+echo
+echo "5/5  supervisor: independent recount of every published figure"
+PYTHONPATH=src $PY -m civicalign.agents.supervisor || exit 5
+
 if ! $PY -m pytest -q tests/test_whitepaper.py >/dev/null 2>&1; then
   echo
   echo "  note: WHITEPAPER.md quotes figures that have moved. The pages are"

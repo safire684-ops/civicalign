@@ -146,9 +146,9 @@ to count what they did. Every Senate bill of the 119th Congress is in the
 government's own bulk release, with its author and every committee it was sent to.
 Each bill takes the side of the senator who wrote it.
 
-Being sent on is rare so far: of 5,333 distinct bills sent to a committee (5,368
-referrals, since some bills go to two committees), 421 have been sent on to the
-floor. The Finance Committee has sent on 1 of 872. A bill not yet sent on is
+Being sent on is rare so far: of 5,333 distinct bills sent to a Senate committee
+(5,362 referrals, since some bills go to two committees), 421 have been sent on to
+the floor. The Finance Committee has sent on 1 of 872. A bill not yet sent on is
 counted as pending, not dead; the Congress is still running.
 
 Across the whole Senate, bills by conservative senators get through 2.4 percentage

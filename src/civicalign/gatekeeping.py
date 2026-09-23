@@ -73,6 +73,8 @@ def gatekeeping(referrals: list[BillReferral],
     tot = {"lib_r": 0, "lib_p": 0, "con_r": 0, "con_p": 0}
 
     for ref in referrals:
+        if not ref.committee.startswith("S"):
+            continue  # a Senate bill occasionally goes to a House committee; not the Senate's gate
         x = scores.get(ref.sponsor)
         if x is None:
             continue  # House sponsor, or a senator held back by the vote threshold
