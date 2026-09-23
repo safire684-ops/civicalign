@@ -12,7 +12,7 @@ in step.
 - Repo: https://github.com/safire684-ops/civicalign (branch `main`; the weekly
   job commits as `civicalign-bot`)
 - Claude.ai copy (manual republish, stylesheet inlined, does not update itself):
-  https://claude.ai/artifact/Ft6hU6XZUnWHPhZwzwmzaj (version 26)
+  https://claude.ai/artifact/Ft6hU6XZUnWHPhZwzwmzaj (version 27)
 - Shared doc (hand-mirrored, methodology only):
   https://claude.ai/code/artifact/683a9e36-3046-4827-a7af-7442b49ef7e3
 
@@ -92,8 +92,10 @@ All seven are enforced by tests that run in the weekly job.
   the Senate middle. (i)" / "Why 60? Under Senate rules, ending debate on most
   legislation generally requires three-fifths of senators: 60 votes when all 100
   seats are filled."); the state estimates on the VOTER ESTIMATE SCALE with every
-  state as a faint tick. Folded: why it matters (two senators per state; "not
-  every bill does"; "This procedure for ending debate is called cloture"), all
+  state as a faint tick. Folded: why it matters (two senators per state; "For
+  most legislation, ending debate generally requires three-fifths of the Senate …
+  Final passage itself usually requires a simple majority." then "This procedure
+  for ending debate is called cloture"), all
   100 circles, the numbers.
 - **Committees.** "Senate committees review bills before many of them can go to
   the full Senate." then a four-step flow (a bill is introduced → sent to a
