@@ -1,243 +1,199 @@
 # Project handoff — CivicAlign, Pillars 4–6
 
-Updated 22 September 2026. Scope is **Pillars 4, 5 and 6 only** (math-spec
-sections 2–5). Pillars 1–3 and 7 belong to someone else.
+Updated 23 September 2026. Scope is **Pillars 4, 5 and 6 only** (math-spec
+sections 2–5). Pillars 1–3 and 7 belong to someone else. Everything described
+here is published and the repository, the live site and the claude.ai copy are
+in step.
+
+## Where things are
+
+- Live site: https://safire684-ops.github.io/civicalign/ (senator page:
+  `/senator-check.html`, methodology report: `/methodology.html`)
+- Repo: https://github.com/safire684-ops/civicalign (branch `main`; the weekly
+  job commits as `civicalign-bot`)
+- Claude.ai copy (manual republish, stylesheet inlined, does not update itself):
+  https://claude.ai/artifact/Ft6hU6XZUnWHPhZwzwmzaj (version 23)
+- Shared doc (hand-mirrored, methodology only):
+  https://claude.ai/code/artifact/683a9e36-3046-4827-a7af-7442b49ef7e3
 
 ## The contract, and what moves
 
 **The methodology contract is stable, but the data is dynamic. CivicAlign
 rebuilds from current source data every week. Numerical figures, rosters, bill
 counts and valid same-scale conclusions are expected to change.** The project is
-not frozen. What never changes without a deliberate decision: no comparison across
-the Voteview and survey scales, no bill ideology from cutpoints or sponsors, no
-"dead" bills, the sample-size thresholds, and the four-view interface.
+not frozen.
 
-Weekly chain (`.github/workflows/update.yml`, mirrored by `scripts/update.sh`):
-fetch every source as one snapshot (all critical sources succeed or nothing is
-installed and the job fails) → verify roster, join keys and record counts → data
-tests → rebuild → public-claim tests → supervisor → commit only if the pages or
-provenance changed → publish only if every gate passed. A failure leaves the
-previously verified site live. `data/raw/SNAPSHOT.json` records each source's
-URL, bytes, hash, content key, whether its content changed, when it last changed
-and when it was last checked; `PROVENANCE.tsv` logs each content change.
+What never changes without a deliberate decision:
 
-## Status in one line
+1. **No comparison across the two scales.** A senator's score (Voteview,
+   Nokken-Poole) and a state's voter estimate (American Ideology Project) are
+   separate measurement systems with no validated bridge. Nothing public, and
+   nothing in `src/`, subtracts one from the other, compares them with `<`/`>`,
+   tests a senator against the state's uncertainty band, or ranks senators by any
+   senator-versus-state figure. A direct alignment measure requires a validated
+   statistical bridge; CivicAlign does not have one. Valid comparisons stay inside
+   one system: senator vs Senate middle, committee vs Senate middle, 60-vote point
+   vs Senate middle, state vs national voter estimate, state vs state.
+2. **No bill ideology.** A roll-call dividing line says where senators split, not
+   what the bill was. A sponsor's record does not make a bill liberal or
+   conservative. The page says both.
+3. **No dead bills.** A bill not yet formally reported is "not yet sent forward",
+   never buried, killed or dead. The Congress is running.
+4. **Thresholds.** Two-side bill-flow comparison only with ≥ 25 bills per sponsor
+   group; floor-vote split only with ≥ 7 qualifying votes, tagged "Early signal"
+   below 15; a committee is "clearly" to one side beyond 0.15 underlying units.
+5. **Words follow one rule.** Every same-scale position is described by
+   `relWords` (page) / `rel_words` (`build_demo.py`): within 0.05 underlying
+   units "near the …", within 0.15 "somewhat on the more liberal/conservative
+   side of the …", beyond that "clearly …". Neutral descriptions, not grades; no
+   "most liberal", "extreme", "moderate", ranks or scores.
+6. **Meaning before numbers.** Cards lead with a ruler and a sentence.
+   Coordinates appear only under "See details", introduced by the scale note
+   ("a position on that line; not a percentage, a vote total, an approval rating
+   or a grade") and labelled "display-scale units". Bill-flow differences are
+   "percentage points". The two are never mixed.
+7. **The four-view interface** and its accessibility (tabs with roving tabindex,
+   tracks hidden from screen readers with a spoken sentence, 44px targets).
 
-Words before numbers (23 September 2026, published): every same-scale position
-is described by one fixed rule (`relWords` on the page, `rel_words` in
-build_demo.py: near < 0.05 underlying, somewhat < 0.15, clearly beyond;
-documented in the report under "Words for positions"). Cards lead with the
-picture and the sentence; display-line coordinates and differences appear only
-under See details, labelled "display-scale units" and preceded by the scale
-note; bill-flow differences are "percentage points". No ranking words. Senate
-view leads with the 60-vote point in words. Tests: 155 pass.
+All seven are enforced by tests that run in the weekly job.
 
-Weekly chain hardened (23 September 2026, published): fetch is all-or-nothing
-(`agents/base.py: run_snapshot`), a pre-build `agents/verify.py` checks the
-roster, join keys and record counts, the workflow gates every step and publishes
-only on full success, `data/raw/SNAPSHOT.json` records each source (URL, bytes,
-hash, content key, changed?, content-changed date, checked date, vintage), the
-page shows "Data updated <date>" and, per source, retrieval date and vintage
-separately, and zip archives are compared by content so daily republishing does
-not count as change. `python -m civicalign.whitepaper` refreshes the whitepaper's
-figures in one command. Tests: 143 pass; supervisor 18/18.
+## What the page shows
 
-Backend cleanup (23 September 2026, published): the obsolete cross-scale
-metrics were deleted, not hidden. `alignment.py` now only carries `Positions`
-(senator Voteview score and state survey estimate side by side); removed:
-abs_gap, signed_gap, spec_score, rank, crosses_over, rank_all;
-`ChamberStats.apportionment_skew` (median minus national estimate);
-`CommitteeStats.cnd`/`cnd_mean`; `OutputIdeology.vs_public`. The CLI prints the
-two scales separately with no distance; the JSON export gains
-`senator_positions` and `state_voter_estimates` (each labelled with its own
-scale) and lost cnd_median, cnd_mean, vs_public and crosses_over; the supervisor
-no longer verifies a "Senate-public gap". Nothing in src/ subtracts a Voteview
-coordinate from a survey coordinate. The election-result regression (method A,
-`representation.py`, JSON `state_alignment`) stays, documented as answering a
-different question. Tests: 133 pass; supervisor 18/18.
+- **Your senators.** State picker; one line: "Georgia's voter estimate is somewhat
+  on the more conservative side of the national voter estimate." Each senator card:
+  "Senator voting pattern, compared with the Senate middle", a ruler (MORE LIBERAL
+  ← → MORE CONSERVATIVE, Senate-middle tick, senator dot), "Ossoff's voting record
+  is clearly on the more liberal side of the Senate middle.", the vote count and
+  source. One state card: "State voter estimate, compared with the national voter
+  estimate", ruler with the shaded estimated range, the sentence, "Based on the
+  American Ideology Project, 2020 wave." Between them: "These are different
+  measures and are shown separately." "Where familiar senators sit" (folded) puts
+  the middle Democrat, middle Republican, Senate middle and eight named senators on
+  the senators' line.
+- **The Senate.** Senate middle and 60-vote point on the senators' line ("The
+  60-vote point sits somewhat on the more conservative side of the Senate middle.
+  Many Senate actions need 60 votes to advance."); the national voter estimate on
+  its own line with every state as a faint tick. Folded: why it matters (two
+  senators per state; cloture named after the explanation), all 100 circles
+  coloured by side of the Senate middle, the numbers.
+- **Committees.** One committee at a time, three questions: who is on it (ruler,
+  sentence), what it has sent forward (referred / formally sent forward / not yet,
+  bars grouped by sponsor record with the sponsor-is-not-bill caveat, "Limited
+  data" below 25 per group), where senators divided on its bills (sentence, sample
+  size, "Early signal" or "Not enough data yet").
+- **How it works.** Where the information comes from, how we compare (two lines,
+  why they are shown separately), important limits, "Show the math" (raw values,
+  same-scale arithmetic, sources with exact files), link to the report.
+- Header: "Data updated <date>", with the note that the survey wave is 2020.
+  Footer: sources with publisher, link, vintage and retrieval date.
 
-Two measures, shown separately (22 September 2026, published): the page no
-longer compares a senator's Voteview score with the state's survey estimate in
-any way, not even the sign. Each senator card shows the voting pattern against
-the Senate middle on the senators' scale ("More liberal than the Senate middle
-(43 points)"); one state card shows the voter estimate against the national
-estimate on the voters' scale ("Estimated slightly conservative on the voter
-measure"); one line says the two use different methods and are shown separately.
-The Senate view shows the Senate middle and 60-vote point on one line and the
-national estimate (with every state as a faint tick) on another, not compared.
-Public payload carries no cross-scale fields (gap, score, rank, crosses, dir,
-vsUS, vsState, nRightOfPublic, medianGap, skew, dUS, cndMedian, cndMean, C block
-gone); the supervisor and six new tests enforce that no public code subtracts,
-compares, band-tests or ranks across the two scales. Headline: "See your
-senator's voting pattern and your state's voter estimate". Report and README
-state that a direct senator-versus-state measure needs a validated bridge that
-CivicAlign does not currently have; method A (regression) stays separate. The
-pipeline still computes the old alignment diagnostics privately (CLI, JSON
-export, supervisor) but nothing public uses them. Tests: 138 pass.
+## How the weekly update works
 
-No cross-scale arithmetic (22 September 2026, published): nothing a reader sees
-subtracts a Voteview figure from an American Ideology Project estimate. The card
-says which side of the state estimate the senator's pattern falls on, or that it
-falls within the estimated range; no "points apart", no typical-gap ratios, no
-named-senator distances, no widest-gap ranks, no "one of the most liberal". The
-Senate view says which side of the national estimate the Senate's pattern falls
-on; the gap figure and "senators right of the country" count are gone. Committee
-versus public columns removed from the report and whitepaper. Senator-to-senator
-and committee-to-Senate figures (one scale) remain in points. Headline is now
-"How does your senator's voting pattern compare with your state?". A regression
-test bans the cross-scale phrases and expressions. Tests: 132 pass.
+`.github/workflows/update.yml` (Mondays 11:00 UTC, or "Run workflow"), mirrored
+by `scripts/update.sh`. Every step is a gate; a failure fails the Action, commits
+nothing, and leaves the previously verified site live.
 
-Plain-language redesign (22 September 2026, published): each view answers one
-question with one sentence, one simple picture, one short caveat and a "See
-details" fold. The senator card shows only the state's estimated range, the
-state's mark and the senator's dot; party middles, the Senate's middle, the
-country and familiar senators moved into "Where familiar senators sit" and
-See details. Verdicts are words ("well to the left of Georgia's voters"), the
-visible distance is rounded to 5 and marked approximate, the survey vintage
-(2020 wave) is on the first screen, the Senate view is two dots and a sentence
-with "Why does this happen?" / "See all 100 senators" / "The numbers" folded,
-and the committee view answers three questions (who is on it, what has it sent
-forward, where senators divided on its bills) with "Limited data" / "Early
-signal" tags below 25 bills per side or 15 floor votes. README now separates the
-regression method (A) from the live survey comparison (B). Sources are a neat
-linked list with download dates; all eight were re-fetched live and matched the
-local files (the bill archive differs only because GovInfo republishes daily).
-Tests: 131 pass, including the brief's twelve guarantees.
+1. **Fetch as one snapshot** (`python -m civicalign.agents`): all ten sources are
+   downloaded and validated into staging; if any critical source fails, nothing
+   is installed and the run stops. All ten are critical: Voteview members, roll
+   calls, votes; congress-legislators roster and committee membership; American
+   Ideology Project state estimates; Census populations; Senate and House
+   bill-status archives; MIT election results. Change detection is by content
+   (zip members, not archive timestamps). `data/raw/SNAPSHOT.json` (tracked)
+   records per source: URL, file, bytes, SHA-256, content key, changed flag,
+   content-changed date, checked date, vintage. `PROVENANCE.tsv` logs content
+   changes. On a fresh checkout the raw files are absent; the comparison uses the
+   committed snapshot's keys, so re-downloads of identical content are not changes.
+2. **Verify** (`python -m civicalign.agents.verify`): 100 seats, ≤ 2 senators per
+   state, scored senators and committee members on the current roster, record
+   counts sane, no source shrank > 30 %.
+3. **Data tests** (`pytest`, excluding the page and whitepaper tests).
+4. **Rebuild** (`python -m civicalign.build_demo`): regenerates the page's data
+   blocks and `demo/methodology.html` from the template.
+5. **Page tests** (`tests/test_published_pages.py`): the public-claim contract.
+6. **Supervisor** (`python -m civicalign.agents.supervisor`): separate code
+   re-reads the raw files and reproduces 18 figures, and checks the payload
+   carries no cross-scale field.
+7. **Commit** only if the pages or the provenance log changed (a check-stamp-only
+   snapshot change is discarded). **Publish** only if every step passed.
 
-Reader scale is now 0 to 100 (22 September 2026, published): every displayed
-position is score × 50 + 50 and every distance × 50; the data blocks and the
-pipeline stay on −1 to +1, and the arithmetic section shows both. The report shows
-0–100 with raw values beside the worked example.
+Roster changes (resignations, appointments, deaths, new members) flow through
+the roster join; a senator with fewer than 30 roll calls gets the
+"Insufficient data" card, never a predecessor's score. The seat de-duplication
+guard (104 Voteview rows for 100 seats) is in `sources/voteview.py`.
 
-Supervisor agent added (`src/civicalign/agents/supervisor.py`, step 5/5 in
-`scripts/update.sh` and the workflow): separate code re-reads the raw files and
-recomputes 19 published figures (scores, medians, 60th vote, state estimates,
-national public, every committee's counts, distinct-bill totals, page blocks,
-party middles, anchors, summary counts). Any disagreement fails the update.
-`tests/test_supervisor.py` also proves it catches a sabotaged page figure.
+## Routine tasks
 
-Accuracy fixes found in review: referrals of Senate bills to House committees
-(7 rows) no longer count toward Senate totals; every committee's counts are shown
-with the two-side comparison withheld below 25 per side; the page states exactly
-what "sent on" counts (formally reported; markups not yet reported and House bills
-excluded) with the data date; two causal phrasings softened (gatekeeper warning,
-"structural veto"); the report's source list now names all six datasets and no
-longer says "nothing is estimated by us".
+- Refresh the whitepaper's figures after data moves (the job only warns):
+  `PYTHONPATH=src python -m civicalign.whitepaper`, then commit `WHITEPAPER.md`.
+- Republish the claude.ai copy: inline `demo/civicalign.css` into
+  `demo/senator-check.html` in place of the `<link>` tag, point
+  `href="methodology.html"` at the live URL, and publish to the artifact URL above.
+- Run everything locally: `scripts/update.sh` (uses `.venv` if present).
+- Read the figures on the command line: `PYTHONPATH=src python -m civicalign`
+  (`--json` for the export; each section is labelled with its scale).
 
-Five methodology concerns fixed in wording and counts (22 September 2026,
-published): (1) the page and report no longer claim the survey and senator scales
-are the same; they say the two rulers were built separately and every distance is a
-rough comparison; (2) committee "output" is described as where the Senate split on
-its bills, explicitly not bill ideology; (3) bills not yet reported are "pending" or
-"not yet sent on", never buried, dead or survivors; (4) Senate-wide totals count
-distinct bills (5,333) with referrals (5,368) named separately, via new Report fields
-`bills_referred_unique` / `bills_reported_unique`; (5) the alignment badge is "Too
-close to tell apart" with the band described as one standard error and "not the same
-as agreement". The 1-SE threshold itself is unchanged.
+## Code map (Pillars 4–6)
 
-Earlier the same day (published): the senator view shows **no
-bills**. Each card explains the gap in plain terms from the page's own data: how
-far it is (share of the scale, the distance between two familiar senators, and
-against the typical senator's gap), where the senator sits against their party's
-middle and the other 99 senators, where the state sits against the public and the
-other states, and what each number is made of. The track and the "Explore the
-scale" ruler carry landmarks (middle Democrat, middle Republican, Senate middle,
-public, familiar senators). The page states it cannot say which issues make up
-the difference and never guesses.
+- `src/civicalign/pipeline.py` — `run()` builds the `Report`.
+- `alignment.py` — `Positions`: senator score and state estimate side by side,
+  nothing derived. `chamber.py` — median, 60th vote, party medians; carries the
+  national estimate for the voter chart only. `committees.py`,
+  `output_ideology.py`, `gatekeeping.py`, `landmarks.py`, `receipts.py` (the vote
+  example still exists in the pipeline and JSON, not on the page).
+  `representation.py` — method A, the election-result regression (answers "how
+  does this senator compare with the pattern typical of states that vote
+  similarly?"), kept separate from the page.
+- `build_demo.py` — data blocks `V M X P G` (no cross-scale field), report
+  placeholders, sources list, wording rule.
+- `agents/` — `base.py` (snapshot), `sources.py` (ten agents with validators and
+  vintages), `verify.py`, `supervisor.py`. `whitepaper.py` — figure refresher.
+- Tests: `test_published_pages.py` (contract: no cross-scale arithmetic G1–G6,
+  no bill ideology, no dead bills, twelve UX guarantees, ten presentation
+  guarantees), `test_update_chain.py` (snapshot, gates, provenance),
+  `test_supervisor.py`, `test_independent.py` (raw-file recomputation),
+  `test_floor_votes.py`, `test_math.py`, `test_regressions.py`,
+  `test_representation.py`, `test_uncertainty.py`, `test_whitepaper.py`.
+  155 pass as of this handoff; supervisor 18/18; verify 12/12.
 
-Everything below is **published** as of 22 September 2026: the four-view layout,
-the vote-example correction and the presentation safeguards are on the live site,
-`origin/main` is at the same commit, and the claude.ai copy (version 12) was
-rebuilt from the same page with the stylesheet inlined. The weekly workflow ran
-green (`update` and `publish` both succeeded) and only re-dated the report.
+## Open items
 
-## Where things stand
+- The 2024 survey wave does not exist; 2020 is the newest. The page says so.
+- Two audits disagree on committee median vs mean; the median is shown and the
+  mean is in fine print. Not resolved.
+- Voteview publishes no standard errors for senator scores, so only the survey
+  side has an uncertainty band.
+- The claude.ai copy and the shared doc do not update themselves.
+- Rotate the Congress.gov API key that was pasted into chat earlier; it is not
+  used anywhere and must never be committed.
+- Enter/Space on tabs and circles could not be driven from the browser pane
+  (elements are native links and buttons; worth a press on a real keyboard).
+- Headless Chrome enforces a 500px minimum viewport; phone screenshots need the
+  DevTools-protocol emulation script pattern.
 
-- Live site: https://safire684-ops.github.io/civicalign/
-- Repo: https://github.com/safire684-ops/civicalign — `origin/main` matches local `main`.
-- Claude.ai copy (manual republish, CSS inlined; does not update itself): https://claude.ai/artifact/Ft6hU6XZUnWHPhZwzwmzaj
-- Shared doc (hand-mirrored): https://claude.ai/code/artifact/683a9e36-3046-4827-a7af-7442b49ef7e3
+## Decision history, condensed
 
-## The four-view layout (published)
+- Sept 2026, early rounds: Pillars 4–6 built on real data; automation via
+  GitHub Actions and Pages; four-view interface; navigation and phone fixes.
+- Vote examples: the "state side of a vote" inference was removed, then the
+  vote example itself was removed from the senator view (bills are not marked
+  on the senators' line).
+- Methodology cleanup: scales described as separate; splits are not bill
+  ideology; pending not dead; distinct bills vs referrals; the alignment band
+  label softened, then the comparison removed altogether.
+- 0-to-100 display scale (score × 50 + 50); later, numbers moved under
+  details with the scale note and "display-scale units".
+- Backend: obsolete cross-scale metrics (gap, score, rank, crosses_over,
+  apportionment_skew on the survey scale, cnd, vs_public) deleted, not hidden.
+- Weekly chain hardened: all-or-nothing snapshot, verify step, gated publish,
+  content-based change detection, provenance with vintage and retrieval dates.
+- Presentation: one wording rule, words before numbers, percentage points vs
+  display-scale units, no ranking language.
 
-Three files changed. **Calculations, thresholds, data blocks and the methodology
-report were not touched and must stay unchanged.**
-
-| File | What changed |
-|---|---|
-| `demo/senator-check.html` | The long page became four views, one visible at a time, switched by real tabs (hash-routed: `#your-senators`, `#the-senate`, `#committees`, `#how-it-works`). Each leads with a one-line takeaway derived from figures already on the page. Extra detail sits behind "See details"; limits stay visible. Committees are chosen one at a time from an alphabetical list and show all their existing measures together. Clicking a senator's circle opens their state. |
-| `demo/civicalign.css` | Tab/view styles keyed to `aria-selected`; takeaway, limit and disclosure styles; consistent spacing inside views; smooth scroll and hover scaling removed; tap targets ≥ 44px; smallest visible text 12px; the Senate "60th vote" label anchored away from the public label. |
-| `tests/test_published_pages.py` | Nav test loosened for tab attributes. New tests: four tab panels with only the first shown at load; every view has a takeaway and a limit outside any disclosure; committee view is one-at-a-time and alphabetical; no smooth scroll or hover animation; existing measures and the 0.15 threshold present; highlight keyed to `aria-selected`; new How-it-works wording present and old absent; selected tab scrolled into view; pivot label anchoring; 44px tap targets. |
-
-Wording change made at the owner's request: the How-it-works takeaway now reads
-*"We combine public voting records, survey estimates, and other public data to
-make these comparisons."*
-
-## Test results
-
-- `python -m pytest -q` → **93 passed**.
-- Data blocks (`V M X G L R P C`) byte-identical to the pre-redesign page.
-- Every sentence the old page rendered is still rendered identically; the new
-  page additionally renders the 11 committees the old page never showed.
-- Checked in a real mobile emulation at 375px, all four views: no horizontal
-  overflow; smallest visible text 12px; every tap target ≥ 44px; Senate labels do
-  not overlap; selected tab visible in the nav row.
-- Keyboard: roving tabindex on the tabs (exactly one in the Tab order);
-  ArrowLeft/Right/Home/End move selection, visible panel, hash and focus together.
-  Zero console errors.
-
-## Remaining issues
-
-- **Real Enter/Space activation** of tabs and circles could not be driven from the
-  browser pane (its key injection does not trigger native default actions — Enter
-  did not toggle a plain `<details>` either). Elements are native links and
-  buttons; worth one press on a real keyboard.
-- **Headless-Chrome screenshots are untrustworthy at phone widths**: headless
-  enforces a 500px minimum viewport, producing cropped images that once looked like
-  stale wording. Use the DevTools-protocol script pattern (device emulation) for
-  phone captures.
-- Earlier items unchanged: rotate the Congress.gov API key pasted into chat; the
-  2024 survey wave does not exist; two audits disagree on committee median vs mean
-  (median shown, both computed — do not resolve during interface work); Output
-  Ideology rests on 7–28 votes for four committees; the claude.ai copy and shared
-  doc do not update themselves; the whitepaper is hand-written and the weekly job
-  warns rather than blocks if its figures drift.
-
-## Exact next steps
-
-1. Owner reviews the fresh screenshots (four phone views at 390px, four desktop).
-2. `git push` the local commit to `origin/main`.
-3. Trigger the workflow (`gh workflow run update.yml -R safire684-ops/civicalign`)
-   and confirm `update` and `publish` both succeed.
-4. Verify the live site: nav present, only the first view shown at load, the same
-   figures as local (`/tmp/snap2.js`-style sentence comparison).
-5. Rebuild the claude.ai copy with the stylesheet inlined and republish to the
-   same URL; the shared doc needs no change (methodology untouched).
-6. If the weekly job re-dates `demo/methodology.html`, that is expected and
-   separate from this change.
-
-## The feedback that shaped this round, verbatim
-
-> Replace the long scrolling page with four clear views: Your senators: state selector and two simple senator cards. The Senate: one main comparison, with the senator circles below. Committees: choose one committee and see its existing measures together. How it works: plain explanations, sources, and calculations. Each view should lead with a short takeaway and a clear chart. Put extra detail behind "See details," but keep important limits visible. Use readable text, consistent spacing, and clear labels. Avoid crowded charts and unnecessary animation. Scope: Pillars 4–6 only. Preserve all calculations, data, thresholds, and existing measures. Keep unresolved methodology disagreements separate. Do not add rankings, grades, or new claims.
-
-Follow-ups: make the selected tab clearly visible (CSS had keyed to `aria-current`
-while the tabs set `aria-selected`); replace the How-it-works takeaway wording; fix
-the overlapping Senate labels on phones; confirm readability and tap targets at
-phone size.
-
-## Earlier rounds (kept for context)
-
-The Gemini reports referenced in earlier rounds:
-
-- Pillar 6 dual-metric framework: https://gemini.google.com/share/b75123b297db?skid=4798bd3c-9d90-4f8a-a251-00429acbda75
-- System audit & execution directives: https://gemini.google.com/share/82bd4fe17a76?skid=e8601a35-0fb0-4b8d-b6a8-f4b2775b7142
-
-Decisions approved earlier: public repo under `safire684-ops` with the personal
-email hidden in history; Pillars 4–6 only; committee module plots the members'
-median with the 0.15 threshold and keeps the mean in fine print; the percentage
-score removed; six landmark bills at their median cutpoint; no API key anywhere.
-Superseded: "receipts name the bill, vote and dividing line only" — the vote
-example now shows the bill, question, date, the senator's own vote and a Voteview
-link, is chosen by a neutral rule (busiest bill, passage vote first), and carries
-the sentence "This vote does not tell us whether the state's voters supported the
-bill." No state side is inferred from a vote's dividing line any more.
+Reference reports from earlier rounds (Gemini): Pillar 6 dual-metric framework
+https://gemini.google.com/share/b75123b297db?skid=4798bd3c-9d90-4f8a-a251-00429acbda75 ;
+system audit and execution directives
+https://gemini.google.com/share/82bd4fe17a76?skid=e8601a35-0fb0-4b8d-b6a8-f4b2775b7142 .
+Later reports asked for cross-scale claims, invented bill positions and
+AI-written bill impacts; those were declined and the reasons are in the commit
+messages.
