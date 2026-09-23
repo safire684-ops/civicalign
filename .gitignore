@@ -7,6 +7,7 @@ __pycache__/
 # PROVENANCE.tsv is tracked so a past run's exact inputs stay identifiable.
 data/raw/*
 !data/raw/PROVENANCE.tsv
+!data/raw/SNAPSHOT.json
 data/processed/*
 !data/processed/.gitkeep
 

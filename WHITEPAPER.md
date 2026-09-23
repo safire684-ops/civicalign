@@ -94,8 +94,8 @@ with election results on both sides: how does this senator compare with the
 voting pattern typically associated with states that vote similarly?
 
 **Perspective.** A position on its own means nothing to a reader, so the tool
-marks landmarks on the same line: the middle Democrat (−0.378), the middle
-Republican (+0.564), the Senate's middle, the American public, and eight familiar
+marks landmarks on the same line: the middle Democrat (−0.379), the middle
+Republican (+0.563), the Senate's middle, the American public, and eight familiar
 senators at their real positions. A gap is also expressed as a share of the whole
 scale, as the distance between the two named senators who sit that far apart, and
 against the typical senator's distance from their own state. No bills are marked:
@@ -122,8 +122,8 @@ column says how far.
 | Environment | +0.003 | −0.307 | 0.29 |
 | Appropriations | +0.004 | −0.306 | 0.17 |
 | Foreign Relations | +0.535 | +0.225 | 0.06 |
-| Homeland/Govt Affairs | +0.521 | +0.211 | 0.34 |
-| Small Business | +0.521 | +0.211 | 0.34 |
+| Homeland/Govt Affairs | +0.520 | +0.210 | 0.34 |
+| Small Business | +0.520 | +0.210 | 0.34 |
 | Budget | +0.128 | −0.182 | 0.33 |
 
 **Where the Senate split on its bills.** Take the bills a committee sent to the
@@ -147,9 +147,9 @@ to count what they did. Every Senate bill of the 119th Congress is in the
 government's own bulk release, with its author and every committee it was sent to.
 Each bill takes the side of the senator who wrote it.
 
-Being sent on is rare so far: of 5,333 distinct bills sent to a Senate committee
-(5,362 referrals, since some bills go to two committees), 421 have been sent on to
-the floor. The Finance Committee has sent on 1 of 872. A bill not yet sent on is
+Being sent on is rare so far: of 5,347 distinct bills sent to a Senate committee
+(5,376 referrals, since some bills go to two committees), 425 have been sent on to
+the floor. The Finance Committee has sent on 1 of 876. A bill not yet sent on is
 counted as pending, not dead; the Congress is still running.
 
 Across the whole Senate, bills by conservative senators get through 2.4 percentage
@@ -160,9 +160,9 @@ than against zero:
 | committee | liberal-record sponsors: sent forward | conservative-record sponsors: sent forward | beyond baseline |
 |---|---|---|---|
 | Small Business | 4 of 37 | 7 of 35 | +6.8 |
-| Foreign Relations | 31 of 123 | 31 of 147 | −6.5 |
-| HELP | 13 of 425 | 28 of 296 | +4.0 |
-| Agriculture | 4 of 194 | 10 of 148 | +2.3 |
+| Foreign Relations | 31 of 123 | 31 of 147 | −6.6 |
+| HELP | 13 of 426 | 28 of 297 | +3.9 |
+| Commerce | 34 of 227 | 50 of 250 | +2.6 |
 
 Committees with fewer than 25 bills from either side are not reported; there one
 bill moves the rate by several points. Thirteen committees have enough.
@@ -201,8 +201,8 @@ instead.
 midpoint to destabilise, and the chair controls what receives a hearing. Measured
 against the median of their own party's members on that same committee — which
 separates the chair's own position from the fact that chairs always come from the
-majority — several sit well to the side of their own colleagues: Energy +0.327,
-Budget +0.286, Commerce +0.222.
+majority — several sit well to the side of their own colleagues: Energy +0.328,
+Budget +0.283, Commerce +0.219.
 
 **Which states hold the seats.** Averaged across a committee's twenty or so seats,
 state partisan lean is stable, because an average over many states does not

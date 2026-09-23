@@ -252,6 +252,7 @@ def _blocks(r: Report, cfg: Config) -> dict[str, dict]:
               "congress": cfg.congress, "ideologyYear": cfg.ideology_year,
               "source": r.state_source.citation},
         "M": {"congress": cfg.congress, "scoreCol": cfg.score_column,
+              "dataUpdated": _data_updated(cfg),
               "ideologyYear": cfg.ideology_year, "ideologyCol": "mrp_ideology",
               "se": se_map,
               "chM": round(r.chamber.median, 4),
@@ -261,29 +262,32 @@ def _blocks(r: Report, cfg: Config) -> dict[str, dict]:
                 {"what": "Senator voting records", "who": "Voteview, University of California, Los Angeles",
                  "url": "https://voteview.com/data", "file": "https://voteview.com/static/data/out/members/HSall_members.csv",
                  "use": f"column {cfg.score_column}, rows for the {cfg.congress}th Congress, Senate",
-                 "asof": _asof(cfg, "HSall_members.csv")},
+                 "asof": _asof(cfg, "HSall_members.csv"), "vintage": _vintage(cfg, "HSall_members.csv")},
                 {"what": "Who currently holds each seat", "who": "congress-legislators, the @unitedstates project",
                  "url": "https://github.com/unitedstates/congress-legislators", "file": "https://unitedstates.github.io/congress-legislators/legislators-current.json",
-                 "use": "joined on each member's Bioguide ID", "asof": _asof(cfg, "legislators-current.json")},
+                 "use": "joined on each member's Bioguide ID", "asof": _asof(cfg, "legislators-current.json"),
+                 "vintage": _vintage(cfg, "legislators-current.json")},
                 {"what": "State voter estimates", "who": "American Ideology Project, Tausanovitch & Warshaw, Harvard Dataverse",
                  "url": "https://doi.org/10.7910/DVN/BQKU4M", "file": "https://dataverse.harvard.edu/api/access/datafile/6690212",
                  "use": f"file aip_states_ideology_v2022a.tab, column mrp_ideology and its standard error, {cfg.ideology_year} wave",
-                 "asof": _asof(cfg, "aip_states_ideology_v2022a.tab")},
+                 "asof": _asof(cfg, "aip_states_ideology_v2022a.tab"), "vintage": _vintage(cfg, "aip_states_ideology_v2022a.tab")},
                 {"what": "State populations", "who": "U.S. Census Bureau, population estimates",
                  "url": "https://www.census.gov/programs-surveys/popest.html",
                  "file": f"https://www2.census.gov/programs-surveys/popest/datasets/2020-{cfg.population_year}/state/totals/NST-EST{cfg.population_year}-ALLDATA.csv",
-                 "use": f"column POPESTIMATE{cfg.population_year}, used to weight states", "asof": _asof(cfg, f"NST-EST{cfg.population_year}-ALLDATA.csv")},
+                 "use": f"column POPESTIMATE{cfg.population_year}, used to weight states", "asof": _asof(cfg, f"NST-EST{cfg.population_year}-ALLDATA.csv"),
+                 "vintage": _vintage(cfg, f"NST-EST{cfg.population_year}-ALLDATA.csv")},
                 {"what": "Floor votes", "who": "Voteview, University of California, Los Angeles",
                  "url": "https://voteview.com/data", "file": f"https://voteview.com/static/data/out/rollcalls/S{cfg.congress}_rollcalls.csv",
                  "use": f"each roll call's dividing line (nominate_mid_1) and, in S{cfg.congress}_votes.csv, each senator's vote",
-                 "asof": _asof(cfg, f"S{cfg.congress}_rollcalls.csv")},
+                 "asof": _asof(cfg, f"S{cfg.congress}_rollcalls.csv"), "vintage": _vintage(cfg, f"S{cfg.congress}_rollcalls.csv")},
                 {"what": "Bills and committee actions", "who": "GovInfo bulk data, U.S. Government Publishing Office",
                  "url": f"https://www.govinfo.gov/bulkdata/BILLSTATUS/{cfg.congress}", "file": f"https://www.govinfo.gov/bulkdata/BILLSTATUS/{cfg.congress}/s/BILLSTATUS-{cfg.congress}-s.zip",
                  "use": "each bill's sponsor, the committees it was referred to, and whether each formally reported it",
-                 "asof": _asof(cfg, f"BILLSTATUS-{cfg.congress}-s.zip")},
+                 "asof": _asof(cfg, f"BILLSTATUS-{cfg.congress}-s.zip"), "vintage": _vintage(cfg, f"BILLSTATUS-{cfg.congress}-s.zip")},
                 {"what": "Committee rosters", "who": "congress-legislators, the @unitedstates project",
                  "url": "https://github.com/unitedstates/congress-legislators", "file": "https://unitedstates.github.io/congress-legislators/committee-membership-current.json",
-                 "use": "current membership of each Senate committee", "asof": _asof(cfg, "committee-membership-current.json")},
+                 "use": "current membership of each Senate committee", "asof": _asof(cfg, "committee-membership-current.json"),
+                 "vintage": _vintage(cfg, "committee-membership-current.json")},
               ]},
         "X": {"anchors": [
                   {"name": ANCHOR_NAMES[b], "full": r.senators[b].name,
@@ -342,8 +346,28 @@ def _public_block(r: Report, cfg: Config) -> dict:
     }
 
 
+def _fmt_stamp(stamp: str) -> str:
+    from datetime import datetime
+    if not stamp:
+        return ""
+    d = datetime.strptime(stamp[:10], "%Y-%m-%d")
+    return f"{d.day} {d.strftime('%B %Y')}"
+
+
+def _snapshot_record(cfg: Config, filename: str) -> dict:
+    from .agents.base import load_snapshot
+    for s in load_snapshot(cfg.raw_dir).get("sources", []):
+        if s.get("file") == filename:
+            return s
+    return {}
+
+
 def _asof(cfg: Config, filename: str) -> str:
-    """Date a raw file was last downloaded, from the provenance log (latest entry)."""
+    """Date a raw file's CONTENT last changed: the accepted snapshot's record,
+    or, before the first snapshot, the provenance log's latest entry."""
+    rec = _snapshot_record(cfg, filename)
+    if rec.get("content_changed_utc"):
+        return _fmt_stamp(rec["content_changed_utc"])
     prov = cfg.raw_dir / "PROVENANCE.tsv"
     if not prov.exists():
         return ""
@@ -352,11 +376,24 @@ def _asof(cfg: Config, filename: str) -> str:
         parts = line.split("\t")
         if len(parts) >= 2 and parts[1] == filename:
             stamp = parts[0]
-    if not stamp:
-        return ""
-    from datetime import datetime
-    d = datetime.strptime(stamp[:10], "%Y-%m-%d")
-    return f"{d.day} {d.strftime('%B %Y')}"
+    return _fmt_stamp(stamp)
+
+
+def _vintage(cfg: Config, filename: str) -> str:
+    return _snapshot_record(cfg, filename).get("vintage", "")
+
+
+def _data_updated(cfg: Config) -> str:
+    """The latest content change across the critical sources: what 'Data updated'
+    means. A re-download with identical content does not move it."""
+    from .agents.base import load_snapshot
+    stamps = [s.get("content_changed_utc", "") for s in load_snapshot(cfg.raw_dir).get("sources", [])
+              if s.get("critical", True)]
+    if not stamps:
+        prov = cfg.raw_dir / "PROVENANCE.tsv"
+        if prov.exists():
+            stamps = [ln.split("\t")[0] for ln in prov.read_text().splitlines()[1:] if "\t" in ln]
+    return _fmt_stamp(max(stamps)) if stamps else ""
 
 
 def _billflow_asof(cfg: Config) -> str:

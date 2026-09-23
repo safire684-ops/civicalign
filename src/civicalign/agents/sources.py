@@ -12,7 +12,7 @@ import zipfile
 from pathlib import Path
 
 from ..config import DEFAULT
-from .base import Agent
+from .base import Agent, zip_content_key
 
 RAW = DEFAULT.raw_dir
 
@@ -136,6 +136,7 @@ def all_agents() -> list[Agent]:
     return [
         Agent(
             name="senator scores",
+            vintage="current Congress; Voteview revises scores as new votes are cast",
             url="https://voteview.com/static/data/out/members/HSall_members.csv",
             target=RAW / "HSall_members.csv",
             validate=_senator_scores,
@@ -143,6 +144,7 @@ def all_agents() -> list[Agent]:
         ),
         Agent(
             name="seated senators",
+            vintage="current roster",
             url="https://unitedstates.github.io/congress-legislators/legislators-current.json",
             target=RAW / "legislators-current.json",
             validate=_roster,
@@ -150,6 +152,7 @@ def all_agents() -> list[Agent]:
         ),
         Agent(
             name="committee rosters",
+            vintage="current committee membership",
             url="https://unitedstates.github.io/congress-legislators/committee-membership-current.json",
             target=RAW / "committee-membership-current.json",
             validate=_committees,
@@ -157,6 +160,8 @@ def all_agents() -> list[Agent]:
         ),
         Agent(
             name="bill flow",
+            vintage="current Congress; GovInfo republishes daily",
+            content_key=zip_content_key,
             url=f"https://www.govinfo.gov/bulkdata/BILLSTATUS/{DEFAULT.congress}/s/"
                 f"BILLSTATUS-{DEFAULT.congress}-s.zip",
             target=RAW / f"BILLSTATUS-{DEFAULT.congress}-s.zip",
@@ -166,6 +171,8 @@ def all_agents() -> list[Agent]:
         ),
         Agent(
             name="bill flow (House bills)",
+            vintage="current Congress; GovInfo republishes daily",
+            content_key=zip_content_key,
             url=f"https://www.govinfo.gov/bulkdata/BILLSTATUS/{DEFAULT.congress}/hr/"
                 f"BILLSTATUS-{DEFAULT.congress}-hr.zip",
             target=RAW / f"BILLSTATUS-{DEFAULT.congress}-hr.zip",
@@ -175,6 +182,7 @@ def all_agents() -> list[Agent]:
         ),
         Agent(
             name="floor roll calls",
+            vintage="current Congress",
             url=f"https://voteview.com/static/data/out/rollcalls/S{DEFAULT.congress}_rollcalls.csv",
             target=RAW / f"S{DEFAULT.congress}_rollcalls.csv",
             validate=_rollcalls,
@@ -182,6 +190,7 @@ def all_agents() -> list[Agent]:
         ),
         Agent(
             name="senator votes",
+            vintage="current Congress",
             url=f"https://voteview.com/static/data/out/votes/S{DEFAULT.congress}_votes.csv",
             target=RAW / f"S{DEFAULT.congress}_votes.csv",
             validate=_votes,
@@ -189,6 +198,7 @@ def all_agents() -> list[Agent]:
         ),
         Agent(
             name="state ideology",
+            vintage="2020 wave (surveys run 2017-2021); no newer wave is published",
             url="https://dataverse.harvard.edu/api/access/datafile/6690212",
             target=RAW / "aip_states_ideology_v2022a.tab",
             validate=_ideology,
@@ -196,6 +206,7 @@ def all_agents() -> list[Agent]:
         ),
         Agent(
             name="election results",
+            vintage="presidential elections 1976-2024",
             url="https://dataverse.harvard.edu/api/access/datafile/13887042",
             target=RAW / "mit_president_1976_2024.csv",
             validate=_elections,
@@ -203,6 +214,7 @@ def all_agents() -> list[Agent]:
         ),
         Agent(
             name="state populations",
+            vintage="Census vintage 2024 estimates",
             url="https://www2.census.gov/programs-surveys/popest/datasets/"
                 "2020-2024/state/totals/NST-EST2024-ALLDATA.csv",
             target=RAW / "NST-EST2024-ALLDATA.csv",

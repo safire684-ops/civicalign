@@ -33,6 +33,7 @@ h1{font-size:clamp(30px,6vw,44px);line-height:1.1;letter-spacing:-.018em}
 h2{font-size:clamp(21px,3.4vw,26px);line-height:1.22}
 p{margin:0}
 .sub{margin-top:16px;font-size:17.5px;color:var(--muted);max-width:54ch}
+.updated{margin-top:10px;font-size:13px;color:var(--muted);max-width:60ch}
 .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.1em;
   text-transform:uppercase;color:var(--muted)}
 

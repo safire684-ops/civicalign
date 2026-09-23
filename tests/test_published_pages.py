@@ -74,8 +74,8 @@ def test_report_quotes_the_current_bill_figures(report):
     assert f"{fi.reported} of {fi.referred}" in text, "Finance figure has moved"
     assert f"{report.gatekeeping_baseline:.1f} percentage points" in text
 
-    for code in ("SSSB", "SSFR", "SSHR", "SSAF"):
-        g = by[code]
+    shown = sorted((g for g in report.gatekeeping if g.is_reportable), key=lambda g: -abs(g.gbi_vs_baseline))[:4]
+    for g in shown:
         assert f"{g.lib_reported} of {g.lib_referred} ({g.survival_liberal:.1f}%)" in text
         assert f"{g.con_reported} of {g.con_referred} ({g.survival_conservative:.1f}%)" in text
         # stated without its sign character, which the report writes as &minus;

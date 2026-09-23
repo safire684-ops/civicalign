@@ -2,10 +2,19 @@
 # pages. This is what moves CivicAlign off a laptop: nothing here depends on any
 # machine being switched on.
 #
-# Order is the safety mechanism, same as scripts/update.sh:
-#   fetch -> verify -> rebuild -> confirm -> commit -> publish
-# If verification fails, nothing is rebuilt, committed or published, so the live
-# site keeps serving the last figures that passed.
+# THE RULE: the site is always ONE verified snapshot. Every step is a gate.
+#   1 fetch      every source into staging; all critical sources succeed or NONE
+#                is installed (the previous snapshot stays intact) and the job fails
+#   2 verify     roster, join keys, record counts, no drastic shrinkage
+#   3 data tests recompute every figure from the raw files
+#   4 rebuild    both pages from the snapshot
+#   5 page tests the public-claim contract (no cross-scale comparisons, no bill
+#                ideology, no dead/killed wording, sponsor not bill, etc.)
+#   6 supervisor separate code re-reads the raw files and reproduces every figure
+#   7 commit     only if the generated pages or the provenance changed
+#   8 publish    only if every step above passed
+# If any step fails the job fails, nothing is committed, and GitHub Pages keeps
+# serving the last verified site.
 
 name: Weekly update
 
@@ -26,7 +35,7 @@ concurrency:
 jobs:
   update:
     runs-on: ubuntu-24.04
-    timeout-minutes: 20
+    timeout-minutes: 25
     steps:
       - uses: actions/checkout@v7
 
@@ -37,29 +46,27 @@ jobs:
       - name: Install test runner
         run: pip install pytest
 
-      - name: 1/4 Fetch every source
-        # A failed source keeps nothing half-written; the job goes on so the
-        # tests can decide whether what we have is still usable.
-        run: PYTHONPATH=src python -m civicalign.agents || echo "FETCH_FAILED=1" >> "$GITHUB_ENV"
+      - name: 1/6 Fetch every source as one snapshot (all or nothing)
+        # A failed critical source means NO file is replaced and the job stops
+        # here. The previous verified snapshot, and the live site, are untouched.
+        run: PYTHONPATH=src python -m civicalign.agents
 
-      - name: 2/4 Verify the data
-        # Checks the numbers themselves. The pages are checked in step 4, AFTER
-        # they are rebuilt -- checking them here would fail every week the data
-        # moved, even when nothing is wrong.
+      - name: 2/6 Verify the snapshot (roster, join keys, record counts)
+        run: PYTHONPATH=src python -m civicalign.agents.verify
+
+      - name: 3/6 Recompute every figure from the raw files (data tests)
         run: >
           python -m pytest -q
           --ignore=tests/test_published_pages.py
           --ignore=tests/test_whitepaper.py
 
-      - name: 3/4 Rebuild both pages
+      - name: 4/6 Rebuild both pages from the snapshot
         run: PYTHONPATH=src python -m civicalign.build_demo
 
-      - name: 4/4 Confirm the rebuilt pages
+      - name: 5/6 Check the public-claim contract on the rebuilt pages
         run: python -m pytest -q tests/test_published_pages.py
 
-      - name: 5/5 Supervisor -- independent recount of every published figure
-        # Separate code re-reads the raw files and recomputes each figure the
-        # pages show. Any disagreement stops the publish.
+      - name: 6/6 Supervisor -- independent recount of every published figure
         run: PYTHONPATH=src python -m civicalign.agents.supervisor
 
       - name: Check the hand-written whitepaper (warns, never blocks)
@@ -72,15 +79,15 @@ jobs:
             echo "::warning::was still published. Update the prose when convenient."
           fi
 
-      - name: Commit the rebuilt page if any figure moved
+      - name: Commit the rebuilt pages and provenance if anything substantive changed
         run: |
           git config user.name  "civicalign-bot"
           git config user.email "civicalign-bot@users.noreply.github.com"
-          git add demo/senator-check.html demo/methodology.html
+          git add demo/senator-check.html demo/methodology.html data/raw/PROVENANCE.tsv data/raw/SNAPSHOT.json
           if git diff --cached --quiet; then
             echo "No figures moved this week."
           else
-            git commit -m "Weekly update: figures refreshed from source data"
+            git commit -m "Weekly update: figures refreshed from a verified source snapshot"
             git push
           fi
 
@@ -89,15 +96,11 @@ jobs:
         with:
           path: demo
 
-      - name: Flag a partial fetch
-        if: env.FETCH_FAILED == '1'
-        run: |
-          echo "::warning::At least one source could not be fetched. The site was"
-          echo "::warning::published from the sources that did update, and the"
-          echo "::warning::previous copy of the rest."
-
   publish:
+    # Runs only when every gate in `update` passed. A failure above leaves the
+    # previously deployed site in place.
     needs: update
+    if: ${{ needs.update.result == 'success' }}
     runs-on: ubuntu-24.04
     environment:
       name: github-pages

@@ -1,40 +1,24 @@
-"""python -m civicalign.agents  --  run every update agent."""
+"""python -m civicalign.agents  --  refresh every source as one snapshot, or not at all."""
 import sys
-from datetime import datetime, timezone
 
 from ..config import DEFAULT
-from .base import run_all
+from .base import run_snapshot
 from .sources import all_agents
 
 
 def main() -> int:
-    stamp = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
-    print(f"CivicAlign update run  {stamp}\n")
-
-    results = run_all(all_agents())
-    for r in results:
+    agents = all_agents()
+    snap = run_snapshot(agents, DEFAULT.raw_dir)
+    print(f"CivicAlign update run  {snap.run_utc}\n")
+    for r in snap.results:
         print(r.line())
-
-    prov = DEFAULT.raw_dir / "PROVENANCE.tsv"
-    if not prov.exists():
-        prov.write_text("fetched_utc\tfile\tsha256\turl\n")
-    with prov.open("a") as fh:
-        for r, a in zip(results, all_agents()):
-            if r.ok and r.changed:
-                fh.write(f"{stamp}\t{a.target.name}\t{r.sha256}\t{a.url}\n")
-
-    failed = [r for r in results if not r.ok]
-    changed = [r for r in results if r.changed]
-    print(f"\n  {len(changed)} updated, {len(failed)} failed, "
-          f"{len(results) - len(changed) - len(failed)} already current")
-
-    if failed:
-        print("\n  Failures kept the previous good data in place. The site is still")
-        print("  serving correct figures; it is just not serving the newest ones.")
+    print(f"\n  {snap.summary()}")
+    if not snap.accepted:
+        print("\n  The site is not rebuilt from a partial refresh. Fix the failing source")
+        print("  and re-run; until then the previously verified site stays live.")
         return 1
-    if changed:
-        print("\n  Data changed. Re-run the tests before publishing:")
-        print("    python3 -m pytest -q")
+    if snap.changed:
+        print("\n  Data changed. The tests, rebuild and supervisor decide whether it publishes.")
     return 0
 
 

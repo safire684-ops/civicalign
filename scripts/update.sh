@@ -1,47 +1,48 @@
 #!/usr/bin/env bash
 # The whole update chain, in the order that keeps bad data off the page.
+# Mirrors .github/workflows/update.yml. Every step is a gate: a failure stops
+# the chain, nothing is rebuilt from a partial snapshot, and the previously
+# verified pages stay as they are.
 #
-#   1 fetch    each source independently; a source that fails its own check
-#              leaves the previous good file in place
-#   2 verify   61 tests, including ones that recompute every published figure
-#              from the raw files
-#   3 rebuild  push the new numbers into the demo page, which carries its data
-#              inside itself
-#   4 confirm  re-run the checks against the rebuilt page
-#
-# If step 2 fails the page is NOT rebuilt: the site keeps serving the last
-# figures that passed, which is the whole point of doing it in this order.
+#   1 fetch      every source into staging; all critical sources succeed or none
+#                is installed
+#   2 verify     roster, join keys, record counts
+#   3 data tests recompute every figure from the raw files
+#   4 rebuild    both pages
+#   5 page tests the public-claim contract
+#   6 supervisor independent recount of every published figure
 set -uo pipefail
 cd "$(dirname "$0")/.."
 
 PY=python3
 [ -x ./.venv/bin/python ] && PY=./.venv/bin/python
 
-echo "1/4  fetching sources"
-PYTHONPATH=src python3 -m civicalign.agents
-fetch_status=$?
+echo "1/6  fetching every source as one snapshot"
+PYTHONPATH=src $PY -m civicalign.agents || { echo; echo "  FETCH FAILED -- no file was replaced; the previous snapshot and pages stand."; exit 1; }
 
 echo
-echo "2/4  verifying the data"
+echo "2/6  verifying the snapshot"
+PYTHONPATH=src $PY -m civicalign.agents.verify || exit 2
+
+echo
+echo "3/6  recomputing every figure from the raw files"
 if ! $PY -m pytest -q --ignore=tests/test_published_pages.py --ignore=tests/test_whitepaper.py; then
   echo
-  echo "  TESTS FAILED -- the page was not rebuilt."
-  echo "  It is still showing the last figures that passed. Read the failure above:"
-  echo "  a test naming a stale number means the data moved and the prose needs it."
-  exit 2
+  echo "  TESTS FAILED -- the pages were not rebuilt."
+  exit 3
 fi
 
 echo
-echo "3/4  rebuilding both pages"
-PYTHONPATH=src python3 -m civicalign.build_demo || exit 3
+echo "4/6  rebuilding both pages"
+PYTHONPATH=src $PY -m civicalign.build_demo || exit 4
 
 echo
-echo "4/4  confirming the rebuilt pages"
-$PY -m pytest -q tests/test_published_pages.py || exit 4
+echo "5/6  checking the public-claim contract on the rebuilt pages"
+$PY -m pytest -q tests/test_published_pages.py || exit 5
 
 echo
-echo "5/5  supervisor: independent recount of every published figure"
-PYTHONPATH=src $PY -m civicalign.agents.supervisor || exit 5
+echo "6/6  supervisor: independent recount of every published figure"
+PYTHONPATH=src $PY -m civicalign.agents.supervisor || exit 6
 
 if ! $PY -m pytest -q tests/test_whitepaper.py >/dev/null 2>&1; then
   echo
@@ -50,9 +51,4 @@ if ! $PY -m pytest -q tests/test_whitepaper.py >/dev/null 2>&1; then
 fi
 
 echo
-if [ $fetch_status -ne 0 ]; then
-  echo "done, but at least one source could not be fetched (see above)."
-  echo "Everything else is current."
-  exit $fetch_status
-fi
-echo "done. All sources current, all checks passed, page rebuilt."
+echo "done. Snapshot accepted, every check passed, pages rebuilt."

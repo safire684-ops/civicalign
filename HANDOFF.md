@@ -3,7 +3,35 @@
 Updated 22 September 2026. Scope is **Pillars 4, 5 and 6 only** (math-spec
 sections 2–5). Pillars 1–3 and 7 belong to someone else.
 
+## The contract, and what moves
+
+**The methodology contract is stable, but the data is dynamic. CivicAlign
+rebuilds from current source data every week. Numerical figures, rosters, bill
+counts and valid same-scale conclusions are expected to change.** The project is
+not frozen. What never changes without a deliberate decision: no comparison across
+the Voteview and survey scales, no bill ideology from cutpoints or sponsors, no
+"dead" bills, the sample-size thresholds, and the four-view interface.
+
+Weekly chain (`.github/workflows/update.yml`, mirrored by `scripts/update.sh`):
+fetch every source as one snapshot (all critical sources succeed or nothing is
+installed and the job fails) → verify roster, join keys and record counts → data
+tests → rebuild → public-claim tests → supervisor → commit only if the pages or
+provenance changed → publish only if every gate passed. A failure leaves the
+previously verified site live. `data/raw/SNAPSHOT.json` records each source's
+URL, bytes, hash, content key, whether its content changed, when it last changed
+and when it was last checked; `PROVENANCE.tsv` logs each content change.
+
 ## Status in one line
+
+Weekly chain hardened (23 September 2026, published): fetch is all-or-nothing
+(`agents/base.py: run_snapshot`), a pre-build `agents/verify.py` checks the
+roster, join keys and record counts, the workflow gates every step and publishes
+only on full success, `data/raw/SNAPSHOT.json` records each source (URL, bytes,
+hash, content key, changed?, content-changed date, checked date, vintage), the
+page shows "Data updated <date>" and, per source, retrieval date and vintage
+separately, and zip archives are compared by content so daily republishing does
+not count as change. `python -m civicalign.whitepaper` refreshes the whitepaper's
+figures in one command. Tests: 143 pass; supervisor 18/18.
 
 Backend cleanup (23 September 2026, published): the obsolete cross-scale
 metrics were deleted, not hidden. `alignment.py` now only carries `Positions`
