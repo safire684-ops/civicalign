@@ -124,7 +124,7 @@ def test_workflow_gates_publication_on_every_check():
 
 def test_data_updated_line_distinguishes_retrieval_from_vintage():
     page = (ROOT / "demo" / "senator-check.html").read_text()
-    assert "Data updated '+M.dataUpdated" in page
+    assert "Senate data updated: '+esc(M.dataUpdated)" in page and "Voter estimate: '+M.ideologyYear+' wave" in page
     assert "the survey itself is not newer than that" in page
     assert "retrieved '+esc(t.asof)" in page and "data: '+esc(t.vintage)" in page
 

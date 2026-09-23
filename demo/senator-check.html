@@ -13,13 +13,11 @@
 <body>
 <div class="wrap">
 <header>
-  <div class="top">
-    <p class="eyebrow">CivicAlign &middot; 119th Congress</p>
-    <span class="badge" id="baseline">Baseline: &mdash;</span>
-  </div>
-  <h1>See your senator's voting pattern and your state's voter estimate</h1>
-  <p class="sub">Use this to see where your senators sit within the Senate and where
-    your state sits among voter estimates.</p>
+  <p class="eyebrow">CivicAlign &middot; 119th Congress</p>
+  <h1>Your senators, and your state’s voters</h1>
+  <p class="sub">See how your senators vote within the Senate, and where voters in your
+    state are estimated to sit politically compared with voters nationally.</p>
+  <p class="separate">These are two separate measures and are not directly compared.</p>
   <p class="updated" id="updated"></p>
 </header>
 
@@ -36,15 +34,12 @@
   <div class="picker">
     <label for="state">Your state</label>
     <select id="state"></select>
-    <p class="statefact" id="statefact"></p>
   </div>
-  <p class="leftright">On these charts, <b>left</b> means more liberal and <b>right</b>
-    means more conservative.</p>
+  <h3 class="q">Your senators</h3>
+  <p class="qsub">How they vote compared with the Senate.</p>
   <div id="cards"></div>
   <div id="stateblock"></div>
-  <p class="limit">These show two different things: how the senator votes within the
-    Senate, and where the state’s voters are estimated to sit among voter estimates.
-    They are not directly compared.</p>
+  <p class="limit">These are different measures and are shown separately.</p>
   <details class="explore" id="explore">
     <summary><span>Where familiar senators sit</span></summary>
     <div class="ruler" id="ruler"></div>
@@ -55,11 +50,8 @@
 <section id="the-senate" class="view" role="tabpanel" aria-labelledby="tab-the-senate" tabindex="-1" hidden>
   <p class="takeaway" id="take-senate"></p>
   <div class="pubcard" id="pubcard"></div>
-  <p class="why">Every state gets two senators regardless of population, so the Senate
-    does not represent people in proportion to where they live.</p>
   <p class="limit">The Senate figures and the voter estimates come from different
-    measurement systems and are not directly compared. The voter estimate is academic
-    survey work (American Ideology Project, 2020 wave), not a poll of today's opinion.</p>
+    measurement systems and are not directly compared.</p>
   <details class="more">
     <summary><span>Why does this matter?</span></summary>
     <div class="stakes" id="stakes"></div>
@@ -84,23 +76,30 @@
 <section id="committees" class="view" role="tabpanel" aria-labelledby="tab-committees" tabindex="-1" hidden>
   <p class="takeaway" id="take-committee"></p>
   <p class="why">Senate committees review bills before many of them can go to the
-    full Senate. Pick a committee to see who is on it, what it has sent forward, and
-    what happened on Senate votes about those bills.</p>
+    full Senate.</p>
+  <div class="flow process" aria-label="How a bill moves">
+    <div class="step"><span class="k">A bill is introduced</span></div>
+    <div class="arr" aria-hidden="true"></div>
+    <div class="step"><span class="k">Sent to a committee, which reviews it</span></div>
+    <div class="arr" aria-hidden="true"></div>
+    <div class="step"><span class="k">Some are formally sent to the full Senate</span></div>
+    <div class="arr" aria-hidden="true"></div>
+    <div class="step end"><span class="k">The Senate may vote</span></div>
+  </div>
   <div class="picker">
     <label for="committee">Committee</label>
     <select id="committee"></select>
-    <p class="statefact" id="cmfact"></p>
   </div>
   <div id="committee-drift-module">
     <h3 class="q">1. Who is on this committee?</h3>
     <div id="committee-cards"></div>
   </div>
   <div class="gate">
-    <h3 class="q">2. What has this committee sent to the full Senate?</h3>
+    <h3 class="q">2. What has it sent to the full Senate?</h3>
     <div id="gates"></div>
   </div>
   <div class="gate">
-    <h3 class="q">3. What happened when those bills reached the full Senate?</h3>
+    <h3 class="q">3. When these bills reached Senate votes, where did the Yes and No sides divide?</h3>
     <div id="floorsplit"></div>
   </div>
   <p class="limit">Limited data can make committee patterns unstable. A bill still in
@@ -119,41 +118,55 @@
   <p class="takeaway">Plain answers to the questions people ask most. We combine public voting records, survey estimates, and other
     public data to make these comparisons.</p>
   <div class="faq">
-    <div><h3>Where does the senator information come from?</h3>
-      <p>Actual Senate votes, collected and scored by Voteview, a university project.
-      Every vote a senator has cast this Congress is boiled down to one overall voting
-      pattern, from more liberal to more conservative.</p></div>
-    <div><h3>What is the Senate middle?</h3>
-      <p>The midpoint of current senators’ voting patterns: roughly where the center
-      of the Senate sits. Each senator is shown compared with it.</p></div>
-    <div><h3>Where does the voter information come from?</h3>
-      <p>Academic survey estimates from the American Ideology Project (Tausanovitch
-      &amp; Warshaw), 2020 wave: where voters in each state generally sit, from surveys
-      run 2017&ndash;2021. It is not a current poll, an election result, party
-      registration or an approval rating.</p></div>
-    <div><h3>Are the senator and voter numbers directly compared?</h3>
+    <div><h3>What is this site showing me?</h3>
+      <p>Two things, kept separate: how each senator votes compared with the rest of
+      the Senate, and where voters in each state are estimated to sit politically
+      compared with voters nationally. It also shows what Senate committees have sent
+      to the full Senate.</p></div>
+    <div><h3>How are senators measured?</h3>
+      <p>From their actual Senate votes, collected and scored by Voteview, a university
+      project. Every vote a senator has cast this Congress is boiled down to one overall
+      voting pattern, from more liberal to more conservative.</p></div>
+    <div><h3>What is the voter estimate?</h3>
+      <p>An academic survey estimate from the American Ideology Project (Tausanovitch
+      &amp; Warshaw), 2020 wave: where voters in each state generally sit politically,
+      from surveys run 2017&ndash;2021. It is not a current opinion poll, an election
+      result, party registration or an approval rating.</p></div>
+    <div><h3>Are the senator and voter measures directly compared?</h3>
       <p>No. They use different measurement systems, so CivicAlign shows them
       separately. A direct senator-versus-state comparison would need a validated
       statistical bridge between the two scales, and CivicAlign does not currently
       have one.</p></div>
-    <div><h3>Is this telling me whether my senator represents me?</h3>
+    <div><h3>What does Senate middle mean?</h3>
+      <p>The center of current senators’ voting patterns. Each senator, each committee
+      and the 60-vote point are shown compared with it.</p></div>
+    <div><h3>Why are 60 votes shown?</h3>
+      <p>Under Senate rules, ending debate on most legislation generally requires
+      three-fifths of senators: 60 votes when all 100 seats are filled. So the senator
+      around the 60-vote point can matter as much as the middle. Not every bill needs
+      60 votes.</p></div>
+    <div><h3>What does a Senate committee do?</h3>
+      <p>It reviews bills in its subject area before many of them can go to the full
+      Senate. Bills are introduced, sent to a committee, and some are formally sent on
+      to the full Senate, which may then vote.</p></div>
+    <div><h3>What does “sent forward” mean?</h3>
+      <p>Formally reported by the committee to the full Senate. Not every reported bill
+      gets a floor vote, and a bill still in committee is not dead: Congress is still in
+      session and some bills may move later.</p></div>
+    <div><h3>Does this tell me whether my senator represents me?</h3>
       <p>No. CivicAlign shows voting patterns and voter estimates. Whether those
       differences matter to you depends on the issues you care about.</p></div>
     <div><h3>Does this tell me whether a bill is liberal or conservative?</h3>
       <p>No. The floor-vote measure shows where senators divided on a vote, not
       whether the bill itself was liberal or conservative. A sponsor’s voting record
       does not tell us that either.</p></div>
-    <div><h3>Does “still in committee” mean a bill is dead?</h3>
-      <p>No. Congress is still in session and some bills may move later.</p></div>
+    <div><h3>When was this data updated?</h3>
+      <p id="faq-updated"></p></div>
     <div><h3>What can’t this tell me?</h3>
       <p>Which issues make up a difference, or how a state’s voters feel about any one
       bill: each number squeezes many positions into one. Small samples deserve weak
       conclusions. Words like “near” and “on the more liberal side” describe position
       by one fixed rule; they are not grades.</p></div>
-    <div><h3>Where do the population and bill figures come from?</h3>
-      <p>U.S. Census estimates weight the states when we describe the country as a
-      whole. Official congressional records give each bill’s sponsor, the committees it
-      went to, and whether a committee formally sent it forward.</p></div>
   </div>
   <p class="limit">Every figure on this site is recomputed from the source files by an
     independent check before each weekly update is published.</p>
@@ -233,10 +246,10 @@ const P={"chM":0.31,"usM":-0.027,"pivot":0.44,"stateEstimates":[0.176,0.198,0.18
     b.after(s); b.setAttribute('aria-expanded','true');
   });
   var HELP={
-    middle:'Senate middle = the midpoint of current senators’ voting patterns.',
+    middle:'Senate middle = the center of current senators’ voting patterns.',
     national:'National voter estimate = all the state estimates combined, weighted by population.',
     sixty:'Where the 60th senator falls when senators are ordered by voting pattern, from more liberal to more conservative.',
-    sent:'Sent forward = the committee formally reported the bill to the full Senate.'
+    sent:'Sent forward = formally reported by the committee to the full Senate. Not every reported bill gets a floor vote.'
   };
   var pcol=function(p){return p==='Republican'?'var(--rep)':p==='Democrat'?'var(--dem)':'var(--muted)'};
   // blue (left of the public) -> grey -> red (right of the public)
@@ -245,8 +258,8 @@ const P={"chM":0.31,"usM":-0.027,"pivot":0.44,"stateEstimates":[0.176,0.198,0.18
     var e=t<0?b:r; return 'rgb('+g.map(function(v,i){return Math.round(v+(e[i]-v)*k)}).join(',')+')';
   };
 
-  $('baseline').textContent='Votes: this Congress · Surveys: '+M.ideologyYear+' wave';
-  $('updated').textContent=(M.dataUpdated?'Data updated '+M.dataUpdated+'. ':'')+'Senate votes and bills: current Congress, refreshed weekly. State voter estimate: American Ideology Project, '+M.ideologyYear+' wave (the survey itself is not newer than that).';
+  $('updated').innerHTML=(M.dataUpdated?'<span>Senate data updated: '+esc(M.dataUpdated)+'</span>':'')+'<span>Voter estimate: '+M.ideologyYear+' wave</span>';
+  $('faq-updated').textContent=(M.dataUpdated?'Senate votes, rosters and bills were last refreshed on '+M.dataUpdated+'; they are re-fetched and re-checked every week. ':'')+'The voter estimate is the '+M.ideologyYear+' wave of the American Ideology Project, the newest published; the survey itself is not newer than that.';
 
   // ---------- views (four tabs, hash-routed) ----------
   var VIEWS=['your-senators','the-senate','committees','how-it-works'];
@@ -330,7 +343,7 @@ const P={"chM":0.31,"usM":-0.027,"pivot":0.44,"stateEstimates":[0.176,0.198,0.18
   function cap(s){return s.charAt(0).toUpperCase()+s.slice(1)}
   function senatorTrack(s){
     var last=esc(surname(s.name)), sp=senatorPos(s);
-    return '<div class="scale"><div class="ends"><span>← More liberal</span><span>More conservative →</span></div>'+
+    return '<div class="scale"><p class="scalename">Senate voting scale</p><div class="ends"><span>← More liberal</span><span>More conservative →</span></div>'+
       '<div class="track" aria-hidden="true" style="--rows:1">'+
         '<div class="anchor sen" style="--x:'+pos(X.chMedian)+'%"></div><div class="atag sen" style="--x:'+pos(X.chMedian)+'%">Senate middle</div>'+
         '<div class="mark sen" style="--x:'+pos(s.record)+'%;--dot:'+pcol(s.party)+'"></div>'+
@@ -342,7 +355,7 @@ const P={"chM":0.31,"usM":-0.027,"pivot":0.44,"stateEstimates":[0.176,0.198,0.18
   function statePos(st){return P.usM==null?{w:'shown on the voter scale',c:'neutral',i:'\u25C6'}:relWords(st.center-P.usM,'national voter estimate')}
   function stateTrack(st,se){
     var stName=esc(st.name), moeW=Math.max(se*100,1.2), sp=statePos(st);
-    return '<div class="scale"><div class="ends"><span>← More liberal</span><span>More conservative →</span></div>'+
+    return '<div class="scale"><p class="scalename">Voter estimate scale</p><div class="ends"><span>← More liberal</span><span>More conservative →</span></div>'+
       '<div class="track" aria-hidden="true" style="--rows:1">'+
         (P.usM!=null?'<div class="anchor pub" style="--x:'+pos(P.usM)+'%"></div><div class="atag pub" style="--x:'+pos(P.usM)+'%">National voter estimate</div>':'')+
         '<div class="mark state-error-band" style="--x:'+pos(st.center)+'%;--w:'+moeW+'%"></div>'+
@@ -365,7 +378,7 @@ const P={"chM":0.31,"usM":-0.027,"pivot":0.44,"stateEstimates":[0.176,0.198,0.18
   }
   function stateWhat(st){
     var stName=esc(st.name);
-    return '<div class="term"><h4>What this is, and is not</h4><p>An estimate, from large academic surveys, of where voters in '+stName+' generally sit, from more liberal to more conservative. It is not a current poll, an election result, party registration, an approval rating, or opinion on any one issue. The estimate is based on survey data, so there is uncertainty around the exact position; the shaded area shows that range.</p></div>';
+    return '<div class="term"><h4>What this is, and is not</h4><p>This estimates where voters in '+stName+' generally sit politically. It is not a current opinion poll, election result, party-registration count, approval rating, or measure of opinion on a specific issue. The estimate is based on survey data, so there is uncertainty around the exact position; the shaded area shows that range.</p></div>';
   }
   function stateNumbers(st,se){
     var stName=esc(st.name);
@@ -381,7 +394,6 @@ const P={"chM":0.31,"usM":-0.027,"pivot":0.44,"stateEstimates":[0.176,0.198,0.18
   }
   function render(code){
     var st=V.states[code], se=M.se[code]||0, stName=esc(st.name), spst=statePos(st);
-    $('statefact').innerHTML='Below: how each of '+stName+'’s senators votes compared with the Senate, then where '+stName+'’s voters are estimated to sit.';
     (function(){
       var scored=st.senators.filter(function(s){return s.record!=null});
       var t;
@@ -398,18 +410,19 @@ const P={"chM":0.31,"usM":-0.027,"pivot":0.44,"stateEstimates":[0.176,0.198,0.18
       var sp=senatorPos(s), last=esc(surname(s.name));
       return '<div class="card">'+
         '<div class="who"><h3>'+esc(s.name)+'</h3><span class="party '+pcls(s.party)+'">'+esc(s.party)+'</span></div>'+
-        '<p class="kicker">How '+last+' votes <span class="kick2">compared with the Senate middle</span>'+help('What is the Senate middle?',HELP.middle)+'</p>'+
+        '<p class="kicker">How '+esc(s.name)+' votes <span class="kick2">compared with the Senate</span></p>'+
         senatorTrack(s)+
-        '<p class="verdict"><span class="ic" aria-hidden="true">'+sp.i+'</span>'+last+'’s voting record is <b>'+sp.w+'</b>.</p>'+
-        '<p class="caption">Based on '+last+'’s '+(s.votes?s.votes+' ':'')+'Senate votes during the current Congress.</p>'+
+        '<p class="verdict"><span class="ic" aria-hidden="true">'+sp.i+'</span>'+last+'’s voting record is <b>'+sp.w+'</b>.'+help('What is the Senate middle?',HELP.middle)+'</p>'+
+        '<p class="caption">Based on '+(s.votes?s.votes+' ':'')+'recorded Senate votes during the current Congress.</p>'+
         '<details class="more"><summary><span>See details</span></summary>'+
           '<div class="terms">'+senatorNumbers(s)+madeOf(s)+'</div>'+
-          '<p class="legend">The tick marks the Senate middle, the midpoint of current senators’ voting patterns. Open “Where familiar senators sit” below to see the typical Democrat, the typical Republican and a few well-known senators on this same line.</p>'+
+          '<p class="legend">Scored by Voteview, a university project, from every recorded vote. Open “Where familiar senators sit” below to see the typical Democrat, the typical Republican and a few well-known senators on this same line.</p>'+
         '</details></div>';
     }).join('');
-    $('stateblock').innerHTML='<div class="card statecard">'+
-      '<div class="who"><h3>Estimated political position of '+stName+' voters</h3><span class="party i">Academic survey estimate</span></div>'+
-      '<p class="kicker">Voter estimate <span class="kick2">compared with the national voter estimate</span>'+help('What is the national voter estimate?',HELP.national)+'</p>'+
+    $('stateblock').innerHTML='<h3 class="q">Voters in '+stName+'</h3><p class="qsub">An academic estimate of where '+stName+' voters generally sit politically compared with voters nationally.</p>'+
+      '<div class="card statecard">'+
+      '<div class="who"><h3>Estimated political position of '+stName+' voters</h3></div>'+
+      '<p class="kicker">Compared with voters nationally <span class="kick2">the national voter estimate</span>'+help('What is the national voter estimate?',HELP.national)+'</p>'+
       stateTrack(st,se)+
       '<p class="verdict"><span class="ic" aria-hidden="true">'+spst.i+'</span>'+stName+'’s voter estimate is <b>'+spst.w+'</b>.</p>'+
       '<p class="caption">Academic survey estimate, American Ideology Project, '+M.ideologyYear+' wave.</p>'+
@@ -426,23 +439,23 @@ const P={"chM":0.31,"usM":-0.027,"pivot":0.44,"stateEstimates":[0.176,0.198,0.18
     var piv=relWords(P.pivot-P.chM,'Senate middle');
     $('pubcard').innerHTML=
       '<p class="kicker">How the Senate votes <span class="kick2">all 100 senators, compared with the Senate middle</span>'+help('What is the Senate middle?',HELP.middle)+'</p>'+
-      '<div class="ends"><span>← More liberal</span><span>More conservative →</span></div>'+
+      '<p class="scalename">Senate voting scale</p><div class="ends"><span>← More liberal</span><span>More conservative →</span></div>'+
       '<div class="pubtrack" aria-hidden="true">'+
         '<div class="pm sen" style="--x:'+pos(P.chM)+'%"></div><div class="pt b" style="--x:'+pos(P.chM)+'%">Senate middle</div>'+
         '<div class="pm piv" style="--x:'+pos(P.pivot)+'%"></div><div class="pt c after" style="--x:'+pos(P.pivot)+'%">60-vote point</div>'+
       '</div>'+
       '<p class="sr-only">Chart: the 60-vote point is '+piv.w+'. On the display line the middle of the Senate is at '+p100(P.chM)+' and the 60th vote from the left at '+p100(P.pivot)+'.</p>'+
-      '<p class="verdict">The 60-vote point sits <b>'+piv.w+'</b>.'+help('What is the 60-vote point?',HELP.sixty)+'</p>'+
-      '<p class="caption">Why 60? Many Senate actions need 60 votes to move forward.</p>'+
+      '<p class="verdict">The 60-vote point is <b>'+piv.w+'</b>.'+help('What is the 60-vote point?',HELP.sixty)+'</p>'+
+      '<p class="caption">Why 60? Under Senate rules, ending debate on most legislation generally requires three-fifths of senators: 60 votes when all 100 seats are filled.</p>'+
       (P.usM==null?'':'<p class="kicker">Where each state’s voters are estimated to sit <span class="kick2">survey estimates, '+M.ideologyYear+' wave</span></p>'+
-      '<div class="ends"><span>← More liberal</span><span>More conservative →</span></div>'+
+      '<p class="scalename">Voter estimate scale</p><div class="ends"><span>← More liberal</span><span>More conservative →</span></div>'+
       '<div class="pubtrack voters" aria-hidden="true">'+ticks+
         '<div class="pm pub" style="--x:'+pos(P.usM)+'%"></div><div class="pt a" style="--x:'+pos(P.usM)+'%">National voter estimate</div>'+
       '</div>'+
       '<p class="sr-only">Chart: the national voter estimate on the voter scale, at '+p100(P.usM)+' on the display line, with each state’s estimate as a faint tick around it.</p>'+
       '<p class="verdict">Each faint tick is one state’s voter estimate; the green mark is the national voter estimate.</p>'+
       '<p class="caption">These are different measures and are shown separately.</p>');
-    $('take-senate').textContent='This shows the middle of current Senate voting patterns and where the 60-vote point falls. The country’s voter estimate is shown on a separate scale below; the two are not directly compared.';
+    $('take-senate').textContent='This shows the Senate’s voting center and where the 60-vote point falls. The country’s voter estimate is shown on a separate scale below; the two are not directly compared.';
     $('pubnums').innerHTML='<p class="fine">'+SCALE_NOTE+'</p><div class="bignums">'+
         '<div><span class="k">The Senate’s middle</span><span class="v">'+p100(P.chM)+'</span><span class="s">display line, senators’ scale; the middle senator’s voting pattern</span></div>'+
         '<div><span class="k">The 60-vote point</span><span class="v">'+p100(P.pivot)+'</span><span class="s">display line, senators’ scale; the 60th senator counting from the liberal end</span></div>'+
@@ -474,7 +487,7 @@ const P={"chM":0.31,"usM":-0.027,"pivot":0.44,"stateEstimates":[0.176,0.198,0.18
       goToSenators();
     });
     $('stakes').innerHTML='<p>Every state gets two senators whether it has 40 million people or 600,000. So the Senate does not represent people in proportion to where they live, and a bill backed by a slim majority of the country can fail in the Senate without any senator changing their mind.</p>'+
-      '<p>Many Senate actions need 60 votes to move forward, though not every bill does. So the senator around that 60-vote point can matter more than the mathematical middle of the Senate. Counting from the liberal end, that 60th senator sits '+piv.w+'. (In Senate procedure this is called the cloture threshold.)</p>';
+      '<p>Many Senate actions need 60 votes to move forward, though not every bill does. So the senator around that 60-vote point can matter more than the mathematical middle of the Senate. Counting from the liberal end, that 60th senator sits '+piv.w+'. This procedure for ending debate is called cloture.</p>';
   })();
 
   // ---------- committees: one at a time, all its measures together ----------
@@ -485,7 +498,7 @@ const P={"chM":0.31,"usM":-0.027,"pivot":0.44,"stateEstimates":[0.176,0.198,0.18
     var l=Math.min(pos(c.median),pos(X.chMedian)), w=Math.abs(pos(c.median)-pos(X.chMedian));
     var spoken='Chart: this committee\u2019s members sit '+driftWords(c.drift)+'. On the display line the middle of the Senate is at '+p100(X.chMedian)+' and this committee\u2019s members\u2019 midpoint at '+p100(c.median)+'.';
     return '<div class="cm"><div class="gh"><b>'+esc(c.name)+'</b><span>'+c.n+' senators \u00b7 '+c.split[0]+' from the majority party, '+c.split[1]+' from the minority</span></div>'+
-      '<div class="ends"><span>← More liberal</span><span>More conservative →</span></div>'+
+      '<p class="scalename">Senate voting scale</p><div class="ends"><span>← More liberal</span><span>More conservative →</span></div>'+
       '<div class="ctrack" aria-hidden="true">'+
         '<div class="conn'+(right?'':' left')+'" style="--l:'+l+'%;--w:'+w+'%"></div>'+
         '<div class="cmk sen" style="--x:'+pos(X.chMedian)+'%"></div><div class="ct a" style="--x:'+pos(X.chMedian)+'%">Senate middle</div>'+
@@ -512,20 +525,21 @@ const P={"chM":0.31,"usM":-0.027,"pivot":0.44,"stateEstimates":[0.176,0.198,0.18
         '<div class="arr" aria-hidden="true"></div>'+
         '<div class="step"><span class="k">Formally sent forward'+help('What does sent forward mean?',HELP.sent)+'</span><span class="v">'+rep+'</span></div>'+
         '<div class="arr" aria-hidden="true"></div>'+
-        '<div class="step end"><span class="k">Full Senate</span><span class="s">where a bill can get a vote</span></div>'+
+        '<div class="step end"><span class="k">Full Senate</span><span class="s">which may vote on it</span></div>'+
       '</div>'+
-      '<p class="rest"><b>'+(ref-rep).toLocaleString()+'</b> still in committee. Sent forward means the committee formally reported the bill to the full Senate; a bill still in committee is not dead, it just has not moved yet.</p>'+
-      '<p class="grouped">Sponsor = the senator who introduced the bill. Below, the bills are grouped by whether their sponsor has a more liberal or a more conservative voting record. The sponsor’s voting record does not tell us whether the bill itself is liberal or conservative.</p>'+
+      '<p class="rest"><b>'+(ref-rep).toLocaleString()+'</b> still in committee. Sent forward means formally reported by the committee to the full Senate; a bill still in committee is not dead, it just has not moved yet.</p>'+
+      '<p class="grouped">Sponsor = the senator who introduced the bill. These bills are grouped by the voting pattern of the senator who introduced them.</p>'+
+      '<p class="notbill">This describes the sponsor, not the ideology of the bill.</p>'+
       '<div class="bars">'+row('Sponsor with a liberal record','l',c.libRep,c.libRef,c.libPct)+row('Sponsor with a conservative record','c',c.conRep,c.conRef,c.conPct)+'</div><p class="say">'+say+'</p></div>';
   }
   function floorSplit(code){
     var o=X.output[code];
-    if(!o) return '<div class="gk weak"><p class="say"><span class="tag weak">Not enough data yet</span> Fewer than 7 Senate votes so far on bills this committee sent forward, so there is nothing to show yet.</p><p class="fine">Most floor action is on nominations and House bills that no Senate committee reported, so most committees have few qualifying votes.</p></div>';
+    if(!o) return '<div class="gk weak"><p class="say"><span class="tag weak">Not enough data yet</span> Fewer than 7 qualifying Senate votes so far on bills this committee sent forward, so there is nothing to show yet.</p><p class="fine">Most floor action is on nominations and House bills that no Senate committee reported, so most committees have few qualifying votes.</p></div>';
     var weak=o.n<15;
     var sw=relWords(o.vsSen,'Senate middle');
     var right=o.vsSen>0, l=Math.min(pos(o.coi),pos(X.chMedian)), w=Math.abs(pos(o.coi)-pos(X.chMedian));
-    return '<div class="gk'+(weak?' weak':'')+'"><p class="say">On Senate votes involving these bills, this shows where the Yes and No sides divided.</p>'+
-      '<div class="ends"><span>← More liberal</span><span>More conservative →</span></div>'+
+    return '<div class="gk'+(weak?' weak':'')+'">'+
+      '<p class="scalename">Senate voting scale</p><div class="ends"><span>← More liberal</span><span>More conservative →</span></div>'+
       '<div class="ctrack" aria-hidden="true">'+
         '<div class="conn'+(right?'':' left')+'" style="--l:'+l+'%;--w:'+w+'%"></div>'+
         '<div class="cmk sen" style="--x:'+pos(X.chMedian)+'%"></div><div class="ct a" style="--x:'+pos(X.chMedian)+'%">Senate middle</div>'+
@@ -533,8 +547,8 @@ const P={"chM":0.31,"usM":-0.027,"pivot":0.44,"stateEstimates":[0.176,0.198,0.18
       '</div>'+
       '<p class="sr-only">Chart: the split between Yes and No senators fell '+sw.w+'.</p>'+
       '<p class="verdict">The split between Yes and No senators fell <b>'+sw.w+'</b>.</p>'+
-      '<p class="caption">It does not tell us whether the bill itself was liberal or conservative.</p>'+
-      '<p class="say">'+(weak?'<span class="tag weak">Early signal</span> Only '+o.n+' Senate votes on these bills so far, so this is too little data for a strong conclusion.':'Based on '+o.n+' Senate votes on these bills.')+'</p>'+
+      '<p class="caption">This shows where senators divided on the vote. It does not tell us whether the bill itself was liberal or conservative.</p>'+
+      '<p class="say">'+(weak?'<span class="tag weak">Early signal</span> Only '+o.n+' qualifying Senate votes so far, so there is too little data for a strong conclusion.':'Based on '+o.n+' qualifying Senate votes.')+'</p>'+
       '<details class="more"><summary><span>More about these votes</span></summary>'+
       '<p class="fine">'+SCALE_NOTE+' Only votes on bills this committee formally sent forward count. On the display line the split point is at '+p100(o.coi)+', '+d100(o.vsSen)+' display-scale units from the Senate middle at '+p100(X.chMedian)+'.</p></details></div>';
   }
@@ -546,7 +560,6 @@ const P={"chM":0.31,"usM":-0.027,"pivot":0.44,"stateEstimates":[0.176,0.198,0.18
     var g=(G.committees||[]).filter(function(x){return x.code===code})[0], o=X.output[code];
     var second=(g&&g.ok)?(Math.abs(g.vsBase)<1?'it sends bills from both groups to the full Senate about as often as the Senate overall':'it has sent forward bills introduced by senators with '+(g.vsBase>0?'conservative':'liberal')+' records '+(Math.abs(g.vsBase)<5?'a bit':'noticeably')+' more often than the Senate overall'):'there is not yet enough bill data for a strong conclusion about what it does';
     $('take-committee').textContent='The '+c.name+' Committee\u2019s members sit '+driftWords(c.drift)+', and '+second+'.';
-    $('cmfact').innerHTML=c.n+' senators, '+c.split[0]+' from the majority party and '+c.split[1]+' from the minority.';
     $('committee-cards').innerHTML=committeeCard(c);
     $('gates').innerHTML=sentOnBars(code);
     $('floorsplit').innerHTML=floorSplit(code);
@@ -585,7 +598,7 @@ const P={"chM":0.31,"usM":-0.027,"pivot":0.44,"stateEstimates":[0.176,0.198,0.18
   }
   var srcRow=function(t){return '<div><b>'+esc(t.what)+'</b><span class="who"><a href="'+esc(t.url)+'" target="_blank" rel="noopener">'+esc(t.who)+'</a></span><span>'+esc(t.use)+'. <a href="'+esc(t.file)+'" target="_blank" rel="noopener">Exact file</a>'+(t.vintage?' \u00b7 data: '+esc(t.vintage):'')+(t.asof?' \u00b7 retrieved '+esc(t.asof):'')+'</span></div>'};
   $('srcs').innerHTML=M.sources.map(srcRow).join('');
-  $('foot').innerHTML='<h3>Sources</h3><ul>'+M.sources.map(function(t){return '<li><b>'+esc(t.what)+':</b> <a href="'+esc(t.url)+'" target="_blank" rel="noopener">'+esc(t.who)+'</a>'+(t.vintage?' <span class="asof">\u2014 '+esc(t.vintage)+'</span>':'')+(t.asof?' <span class="asof">(retrieved '+esc(t.asof)+')</span>':'')+'</li>'}).join('')+'</ul><p>'+(M.dataUpdated?'Data updated '+esc(M.dataUpdated)+'. ':'')+'Every week the sources are re-fetched as one set, checked, and every figure is recomputed by an independent check before anything is published. <a href="methodology.html">Full methodology</a>.</p>';
+  $('foot').innerHTML='<h3>Sources</h3><ul>'+M.sources.map(function(t){return '<li><b>'+esc(t.what)+':</b> <a href="'+esc(t.url)+'" target="_blank" rel="noopener">'+esc(t.who)+'</a>'+(t.vintage?' <span class="asof">\u2014 '+esc(t.vintage)+'</span>':'')+(t.asof?' <span class="asof">(retrieved '+esc(t.asof)+')</span>':'')+'</li>'}).join('')+'</ul><p>'+(M.dataUpdated?'Senate data updated '+esc(M.dataUpdated)+'; voter estimate: '+M.ideologyYear+' wave. ':'')+'Every week the sources are re-fetched as one set, checked, and every figure is recomputed by an independent check before anything is published. <a href="methodology.html">Full methodology</a>.</p>';
 
   sel.addEventListener('change',function(){render(sel.value)});
   sel.value='GA'; render('GA');

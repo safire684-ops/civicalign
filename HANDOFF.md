@@ -64,54 +64,63 @@ All seven are enforced by tests that run in the weekly job.
 
 ## What the page shows
 
-- **Header.** One purpose sentence: "Use this to see where your senators sit
-  within the Senate and where your state sits among voter estimates."
-- **Your senators.** State picker with an orientation line ("Below: how each of
-  Georgia's senators votes compared with the Senate, then where Georgia's voters
-  are estimated to sit."). Each senator card: "How Ossoff votes, compared with the
-  Senate middle (i)", a ruler (MORE LIBERAL ← → MORE CONSERVATIVE, Senate-middle
-  tick, senator dot), "Ossoff's voting record is on the more liberal side of the
-  Senate middle.", "Based on Ossoff's 844 Senate votes during the current
-  Congress." One state card, "Estimated political position of Georgia voters":
-  "Voter estimate, compared with the national voter estimate (i)", ruler with
-  "Shaded area = estimated range.", the sentence, "Academic survey estimate,
-  American Ideology Project, 2020 wave." Under details: what the estimate is and
-  is not (not a poll, election result, registration, approval rating), then the
-  numbers. Below the cards: "These show two different things: how the senator
-  votes within the Senate, and where the state's voters are estimated to sit among
-  voter estimates. They are not directly compared." "Where familiar senators sit" (folded) puts
+- **Header.** "Your senators, and your state's voters" / "See how your senators
+  vote within the Senate, and where voters in your state are estimated to sit
+  politically compared with voters nationally." / "These are two separate
+  measures and are not directly compared." / "Senate data updated: <date> ·
+  Voter estimate: 2020 wave".
+- **Your senators.** State picker, then the section "YOUR SENATORS — How they
+  vote compared with the Senate." Each senator card: "How Jon Ossoff votes,
+  compared with the Senate", a ruler labelled SENATE VOTING SCALE (MORE LIBERAL
+  ← → MORE CONSERVATIVE, Senate-middle tick, senator dot), "Ossoff's voting
+  record is on the more liberal side of the Senate middle. (i)", "Based on 844
+  recorded Senate votes during the current Congress." Then the section "VOTERS
+  IN GEORGIA — An academic estimate of where Georgia voters generally sit
+  politically compared with voters nationally." and one card, "Estimated
+  political position of Georgia voters": "Compared with voters nationally (i)",
+  a ruler labelled VOTER ESTIMATE SCALE with "Shaded area = estimated range.",
+  the sentence, "Academic survey estimate, American Ideology Project, 2020 wave."
+  Under details: what the estimate is and is not (not a current opinion poll,
+  election result, party-registration count, approval rating, or opinion on a
+  specific issue), then the numbers. Below the cards: "These are different
+  measures and are shown separately." "Where familiar senators sit" (folded) puts
   the middle Democrat, middle Republican, Senate middle and eight named senators on
   the senators' line.
-- **The Senate.** "This shows the middle of current Senate voting patterns and
-  where the 60-vote point falls." Senate middle and 60-vote point on the senators'
-  line ("The 60-vote point sits on the more conservative side of the Senate
-  middle. (i)" / "Why 60? Many Senate actions need 60 votes to move forward.");
-  the state estimates on their own line with every state as a faint tick. Folded:
-  why it matters (two senators per state; "not every bill does"; cloture named
-  after the explanation), all 100 circles coloured by side of the Senate middle,
-  the numbers.
+- **The Senate.** "This shows the Senate's voting center and where the 60-vote
+  point falls." "How the Senate votes (i)", Senate middle and 60-vote point on
+  the SENATE VOTING SCALE ("The 60-vote point is on the more conservative side of
+  the Senate middle. (i)" / "Why 60? Under Senate rules, ending debate on most
+  legislation generally requires three-fifths of senators: 60 votes when all 100
+  seats are filled."); the state estimates on the VOTER ESTIMATE SCALE with every
+  state as a faint tick. Folded: why it matters (two senators per state; "not
+  every bill does"; "This procedure for ending debate is called cloture"), all
+  100 circles, the numbers.
 - **Committees.** "Senate committees review bills before many of them can go to
-  the full Senate. Pick a committee to see who is on it, what it has sent forward,
-  and what happened on Senate votes about those bills." One committee at a time,
-  three questions: who is on it (ruler, sentence); what it has sent to the full
-  Senate (a three-step flow: bills sent to this committee → formally sent forward
-  (i) → full Senate; "N still in committee … not dead"; "Sponsor = the senator who
-  introduced the bill"; bars grouped by sponsor record; "Limited data" below 25 per
-  group); what happened when those bills reached the full Senate ("On Senate votes
-  involving these bills, this shows where the Yes and No sides divided", a ruler
-  with the Yes/No split against the Senate middle, "It does not tell us whether the
-  bill itself was liberal or conservative", "Based on 28 Senate votes on these
-  bills" or "Only 7 … too little data for a strong conclusion", numbers under
-  "More about these votes").
-- **How it works.** Nine plain questions and answers (where the senator and
-  voter information comes from, what the Senate middle is, whether the two are
-  compared, whether this says if a senator represents you, whether a bill is
-  liberal or conservative, whether "still in committee" means dead, what it cannot
-  tell you, where population and bill figures come from), the weekly-check line,
-  link to the report, and "Show the technical methodology" (two lines, why
-  separate, raw values, same-scale arithmetic, sources with exact files).
-- Header: "Data updated <date>", with the note that the survey wave is 2020.
-  Footer: sources with publisher, link, vintage and retrieval date.
+  the full Senate." then a four-step flow (a bill is introduced → sent to a
+  committee, which reviews it → some are formally sent to the full Senate → the
+  Senate may vote). One committee at a time, three questions: who is on it
+  (ruler, sentence); what it has sent to the full Senate (bills sent to this
+  committee → formally sent forward (i) → full Senate, "which may vote on it";
+  "N still in committee … not dead"; "Sponsor = the senator who introduced the
+  bill. These bills are grouped by the voting pattern of the senator who
+  introduced them." / "This describes the sponsor, not the ideology of the bill.";
+  bars; "Limited data" below 25 per group); "When these bills reached Senate
+  votes, where did the Yes and No sides divide?" (ruler with the Yes/No split
+  against the Senate middle, "This shows where senators divided on the vote. It
+  does not tell us whether the bill itself was liberal or conservative.", "Based
+  on 28 qualifying Senate votes." or "Only 7 qualifying Senate votes so far, so
+  there is too little data for a strong conclusion.", numbers under "More about
+  these votes").
+- **How it works.** Twelve plain questions and answers, in the order a voter
+  would ask them (what the site shows, how senators are measured, what the voter
+  estimate is, whether the two are compared, what Senate middle means, why 60
+  votes are shown, what a committee does, what "sent forward" means, whether this
+  says if a senator represents you, whether a bill is liberal or conservative,
+  when the data was updated, what it cannot tell you), the weekly-check line, link
+  to the report, and "Show the technical methodology" (two lines, why separate,
+  raw values, same-scale arithmetic, sources with exact files).
+- Footer: sources with publisher, link, vintage and retrieval date, and
+  "Senate data updated <date>; voter estimate: 2020 wave".
 
 ## How the weekly update works
 
@@ -176,12 +185,12 @@ guard (104 Voteview rows for 100 seats) is in `sources/voteview.py`.
   vintages), `verify.py`, `supervisor.py`. `whitepaper.py` — figure refresher.
 - Tests: `test_published_pages.py` (contract: no cross-scale arithmetic G1–G6,
   no bill ideology, no dead bills, twelve UX guarantees, ten presentation
-  guarantees, fifteen average-voter guarantees V1–V15), `test_update_chain.py`
+  guarantees, twenty average-voter guarantees V1–V20), `test_update_chain.py`
   (snapshot, gates, provenance),
   `test_supervisor.py`, `test_independent.py` (raw-file recomputation),
   `test_floor_votes.py`, `test_math.py`, `test_regressions.py`,
   `test_representation.py`, `test_uncertainty.py`, `test_whitepaper.py`.
-  170 pass as of this handoff; supervisor 18/18; verify 12/12.
+  175 pass as of this handoff; supervisor 18/18; verify 12/12.
 
 ## Open items
 
@@ -221,7 +230,12 @@ guard (104 Voteview rows for 100 seats) is in `sources/voteview.py`.
   Later that day, the average-voter pass: tap-to-open hints for Senate middle,
   national voter estimate, 60-vote point and sent forward; bill flow as three
   steps; a Yes/No-split ruler; How it works as questions and answers; academic
-  terms and coordinates moved behind details; no engine change.
+  terms and coordinates moved behind details; no engine change. Final
+  comprehension pass: new header and freshness line, "Your senators" / "Voters in
+  <State>" sections, SENATE VOTING SCALE / VOTER ESTIMATE SCALE labels on every
+  ruler, the legislative flow, the three-fifths explanation of 60, FAQ reordered
+  with "When was this data updated?"; removed the badge, the left/right line, the
+  picker fact lines and the duplicate two-senators paragraph.
 
 Reference reports from earlier rounds (Gemini): Pillar 6 dual-metric framework
 https://gemini.google.com/share/b75123b297db?skid=4798bd3c-9d90-4f8a-a251-00429acbda75 ;
