@@ -33,70 +33,74 @@ from pathlib import Path
 from ..agents.base import sha256_bytes
 from ..config import DEFAULT, Config
 from ..sources import federal_register as fr, publaw, uscode
-from . import binding as B
+from . import binding as B, relevance as R
 from .fetch import Store
 
-CONTEXT_SCHEMA = "civicalign.context/1.0"
-PACKET_SCHEMA = "civicalign.packet/1.0"
+CONTEXT_SCHEMA = "civicalign.context/1.1"
+PACKET_SCHEMA = "civicalign.packet/1.1"
 SECTION_CAP = 12                 # more cited sections than this and the selection policy for large measures is needed
 LARGE_TEXT_WORDS = 30000         # above this a packet needs a section-selection policy for the text itself (not built)
 CRA_CONSEQUENCE = ("5", "801")   # the CRA consequence: 5 U.S.C. 801 in the Code in force at the vote
 
-AMENDATORY = re.compile(r"\bis amended\b|\bare amended\b|\bis repealed\b|\bby striking\b|\bby inserting\b|\bis redesignated\b|\bare redesignated\b")
-BLOCKS = {"text", "clause", "subclause", "subparagraph", "paragraph", "subsection", "section", "quoted-block", "resolution-body", "legis-body"}
+FULL_SECTION_MAX_CHARS = 50000  # a whole cited section larger than this is never injected; a pinpoint or a policy decision is needed
+PACKET_REVIEW_CHARS = 150000     # a packet whose source text exceeds this is flagged for human review (never truncated)
 
-# ---- references ----------------------------------------------------------------
+# ---- references and the selection policy ------------------------------------------
 
 def extract_references(xml_bytes: bytes) -> list[dict]:
-    root = ET.parse(io.BytesIO(xml_bytes)).getroot()
-    parent = {c: p for p in root.iter() for c in p}
-    out = []
-    for x in root.iter("external-xref"):
-        cite = x.get("parsable-cite", ""); ld = x.get("legal-doc", "")
-        block = parent.get(x)
-        while block is not None and block.tag not in BLOCKS:
-            block = parent.get(block)
-        btext = " ".join("".join(block.itertext()).split()) if block is not None else ""
-        rec = {"legal_doc": ld, "cite": cite, "text": "".join(x.itertext()).strip(),
-               "amendatory": bool(AMENDATORY.search(btext)), "pl_section": None, "pl_division": None}
-        if ld == "public-law":
-            pl = publaw.parse_cite(cite)
-            if pl:
-                for m in publaw.SECTION_OF_PL.finditer(btext):
-                    if (int(m.group(2)), int(m.group(3))) == pl:
-                        rec["pl_section"] = m.group(1); break
-                if rec["pl_section"] is None:
-                    for m in publaw.DIVISION_OF_PL.finditer(btext):
-                        if (int(m.group(2)), int(m.group(3))) == pl:
-                            rec["pl_division"] = m.group(1); break
-        out.append(rec)
-    return out
+    """Every tagged citation in the voted XML with its location, scope, pinpoint
+    and relationship (see relevance.py)."""
+    return R.analyse(xml_bytes)["references"]
 
 
-def select_sections(refs: list[dict], is_cra: bool) -> dict:
-    """The fixed policy. Sections cited inside amendatory instructions are
-    required; if there are none, every cited section is required (a short
-    measure's authorities); above SECTION_CAP the large-measure policy, which
-    does not exist yet, is needed and the context stays pending."""
-    ids = {}
+def citation_gaps(xml_bytes: bytes) -> list[dict]:
+    return R.analyse(xml_bytes)["gaps"]
+
+
+def _subsumed(ident: str, others: set[str]) -> bool:
+    return any(ident != o and ident.startswith(o + "/") for o in others)
+
+
+def select_sections(refs: list[dict], is_cra: bool, gaps: list[dict] | None = None) -> dict:
+    """The fixed policy. U.S. Code provisions whose relationship needs content are
+    required, at the node the citation names (a whole section only when the
+    citation names only the section); a node inside another required provision
+    is covered by it. Everything else is tracked, not included. CRA resolutions
+    keep their own policy (the resolution's text and 5 U.S.C. 801 only). A
+    citation the XML leaves unresolved in a location that needs content, or more
+    required provisions than SECTION_CAP, leaves the context pending."""
+    need: dict[str, dict] = {}; tracked: dict[str, dict] = {}
     for r in refs:
         if r["legal_doc"] != "usc":
             continue
         u = uscode.usc_identifier(r["cite"])
-        if u:
-            ids.setdefault(u[2], {"title": u[0], "section": u[1], "amendatory": False})
-            ids[u[2]]["amendatory"] |= r["amendatory"]
-    amend = sorted(k for k, v in ids.items() if v["amendatory"])
-    if is_cra:
-        return {"policy": "cra: the resolution's own text and the CRA consequence section; cited authorities are not extracted",
-                "section_cap": SECTION_CAP, "required": [], "cited": sorted(ids), "amended": amend, "status": "ok"}
-    required = amend if amend else sorted(ids)
+        if not u:
+            continue
+        ident = R.node_identifier(u[0], u[1], r["pinpoint"]) if r["scope"] == "node" else u[2]
+        target = need if (r["relationship"] in R.REQUIRED and not is_cra) else tracked
+        e = target.setdefault(ident, {"title": u[0], "section": u[1], "section_identifier": u[2], "scope": "node" if r["scope"] == "node" else "section",
+                                      "relationships": [], "bases": []})
+        if r["relationship"] not in e["relationships"]:
+            e["relationships"].append(r["relationship"]); e["bases"].append(r["basis"])
+    required = sorted(k for k in need if not _subsumed(k, set(need)))
+    tracked_only = sorted(k for k in tracked if k not in need and not _subsumed(k, set(need)))
+    relationships = {k: need[k]["relationships"] for k in required} | {k: tracked[k]["relationships"] for k in tracked_only}
+    bases = {k: need[k]["bases"] for k in required} | {k: tracked[k]["bases"] for k in tracked_only}
+    unresolved = [g for g in (gaps or []) if g["relationship"] in R.REQUIRED and not is_cra]
+    base = {"policy": ("cra: the resolution's own text and the CRA consequence section; cited authorities are tracked, not extracted" if is_cra else
+                       "provisions whose relationship needs content, at the cited node; others tracked only; capped"),
+            "section_cap": SECTION_CAP, "full_section_max_chars": FULL_SECTION_MAX_CHARS,
+            "required": required, "tracked_only": tracked_only, "relationships": relationships, "bases": bases,
+            "cited": sorted({e["section_identifier"] for e in list(need.values()) + list(tracked.values())}),
+            "amended": sorted(k for k in required if set(need[k]["relationships"]) & {R.AMENDED_TARGET, R.REPLACED_TEXT}),
+            "unresolved_citations": unresolved, "status": "ok"}
+    if unresolved:
+        base["status"] = "unresolved_citations"
+        base["reason"] = f"{len(unresolved)} citation(s) in provisions that need content are not structured in the voted XML: {[g['text'] for g in unresolved]}"
     if len(required) > SECTION_CAP:
-        return {"policy": "amended sections if any, else all cited sections; capped", "section_cap": SECTION_CAP,
-                "required": [], "cited": sorted(ids), "amended": amend, "status": "exceeds_cap",
-                "reason": f"{len(required)} sections exceed the cap of {SECTION_CAP}; the large-measure selection policy is not built"}
-    return {"policy": "amended sections if any, else all cited sections; capped", "section_cap": SECTION_CAP,
-            "required": required, "cited": sorted(ids), "amended": amend, "status": "ok"}
+        base.update({"required": [], "status": "exceeds_cap",
+                     "reason": f"{len(required)} provisions exceed the cap of {SECTION_CAP}; the large-measure selection policy is not built"})
+    return base
 
 
 # ---- official summary ------------------------------------------------------------
@@ -275,7 +279,52 @@ class Code:
         frag = uscode.extract_section(data, ident)
         if frag is None:
             rec["status"] = "section_not_found"; return rec
-        rec.update({"fragment_sha256": sha256_bytes(frag), "bytes": len(frag), "heading": uscode.section_heading(frag), "status": "fetched", "_content": frag.decode("utf8", "ignore")})
+        rec.update({"fragment_sha256": sha256_bytes(frag), "bytes": len(frag), "heading": uscode.section_heading(frag), "status": "fetched",
+                    "_bytes": frag, "_content": frag.decode("utf8", "ignore")})
+        return rec
+
+    def provision(self, ident: str, title: str, section: str, vote_date: str, relationships: list[str], bases: list[str], include: bool) -> dict:
+        """A cited provision at the node the citation names. The section is
+        resolved in force at the vote as before; a node is then cut from it
+        byte-exact, with the lead-in (number, heading, chapeau) of every provision
+        above it. Content is kept only when the relationship needs it and it is
+        not an oversized whole section."""
+        section_id = f"/us/usc/t{title}/s{section}"
+        rels = sorted(relationships, key=R.PRECEDENCE.index)
+        rec = self.section(title, section, vote_date, rels[0])
+        rec.update({"identifier": ident, "section_identifier": section_id, "scope": "section" if ident == section_id else "node",
+                    "relationships": rels, "bases": bases, "inclusion": R.CONTENT_INCLUDED if include else R.REFERENCE_TRACKED, "hierarchy": []})
+        if rec["status"] != "fetched":
+            return rec
+        sec = rec.pop("_bytes")
+        rec["section_fragment_sha256"], rec["section_bytes"] = rec["fragment_sha256"], rec["bytes"]
+        if rec["scope"] == "node":
+            node = uscode.extract_node(sec, ident)
+            if node is None:
+                rec.pop("_content", None)
+                rec.update({"status": "node_not_found", "fragment_sha256": None, "bytes": None,
+                            "reason": f"{ident} is not an identifier in {section_id} at {rec['as_of']['release_point']}"})
+                return rec
+            frag = node[0]
+            rec.update({"fragment_sha256": sha256_bytes(frag), "bytes": len(frag), "heading": uscode.section_heading(frag), "_content": frag.decode("utf8", "ignore")})
+            parts = ident[len(section_id):].strip("/").split("/")
+            for i in range(len(parts)):
+                anc = section_id + "".join("/" + p for p in parts[:i])
+                el = sec if anc == section_id else (uscode.extract_node(sec, anc) or (None,))[0]
+                if el is None:
+                    rec["status"] = "node_not_found"; rec["reason"] = f"ancestor {anc} not found"; rec.pop("_content", None); return rec
+                li = uscode.lead_in(el)
+                rec["hierarchy"].append({"identifier": anc, "sha256": sha256_bytes(li), "bytes": len(li), "_content": li.decode("utf8", "ignore")})
+        elif include and len(rec["_content"]) > FULL_SECTION_MAX_CHARS:
+            rec.pop("_content", None)
+            rec.update({"status": "fragment_selection_required", "inclusion": R.REFERENCE_TRACKED,
+                        "reason": f"the citation names only the whole section ({rec['section_bytes']:,} bytes, over {FULL_SECTION_MAX_CHARS:,} characters); "
+                                  "a deterministic fragment cannot be chosen, so it is not injected"})
+            return rec
+        if not include:
+            rec.pop("_content", None)
+            for h in rec["hierarchy"]:
+                h.pop("_content", None)
         return rec
 
 
@@ -288,7 +337,7 @@ def build_context(cfg: Config, b: dict, store: Store, code: Code, offline: bool)
     ctx = {"schema": CONTEXT_SCHEMA,
            "vote": {"congress": v["congress"], "session": v["session"], "clerk_number": v["clerk_number"], "date": v["date"], "measure": obj["id"]},
            "binding": {"kind": b["classification"]["kind"], "verification": b["verification"]["status"], "text_status": tb["status"], "text_sha256": tb["sha256"]},
-           "references": [], "selection": None, "release_point": None, "existing_law_context": [], "public_laws": [],
+           "references": [], "citation_gaps": [], "selection": None, "release_point": None, "existing_law_context": [], "public_laws": [],
            "official_summary": {"status": "none", "version_relationship": "UNKNOWN", "usable": False},
            "cra": {"mode": "not_cra", "rule_status": None, "consequence_source": None, "underlying_rule": None, "gao_determination": None},
            "completeness": {"status": "PENDING", "missing": [], "notes": []}, "generation": {"status": "UNSUPPORTED"}}
@@ -304,31 +353,42 @@ def build_context(cfg: Config, b: dict, store: Store, code: Code, offline: bool)
     plain = " ".join("".join(ET.parse(io.BytesIO(xml_bytes)).getroot().itertext()).split())
     words = len(plain.split())
     is_cra = bool(b["cra"]["is_cra"])
-    refs = extract_references(xml_bytes); ctx["references"] = refs
-    sel = select_sections(refs, is_cra); ctx["selection"] = sel
+    analysed = R.analyse(xml_bytes)
+    refs = analysed["references"]; ctx["references"] = refs
+    sel = select_sections(refs, is_cra, analysed["gaps"]); ctx["selection"] = sel
+    ctx["citation_gaps"] = analysed["gaps"]
     rp = uscode.in_force(code.points, v["date"])
     ctx["release_point"] = {"label": rp.label, "date": rp.date.isoformat(), "note": "latest release point on or before the vote; per-section archives may come from an earlier published one"} if rp else None
 
     ambiguous = False
-    # U.S. Code sections required by the policy
-    for ident in sel["required"]:
-        t, s = ident.split("/t")[1].split("/s")
-        rel = "amended_by_bound_measure" if ident in sel["amended"] else "cited_as_authority"
+    # U.S. Code provisions: required ones with content, the rest tracked (hash, no content)
+    wanted = [(i, True) for i in sel["required"]] + [(i, False) for i in sel["tracked_only"]]
+    for ident, include in wanted:
+        t, rest = ident.split("/t", 1)[1].split("/s", 1)
+        sec = rest.split("/", 1)[0]
+        rels = sel["relationships"][ident]
         if rp is None:
-            ctx["existing_law_context"].append({"type": "us_code", "identifier": ident, "status": "no_release_point", "relationship": rel})
-            if code.points:
-                missing.append(f"us_code:{ident} (no release point on or before the vote)"); ambiguous = True
-            else:
-                missing.append(f"us_code:{ident} (release point list unavailable)")
+            ctx["existing_law_context"].append({"type": "us_code", "identifier": ident, "status": "no_release_point", "relationships": rels,
+                                                "inclusion": R.CONTENT_INCLUDED if include else R.REFERENCE_TRACKED})
+            if include:
+                missing.append(f"us_code:{ident} (no release point on or before the vote)" if code.points else f"us_code:{ident} (release point list unavailable)")
+                ambiguous = ambiguous or bool(code.points)
             continue
-        rec = code.section(t, s, v["date"], rel); ctx["existing_law_context"].append(rec)
+        rec = code.provision(ident, t, sec, v["date"], rels, sel["bases"][ident], include)
+        ctx["existing_law_context"].append(rec)
+        if not include:
+            continue
         if rec["status"] == "archive_unavailable":
             if rec.get("reason") == "archive download in progress":
                 missing.append(f"us_code:{ident} (archive pending)")
             else:
                 missing.append(f"us_code:{ident} (release point not retrievable)"); ambiguous = True
+        elif rec["status"] in ("node_not_found", "fragment_selection_required"):
+            missing.append(f"us_code:{ident} ({rec['status']})"); notes.append(rec["reason"])
         elif rec["status"] != "fetched":
             missing.append(f"us_code:{ident} ({rec['status']})"); ambiguous = True
+    if sel["status"] == "unresolved_citations":
+        missing.append("unresolved statutory citations in provisions that need content"); notes.append(sel["reason"])
     if sel["status"] == "exceeds_cap":
         missing.append("section selection for a large measure"); notes.append(sel["reason"])
     if words > LARGE_TEXT_WORDS and not is_cra:
@@ -344,18 +404,34 @@ def build_context(cfg: Config, b: dict, store: Store, code: Code, offline: bool)
             continue
         sections = sorted({x["pl_section"] for x in refs if x["cite"] == r["cite"] and x["pl_section"]})
         divisions = sorted({x["pl_division"] for x in refs if x["cite"] == r["cite"] and x["pl_division"]})
+        rels_of = lambda sec_: sorted({x["relationship"] for x in refs if x["cite"] == r["cite"] and x["pl_section"] == sec_}, key=R.PRECEDENCE.index)
         rec = {"type": "public_law", "cite": r["cite"], "congress": pl[0], "law": pl[1], "source_url": publaw.law_url(*pl),
                "sha256": None, "bytes": None, "sections": sections, "divisions": divisions, "fragments": [], "status": "pending",
-               "relationship": "amended_by_bound_measure" if any(x["amendatory"] for x in refs if x["cite"] == r["cite"]) else "cited"}
+               "relationships": sorted({x["relationship"] for x in refs if x["cite"] == r["cite"]}, key=R.PRECEDENCE.index)}
         f = store.fetch(rec["source_url"], f"publaw/PLAW-{pl[0]}publ{pl[1]}.xml", timeout=600, min_bytes=1000, offline=offline, immutable=True)
         if f.ok and publaw.looks_like_uslm(f.path.read_bytes()[:600]):
             data = f.path.read_bytes(); rec["sha256"], rec["bytes"] = f.sha256, f.size; rec["status"] = "identified"
             for sec in sections:
+                rels = rels_of(sec); include = bool(set(rels) & R.REQUIRED) and not is_cra
                 frag = publaw.extract_section(data, sec)
+                entry = {"section": sec, "relationships": rels, "inclusion": R.CONTENT_INCLUDED if include else R.REFERENCE_TRACKED}
                 if frag is None:
-                    rec["fragments"].append({"section": sec, "status": "section_not_found"}); missing.append(f"public_law:{r['cite']}/s{sec}"); ambiguous = True
-                else:
-                    rec["fragments"].append({"section": sec, "fragment_sha256": sha256_bytes(frag), "bytes": len(frag), "status": "fetched", "_content": frag.decode("utf8", "ignore")})
+                    entry["status"] = "section_not_found"; rec["fragments"].append(entry)
+                    if include:
+                        missing.append(f"public_law:{r['cite']}/s{sec}"); ambiguous = True
+                    continue
+                entry.update({"fragment_sha256": sha256_bytes(frag), "bytes": len(frag), "status": "fetched"})
+                content = frag.decode("utf8", "ignore")
+                if include and len(content) > FULL_SECTION_MAX_CHARS:
+                    entry.update({"status": "fragment_selection_required", "inclusion": R.REFERENCE_TRACKED,
+                                  "reason": f"whole Public Law section of {len(frag):,} bytes, over {FULL_SECTION_MAX_CHARS:,} characters"})
+                    missing.append(f"public_law:{r['cite']}/s{sec} (fragment_selection_required)")
+                elif include:
+                    entry["_content"] = content
+                rec["fragments"].append(entry)
+            whole_rels = sorted({x["relationship"] for x in refs if x["cite"] == r["cite"] and not x["pl_section"]}, key=R.PRECEDENCE.index)
+            if set(whole_rels) & R.REQUIRED and not is_cra:
+                missing.append(f"public_law:{r['cite']} (needed as {whole_rels[0]} but cited as a whole law; no section can be selected)")
             if not sections:
                 notes.append(f"{r['cite']} cited as a whole law{' (' + ', '.join(divisions) + ')' if divisions else ''}: identified and hashed, no section extracted; the Maker may not describe its contents")
         else:
@@ -370,7 +446,9 @@ def build_context(cfg: Config, b: dict, store: Store, code: Code, offline: bool)
     # CRA
     if is_cra:
         ctx["cra"]["mode"] = "resolution_only"
-        cons = code.section(CRA_CONSEQUENCE[0], CRA_CONSEQUENCE[1], v["date"], "cra_statutory_consequence") if rp else None
+        cons = code.section(CRA_CONSEQUENCE[0], CRA_CONSEQUENCE[1], v["date"], R.SUPPORTING_CONTEXT) if rp else None
+        if cons is not None:
+            cons.pop("_bytes", None); cons["inclusion"] = R.CONTENT_INCLUDED; cons["basis"] = "fixed rule: the CRA consequence section in force at the vote"
         ctx["cra"]["consequence_source"] = cons
         if cons is None or cons["status"] != "fetched":
             missing.append(f"us_code:/us/usc/t5/s801@{rp.label if rp else '?'} (CRA consequence)")
@@ -398,13 +476,17 @@ def build_context(cfg: Config, b: dict, store: Store, code: Code, offline: bool)
     if ctx["generation"]["status"] in ("READY_FOR_GENERATION", "READY_WITH_LIMITS"):
         packet = build_packet(b, ctx, xml_bytes, store)
     # strip private content from the tracked context record
+    if packet is not None:
+        ctx["metrics"] = packet["metrics"]; ctx["budget"] = packet["budget"]
     for rec in ctx["existing_law_context"]:
-        rec.pop("_content", None)
+        rec.pop("_content", None); rec.pop("_bytes", None)
+        for h in rec.get("hierarchy", []):
+            h.pop("_content", None)
     for pl in ctx["public_laws"]:
         for fr_ in pl["fragments"]:
             fr_.pop("_content", None)
     if ctx["cra"]["consequence_source"]:
-        ctx["cra"]["consequence_source"].pop("_content", None)
+        ctx["cra"]["consequence_source"].pop("_content", None); ctx["cra"]["consequence_source"].pop("_bytes", None)
     ctx["official_summary"].pop("_text", None)
     return ctx, packet
 
@@ -412,17 +494,31 @@ def build_context(cfg: Config, b: dict, store: Store, code: Code, offline: bool)
 def build_packet(b: dict, ctx: dict, xml_bytes: bytes, store: Store) -> dict:
     """Everything the Maker may cite, byte-exact from tracked artefacts."""
     v, tb, obj = b["vote"], b["text_binding"], b["object"]
-    law = []
+    law, tracked = [], []
     for rec in ctx["existing_law_context"]:
-        if rec["status"] == "fetched":
-            law.append({"type": "us_code", "identifier": rec["identifier"], "heading": rec["heading"], "as_of": rec["as_of"],
-                        "sha256": rec["fragment_sha256"], "relationship": rec["relationship"], "content": rec["_content"]})
+        if rec["status"] == "fetched" and rec["inclusion"] == R.CONTENT_INCLUDED:
+            law.append({"type": "us_code", "identifier": rec["identifier"], "section_identifier": rec["section_identifier"], "scope": rec["scope"],
+                        "heading": rec["heading"], "as_of": rec["as_of"], "relationship": rec["relationship"], "relationships": rec["relationships"],
+                        "inclusion": rec["inclusion"],
+                        "hierarchy": [{"identifier": h["identifier"], "sha256": h["sha256"], "content": h["_content"]} for h in rec["hierarchy"]],
+                        "sha256": rec["fragment_sha256"], "content": rec["_content"]})
+        else:
+            tracked.append({"type": "us_code", "identifier": rec["identifier"], "relationships": rec["relationships"], "inclusion": R.REFERENCE_TRACKED,
+                            "as_of": rec.get("as_of"), "sha256": rec.get("fragment_sha256"), "content_included": False,
+                            "note": "the measure's citation may be repeated as written; the provision's contents may not be described"})
     for pl in ctx["public_laws"]:
         for fr_ in pl["fragments"]:
-            if fr_["status"] == "fetched":
-                law.append({"type": "public_law", "identifier": f"{pl['cite']}/s{fr_['section']}", "as_of": {"enacted_law": f"Public Law {pl['congress']}-{pl['law']}"},
-                            "sha256": fr_["fragment_sha256"], "relationship": pl["relationship"], "content": fr_["_content"]})
-    cited_laws = [{"type": "public_law", "identifier": pl["cite"], "sha256": pl["sha256"], "divisions": pl["divisions"], "content_included": False,
+            if fr_["status"] == "fetched" and fr_["inclusion"] == R.CONTENT_INCLUDED:
+                law.append({"type": "public_law", "identifier": f"{pl['cite']}/s{fr_['section']}", "scope": "section",
+                            "as_of": {"enacted_law": f"Public Law {pl['congress']}-{pl['law']}"}, "relationship": fr_["relationships"][0],
+                            "relationships": fr_["relationships"], "inclusion": fr_["inclusion"], "hierarchy": [],
+                            "sha256": fr_["fragment_sha256"], "content": fr_["_content"]})
+            else:
+                tracked.append({"type": "public_law", "identifier": f"{pl['cite']}/s{fr_['section']}", "relationships": fr_["relationships"],
+                                "inclusion": R.REFERENCE_TRACKED, "sha256": fr_.get("fragment_sha256"), "content_included": False,
+                                "note": "the measure's citation may be repeated as written; the provision's contents may not be described"})
+    cited_laws = [{"type": "public_law", "identifier": pl["cite"], "sha256": pl["sha256"], "divisions": pl["divisions"], "relationships": pl["relationships"],
+                   "inclusion": R.REFERENCE_TRACKED, "content_included": False,
                    "note": "identified and hashed only; not to be described"} for pl in ctx["public_laws"] if not pl["sections"]]
     cra = ctx["cra"]
     cra_packet = {"mode": cra["mode"]}
@@ -447,18 +543,45 @@ def build_packet(b: dict, ctx: dict, xml_bytes: bytes, store: Store) -> dict:
             summary_packet["content"] = summ["_text"]
         else:
             summary_packet["warning"] = "describes an earlier version of the text; excluded from generation"
+    voted = xml_bytes.decode("utf8", "ignore")
+    metrics = packet_metrics(voted, law, cra_packet, summary_packet, tracked, cited_laws)
     return {"packet_schema": PACKET_SCHEMA,
             "vote": {**v, "senator_votes_source": "block F / S119_votes.csv (not included here)"},
             "legislative_object": {"type": obj["type"], "id": obj["id"], "title": obj["title"], "short_title": obj["short_title"], "origin_chamber": obj["origin_chamber"]},
             "classification": {"kind": b["classification"]["kind"]},
             "receipt_scaffold": b["receipt"],
             "voted_text": {"version_code": tb["version_code"], "version_name": tb["version_name"], "date": tb["version_date"], "url": tb["govinfo_url"],
-                           "sha256": tb["sha256"], "format": "govinfo-bill-xml", "content": xml_bytes.decode("utf8", "ignore")},
-            "existing_law_context": law, "cited_public_laws_not_included": cited_laws,
+                           "sha256": tb["sha256"], "format": "govinfo-bill-xml", "content": voted},
+            "existing_law_context": law, "tracked_references": tracked, "cited_public_laws_not_included": cited_laws,
             "official_summary": summary_packet, "cra_context": cra_packet,
             "completeness": ctx["completeness"], "generation": ctx["generation"],
+            "metrics": metrics, "budget": budget_for(metrics),
             "maker_rules": ["factual claims only from the content fields of this packet", "no browsing, no retrieval, no model memory for facts",
-                            "derived metadata (headings, relationships, statuses) is not source text"]}
+                            "derived metadata (headings, relationships, statuses) is not source text",
+                            "a tracked reference may be named as the measure names it; its contents may not be described",
+                            "vote_result and next_step are fixed text: repeat them, do not restate a failed vote as advancing"]}
+
+
+def packet_metrics(voted_text: str, law: list[dict], cra_packet: dict, summary_packet: dict, tracked: list[dict], cited_laws: list[dict]) -> dict:
+    """Deterministic size figures for a packet: what the Maker would read."""
+    ctx_chars = sum(len(e["content"]) + sum(len(h["content"]) for h in e["hierarchy"]) for e in law)
+    cons = (cra_packet or {}).get("statutory_consequence_source")
+    ctx_chars += len(cons["content"]) if cons else 0
+    summ = len(summary_packet.get("content") or "")
+    return {"voted_text_chars": len(voted_text), "context_chars": ctx_chars, "official_summary_chars": summ,
+            "total_source_chars": len(voted_text) + ctx_chars + summ,
+            "source_count": 1 + len(law) + (1 if cons else 0) + (1 if summ else 0),
+            "included_context_fragment_count": len(law) + (1 if cons else 0),
+            "hierarchy_fragment_count": sum(len(e["hierarchy"]) for e in law),
+            "tracked_reference_count": len(tracked) + len(cited_laws)}
+
+
+def budget_for(metrics: dict) -> dict:
+    """A packet over the documented threshold is flagged for a person to confirm
+    its size is necessary before any Maker reads it. Nothing is ever truncated."""
+    over = metrics["total_source_chars"] > PACKET_REVIEW_CHARS
+    return {"review_threshold_chars": PACKET_REVIEW_CHARS, "status": "REVIEW_REQUIRED" if over else "WITHIN_BUDGET",
+            "rule": "no truncation; a packet over the threshold needs a recorded human review before generation"}
 
 
 # ---- files and runner --------------------------------------------------------------
@@ -467,14 +590,24 @@ def _strip(d: dict) -> dict:
     return {k: v for k, v in d.items() if k not in ("history", "recorded_utc")}
 
 
-def write_json(path: Path, doc: dict) -> str:
+def _digest(d: dict) -> dict:
+    """What a packet's history keeps of a superseded packet: its hash and headline
+    state. The superseded packet itself is in git; copying its sources into the
+    new packet would make every change double the file."""
+    return {"packet_sha256": sha256_bytes(json.dumps(d, sort_keys=True, ensure_ascii=False).encode()), "packet_schema": d.get("packet_schema"),
+            "generation": (d.get("generation") or {}).get("status"), "metrics": d.get("metrics"),
+            "voted_text_sha256": (d.get("voted_text") or {}).get("sha256"),
+            "law_sha256": [e.get("sha256") for e in d.get("existing_law_context", [])]}
+
+
+def write_json(path: Path, doc: dict, digest_history: bool = False) -> str:
     path.parent.mkdir(parents=True, exist_ok=True)
     stamp = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
     if path.exists():
         old = json.loads(path.read_text())
         if _strip(old) == _strip(doc):
             return "unchanged"
-        hist = old.get("history", []); prev = _strip(old); prev["superseded_utc"] = stamp; hist.append(prev)
+        hist = old.get("history", []); prev = _digest(_strip(old)) if digest_history else _strip(old); prev["superseded_utc"] = stamp; hist.append(prev)
         path.write_text(json.dumps(dict(doc, history=hist, recorded_utc=stamp), indent=1, ensure_ascii=False) + "\n"); return "changed"
     path.write_text(json.dumps(dict(doc, history=[], recorded_utc=stamp), indent=1, ensure_ascii=False) + "\n"); return "new"
 
@@ -492,17 +625,21 @@ def run(cfg: Config = DEFAULT, offline: bool = False, verbose: bool = True, only
         writes[write_json(cdir / f.name.replace(".json", ".context.json"), ctx)] += 1
         ppath = pdir / f.name.replace(".json", ".packet.json")
         if packet is not None:
-            writes["packet_" + write_json(ppath, packet)] += 1
+            writes["packet_" + write_json(ppath, packet, digest_history=True)] += 1
         elif ppath.exists():
             ppath.unlink(); writes["packet_removed"] += 1
         gen[ctx["generation"]["status"]] += 1; comp[ctx["completeness"]["status"]] += 1
         rows.append((b["object"]["id"], b["vote"]["date"], ctx["generation"]["status"], ctx["completeness"]["status"], ctx["cra"]["mode"], ctx["cra"]["rule_status"],
-                     ctx["official_summary"]["version_relationship"], len([x for x in ctx["existing_law_context"] if x["status"] == "fetched"]), ctx["completeness"]["missing"][:2]))
+                     ctx["official_summary"]["version_relationship"], len([x for x in ctx["existing_law_context"] if x["status"] == "fetched" and x.get("inclusion") == R.CONTENT_INCLUDED]), ctx["completeness"]["missing"][:2],
+                     (ctx.get("metrics") or {}).get("total_source_chars"), (ctx.get("budget") or {}).get("status")))
     store.save()
     index = {"schema": CONTEXT_SCHEMA, "rule": {"section_cap": SECTION_CAP, "large_text_words": LARGE_TEXT_WORDS, "cra_consequence": "/us/usc/t5/s801",
+                                                "full_section_max_chars": FULL_SECTION_MAX_CHARS, "packet_review_chars": PACKET_REVIEW_CHARS,
+                                                "relationships": R.PRECEDENCE,
                                                 "release_point_rule": "latest OLRC release point dated on or before the vote; never a later one"},
              "generation": dict(gen), "completeness": dict(comp),
-             "votes": [{"measure": r[0], "date": r[1], "generation": r[2], "completeness": r[3], "cra_mode": r[4], "rule_status": r[5], "summary": r[6], "law_sections": r[7]} for r in rows]}
+             "votes": [{"measure": r[0], "date": r[1], "generation": r[2], "completeness": r[3], "cra_mode": r[4], "rule_status": r[5], "summary": r[6], "law_sections": r[7],
+                        "total_source_chars": r[9], "budget": r[10]} for r in rows]}
     (cdir / "index.json").parent.mkdir(parents=True, exist_ok=True)
     write_json(cdir / "index.json", index)
     if verbose:

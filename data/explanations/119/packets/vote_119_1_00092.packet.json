@@ -1,5 +1,5 @@
 {
- "packet_schema": "civicalign.packet/1.0",
+ "packet_schema": "civicalign.packet/1.1",
  "vote": {
   "congress": 119,
   "session": 1,
@@ -36,7 +36,24 @@
   "heading_failure": "If the resolution does not pass",
   "yea_means": "A Yea vote is a vote to pass the joint resolution in the Senate.",
   "nay_means": "A Nay vote is a vote against passing the joint resolution.",
-  "next_step": "A joint resolution has the force of a bill: after both chambers pass it, it goes to the President.",
+  "vote_result": {
+   "outcome": "PASSED",
+   "official_result": "Joint Resolution Passed",
+   "statement": "The Senate passed the joint resolution."
+  },
+  "next_step": {
+   "case": "SENATE_ORIGIN",
+   "actual": "The Senate passed the joint resolution. It next goes to the House.",
+   "hypothetical": null,
+   "basis": {
+    "measure_type": "joint_resolution",
+    "origin_chamber": "Senate",
+    "billstatus_origin_chamber": "Senate",
+    "senate_changed_text": false,
+    "house_passage_before_vote": null,
+    "official_result": "Joint Resolution Passed (54-44, 1/2 required)"
+   }
+  },
   "sources": [
    {
     "what": "Senate roll-call record",
@@ -66,6 +83,7 @@
   "content": "<?xml version=\"1.0\"?>\n<?xml-stylesheet type=\"text/xsl\" href=\"billres.xsl\"?>\n<!DOCTYPE resolution PUBLIC \"-//US Congress//DTDs/res.dtd//EN\" \"res.dtd\">\n<resolution public-private=\"public\" resolution-stage=\"Engrossed-in-Senate\" resolution-type=\"senate-joint\" star-print=\"no-star-print\" slc-id=\"S1-NEW25099-WGL-99-LNG\" key=\"G\" stage-count=\"1\" public-print=\"no\"><metadata xmlns:dc=\"http://purl.org/dc/elements/1.1/\">\n<dublinCore>\n<dc:title>119 SJ 11 ES: Providing for congressional disapproval under chapter 8 of title 5, United States Code, of the rule submitted by the Bureau of Ocean Energy Management relating to “Protection of Marine Archaeological Resources”.</dc:title>\n<dc:publisher>U.S. Senate</dc:publisher>\n<dc:date></dc:date>\n<dc:format>text/xml</dc:format>\n<dc:language>EN</dc:language>\n<dc:rights>Pursuant to Title 17 Section 105 of the United States Code, this file is not subject to copyright protection and is in the public domain.</dc:rights>\n</dublinCore>\n</metadata>\n<form display=\"yes\">\n<congress display=\"yes\">119th CONGRESS</congress><session display=\"yes\">1st Session</session><legis-num display=\"yes\">S. J. RES. 11</legis-num><current-chamber display=\"no\">IN THE SENATE OF THE UNITED STATES</current-chamber><legis-type display=\"yes\">JOINT RESOLUTION</legis-type><official-title display=\"yes\">Providing for congressional disapproval under <external-xref legal-doc=\"usc-chapter\" parsable-cite=\"usc-chapter/5/8\">chapter 8</external-xref> of title 5, United States Code, of the rule submitted by the Bureau of Ocean Energy Management relating to <quote>Protection of Marine Archaeological Resources</quote>.</official-title></form><resolution-body style=\"OLC\" display-resolving-clause=\"yes-display-resolving-clause\"><section id=\"S1\" display-inline=\"yes-display-inline\" section-type=\"undesignated-section\" commented=\"no\"><text display-inline=\"yes-display-inline\">That Congress disapproves the rule submitted by the Bureau of Ocean Energy Management relating to <quote>Protection of Marine Archaeological Resources</quote> (89 Fed. Reg. 71160 (September 3, 2024)), and such rule shall have no force or effect.</text></section></resolution-body><attestation><attestation-group><attestation-date date=\"20250225\" chamber=\"Senate\">Passed the Senate February 25, 2025.</attestation-date><attestor display=\"no\"></attestor><role>Secretary</role></attestation-group></attestation><endorsement display=\"yes\"></endorsement></resolution> \n\n"
  },
  "existing_law_context": [],
+ "tracked_references": [],
  "cited_public_laws_not_included": [],
  "official_summary": {
   "status": "available",
@@ -124,11 +142,38 @@
  "generation": {
   "status": "READY_WITH_LIMITS"
  },
+ "metrics": {
+  "voted_text_chars": 2444,
+  "context_chars": 32792,
+  "official_summary_chars": 0,
+  "total_source_chars": 35236,
+  "source_count": 2,
+  "included_context_fragment_count": 1,
+  "hierarchy_fragment_count": 0,
+  "tracked_reference_count": 0
+ },
+ "budget": {
+  "review_threshold_chars": 150000,
+  "status": "WITHIN_BUDGET",
+  "rule": "no truncation; a packet over the threshold needs a recorded human review before generation"
+ },
  "maker_rules": [
   "factual claims only from the content fields of this packet",
   "no browsing, no retrieval, no model memory for facts",
-  "derived metadata (headings, relationships, statuses) is not source text"
+  "derived metadata (headings, relationships, statuses) is not source text",
+  "a tracked reference may be named as the measure names it; its contents may not be described",
+  "vote_result and next_step are fixed text: repeat them, do not restate a failed vote as advancing"
  ],
- "history": [],
- "recorded_utc": "2026-09-24T03:29:14Z"
+ "history": [
+  {
+   "packet_sha256": "7ffe637265d03351b96cc504c13f44edb1e8f4b24a6449e11eaa39c37b2201a1",
+   "packet_schema": "civicalign.packet/1.0",
+   "generation": "READY_WITH_LIMITS",
+   "metrics": null,
+   "voted_text_sha256": "130efdbc64267bd0ab7cf7e668c9fb596131eddc60413ed272882522d365f4df",
+   "law_sha256": [],
+   "superseded_utc": "2026-09-24T12:22:16Z"
+  }
+ ],
+ "recorded_utc": "2026-09-24T12:22:16Z"
 }

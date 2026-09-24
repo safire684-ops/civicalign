@@ -69,7 +69,24 @@
   "heading_failure": "If the resolution does not pass",
   "yea_means": "A Yea vote is a vote to pass the joint resolution in the Senate.",
   "nay_means": "A Nay vote is a vote against passing the joint resolution.",
-  "next_step": "A joint resolution has the force of a bill: after both chambers pass it, it goes to the President.",
+  "vote_result": {
+   "outcome": "REJECTED",
+   "official_result": "Joint Resolution Defeated",
+   "statement": "The joint resolution did not pass the Senate in this vote."
+  },
+  "next_step": {
+   "case": "SENATE_ORIGIN",
+   "actual": "The joint resolution did not pass the Senate in this vote.",
+   "hypothetical": "If the Senate had passed it, the joint resolution would next have gone to the House.",
+   "basis": {
+    "measure_type": "joint_resolution",
+    "origin_chamber": "Senate",
+    "billstatus_origin_chamber": "Senate",
+    "senate_changed_text": false,
+    "house_passage_before_vote": null,
+    "official_result": "Joint Resolution Defeated (47-52, 1/2 required)"
+   }
+  },
   "sources": [
    {
     "what": "Senate roll-call record",
@@ -144,6 +161,155 @@
    }
   ]
  },
- "history": [],
- "recorded_utc": "2026-09-24T01:15:15Z"
+ "history": [
+  {
+   "schema": "civicalign.binding/1.0",
+   "vote": {
+    "congress": 119,
+    "session": 1,
+    "clerk_number": 95,
+    "voteview_id": 95,
+    "date": "2025-02-26",
+    "question": "On the Joint Resolution",
+    "result": "Joint Resolution Defeated",
+    "required": "1/2",
+    "yeas": 47,
+    "nays": 52,
+    "measure": "SJRES10",
+    "senate_url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1191/vote_119_1_00095.xml",
+    "senate_sha256": "9ef1c2411b12bc98cc07ff88dba59c7e04f886b6286d0b3047298652e023b246",
+    "senate_title": "S. J. Res. 10",
+    "senate_document_text": "A joint resolution terminating the national emergency declared with respect to energy.",
+    "amendment_number": null,
+    "voteview_url": "https://voteview.com/rollcall/RS1190095"
+   },
+   "classification": {
+    "kind": "JOINT_RESOLUTION_PASSAGE",
+    "summary_eligible": true,
+    "kind_supported": true,
+    "basis": [
+     "voteview.question='On the Joint Resolution'",
+     "senate.question='On the Joint Resolution'"
+    ],
+    "conflict": null
+   },
+   "object": {
+    "type": "joint_resolution",
+    "id": "SJRES10",
+    "title": "A joint resolution terminating the national emergency declared with respect to energy.",
+    "short_title": "",
+    "origin_chamber": "Senate",
+    "billstatus_source": "https://www.govinfo.gov/bulkdata/BILLSTATUS/119/sjres/BILLSTATUS-119sjres10.xml",
+    "billstatus_sha256": "f8115e0dd1e533b33daaabf65edd3fa74746933db4ce7f5a98ef0705494f1603",
+    "billstatus_update_date": "2026-09-08T18:09:59Z",
+    "passage_action_text": "Failed of passage in Senate by Yea-Nay Vote. 47 - 52. Record Vote Number: 95. (consideration: CR S1364, S1367-1390)"
+   },
+   "text_binding": {
+    "status": "TEXT_BOUND",
+    "version_code": "is",
+    "version_name": "Introduced in Senate",
+    "version_date": "2025-02-03",
+    "govinfo_url": "https://www.govinfo.gov/content/pkg/BILLS-119sjres10is/xml/BILLS-119sjres10is.xml",
+    "sha256": "d931fda89994ef7ed740f4bd6d8614baff61477805753a0f42680c5c2ccccf7e",
+    "bytes": 2102,
+    "stage_attribute_matches": null,
+    "selection_reason": "latest pre-vote version (is, 2025-02-03); no Senate amendment recorded",
+    "candidates": [
+     "is@2025-02-03"
+    ]
+   },
+   "cra": {
+    "is_cra": false,
+    "agency": null,
+    "rule_title": null,
+    "title_form": null,
+    "consequence_ref": null,
+    "underlying_rule_source": null,
+    "underlying_rule_sha256": null
+   },
+   "receipt": {
+    "deciding": "On the Joint Resolution S.J.Res. 10",
+    "heading_success": "If the resolution passes",
+    "heading_failure": "If the resolution does not pass",
+    "yea_means": "A Yea vote is a vote to pass the joint resolution in the Senate.",
+    "nay_means": "A Nay vote is a vote against passing the joint resolution.",
+    "next_step": "A joint resolution has the force of a bill: after both chambers pass it, it goes to the President.",
+    "sources": [
+     {
+      "what": "Senate roll-call record",
+      "url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1191/vote_119_1_00095.xml"
+     },
+     {
+      "what": "Bill status (GovInfo)",
+      "url": "https://www.govinfo.gov/bulkdata/BILLSTATUS/119/sjres/BILLSTATUS-119sjres10.xml"
+     },
+     {
+      "what": "Text as voted on (Introduced in Senate)",
+      "url": "https://www.govinfo.gov/content/pkg/BILLS-119sjres10is/xml/BILLS-119sjres10is.xml"
+     },
+     {
+      "what": "Roll call at Voteview",
+      "url": "https://voteview.com/rollcall/RS1190095"
+     }
+    ]
+   },
+   "verification": {
+    "status": "VERIFIED",
+    "checks": [
+     {
+      "check": "senate_record_exists",
+      "ok": true,
+      "detail": ""
+     },
+     {
+      "check": "identity_matches",
+      "ok": true,
+      "detail": "senate 119/1/95 vs voteview 119/1/95"
+     },
+     {
+      "check": "date_compatible",
+      "ok": true,
+      "detail": "senate 2025-02-26 vs voteview 2025-02-26"
+     },
+     {
+      "check": "question_matches",
+      "ok": true,
+      "detail": "'On the Joint Resolution' vs 'On the Joint Resolution'"
+     },
+     {
+      "check": "tallies_match",
+      "ok": true,
+      "detail": "senate 47-52 vs voteview 47-52"
+     },
+     {
+      "check": "threshold_matches",
+      "ok": true,
+      "detail": "1/2 vs 1/2"
+     },
+     {
+      "check": "member_votes_match",
+      "ok": true,
+      "detail": "yea 47/47 nay 52/52; former members matched by name+state+party {'S293': 'G000359', 'S419': 'M001190'}"
+     },
+     {
+      "check": "measure_matches",
+      "ok": true,
+      "detail": "senate 'SJRES10' vs voteview 'SJRES10'"
+     },
+     {
+      "check": "billstatus_present",
+      "ok": true,
+      "detail": "BILLSTATUS-119sjres10.xml"
+     },
+     {
+      "check": "billstatus_links_vote",
+      "ok": true,
+      "detail": "recorded-vote link to this Senate vote number"
+     }
+    ]
+   },
+   "superseded_utc": "2026-09-24T12:05:12Z"
+  }
+ ],
+ "recorded_utc": "2026-09-24T12:05:12Z"
 }

@@ -1,5 +1,5 @@
 {
- "packet_schema": "civicalign.packet/1.0",
+ "packet_schema": "civicalign.packet/1.1",
  "vote": {
   "congress": 119,
   "session": 1,
@@ -36,7 +36,24 @@
   "heading_failure": "If the resolution does not pass",
   "yea_means": "A Yea vote is a vote to pass the joint resolution in the Senate.",
   "nay_means": "A Nay vote is a vote against passing the joint resolution.",
-  "next_step": "A joint resolution has the force of a bill: after both chambers pass it, it goes to the President.",
+  "vote_result": {
+   "outcome": "REJECTED",
+   "official_result": "Joint Resolution Defeated",
+   "statement": "The joint resolution did not pass the Senate in this vote."
+  },
+  "next_step": {
+   "case": "SENATE_ORIGIN",
+   "actual": "The joint resolution did not pass the Senate in this vote.",
+   "hypothetical": "If the Senate had passed it, the joint resolution would next have gone to the House.",
+   "basis": {
+    "measure_type": "joint_resolution",
+    "origin_chamber": "Senate",
+    "billstatus_origin_chamber": "Senate",
+    "senate_changed_text": false,
+    "house_passage_before_vote": null,
+    "official_result": "Joint Resolution Defeated (47-51, 1/2 required)"
+   }
+  },
   "sources": [
    {
     "what": "Senate roll-call record",
@@ -65,19 +82,23 @@
   "format": "govinfo-bill-xml",
   "content": "<?xml version=\"1.0\"?>\n<?xml-stylesheet type=\"text/xsl\" href=\"billres.xsl\"?>\n<!DOCTYPE resolution PUBLIC \"-//US Congress//DTDs/res.dtd//EN\" \"res.dtd\">\n<resolution resolution-type=\"senate-joint\" star-print=\"no-star-print\" public-private=\"public\" resolution-stage=\"Introduced-in-Senate\" slc-id=\"S1-ROS25F03-8FV-VD-58C\">\n    <metadata xmlns:dc=\"http://purl.org/dc/elements/1.1/\">\n<dublinCore>\n<dc:title>119 SJ 71 IS: Terminating the national emergency declared with respect to energy.</dc:title>\n<dc:publisher>U.S. Senate</dc:publisher>\n<dc:date>2025-07-31</dc:date>\n<dc:format>text/xml</dc:format>\n<dc:language>EN</dc:language>\n<dc:rights>Pursuant to Title 17 Section 105 of the United States Code, this file is not subject to copyright protection and is in the public domain.</dc:rights>\n</dublinCore>\n</metadata>\n<form>\n        <distribution-code>IIA</distribution-code>\n        <congress display=\"yes\">119th CONGRESS</congress>\n        <session display=\"yes\">1st Session</session>\n        <legis-num>S. J. RES. 71</legis-num>\n        <current-chamber>IN THE SENATE OF THE UNITED STATES</current-chamber>\n        <action display=\"yes\">\n            <action-date date=\"20250731\">July 31, 2025</action-date>\n            <action-desc><sponsor name-id=\"S362\">Mr. Kaine</sponsor> (for himself and <cosponsor name-id=\"S359\">Mr. Heinrich</cosponsor>) introduced the following joint\n                resolution; which was read twice and referred to the <committee-name committee-id=\"SSEG00\">Committee on Energy and Natural\n                Resources</committee-name></action-desc>\n        </action>\n        <legis-type>JOINT RESOLUTION</legis-type>\n        <official-title display=\"yes\">Terminating the national emergency declared with respect to\n            energy.</official-title>\n    </form>\n    <resolution-body>\n        <section display-inline=\"yes-display-inline\" section-type=\"undesignated-section\" id=\"S1\">\n <text>That the national emergency relating to energy declared on January 20, 2025, by the President in Executive Order 14156 (90 Fed. Reg. 8433) and pursuant to the National Emergencies Act (<external-xref legal-doc=\"usc\" parsable-cite=\"usc/50/1601\">50 U.S.C. 1601 et seq.</external-xref>), is terminated.</text>\n        </section>\n    </resolution-body>\n</resolution>\n\n"
  },
- "existing_law_context": [
+ "existing_law_context": [],
+ "tracked_references": [
   {
    "type": "us_code",
    "identifier": "/us/usc/t50/s1601",
-   "heading": "Termination of existing declared emergencies",
+   "relationships": [
+    "CROSS_REFERENCE_ONLY"
+   ],
+   "inclusion": "REFERENCE_TRACKED",
    "as_of": {
     "release_point": "119-36",
     "date": "2025-09-05",
     "rule": "latest OLRC release point on or before the vote with a published archive; intervening laws checked against the classification table"
    },
    "sha256": "0811ce0e47ed227abfb10588989b942633e56068b3e804b568f6c2e5ed954513",
-   "relationship": "cited_as_authority",
-   "content": "<section style=\"-uslm-lc:I80\" id=\"id97553b54-7e89-11f0-a93b-d1785429c93b\" identifier=\"/us/usc/t50/s1601\"><num value=\"1601\">§ 1601.</num><heading> Termination of existing declared emergencies</heading><subsection style=\"-uslm-lc:I11\" class=\"indent0\" id=\"id97553b55-7e89-11f0-a93b-d1785429c93b\" identifier=\"/us/usc/t50/s1601/a\"><num value=\"a\">(a)</num><chapeau> All powers and authorities possessed by the President, any other officer or employee of the Federal Government, or any executive agency, as defined in <ref href=\"/us/usc/t5/s105\">section 105 of title 5</ref>, as a result of the existence of any declaration of national emergency in effect on <date date=\"1976-09-14\">September 14, 1976</date>, are terminated two years from <date date=\"1976-09-14\">September 14, 1976</date>. Such termination shall not affect—</chapeau><paragraph style=\"-uslm-lc:I12\" class=\"indent1\" id=\"id97553b56-7e89-11f0-a93b-d1785429c93b\" identifier=\"/us/usc/t50/s1601/a/1\"><num value=\"1\">(1)</num><content> any action taken or proceeding pending not finally concluded or determined on such date;</content>\n</paragraph>\n<paragraph style=\"-uslm-lc:I12\" class=\"indent1\" id=\"id97553b57-7e89-11f0-a93b-d1785429c93b\" identifier=\"/us/usc/t50/s1601/a/2\"><num value=\"2\">(2)</num><content> any action or proceeding based on any act committed prior to such date; or</content>\n</paragraph>\n<paragraph style=\"-uslm-lc:I12\" class=\"indent1\" id=\"id97553b58-7e89-11f0-a93b-d1785429c93b\" identifier=\"/us/usc/t50/s1601/a/3\"><num value=\"3\">(3)</num><content> any rights or duties that matured or penalties that were incurred prior to such date.</content>\n</paragraph>\n</subsection>\n<subsection style=\"-uslm-lc:I11\" class=\"indent0\" id=\"id97553b59-7e89-11f0-a93b-d1785429c93b\" identifier=\"/us/usc/t50/s1601/b\"><num value=\"b\">(b)</num><content> For the purpose of this section, the words “any national emergency in effect” means a general declaration of emergency made by the President.</content>\n</subsection>\n<sourceCredit id=\"id97553b5a-7e89-11f0-a93b-d1785429c93b\">(<ref href=\"/us/pl/94/412/tI/s101\">Pub. L. 94–412, title I, § 101</ref>, <date date=\"1976-09-14\">Sept. 14, 1976</date>, <ref href=\"/us/stat/90/1255\">90 Stat. 1255</ref>.)</sourceCredit>\n<notes type=\"uscNote\" id=\"id97553b5b-7e89-11f0-a93b-d1785429c93b\">\n<note style=\"-uslm-lc:I74\" role=\"crossHeading\" topic=\"statutoryNotes\" id=\"id97553b5c-7e89-11f0-a93b-d1785429c93b\"><heading class=\"centered\"><b>Statutory Notes and Related Subsidiaries</b></heading></note>\n<note style=\"-uslm-lc:I74\" topic=\"shortTitle\" id=\"id97553b5d-7e89-11f0-a93b-d1785429c93b\"><heading class=\"centered smallCaps\">Short Title</heading><p><ref href=\"/us/pl/94/412/s1\">Pub. L. 94–412, § 1</ref>, <date date=\"1976-09-14\">Sept. 14, 1976</date>, <ref href=\"/us/stat/90/1255\">90 Stat. 1255</ref>, provided: <quotedContent origin=\"/us/pl/94/412/s1\">“That this Act [enacting this chapter, amending <ref href=\"/us/usc/t8/s1481\">section 1481 of Title 8</ref>, Aliens and Nationality, and <ref href=\"/us/usc/t10/s2667\">section 2667 of Title 10</ref>, Armed Forces, repealing <ref href=\"/us/usc/t12/s249\">section 249 of Title 12</ref>, Banks and Banking, <ref href=\"/us/usc/t16/s831d\">section 831d of Title 16</ref>, Conservation, <ref href=\"/us/usc/t18/s1383\">section 1383 of Title 18</ref>, Crimes and Criminal Procedure, <ref href=\"/us/usc/t42/s211b\">section 211b of Title 42</ref>, The Public Health and Welfare, and section 1742 of the former Appendix to this title, and enacting provisions set out below] may be cited as the ‘National Emergencies Act’.”</quotedContent>\n</p>\n</note>\n<note style=\"-uslm-lc:I74\" topic=\"savings\" id=\"id97553b5e-7e89-11f0-a93b-d1785429c93b\"><heading class=\"centered smallCaps\">Savings Provision</heading><p><ref href=\"/us/pl/94/412/tV/s501/h\">Pub. L. 94–412, title V, § 501(h)</ref>, <date date=\"1976-09-14\">Sept. 14, 1976</date>, <ref href=\"/us/stat/90/1258\">90 Stat. 1258</ref>, provided that: <quotedContent origin=\"/us/pl/94/412/tV/s501/h\">\n<inline>“This section [amending <ref href=\"/us/usc/t8/s1481\">section 1481 of Title 8</ref>, Aliens and Nationality and <ref href=\"/us/usc/t10/s2667\">section 2667 of Title 10</ref>, Armed Forces, and repealing <ref href=\"/us/usc/t12/s249\">section 249 of Title 12</ref>, Banks and Banking, <ref href=\"/us/usc/t16/s831d\">section 831d of Title 16</ref>, Conservation, <ref href=\"/us/usc/t18/s1383\">section 1383 of Title 18</ref>, Crimes and Criminal Procedure, and <ref href=\"/us/usc/t42/s211b\">section 211b of Title 42</ref>, The Public Health and Welfare] shall not affect—</inline>\n<paragraph style=\"-uslm-lc:I22\" class=\"indent1\"><num value=\"1\">“(1)</num><content> any action taken or proceeding pending not finally concluded or determined at the time of repeal;</content>\n</paragraph>\n<paragraph style=\"-uslm-lc:I22\" class=\"indent1\"><num value=\"2\">“(2)</num><content> any action or proceeding based on any act committed prior to repeal; or</content>\n</paragraph>\n<paragraph style=\"-uslm-lc:I22\" class=\"indent1\"><num value=\"3\">“(3)</num><content> any rights or duties that matured or penalties that were incurred prior to repeal.”</content>\n</paragraph>\n</quotedContent>\n</p>\n</note>\n</notes>\n</section>"
+   "content_included": false,
+   "note": "the measure's citation may be repeated as written; the provision's contents may not be described"
   }
  ],
  "cited_public_laws_not_included": [],
@@ -102,11 +123,40 @@
  "generation": {
   "status": "READY_FOR_GENERATION"
  },
+ "metrics": {
+  "voted_text_chars": 2275,
+  "context_chars": 0,
+  "official_summary_chars": 1342,
+  "total_source_chars": 3617,
+  "source_count": 2,
+  "included_context_fragment_count": 0,
+  "hierarchy_fragment_count": 0,
+  "tracked_reference_count": 1
+ },
+ "budget": {
+  "review_threshold_chars": 150000,
+  "status": "WITHIN_BUDGET",
+  "rule": "no truncation; a packet over the threshold needs a recorded human review before generation"
+ },
  "maker_rules": [
   "factual claims only from the content fields of this packet",
   "no browsing, no retrieval, no model memory for facts",
-  "derived metadata (headings, relationships, statuses) is not source text"
+  "derived metadata (headings, relationships, statuses) is not source text",
+  "a tracked reference may be named as the measure names it; its contents may not be described",
+  "vote_result and next_step are fixed text: repeat them, do not restate a failed vote as advancing"
  ],
- "history": [],
- "recorded_utc": "2026-09-24T03:32:30Z"
+ "history": [
+  {
+   "packet_sha256": "39a5d6c40af7a8dd1ed5309019548f9844eea7ed33360d861ff16f638c314352",
+   "packet_schema": "civicalign.packet/1.0",
+   "generation": "READY_FOR_GENERATION",
+   "metrics": null,
+   "voted_text_sha256": "0b52c7a27c9de381a46205f7c1c1582480725e6c2c7f8365a916000bced30b32",
+   "law_sha256": [
+    "0811ce0e47ed227abfb10588989b942633e56068b3e804b568f6c2e5ed954513"
+   ],
+   "superseded_utc": "2026-09-24T12:22:17Z"
+  }
+ ],
+ "recorded_utc": "2026-09-24T12:22:17Z"
 }

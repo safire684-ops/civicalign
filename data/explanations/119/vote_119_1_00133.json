@@ -73,7 +73,24 @@
   "heading_failure": "If the bill does not pass",
   "yea_means": "A Yea vote is a vote to pass the bill in the Senate.",
   "nay_means": "A Nay vote is a vote against passing the bill.",
-  "next_step": "A bill the Senate passes goes to the House (or, if the House already passed the same text, to the President).",
+  "vote_result": {
+   "outcome": "PASSED",
+   "official_result": "Bill Passed",
+   "statement": "The Senate passed the House-passed text of the bill."
+  },
+  "next_step": {
+   "case": "HOUSE_ORIGIN_SAME_TEXT",
+   "actual": "The Senate passed the House-passed text. Because both chambers have approved the same text, it can proceed to presentment to the President.",
+   "hypothetical": null,
+   "basis": {
+    "measure_type": "bill",
+    "origin_chamber": "House",
+    "billstatus_origin_chamber": "House",
+    "senate_changed_text": false,
+    "house_passage_before_vote": "2025-03-11: Passed/agreed to in House: On passage Passed by the Yeas and Nays: 217 - 213 (Roll no. 70)",
+    "official_result": "Bill Passed (54-46, 1/2 required)"
+   }
+  },
   "sources": [
    {
     "what": "Senate roll-call record",
@@ -148,6 +165,159 @@
    }
   ]
  },
- "history": [],
- "recorded_utc": "2026-09-24T01:15:16Z"
+ "history": [
+  {
+   "schema": "civicalign.binding/1.0",
+   "vote": {
+    "congress": 119,
+    "session": 1,
+    "clerk_number": 133,
+    "voteview_id": 133,
+    "date": "2025-03-14",
+    "question": "On Passage of the Bill",
+    "result": "Bill Passed",
+    "required": "1/2",
+    "yeas": 54,
+    "nays": 46,
+    "measure": "HR1968",
+    "senate_url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1191/vote_119_1_00133.xml",
+    "senate_sha256": "b7cacf27a97a168a5c98148dcc1251c5d785b2a840aa00ed689d55a34a9a5d8d",
+    "senate_title": "H.R. 1968",
+    "senate_document_text": "A bill making further continuing appropriations and other extensions for the fiscal year ending September 30, 2025, and for other purposes.",
+    "amendment_number": null,
+    "voteview_url": "https://voteview.com/rollcall/RS1190133"
+   },
+   "classification": {
+    "kind": "PASSAGE",
+    "summary_eligible": true,
+    "kind_supported": true,
+    "basis": [
+     "voteview.question='On Passage of the Bill'",
+     "senate.question='On Passage of the Bill'"
+    ],
+    "conflict": null
+   },
+   "object": {
+    "type": "bill",
+    "id": "HR1968",
+    "title": "Full-Year Continuing Appropriations and Extensions Act, 2025",
+    "short_title": "Full-Year Continuing Appropriations and Extensions Act, 2025",
+    "origin_chamber": "House",
+    "billstatus_source": "https://www.govinfo.gov/bulkdata/BILLSTATUS/119/hr/BILLSTATUS-119hr1968.xml",
+    "billstatus_sha256": "e76bef88c341833e2cef8adf4319f8e2684f7988e45bae30138cdc428f206e84",
+    "billstatus_update_date": "2026-09-08T19:31:27Z",
+    "passage_action_text": "Passed Senate without amendment by Yea-Nay Vote. 54 - 46. Record Vote Number: 133."
+   },
+   "text_binding": {
+    "status": "TEXT_BOUND",
+    "version_code": "pcs",
+    "version_name": "Placed on Calendar Senate",
+    "version_date": "2025-03-11",
+    "govinfo_url": "https://www.govinfo.gov/content/pkg/BILLS-119hr1968pcs/xml/BILLS-119hr1968pcs.xml",
+    "sha256": "db8e2596dd52e974f4bd42b4cff6df382f9f9e14c61fa6abdbc7ae257d184728",
+    "bytes": 207616,
+    "stage_attribute_matches": true,
+    "selection_reason": "latest pre-vote version (pcs, 2025-03-11); no Senate amendment recorded; same-day versions ['pcs', 'eh'] resolved by precedence ['pcs', 'rs', 'rds', 'rfs', 'eh', 'cph']",
+    "candidates": [
+     "enr@-",
+     "pcs@2025-03-11",
+     "eh@2025-03-11",
+     "ih@2025-03-10",
+     "pl@2025-03-16"
+    ]
+   },
+   "cra": {
+    "is_cra": false,
+    "agency": null,
+    "rule_title": null,
+    "title_form": null,
+    "consequence_ref": null,
+    "underlying_rule_source": null,
+    "underlying_rule_sha256": null
+   },
+   "receipt": {
+    "deciding": "On Passage of the Bill H.R. 1968",
+    "heading_success": "If the bill passes",
+    "heading_failure": "If the bill does not pass",
+    "yea_means": "A Yea vote is a vote to pass the bill in the Senate.",
+    "nay_means": "A Nay vote is a vote against passing the bill.",
+    "next_step": "A bill the Senate passes goes to the House (or, if the House already passed the same text, to the President).",
+    "sources": [
+     {
+      "what": "Senate roll-call record",
+      "url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1191/vote_119_1_00133.xml"
+     },
+     {
+      "what": "Bill status (GovInfo)",
+      "url": "https://www.govinfo.gov/bulkdata/BILLSTATUS/119/hr/BILLSTATUS-119hr1968.xml"
+     },
+     {
+      "what": "Text as voted on (Placed on Calendar Senate)",
+      "url": "https://www.govinfo.gov/content/pkg/BILLS-119hr1968pcs/xml/BILLS-119hr1968pcs.xml"
+     },
+     {
+      "what": "Roll call at Voteview",
+      "url": "https://voteview.com/rollcall/RS1190133"
+     }
+    ]
+   },
+   "verification": {
+    "status": "VERIFIED",
+    "checks": [
+     {
+      "check": "senate_record_exists",
+      "ok": true,
+      "detail": ""
+     },
+     {
+      "check": "identity_matches",
+      "ok": true,
+      "detail": "senate 119/1/133 vs voteview 119/1/133"
+     },
+     {
+      "check": "date_compatible",
+      "ok": true,
+      "detail": "senate 2025-03-14 vs voteview 2025-03-14"
+     },
+     {
+      "check": "question_matches",
+      "ok": true,
+      "detail": "'On Passage of the Bill' vs 'On Passage of the Bill'"
+     },
+     {
+      "check": "tallies_match",
+      "ok": true,
+      "detail": "senate 54-46 vs voteview 54-46"
+     },
+     {
+      "check": "threshold_matches",
+      "ok": true,
+      "detail": "1/2 vs 1/2"
+     },
+     {
+      "check": "member_votes_match",
+      "ok": true,
+      "detail": "yea 54/54 nay 46/46; former members matched by name+state+party {'S293': 'G000359', 'S419': 'M001190'}"
+     },
+     {
+      "check": "measure_matches",
+      "ok": true,
+      "detail": "senate 'HR1968' vs voteview 'HR1968'"
+     },
+     {
+      "check": "billstatus_present",
+      "ok": true,
+      "detail": "BILLSTATUS-119hr1968.xml"
+     },
+     {
+      "check": "billstatus_links_vote",
+      "ok": true,
+      "detail": "recorded-vote link to this Senate vote number"
+     }
+    ]
+   },
+   "superseded_utc": "2026-09-24T12:05:12Z"
+  }
+ ],
+ "recorded_utc": "2026-09-24T12:05:12Z"
 }

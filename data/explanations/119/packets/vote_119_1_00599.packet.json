@@ -1,5 +1,5 @@
 {
- "packet_schema": "civicalign.packet/1.0",
+ "packet_schema": "civicalign.packet/1.1",
  "vote": {
   "congress": 119,
   "session": 1,
@@ -36,7 +36,24 @@
   "heading_failure": "If the resolution does not pass",
   "yea_means": "A Yea vote is a vote to pass the joint resolution in the Senate.",
   "nay_means": "A Nay vote is a vote against passing the joint resolution.",
-  "next_step": "A joint resolution has the force of a bill: after both chambers pass it, it goes to the President.",
+  "vote_result": {
+   "outcome": "PASSED",
+   "official_result": "Joint Resolution Passed",
+   "statement": "The Senate passed the joint resolution."
+  },
+  "next_step": {
+   "case": "SENATE_ORIGIN",
+   "actual": "The Senate passed the joint resolution. It next goes to the House.",
+   "hypothetical": null,
+   "basis": {
+    "measure_type": "joint_resolution",
+    "origin_chamber": "Senate",
+    "billstatus_origin_chamber": "Senate",
+    "senate_changed_text": false,
+    "house_passage_before_vote": null,
+    "official_result": "Joint Resolution Passed (52-45, 1/2 required)"
+   }
+  },
   "sources": [
    {
     "what": "Senate roll-call record",
@@ -66,6 +83,7 @@
   "content": "<?xml version=\"1.0\"?>\n<?xml-stylesheet type=\"text/xsl\" href=\"billres.xsl\"?>\n<!DOCTYPE resolution PUBLIC \"-//US Congress//DTDs/res.dtd//EN\" \"res.dtd\">\n<resolution public-private=\"public\" resolution-stage=\"Engrossed-in-Senate\" resolution-type=\"senate-joint\" star-print=\"no-star-print\" slc-id=\"S1-FLO25728-RL0-NL-6PN\" key=\"G\" stage-count=\"1\" public-print=\"no\"><metadata xmlns:dc=\"http://purl.org/dc/elements/1.1/\">\n<dublinCore>\n<dc:title>119 SJ 80 ES: Providing for congressional disapproval under chapter 8 of title 5, United States Code, of the rule submitted by the Bureau of Land Management relating to “National Petroleum Reserve in Alaska Integrated Activity Plan Record of Decision”.</dc:title>\n<dc:publisher>U.S. Senate</dc:publisher>\n<dc:date></dc:date>\n<dc:format>text/xml</dc:format>\n<dc:language>EN</dc:language>\n<dc:rights>Pursuant to Title 17 Section 105 of the United States Code, this file is not subject to copyright protection and is in the public domain.</dc:rights>\n</dublinCore>\n</metadata>\n<form display=\"yes\">\n<congress display=\"yes\">119th CONGRESS</congress><session display=\"yes\">1st Session</session><legis-num display=\"yes\">S. J. RES. 80</legis-num><current-chamber display=\"no\">IN THE SENATE OF THE UNITED STATES</current-chamber><legis-type display=\"yes\">JOINT RESOLUTION</legis-type><official-title display=\"yes\">Providing for congressional disapproval under <external-xref legal-doc=\"usc-chapter\" parsable-cite=\"usc-chapter/5/8\">chapter 8</external-xref> of title 5, United States Code, of the rule submitted by the Bureau of Land Management relating to <quote>National Petroleum Reserve in Alaska Integrated Activity Plan Record of Decision</quote>.</official-title></form><resolution-body style=\"OLC\" display-resolving-clause=\"yes-display-resolving-clause\"><section display-inline=\"yes-display-inline\" id=\"S1\" section-type=\"undesignated-section\" commented=\"no\"><text display-inline=\"yes-display-inline\">That Congress disapproves the rule submitted by the Bureau of Land Management relating to <quote>National Petroleum Reserve in Alaska Integrated Activity Plan Record of Decision</quote> (issued April 25, 2022, as a record of decision, and a letter of opinion from the Government Accountability Office dated July 24, 2025, printed in the Congressional Record on July 28, 2025, on pages S4768–S4770, concluding that such record of decision is a rule under the Congressional Review Act), and such rule shall have no force or effect.</text></section></resolution-body><attestation><attestation-group><attestation-date date=\"20251030\" chamber=\"Senate\">Passed the Senate October 30, 2025.</attestation-date><attestor display=\"no\"></attestor><role>Secretary</role></attestation-group></attestation><endorsement display=\"yes\"></endorsement></resolution> \n\n"
  },
  "existing_law_context": [],
+ "tracked_references": [],
  "cited_public_laws_not_included": [],
  "official_summary": {
   "status": "available",
@@ -111,11 +129,38 @@
  "generation": {
   "status": "READY_WITH_LIMITS"
  },
+ "metrics": {
+  "voted_text_chars": 2781,
+  "context_chars": 32792,
+  "official_summary_chars": 740,
+  "total_source_chars": 36313,
+  "source_count": 3,
+  "included_context_fragment_count": 1,
+  "hierarchy_fragment_count": 0,
+  "tracked_reference_count": 0
+ },
+ "budget": {
+  "review_threshold_chars": 150000,
+  "status": "WITHIN_BUDGET",
+  "rule": "no truncation; a packet over the threshold needs a recorded human review before generation"
+ },
  "maker_rules": [
   "factual claims only from the content fields of this packet",
   "no browsing, no retrieval, no model memory for facts",
-  "derived metadata (headings, relationships, statuses) is not source text"
+  "derived metadata (headings, relationships, statuses) is not source text",
+  "a tracked reference may be named as the measure names it; its contents may not be described",
+  "vote_result and next_step are fixed text: repeat them, do not restate a failed vote as advancing"
  ],
- "history": [],
- "recorded_utc": "2026-09-24T03:32:50Z"
+ "history": [
+  {
+   "packet_sha256": "2bb63512bc787de30cd05a97313e74265427c3d1448ed044fc2116f7b7273479",
+   "packet_schema": "civicalign.packet/1.0",
+   "generation": "READY_WITH_LIMITS",
+   "metrics": null,
+   "voted_text_sha256": "37a8c8020007823f6e4773187f47cb15a184d511b25143be6f75326fa793cb78",
+   "law_sha256": [],
+   "superseded_utc": "2026-09-24T12:22:18Z"
+  }
+ ],
+ "recorded_utc": "2026-09-24T12:22:18Z"
 }

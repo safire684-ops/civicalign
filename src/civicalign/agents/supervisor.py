@@ -377,11 +377,179 @@ def _binding_checks(cfg: Config, roster: dict, scores: dict[str, float]) -> list
         for k in ("decision", "if_succeeds", "if_fails", "summary"):
             if k in b:
                 problems.append(f"{f.name}: generated field {k!r} present in a Stage 2 binding")
+        exp = _expected_next_step(b, bill, s, row)
+        got = b["receipt"]
+        have = (got["next_step"]["case"], got["vote_result"]["outcome"], got["vote_result"]["statement"], got["next_step"]["actual"], got["next_step"]["hypothetical"])
+        if have != exp:
+            problems.append(f"{f.name}: vote result / next step {have} does not reproduce {exp}")
+        if got["vote_result"]["outcome"] == "REJECTED" and any(w in (got["next_step"]["actual"] or "") for w in ("next goes", "presentment", "must agree")):
+            problems.append(f"{f.name}: a failed vote is described as advancing")
+        if b["object"]["id"] and b["object"]["id"][0] == "S" and "back to the House" in json.dumps(got):
+            problems.append(f"{f.name}: a Senate-origin measure is said to go back to the House")
         for rec in b["history"]:
             if rec.get("vote", {}).get("clerk_number") != v["clerk_number"]:
                 problems.append(f"{f.name}: history entry for a different vote")
     out.append(Check("Pillar 1 bindings re-derived from cached first-party files", not problems,
                      f"{checked} bindings, {eligible} eligible, {unverifiable} unverifiable; kinds {kinds}" + (f"; problems {problems[:6]}" if problems else "")))
+    return out
+
+
+def _expected_next_step(b: dict, bill, s, row: dict) -> tuple:
+    """Separate code for the receipt's actual result and next step, from the raw
+    records: the measure number, the bill status (origin, House passage, this
+    vote's action), the Senate's own record (title, result) and Voteview's tally.
+    Returns (case, outcome, result statement, actual, hypothetical)."""
+    import re as _re
+    mid = b["object"]["id"] or ""
+    prefix = _re.sub(r"\d", "", mid)
+    noun = {"S": "bill", "HR": "bill", "SJRES": "joint resolution", "HJRES": "joint resolution"}.get(prefix)
+    origin = {"S": "Senate", "SJRES": "Senate", "HR": "House", "HJRES": "House"}.get(prefix)
+    last = row["vote_result"].strip().lower().split()[-1] if row["vote_result"].strip() else ""
+    y, n, req = int(row["yea_count"]), int(row["nay_count"]), row["majority_requirement"]
+    outcome = "PASSED" if last in ("passed",) or row["vote_result"].strip().lower().endswith("agreed to") and "not agreed" not in row["vote_result"].lower() \
+        else "REJECTED" if last in ("defeated", "rejected", "failed") or "not agreed to" in row["vote_result"].lower() else None
+    fits = {("1/2", "PASSED"): y >= n, ("1/2", "REJECTED"): y <= n, ("3/5", "PASSED"): 5 * y >= 3 * (y + n), ("3/5", "REJECTED"): y < 60,
+            ("2/3", "PASSED"): 3 * y >= 2 * (y + n), ("2/3", "REJECTED"): 3 * y < 2 * (y + n)}.get((req, outcome), False)
+    if b["classification"]["kind"] not in ("PASSAGE", "PASSAGE_AS_AMENDED", "JOINT_RESOLUTION_PASSAGE") or noun is None or bill is None \
+            or bill.origin_chamber != origin or outcome is None or not fits:
+        return ("UNDETERMINED", outcome if fits else None, None, None, None)
+    if noun == "joint resolution" and "proposing an amendment to the constitution" in (bill.title or "").lower():
+        return ("UNSUPPORTED_CONSTITUTIONAL_AMENDMENT", outcome, None, None, None)
+    this_action = next((a.text for a in bill.actions for rv in a.recorded_votes if rv.chamber == "Senate" and rv.number == b["vote"]["clerk_number"] and a.date == row["date"]), "")
+    changed = b["classification"]["kind"] == "PASSAGE_AS_AMENDED" or s.title.strip().endswith("As Amended") \
+        or "with an amendment" in this_action.lower() or "with amendments" in this_action.lower() or b["text_binding"]["version_code"] == "eas"
+    pres = "proceed to presentment to the President"
+    if origin == "Senate":
+        case, yes, act = "SENATE_ORIGIN", f"The Senate passed the {noun}.", f"The Senate passed the {noun}. It next goes to the House."
+        hyp = f"If the Senate had passed it, the {noun} would next have gone to the House."
+    elif not any(a.text.startswith("Passed/agreed to in House") and a.date and a.date <= row["date"] for a in bill.actions):
+        return ("UNDETERMINED", outcome, None, None, None)
+    elif changed:
+        case, yes = "HOUSE_ORIGIN_AMENDED", f"The Senate passed an amended version of the {noun}."
+        act = f"The Senate passed an amended version. The House must agree to the Senate changes before the measure can {pres}."
+        hyp = f"If the Senate had passed it, the House would have had to agree to the Senate changes before the measure could {pres}."
+    else:
+        case, yes = "HOUSE_ORIGIN_SAME_TEXT", f"The Senate passed the House-passed text of the {noun}."
+        act = f"The Senate passed the House-passed text. Because both chambers have approved the same text, it can {pres}."
+        hyp = "If the Senate had passed it, both chambers would have approved the same text and it could have proceeded to presentment to the President."
+    if outcome == "PASSED":
+        return (case, outcome, yes, act, None)
+    no = f"The {noun} did not pass the Senate in this vote."
+    return (case, outcome, no, no, hyp)
+
+
+_NEEDS_CONTENT = {"AMENDED_TARGET", "REPLACED_TEXT", "DEFINITION_REQUIRED", "CROSS_REFERENCE_REQUIRED", "SUPPORTING_CONTEXT"}
+
+
+def _own_start(xml: bytes, ident: str) -> tuple[int, bytes] | None:
+    """Start offset and tag name of the element carrying identifier=ident."""
+    for idv in (ident, ident.replace("-", "\u2013")):
+        at = xml.find(b'identifier="' + idv.encode("utf8") + b'"')
+        if at >= 0:
+            lt = xml.rfind(b"<", 0, at)
+            name = xml[lt + 1:at].split()[0]
+            return lt, name
+    return None
+
+
+def _own_node(sec: bytes, ident: str) -> bytes | None:
+    """A node cut from a section by counting its own open and close tags."""
+    st = _own_start(sec, ident)
+    if st is None:
+        return None
+    start, name = st
+    depth, i = 0, start
+    while True:
+        o = sec.find(b"<" + name, i); c = sec.find(b"</" + name + b">", i)
+        if c < 0:
+            return None
+        if 0 <= o < c and sec[o + 1 + len(name):o + 2 + len(name)] in (b" ", b">"):
+            depth += 1; i = o + 1
+        else:
+            depth -= 1; i = c + 1
+            if depth == 0:
+                return sec[start:c + len(name) + 3]
+
+
+def _own_lead_in(sec: bytes, ident: str) -> bytes | None:
+    """A provision's bytes up to its first child provision (children's
+    identifiers extend the parent's with a slash)."""
+    st = _own_start(sec, ident)
+    if st is None:
+        return None
+    child = sec.find(b'identifier="' + ident.encode("utf8") + b"/", st[0])
+    el = _own_node(sec, ident) if st[1] != b"section" else sec
+    if el is None:
+        return None
+    return sec[st[0]:sec.rfind(b"<", 0, child)] if 0 <= child < st[0] + len(el) else el
+
+
+def _own_metrics(pk: dict) -> dict:
+    law = pk["existing_law_context"]
+    cons = (pk.get("cra_context") or {}).get("statutory_consequence_source")
+    summ = len(pk["official_summary"].get("content") or "")
+    ctx = sum(len(e["content"]) for e in law) + sum(len(h["content"]) for e in law for h in e.get("hierarchy", [])) + (len(cons["content"]) if cons else 0)
+    vt = len(pk["voted_text"]["content"])
+    return {"voted_text_chars": vt, "context_chars": ctx, "official_summary_chars": summ, "total_source_chars": vt + ctx + summ,
+            "source_count": 1 + len(law) + (1 if cons else 0) + (1 if summ else 0),
+            "included_context_fragment_count": len(law) + (1 if cons else 0),
+            "hierarchy_fragment_count": sum(len(e.get("hierarchy", [])) for e in law),
+            "tracked_reference_count": len(pk.get("tracked_references", [])) + len(pk["cited_public_laws_not_included"])}
+
+
+def _relevance_problems(name: str, c: dict, b: dict, text_path) -> list[str]:
+    """Separate checks of the relevance rules against the voted XML: an 'et seq.'
+    or whole-law citation is never given content; a citation under a header that
+    says 'defin…' is DEFINITION_REQUIRED; a pinpoint in the citation's visible
+    text is the node selected; every untagged 'U.S.C.' citation is recorded as a
+    gap; a READY non-CRA record has no gap in a location that needs content."""
+    import io as _io, re as _re, xml.etree.ElementTree as _ET
+    out = []
+    if text_path is None or not c["references"] and not c.get("citation_gaps"):
+        return out
+    root = _ET.parse(_io.BytesIO(text_path.read_bytes())).getroot()
+    parent = {ch: p for p in root.iter() for ch in p}
+    xrefs = list(root.iter("external-xref"))
+    if len(xrefs) != len(c["references"]):
+        return [f"{name}: {len(xrefs)} citations in the XML, {len(c['references'])} recorded"]
+    sel = c["selection"] or {}
+    for x, r in zip(xrefs, c["references"]):
+        shown = " ".join("".join(x.itertext()).split())
+        if shown != r["text"] or x.get("parsable-cite", "") != r["cite"]:
+            out.append(f"{name}: citation {shown!r} recorded as {r['text']!r}"); continue
+        anc, p = [], parent.get(x)
+        while p is not None:
+            anc.append(p); p = parent.get(p)
+        quoted = any(a.tag in ("quoted-block", "quote") for a in anc)
+        in_def = any(a.find("header") is not None and _re.search(r"defin", "".join(a.find("header").itertext()), _re.I) for a in anc)
+        if r["legal_doc"] == "usc" and _re.search(r"et\.?\s*seq", shown) and r["relationship"] not in ("CROSS_REFERENCE_ONLY", "AMENDED_TARGET", "REPLACED_TEXT"):
+            out.append(f"{name}: {shown!r} cites a whole Act but is {r['relationship']}")
+        if in_def and not quoted and r["relationship"] not in ("DEFINITION_REQUIRED", "AMENDED_TARGET", "REPLACED_TEXT", "CROSS_REFERENCE_ONLY"):
+            out.append(f"{name}: {shown!r} sits in a definition but is {r['relationship']}")
+        m = _re.match(r"^(\d+[a-zA-Z]?) U\.S\.C\. ([0-9A-Za-z\-\u2013.]+?)((?:\([0-9A-Za-z]+\))+)$", shown)
+        if r["legal_doc"] == "usc" and m and r["relationship"] in _NEEDS_CONTENT:
+            node = f"/us/usc/t{m.group(1)}/s{m.group(2)}" + "".join("/" + q for q in _re.findall(r"\(([0-9A-Za-z]+)\)", m.group(3)))
+            covered = [k for k in sel.get("required", []) if node == k or node.startswith(k + "/")]
+            if not covered and sel.get("status") == "ok" and not b["cra"]["is_cra"]:
+                out.append(f"{name}: pinpoint {node} is not among the selected provisions")
+    # untagged citations: own scan of text outside external-xref
+    own_gaps = 0
+    for el in root.iter():
+        for chunk in ([] if el.tag == "external-xref" else [el.text]) + ([el.tail] if parent.get(el) is not None else []):
+            own_gaps += len(_re.findall(r"\d+[a-zA-Z]?\s+U\.S\.C\.\s+[0-9A-Za-z]", chunk or ""))
+        if el.tag == "external-xref" and el.get("legal-doc") == "usc":
+            own_gaps += bool(_re.match(r"^(?:,\s*|,?\s+or\s+|,?\s+and\s+)[0-9][^\s,;)]*(?=[\s,;)]|$)(?!\s+U\.S\.C\.)", el.tail or ""))
+            shown = " ".join("".join(el.itertext()).split()); sec = (el.get("parsable-cite", "").split("/") + ["", "", ""])[2]
+            pat = r"^(?:\d+[a-zA-Z]? U\.S\.C\.|[Ss]ection) " + _re.escape(sec).replace("\\-", "[-\u2013]") + r"(?:\([0-9A-Za-z]+\))*(?: et\.? ?seq\.?)?$"
+            own_gaps += not _re.match(pat, shown)
+    if own_gaps != len(c.get("citation_gaps", [])):
+        out.append(f"{name}: {own_gaps} unstructured citations found, {len(c.get('citation_gaps', []))} recorded")
+    if c["generation"]["status"] in ("READY_FOR_GENERATION", "READY_WITH_LIMITS") and not b["cra"]["is_cra"]:
+        if any(g["relationship"] in _NEEDS_CONTENT for g in c.get("citation_gaps", [])):
+            out.append(f"{name}: READY with an unresolved citation that needs content")
+        for rec in c["existing_law_context"]:
+            if rec.get("inclusion") == "CONTENT_INCLUDED_FOR_GENERATION" and rec["status"] != "fetched":
+                out.append(f"{name}: READY but required {rec['identifier']} is {rec['status']}")
     return out
 
 
@@ -422,7 +590,7 @@ def _context_checks(cfg: Config) -> list[Check]:
             own = C.extract_references(xml)
             if sorted(r["cite"] for r in own) != sorted(r["cite"] for r in c["references"]):
                 problems.append(f"{f.name}: references differ from the voted XML")
-            sel = C.select_sections(own, bool(b["cra"]["is_cra"]))
+            sel = C.select_sections(own, bool(b["cra"]["is_cra"]), C.citation_gaps(xml))
             if sel["required"] != c["selection"]["required"] or sel["status"] != c["selection"]["status"]:
                 problems.append(f"{f.name}: selection policy does not reproduce")
         rp = c.get("release_point")
@@ -442,6 +610,7 @@ def _context_checks(cfg: Config) -> list[Check]:
             if page.exists():
                 for k, val in uscode.parse_classification(page.read_text(errors="ignore")).items():
                     classification.setdefault(k, set()).update(val)
+        problems += _relevance_problems(f.name, c, b, tpath if tpath.exists() else None)
         for rec in c["existing_law_context"] + ([c["cra"]["consequence_source"]] if c["cra"]["consequence_source"] else []):
             if rec["status"] != "fetched":
                 continue
@@ -454,9 +623,15 @@ def _context_checks(cfg: Config) -> list[Check]:
             arch = raw / "uscode" / uscode.archive_name(rec["title"], uscode.ReleasePoint(*map(int, rec["as_of"]["release_point"].split("-")), __import__("datetime").date.fromisoformat(rec["as_of"]["date"])))
             if arch.exists():
                 data = uscode.read_title(arch)
-                frag = uscode.extract_section(data, rec["identifier"])
+                sec_id = rec.get("section_identifier", rec["identifier"])
+                sec = uscode.extract_section(data, sec_id)
+                frag = sec if (sec is None or sec_id == rec["identifier"]) else _own_node(sec, rec["identifier"])
                 if frag is None or hashlib.sha256(frag).hexdigest() != rec["fragment_sha256"]:
                     problems.append(f"{f.name}: {rec['identifier']} does not reproduce from the cached archive")
+                for h in rec.get("hierarchy", []):
+                    li = _own_lead_in(sec, h["identifier"]) if sec is not None else None
+                    if li is None or hashlib.sha256(li).hexdigest() != h["sha256"]:
+                        problems.append(f"{f.name}: lead-in of {h['identifier']} does not reproduce")
                 if hashlib.sha256(arch.read_bytes()).hexdigest() != rec["archive_sha256"]:
                     problems.append(f"{f.name}: archive hash changed for {rec['identifier']}")
         st = c["generation"]["status"]; comp = c["completeness"]["status"]
@@ -492,6 +667,23 @@ def _context_checks(cfg: Config) -> list[Check]:
             for rec in pk["existing_law_context"]:
                 if hashlib.sha256(rec["content"].encode()).hexdigest() != rec["sha256"]:
                     problems.append(f"{f.name}: packet law fragment {rec['identifier']} does not match its hash")
+                for h in rec.get("hierarchy", []):
+                    if hashlib.sha256(h["content"].encode()).hexdigest() != h["sha256"]:
+                        problems.append(f"{f.name}: packet lead-in {h['identifier']} does not match its hash")
+                if not set(rec["relationships"]) & _NEEDS_CONTENT or rec["inclusion"] != "CONTENT_INCLUDED_FOR_GENERATION":
+                    problems.append(f"{f.name}: {rec['identifier']} included without a relationship that needs content")
+                if rec.get("scope") == "section" and len(rec["content"]) > 50000:
+                    problems.append(f"{f.name}: whole section {rec['identifier']} over 50,000 characters injected")
+            for rec in pk.get("tracked_references", []) + pk["cited_public_laws_not_included"]:
+                if "content" in rec or rec.get("content_included") is not False:
+                    problems.append(f"{f.name}: tracked reference {rec['identifier']} carries content")
+            own = _own_metrics(pk)
+            if own != pk.get("metrics"):
+                problems.append(f"{f.name}: packet metrics {pk.get('metrics')} do not recompute ({own})")
+            if (pk.get("budget") or {}).get("status") != ("REVIEW_REQUIRED" if own["total_source_chars"] > 150000 else "WITHIN_BUDGET"):
+                problems.append(f"{f.name}: packet budget status does not follow its size")
+            if pk["receipt_scaffold"] != b["receipt"]:
+                problems.append(f"{f.name}: packet receipt differs from the binding's")
             cons = pk["cra_context"].get("statutory_consequence_source")
             if cons and hashlib.sha256(cons["content"].encode()).hexdigest() != cons["sha256"]:
                 problems.append(f"{f.name}: packet CRA consequence does not match its hash")

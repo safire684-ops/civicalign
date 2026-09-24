@@ -73,7 +73,24 @@
   "heading_failure": "If the bill does not pass",
   "yea_means": "A Yea vote is a vote to pass the bill as the Senate amended it.",
   "nay_means": "A Nay vote is a vote against passing the amended bill.",
-  "next_step": "Because the Senate changed the text, the amended bill goes back to the House, which must agree to the Senate's version before it can become law.",
+  "vote_result": {
+   "outcome": "PASSED",
+   "official_result": "Bill Passed",
+   "statement": "The Senate passed the bill."
+  },
+  "next_step": {
+   "case": "SENATE_ORIGIN",
+   "actual": "The Senate passed the bill. It next goes to the House.",
+   "hypothetical": null,
+   "basis": {
+    "measure_type": "bill",
+    "origin_chamber": "Senate",
+    "billstatus_origin_chamber": "Senate",
+    "senate_changed_text": true,
+    "house_passage_before_vote": null,
+    "official_result": "Bill Passed (52-47, 1/2 required)"
+   }
+  },
   "sources": [
    {
     "what": "Senate roll-call record",
@@ -148,6 +165,159 @@
    }
   ]
  },
- "history": [],
- "recorded_utc": "2026-09-24T01:15:31Z"
+ "history": [
+  {
+   "schema": "civicalign.binding/1.0",
+   "vote": {
+    "congress": 119,
+    "session": 2,
+    "clerk_number": 163,
+    "voteview_id": 822,
+    "date": "2026-06-05",
+    "question": "On Passage of the Bill",
+    "result": "Bill Passed",
+    "required": "1/2",
+    "yeas": 52,
+    "nays": 47,
+    "measure": "S2",
+    "senate_url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1192/vote_119_2_00163.xml",
+    "senate_sha256": "44e9c6a8bde4a388c68965e2f03c25366d3a82c51a50d8b28871a852910f16e7",
+    "senate_title": "S. 2, As Amended",
+    "senate_document_text": "An original bill to provide for reconciliation pursuant to title II of S. Con. Res. 33.",
+    "amendment_number": null,
+    "voteview_url": "https://voteview.com/rollcall/RS1190822"
+   },
+   "classification": {
+    "kind": "PASSAGE_AS_AMENDED",
+    "summary_eligible": true,
+    "kind_supported": true,
+    "basis": [
+     "voteview.question='On Passage of the Bill'",
+     "senate.question='On Passage of the Bill'",
+     "senate.title=As Amended"
+    ],
+    "conflict": null
+   },
+   "object": {
+    "type": "bill",
+    "id": "S2",
+    "title": "Secure America Act",
+    "short_title": "Secure America Act",
+    "origin_chamber": "Senate",
+    "billstatus_source": "https://www.govinfo.gov/bulkdata/BILLSTATUS/119/s/BILLSTATUS-119s2.xml",
+    "billstatus_sha256": "2da384bc475373ef47f60caf3d1bc167585f23092724d195b1c70f31280e3956",
+    "billstatus_update_date": "2026-09-08T19:31:27Z",
+    "passage_action_text": "Passed Senate with an amendment by Yea-Nay Vote. 52 - 47. Record Vote Number: 163. (text: CR S2570-2571)"
+   },
+   "text_binding": {
+    "status": "TEXT_BOUND",
+    "version_code": "es",
+    "version_name": "Engrossed in Senate",
+    "version_date": "2026-06-05",
+    "govinfo_url": "https://www.govinfo.gov/content/pkg/BILLS-119s2es/xml/BILLS-119s2es.xml",
+    "sha256": "d7d307b0a00c7ed1b4b66088a3a35473b0003574db8ac9d0da87a293400533b6",
+    "bytes": 23134,
+    "stage_attribute_matches": true,
+    "selection_reason": "engrossed by the Senate on the vote date (es): the measure as passed",
+    "candidates": [
+     "enr@-",
+     "es@2026-06-05",
+     "pcs@2026-05-20",
+     "pl@2026-06-11"
+    ]
+   },
+   "cra": {
+    "is_cra": false,
+    "agency": null,
+    "rule_title": null,
+    "title_form": null,
+    "consequence_ref": null,
+    "underlying_rule_source": null,
+    "underlying_rule_sha256": null
+   },
+   "receipt": {
+    "deciding": "On Passage of the Bill S. 2",
+    "heading_success": "If the bill, as amended, passes",
+    "heading_failure": "If the bill does not pass",
+    "yea_means": "A Yea vote is a vote to pass the bill as the Senate amended it.",
+    "nay_means": "A Nay vote is a vote against passing the amended bill.",
+    "next_step": "Because the Senate changed the text, the amended bill goes back to the House, which must agree to the Senate's version before it can become law.",
+    "sources": [
+     {
+      "what": "Senate roll-call record",
+      "url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1192/vote_119_2_00163.xml"
+     },
+     {
+      "what": "Bill status (GovInfo)",
+      "url": "https://www.govinfo.gov/bulkdata/BILLSTATUS/119/s/BILLSTATUS-119s2.xml"
+     },
+     {
+      "what": "Text as voted on (Engrossed in Senate)",
+      "url": "https://www.govinfo.gov/content/pkg/BILLS-119s2es/xml/BILLS-119s2es.xml"
+     },
+     {
+      "what": "Roll call at Voteview",
+      "url": "https://voteview.com/rollcall/RS1190822"
+     }
+    ]
+   },
+   "verification": {
+    "status": "VERIFIED",
+    "checks": [
+     {
+      "check": "senate_record_exists",
+      "ok": true,
+      "detail": ""
+     },
+     {
+      "check": "identity_matches",
+      "ok": true,
+      "detail": "senate 119/2/163 vs voteview 119/2/163"
+     },
+     {
+      "check": "date_compatible",
+      "ok": true,
+      "detail": "senate 2026-06-05 vs voteview 2026-06-05"
+     },
+     {
+      "check": "question_matches",
+      "ok": true,
+      "detail": "'On Passage of the Bill' vs 'On Passage of the Bill'"
+     },
+     {
+      "check": "tallies_match",
+      "ok": true,
+      "detail": "senate 52-47 vs voteview 52-47"
+     },
+     {
+      "check": "threshold_matches",
+      "ok": true,
+      "detail": "1/2 vs 1/2"
+     },
+     {
+      "check": "member_votes_match",
+      "ok": true,
+      "detail": "yea 52/52 nay 47/47; former members matched by name+state+party {'S293': 'G000359'}"
+     },
+     {
+      "check": "measure_matches",
+      "ok": true,
+      "detail": "senate 'S2' vs voteview 'S2'"
+     },
+     {
+      "check": "billstatus_present",
+      "ok": true,
+      "detail": "BILLSTATUS-119s2.xml"
+     },
+     {
+      "check": "billstatus_links_vote",
+      "ok": true,
+      "detail": "recorded-vote link to this Senate vote number"
+     }
+    ]
+   },
+   "superseded_utc": "2026-09-24T12:05:13Z"
+  }
+ ],
+ "recorded_utc": "2026-09-24T12:05:13Z"
 }

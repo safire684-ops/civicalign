@@ -73,7 +73,24 @@
   "heading_failure": "If the resolution does not pass",
   "yea_means": "A Yea vote is a vote to pass the joint resolution in the Senate.",
   "nay_means": "A Nay vote is a vote against passing the joint resolution.",
-  "next_step": "A joint resolution has the force of a bill: after both chambers pass it, it goes to the President.",
+  "vote_result": {
+   "outcome": "PASSED",
+   "official_result": "Joint Resolution Passed",
+   "statement": "The Senate passed the House-passed text of the joint resolution."
+  },
+  "next_step": {
+   "case": "HOUSE_ORIGIN_SAME_TEXT",
+   "actual": "The Senate passed the House-passed text. Because both chambers have approved the same text, it can proceed to presentment to the President.",
+   "hypothetical": null,
+   "basis": {
+    "measure_type": "joint_resolution",
+    "origin_chamber": "House",
+    "billstatus_origin_chamber": "House",
+    "senate_changed_text": false,
+    "house_passage_before_vote": "2025-03-05: Passed/agreed to in House: On passage Passed by the Yeas and Nays: 216 - 202 (Roll no. 58)",
+    "official_result": "Joint Resolution Passed (55-45, 1/2 required)"
+   }
+  },
   "sources": [
    {
     "what": "Senate roll-call record",
@@ -148,6 +165,159 @@
    }
   ]
  },
- "history": [],
- "recorded_utc": "2026-09-24T01:15:19Z"
+ "history": [
+  {
+   "schema": "civicalign.binding/1.0",
+   "vote": {
+    "congress": 119,
+    "session": 1,
+    "clerk_number": 232,
+    "voteview_id": 232,
+    "date": "2025-05-06",
+    "question": "On the Joint Resolution",
+    "result": "Joint Resolution Passed",
+    "required": "1/2",
+    "yeas": 55,
+    "nays": 45,
+    "measure": "HJRES61",
+    "senate_url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1191/vote_119_1_00232.xml",
+    "senate_sha256": "512b15c75ae0328af24e47ac067f72eb25562485926d6e3dc6e66a28c547ab97",
+    "senate_title": "H.J.Res. 61",
+    "senate_document_text": "A joint resolution providing for congressional disapproval under chapter 8 of title 5, United States Code, of the rule submitted by the Environmental Protection Agency relating to \"National Emission Standards for Hazardous Air Pollutants: Rubber Tire Manufacturing\".",
+    "amendment_number": null,
+    "voteview_url": "https://voteview.com/rollcall/RS1190232"
+   },
+   "classification": {
+    "kind": "JOINT_RESOLUTION_PASSAGE",
+    "summary_eligible": true,
+    "kind_supported": true,
+    "basis": [
+     "voteview.question='On the Joint Resolution'",
+     "senate.question='On the Joint Resolution'"
+    ],
+    "conflict": null
+   },
+   "object": {
+    "type": "joint_resolution",
+    "id": "HJRES61",
+    "title": "Providing for congressional disapproval under chapter 8 of title 5, United States Code, of the rule submitted by the Environmental Protection Agency relating to \"National Emission Standards for Hazardous Air Pollutants: Rubber Tire Manufacturing\".",
+    "short_title": "",
+    "origin_chamber": "House",
+    "billstatus_source": "https://www.govinfo.gov/bulkdata/BILLSTATUS/119/hjres/BILLSTATUS-119hjres61.xml",
+    "billstatus_sha256": "a6baf1b557bff255049b66fa81e5622ac487396cd8199bcc774bbe097133e87e",
+    "billstatus_update_date": "2026-07-15T12:40:18Z",
+    "passage_action_text": "Passed Senate without amendment by Yea-Nay Vote. 55 - 45. Record Vote Number: 232."
+   },
+   "text_binding": {
+    "status": "TEXT_BOUND",
+    "version_code": "rds",
+    "version_name": "Received in Senate",
+    "version_date": "2025-03-06",
+    "govinfo_url": "https://www.govinfo.gov/content/pkg/BILLS-119hjres61rds/xml/BILLS-119hjres61rds.xml",
+    "sha256": "076c5c54a784bd363db8787b1637726632b417b27ccfbe8da94e316482f8525b",
+    "bytes": 2712,
+    "stage_attribute_matches": null,
+    "selection_reason": "latest pre-vote version (rds, 2025-03-06); no Senate amendment recorded",
+    "candidates": [
+     "enr@-",
+     "rds@2025-03-06",
+     "eh@2025-03-05",
+     "ih@2025-02-25",
+     "pl@2025-05-24"
+    ]
+   },
+   "cra": {
+    "is_cra": true,
+    "agency": "Environmental Protection Agency",
+    "rule_title": "National Emission Standards for Hazardous Air Pollutants: Rubber Tire Manufacturing",
+    "title_form": "chapter 8 of title 5",
+    "consequence_ref": "Congressional Review Act, 5 U.S.C. 801(b): a rule disapproved by an enacted joint resolution shall not take effect (or shall not continue in effect) and may not be reissued in substantially the same form without subsequent statutory authorization.",
+    "underlying_rule_source": null,
+    "underlying_rule_sha256": null
+   },
+   "receipt": {
+    "deciding": "On the Joint Resolution H.J.Res. 61",
+    "heading_success": "If the resolution passes",
+    "heading_failure": "If the resolution does not pass",
+    "yea_means": "A Yea vote is a vote to pass the joint resolution in the Senate.",
+    "nay_means": "A Nay vote is a vote against passing the joint resolution.",
+    "next_step": "A joint resolution has the force of a bill: after both chambers pass it, it goes to the President.",
+    "sources": [
+     {
+      "what": "Senate roll-call record",
+      "url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1191/vote_119_1_00232.xml"
+     },
+     {
+      "what": "Bill status (GovInfo)",
+      "url": "https://www.govinfo.gov/bulkdata/BILLSTATUS/119/hjres/BILLSTATUS-119hjres61.xml"
+     },
+     {
+      "what": "Text as voted on (Received in Senate)",
+      "url": "https://www.govinfo.gov/content/pkg/BILLS-119hjres61rds/xml/BILLS-119hjres61rds.xml"
+     },
+     {
+      "what": "Roll call at Voteview",
+      "url": "https://voteview.com/rollcall/RS1190232"
+     }
+    ]
+   },
+   "verification": {
+    "status": "VERIFIED",
+    "checks": [
+     {
+      "check": "senate_record_exists",
+      "ok": true,
+      "detail": ""
+     },
+     {
+      "check": "identity_matches",
+      "ok": true,
+      "detail": "senate 119/1/232 vs voteview 119/1/232"
+     },
+     {
+      "check": "date_compatible",
+      "ok": true,
+      "detail": "senate 2025-05-06 vs voteview 2025-05-06"
+     },
+     {
+      "check": "question_matches",
+      "ok": true,
+      "detail": "'On the Joint Resolution' vs 'On the Joint Resolution'"
+     },
+     {
+      "check": "tallies_match",
+      "ok": true,
+      "detail": "senate 55-45 vs voteview 55-45"
+     },
+     {
+      "check": "threshold_matches",
+      "ok": true,
+      "detail": "1/2 vs 1/2"
+     },
+     {
+      "check": "member_votes_match",
+      "ok": true,
+      "detail": "yea 55/55 nay 45/45; former members matched by name+state+party {'S293': 'G000359', 'S419': 'M001190'}"
+     },
+     {
+      "check": "measure_matches",
+      "ok": true,
+      "detail": "senate 'HJRES61' vs voteview 'HJRES61'"
+     },
+     {
+      "check": "billstatus_present",
+      "ok": true,
+      "detail": "BILLSTATUS-119hjres61.xml"
+     },
+     {
+      "check": "billstatus_links_vote",
+      "ok": true,
+      "detail": "recorded-vote link to this Senate vote number"
+     }
+    ]
+   },
+   "superseded_utc": "2026-09-24T12:05:13Z"
+  }
+ ],
+ "recorded_utc": "2026-09-24T12:05:13Z"
 }

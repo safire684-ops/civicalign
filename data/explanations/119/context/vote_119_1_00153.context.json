@@ -1,5 +1,5 @@
 {
- "schema": "civicalign.context/1.0",
+ "schema": "civicalign.context/1.1",
  "vote": {
   "congress": 119,
   "session": 1,
@@ -14,12 +14,18 @@
   "text_sha256": "a180e8a4d4171c3bcecd03a82d5f6f798e070bbf9316c0a7a222fff58ddead82"
  },
  "references": [],
+ "citation_gaps": [],
  "selection": {
-  "policy": "cra: the resolution's own text and the CRA consequence section; cited authorities are not extracted",
+  "policy": "cra: the resolution's own text and the CRA consequence section; cited authorities are tracked, not extracted",
   "section_cap": 12,
+  "full_section_max_chars": 50000,
   "required": [],
+  "tracked_only": [],
+  "relationships": {},
+  "bases": {},
   "cited": [],
   "amended": [],
+  "unresolved_citations": [],
   "status": "ok"
  },
  "release_point": {
@@ -56,7 +62,7 @@
    "fragment_sha256": "428e76f02b92afb745472c99f9d0f3059376320e60727f9e4f10a30788be6daf",
    "bytes": 33022,
    "heading": "Congressional review",
-   "relationship": "cra_statutory_consequence",
+   "relationship": "SUPPORTING_CONTEXT",
    "status": "fetched",
    "in_force_check": {
     "status": "ok",
@@ -64,7 +70,9 @@
     "intervening": [],
     "affected_by": [],
     "check": "no intervening release point"
-   }
+   },
+   "inclusion": "CONTENT_INCLUDED_FOR_GENERATION",
+   "basis": "fixed rule: the CRA consequence section in force at the vote"
   },
   "underlying_rule": {
    "status": "RULE_BOUND",
@@ -93,6 +101,119 @@
  "generation": {
   "status": "READY_WITH_LIMITS"
  },
- "history": [],
- "recorded_utc": "2026-09-24T03:29:18Z"
+ "metrics": {
+  "voted_text_chars": 2322,
+  "context_chars": 32792,
+  "official_summary_chars": 0,
+  "total_source_chars": 35114,
+  "source_count": 2,
+  "included_context_fragment_count": 1,
+  "hierarchy_fragment_count": 0,
+  "tracked_reference_count": 0
+ },
+ "budget": {
+  "review_threshold_chars": 150000,
+  "status": "WITHIN_BUDGET",
+  "rule": "no truncation; a packet over the threshold needs a recorded human review before generation"
+ },
+ "history": [
+  {
+   "schema": "civicalign.context/1.0",
+   "vote": {
+    "congress": 119,
+    "session": 1,
+    "clerk_number": 153,
+    "date": "2025-03-27",
+    "measure": "SJRES18"
+   },
+   "binding": {
+    "kind": "JOINT_RESOLUTION_PASSAGE",
+    "verification": "VERIFIED",
+    "text_status": "TEXT_BOUND",
+    "text_sha256": "a180e8a4d4171c3bcecd03a82d5f6f798e070bbf9316c0a7a222fff58ddead82"
+   },
+   "references": [],
+   "selection": {
+    "policy": "cra: the resolution's own text and the CRA consequence section; cited authorities are not extracted",
+    "section_cap": 12,
+    "required": [],
+    "cited": [],
+    "amended": [],
+    "status": "ok"
+   },
+   "release_point": {
+    "label": "119-4",
+    "date": "2025-03-15",
+    "note": "latest release point on or before the vote; per-section archives may come from an earlier published one"
+   },
+   "existing_law_context": [],
+   "public_laws": [],
+   "official_summary": {
+    "status": "available",
+    "version_code": "00",
+    "action_desc": "Introduced in Senate",
+    "action_date": "2025-02-13",
+    "sha256": "29a888dd2c020d6fa0879cbb7da8789bc4c94652b3215643e00e0c392e5b037c",
+    "version_relationship": "PRE_AMENDMENT",
+    "usable": false
+   },
+   "cra": {
+    "mode": "rule_bound",
+    "rule_status": "RULE_BOUND",
+    "consequence_source": {
+     "type": "us_code",
+     "identifier": "/us/usc/t5/s801",
+     "title": "5",
+     "section": "801",
+     "as_of": {
+      "release_point": "119-4",
+      "date": "2025-03-15",
+      "rule": "latest OLRC release point on or before the vote with a published archive; intervening laws checked against the classification table"
+     },
+     "source_url": "https://uscode.house.gov/download/releasepoints/us/pl/119/4/xml_usc05@119-4.zip",
+     "archive_sha256": "67b23ff2bb7b69db1c9aa892dcfdf0fb378b8aa042d097cafb20931596149f82",
+     "fragment_sha256": "428e76f02b92afb745472c99f9d0f3059376320e60727f9e4f10a30788be6daf",
+     "bytes": 33022,
+     "heading": "Congressional review",
+     "relationship": "cra_statutory_consequence",
+     "status": "fetched",
+     "in_force_check": {
+      "status": "ok",
+      "archive": "xml_usc05@119-4.zip",
+      "intervening": [],
+      "affected_by": [],
+      "check": "no intervening release point"
+     }
+    },
+    "underlying_rule": {
+     "status": "RULE_BOUND",
+     "citation": "89 FR 106768",
+     "document_number": "2024-29699",
+     "fr_title": "Overdraft Lending: Very Large Financial Institutions",
+     "type": "Rule",
+     "publication_date": "2024-12-30",
+     "agencies": [
+      "Consumer Financial Protection Bureau"
+     ],
+     "source_url": "https://www.federalregister.gov/documents/2024/12/30/2024-29699/overdraft-lending-very-large-financial-institutions",
+     "full_text_xml_url": "https://www.federalregister.gov/documents/full_text/xml/2024/12/30/2024-29699.xml",
+     "sha256": "dade3c677c0c58c88000fcaebf56c3f44ace79ac870fd7670b77ba2920dc9a11",
+     "bytes": 782821
+    },
+    "gao_determination": null
+   },
+   "completeness": {
+    "status": "LIMITED",
+    "missing": [],
+    "notes": [
+     "CRA: the resolution's own effect may be explained; the underlying rule's substance may not unless the rule is bound and separately verified"
+    ]
+   },
+   "generation": {
+    "status": "READY_WITH_LIMITS"
+   },
+   "superseded_utc": "2026-09-24T12:22:16Z"
+  }
+ ],
+ "recorded_utc": "2026-09-24T12:22:16Z"
 }

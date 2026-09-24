@@ -66,8 +66,92 @@ def test_passage_as_amended_needs_corroboration_and_agreement():
 def test_supported_kinds_are_exactly_the_stage_2_set():
     assert B.SUPPORTED_KINDS == {B.PASSAGE, B.PASSAGE_AS_AMENDED, B.JOINT_RESOLUTION_PASSAGE}
     for k in B.SUPPORTED_KINDS:
-        assert k in B.HEADINGS and k in B.YEA_NAY and k in B.NEXT_STEP
+        assert k in B.HEADINGS and k in B.YEA_NAY
     assert B.HEADINGS[B.JOINT_RESOLUTION_PASSAGE] == ("If the resolution passes", "If the resolution does not pass")
+
+
+# ---- the actual result and what follows it ----
+
+HOUSE_PASSED = "2025-06-12: Passed/agreed to in House: On passage Passed by the Yeas and Nays"
+
+
+def _next(measure, kind, result, tally, title="", senate_title="", action="", code="pcs", house=HOUSE_PASSED, origin=None, required="1/2"):
+    prefix = "".join(ch for ch in measure if ch.isalpha())
+    origin = origin or {"S": "Senate", "SJRES": "Senate", "HR": "House", "HJRES": "House"}[prefix]
+    return B.next_step(measure, origin, title, kind, senate_title or measure, action, code, result, tally[0], tally[1], required,
+                       house if origin == "House" else None)
+
+
+# (measure, kind, result, tally, extra) -> (case, outcome, result statement, actual, hypothetical)
+NEXT_CASES = [
+    ("Senate-origin bill passed", ("S2", B.PASSAGE, "Bill Passed", (52, 47), {}),
+     (B.SENATE_ORIGIN, B.PASSED, "The Senate passed the bill.", "The Senate passed the bill. It next goes to the House.", None)),
+    ("Senate-origin bill passed as amended in the Senate", ("S2", B.PASSAGE_AS_AMENDED, "Bill Passed", (52, 47), {"senate_title": "S. 2, As Amended", "code": "es"}),
+     (B.SENATE_ORIGIN, B.PASSED, "The Senate passed the bill.", "The Senate passed the bill. It next goes to the House.", None)),
+    ("Senate-origin bill rejected", ("S5", B.PASSAGE, "Bill Defeated", (40, 58), {}),
+     (B.SENATE_ORIGIN, B.REJECTED, "The bill did not pass the Senate in this vote.", "The bill did not pass the Senate in this vote.",
+      "If the Senate had passed it, the bill would next have gone to the House.")),
+    ("House-origin bill passed unchanged", ("HR23", B.PASSAGE, "Bill Passed", (51, 49), {}),
+     (B.HOUSE_ORIGIN_SAME_TEXT, B.PASSED, "The Senate passed the House-passed text of the bill.",
+      "The Senate passed the House-passed text. Because both chambers have approved the same text, it can proceed to presentment to the President.", None)),
+    ("House-origin bill passed as amended", ("HR4", B.PASSAGE_AS_AMENDED, "Bill Passed", (51, 48), {"code": "eas", "action": "Passed Senate with an amendment by Yea-Nay Vote. 51 - 48."}),
+     (B.HOUSE_ORIGIN_AMENDED, B.PASSED, "The Senate passed an amended version of the bill.",
+      "The Senate passed an amended version. The House must agree to the Senate changes before the measure can proceed to presentment to the President.", None)),
+    ("House-origin bill rejected", ("HR5371", B.PASSAGE, "Bill Defeated", (55, 45), {"required": "3/5"}),
+     (B.HOUSE_ORIGIN_SAME_TEXT, B.REJECTED, "The bill did not pass the Senate in this vote.", "The bill did not pass the Senate in this vote.",
+      "If the Senate had passed it, both chambers would have approved the same text and it could have proceeded to presentment to the President.")),
+    ("House-origin amended bill rejected", ("HR9", B.PASSAGE_AS_AMENDED, "Bill Defeated", (45, 55), {"senate_title": "H.R. 9, As Amended"}),
+     (B.HOUSE_ORIGIN_AMENDED, B.REJECTED, "The bill did not pass the Senate in this vote.", "The bill did not pass the Senate in this vote.",
+      "If the Senate had passed it, the House would have had to agree to the Senate changes before the measure could proceed to presentment to the President.")),
+    ("Senate-origin joint resolution passed", ("SJRES37", B.JOINT_RESOLUTION_PASSAGE, "Joint Resolution Passed", (51, 48), {"code": "es"}),
+     (B.SENATE_ORIGIN, B.PASSED, "The Senate passed the joint resolution.", "The Senate passed the joint resolution. It next goes to the House.", None)),
+    ("Senate-origin joint resolution rejected (tie)", ("SJRES49", B.JOINT_RESOLUTION_PASSAGE, "Joint Resolution Defeated", (49, 49), {"code": "is"}),
+     (B.SENATE_ORIGIN, B.REJECTED, "The joint resolution did not pass the Senate in this vote.", "The joint resolution did not pass the Senate in this vote.",
+      "If the Senate had passed it, the joint resolution would next have gone to the House.")),
+    ("House-origin joint resolution passed", ("HJRES142", B.JOINT_RESOLUTION_PASSAGE, "Joint Resolution Passed", (49, 47), {}),
+     (B.HOUSE_ORIGIN_SAME_TEXT, B.PASSED, "The Senate passed the House-passed text of the joint resolution.",
+      "The Senate passed the House-passed text. Because both chambers have approved the same text, it can proceed to presentment to the President.", None)),
+    ("House-origin joint resolution rejected", ("HJRES7", B.JOINT_RESOLUTION_PASSAGE, "Joint Resolution Defeated", (47, 52), {}),
+     (B.HOUSE_ORIGIN_SAME_TEXT, B.REJECTED, "The joint resolution did not pass the Senate in this vote.", "The joint resolution did not pass the Senate in this vote.",
+      "If the Senate had passed it, both chambers would have approved the same text and it could have proceeded to presentment to the President.")),
+]
+
+
+@pytest.mark.parametrize("label,inputs,expected", NEXT_CASES, ids=[c[0] for c in NEXT_CASES])
+def test_result_and_next_step_follow_origin_change_and_outcome(label, inputs, expected):
+    measure, kind, result, tally, extra = inputs
+    ns = _next(measure, kind, result, tally, **extra)
+    assert (ns.case, ns.outcome, ns.result_statement, ns.actual, ns.hypothetical) == expected
+    if ns.outcome == B.REJECTED:
+        assert not any(w in ns.actual for w in ("next goes", "presentment", "must agree")), "a failed vote never advances"
+        assert ns.hypothetical.startswith("If the Senate had passed it")
+    else:
+        assert ns.hypothetical is None
+    if ns.case == B.SENATE_ORIGIN:
+        assert "back to the House" not in (ns.actual or "") + (ns.hypothetical or "")
+
+
+def test_next_step_fails_closed():
+    assert _next("HR4", B.PASSAGE, "Bill Passed", (51, 48), house=None).case == B.UNDETERMINED, "no House passage on record"
+    assert _next("HR4", B.PASSAGE, "Bill Passed", (51, 48), origin="Senate").case == B.UNDETERMINED, "number and bill status disagree"
+    assert _next("S2", B.PASSAGE, "Bill Passed", (40, 58)).case == B.UNDETERMINED, "result disagrees with the tally"
+    assert _next("S2", B.PASSAGE, "Bill Defeated", (60, 38)).case == B.UNDETERMINED
+    assert _next("S2", B.PASSAGE, "Something Else", (52, 47)).case == B.UNDETERMINED
+    assert _next("S2", B.CLOTURE, "Cloture Motion Agreed to", (60, 38)).case == B.UNDETERMINED
+    assert _next("SJRES1", B.JOINT_RESOLUTION_PASSAGE, "Joint Resolution Passed", (70, 30), title="Proposing an amendment to the Constitution of the United States relative to X.",
+                 required="2/3").case == B.UNSUPPORTED_CONSTITUTIONAL
+    for ns in (_next("HR4", B.PASSAGE, "Bill Passed", (51, 48), house=None), _next("S2", B.PASSAGE, "Bill Passed", (40, 58))):
+        assert ns.result_statement is None and ns.actual is None and ns.hypothetical is None
+    tie_passed = _next("S2", B.PASSAGE, "Bill Passed", (50, 50))
+    assert tie_passed.outcome == B.PASSED, "a 1/2 tie passes only with the Vice President, whose vote the tally omits"
+    assert B.vote_outcome("Bill Passed", 61, 37, "3/5")[0] == B.PASSED and B.vote_outcome("Bill Passed", 58, 40, "3/5")[0] is None and B.vote_outcome("Bill Defeated", 55, 45, "3/5")[0] == B.REJECTED
+
+
+def test_house_passage_is_read_only_up_to_the_vote():
+    acts = [Action("2025-07-18", "House agreed to Senate amendment pursuant to H. Res. 590.", "House floor actions", ()),
+            Action("2025-06-12", "Passed/agreed to in House: On passage Passed by the Yeas and Nays: 214 - 212 (Roll no. 168).", "Library of Congress", ())]
+    assert B.house_passage_before(acts, "2025-07-17").startswith("2025-06-12")
+    assert B.house_passage_before(acts, "2025-06-11") is None
 
 
 # ---- CRA ----
@@ -170,6 +254,28 @@ def test_bindings_cover_only_supported_kinds_and_carry_no_generated_text(binding
             assert b["cra"]["agency"] and b["cra"]["rule_title"] and b["cra"]["underlying_rule_source"] is None
         assert b["receipt"]["sources"] and all(s["url"].startswith("https://") for s in b["receipt"]["sources"])
         assert isinstance(b["history"], list)
+
+
+def test_cohort_results_and_next_steps(bindings):
+    """The first Stage 3 cohort's receipts: S.2 goes to the House (never 'back');
+    the failed S.J.Res. never advance; H.R.4 is a House bill the Senate amended."""
+    by = {b["object"]["id"]: b["receipt"] for b in bindings}
+    s2 = by["S2"]
+    assert s2["next_step"]["case"] == B.SENATE_ORIGIN and s2["next_step"]["actual"] == "The Senate passed the bill. It next goes to the House."
+    assert "back to the House" not in json.dumps(s2)
+    for m in ("SJRES10", "SJRES49", "SJRES71"):
+        r = by[m]
+        assert r["vote_result"]["outcome"] == B.REJECTED and r["vote_result"]["statement"] == "The joint resolution did not pass the Senate in this vote."
+        assert r["next_step"]["actual"] == "The joint resolution did not pass the Senate in this vote."
+        assert r["next_step"]["hypothetical"] == "If the Senate had passed it, the joint resolution would next have gone to the House."
+    for m in ("SJRES37", "SJRES77", "SJRES81", "SJRES88"):
+        assert by[m]["next_step"]["actual"] == "The Senate passed the joint resolution. It next goes to the House."
+    hr4 = by["HR4"]
+    assert hr4["next_step"]["case"] == B.HOUSE_ORIGIN_AMENDED and hr4["next_step"]["basis"]["house_passage_before_vote"].startswith("2025-06-12")
+    assert hr4["vote_result"]["statement"] == "The Senate passed an amended version of the bill."
+    assert by["HJRES142"]["next_step"]["case"] == B.HOUSE_ORIGIN_SAME_TEXT
+    for b in bindings:
+        assert b["receipt"]["next_step"]["case"] != B.UNDETERMINED, b["object"]["id"]
 
 
 def test_index_matches_files(bindings):

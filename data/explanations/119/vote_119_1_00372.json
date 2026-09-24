@@ -75,7 +75,24 @@
   "heading_failure": "If the bill does not pass",
   "yea_means": "A Yea vote is a vote to pass the bill as the Senate amended it.",
   "nay_means": "A Nay vote is a vote against passing the amended bill.",
-  "next_step": "Because the Senate changed the text, the amended bill goes back to the House, which must agree to the Senate's version before it can become law.",
+  "vote_result": {
+   "outcome": "PASSED",
+   "official_result": "Bill Passed",
+   "statement": "The Senate passed an amended version of the bill."
+  },
+  "next_step": {
+   "case": "HOUSE_ORIGIN_AMENDED",
+   "actual": "The Senate passed an amended version. The House must agree to the Senate changes before the measure can proceed to presentment to the President.",
+   "hypothetical": null,
+   "basis": {
+    "measure_type": "bill",
+    "origin_chamber": "House",
+    "billstatus_origin_chamber": "House",
+    "senate_changed_text": true,
+    "house_passage_before_vote": "2025-05-22: Passed/agreed to in House: On passage Passed by the Yeas and Nays: 215 - 214, 1 Present (R",
+    "official_result": "Bill Passed (50-50, 1/2 required)"
+   }
+  },
   "sources": [
    {
     "what": "Senate roll-call record",
@@ -150,6 +167,161 @@
    }
   ]
  },
- "history": [],
- "recorded_utc": "2026-09-24T01:15:22Z"
+ "history": [
+  {
+   "schema": "civicalign.binding/1.0",
+   "vote": {
+    "congress": 119,
+    "session": 1,
+    "clerk_number": 372,
+    "voteview_id": 372,
+    "date": "2025-07-01",
+    "question": "On Passage of the Bill",
+    "result": "Bill Passed",
+    "required": "1/2",
+    "yeas": 50,
+    "nays": 50,
+    "measure": "HR1",
+    "senate_url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1191/vote_119_1_00372.xml",
+    "senate_sha256": "b7c0944df3ffefd23575b12c92d405bac12e594b5b002417ff9ee1354ebacc13",
+    "senate_title": "H.R. 1, as Amended",
+    "senate_document_text": "A bill to provide for reconciliation pursuant to title II of H. Con. Res. 14.",
+    "amendment_number": null,
+    "voteview_url": "https://voteview.com/rollcall/RS1190372"
+   },
+   "classification": {
+    "kind": "PASSAGE_AS_AMENDED",
+    "summary_eligible": true,
+    "kind_supported": true,
+    "basis": [
+     "voteview.question='On Passage of the Bill'",
+     "senate.question='On Passage of the Bill'",
+     "senate.title=As Amended"
+    ],
+    "conflict": null
+   },
+   "object": {
+    "type": "bill",
+    "id": "HR1",
+    "title": "An act to provide for reconciliation pursuant to title II of H. Con. Res. 14.",
+    "short_title": "FEHB Protection Act of 2025",
+    "origin_chamber": "House",
+    "billstatus_source": "https://www.govinfo.gov/bulkdata/BILLSTATUS/119/hr/BILLSTATUS-119hr1.xml",
+    "billstatus_sha256": "95644d3867530f8d99b4134948e7c47e1b3e5c50882e9cb73f30778628b81fda",
+    "billstatus_update_date": "2026-05-08T14:41:30Z",
+    "passage_action_text": "Passed Senate with an amendment by Yea-Nay Vote. 51 - 50. Record Vote Number: 372."
+   },
+   "text_binding": {
+    "status": "TEXT_BOUND",
+    "version_code": "eas",
+    "version_name": "Engrossed Amendment Senate",
+    "version_date": "2025-07-01",
+    "govinfo_url": "https://www.govinfo.gov/content/pkg/BILLS-119hr1eas/xml/BILLS-119hr1eas.xml",
+    "sha256": "97cf9985cb4b4a5a03a698a3922eb9e893371a5bc525e6886df1047bf7e5bbad",
+    "bytes": 1773496,
+    "stage_attribute_matches": null,
+    "selection_reason": "engrossed by the Senate on the vote date (eas): the measure as passed",
+    "candidates": [
+     "enr@-",
+     "eas@2025-07-01",
+     "pcs@2025-06-28",
+     "eh@2025-05-22",
+     "rh@2025-05-20",
+     "pl@2025-07-05"
+    ]
+   },
+   "cra": {
+    "is_cra": false,
+    "agency": null,
+    "rule_title": null,
+    "title_form": null,
+    "consequence_ref": null,
+    "underlying_rule_source": null,
+    "underlying_rule_sha256": null
+   },
+   "receipt": {
+    "deciding": "On Passage of the Bill H.R. 1",
+    "heading_success": "If the bill, as amended, passes",
+    "heading_failure": "If the bill does not pass",
+    "yea_means": "A Yea vote is a vote to pass the bill as the Senate amended it.",
+    "nay_means": "A Nay vote is a vote against passing the amended bill.",
+    "next_step": "Because the Senate changed the text, the amended bill goes back to the House, which must agree to the Senate's version before it can become law.",
+    "sources": [
+     {
+      "what": "Senate roll-call record",
+      "url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1191/vote_119_1_00372.xml"
+     },
+     {
+      "what": "Bill status (GovInfo)",
+      "url": "https://www.govinfo.gov/bulkdata/BILLSTATUS/119/hr/BILLSTATUS-119hr1.xml"
+     },
+     {
+      "what": "Text as voted on (Engrossed Amendment Senate)",
+      "url": "https://www.govinfo.gov/content/pkg/BILLS-119hr1eas/xml/BILLS-119hr1eas.xml"
+     },
+     {
+      "what": "Roll call at Voteview",
+      "url": "https://voteview.com/rollcall/RS1190372"
+     }
+    ]
+   },
+   "verification": {
+    "status": "VERIFIED",
+    "checks": [
+     {
+      "check": "senate_record_exists",
+      "ok": true,
+      "detail": ""
+     },
+     {
+      "check": "identity_matches",
+      "ok": true,
+      "detail": "senate 119/1/372 vs voteview 119/1/372"
+     },
+     {
+      "check": "date_compatible",
+      "ok": true,
+      "detail": "senate 2025-07-01 vs voteview 2025-07-01"
+     },
+     {
+      "check": "question_matches",
+      "ok": true,
+      "detail": "'On Passage of the Bill' vs 'On Passage of the Bill'"
+     },
+     {
+      "check": "tallies_match",
+      "ok": true,
+      "detail": "senate 50-50 vs voteview 50-50"
+     },
+     {
+      "check": "threshold_matches",
+      "ok": true,
+      "detail": "1/2 vs 1/2"
+     },
+     {
+      "check": "member_votes_match",
+      "ok": true,
+      "detail": "yea 50/50 nay 50/50; former members matched by name+state+party {'S293': 'G000359', 'S419': 'M001190'}"
+     },
+     {
+      "check": "measure_matches",
+      "ok": true,
+      "detail": "senate 'HR1' vs voteview 'HR1'"
+     },
+     {
+      "check": "billstatus_present",
+      "ok": true,
+      "detail": "BILLSTATUS-119hr1.xml"
+     },
+     {
+      "check": "billstatus_links_vote",
+      "ok": true,
+      "detail": "recorded-vote link to this Senate vote number"
+     }
+    ]
+   },
+   "superseded_utc": "2026-09-24T12:05:13Z"
+  }
+ ],
+ "recorded_utc": "2026-09-24T12:05:13Z"
 }

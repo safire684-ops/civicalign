@@ -10,7 +10,7 @@ from pathlib import Path
 import pytest
 
 from civicalign.config import DEFAULT
-from civicalign.explain import context as C
+from civicalign.explain import context as C, relevance as R
 from civicalign.sources import federal_register as fr, publaw, uscode
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -26,22 +26,112 @@ XML = b'''<?xml version="1.0"?><bill bill-stage="Engrossed-in-Senate"><legis-bod
 </legis-body></bill>'''
 
 
-def test_references_are_structured_and_amendatory_status_is_local():
+def test_references_are_structured_with_scope_pinpoint_and_relationship():
     refs = C.extract_references(XML)
-    cites = [(r["legal_doc"], r["cite"], r["amendatory"]) for r in refs]
-    assert ("usc", "usc/50/1622", False) in cites and ("usc", "usc/8/1226", True) in cites
+    by = {(r["cite"], r["text"]): r for r in refs}
+    nea = by[("usc/50/1622", "50 U.S.C. 1622")]
+    assert nea["scope"] == "section" and nea["relationship"] == R.CROSS_REFERENCE_REQUIRED
+    amended = by[("usc/8/1226", "8 U.S.C. 1226(c)(1)")]
+    assert amended["scope"] == "node" and amended["pinpoint"] == ["c", "1"] and amended["relationship"] == R.REPLACED_TEXT
     pl = {r["cite"]: r for r in refs if r["legal_doc"] == "public-law"}
-    assert pl["pl/119/21"]["pl_section"] == "100051" and pl["pl/118/47"]["pl_division"] == "division F"
+    assert pl["pl/119/21"]["pl_section"] == "100051" and pl["pl/119/21"]["scope"] == "section"
+    assert pl["pl/118/47"]["pl_division"] == "division F" and pl["pl/118/47"]["relationship"] == R.CROSS_REFERENCE_ONLY
 
 
-def test_selection_policy_prefers_amended_sections_and_caps():
+def test_selection_takes_the_cited_node_and_caps():
     refs = C.extract_references(XML)
     sel = C.select_sections(refs, is_cra=False)
-    assert sel["required"] == ["/us/usc/t8/s1226"] and sel["amended"] == ["/us/usc/t8/s1226"] and sel["status"] == "ok"
-    many = [{"legal_doc": "usc", "cite": f"usc/42/{n}", "text": "", "amendatory": True, "pl_section": None, "pl_division": None} for n in range(1, 20)]
+    assert sel["required"] == ["/us/usc/t50/s1622", "/us/usc/t8/s1226/c/1"] and sel["amended"] == ["/us/usc/t8/s1226/c/1"] and sel["status"] == "ok"
+    many = [{"legal_doc": "usc", "cite": f"usc/42/{n}", "text": f"42 U.S.C. {n}", "scope": "section", "pinpoint": [], "relationship": R.AMENDED_TARGET,
+             "basis": "x", "pl_section": None, "pl_division": None} for n in range(1, 20)]
     sel = C.select_sections(many, is_cra=False)
     assert sel["status"] == "exceeds_cap" and sel["required"] == []
-    assert C.select_sections(refs, is_cra=True)["required"] == []
+    cra = C.select_sections(refs, is_cra=True)
+    assert cra["required"] == [] and "/us/usc/t50/s1622" in cra["tracked_only"]
+
+
+DEF_XML = b'''<?xml version="1.0"?><bill><legis-body>
+<section><enum>103.</enum><header>Border security</header><subsection><enum>(a)</enum><text>There is appropriated $1 for the following:</text>
+<paragraph><enum>(4)</enum><text>Necessary expenses relating to the biometric entry and exit system under section 7208 of the Intelligence Reform and Terrorism Prevention Act of 2004 (<external-xref legal-doc="usc" parsable-cite="usc/8/1365b">8 U.S.C. 1365b</external-xref>).</text></paragraph></subsection></section>
+<section><enum>202.</enum><header>Enforcement</header><paragraph><enum>(9)</enum><header>Arrests</header>
+<subparagraph><enum>(D)</enum><header>Covered unlawful alien defined</header><text>In this paragraph, the term <term>covered unlawful alien</term> means an adult alien who&#8212;</text>
+<clause><enum>(ii)</enum><text>is inadmissible under section 212(a)(2) of such Act (<external-xref legal-doc="usc" parsable-cite="usc/8/1182">8 U.S.C. 1182(a)(2)</external-xref>);</text></clause>
+<clause><enum>(iv)</enum><text>is the subject of a detainer issued pursuant to section 236, 241(a), or 287 of such Act (<external-xref legal-doc="usc" parsable-cite="usc/8/1226">8 U.S.C. 1226</external-xref>, 1231(a), or 1357); or</text></clause>
+<clause><enum>(v)</enum><text>has been charged with an offense described in section 275 or 276 of such Act (8 U.S.C. 1325 or 1326).</text></clause></subparagraph></paragraph></section>
+<section><enum>3.</enum><text>That the national emergency declared pursuant to the National Emergencies Act (<external-xref legal-doc="usc" parsable-cite="usc/50/1601">50 U.S.C. 1601 et seq.</external-xref>) is terminated, as defined in section 3 of the Act (<external-xref legal-doc="usc" parsable-cite="usc/5/551">5 U.S.C. 551(13)</external-xref>).</text></section>
+</legis-body></bill>'''
+
+
+def test_relevance_classes_come_from_location_in_the_voted_xml():
+    a = R.analyse(DEF_XML)
+    by = {r["text"]: r for r in a["references"]}
+    assert by["8 U.S.C. 1365b"]["relationship"] == R.CROSS_REFERENCE_ONLY, "names a system by its statutory home"
+    assert by["8 U.S.C. 1182(a)(2)"]["relationship"] == R.DEFINITION_REQUIRED and by["8 U.S.C. 1182(a)(2)"]["pinpoint"] == ["a", "2"]
+    assert by["8 U.S.C. 1226"]["relationship"] == R.DEFINITION_REQUIRED
+    assert by["50 U.S.C. 1601 et seq."]["scope"] == "act_as_a_whole" and by["50 U.S.C. 1601 et seq."]["relationship"] == R.CROSS_REFERENCE_ONLY
+    assert by["5 U.S.C. 551(13)"]["relationship"] == R.DEFINITION_REQUIRED, "imports a definition"
+    gaps = {g["kind"]: g for g in a["gaps"]}
+    assert gaps["citation_list_continues_untagged"]["text"] == "8 U.S.C. 1226, 1231(a), or 1357"
+    assert gaps["untagged_citation"]["text"] == "8 U.S.C. 1325 or 1326"
+    assert all(g["relationship"] == R.DEFINITION_REQUIRED for g in a["gaps"])
+    sel = C.select_sections(a["references"], False, a["gaps"])
+    assert sel["status"] == "unresolved_citations" and "/us/usc/t8/s1365b" in sel["tracked_only"]
+    assert "/us/usc/t8/s1182/a/2" in sel["required"] and "/us/usc/t8/s1182" not in sel["required"]
+    assert "/us/usc/t50/s1601" in sel["tracked_only"]
+
+
+def test_governing_phrase_strips_only_the_designation():
+    assert R.governing_phrase("That, pursuant to section 202 of the National Emergencies Act (") == "That, pursuant to"
+    assert R.governing_phrase("implementing agreements under section 287(g) of the Immigration and Nationality Act (").endswith("agreements under")
+    assert R.parse_display("8 U.S.C. 1226, 1231(a), or 1357", "usc/8/1226")["scope"] == "unparsed"
+    assert R.parse_display("Section 1(j)(3)", "usc/43/1")["pinpoint"] == ["j", "3"]
+    assert R.parse_display("2 U.S.C. 682 et seq.", "usc/2/682")["scope"] == "act_as_a_whole"
+
+
+def test_node_and_lead_in_are_cut_byte_exact():
+    sec = (b'<section identifier="/us/usc/t8/s1182"><num>1182</num><heading>Inadmissible aliens</heading>'
+           b'<subsection identifier="/us/usc/t8/s1182/a"><num>(a)</num><heading>Classes</heading><chapeau>aliens who are:</chapeau>'
+           b'<paragraph identifier="/us/usc/t8/s1182/a/1"><num>(1)</num><content>health</content></paragraph>'
+           b'<paragraph identifier="/us/usc/t8/s1182/a/2"><num>(2)</num><heading>Criminal</heading><subparagraph identifier="/us/usc/t8/s1182/a/2/A"><content>x</content></subparagraph></paragraph>'
+           b'</subsection><notes><note>long history</note></notes></section>')
+    node, tag = uscode.extract_node(sec, "/us/usc/t8/s1182/a/2")
+    assert tag == "paragraph" and node.startswith(b'<paragraph identifier="/us/usc/t8/s1182/a/2">') and node.endswith(b"</paragraph>") and b"health" not in node
+    assert uscode.lead_in(uscode.extract_node(sec, "/us/usc/t8/s1182/a")[0]).endswith(b"<chapeau>aliens who are:</chapeau>")
+    assert uscode.lead_in(sec).endswith(b"<heading>Inadmissible aliens</heading>")
+    assert uscode.extract_node(sec, "/us/usc/t8/s1182/b") is None
+
+
+class _FakeCode(C.Code):
+    def __init__(self, section_bytes):
+        self._sec = section_bytes
+
+    def section(self, cite_title, section, vote_date, relationship):
+        frag = self._sec
+        return {"type": "us_code", "identifier": f"/us/usc/t{cite_title}/s{section}", "title": cite_title, "section": section,
+                "as_of": {"release_point": "119-1", "date": "2025-01-29", "rule": "r"}, "archive_sha256": "a", "fragment_sha256": hashlib.sha256(frag).hexdigest(),
+                "bytes": len(frag), "heading": "h", "relationship": relationship, "status": "fetched", "_bytes": frag, "_content": frag.decode()}
+
+
+def test_oversized_whole_sections_are_never_injected():
+    big = b'<section identifier="/us/usc/t21/s802"><num>802</num>' + b"x" * (C.FULL_SECTION_MAX_CHARS + 10) + b"</section>"
+    rec = _FakeCode(big).provision("/us/usc/t21/s802", "21", "802", "2025-03-14", [R.AMENDED_TARGET], ["b"], include=True)
+    assert rec["status"] == "fragment_selection_required" and "_content" not in rec and rec["inclusion"] == R.REFERENCE_TRACKED
+    small = b'<section identifier="/us/usc/t21/s803"><num>803</num>short</section>'
+    ok = _FakeCode(small).provision("/us/usc/t21/s803", "21", "803", "2025-03-14", [R.AMENDED_TARGET], ["b"], include=True)
+    assert ok["status"] == "fetched" and ok["_content"] == small.decode() and ok["inclusion"] == R.CONTENT_INCLUDED
+    tracked = _FakeCode(big).provision("/us/usc/t21/s802", "21", "802", "2025-03-14", [R.CROSS_REFERENCE_ONLY], ["b"], include=False)
+    assert tracked["status"] == "fetched" and "_content" not in tracked and tracked["fragment_sha256"], "tracked: hash kept, no content"
+    missing_node = _FakeCode(small).provision("/us/usc/t21/s803/q", "21", "803", "2025-03-14", [R.DEFINITION_REQUIRED], ["b"], include=True)
+    assert missing_node["status"] == "node_not_found" and "_content" not in missing_node
+
+
+def test_packet_metrics_and_budget():
+    law = [{"content": "a" * 100, "hierarchy": [{"content": "b" * 10}]}]
+    m = C.packet_metrics("t" * 50, law, {"statutory_consequence_source": {"content": "c" * 5}}, {"content": "s" * 7}, [{}], [{}, {}])
+    assert m == {"voted_text_chars": 50, "context_chars": 115, "official_summary_chars": 7, "total_source_chars": 172, "source_count": 4,
+                 "included_context_fragment_count": 2, "hierarchy_fragment_count": 1, "tracked_reference_count": 3}
+    assert C.budget_for(m)["status"] == "WITHIN_BUDGET"
+    assert C.budget_for(dict(m, total_source_chars=C.PACKET_REVIEW_CHARS + 1))["status"] == "REVIEW_REQUIRED"
 
 
 def test_release_point_in_force_never_after_the_vote():
@@ -170,6 +260,17 @@ def test_packets_contain_only_hashed_artefacts(records):
         assert hashlib.sha256(pk["voted_text"]["content"].encode()).hexdigest() == b["text_binding"]["sha256"]
         for rec in pk["existing_law_context"]:
             assert hashlib.sha256(rec["content"].encode()).hexdigest() == rec["sha256"] and rec["as_of"]
+            assert rec["inclusion"] == R.CONTENT_INCLUDED and set(rec["relationships"]) & R.REQUIRED
+            for h in rec["hierarchy"]:
+                assert hashlib.sha256(h["content"].encode()).hexdigest() == h["sha256"]
+            if rec["scope"] == "section":
+                assert len(rec["content"]) <= C.FULL_SECTION_MAX_CHARS
+        for t in pk["tracked_references"]:
+            assert "content" not in t and t["content_included"] is False and t["inclusion"] == R.REFERENCE_TRACKED
+        assert pk["metrics"] == C.packet_metrics(pk["voted_text"]["content"], pk["existing_law_context"], pk["cra_context"], pk["official_summary"],
+                                                 pk["tracked_references"], pk["cited_public_laws_not_included"])
+        assert pk["budget"]["status"] == ("REVIEW_REQUIRED" if pk["metrics"]["total_source_chars"] > C.PACKET_REVIEW_CHARS else "WITHIN_BUDGET")
+        assert pk["receipt_scaffold"] == b["receipt"] and pk["receipt_scaffold"]["next_step"]["case"] != "UNDETERMINED"
         for law in pk["cited_public_laws_not_included"]:
             assert "content" not in law and law["sha256"]
         summ = pk["official_summary"]
@@ -186,14 +287,31 @@ def test_packets_contain_only_hashed_artefacts(records):
 
 
 def test_first_cohort_readiness(records):
+    """Nine of the ten are source-complete under the relevance rules. S.2 is not:
+    its definition of "covered unlawful alien" cites 8 U.S.C. 1231(a), 1357, 1325
+    and 1326 in text the XML does not structure, so the required context cannot
+    be selected deterministically. It must stay pending until that is resolved,
+    and it must never again carry the whole of 8 U.S.C. 1182."""
     by = {c["vote"]["measure"]: c for c in records.values()}
-    cohort = ["SJRES10", "SJRES37", "SJRES49", "SJRES71", "SJRES81", "SJRES77", "SJRES88", "HJRES142", "S2", "HR4"]
-    for m in cohort:
-        if m in by:
-            assert by[m]["generation"]["status"] == "READY_FOR_GENERATION", (m, by[m]["completeness"])
-    if "S2" in by:
-        assert len([r for r in by["S2"]["existing_law_context"] if r["status"] == "fetched"]) == 7
-        assert by["S2"]["public_laws"][0]["fragments"][0]["status"] == "fetched"
+    ready = ["SJRES10", "SJRES37", "SJRES49", "SJRES71", "SJRES81", "SJRES77", "SJRES88", "HJRES142", "HR4"]
+    for m in ready:
+        assert by[m]["generation"]["status"] == "READY_FOR_GENERATION", (m, by[m]["completeness"])
+        assert by[m]["budget"]["status"] == "WITHIN_BUDGET"
+    s2 = by["S2"]
+    assert s2["generation"]["status"] == "SOURCE_CONTEXT_PENDING"
+    assert s2["selection"]["status"] == "unresolved_citations"
+    assert {g["text"] for g in s2["selection"]["unresolved_citations"]} == {"8 U.S.C. 1226, 1231(a), or 1357", "8 U.S.C. 1325 or 1326"}
+    law = {e["identifier"]: e for e in s2["existing_law_context"]}
+    assert "/us/usc/t8/s1182" not in law and law["/us/usc/t8/s1182/a/2"]["relationships"] == [R.DEFINITION_REQUIRED]
+    assert law["/us/usc/t8/s1182/a/2"]["bytes"] < 20000 and law["/us/usc/t8/s1365b"]["inclusion"] == R.REFERENCE_TRACKED
+    assert not (PDIR / "vote_119_2_00163.packet.json").exists()
+    # "et seq." citations are tracked, not injected (50 U.S.C. 1601 is not the termination rule)
+    for m in ("SJRES10", "SJRES71"):
+        assert [(e["identifier"], e["inclusion"]) for e in by[m]["existing_law_context"]] == [("/us/usc/t50/s1601", R.REFERENCE_TRACKED)]
+    for m in ("SJRES37", "SJRES49", "SJRES77", "SJRES81", "SJRES88"):
+        assert [(e["identifier"], e["relationships"], e["inclusion"]) for e in by[m]["existing_law_context"]] == \
+            [("/us/usc/t50/s1622", [R.CROSS_REFERENCE_REQUIRED], R.CONTENT_INCLUDED)]
+    assert [(e["identifier"], e["inclusion"]) for e in by["HR4"]["existing_law_context"]] == [("/us/usc/t2/s682", R.REFERENCE_TRACKED)]
 
 
 def test_supervisor_reproduces_context(records):

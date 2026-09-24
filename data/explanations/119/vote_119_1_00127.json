@@ -74,7 +74,24 @@
   "heading_failure": "If the bill does not pass",
   "yea_means": "A Yea vote is a vote to pass the bill as the Senate amended it.",
   "nay_means": "A Nay vote is a vote against passing the amended bill.",
-  "next_step": "Because the Senate changed the text, the amended bill goes back to the House, which must agree to the Senate's version before it can become law.",
+  "vote_result": {
+   "outcome": "PASSED",
+   "official_result": "Bill Passed",
+   "statement": "The Senate passed the bill."
+  },
+  "next_step": {
+   "case": "SENATE_ORIGIN",
+   "actual": "The Senate passed the bill. It next goes to the House.",
+   "hypothetical": null,
+   "basis": {
+    "measure_type": "bill",
+    "origin_chamber": "Senate",
+    "billstatus_origin_chamber": "Senate",
+    "senate_changed_text": true,
+    "house_passage_before_vote": null,
+    "official_result": "Bill Passed (84-16, 1/2 required)"
+   }
+  },
   "sources": [
    {
     "what": "Senate roll-call record",
@@ -149,6 +166,160 @@
    }
   ]
  },
- "history": [],
- "recorded_utc": "2026-09-24T01:15:16Z"
+ "history": [
+  {
+   "schema": "civicalign.binding/1.0",
+   "vote": {
+    "congress": 119,
+    "session": 1,
+    "clerk_number": 127,
+    "voteview_id": 127,
+    "date": "2025-03-14",
+    "question": "On Passage of the Bill",
+    "result": "Bill Passed",
+    "required": "1/2",
+    "yeas": 84,
+    "nays": 16,
+    "measure": "S331",
+    "senate_url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1191/vote_119_1_00127.xml",
+    "senate_sha256": "db946beb802b973fec60926250c66fe9130c240a86eefac0739d4a454a1bbd40",
+    "senate_title": "S. 331, as amended",
+    "senate_document_text": "A bill to amend the Controlled Substances Act with respect to the scheduling of fentanyl-related substances, and for other purposes.",
+    "amendment_number": null,
+    "voteview_url": "https://voteview.com/rollcall/RS1190127"
+   },
+   "classification": {
+    "kind": "PASSAGE_AS_AMENDED",
+    "summary_eligible": true,
+    "kind_supported": true,
+    "basis": [
+     "voteview.question='On Passage of the Bill'",
+     "senate.question='On Passage of the Bill'",
+     "senate.title=As Amended"
+    ],
+    "conflict": null
+   },
+   "object": {
+    "type": "bill",
+    "id": "S331",
+    "title": "HALT Fentanyl Act",
+    "short_title": "HALT Fentanyl Act",
+    "origin_chamber": "Senate",
+    "billstatus_source": "https://www.govinfo.gov/bulkdata/BILLSTATUS/119/s/BILLSTATUS-119s331.xml",
+    "billstatus_sha256": "d4133ef06c2b44d81e8ad3e074fdbfd4c54693b403ba8a3395cfff60ee245232",
+    "billstatus_update_date": "2026-08-10T11:51:27Z",
+    "passage_action_text": "Passed Senate with an amendment by Yea-Nay Vote. 84 - 16. Record Vote Number: 127."
+   },
+   "text_binding": {
+    "status": "TEXT_BOUND",
+    "version_code": "es",
+    "version_name": "Engrossed in Senate",
+    "version_date": "2025-03-14",
+    "govinfo_url": "https://www.govinfo.gov/content/pkg/BILLS-119s331es/xml/BILLS-119s331es.xml",
+    "sha256": "4e907878b839c14cda219f2ce5eed1c3ce7014f8a586e0e1ff75dee2a808a376",
+    "bytes": 60514,
+    "stage_attribute_matches": true,
+    "selection_reason": "engrossed by the Senate on the vote date (es): the measure as passed",
+    "candidates": [
+     "enr@-",
+     "es@2025-03-14",
+     "rs@2025-03-03",
+     "is@2025-01-30",
+     "pl@2025-07-16"
+    ]
+   },
+   "cra": {
+    "is_cra": false,
+    "agency": null,
+    "rule_title": null,
+    "title_form": null,
+    "consequence_ref": null,
+    "underlying_rule_source": null,
+    "underlying_rule_sha256": null
+   },
+   "receipt": {
+    "deciding": "On Passage of the Bill S. 331",
+    "heading_success": "If the bill, as amended, passes",
+    "heading_failure": "If the bill does not pass",
+    "yea_means": "A Yea vote is a vote to pass the bill as the Senate amended it.",
+    "nay_means": "A Nay vote is a vote against passing the amended bill.",
+    "next_step": "Because the Senate changed the text, the amended bill goes back to the House, which must agree to the Senate's version before it can become law.",
+    "sources": [
+     {
+      "what": "Senate roll-call record",
+      "url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1191/vote_119_1_00127.xml"
+     },
+     {
+      "what": "Bill status (GovInfo)",
+      "url": "https://www.govinfo.gov/bulkdata/BILLSTATUS/119/s/BILLSTATUS-119s331.xml"
+     },
+     {
+      "what": "Text as voted on (Engrossed in Senate)",
+      "url": "https://www.govinfo.gov/content/pkg/BILLS-119s331es/xml/BILLS-119s331es.xml"
+     },
+     {
+      "what": "Roll call at Voteview",
+      "url": "https://voteview.com/rollcall/RS1190127"
+     }
+    ]
+   },
+   "verification": {
+    "status": "VERIFIED",
+    "checks": [
+     {
+      "check": "senate_record_exists",
+      "ok": true,
+      "detail": ""
+     },
+     {
+      "check": "identity_matches",
+      "ok": true,
+      "detail": "senate 119/1/127 vs voteview 119/1/127"
+     },
+     {
+      "check": "date_compatible",
+      "ok": true,
+      "detail": "senate 2025-03-14 vs voteview 2025-03-14"
+     },
+     {
+      "check": "question_matches",
+      "ok": true,
+      "detail": "'On Passage of the Bill' vs 'On Passage of the Bill'"
+     },
+     {
+      "check": "tallies_match",
+      "ok": true,
+      "detail": "senate 84-16 vs voteview 84-16"
+     },
+     {
+      "check": "threshold_matches",
+      "ok": true,
+      "detail": "1/2 vs 1/2"
+     },
+     {
+      "check": "member_votes_match",
+      "ok": true,
+      "detail": "yea 84/84 nay 16/16; former members matched by name+state+party {'S293': 'G000359', 'S419': 'M001190'}"
+     },
+     {
+      "check": "measure_matches",
+      "ok": true,
+      "detail": "senate 'S331' vs voteview 'S331'"
+     },
+     {
+      "check": "billstatus_present",
+      "ok": true,
+      "detail": "BILLSTATUS-119s331.xml"
+     },
+     {
+      "check": "billstatus_links_vote",
+      "ok": true,
+      "detail": "recorded-vote link to this Senate vote number"
+     }
+    ]
+   },
+   "superseded_utc": "2026-09-24T12:05:12Z"
+  }
+ ],
+ "recorded_utc": "2026-09-24T12:05:12Z"
 }

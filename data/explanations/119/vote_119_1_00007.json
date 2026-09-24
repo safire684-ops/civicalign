@@ -73,7 +73,24 @@
   "heading_failure": "If the bill does not pass",
   "yea_means": "A Yea vote is a vote to pass the bill as the Senate amended it.",
   "nay_means": "A Nay vote is a vote against passing the amended bill.",
-  "next_step": "Because the Senate changed the text, the amended bill goes back to the House, which must agree to the Senate's version before it can become law.",
+  "vote_result": {
+   "outcome": "PASSED",
+   "official_result": "Bill Passed",
+   "statement": "The Senate passed the bill."
+  },
+  "next_step": {
+   "case": "SENATE_ORIGIN",
+   "actual": "The Senate passed the bill. It next goes to the House.",
+   "hypothetical": null,
+   "basis": {
+    "measure_type": "bill",
+    "origin_chamber": "Senate",
+    "billstatus_origin_chamber": "Senate",
+    "senate_changed_text": true,
+    "house_passage_before_vote": null,
+    "official_result": "Bill Passed (64-35, 1/2 required)"
+   }
+  },
   "sources": [
    {
     "what": "Senate roll-call record",
@@ -148,6 +165,159 @@
    }
   ]
  },
- "history": [],
- "recorded_utc": "2026-09-24T01:15:14Z"
+ "history": [
+  {
+   "schema": "civicalign.binding/1.0",
+   "vote": {
+    "congress": 119,
+    "session": 1,
+    "clerk_number": 7,
+    "voteview_id": 7,
+    "date": "2025-01-20",
+    "question": "On Passage of the Bill",
+    "result": "Bill Passed",
+    "required": "1/2",
+    "yeas": 64,
+    "nays": 35,
+    "measure": "S5",
+    "senate_url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1191/vote_119_1_00007.xml",
+    "senate_sha256": "75569bb8cc84e5f08771697375f15cd4b0e7f930f6face533ae46f22e76e29cc",
+    "senate_title": "S. 5, As Amended",
+    "senate_document_text": "A bill to require the Secretary of Homeland Security to take into custody aliens who have been charged in the United States with theft, and for other purposes.",
+    "amendment_number": null,
+    "voteview_url": "https://voteview.com/rollcall/RS1190007"
+   },
+   "classification": {
+    "kind": "PASSAGE_AS_AMENDED",
+    "summary_eligible": true,
+    "kind_supported": true,
+    "basis": [
+     "voteview.question='On Passage of the Bill'",
+     "senate.question='On Passage of the Bill'",
+     "senate.title=As Amended"
+    ],
+    "conflict": null
+   },
+   "object": {
+    "type": "bill",
+    "id": "S5",
+    "title": "Laken Riley Act",
+    "short_title": "Laken Riley Act",
+    "origin_chamber": "Senate",
+    "billstatus_source": "https://www.govinfo.gov/bulkdata/BILLSTATUS/119/s/BILLSTATUS-119s5.xml",
+    "billstatus_sha256": "060213ff9909c0d5683d586fc7b9b4150c1c5a1d46b5bdb99ada5c49c89dc5eb",
+    "billstatus_update_date": "2026-07-30T16:27:39Z",
+    "passage_action_text": "Passed Senate with an amendment by Yea-Nay Vote. 64 - 35. Record Vote Number: 7. (text: CR S250-251)"
+   },
+   "text_binding": {
+    "status": "TEXT_BOUND",
+    "version_code": "es",
+    "version_name": "Engrossed in Senate",
+    "version_date": "2025-01-20",
+    "govinfo_url": "https://www.govinfo.gov/content/pkg/BILLS-119s5es/xml/BILLS-119s5es.xml",
+    "sha256": "bebf01a558f947933e2d9ff55403cdec0bff030a51782456457baff66e2e7a9f",
+    "bytes": 18307,
+    "stage_attribute_matches": true,
+    "selection_reason": "engrossed by the Senate on the vote date (es): the measure as passed",
+    "candidates": [
+     "enr@-",
+     "es@2025-01-20",
+     "pcs@2025-01-07",
+     "pl@2025-01-30"
+    ]
+   },
+   "cra": {
+    "is_cra": false,
+    "agency": null,
+    "rule_title": null,
+    "title_form": null,
+    "consequence_ref": null,
+    "underlying_rule_source": null,
+    "underlying_rule_sha256": null
+   },
+   "receipt": {
+    "deciding": "On Passage of the Bill S. 5",
+    "heading_success": "If the bill, as amended, passes",
+    "heading_failure": "If the bill does not pass",
+    "yea_means": "A Yea vote is a vote to pass the bill as the Senate amended it.",
+    "nay_means": "A Nay vote is a vote against passing the amended bill.",
+    "next_step": "Because the Senate changed the text, the amended bill goes back to the House, which must agree to the Senate's version before it can become law.",
+    "sources": [
+     {
+      "what": "Senate roll-call record",
+      "url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1191/vote_119_1_00007.xml"
+     },
+     {
+      "what": "Bill status (GovInfo)",
+      "url": "https://www.govinfo.gov/bulkdata/BILLSTATUS/119/s/BILLSTATUS-119s5.xml"
+     },
+     {
+      "what": "Text as voted on (Engrossed in Senate)",
+      "url": "https://www.govinfo.gov/content/pkg/BILLS-119s5es/xml/BILLS-119s5es.xml"
+     },
+     {
+      "what": "Roll call at Voteview",
+      "url": "https://voteview.com/rollcall/RS1190007"
+     }
+    ]
+   },
+   "verification": {
+    "status": "VERIFIED",
+    "checks": [
+     {
+      "check": "senate_record_exists",
+      "ok": true,
+      "detail": ""
+     },
+     {
+      "check": "identity_matches",
+      "ok": true,
+      "detail": "senate 119/1/7 vs voteview 119/1/7"
+     },
+     {
+      "check": "date_compatible",
+      "ok": true,
+      "detail": "senate 2025-01-20 vs voteview 2025-01-20"
+     },
+     {
+      "check": "question_matches",
+      "ok": true,
+      "detail": "'On Passage of the Bill' vs 'On Passage of the Bill'"
+     },
+     {
+      "check": "tallies_match",
+      "ok": true,
+      "detail": "senate 64-35 vs voteview 64-35"
+     },
+     {
+      "check": "threshold_matches",
+      "ok": true,
+      "detail": "1/2 vs 1/2"
+     },
+     {
+      "check": "member_votes_match",
+      "ok": true,
+      "detail": "yea 64/64 nay 35/35; former members matched by name+state+party {'S293': 'G000359', 'S419': 'M001190', 'S350': 'R000595'}"
+     },
+     {
+      "check": "measure_matches",
+      "ok": true,
+      "detail": "senate 'S5' vs voteview 'S5'"
+     },
+     {
+      "check": "billstatus_present",
+      "ok": true,
+      "detail": "BILLSTATUS-119s5.xml"
+     },
+     {
+      "check": "billstatus_links_vote",
+      "ok": true,
+      "detail": "recorded-vote link to this Senate vote number"
+     }
+    ]
+   },
+   "superseded_utc": "2026-09-24T12:05:12Z"
+  }
+ ],
+ "recorded_utc": "2026-09-24T12:05:12Z"
 }

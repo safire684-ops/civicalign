@@ -71,7 +71,24 @@
   "heading_failure": "If the resolution does not pass",
   "yea_means": "A Yea vote is a vote to pass the joint resolution in the Senate.",
   "nay_means": "A Nay vote is a vote against passing the joint resolution.",
-  "next_step": "A joint resolution has the force of a bill: after both chambers pass it, it goes to the President.",
+  "vote_result": {
+   "outcome": "PASSED",
+   "official_result": "Joint Resolution Passed",
+   "statement": "The Senate passed the joint resolution."
+  },
+  "next_step": {
+   "case": "SENATE_ORIGIN",
+   "actual": "The Senate passed the joint resolution. It next goes to the House.",
+   "hypothetical": null,
+   "basis": {
+    "measure_type": "joint_resolution",
+    "origin_chamber": "Senate",
+    "billstatus_origin_chamber": "Senate",
+    "senate_changed_text": false,
+    "house_passage_before_vote": null,
+    "official_result": "Joint Resolution Passed (70-27, 1/2 required)"
+   }
+  },
   "sources": [
    {
     "what": "Senate roll-call record",
@@ -146,6 +163,157 @@
    }
   ]
  },
- "history": [],
- "recorded_utc": "2026-09-24T01:15:15Z"
+ "history": [
+  {
+   "schema": "civicalign.binding/1.0",
+   "vote": {
+    "congress": 119,
+    "session": 1,
+    "clerk_number": 102,
+    "voteview_id": 102,
+    "date": "2025-03-04",
+    "question": "On the Joint Resolution",
+    "result": "Joint Resolution Passed",
+    "required": "1/2",
+    "yeas": 70,
+    "nays": 27,
+    "measure": "SJRES3",
+    "senate_url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1191/vote_119_1_00102.xml",
+    "senate_sha256": "05c65e84d65f84bd5e84dad1273eb2c01f2d619ca6fae07a12e090f9e6ce96c3",
+    "senate_title": "S.J. Res. 3",
+    "senate_document_text": "A joint resolution providing for congressional disapproval under chapter 8 of title 5, United States Code, of the rule submitted by the Internal Revenue Service relating to \"Gross Proceeds Reporting by Brokers That Regularly Provide Services Effectuating Digital Asset Sales\".",
+    "amendment_number": null,
+    "voteview_url": "https://voteview.com/rollcall/RS1190102"
+   },
+   "classification": {
+    "kind": "JOINT_RESOLUTION_PASSAGE",
+    "summary_eligible": true,
+    "kind_supported": true,
+    "basis": [
+     "voteview.question='On the Joint Resolution'",
+     "senate.question='On the Joint Resolution'"
+    ],
+    "conflict": null
+   },
+   "object": {
+    "type": "joint_resolution",
+    "id": "SJRES3",
+    "title": "A joint resolution providing for congressional disapproval under chapter 8 of title 5, United States Code, of the rule submitted by the Internal Revenue Service relating to \"Gross Proceeds Reporting by Brokers That Regularly Provide Services Effectuating Digital Asset Sales\".",
+    "short_title": "",
+    "origin_chamber": "Senate",
+    "billstatus_source": "https://www.govinfo.gov/bulkdata/BILLSTATUS/119/sjres/BILLSTATUS-119sjres3.xml",
+    "billstatus_sha256": "e4cae8fe1a19517e4b329996be1a136a76207044b2cac0ba5b5fda2974dd6fe0",
+    "billstatus_update_date": "2026-06-09T21:56:03Z",
+    "passage_action_text": "Passed Senate without amendment by Yea-Nay Vote. 70 - 27. Record Vote Number: 102. (text: CR S1488)"
+   },
+   "text_binding": {
+    "status": "TEXT_BOUND",
+    "version_code": "es",
+    "version_name": "Engrossed in Senate",
+    "version_date": "2025-03-04",
+    "govinfo_url": "https://www.govinfo.gov/content/pkg/BILLS-119sjres3es/xml/BILLS-119sjres3es.xml",
+    "sha256": "cb9e4df1d9e1ebfb48e16a4ad6be88ced022f144912f303d5ee7a92aaaeef298",
+    "bytes": 2666,
+    "stage_attribute_matches": null,
+    "selection_reason": "engrossed by the Senate on the vote date (es): the measure as passed",
+    "candidates": [
+     "es@2025-03-04",
+     "pcs@2025-02-12",
+     "is@2025-01-21"
+    ]
+   },
+   "cra": {
+    "is_cra": true,
+    "agency": "Internal Revenue Service",
+    "rule_title": "Gross Proceeds Reporting by Brokers That Regularly Provide Services Effectuating Digital Asset Sales",
+    "title_form": "chapter 8 of title 5",
+    "consequence_ref": "Congressional Review Act, 5 U.S.C. 801(b): a rule disapproved by an enacted joint resolution shall not take effect (or shall not continue in effect) and may not be reissued in substantially the same form without subsequent statutory authorization.",
+    "underlying_rule_source": null,
+    "underlying_rule_sha256": null
+   },
+   "receipt": {
+    "deciding": "On the Joint Resolution S.J.Res. 3",
+    "heading_success": "If the resolution passes",
+    "heading_failure": "If the resolution does not pass",
+    "yea_means": "A Yea vote is a vote to pass the joint resolution in the Senate.",
+    "nay_means": "A Nay vote is a vote against passing the joint resolution.",
+    "next_step": "A joint resolution has the force of a bill: after both chambers pass it, it goes to the President.",
+    "sources": [
+     {
+      "what": "Senate roll-call record",
+      "url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1191/vote_119_1_00102.xml"
+     },
+     {
+      "what": "Bill status (GovInfo)",
+      "url": "https://www.govinfo.gov/bulkdata/BILLSTATUS/119/sjres/BILLSTATUS-119sjres3.xml"
+     },
+     {
+      "what": "Text as voted on (Engrossed in Senate)",
+      "url": "https://www.govinfo.gov/content/pkg/BILLS-119sjres3es/xml/BILLS-119sjres3es.xml"
+     },
+     {
+      "what": "Roll call at Voteview",
+      "url": "https://voteview.com/rollcall/RS1190102"
+     }
+    ]
+   },
+   "verification": {
+    "status": "VERIFIED",
+    "checks": [
+     {
+      "check": "senate_record_exists",
+      "ok": true,
+      "detail": ""
+     },
+     {
+      "check": "identity_matches",
+      "ok": true,
+      "detail": "senate 119/1/102 vs voteview 119/1/102"
+     },
+     {
+      "check": "date_compatible",
+      "ok": true,
+      "detail": "senate 2025-03-04 vs voteview 2025-03-04"
+     },
+     {
+      "check": "question_matches",
+      "ok": true,
+      "detail": "'On the Joint Resolution' vs 'On the Joint Resolution'"
+     },
+     {
+      "check": "tallies_match",
+      "ok": true,
+      "detail": "senate 70-27 vs voteview 70-27"
+     },
+     {
+      "check": "threshold_matches",
+      "ok": true,
+      "detail": "1/2 vs 1/2"
+     },
+     {
+      "check": "member_votes_match",
+      "ok": true,
+      "detail": "yea 70/70 nay 27/27; former members matched by name+state+party {'S293': 'G000359', 'S419': 'M001190'}"
+     },
+     {
+      "check": "measure_matches",
+      "ok": true,
+      "detail": "senate 'SJRES3' vs voteview 'SJRES3'"
+     },
+     {
+      "check": "billstatus_present",
+      "ok": true,
+      "detail": "BILLSTATUS-119sjres3.xml"
+     },
+     {
+      "check": "billstatus_links_vote",
+      "ok": true,
+      "detail": "recorded-vote link to this Senate vote number"
+     }
+    ]
+   },
+   "superseded_utc": "2026-09-24T12:05:12Z"
+  }
+ ],
+ "recorded_utc": "2026-09-24T12:05:12Z"
 }

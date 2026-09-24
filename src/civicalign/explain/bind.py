@@ -187,6 +187,10 @@ def build_binding(cfg: Config, row: dict, senate, bill, mv, lis_map, store: Stor
     cra = B.cra_from_title(bill.title) if (bill is not None and mtype == "joint_resolution") else B.Cra(False)
     eligible = cls.summary_eligible and status == "VERIFIED" and text_rec["status"] == B.TEXT_BOUND
     head = B.HEADINGS.get(cls.kind); yn = B.YEA_NAY.get(cls.kind)
+    nxt = B.next_step(measure, bill.origin_chamber if bill else None, bill.title if bill else "", cls.kind,
+                      senate.title if senate else "", action_text, text_rec["version_code"] or "",
+                      row["vote_result"].strip(), int(row["yea_count"]), int(row["nay_count"]), row["majority_requirement"],
+                      B.house_passage_before(bill.actions, row["date"]) if bill else None)
     return {
         "schema": BINDING_SCHEMA,
         "vote": {"congress": int(row["congress"]), "session": session, "clerk_number": clerk,
@@ -215,7 +219,9 @@ def build_binding(cfg: Config, row: dict, senate, bill, mv, lis_map, store: Stor
         "receipt": {"deciding": senate.question_text if senate else None,
                     "heading_success": head[0] if head else None, "heading_failure": head[1] if head else None,
                     "yea_means": yn[0] if yn else None, "nay_means": yn[1] if yn else None,
-                    "next_step": B.NEXT_STEP.get(cls.kind),
+                    # (A) what this vote actually did, and (B) what follows it; a failed vote gets only a marked counterfactual
+                    "vote_result": {"outcome": nxt.outcome, "official_result": row["vote_result"].strip(), "statement": nxt.result_statement},
+                    "next_step": {"case": nxt.case, "actual": nxt.actual, "hypothetical": nxt.hypothetical, "basis": nxt.basis},
                     "sources": [s for s in [
                         {"what": "Senate roll-call record", "url": senate_vote_url(int(row["congress"]), session, clerk)},
                         {"what": "Bill status (GovInfo)", "url": f"https://www.govinfo.gov/bulkdata/BILLSTATUS/{cfg.congress}/{bill.bill_type.lower()}/{bill.filename}"} if bill else None,

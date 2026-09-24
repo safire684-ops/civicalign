@@ -1,5 +1,5 @@
 {
- "schema": "civicalign.context/1.0",
+ "schema": "civicalign.context/1.1",
  "vote": {
   "congress": 119,
   "session": 1,
@@ -18,7 +18,15 @@
    "legal_doc": "usc",
    "cite": "usc/5/802",
    "text": "5 U.S.C. 802(c)",
-   "amendatory": false,
+   "location": [],
+   "in_quoted_text": false,
+   "scope": "node",
+   "pinpoint": [
+    "c"
+   ],
+   "display_matches_cite": true,
+   "relationship": "CROSS_REFERENCE_REQUIRED",
+   "basis": "operative reference with no narrower rule (fail closed: content required)",
    "pl_section": null,
    "pl_division": null
   },
@@ -26,7 +34,13 @@
    "legal_doc": "usc-chapter",
    "cite": "usc-chapter/5/8",
    "text": "chapter 8",
-   "amendatory": false,
+   "location": [],
+   "in_quoted_text": false,
+   "scope": "unparsed",
+   "pinpoint": [],
+   "display_matches_cite": false,
+   "relationship": "CROSS_REFERENCE_REQUIRED",
+   "basis": "operative reference with no narrower rule (fail closed: content required)",
    "pl_section": null,
    "pl_division": null
   },
@@ -34,7 +48,15 @@
    "legal_doc": "usc-chapter",
    "cite": "usc-chapter/5/8",
    "text": "chapter 8",
-   "amendatory": false,
+   "location": [
+    "section:"
+   ],
+   "in_quoted_text": false,
+   "scope": "unparsed",
+   "pinpoint": [],
+   "display_matches_cite": false,
+   "relationship": "CROSS_REFERENCE_REQUIRED",
+   "basis": "operative provision applies or acts under it ('under')",
    "pl_section": null,
    "pl_division": null
   },
@@ -42,19 +64,43 @@
    "legal_doc": "usc",
    "cite": "usc/5/802",
    "text": "5 U.S.C. 802(c)",
-   "amendatory": false,
+   "location": [],
+   "in_quoted_text": false,
+   "scope": "node",
+   "pinpoint": [
+    "c"
+   ],
+   "display_matches_cite": true,
+   "relationship": "CROSS_REFERENCE_REQUIRED",
+   "basis": "operative reference with no narrower rule (fail closed: content required)",
    "pl_section": null,
    "pl_division": null
   }
  ],
+ "citation_gaps": [],
  "selection": {
-  "policy": "cra: the resolution's own text and the CRA consequence section; cited authorities are not extracted",
+  "policy": "cra: the resolution's own text and the CRA consequence section; cited authorities are tracked, not extracted",
   "section_cap": 12,
+  "full_section_max_chars": 50000,
   "required": [],
+  "tracked_only": [
+   "/us/usc/t5/s802/c"
+  ],
+  "relationships": {
+   "/us/usc/t5/s802/c": [
+    "CROSS_REFERENCE_REQUIRED"
+   ]
+  },
+  "bases": {
+   "/us/usc/t5/s802/c": [
+    "operative reference with no narrower rule (fail closed: content required)"
+   ]
+  },
   "cited": [
    "/us/usc/t5/s802"
   ],
   "amended": [],
+  "unresolved_citations": [],
   "status": "ok"
  },
  "release_point": {
@@ -62,7 +108,51 @@
   "date": "2025-12-18",
   "note": "latest release point on or before the vote; per-section archives may come from an earlier published one"
  },
- "existing_law_context": [],
+ "existing_law_context": [
+  {
+   "type": "us_code",
+   "identifier": "/us/usc/t5/s802/c",
+   "title": "5",
+   "section": "802",
+   "as_of": {
+    "release_point": "119-59",
+    "date": "2025-12-18",
+    "rule": "latest OLRC release point on or before the vote with a published archive; intervening laws checked against the classification table"
+   },
+   "source_url": "https://uscode.house.gov/download/releasepoints/us/pl/119/59/xml_usc05@119-59.zip",
+   "archive_sha256": "eb85c1c9ad092e9ec953d0f790f6a1f525cbd6a6bc79b095027889f2100941a0",
+   "fragment_sha256": "6a2af05b248e697e4a614b006fcf146f5ed8cf20a885c3259fbfbd4b7b1cf513",
+   "bytes": 670,
+   "heading": "",
+   "relationship": "CROSS_REFERENCE_REQUIRED",
+   "status": "fetched",
+   "in_force_check": {
+    "status": "ok",
+    "archive": "xml_usc05@119-59.zip",
+    "intervening": [],
+    "affected_by": [],
+    "check": "no intervening release point"
+   },
+   "section_identifier": "/us/usc/t5/s802",
+   "scope": "node",
+   "relationships": [
+    "CROSS_REFERENCE_REQUIRED"
+   ],
+   "bases": [
+    "operative reference with no narrower rule (fail closed: content required)"
+   ],
+   "inclusion": "REFERENCE_TRACKED",
+   "hierarchy": [
+    {
+     "identifier": "/us/usc/t5/s802",
+     "sha256": "e6c5536ca24657ace511d15115695d28bf9735cd7ac0c44b6e3aa338f365ad97",
+     "bytes": 190
+    }
+   ],
+   "section_fragment_sha256": "e92f54da0b5aa34d95f1b11251f7970744f49d56f78e7fd01226ed50dad721ab",
+   "section_bytes": 9799
+  }
+ ],
  "public_laws": [],
  "official_summary": {
   "status": "none",
@@ -87,7 +177,7 @@
    "fragment_sha256": "1e0086b1f6690faa671bf9ffb2264c853de1e873445eb77e1e1b6c20a172c8b4",
    "bytes": 33022,
    "heading": "Congressional review",
-   "relationship": "cra_statutory_consequence",
+   "relationship": "SUPPORTING_CONTEXT",
    "status": "fetched",
    "in_force_check": {
     "status": "ok",
@@ -95,7 +185,9 @@
     "intervening": [],
     "affected_by": [],
     "check": "no intervening release point"
-   }
+   },
+   "inclusion": "CONTENT_INCLUDED_FOR_GENERATION",
+   "basis": "fixed rule: the CRA consequence section in force at the vote"
   },
   "underlying_rule": null,
   "gao_determination": {
@@ -118,6 +210,144 @@
  "generation": {
   "status": "READY_WITH_LIMITS"
  },
- "history": [],
- "recorded_utc": "2026-09-24T03:32:59Z"
+ "metrics": {
+  "voted_text_chars": 5456,
+  "context_chars": 32792,
+  "official_summary_chars": 0,
+  "total_source_chars": 38248,
+  "source_count": 2,
+  "included_context_fragment_count": 1,
+  "hierarchy_fragment_count": 0,
+  "tracked_reference_count": 1
+ },
+ "budget": {
+  "review_threshold_chars": 150000,
+  "status": "WITHIN_BUDGET",
+  "rule": "no truncation; a packet over the threshold needs a recorded human review before generation"
+ },
+ "history": [
+  {
+   "schema": "civicalign.context/1.0",
+   "vote": {
+    "congress": 119,
+    "session": 1,
+    "clerk_number": 654,
+    "date": "2025-12-18",
+    "measure": "SJRES82"
+   },
+   "binding": {
+    "kind": "JOINT_RESOLUTION_PASSAGE",
+    "verification": "VERIFIED",
+    "text_status": "TEXT_BOUND",
+    "text_sha256": "55e21e3615bf3babc0540f3d54da055615dc67fb3398516128c207622084ec65"
+   },
+   "references": [
+    {
+     "legal_doc": "usc",
+     "cite": "usc/5/802",
+     "text": "5 U.S.C. 802(c)",
+     "amendatory": false,
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc-chapter",
+     "cite": "usc-chapter/5/8",
+     "text": "chapter 8",
+     "amendatory": false,
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc-chapter",
+     "cite": "usc-chapter/5/8",
+     "text": "chapter 8",
+     "amendatory": false,
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/5/802",
+     "text": "5 U.S.C. 802(c)",
+     "amendatory": false,
+     "pl_section": null,
+     "pl_division": null
+    }
+   ],
+   "selection": {
+    "policy": "cra: the resolution's own text and the CRA consequence section; cited authorities are not extracted",
+    "section_cap": 12,
+    "required": [],
+    "cited": [
+     "/us/usc/t5/s802"
+    ],
+    "amended": [],
+    "status": "ok"
+   },
+   "release_point": {
+    "label": "119-59",
+    "date": "2025-12-18",
+    "note": "latest release point on or before the vote; per-section archives may come from an earlier published one"
+   },
+   "existing_law_context": [],
+   "public_laws": [],
+   "official_summary": {
+    "status": "none",
+    "version_relationship": "UNKNOWN",
+    "usable": false
+   },
+   "cra": {
+    "mode": "resolution_only",
+    "rule_status": "GAO_RULE_DETERMINATION",
+    "consequence_source": {
+     "type": "us_code",
+     "identifier": "/us/usc/t5/s801",
+     "title": "5",
+     "section": "801",
+     "as_of": {
+      "release_point": "119-59",
+      "date": "2025-12-18",
+      "rule": "latest OLRC release point on or before the vote with a published archive; intervening laws checked against the classification table"
+     },
+     "source_url": "https://uscode.house.gov/download/releasepoints/us/pl/119/59/xml_usc05@119-59.zip",
+     "archive_sha256": "eb85c1c9ad092e9ec953d0f790f6a1f525cbd6a6bc79b095027889f2100941a0",
+     "fragment_sha256": "1e0086b1f6690faa671bf9ffb2264c853de1e873445eb77e1e1b6c20a172c8b4",
+     "bytes": 33022,
+     "heading": "Congressional review",
+     "relationship": "cra_statutory_consequence",
+     "status": "fetched",
+     "in_force_check": {
+      "status": "ok",
+      "archive": "xml_usc05@119-59.zip",
+      "intervening": [],
+      "affected_by": [],
+      "check": "no intervening release point"
+     }
+    },
+    "underlying_rule": null,
+    "gao_determination": {
+     "type": "GAO_RULE_DETERMINATION",
+     "opinion_date": "2025-08-27",
+     "congressional_record_date": "2025-09-03",
+     "congressional_record_pages": "S6003-S6005",
+     "status": "identified_not_retrieved",
+     "source_url": null,
+     "sha256": null
+    }
+   },
+   "completeness": {
+    "status": "LIMITED",
+    "missing": [],
+    "notes": [
+     "CRA: the resolution's own effect may be explained; the underlying rule's substance may not unless the rule is bound and separately verified"
+    ]
+   },
+   "generation": {
+    "status": "READY_WITH_LIMITS"
+   },
+   "superseded_utc": "2026-09-24T12:22:18Z"
+  }
+ ],
+ "recorded_utc": "2026-09-24T12:22:18Z"
 }

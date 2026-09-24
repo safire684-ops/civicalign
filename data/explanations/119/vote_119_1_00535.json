@@ -74,7 +74,24 @@
   "heading_failure": "If the bill does not pass",
   "yea_means": "A Yea vote is a vote to pass the bill in the Senate.",
   "nay_means": "A Nay vote is a vote against passing the bill.",
-  "next_step": "A bill the Senate passes goes to the House (or, if the House already passed the same text, to the President).",
+  "vote_result": {
+   "outcome": "REJECTED",
+   "official_result": "Bill Defeated",
+   "statement": "The bill did not pass the Senate in this vote."
+  },
+  "next_step": {
+   "case": "HOUSE_ORIGIN_SAME_TEXT",
+   "actual": "The bill did not pass the Senate in this vote.",
+   "hypothetical": "If the Senate had passed it, both chambers would have approved the same text and it could have proceeded to presentment to the President.",
+   "basis": {
+    "measure_type": "bill",
+    "origin_chamber": "House",
+    "billstatus_origin_chamber": "House",
+    "senate_changed_text": false,
+    "house_passage_before_vote": "2025-09-19: Passed/agreed to in House: On passage Passed by the Yeas and Nays: 217 - 212 (Roll no. 281",
+    "official_result": "Bill Defeated (55-45, 3/5 required)"
+   }
+  },
   "sources": [
    {
     "what": "Senate roll-call record",
@@ -149,6 +166,160 @@
    }
   ]
  },
- "history": [],
- "recorded_utc": "2026-09-24T01:15:24Z"
+ "history": [
+  {
+   "schema": "civicalign.binding/1.0",
+   "vote": {
+    "congress": 119,
+    "session": 1,
+    "clerk_number": 535,
+    "voteview_id": 535,
+    "date": "2025-09-30",
+    "question": "On Passage of the Bill",
+    "result": "Bill Defeated",
+    "required": "3/5",
+    "yeas": 55,
+    "nays": 45,
+    "measure": "HR5371",
+    "senate_url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1191/vote_119_1_00535.xml",
+    "senate_sha256": "edf0679edeaa9f7d58ebb1df16045460168ccc56b424c68bda4cf8c193e13914",
+    "senate_title": "Upon Reconsideration, H.R. 5371",
+    "senate_document_text": "A bill making continuing appropriations and extensions for fiscal year 2026, and for other purposes.",
+    "amendment_number": null,
+    "voteview_url": "https://voteview.com/rollcall/RS1190535"
+   },
+   "classification": {
+    "kind": "PASSAGE",
+    "summary_eligible": true,
+    "kind_supported": true,
+    "basis": [
+     "voteview.question='On Passage of the Bill'",
+     "senate.question='On Passage of the Bill'"
+    ],
+    "conflict": null
+   },
+   "object": {
+    "type": "bill",
+    "id": "HR5371",
+    "title": "Continuing Appropriations, Agriculture, Legislative Branch, Military Construction and Veterans Affairs, and Extensions Act, 2026",
+    "short_title": "Legislative Branch Appropriations Act, 2026",
+    "origin_chamber": "House",
+    "billstatus_source": "https://www.govinfo.gov/bulkdata/BILLSTATUS/119/hr/BILLSTATUS-119hr5371.xml",
+    "billstatus_sha256": "044b0c48f481ee87e898f7a7c58aa2e85e9c7ca5ac555523b5e78ce8a4a58947",
+    "billstatus_update_date": "2026-09-16T17:49:32Z",
+    "passage_action_text": "Upon reconsideration, under the order of 9/18/2025, not having achieved 60 votes in the affirmative, failed of passage in Senate by Yea-Nay Vote. 55 - 45. Record Vote Number: 535."
+   },
+   "text_binding": {
+    "status": "TEXT_BOUND",
+    "version_code": "pcs",
+    "version_name": "Placed on Calendar Senate",
+    "version_date": "2025-09-19",
+    "govinfo_url": "https://www.govinfo.gov/content/pkg/BILLS-119hr5371pcs/xml/BILLS-119hr5371pcs.xml",
+    "sha256": "94bfa840ecc5da60b0f0f7fcae6ae3b7734390ab4c318ef0c8393286f250174b",
+    "bytes": 181240,
+    "stage_attribute_matches": true,
+    "selection_reason": "latest pre-vote version (pcs, 2025-09-19); no Senate amendment recorded; same-day versions ['pcs', 'eh'] resolved by precedence ['pcs', 'rs', 'rds', 'rfs', 'eh', 'cph']",
+    "candidates": [
+     "enr@-",
+     "eas@2025-11-10",
+     "pcs@2025-09-19",
+     "eh@2025-09-19",
+     "ih@2025-09-16",
+     "pl@2025-11-13"
+    ]
+   },
+   "cra": {
+    "is_cra": false,
+    "agency": null,
+    "rule_title": null,
+    "title_form": null,
+    "consequence_ref": null,
+    "underlying_rule_source": null,
+    "underlying_rule_sha256": null
+   },
+   "receipt": {
+    "deciding": "On Passage of the Bill H.R. 5371",
+    "heading_success": "If the bill passes",
+    "heading_failure": "If the bill does not pass",
+    "yea_means": "A Yea vote is a vote to pass the bill in the Senate.",
+    "nay_means": "A Nay vote is a vote against passing the bill.",
+    "next_step": "A bill the Senate passes goes to the House (or, if the House already passed the same text, to the President).",
+    "sources": [
+     {
+      "what": "Senate roll-call record",
+      "url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1191/vote_119_1_00535.xml"
+     },
+     {
+      "what": "Bill status (GovInfo)",
+      "url": "https://www.govinfo.gov/bulkdata/BILLSTATUS/119/hr/BILLSTATUS-119hr5371.xml"
+     },
+     {
+      "what": "Text as voted on (Placed on Calendar Senate)",
+      "url": "https://www.govinfo.gov/content/pkg/BILLS-119hr5371pcs/xml/BILLS-119hr5371pcs.xml"
+     },
+     {
+      "what": "Roll call at Voteview",
+      "url": "https://voteview.com/rollcall/RS1190535"
+     }
+    ]
+   },
+   "verification": {
+    "status": "VERIFIED",
+    "checks": [
+     {
+      "check": "senate_record_exists",
+      "ok": true,
+      "detail": ""
+     },
+     {
+      "check": "identity_matches",
+      "ok": true,
+      "detail": "senate 119/1/535 vs voteview 119/1/535"
+     },
+     {
+      "check": "date_compatible",
+      "ok": true,
+      "detail": "senate 2025-09-30 vs voteview 2025-09-30"
+     },
+     {
+      "check": "question_matches",
+      "ok": true,
+      "detail": "'On Passage of the Bill' vs 'On Passage of the Bill'"
+     },
+     {
+      "check": "tallies_match",
+      "ok": true,
+      "detail": "senate 55-45 vs voteview 55-45"
+     },
+     {
+      "check": "threshold_matches",
+      "ok": true,
+      "detail": "3/5 vs 3/5"
+     },
+     {
+      "check": "member_votes_match",
+      "ok": true,
+      "detail": "yea 55/55 nay 45/45; former members matched by name+state+party {'S293': 'G000359', 'S419': 'M001190'}"
+     },
+     {
+      "check": "measure_matches",
+      "ok": true,
+      "detail": "senate 'HR5371' vs voteview 'HR5371'"
+     },
+     {
+      "check": "billstatus_present",
+      "ok": true,
+      "detail": "BILLSTATUS-119hr5371.xml"
+     },
+     {
+      "check": "billstatus_links_vote",
+      "ok": true,
+      "detail": "recorded-vote link to this Senate vote number"
+     }
+    ]
+   },
+   "superseded_utc": "2026-09-24T12:05:13Z"
+  }
+ ],
+ "recorded_utc": "2026-09-24T12:05:13Z"
 }

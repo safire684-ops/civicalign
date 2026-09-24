@@ -68,13 +68,123 @@ YEA_NAY = {
     JOINT_RESOLUTION_PASSAGE: ("A Yea vote is a vote to pass the joint resolution in the Senate.",
                                "A Nay vote is a vote against passing the joint resolution."),
 }
-NEXT_STEP = {
-    PASSAGE: "A bill the Senate passes goes to the House (or, if the House already passed the same text, to the President).",
-    PASSAGE_AS_AMENDED: "Because the Senate changed the text, the amended bill goes back to the House, which must agree to the Senate's version before it can become law.",
-    JOINT_RESOLUTION_PASSAGE: "A joint resolution has the force of a bill: after both chambers pass it, it goes to the President.",
-}
-
 MEASURE_TYPES = {"S": "bill", "HR": "bill", "SJRES": "joint_resolution", "HJRES": "joint_resolution"}
+MEASURE_ORIGIN = {"S": "Senate", "SJRES": "Senate", "HR": "House", "HJRES": "House"}
+
+# ---- the actual result of the vote and what follows it ------------------------------
+#
+# Two things the receipt must never blur: (A) what this Senate vote actually
+# decided, and (B) the next legislative step. B depends on the measure type, the
+# chamber it started in, whether the Senate changed the House's text, and the
+# result. A failed vote never gets an "it next goes to…" sentence; it gets a
+# counterfactual clearly marked as one. Nothing after the vote date is used (the
+# receipt describes the vote as of the vote, not what later happened).
+PASSED, REJECTED = "PASSED", "REJECTED"
+SENATE_ORIGIN = "SENATE_ORIGIN"                        # S. or S.J.Res.: the Senate acts first
+HOUSE_ORIGIN_SAME_TEXT = "HOUSE_ORIGIN_SAME_TEXT"      # H.R./H.J.Res. already passed by the House, Senate leaves the text unchanged
+HOUSE_ORIGIN_AMENDED = "HOUSE_ORIGIN_AMENDED"          # H.R./H.J.Res. already passed by the House, Senate changes the text
+UNDETERMINED = "UNDETERMINED"                          # inputs disagree or are missing: no sentence is produced
+UNSUPPORTED_CONSTITUTIONAL = "UNSUPPORTED_CONSTITUTIONAL_AMENDMENT"   # goes to the states, not the President; outside the rule
+
+NOUN = {"bill": "bill", "joint_resolution": "joint resolution"}
+PRESENTMENT = "proceed to presentment to the President"
+
+
+def vote_outcome(result: str, yeas: int, nays: int, required: str) -> tuple[str | None, str]:
+    """PASSED or REJECTED from the official result words, cross-checked against
+    the tallies and the threshold. Any disagreement returns None (fail closed)."""
+    r = (result or "").strip().lower()
+    if re.search(r"\b(not agreed to|defeated|rejected|failed)\s*$", r):
+        outcome = REJECTED
+    elif re.search(r"\b(passed|agreed to)\s*$", r):
+        outcome = PASSED
+    else:
+        return None, f"result {result!r} names no outcome"
+    if required == "1/2":
+        # a tie can pass only with the Vice President's vote, which the tallies do not count
+        ok = (yeas >= nays) if outcome == PASSED else (yeas <= nays)
+    elif required == "3/5":
+        ok = (yeas * 5 >= (yeas + nays) * 3) if outcome == PASSED else (yeas < 60)
+    elif required == "2/3":
+        ok = (yeas * 3 >= (yeas + nays) * 2) if outcome == PASSED else (yeas * 3 < (yeas + nays) * 2)
+    else:
+        return None, f"threshold {required!r} not recognised"
+    if not ok:
+        return None, f"result {result!r} disagrees with the tally {yeas}-{nays} at {required}"
+    return outcome, f"{result} ({yeas}-{nays}, {required} required)"
+
+
+@dataclass(frozen=True)
+class NextStep:
+    case: str
+    outcome: str | None
+    result_statement: str | None     # (A) what this vote actually did
+    actual: str | None               # (B) the step that actually follows, stated only when the Senate passed it
+    hypothetical: str | None         # (B) for a failed vote only: what would have followed, marked as counterfactual
+    basis: dict = field(default_factory=dict)
+
+
+def senate_changed_text(kind: str, senate_title: str, passage_action_text: str, text_code: str) -> bool:
+    """Whether the Senate's version differs from the text it received: the vote
+    kind, the Senate's own title ("…, As Amended"), the bill's action for this
+    vote ("with an amendment"), or a Senate-amendment engrossment as the voted text."""
+    return (kind == PASSAGE_AS_AMENDED or (senate_title or "").rstrip().endswith("As Amended")
+            or bool(re.search(r"\bwith (an )?amendments?\b", passage_action_text or "", re.I)) or text_code == "eas")
+
+
+def house_passage_before(actions, vote_date: str) -> str | None:
+    """The bill-status action recording House passage on or before the vote date
+    ("Passed/agreed to in House: …"), or None."""
+    for a in actions:
+        if a.date and a.date <= vote_date and a.text.startswith("Passed/agreed to in House"):
+            return f"{a.date}: {a.text[:90]}"
+    return None
+
+
+def next_step(measure_id: str, billstatus_origin: str | None, title: str, kind: str, senate_title: str,
+              passage_action_text: str, text_code: str, result: str, yeas: int, nays: int, required: str,
+              house_passed: str | None) -> NextStep:
+    prefix = "".join(ch for ch in (measure_id or "") if ch.isalpha())
+    mtype, origin = MEASURE_TYPES.get(prefix), MEASURE_ORIGIN.get(prefix)
+    outcome, why = vote_outcome(result, yeas, nays, required)
+    changed = senate_changed_text(kind, senate_title, passage_action_text, text_code)
+    basis = {"measure_type": mtype, "origin_chamber": origin, "billstatus_origin_chamber": billstatus_origin,
+             "senate_changed_text": changed, "house_passage_before_vote": house_passed, "official_result": why}
+
+    def undetermined(reason):
+        return NextStep(UNDETERMINED, outcome, None, None, None, dict(basis, reason=reason))
+    if kind not in SUPPORTED_KINDS:
+        return undetermined(f"vote kind {kind} has no next-step rule")
+    if mtype is None or origin is None:
+        return undetermined(f"measure {measure_id!r} is not a bill or joint resolution")
+    if billstatus_origin and billstatus_origin != origin:
+        return undetermined(f"measure number says {origin} origin, bill status says {billstatus_origin}")
+    if outcome is None:
+        return undetermined(why)
+    if mtype == "joint_resolution" and re.search(r"proposing an amendment to the Constitution", title or "", re.I):
+        return NextStep(UNSUPPORTED_CONSTITUTIONAL, outcome, None, None, None, dict(basis, reason="constitutional amendments go to the states, not the President"))
+    noun = NOUN[mtype]
+    if origin == "Senate":
+        case = SENATE_ORIGIN
+        passed = f"The Senate passed the {noun}."
+        actual = f"The Senate passed the {noun}. It next goes to the House."
+        hypo = f"If the Senate had passed it, the {noun} would next have gone to the House."
+    else:
+        if not house_passed:
+            return undetermined("House-origin measure with no House passage recorded on or before the vote")
+        if changed:
+            case = HOUSE_ORIGIN_AMENDED
+            passed = f"The Senate passed an amended version of the {noun}."
+            actual = f"The Senate passed an amended version. The House must agree to the Senate changes before the measure can {PRESENTMENT}."
+            hypo = f"If the Senate had passed it, the House would have had to agree to the Senate changes before the measure could {PRESENTMENT}."
+        else:
+            case = HOUSE_ORIGIN_SAME_TEXT
+            passed = f"The Senate passed the House-passed text of the {noun}."
+            actual = f"The Senate passed the House-passed text. Because both chambers have approved the same text, it can {PRESENTMENT}."
+            hypo = f"If the Senate had passed it, both chambers would have approved the same text and it could have {PRESENTMENT.replace('proceed', 'proceeded')}."
+    if outcome == PASSED:
+        return NextStep(case, outcome, passed, actual, None, basis)
+    return NextStep(case, outcome, f"The {noun} did not pass the Senate in this vote.", f"The {noun} did not pass the Senate in this vote.", hypo, basis)
 
 # ---- classification -------------------------------------------------------------
 

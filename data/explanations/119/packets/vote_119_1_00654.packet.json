@@ -1,5 +1,5 @@
 {
- "packet_schema": "civicalign.packet/1.0",
+ "packet_schema": "civicalign.packet/1.1",
  "vote": {
   "congress": 119,
   "session": 1,
@@ -36,7 +36,24 @@
   "heading_failure": "If the resolution does not pass",
   "yea_means": "A Yea vote is a vote to pass the joint resolution in the Senate.",
   "nay_means": "A Nay vote is a vote against passing the joint resolution.",
-  "next_step": "A joint resolution has the force of a bill: after both chambers pass it, it goes to the President.",
+  "vote_result": {
+   "outcome": "REJECTED",
+   "official_result": "Joint Resolution Defeated",
+   "statement": "The joint resolution did not pass the Senate in this vote."
+  },
+  "next_step": {
+   "case": "SENATE_ORIGIN",
+   "actual": "The joint resolution did not pass the Senate in this vote.",
+   "hypothetical": "If the Senate had passed it, the joint resolution would next have gone to the House.",
+   "basis": {
+    "measure_type": "joint_resolution",
+    "origin_chamber": "Senate",
+    "billstatus_origin_chamber": "Senate",
+    "senate_changed_text": false,
+    "house_passage_before_vote": null,
+    "official_result": "Joint Resolution Defeated (50-50, 1/2 required)"
+   }
+  },
   "sources": [
    {
     "what": "Senate roll-call record",
@@ -66,6 +83,24 @@
   "content": "<?xml version=\"1.0\"?>\n<?xml-stylesheet type=\"text/xsl\" href=\"billres.xsl\"?>\n<!DOCTYPE resolution PUBLIC \"-//US Congress//DTDs/res.dtd//EN\" \"res.dtd\">\n<resolution public-private=\"public\" resolution-stage=\"Placed-on-Calendar-Senate\" resolution-type=\"senate-joint\" star-print=\"no-star-print\" slc-id=\"S1-GOE25760-V2T-LJ-1V8\" key=\"G\"><metadata xmlns:dc=\"http://purl.org/dc/elements/1.1/\">\n<dublinCore>\n<dc:title>119 SJ 82 PCS: Providing for congressional disapproval under chapter 8 of title 5, United States Code, of the rule submitted by the Office of the Secretary of the Department of Health and Human Services relating to “Policy on Adhering to the Text of the Administrative Procedure Act”.</dc:title>\n<dc:publisher>U.S. Senate</dc:publisher>\n<dc:date>2025-10-22</dc:date>\n<dc:format>text/xml</dc:format>\n<dc:language>EN</dc:language>\n<dc:rights>Pursuant to Title 17 Section 105 of the United States Code, this file is not subject to copyright protection and is in the public domain.</dc:rights>\n</dublinCore>\n</metadata>\n<form>\n<distribution-code display=\"yes\">IIA</distribution-code><calendar>Calendar No. 203</calendar><congress display=\"yes\">119th CONGRESS</congress><session display=\"yes\">1st Session</session><legis-num>S. J. RES. 82</legis-num><current-chamber>IN THE SENATE OF THE UNITED STATES</current-chamber><action display=\"yes\"><action-date date=\"20250918\" legis-day=\"20250916\">September 18 (legislative day, September 16), 2025</action-date><action-desc><sponsor name-id=\"S363\">Mr. King</sponsor> (for himself, <cosponsor name-id=\"S247\">Mr. Wyden</cosponsor>, <cosponsor name-id=\"S428\">Ms. Alsobrooks</cosponsor>, <cosponsor name-id=\"S341\">Mr. Blumenthal</cosponsor>, <cosponsor name-id=\"S430\">Ms. Blunt Rochester</cosponsor>, <cosponsor name-id=\"S370\">Mr. Booker</cosponsor>, <cosponsor name-id=\"S385\">Ms. Cortez Masto</cosponsor>, <cosponsor name-id=\"S386\">Ms. Duckworth</cosponsor>, <cosponsor name-id=\"S253\">Mr. Durbin</cosponsor>, <cosponsor name-id=\"S432\">Mr. Gallego</cosponsor>, <cosponsor name-id=\"S331\">Mrs. Gillibrand</cosponsor>, <cosponsor name-id=\"S359\">Mr. Heinrich</cosponsor>, <cosponsor name-id=\"S361\">Ms. Hirono</cosponsor>, <cosponsor name-id=\"S311\">Ms. Klobuchar</cosponsor>, <cosponsor name-id=\"S409\">Mr. Luján</cosponsor>, <cosponsor name-id=\"S369\">Mr. Markey</cosponsor>, <cosponsor name-id=\"S322\">Mr. Merkley</cosponsor>, <cosponsor name-id=\"S229\">Mrs. Murray</cosponsor>, <cosponsor name-id=\"S364\">Mr. Murphy</cosponsor>, <cosponsor name-id=\"S259\">Mr. Reed</cosponsor>, <cosponsor name-id=\"S402\">Ms. Rosen</cosponsor>, <cosponsor name-id=\"S353\">Mr. Schatz</cosponsor>, <cosponsor name-id=\"S427\">Mr. Schiff</cosponsor>, <cosponsor name-id=\"S324\">Mrs. Shaheen</cosponsor>, <cosponsor name-id=\"S394\">Ms. Smith</cosponsor>, <cosponsor name-id=\"S390\">Mr. Van Hollen</cosponsor>, <cosponsor name-id=\"S327\">Mr. Warner</cosponsor>, <cosponsor name-id=\"S366\">Ms. Warren</cosponsor>, <cosponsor name-id=\"S422\">Mr. Welch</cosponsor>, <cosponsor name-id=\"S316\">Mr. Whitehouse</cosponsor>, <cosponsor name-id=\"S354\">Ms. Baldwin</cosponsor>, <cosponsor name-id=\"S270\">Mr. Schumer</cosponsor>, <cosponsor name-id=\"S413\">Mr. Padilla</cosponsor>, <cosponsor name-id=\"S380\">Mr. Peters</cosponsor>, <cosponsor name-id=\"S362\">Mr. Kaine</cosponsor>, and <cosponsor name-id=\"S408\">Mr. Hickenlooper</cosponsor>) introduced the following joint resolution; which was read twice and referred to the <committee-name committee-id=\"SSHR00\">Committee on Health, Education, Labor, and Pensions</committee-name></action-desc></action><action><action-date date=\"20251022\" legis-day=\"20251021\">October 22 (legislative day, October 21), 2025</action-date><action-desc>Committee discharged by petition, pursuant to <external-xref legal-doc=\"usc\" parsable-cite=\"usc/5/802\">5 U.S.C. 802(c)</external-xref>, and placed on the calendar</action-desc></action><legis-type>JOINT RESOLUTION</legis-type><official-title display=\"yes\">Providing for congressional disapproval under <external-xref legal-doc=\"usc-chapter\" parsable-cite=\"usc-chapter/5/8\">chapter 8</external-xref> of title 5, United States Code, of the rule submitted by the Office of the Secretary of the Department of Health and Human Services relating to <quote>Policy on Adhering to the Text of the Administrative Procedure Act</quote>.</official-title></form><resolution-body><section display-inline=\"yes-display-inline\" id=\"S1\" section-type=\"undesignated-section\"><text>That Congress disapproves the rule submitted by the Office of the Secretary of the Department of Health and Human Services relating to <quote>Policy on Adhering to the Text of the Administrative Procedure Act</quote> (published on March 3, 2025, and a letter of opinion from the Government Accountability Office dated August 27, 2025, printed in the Congressional Record on September 3, 2025, on pages S6003–S6005, concluding that such Policy Statement is a rule under <external-xref legal-doc=\"usc-chapter\" parsable-cite=\"usc-chapter/5/8\">chapter 8</external-xref> of title 5, United States Code), and such rule shall have no force or effect.</text></section></resolution-body><endorsement><action-date date=\"20251022\" legis-day=\"20251021\">October 22 (legislative day, October 21), 2025</action-date><action-desc>Committee discharged by petition, pursuant to <external-xref legal-doc=\"usc\" parsable-cite=\"usc/5/802\">5 U.S.C. 802(c)</external-xref>, and placed on the calendar</action-desc></endorsement></resolution> \n\n"
  },
  "existing_law_context": [],
+ "tracked_references": [
+  {
+   "type": "us_code",
+   "identifier": "/us/usc/t5/s802/c",
+   "relationships": [
+    "CROSS_REFERENCE_REQUIRED"
+   ],
+   "inclusion": "REFERENCE_TRACKED",
+   "as_of": {
+    "release_point": "119-59",
+    "date": "2025-12-18",
+    "rule": "latest OLRC release point on or before the vote with a published archive; intervening laws checked against the classification table"
+   },
+   "sha256": "6a2af05b248e697e4a614b006fcf146f5ed8cf20a885c3259fbfbd4b7b1cf513",
+   "content_included": false,
+   "note": "the measure's citation may be repeated as written; the provision's contents may not be described"
+  }
+ ],
  "cited_public_laws_not_included": [],
  "official_summary": {
   "status": "none",
@@ -106,11 +141,38 @@
  "generation": {
   "status": "READY_WITH_LIMITS"
  },
+ "metrics": {
+  "voted_text_chars": 5456,
+  "context_chars": 32792,
+  "official_summary_chars": 0,
+  "total_source_chars": 38248,
+  "source_count": 2,
+  "included_context_fragment_count": 1,
+  "hierarchy_fragment_count": 0,
+  "tracked_reference_count": 1
+ },
+ "budget": {
+  "review_threshold_chars": 150000,
+  "status": "WITHIN_BUDGET",
+  "rule": "no truncation; a packet over the threshold needs a recorded human review before generation"
+ },
  "maker_rules": [
   "factual claims only from the content fields of this packet",
   "no browsing, no retrieval, no model memory for facts",
-  "derived metadata (headings, relationships, statuses) is not source text"
+  "derived metadata (headings, relationships, statuses) is not source text",
+  "a tracked reference may be named as the measure names it; its contents may not be described",
+  "vote_result and next_step are fixed text: repeat them, do not restate a failed vote as advancing"
  ],
- "history": [],
- "recorded_utc": "2026-09-24T03:32:59Z"
+ "history": [
+  {
+   "packet_sha256": "80bfe31a2a005a36296c2aafd96dcfc26f3d6c33bd50f78293ba6f06bb60a5da",
+   "packet_schema": "civicalign.packet/1.0",
+   "generation": "READY_WITH_LIMITS",
+   "metrics": null,
+   "voted_text_sha256": "55e21e3615bf3babc0540f3d54da055615dc67fb3398516128c207622084ec65",
+   "law_sha256": [],
+   "superseded_utc": "2026-09-24T12:22:18Z"
+  }
+ ],
+ "recorded_utc": "2026-09-24T12:22:18Z"
 }

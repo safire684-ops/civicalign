@@ -1,5 +1,5 @@
 {
- "packet_schema": "civicalign.packet/1.0",
+ "packet_schema": "civicalign.packet/1.1",
  "vote": {
   "congress": 119,
   "session": 1,
@@ -36,7 +36,24 @@
   "heading_failure": "If the resolution does not pass",
   "yea_means": "A Yea vote is a vote to pass the joint resolution in the Senate.",
   "nay_means": "A Nay vote is a vote against passing the joint resolution.",
-  "next_step": "A joint resolution has the force of a bill: after both chambers pass it, it goes to the President.",
+  "vote_result": {
+   "outcome": "PASSED",
+   "official_result": "Joint Resolution Passed",
+   "statement": "The Senate passed the House-passed text of the joint resolution."
+  },
+  "next_step": {
+   "case": "HOUSE_ORIGIN_SAME_TEXT",
+   "actual": "The Senate passed the House-passed text. Because both chambers have approved the same text, it can proceed to presentment to the President.",
+   "hypothetical": null,
+   "basis": {
+    "measure_type": "joint_resolution",
+    "origin_chamber": "House",
+    "billstatus_origin_chamber": "House",
+    "senate_changed_text": false,
+    "house_passage_before_vote": "2025-02-27: Passed/agreed to in House: On passage Passed by the Yeas and Nays: 221 - 198, 2 Present (R",
+    "official_result": "Joint Resolution Passed (53-44, 1/2 required)"
+   }
+  },
   "sources": [
    {
     "what": "Senate roll-call record",
@@ -66,6 +83,7 @@
   "content": "<?xml version=\"1.0\"?>\n<?xml-stylesheet type=\"text/xsl\" href=\"billres.xsl\"?>\n<!DOCTYPE resolution PUBLIC \"-//US Congress//DTDs/res.dtd//EN\" \"res.dtd\">\n<resolution resolution-stage=\"Placed-on-Calendar-Senate\" dms-id=\"H4ADDBE269D4842DB940771BF99615E25\" public-private=\"public\" resolution-type=\"house-joint\" star-print=\"no-star-print\" key=\"G\" stage-count=\"1\"><metadata xmlns:dc=\"http://purl.org/dc/elements/1.1/\">\n<dublinCore>\n<dc:title>119 HJ 20 PCS: Providing for congressional disapproval under chapter 8 of title 5, United States Code, of the rule submitted by the Department of Energy relating to “Energy Conservation Program: Energy Conservation Standards for Consumer Gas-fired Instantaneous Water Heaters”.</dc:title>\n<dc:publisher>U.S. House of Representatives</dc:publisher>\n<dc:date>2025-03-03</dc:date>\n<dc:format>text/xml</dc:format>\n<dc:language>EN</dc:language>\n<dc:rights>Pursuant to Title 17 Section 105 of the United States Code, this file is not subject to copyright protection and is in the public domain.</dc:rights>\n</dublinCore>\n</metadata>\n<form>\n<distribution-code display=\"yes\">IIA</distribution-code><calendar>Calendar No. 17</calendar><congress display=\"yes\">119th CONGRESS</congress><session display=\"yes\">1st Session</session><legis-num display=\"yes\">H. J. RES. 20</legis-num><current-chamber>IN THE SENATE OF THE UNITED STATES</current-chamber><action><action-date date=\"20250303\">March 3, 2025</action-date><action-desc>Received; read twice and placed on the calendar</action-desc></action><legis-type>JOINT RESOLUTION</legis-type><official-title display=\"yes\">Providing for congressional disapproval under <external-xref legal-doc=\"usc-chapter\" parsable-cite=\"usc-chapter/5/8\">chapter 8</external-xref> of title 5, United States Code, of the rule submitted by the Department of Energy relating to <quote>Energy Conservation Program: Energy Conservation Standards for Consumer Gas-fired Instantaneous Water Heaters</quote>.</official-title></form><resolution-body style=\"traditional\" id=\"HD9787CEFDC184AC1B2AF45A686B97C5F\"><section display-inline=\"yes-display-inline\" section-type=\"undesignated-section\" id=\"H2244DA408DEF4E2E985373985626FB3B\"><enum/><text>That Congress disapproves the rule submitted by the Department of Energy relating to <quote>Energy Conservation Program: Energy Conservation Standards for Consumer Gas-fired Instantaneous Water Heaters</quote> (89 Fed. Reg. 105188 (December 26, 2024)), and such rule shall have no force or effect.</text></section></resolution-body><attestation><attestation-group><attestation-date date=\"20250227\" chamber=\"House\">Passed the House of Representatives February 27, 2025.</attestation-date><attestor display=\"yes\">Kevin F. McCumber,</attestor><role>Clerk.</role></attestation-group></attestation><endorsement display=\"yes\"><action-date date=\"20250303\">March 3, 2025</action-date><action-desc>Received; read twice and placed on the calendar</action-desc></endorsement></resolution> \n\n"
  },
  "existing_law_context": [],
+ "tracked_references": [],
  "cited_public_laws_not_included": [],
  "official_summary": {
   "status": "available",
@@ -123,11 +141,38 @@
  "generation": {
   "status": "READY_WITH_LIMITS"
  },
+ "metrics": {
+  "voted_text_chars": 2964,
+  "context_chars": 32792,
+  "official_summary_chars": 484,
+  "total_source_chars": 36240,
+  "source_count": 3,
+  "included_context_fragment_count": 1,
+  "hierarchy_fragment_count": 0,
+  "tracked_reference_count": 0
+ },
+ "budget": {
+  "review_threshold_chars": 150000,
+  "status": "WITHIN_BUDGET",
+  "rule": "no truncation; a packet over the threshold needs a recorded human review before generation"
+ },
  "maker_rules": [
   "factual claims only from the content fields of this packet",
   "no browsing, no retrieval, no model memory for facts",
-  "derived metadata (headings, relationships, statuses) is not source text"
+  "derived metadata (headings, relationships, statuses) is not source text",
+  "a tracked reference may be named as the measure names it; its contents may not be described",
+  "vote_result and next_step are fixed text: repeat them, do not restate a failed vote as advancing"
  ],
- "history": [],
- "recorded_utc": "2026-09-24T03:29:19Z"
+ "history": [
+  {
+   "packet_sha256": "bbbf39b50ec7ae25d6229a332b0b608d449587302d114559c8240f6371c08cac",
+   "packet_schema": "civicalign.packet/1.0",
+   "generation": "READY_WITH_LIMITS",
+   "metrics": null,
+   "voted_text_sha256": "7cbd839d235a7f066fdbe76fc0ecfa6dc97bee1c8b564ea3cbe914e54978d309",
+   "law_sha256": [],
+   "superseded_utc": "2026-09-24T12:22:16Z"
+  }
+ ],
+ "recorded_utc": "2026-09-24T12:22:16Z"
 }

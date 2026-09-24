@@ -73,7 +73,24 @@
   "heading_failure": "If the resolution does not pass",
   "yea_means": "A Yea vote is a vote to pass the joint resolution in the Senate.",
   "nay_means": "A Nay vote is a vote against passing the joint resolution.",
-  "next_step": "A joint resolution has the force of a bill: after both chambers pass it, it goes to the President.",
+  "vote_result": {
+   "outcome": "PASSED",
+   "official_result": "Joint Resolution Passed",
+   "statement": "The Senate passed the House-passed text of the joint resolution."
+  },
+  "next_step": {
+   "case": "HOUSE_ORIGIN_SAME_TEXT",
+   "actual": "The Senate passed the House-passed text. Because both chambers have approved the same text, it can proceed to presentment to the President.",
+   "hypothetical": null,
+   "basis": {
+    "measure_type": "joint_resolution",
+    "origin_chamber": "House",
+    "billstatus_origin_chamber": "House",
+    "senate_changed_text": false,
+    "house_passage_before_vote": "2025-09-03: Passed/agreed to in House: On passage Passed by the Yeas and Nays: 215 - 210 (Roll no. 225",
+    "official_result": "Joint Resolution Passed (50-46, 1/2 required)"
+   }
+  },
   "sources": [
    {
     "what": "Senate roll-call record",
@@ -148,6 +165,159 @@
    }
   ]
  },
- "history": [],
- "recorded_utc": "2026-09-24T01:15:25Z"
+ "history": [
+  {
+   "schema": "civicalign.binding/1.0",
+   "vote": {
+    "congress": 119,
+    "session": 1,
+    "clerk_number": 560,
+    "voteview_id": 560,
+    "date": "2025-10-09",
+    "question": "On the Joint Resolution",
+    "result": "Joint Resolution Passed",
+    "required": "1/2",
+    "yeas": 50,
+    "nays": 46,
+    "measure": "HJRES106",
+    "senate_url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1191/vote_119_1_00560.xml",
+    "senate_sha256": "d8d16defcff75ccc9ea3b7cd1837a5c7c503d4cefe9a2b7e601ff8e422a295b2",
+    "senate_title": "H. J. Res. 106",
+    "senate_document_text": "A joint resolution providing for congressional disapproval under chapter 8 of title 5, United States Code, of the rule submitted by the Bureau of Land Management relating to \"Central Yukon Record of Decision and Approved Resource Management Plan\".",
+    "amendment_number": null,
+    "voteview_url": "https://voteview.com/rollcall/RS1190560"
+   },
+   "classification": {
+    "kind": "JOINT_RESOLUTION_PASSAGE",
+    "summary_eligible": true,
+    "kind_supported": true,
+    "basis": [
+     "voteview.question='On the Joint Resolution'",
+     "senate.question='On the Joint Resolution'"
+    ],
+    "conflict": null
+   },
+   "object": {
+    "type": "joint_resolution",
+    "id": "HJRES106",
+    "title": "Providing for congressional disapproval under chapter 8 of title 5, United States Code, of the rule submitted by the Bureau of Land Management relating to \"Central Yukon Record of Decision and Approved Resource Management Plan\".",
+    "short_title": "",
+    "origin_chamber": "House",
+    "billstatus_source": "https://www.govinfo.gov/bulkdata/BILLSTATUS/119/hjres/BILLSTATUS-119hjres106.xml",
+    "billstatus_sha256": "d76870bbd7046a5fe91fb2bbac505d2b5abfbac13b923feaf4416da697e27d07",
+    "billstatus_update_date": "2026-07-10T15:23:27Z",
+    "passage_action_text": "Passed Senate without amendment by Yea-Nay Vote. 50 - 46. Record Vote Number: 560."
+   },
+   "text_binding": {
+    "status": "TEXT_BOUND",
+    "version_code": "rds",
+    "version_name": "Received in Senate",
+    "version_date": "2025-09-04",
+    "govinfo_url": "https://www.govinfo.gov/content/pkg/BILLS-119hjres106rds/xml/BILLS-119hjres106rds.xml",
+    "sha256": "e09c1bda6d3cc792eb2fb0c6b49d2298be033274cafb8d0f5335186414b9531b",
+    "bytes": 3063,
+    "stage_attribute_matches": null,
+    "selection_reason": "latest pre-vote version (rds, 2025-09-04); no Senate amendment recorded",
+    "candidates": [
+     "enr@-",
+     "rds@2025-09-04",
+     "eh@2025-09-03",
+     "ih@2025-07-14",
+     "pl@2025-12-12"
+    ]
+   },
+   "cra": {
+    "is_cra": true,
+    "agency": "Bureau of Land Management",
+    "rule_title": "Central Yukon Record of Decision and Approved Resource Management Plan",
+    "title_form": "chapter 8 of title 5",
+    "consequence_ref": "Congressional Review Act, 5 U.S.C. 801(b): a rule disapproved by an enacted joint resolution shall not take effect (or shall not continue in effect) and may not be reissued in substantially the same form without subsequent statutory authorization.",
+    "underlying_rule_source": null,
+    "underlying_rule_sha256": null
+   },
+   "receipt": {
+    "deciding": "On the Joint Resolution H.J.Res. 106",
+    "heading_success": "If the resolution passes",
+    "heading_failure": "If the resolution does not pass",
+    "yea_means": "A Yea vote is a vote to pass the joint resolution in the Senate.",
+    "nay_means": "A Nay vote is a vote against passing the joint resolution.",
+    "next_step": "A joint resolution has the force of a bill: after both chambers pass it, it goes to the President.",
+    "sources": [
+     {
+      "what": "Senate roll-call record",
+      "url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1191/vote_119_1_00560.xml"
+     },
+     {
+      "what": "Bill status (GovInfo)",
+      "url": "https://www.govinfo.gov/bulkdata/BILLSTATUS/119/hjres/BILLSTATUS-119hjres106.xml"
+     },
+     {
+      "what": "Text as voted on (Received in Senate)",
+      "url": "https://www.govinfo.gov/content/pkg/BILLS-119hjres106rds/xml/BILLS-119hjres106rds.xml"
+     },
+     {
+      "what": "Roll call at Voteview",
+      "url": "https://voteview.com/rollcall/RS1190560"
+     }
+    ]
+   },
+   "verification": {
+    "status": "VERIFIED",
+    "checks": [
+     {
+      "check": "senate_record_exists",
+      "ok": true,
+      "detail": ""
+     },
+     {
+      "check": "identity_matches",
+      "ok": true,
+      "detail": "senate 119/1/560 vs voteview 119/1/560"
+     },
+     {
+      "check": "date_compatible",
+      "ok": true,
+      "detail": "senate 2025-10-09 vs voteview 2025-10-09"
+     },
+     {
+      "check": "question_matches",
+      "ok": true,
+      "detail": "'On the Joint Resolution' vs 'On the Joint Resolution'"
+     },
+     {
+      "check": "tallies_match",
+      "ok": true,
+      "detail": "senate 50-46 vs voteview 50-46"
+     },
+     {
+      "check": "threshold_matches",
+      "ok": true,
+      "detail": "1/2 vs 1/2"
+     },
+     {
+      "check": "member_votes_match",
+      "ok": true,
+      "detail": "yea 50/50 nay 46/46; former members matched by name+state+party {'S293': 'G000359', 'S419': 'M001190'}"
+     },
+     {
+      "check": "measure_matches",
+      "ok": true,
+      "detail": "senate 'HJRES106' vs voteview 'HJRES106'"
+     },
+     {
+      "check": "billstatus_present",
+      "ok": true,
+      "detail": "BILLSTATUS-119hjres106.xml"
+     },
+     {
+      "check": "billstatus_links_vote",
+      "ok": true,
+      "detail": "recorded-vote link to this Senate vote number"
+     }
+    ]
+   },
+   "superseded_utc": "2026-09-24T12:05:13Z"
+  }
+ ],
+ "recorded_utc": "2026-09-24T12:05:13Z"
 }

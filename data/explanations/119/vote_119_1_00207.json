@@ -73,7 +73,24 @@
   "heading_failure": "If the resolution does not pass",
   "yea_means": "A Yea vote is a vote to pass the joint resolution in the Senate.",
   "nay_means": "A Nay vote is a vote against passing the joint resolution.",
-  "next_step": "A joint resolution has the force of a bill: after both chambers pass it, it goes to the President.",
+  "vote_result": {
+   "outcome": "PASSED",
+   "official_result": "Joint Resolution Passed",
+   "statement": "The Senate passed the House-passed text of the joint resolution."
+  },
+  "next_step": {
+   "case": "HOUSE_ORIGIN_SAME_TEXT",
+   "actual": "The Senate passed the House-passed text. Because both chambers have approved the same text, it can proceed to presentment to the President.",
+   "hypothetical": null,
+   "basis": {
+    "measure_type": "joint_resolution",
+    "origin_chamber": "House",
+    "billstatus_origin_chamber": "House",
+    "senate_changed_text": false,
+    "house_passage_before_vote": "2025-02-27: Passed/agreed to in House: On passage Passed by the Yeas and Nays: 221 - 198, 2 Present (R",
+    "official_result": "Joint Resolution Passed (53-44, 1/2 required)"
+   }
+  },
   "sources": [
    {
     "what": "Senate roll-call record",
@@ -148,6 +165,159 @@
    }
   ]
  },
- "history": [],
- "recorded_utc": "2026-09-24T01:15:18Z"
+ "history": [
+  {
+   "schema": "civicalign.binding/1.0",
+   "vote": {
+    "congress": 119,
+    "session": 1,
+    "clerk_number": 207,
+    "voteview_id": 207,
+    "date": "2025-04-10",
+    "question": "On the Joint Resolution",
+    "result": "Joint Resolution Passed",
+    "required": "1/2",
+    "yeas": 53,
+    "nays": 44,
+    "measure": "HJRES20",
+    "senate_url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1191/vote_119_1_00207.xml",
+    "senate_sha256": "65247d3a3407ce44c498cbdbf57c48675eb6cde28e3502517005771aeb28ae8f",
+    "senate_title": "H.J.Res. 20",
+    "senate_document_text": "A joint resolution providing for congressional disapproval under chapter 8 of title 5, United States Code, of the rule submitted by the Department of Energy relating to \"Energy Conservation Program: Energy Conservation Standards for Consumer Gas-fired Instantaneous Water Heaters\".",
+    "amendment_number": null,
+    "voteview_url": "https://voteview.com/rollcall/RS1190207"
+   },
+   "classification": {
+    "kind": "JOINT_RESOLUTION_PASSAGE",
+    "summary_eligible": true,
+    "kind_supported": true,
+    "basis": [
+     "voteview.question='On the Joint Resolution'",
+     "senate.question='On the Joint Resolution'"
+    ],
+    "conflict": null
+   },
+   "object": {
+    "type": "joint_resolution",
+    "id": "HJRES20",
+    "title": "Providing for congressional disapproval under chapter 8 of title 5, United States Code, of the rule submitted by the Department of Energy relating to \"Energy Conservation Program: Energy Conservation Standards for Consumer Gas-fired Instantaneous Water Heaters\".",
+    "short_title": "",
+    "origin_chamber": "House",
+    "billstatus_source": "https://www.govinfo.gov/bulkdata/BILLSTATUS/119/hjres/BILLSTATUS-119hjres20.xml",
+    "billstatus_sha256": "01bb6bf509f4541a19b5b437cf82fc1efca5218def50427b656712b84c32258a",
+    "billstatus_update_date": "2026-09-19T23:07:08Z",
+    "passage_action_text": "Passed Senate without amendment by Yea-Nay Vote. 53 - 44. Record Vote Number: 207."
+   },
+   "text_binding": {
+    "status": "TEXT_BOUND",
+    "version_code": "pcs",
+    "version_name": "Placed on Calendar Senate",
+    "version_date": "2025-03-03",
+    "govinfo_url": "https://www.govinfo.gov/content/pkg/BILLS-119hjres20pcs/xml/BILLS-119hjres20pcs.xml",
+    "sha256": "7cbd839d235a7f066fdbe76fc0ecfa6dc97bee1c8b564ea3cbe914e54978d309",
+    "bytes": 2968,
+    "stage_attribute_matches": null,
+    "selection_reason": "latest pre-vote version (pcs, 2025-03-03); no Senate amendment recorded",
+    "candidates": [
+     "enr@-",
+     "pcs@2025-03-03",
+     "eh@2025-02-27",
+     "ih@2025-01-15",
+     "pl@2025-05-10"
+    ]
+   },
+   "cra": {
+    "is_cra": true,
+    "agency": "Department of Energy",
+    "rule_title": "Energy Conservation Program: Energy Conservation Standards for Consumer Gas-fired Instantaneous Water Heaters",
+    "title_form": "chapter 8 of title 5",
+    "consequence_ref": "Congressional Review Act, 5 U.S.C. 801(b): a rule disapproved by an enacted joint resolution shall not take effect (or shall not continue in effect) and may not be reissued in substantially the same form without subsequent statutory authorization.",
+    "underlying_rule_source": null,
+    "underlying_rule_sha256": null
+   },
+   "receipt": {
+    "deciding": "On the Joint Resolution H.J.Res. 20",
+    "heading_success": "If the resolution passes",
+    "heading_failure": "If the resolution does not pass",
+    "yea_means": "A Yea vote is a vote to pass the joint resolution in the Senate.",
+    "nay_means": "A Nay vote is a vote against passing the joint resolution.",
+    "next_step": "A joint resolution has the force of a bill: after both chambers pass it, it goes to the President.",
+    "sources": [
+     {
+      "what": "Senate roll-call record",
+      "url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1191/vote_119_1_00207.xml"
+     },
+     {
+      "what": "Bill status (GovInfo)",
+      "url": "https://www.govinfo.gov/bulkdata/BILLSTATUS/119/hjres/BILLSTATUS-119hjres20.xml"
+     },
+     {
+      "what": "Text as voted on (Placed on Calendar Senate)",
+      "url": "https://www.govinfo.gov/content/pkg/BILLS-119hjres20pcs/xml/BILLS-119hjres20pcs.xml"
+     },
+     {
+      "what": "Roll call at Voteview",
+      "url": "https://voteview.com/rollcall/RS1190207"
+     }
+    ]
+   },
+   "verification": {
+    "status": "VERIFIED",
+    "checks": [
+     {
+      "check": "senate_record_exists",
+      "ok": true,
+      "detail": ""
+     },
+     {
+      "check": "identity_matches",
+      "ok": true,
+      "detail": "senate 119/1/207 vs voteview 119/1/207"
+     },
+     {
+      "check": "date_compatible",
+      "ok": true,
+      "detail": "senate 2025-04-10 vs voteview 2025-04-10"
+     },
+     {
+      "check": "question_matches",
+      "ok": true,
+      "detail": "'On the Joint Resolution' vs 'On the Joint Resolution'"
+     },
+     {
+      "check": "tallies_match",
+      "ok": true,
+      "detail": "senate 53-44 vs voteview 53-44"
+     },
+     {
+      "check": "threshold_matches",
+      "ok": true,
+      "detail": "1/2 vs 1/2"
+     },
+     {
+      "check": "member_votes_match",
+      "ok": true,
+      "detail": "yea 53/53 nay 44/44; former members matched by name+state+party {'S293': 'G000359', 'S419': 'M001190'}"
+     },
+     {
+      "check": "measure_matches",
+      "ok": true,
+      "detail": "senate 'HJRES20' vs voteview 'HJRES20'"
+     },
+     {
+      "check": "billstatus_present",
+      "ok": true,
+      "detail": "BILLSTATUS-119hjres20.xml"
+     },
+     {
+      "check": "billstatus_links_vote",
+      "ok": true,
+      "detail": "recorded-vote link to this Senate vote number"
+     }
+    ]
+   },
+   "superseded_utc": "2026-09-24T12:05:13Z"
+  }
+ ],
+ "recorded_utc": "2026-09-24T12:05:13Z"
 }

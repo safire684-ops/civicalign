@@ -1,5 +1,5 @@
 {
- "packet_schema": "civicalign.packet/1.0",
+ "packet_schema": "civicalign.packet/1.1",
  "vote": {
   "congress": 119,
   "session": 1,
@@ -36,7 +36,24 @@
   "heading_failure": "If the resolution does not pass",
   "yea_means": "A Yea vote is a vote to pass the joint resolution in the Senate.",
   "nay_means": "A Nay vote is a vote against passing the joint resolution.",
-  "next_step": "A joint resolution has the force of a bill: after both chambers pass it, it goes to the President.",
+  "vote_result": {
+   "outcome": "PASSED",
+   "official_result": "Joint Resolution Passed",
+   "statement": "The Senate passed the joint resolution."
+  },
+  "next_step": {
+   "case": "SENATE_ORIGIN",
+   "actual": "The Senate passed the joint resolution. It next goes to the House.",
+   "hypothetical": null,
+   "basis": {
+    "measure_type": "joint_resolution",
+    "origin_chamber": "Senate",
+    "billstatus_origin_chamber": "Senate",
+    "senate_changed_text": false,
+    "house_passage_before_vote": null,
+    "official_result": "Joint Resolution Passed (51-47, 1/2 required)"
+   }
+  },
   "sources": [
    {
     "what": "Senate roll-call record",
@@ -66,6 +83,7 @@
   "content": "<?xml version=\"1.0\"?>\n<?xml-stylesheet type=\"text/xsl\" href=\"billres.xsl\"?>\n<!DOCTYPE resolution PUBLIC \"-//US Congress//DTDs/res.dtd//EN\" \"res.dtd\">\n<resolution resolution-type=\"senate-joint\" star-print=\"no-star-print\" public-private=\"public\" resolution-stage=\"Engrossed-in-Senate\" slc-id=\"S1-SIL25249-CSY-93-SN9\" key=\"G\" stage-count=\"1\" public-print=\"no\"><metadata xmlns:dc=\"http://purl.org/dc/elements/1.1/\">\n<dublinCore>\n<dc:title>119 SJ 28 ES: Disapproving the rule submitted by the Bureau of Consumer Financial Protection relating to “Defining Larger Participants of a Market for General-Use Digital Consumer Payment Applications”.</dc:title>\n<dc:publisher>U.S. Senate</dc:publisher>\n<dc:date></dc:date>\n<dc:format>text/xml</dc:format>\n<dc:language>EN</dc:language>\n<dc:rights>Pursuant to Title 17 Section 105 of the United States Code, this file is not subject to copyright protection and is in the public domain.</dc:rights>\n</dublinCore>\n</metadata>\n<form display=\"yes\">\n<congress display=\"yes\">119th CONGRESS</congress><session display=\"yes\">1st Session</session><legis-num display=\"yes\">S. J. RES. 28</legis-num><current-chamber display=\"no\">IN THE SENATE OF THE UNITED STATES</current-chamber><legis-type display=\"yes\">JOINT RESOLUTION</legis-type><official-title display=\"yes\">Disapproving the rule submitted by the Bureau of Consumer Financial Protection relating to <quote>Defining Larger Participants of a Market for General-Use Digital Consumer Payment Applications</quote>.</official-title></form><resolution-body style=\"traditional\" display-resolving-clause=\"yes-display-resolving-clause\" id=\"HA605F242F6D84A37B29B8C3303B9A36E\"><section commented=\"no\" display-inline=\"yes-display-inline\" section-type=\"undesignated-section\" id=\"H2E6EECBB6A624187AD3605E008AD7ADE\"><enum/><text display-inline=\"yes-display-inline\">That Congress disapproves the final rule submitted by the Bureau of Consumer Financial Protection relating to <quote>Defining Larger Participants of a Market for General-Use Digital Consumer Payment Applications</quote> (89 Fed. Reg. 99582 (December 10, 2024)), and such rule shall have no force or effect. </text></section></resolution-body><attestation><attestation-group><attestation-date date=\"20250305\" chamber=\"Senate\">Passed the Senate March 5, 2025.</attestation-date><attestor display=\"no\"></attestor><role>Secretary</role></attestation-group></attestation><endorsement display=\"yes\"></endorsement></resolution> \n\n"
  },
  "existing_law_context": [],
+ "tracked_references": [],
  "cited_public_laws_not_included": [],
  "official_summary": {
   "status": "available",
@@ -123,11 +141,38 @@
  "generation": {
   "status": "READY_WITH_LIMITS"
  },
+ "metrics": {
+  "voted_text_chars": 2454,
+  "context_chars": 32792,
+  "official_summary_chars": 0,
+  "total_source_chars": 35246,
+  "source_count": 2,
+  "included_context_fragment_count": 1,
+  "hierarchy_fragment_count": 0,
+  "tracked_reference_count": 0
+ },
+ "budget": {
+  "review_threshold_chars": 150000,
+  "status": "WITHIN_BUDGET",
+  "rule": "no truncation; a packet over the threshold needs a recorded human review before generation"
+ },
  "maker_rules": [
   "factual claims only from the content fields of this packet",
   "no browsing, no retrieval, no model memory for facts",
-  "derived metadata (headings, relationships, statuses) is not source text"
+  "derived metadata (headings, relationships, statuses) is not source text",
+  "a tracked reference may be named as the measure names it; its contents may not be described",
+  "vote_result and next_step are fixed text: repeat them, do not restate a failed vote as advancing"
  ],
- "history": [],
- "recorded_utc": "2026-09-24T03:29:14Z"
+ "history": [
+  {
+   "packet_sha256": "bb2ed6935b433fb97cdaa79d22fb4bef5235ac1319e16a32d14084d1becb4f20",
+   "packet_schema": "civicalign.packet/1.0",
+   "generation": "READY_WITH_LIMITS",
+   "metrics": null,
+   "voted_text_sha256": "2392f17a37397e9b5d4f7cf0e7fe5c403639876491d06601cce92dbc457a7114",
+   "law_sha256": [],
+   "superseded_utc": "2026-09-24T12:22:16Z"
+  }
+ ],
+ "recorded_utc": "2026-09-24T12:22:16Z"
 }

@@ -1,5 +1,5 @@
 {
- "schema": "civicalign.context/1.0",
+ "schema": "civicalign.context/1.1",
  "vote": {
   "congress": 119,
   "session": 2,
@@ -18,7 +18,16 @@
    "legal_doc": "usc",
    "cite": "usc/8/1101",
    "text": "8 U.S.C. 1101",
-   "amendatory": false,
+   "location": [
+    "section:101.",
+    "paragraph:(3)"
+   ],
+   "in_quoted_text": false,
+   "scope": "section",
+   "pinpoint": [],
+   "display_matches_cite": true,
+   "relationship": "DEFINITION_REQUIRED",
+   "basis": "inside the measure's definition (paragraph (3) defines admission)",
    "pl_section": null,
    "pl_division": null
   },
@@ -26,7 +35,16 @@
    "legal_doc": "usc",
    "cite": "usc/50/1702",
    "text": "50 U.S.C. 1702",
-   "amendatory": false,
+   "location": [
+    "section:101.",
+    "paragraph:(5)"
+   ],
+   "in_quoted_text": false,
+   "scope": "section",
+   "pinpoint": [],
+   "display_matches_cite": true,
+   "relationship": "DEFINITION_REQUIRED",
+   "basis": "inside the measure's definition (paragraph (5) defines blocked property)",
    "pl_section": null,
    "pl_division": null
   },
@@ -34,7 +52,17 @@
    "legal_doc": "usc",
    "cite": "usc/50/1701",
    "text": "50 U.S.C. 1701 et seq.",
-   "amendatory": false,
+   "location": [
+    "section:102.",
+    "subsection:(e)",
+    "paragraph:(1)"
+   ],
+   "in_quoted_text": false,
+   "scope": "act_as_a_whole",
+   "pinpoint": [],
+   "display_matches_cite": true,
+   "relationship": "CROSS_REFERENCE_ONLY",
+   "basis": "cites an Act or chapter as a whole (et seq.)",
    "pl_section": null,
    "pl_division": null
   },
@@ -42,7 +70,19 @@
    "legal_doc": "usc",
    "cite": "usc/8/1101",
    "text": "8 U.S.C. 1101 et seq.",
-   "amendatory": false,
+   "location": [
+    "section:102.",
+    "subsection:(e)",
+    "paragraph:(2)",
+    "subparagraph:(A)",
+    "clause:(iii)"
+   ],
+   "in_quoted_text": false,
+   "scope": "act_as_a_whole",
+   "pinpoint": [],
+   "display_matches_cite": true,
+   "relationship": "CROSS_REFERENCE_ONLY",
+   "basis": "cites an Act or chapter as a whole (et seq.)",
    "pl_section": null,
    "pl_division": null
   },
@@ -50,7 +90,17 @@
    "legal_doc": "usc",
    "cite": "usc/50/1701",
    "text": "50 U.S.C. 1701 et seq.",
-   "amendatory": false,
+   "location": [
+    "section:103.",
+    "subsection:(d)",
+    "paragraph:(1)"
+   ],
+   "in_quoted_text": false,
+   "scope": "act_as_a_whole",
+   "pinpoint": [],
+   "display_matches_cite": true,
+   "relationship": "CROSS_REFERENCE_ONLY",
+   "basis": "cites an Act or chapter as a whole (et seq.)",
    "pl_section": null,
    "pl_division": null
   },
@@ -58,7 +108,17 @@
    "legal_doc": "usc",
    "cite": "usc/22/9529",
    "text": "22 U.S.C. 9529",
-   "amendatory": false,
+   "location": [
+    "section:103.",
+    "subsection:(d)",
+    "paragraph:(2)"
+   ],
+   "in_quoted_text": false,
+   "scope": "section",
+   "pinpoint": [],
+   "display_matches_cite": true,
+   "relationship": "CROSS_REFERENCE_REQUIRED",
+   "basis": "operative provision applies or acts under it ('described in')",
    "pl_section": null,
    "pl_division": null
   },
@@ -66,7 +126,18 @@
    "legal_doc": "public-law",
    "cite": "pl/118/50",
    "text": "Public Law 118–50",
-   "amendatory": false,
+   "location": [
+    "section:103.",
+    "subsection:(e)",
+    "paragraph:(1)",
+    "subparagraph:(A)"
+   ],
+   "in_quoted_text": false,
+   "scope": "whole_law",
+   "pinpoint": [],
+   "display_matches_cite": true,
+   "relationship": "CROSS_REFERENCE_ONLY",
+   "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
    "pl_division": "division F"
   },
@@ -74,7 +145,18 @@
    "legal_doc": "usc",
    "cite": "usc/22/9521",
    "text": "22 U.S.C. 9521",
-   "amendatory": false,
+   "location": [
+    "section:103.",
+    "subsection:(e)",
+    "paragraph:(1)",
+    "subparagraph:(A)"
+   ],
+   "in_quoted_text": false,
+   "scope": "section",
+   "pinpoint": [],
+   "display_matches_cite": true,
+   "relationship": "CROSS_REFERENCE_REQUIRED",
+   "basis": "operative reference with no narrower rule (fail closed: content required)",
    "pl_section": null,
    "pl_division": null
   },
@@ -82,7 +164,16 @@
    "legal_doc": "usc",
    "cite": "usc/50/1701",
    "text": "50 U.S.C. 1701 et seq.",
-   "amendatory": false,
+   "location": [
+    "section:104.",
+    "subsection:(b)"
+   ],
+   "in_quoted_text": false,
+   "scope": "act_as_a_whole",
+   "pinpoint": [],
+   "display_matches_cite": true,
+   "relationship": "CROSS_REFERENCE_ONLY",
+   "basis": "cites an Act or chapter as a whole (et seq.)",
    "pl_section": null,
    "pl_division": null
   },
@@ -90,7 +181,20 @@
    "legal_doc": "usc",
    "cite": "usc/12/461",
    "text": "12 U.S.C. 461(b)(1)(A)",
-   "amendatory": false,
+   "location": [
+    "section:105.",
+    "subsection:(a)"
+   ],
+   "in_quoted_text": false,
+   "scope": "node",
+   "pinpoint": [
+    "b",
+    "1",
+    "A"
+   ],
+   "display_matches_cite": true,
+   "relationship": "DEFINITION_REQUIRED",
+   "basis": "imports a definition ('as defined in')",
    "pl_section": null,
    "pl_division": null
   },
@@ -98,7 +202,16 @@
    "legal_doc": "usc",
    "cite": "usc/15/78a",
    "text": "15 U.S.C. 78a et seq.",
-   "amendatory": false,
+   "location": [
+    "section:105.",
+    "subsection:(a)"
+   ],
+   "in_quoted_text": false,
+   "scope": "act_as_a_whole",
+   "pinpoint": [],
+   "display_matches_cite": true,
+   "relationship": "CROSS_REFERENCE_ONLY",
+   "basis": "cites an Act or chapter as a whole (et seq.)",
    "pl_section": null,
    "pl_division": null
   },
@@ -106,7 +219,19 @@
    "legal_doc": "usc",
    "cite": "usc/15/78c",
    "text": "15 U.S.C. 78c(a)",
-   "amendatory": false,
+   "location": [
+    "section:106.",
+    "subsection:(c)",
+    "paragraph:(1)"
+   ],
+   "in_quoted_text": false,
+   "scope": "node",
+   "pinpoint": [
+    "a"
+   ],
+   "display_matches_cite": true,
+   "relationship": "DEFINITION_REQUIRED",
+   "basis": "inside the measure's definition (paragraph (1) defines issuer)",
    "pl_section": null,
    "pl_division": null
   },
@@ -114,7 +239,17 @@
    "legal_doc": "usc",
    "cite": "usc/15/78f",
    "text": "15 U.S.C. 78f",
-   "amendatory": false,
+   "location": [
+    "section:106.",
+    "subsection:(c)",
+    "paragraph:(2)"
+   ],
+   "in_quoted_text": false,
+   "scope": "section",
+   "pinpoint": [],
+   "display_matches_cite": true,
+   "relationship": "DEFINITION_REQUIRED",
+   "basis": "inside the measure's definition (paragraph (2) defines national securities exchange)",
    "pl_section": null,
    "pl_division": null
   },
@@ -122,7 +257,17 @@
    "legal_doc": "usc",
    "cite": "usc/50/4801",
    "text": "50 U.S.C. 4801",
-   "amendatory": false,
+   "location": [
+    "section:108.",
+    "subsection:(a)",
+    "paragraph:(2)"
+   ],
+   "in_quoted_text": false,
+   "scope": "section",
+   "pinpoint": [],
+   "display_matches_cite": true,
+   "relationship": "DEFINITION_REQUIRED",
+   "basis": "inside the measure's definition (paragraph (2) Definitions)",
    "pl_section": null,
    "pl_division": null
   },
@@ -130,7 +275,17 @@
    "legal_doc": "usc",
    "cite": "usc/50/1701",
    "text": "50 U.S.C. 1701 et seq.",
-   "amendatory": false,
+   "location": [
+    "section:110.",
+    "subsection:(a)",
+    "paragraph:(2)"
+   ],
+   "in_quoted_text": false,
+   "scope": "act_as_a_whole",
+   "pinpoint": [],
+   "display_matches_cite": true,
+   "relationship": "CROSS_REFERENCE_ONLY",
+   "basis": "cites an Act or chapter as a whole (et seq.)",
    "pl_section": null,
    "pl_division": null
   },
@@ -138,7 +293,16 @@
    "legal_doc": "usc",
    "cite": "usc/50/1701",
    "text": "50 U.S.C. 1701 et seq.",
-   "amendatory": false,
+   "location": [
+    "section:110.",
+    "subsection:(d)"
+   ],
+   "in_quoted_text": false,
+   "scope": "act_as_a_whole",
+   "pinpoint": [],
+   "display_matches_cite": true,
+   "relationship": "CROSS_REFERENCE_ONLY",
+   "basis": "cites an Act or chapter as a whole (et seq.)",
    "pl_section": null,
    "pl_division": null
   },
@@ -146,7 +310,16 @@
    "legal_doc": "usc",
    "cite": "usc/19/1671",
    "text": "19 U.S.C. 1671 et seq.",
-   "amendatory": false,
+   "location": [
+    "section:112.",
+    "subsection:(b)"
+   ],
+   "in_quoted_text": false,
+   "scope": "act_as_a_whole",
+   "pinpoint": [],
+   "display_matches_cite": true,
+   "relationship": "CROSS_REFERENCE_ONLY",
+   "basis": "cites an Act or chapter as a whole (et seq.)",
    "pl_section": null,
    "pl_division": null
   },
@@ -154,7 +327,16 @@
    "legal_doc": "usc",
    "cite": "usc/19/2132",
    "text": "19 U.S.C. 2132",
-   "amendatory": false,
+   "location": [
+    "section:112.",
+    "subsection:(b)"
+   ],
+   "in_quoted_text": false,
+   "scope": "section",
+   "pinpoint": [],
+   "display_matches_cite": true,
+   "relationship": "CROSS_REFERENCE_REQUIRED",
+   "basis": "operative reference with no narrower rule (fail closed: content required)",
    "pl_section": null,
    "pl_division": null
   },
@@ -162,7 +344,16 @@
    "legal_doc": "usc",
    "cite": "usc/19/1862",
    "text": "19 U.S.C. 1862",
-   "amendatory": false,
+   "location": [
+    "section:112.",
+    "subsection:(b)"
+   ],
+   "in_quoted_text": false,
+   "scope": "section",
+   "pinpoint": [],
+   "display_matches_cite": true,
+   "relationship": "CROSS_REFERENCE_REQUIRED",
+   "basis": "operative reference with no narrower rule (fail closed: content required)",
    "pl_section": null,
    "pl_division": null
   },
@@ -170,7 +361,16 @@
    "legal_doc": "usc",
    "cite": "usc/19/1671",
    "text": "19 U.S.C. 1671 et seq.",
-   "amendatory": false,
+   "location": [
+    "section:113.",
+    "subsection:(f)"
+   ],
+   "in_quoted_text": false,
+   "scope": "act_as_a_whole",
+   "pinpoint": [],
+   "display_matches_cite": true,
+   "relationship": "CROSS_REFERENCE_ONLY",
+   "basis": "cites an Act or chapter as a whole (et seq.)",
    "pl_section": null,
    "pl_division": null
   },
@@ -178,7 +378,16 @@
    "legal_doc": "usc",
    "cite": "usc/19/2132",
    "text": "19 U.S.C. 2132",
-   "amendatory": false,
+   "location": [
+    "section:113.",
+    "subsection:(f)"
+   ],
+   "in_quoted_text": false,
+   "scope": "section",
+   "pinpoint": [],
+   "display_matches_cite": true,
+   "relationship": "CROSS_REFERENCE_REQUIRED",
+   "basis": "operative reference with no narrower rule (fail closed: content required)",
    "pl_section": null,
    "pl_division": null
   },
@@ -186,7 +395,16 @@
    "legal_doc": "usc",
    "cite": "usc/19/1862",
    "text": "19 U.S.C. 1862",
-   "amendatory": false,
+   "location": [
+    "section:113.",
+    "subsection:(f)"
+   ],
+   "in_quoted_text": false,
+   "scope": "section",
+   "pinpoint": [],
+   "display_matches_cite": true,
+   "relationship": "CROSS_REFERENCE_REQUIRED",
+   "basis": "operative reference with no narrower rule (fail closed: content required)",
    "pl_section": null,
    "pl_division": null
   },
@@ -194,7 +412,18 @@
    "legal_doc": "usc",
    "cite": "usc/7/5602",
    "text": "7 U.S.C. 5602",
-   "amendatory": false,
+   "location": [
+    "section:114.",
+    "subsection:(a)",
+    "paragraph:(3)",
+    "subparagraph:(A)"
+   ],
+   "in_quoted_text": false,
+   "scope": "section",
+   "pinpoint": [],
+   "display_matches_cite": true,
+   "relationship": "DEFINITION_REQUIRED",
+   "basis": "inside the measure's definition (subparagraph (A) defines agricultural commodity)",
    "pl_section": null,
    "pl_division": null
   },
@@ -202,7 +431,18 @@
    "legal_doc": "usc",
    "cite": "usc/21/321",
    "text": "21 U.S.C. 321",
-   "amendatory": false,
+   "location": [
+    "section:114.",
+    "subsection:(a)",
+    "paragraph:(3)",
+    "subparagraph:(B)"
+   ],
+   "in_quoted_text": false,
+   "scope": "section",
+   "pinpoint": [],
+   "display_matches_cite": true,
+   "relationship": "DEFINITION_REQUIRED",
+   "basis": "inside the measure's definition (subparagraph (B) defines medical device)",
    "pl_section": null,
    "pl_division": null
   },
@@ -210,7 +450,18 @@
    "legal_doc": "usc",
    "cite": "usc/21/321",
    "text": "21 U.S.C. 321",
-   "amendatory": false,
+   "location": [
+    "section:114.",
+    "subsection:(a)",
+    "paragraph:(3)",
+    "subparagraph:(C)"
+   ],
+   "in_quoted_text": false,
+   "scope": "section",
+   "pinpoint": [],
+   "display_matches_cite": true,
+   "relationship": "DEFINITION_REQUIRED",
+   "basis": "inside the measure's definition (subparagraph (C) defines medicine)",
    "pl_section": null,
    "pl_division": null
   },
@@ -218,7 +469,16 @@
    "legal_doc": "usc",
    "cite": "usc/50/3091",
    "text": "50 U.S.C. 3091 et seq.",
-   "amendatory": false,
+   "location": [
+    "section:114.",
+    "subsection:(b)"
+   ],
+   "in_quoted_text": false,
+   "scope": "act_as_a_whole",
+   "pinpoint": [],
+   "display_matches_cite": true,
+   "relationship": "CROSS_REFERENCE_ONLY",
+   "basis": "cites an Act or chapter as a whole (et seq.)",
    "pl_section": null,
    "pl_division": null
   },
@@ -226,7 +486,16 @@
    "legal_doc": "usc",
    "cite": "usc/42/2153",
    "text": "42 U.S.C. 2153",
-   "amendatory": false,
+   "location": [
+    "section:114.",
+    "subsection:(d)"
+   ],
+   "in_quoted_text": false,
+   "scope": "section",
+   "pinpoint": [],
+   "display_matches_cite": true,
+   "relationship": "CROSS_REFERENCE_REQUIRED",
+   "basis": "operative provision applies or acts under it ('under')",
    "pl_section": null,
    "pl_division": null
   },
@@ -234,7 +503,16 @@
    "legal_doc": "usc",
    "cite": "usc/50/1705",
    "text": "50 U.S.C. 1705",
-   "amendatory": false,
+   "location": [
+    "section:116.",
+    "subsection:(b)"
+   ],
+   "in_quoted_text": false,
+   "scope": "section",
+   "pinpoint": [],
+   "display_matches_cite": true,
+   "relationship": "CROSS_REFERENCE_REQUIRED",
+   "basis": "operative reference with no narrower rule (fail closed: content required)",
    "pl_section": null,
    "pl_division": null
   },
@@ -242,7 +520,15 @@
    "legal_doc": "public-law",
    "cite": "pl/104/172",
    "text": "Public Law 104–172",
-   "amendatory": true,
+   "location": [
+    "section:201."
+   ],
+   "in_quoted_text": false,
+   "scope": "whole_law",
+   "pinpoint": [],
+   "display_matches_cite": true,
+   "relationship": "REPLACED_TEXT",
+   "basis": "amendatory instruction that strikes, repeals or rewrites existing text",
    "pl_section": null,
    "pl_division": null
   },
@@ -250,17 +536,209 @@
    "legal_doc": "usc",
    "cite": "usc/50/1701",
    "text": "50 U.S.C. 1701",
-   "amendatory": true,
+   "location": [
+    "section:201."
+   ],
+   "in_quoted_text": false,
+   "scope": "section",
+   "pinpoint": [],
+   "display_matches_cite": true,
+   "relationship": "REPLACED_TEXT",
+   "basis": "amendatory instruction that strikes, repeals or rewrites existing text",
    "pl_section": null,
    "pl_division": null
   }
  ],
+ "citation_gaps": [
+  {
+   "kind": "citation_list_continues_untagged",
+   "text": "19 U.S.C. 2132, 2251, and 2411",
+   "cite": "usc/19/2132",
+   "location": [
+    "section:112.",
+    "subsection:(b)"
+   ],
+   "relationship": "CROSS_REFERENCE_REQUIRED",
+   "basis": "operative reference with no narrower rule (fail closed: content required)"
+  },
+  {
+   "kind": "citation_list_continues_untagged",
+   "text": "19 U.S.C. 2132, 2251, and 2411",
+   "cite": "usc/19/2132",
+   "location": [
+    "section:113.",
+    "subsection:(f)"
+   ],
+   "relationship": "CROSS_REFERENCE_REQUIRED",
+   "basis": "operative reference with no narrower rule (fail closed: content required)"
+  },
+  {
+   "kind": "untagged_citation",
+   "text": "42 U.S.C. 2297h–10a(d",
+   "cite": null,
+   "location": [
+    "section:111.",
+    "subsection:(a)"
+   ],
+   "relationship": "CROSS_REFERENCE_REQUIRED",
+   "basis": "operative reference with no narrower rule (fail closed: content required)"
+  },
+  {
+   "kind": "untagged_citation",
+   "text": "42 U.S.C. 2297h–10a(d)(2)(C",
+   "cite": null,
+   "location": [
+    "section:111.",
+    "subsection:(b)"
+   ],
+   "relationship": "CROSS_REFERENCE_REQUIRED",
+   "basis": "operative provision applies or acts under it ('described in')"
+  },
+  {
+   "kind": "untagged_citation",
+   "text": "42 U.S.C. 2297h–10a(d",
+   "cite": null,
+   "location": [
+    "section:114.",
+    "subsection:(e)"
+   ],
+   "relationship": "CROSS_REFERENCE_REQUIRED",
+   "basis": "operative provision applies or acts under it ('described in')"
+  },
+  {
+   "kind": "untagged_citation",
+   "text": "50 U.S.C. 1702 and 1704",
+   "cite": null,
+   "location": [
+    "section:116.",
+    "subsection:(a)"
+   ],
+   "relationship": "CROSS_REFERENCE_REQUIRED",
+   "basis": "operative provision applies or acts under it ('under')"
+  }
+ ],
  "selection": {
-  "policy": "amended sections if any, else all cited sections; capped",
+  "policy": "provisions whose relationship needs content, at the cited node; others tracked only; capped",
   "section_cap": 12,
-  "required": [
-   "/us/usc/t50/s1701"
+  "full_section_max_chars": 50000,
+  "required": [],
+  "tracked_only": [
+   "/us/usc/t15/s78a",
+   "/us/usc/t19/s1671",
+   "/us/usc/t50/s3091"
   ],
+  "relationships": {
+   "/us/usc/t12/s461/b/1/A": [
+    "DEFINITION_REQUIRED"
+   ],
+   "/us/usc/t15/s78c/a": [
+    "DEFINITION_REQUIRED"
+   ],
+   "/us/usc/t15/s78f": [
+    "DEFINITION_REQUIRED"
+   ],
+   "/us/usc/t19/s1862": [
+    "CROSS_REFERENCE_REQUIRED"
+   ],
+   "/us/usc/t19/s2132": [
+    "CROSS_REFERENCE_REQUIRED"
+   ],
+   "/us/usc/t21/s321": [
+    "DEFINITION_REQUIRED"
+   ],
+   "/us/usc/t22/s9521": [
+    "CROSS_REFERENCE_REQUIRED"
+   ],
+   "/us/usc/t22/s9529": [
+    "CROSS_REFERENCE_REQUIRED"
+   ],
+   "/us/usc/t42/s2153": [
+    "CROSS_REFERENCE_REQUIRED"
+   ],
+   "/us/usc/t50/s1701": [
+    "REPLACED_TEXT"
+   ],
+   "/us/usc/t50/s1702": [
+    "DEFINITION_REQUIRED"
+   ],
+   "/us/usc/t50/s1705": [
+    "CROSS_REFERENCE_REQUIRED"
+   ],
+   "/us/usc/t50/s4801": [
+    "DEFINITION_REQUIRED"
+   ],
+   "/us/usc/t7/s5602": [
+    "DEFINITION_REQUIRED"
+   ],
+   "/us/usc/t8/s1101": [
+    "DEFINITION_REQUIRED"
+   ],
+   "/us/usc/t15/s78a": [
+    "CROSS_REFERENCE_ONLY"
+   ],
+   "/us/usc/t19/s1671": [
+    "CROSS_REFERENCE_ONLY"
+   ],
+   "/us/usc/t50/s3091": [
+    "CROSS_REFERENCE_ONLY"
+   ]
+  },
+  "bases": {
+   "/us/usc/t12/s461/b/1/A": [
+    "imports a definition ('as defined in')"
+   ],
+   "/us/usc/t15/s78c/a": [
+    "inside the measure's definition (paragraph (1) defines issuer)"
+   ],
+   "/us/usc/t15/s78f": [
+    "inside the measure's definition (paragraph (2) defines national securities exchange)"
+   ],
+   "/us/usc/t19/s1862": [
+    "operative reference with no narrower rule (fail closed: content required)"
+   ],
+   "/us/usc/t19/s2132": [
+    "operative reference with no narrower rule (fail closed: content required)"
+   ],
+   "/us/usc/t21/s321": [
+    "inside the measure's definition (subparagraph (B) defines medical device)"
+   ],
+   "/us/usc/t22/s9521": [
+    "operative reference with no narrower rule (fail closed: content required)"
+   ],
+   "/us/usc/t22/s9529": [
+    "operative provision applies or acts under it ('described in')"
+   ],
+   "/us/usc/t42/s2153": [
+    "operative provision applies or acts under it ('under')"
+   ],
+   "/us/usc/t50/s1701": [
+    "amendatory instruction that strikes, repeals or rewrites existing text"
+   ],
+   "/us/usc/t50/s1702": [
+    "inside the measure's definition (paragraph (5) defines blocked property)"
+   ],
+   "/us/usc/t50/s1705": [
+    "operative reference with no narrower rule (fail closed: content required)"
+   ],
+   "/us/usc/t50/s4801": [
+    "inside the measure's definition (paragraph (2) Definitions)"
+   ],
+   "/us/usc/t7/s5602": [
+    "inside the measure's definition (subparagraph (A) defines agricultural commodity)"
+   ],
+   "/us/usc/t8/s1101": [
+    "inside the measure's definition (paragraph (3) defines admission)"
+   ],
+   "/us/usc/t15/s78a": [
+    "cites an Act or chapter as a whole (et seq.)"
+   ],
+   "/us/usc/t19/s1671": [
+    "cites an Act or chapter as a whole (et seq.)"
+   ],
+   "/us/usc/t50/s3091": [
+    "cites an Act or chapter as a whole (et seq.)"
+   ]
+  },
   "cited": [
    "/us/usc/t12/s461",
    "/us/usc/t15/s78a",
@@ -284,7 +762,76 @@
   "amended": [
    "/us/usc/t50/s1701"
   ],
-  "status": "ok"
+  "unresolved_citations": [
+   {
+    "kind": "citation_list_continues_untagged",
+    "text": "19 U.S.C. 2132, 2251, and 2411",
+    "cite": "usc/19/2132",
+    "location": [
+     "section:112.",
+     "subsection:(b)"
+    ],
+    "relationship": "CROSS_REFERENCE_REQUIRED",
+    "basis": "operative reference with no narrower rule (fail closed: content required)"
+   },
+   {
+    "kind": "citation_list_continues_untagged",
+    "text": "19 U.S.C. 2132, 2251, and 2411",
+    "cite": "usc/19/2132",
+    "location": [
+     "section:113.",
+     "subsection:(f)"
+    ],
+    "relationship": "CROSS_REFERENCE_REQUIRED",
+    "basis": "operative reference with no narrower rule (fail closed: content required)"
+   },
+   {
+    "kind": "untagged_citation",
+    "text": "42 U.S.C. 2297h–10a(d",
+    "cite": null,
+    "location": [
+     "section:111.",
+     "subsection:(a)"
+    ],
+    "relationship": "CROSS_REFERENCE_REQUIRED",
+    "basis": "operative reference with no narrower rule (fail closed: content required)"
+   },
+   {
+    "kind": "untagged_citation",
+    "text": "42 U.S.C. 2297h–10a(d)(2)(C",
+    "cite": null,
+    "location": [
+     "section:111.",
+     "subsection:(b)"
+    ],
+    "relationship": "CROSS_REFERENCE_REQUIRED",
+    "basis": "operative provision applies or acts under it ('described in')"
+   },
+   {
+    "kind": "untagged_citation",
+    "text": "42 U.S.C. 2297h–10a(d",
+    "cite": null,
+    "location": [
+     "section:114.",
+     "subsection:(e)"
+    ],
+    "relationship": "CROSS_REFERENCE_REQUIRED",
+    "basis": "operative provision applies or acts under it ('described in')"
+   },
+   {
+    "kind": "untagged_citation",
+    "text": "50 U.S.C. 1702 and 1704",
+    "cite": null,
+    "location": [
+     "section:116.",
+     "subsection:(a)"
+    ],
+    "relationship": "CROSS_REFERENCE_REQUIRED",
+    "basis": "operative provision applies or acts under it ('under')"
+   }
+  ],
+  "status": "exceeds_cap",
+  "reason": "15 provisions exceed the cap of 12; the large-measure selection policy is not built"
  },
  "release_point": {
   "label": "119-102",
@@ -294,9 +841,81 @@
  "existing_law_context": [
   {
    "type": "us_code",
-   "identifier": "/us/usc/t50/s1701",
+   "identifier": "/us/usc/t15/s78a",
+   "title": "15",
+   "section": "78a",
+   "as_of": {
+    "release_point": "119-102",
+    "date": "2026-07-12",
+    "rule": "latest OLRC release point on or before the vote with a published archive; intervening laws checked against the classification table"
+   },
+   "source_url": "https://uscode.house.gov/download/releasepoints/us/pl/119/102/xml_usc15@119-102.zip",
+   "archive_sha256": null,
+   "fragment_sha256": null,
+   "bytes": null,
+   "heading": null,
+   "relationship": "CROSS_REFERENCE_ONLY",
+   "status": "archive_unavailable",
+   "in_force_check": {
+    "status": "ok",
+    "archive": "xml_usc15@119-102.zip",
+    "intervening": [],
+    "affected_by": [],
+    "check": "no intervening release point"
+   },
+   "reason": "archive not retrievable",
+   "section_identifier": "/us/usc/t15/s78a",
+   "scope": "section",
+   "relationships": [
+    "CROSS_REFERENCE_ONLY"
+   ],
+   "bases": [
+    "cites an Act or chapter as a whole (et seq.)"
+   ],
+   "inclusion": "REFERENCE_TRACKED",
+   "hierarchy": []
+  },
+  {
+   "type": "us_code",
+   "identifier": "/us/usc/t19/s1671",
+   "title": "19",
+   "section": "1671",
+   "as_of": {
+    "release_point": "119-102",
+    "date": "2026-07-12",
+    "rule": "latest OLRC release point on or before the vote with a published archive; intervening laws checked against the classification table"
+   },
+   "source_url": "https://uscode.house.gov/download/releasepoints/us/pl/119/102/xml_usc19@119-102.zip",
+   "archive_sha256": null,
+   "fragment_sha256": null,
+   "bytes": null,
+   "heading": null,
+   "relationship": "CROSS_REFERENCE_ONLY",
+   "status": "archive_unavailable",
+   "in_force_check": {
+    "status": "ok",
+    "archive": "xml_usc19@119-102.zip",
+    "intervening": [],
+    "affected_by": [],
+    "check": "no intervening release point"
+   },
+   "reason": "archive not retrievable",
+   "section_identifier": "/us/usc/t19/s1671",
+   "scope": "section",
+   "relationships": [
+    "CROSS_REFERENCE_ONLY"
+   ],
+   "bases": [
+    "cites an Act or chapter as a whole (et seq.)"
+   ],
+   "inclusion": "REFERENCE_TRACKED",
+   "hierarchy": []
+  },
+  {
+   "type": "us_code",
+   "identifier": "/us/usc/t50/s3091",
    "title": "50",
-   "section": "1701",
+   "section": "3091",
    "as_of": {
     "release_point": "119-102",
     "date": "2026-07-12",
@@ -304,10 +923,10 @@
    },
    "source_url": "https://uscode.house.gov/download/releasepoints/us/pl/119/102/xml_usc50@119-102.zip",
    "archive_sha256": "8bb2f050b5e66b19c2bf90a37cd626772990d685050b0fa39b088c8f92ab59ef",
-   "fragment_sha256": "7f5ea822b0a1d598c5554293a66e468839eb118f1f2c38593b16d6977b5507e5",
-   "bytes": 936641,
-   "heading": "Unusual and extraordinary threat; declaration of national emergency; exercise of Presidential authorities",
-   "relationship": "amended_by_bound_measure",
+   "fragment_sha256": "0746c66ba734d8826f47ac8f0d4f8caba8a14c50eb3e0feb653151f2cbc3d2de",
+   "bytes": 10598,
+   "heading": "General congressional oversight provisions",
+   "relationship": "CROSS_REFERENCE_ONLY",
    "status": "fetched",
    "in_force_check": {
     "status": "ok",
@@ -315,7 +934,19 @@
     "intervening": [],
     "affected_by": [],
     "check": "no intervening release point"
-   }
+   },
+   "section_identifier": "/us/usc/t50/s3091",
+   "scope": "section",
+   "relationships": [
+    "CROSS_REFERENCE_ONLY"
+   ],
+   "bases": [
+    "cites an Act or chapter as a whole (et seq.)"
+   ],
+   "inclusion": "REFERENCE_TRACKED",
+   "hierarchy": [],
+   "section_fragment_sha256": "0746c66ba734d8826f47ac8f0d4f8caba8a14c50eb3e0feb653151f2cbc3d2de",
+   "section_bytes": 10598
   }
  ],
  "public_laws": [
@@ -333,7 +964,9 @@
    ],
    "fragments": [],
    "status": "identified",
-   "relationship": "cited"
+   "relationships": [
+    "CROSS_REFERENCE_ONLY"
+   ]
   },
   {
    "type": "public_law",
@@ -347,7 +980,9 @@
    "divisions": [],
    "fragments": [],
    "status": "unavailable",
-   "relationship": "amended_by_bound_measure",
+   "relationships": [
+    "REPLACED_TEXT"
+   ],
    "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
   }
  ],
@@ -370,15 +1005,401 @@
  "completeness": {
   "status": "PENDING",
   "missing": [
+   "section selection for a large measure",
    "public_law:pl/104/172 (text pending)"
   ],
   "notes": [
+   "15 provisions exceed the cap of 12; the large-measure selection policy is not built",
    "pl/118/50 cited as a whole law (division F): identified and hashed, no section extracted; the Maker may not describe its contents"
   ]
  },
  "generation": {
   "status": "SOURCE_CONTEXT_PENDING"
  },
- "history": [],
- "recorded_utc": "2026-09-24T03:36:31Z"
+ "history": [
+  {
+   "schema": "civicalign.context/1.0",
+   "vote": {
+    "congress": 119,
+    "session": 2,
+    "clerk_number": 224,
+    "date": "2026-08-07",
+    "measure": "HR5334"
+   },
+   "binding": {
+    "kind": "PASSAGE_AS_AMENDED",
+    "verification": "VERIFIED",
+    "text_status": "TEXT_BOUND",
+    "text_sha256": "e353b63739f7b3a617589c99d4743bf8cbfbaadf307b6d36ce96104e813c0b3a"
+   },
+   "references": [
+    {
+     "legal_doc": "usc",
+     "cite": "usc/8/1101",
+     "text": "8 U.S.C. 1101",
+     "amendatory": false,
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/50/1702",
+     "text": "50 U.S.C. 1702",
+     "amendatory": false,
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/50/1701",
+     "text": "50 U.S.C. 1701 et seq.",
+     "amendatory": false,
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/8/1101",
+     "text": "8 U.S.C. 1101 et seq.",
+     "amendatory": false,
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/50/1701",
+     "text": "50 U.S.C. 1701 et seq.",
+     "amendatory": false,
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/22/9529",
+     "text": "22 U.S.C. 9529",
+     "amendatory": false,
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/118/50",
+     "text": "Public Law 118–50",
+     "amendatory": false,
+     "pl_section": null,
+     "pl_division": "division F"
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/22/9521",
+     "text": "22 U.S.C. 9521",
+     "amendatory": false,
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/50/1701",
+     "text": "50 U.S.C. 1701 et seq.",
+     "amendatory": false,
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/12/461",
+     "text": "12 U.S.C. 461(b)(1)(A)",
+     "amendatory": false,
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/15/78a",
+     "text": "15 U.S.C. 78a et seq.",
+     "amendatory": false,
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/15/78c",
+     "text": "15 U.S.C. 78c(a)",
+     "amendatory": false,
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/15/78f",
+     "text": "15 U.S.C. 78f",
+     "amendatory": false,
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/50/4801",
+     "text": "50 U.S.C. 4801",
+     "amendatory": false,
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/50/1701",
+     "text": "50 U.S.C. 1701 et seq.",
+     "amendatory": false,
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/50/1701",
+     "text": "50 U.S.C. 1701 et seq.",
+     "amendatory": false,
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/19/1671",
+     "text": "19 U.S.C. 1671 et seq.",
+     "amendatory": false,
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/19/2132",
+     "text": "19 U.S.C. 2132",
+     "amendatory": false,
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/19/1862",
+     "text": "19 U.S.C. 1862",
+     "amendatory": false,
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/19/1671",
+     "text": "19 U.S.C. 1671 et seq.",
+     "amendatory": false,
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/19/2132",
+     "text": "19 U.S.C. 2132",
+     "amendatory": false,
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/19/1862",
+     "text": "19 U.S.C. 1862",
+     "amendatory": false,
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/7/5602",
+     "text": "7 U.S.C. 5602",
+     "amendatory": false,
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/21/321",
+     "text": "21 U.S.C. 321",
+     "amendatory": false,
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/21/321",
+     "text": "21 U.S.C. 321",
+     "amendatory": false,
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/50/3091",
+     "text": "50 U.S.C. 3091 et seq.",
+     "amendatory": false,
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/42/2153",
+     "text": "42 U.S.C. 2153",
+     "amendatory": false,
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/50/1705",
+     "text": "50 U.S.C. 1705",
+     "amendatory": false,
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/104/172",
+     "text": "Public Law 104–172",
+     "amendatory": true,
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/50/1701",
+     "text": "50 U.S.C. 1701",
+     "amendatory": true,
+     "pl_section": null,
+     "pl_division": null
+    }
+   ],
+   "selection": {
+    "policy": "amended sections if any, else all cited sections; capped",
+    "section_cap": 12,
+    "required": [
+     "/us/usc/t50/s1701"
+    ],
+    "cited": [
+     "/us/usc/t12/s461",
+     "/us/usc/t15/s78a",
+     "/us/usc/t15/s78c",
+     "/us/usc/t15/s78f",
+     "/us/usc/t19/s1671",
+     "/us/usc/t19/s1862",
+     "/us/usc/t19/s2132",
+     "/us/usc/t21/s321",
+     "/us/usc/t22/s9521",
+     "/us/usc/t22/s9529",
+     "/us/usc/t42/s2153",
+     "/us/usc/t50/s1701",
+     "/us/usc/t50/s1702",
+     "/us/usc/t50/s1705",
+     "/us/usc/t50/s3091",
+     "/us/usc/t50/s4801",
+     "/us/usc/t7/s5602",
+     "/us/usc/t8/s1101"
+    ],
+    "amended": [
+     "/us/usc/t50/s1701"
+    ],
+    "status": "ok"
+   },
+   "release_point": {
+    "label": "119-102",
+    "date": "2026-07-12",
+    "note": "latest release point on or before the vote; per-section archives may come from an earlier published one"
+   },
+   "existing_law_context": [
+    {
+     "type": "us_code",
+     "identifier": "/us/usc/t50/s1701",
+     "title": "50",
+     "section": "1701",
+     "as_of": {
+      "release_point": "119-102",
+      "date": "2026-07-12",
+      "rule": "latest OLRC release point on or before the vote with a published archive; intervening laws checked against the classification table"
+     },
+     "source_url": "https://uscode.house.gov/download/releasepoints/us/pl/119/102/xml_usc50@119-102.zip",
+     "archive_sha256": "8bb2f050b5e66b19c2bf90a37cd626772990d685050b0fa39b088c8f92ab59ef",
+     "fragment_sha256": "7f5ea822b0a1d598c5554293a66e468839eb118f1f2c38593b16d6977b5507e5",
+     "bytes": 936641,
+     "heading": "Unusual and extraordinary threat; declaration of national emergency; exercise of Presidential authorities",
+     "relationship": "amended_by_bound_measure",
+     "status": "fetched",
+     "in_force_check": {
+      "status": "ok",
+      "archive": "xml_usc50@119-102.zip",
+      "intervening": [],
+      "affected_by": [],
+      "check": "no intervening release point"
+     }
+    }
+   ],
+   "public_laws": [
+    {
+     "type": "public_law",
+     "cite": "pl/118/50",
+     "congress": 118,
+     "law": 50,
+     "source_url": "https://www.govinfo.gov/content/pkg/PLAW-118publ50/uslm/PLAW-118publ50.xml",
+     "sha256": "9bbe459e967a14803435bd970e0e27fcb2767caf4b73a23e041b8459d506d28a",
+     "bytes": 772982,
+     "sections": [],
+     "divisions": [
+      "division F"
+     ],
+     "fragments": [],
+     "status": "identified",
+     "relationship": "cited"
+    },
+    {
+     "type": "public_law",
+     "cite": "pl/104/172",
+     "congress": 104,
+     "law": 172,
+     "source_url": "https://www.govinfo.gov/content/pkg/PLAW-104publ172/uslm/PLAW-104publ172.xml",
+     "sha256": null,
+     "bytes": null,
+     "sections": [],
+     "divisions": [],
+     "fragments": [],
+     "status": "unavailable",
+     "relationship": "amended_by_bound_measure",
+     "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+    }
+   ],
+   "official_summary": {
+    "status": "available",
+    "version_code": "55",
+    "action_desc": "Passed Senate",
+    "action_date": "2026-08-07",
+    "sha256": "0a4bdd1ac5d5bbd4a15700953e9f8042cc6b5eb935eb2a01523b23da433093b4",
+    "version_relationship": "MATCHED",
+    "usable": true
+   },
+   "cra": {
+    "mode": "not_cra",
+    "rule_status": null,
+    "consequence_source": null,
+    "underlying_rule": null,
+    "gao_determination": null
+   },
+   "completeness": {
+    "status": "PENDING",
+    "missing": [
+     "public_law:pl/104/172 (text pending)"
+    ],
+    "notes": [
+     "pl/118/50 cited as a whole law (division F): identified and hashed, no section extracted; the Maker may not describe its contents"
+    ]
+   },
+   "generation": {
+    "status": "SOURCE_CONTEXT_PENDING"
+   },
+   "superseded_utc": "2026-09-24T12:22:19Z"
+  }
+ ],
+ "recorded_utc": "2026-09-24T12:22:19Z"
 }

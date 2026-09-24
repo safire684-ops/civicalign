@@ -76,7 +76,24 @@
   "heading_failure": "If the bill does not pass",
   "yea_means": "A Yea vote is a vote to pass the bill as the Senate amended it.",
   "nay_means": "A Nay vote is a vote against passing the amended bill.",
-  "next_step": "Because the Senate changed the text, the amended bill goes back to the House, which must agree to the Senate's version before it can become law.",
+  "vote_result": {
+   "outcome": "PASSED",
+   "official_result": "Bill Passed",
+   "statement": "The Senate passed an amended version of the bill."
+  },
+  "next_step": {
+   "case": "HOUSE_ORIGIN_AMENDED",
+   "actual": "The Senate passed an amended version. The House must agree to the Senate changes before the measure can proceed to presentment to the President.",
+   "hypothetical": null,
+   "basis": {
+    "measure_type": "bill",
+    "origin_chamber": "House",
+    "billstatus_origin_chamber": "House",
+    "senate_changed_text": true,
+    "house_passage_before_vote": "2026-01-12: Passed/agreed to in House: On motion to suspend the rules and pass the bill, as amended Ag",
+    "official_result": "Bill Passed (90-6, 3/5 required)"
+   }
+  },
   "sources": [
    {
     "what": "Senate roll-call record",
@@ -151,6 +168,162 @@
    }
   ]
  },
- "history": [],
- "recorded_utc": "2026-09-24T01:15:31Z"
+ "history": [
+  {
+   "schema": "civicalign.binding/1.0",
+   "vote": {
+    "congress": 119,
+    "session": 2,
+    "clerk_number": 228,
+    "voteview_id": 887,
+    "date": "2026-08-08",
+    "question": "On Passage of the Bill",
+    "result": "Bill Passed",
+    "required": "3/5",
+    "yeas": 90,
+    "nays": 6,
+    "measure": "HR6500",
+    "senate_url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1192/vote_119_2_00228.xml",
+    "senate_sha256": "908e78a7a1077aadc6b0b024fad86de805dccd8667c4d9eaf6cac233c01cc24c",
+    "senate_title": "H.R. 6500, as amended",
+    "senate_document_text": "An act making continuing appropriations and extensions for fiscal year 2027, and for other purposes.",
+    "amendment_number": null,
+    "voteview_url": "https://voteview.com/rollcall/RS1190887"
+   },
+   "classification": {
+    "kind": "PASSAGE_AS_AMENDED",
+    "summary_eligible": true,
+    "kind_supported": true,
+    "basis": [
+     "voteview.question='On Passage of the Bill'",
+     "senate.question='On Passage of the Bill'",
+     "senate.title=As Amended"
+    ],
+    "conflict": null
+   },
+   "object": {
+    "type": "bill",
+    "id": "HR6500",
+    "title": "Continuing Appropriations and Extensions Act, 2027",
+    "short_title": "Continuing Appropriations and Extensions Act, 2027",
+    "origin_chamber": "House",
+    "billstatus_source": "https://www.govinfo.gov/bulkdata/BILLSTATUS/119/hr/BILLSTATUS-119hr6500.xml",
+    "billstatus_sha256": "2c622bb05b91dafe0295a75d0fb6d455e05e1ed205f4866159138cdd762d0652",
+    "billstatus_update_date": "2026-09-17T19:31:17Z",
+    "passage_action_text": "Passed Senate with an amendment and an amendment to the Title by Yea-Nay Vote. 90 - 6. Record Vote Number: 228."
+   },
+   "text_binding": {
+    "status": "TEXT_BOUND",
+    "version_code": "eas",
+    "version_name": "Engrossed Amendment Senate",
+    "version_date": "2026-08-08",
+    "govinfo_url": "https://www.govinfo.gov/content/pkg/BILLS-119hr6500eas/xml/BILLS-119hr6500eas.xml",
+    "sha256": "823e0ee33cd59dbaff99bd5914ba92b54513accd2621fb5bf9fd6a66b0ed203c",
+    "bytes": 119064,
+    "stage_attribute_matches": null,
+    "selection_reason": "engrossed by the Senate on the vote date (eas): the measure as passed",
+    "candidates": [
+     "enr@-",
+     "eas@2026-08-08",
+     "pcs@2026-02-10",
+     "eh@2026-01-12",
+     "rh@2025-12-30",
+     "ih@2025-12-09",
+     "@2026-09-03"
+    ]
+   },
+   "cra": {
+    "is_cra": false,
+    "agency": null,
+    "rule_title": null,
+    "title_form": null,
+    "consequence_ref": null,
+    "underlying_rule_source": null,
+    "underlying_rule_sha256": null
+   },
+   "receipt": {
+    "deciding": "On Passage of the Bill H.R. 6500",
+    "heading_success": "If the bill, as amended, passes",
+    "heading_failure": "If the bill does not pass",
+    "yea_means": "A Yea vote is a vote to pass the bill as the Senate amended it.",
+    "nay_means": "A Nay vote is a vote against passing the amended bill.",
+    "next_step": "Because the Senate changed the text, the amended bill goes back to the House, which must agree to the Senate's version before it can become law.",
+    "sources": [
+     {
+      "what": "Senate roll-call record",
+      "url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1192/vote_119_2_00228.xml"
+     },
+     {
+      "what": "Bill status (GovInfo)",
+      "url": "https://www.govinfo.gov/bulkdata/BILLSTATUS/119/hr/BILLSTATUS-119hr6500.xml"
+     },
+     {
+      "what": "Text as voted on (Engrossed Amendment Senate)",
+      "url": "https://www.govinfo.gov/content/pkg/BILLS-119hr6500eas/xml/BILLS-119hr6500eas.xml"
+     },
+     {
+      "what": "Roll call at Voteview",
+      "url": "https://voteview.com/rollcall/RS1190887"
+     }
+    ]
+   },
+   "verification": {
+    "status": "VERIFIED",
+    "checks": [
+     {
+      "check": "senate_record_exists",
+      "ok": true,
+      "detail": ""
+     },
+     {
+      "check": "identity_matches",
+      "ok": true,
+      "detail": "senate 119/2/228 vs voteview 119/2/228"
+     },
+     {
+      "check": "date_compatible",
+      "ok": true,
+      "detail": "senate 2026-08-08 vs voteview 2026-08-08"
+     },
+     {
+      "check": "question_matches",
+      "ok": true,
+      "detail": "'On Passage of the Bill' vs 'On Passage of the Bill'"
+     },
+     {
+      "check": "tallies_match",
+      "ok": true,
+      "detail": "senate 90-6 vs voteview 90-6"
+     },
+     {
+      "check": "threshold_matches",
+      "ok": true,
+      "detail": "3/5 vs 3/5"
+     },
+     {
+      "check": "member_votes_match",
+      "ok": true,
+      "detail": "yea 90/90 nay 6/6"
+     },
+     {
+      "check": "measure_matches",
+      "ok": true,
+      "detail": "senate 'HR6500' vs voteview 'HR6500'"
+     },
+     {
+      "check": "billstatus_present",
+      "ok": true,
+      "detail": "BILLSTATUS-119hr6500.xml"
+     },
+     {
+      "check": "billstatus_links_vote",
+      "ok": true,
+      "detail": "recorded-vote link to this Senate vote number"
+     }
+    ]
+   },
+   "superseded_utc": "2026-09-24T12:05:13Z"
+  }
+ ],
+ "recorded_utc": "2026-09-24T12:05:13Z"
 }

@@ -1,178 +1,158 @@
 # CivicAlign
 
-Deterministic metrics for legislative accountability and institutional drift.
-This repo implements **Sections 2–5** of the math spec (Pillars 4, 5 and 6).
+A legislative accountability and perspective tool for the U.S. Senate. It shows
+where each senator's voting record sits among comparable senators, how Senate
+seats and committees compare with the country and the chamber, and which
+official records each figure comes from. It is not an ideology lookup, it does
+not rank politicians, and it does not claim to measure whether a senator
+represents their voters.
+
+- Live site: https://safire684-ops.github.io/civicalign/ (`/senator-check.html`,
+  methodology report `/methodology.html`)
+- The site rebuilds every week from current source data (see "How the weekly
+  update works" in `HANDOFF.md`). Figures, rosters and peer groups are expected
+  to change; the methods below are not.
 
 ## Quick start
 
 ```bash
-./scripts/fetch_data.sh    # ~9 MB of source data, stamps data/raw/PROVENANCE.tsv
-./scripts/report.sh        # prints the full report
+./scripts/fetch_data.sh    # downloads the source data, stamps data/raw/PROVENANCE.tsv
+./scripts/report.sh        # prints the figures, each labelled with its scale
+./scripts/update.sh        # the whole weekly chain locally: fetch, verify, bind, test, rebuild, supervise
 ```
 
-No install and no venv needed for the report -- the package is stdlib-only, and
-`report.sh` just sets `PYTHONPATH=src`. For the tests:
+The package is stdlib-only (`csv`, `json`, `statistics`, `xml`); `report.sh`
+just sets `PYTHONPATH=src`. `pytest` is the only development dependency:
 
 ```bash
 python3 -m venv .venv && ./.venv/bin/pip install pytest
-./.venv/bin/python -m pytest -q          # 19 tests
+./.venv/bin/python -m pytest -q
 ```
 
-`conftest.py` puts `src/` on the path, so tests need no install either. (An
-editable install via `pip install -e .` also works but proved flaky on Python
-3.14 here -- if `import civicalign` ever fails, rerun the install or just use
-`PYTHONPATH=src`.)
+## What the site shows
 
-No third-party runtime dependencies — stdlib `csv`, `json`, `statistics` only.
-That is deliberate: the whole point of this repo is numbers people can check, and
-a zero-install pipeline is one fewer thing standing between a reader and a
-reproduction. `pytest` is the only dev dependency.
+### Pillar 4 — each senator among comparable senators
+
+The primary result is a **caucus-group peer comparison** (`peers.py`). Each
+senator is compared with senators in the same caucus group who represent
+*other* states whose recent presidential vote was similar:
+
+- Caucus groups: the Republican caucus; the Democratic caucus, meaning Democrats
+  plus the Independents whose Senate roster entry records that they caucus with
+  them. Any other or missing party or caucus value is not grouped (it fails
+  closed and gets no comparison).
+- Similar states: the two-party presidential vote share, 2016, 2020 and 2024
+  averaged equally (MIT Election Lab), within ±4 percentage points of the
+  senator's state.
+- At least six peers. The conclusion is published only if it is the same at
+  ±2, ±3, ±4 and ±5 points; otherwise the page says the result depends on the
+  window. Too few peers gets an honest "not enough comparable senators".
+- Outcomes: within the observed range of the peers, outside it on the more
+  liberal side, outside it on the more conservative side, window-dependent, or
+  insufficient peers.
+- Peers are listed by state, never ordered by position. Nothing is ranked.
+
+This says where a voting record sits among comparable senators. It does not
+say whether a senator represents, agrees with or matches the state's voters.
+
+**Voter context.** A separate estimate of the state's voters (American Ideology
+Project, 2020 wave) appears as supporting context on its own scale. It is never
+subtracted from, or tested against, a senator's voting score: the two come
+from different measurement systems with no validated bridge between them.
+
+A regression of senator scores on state presidential vote is kept in
+`representation.py` for diagnostics and for the methodology report's
+explanation of why it is not used: its fitted line mostly measured the party
+split and, in competitive states, fell where no senator sits. It produces no
+published classification.
+
+### Pillar 5 — Senate seats and the national vote
+
+Same-scale comparisons of election results: the average presidential vote
+share across Senate seats against the national vote share, by election. The
+chamber's own middle and 60-vote point are shown on the senators' voting scale.
+
+### Pillar 6 — committees against the Senate
+
+Descriptive comparisons of each committee with the Senate overall: where its
+members sit, what share of the bills it received it has formally sent forward
+(described by sponsor, never as the bill's ideology), and where the Yes/No split
+fell on its bills. No causal claims; a bill not yet sent forward is "not yet
+sent forward", never dead.
+
+### Recorded votes
+
+Each senator card lists that senator's recorded Yea or Nay on the most recent
+Senate passage votes, with links to the official records. No bill description
+is shown.
+
+## Pillar 1 — official vote records (no generated explanations)
+
+The deterministic foundation for future plain-English vote receipts is built
+through **Stage 2.5**. Nothing in it calls a model, and the live page reads
+none of it.
+
+- **Stage 2, binding** (`python -m civicalign.explain.bind`, in the weekly job):
+  every Senate roll call is classified from the official question; passage
+  votes on bills and joint resolutions are bound to the Senate's own record,
+  the bill's GovInfo status record and the exact GovInfo text as voted on,
+  cross-checked member by member against Voteview. Each binding also records
+  the vote's actual result and the next legislative step, from the measure
+  type, the chamber it started in, whether the Senate changed the text, and the
+  result; a failed vote is never described as advancing.
+- **Stage 2.5, source context** (`python -m civicalign.explain.context`, an
+  offline job): the U.S. Code in force at the vote (never a later release,
+  never today's law), cited Public Laws, the matching CRS summary, and for
+  Congressional Review Act resolutions the bound rule and 5 U.S.C. 801. Each
+  citation's relationship to the measure is read from where it sits in the
+  voted XML (amended, replaced, used in a definition, applied as a test, or
+  only named). Only provisions the measure needs are included, at the exact
+  subsection or paragraph cited; the rest are tracked by hash. Unstructured
+  citations in places that need content keep a vote pending rather than guessed.
+  Every ready vote gets a hashed source packet with size figures; nothing is
+  truncated.
+
+**Stage 3 (a Maker/Checker evaluation of plain-English receipts) has not
+started. No generated explanation exists or is published.**
+
+## How the numbers are checked
+
+Every weekly run is gated: an all-or-nothing source snapshot, a verification
+step, the data tests, the page rebuild, the public-claim tests, and an
+independent supervisor that re-reads the raw files and reproduces every
+published figure, every peer group, every vote binding and every source packet
+with separate code. If any step fails, nothing is committed and the previous
+verified site stays live.
 
 ## Layout
 
 ```
 src/civicalign/
-  config.py            every definitional choice that changes a published number
-  space.py             Section 2 — the shared metric space X = [-1, +1]
-  alignment.py         Section 3 — Pillar 4, senator vs. state
-  chamber.py           Section 4 — Pillar 5, chamber vs. nation
-  committees.py        Section 5 — Pillar 6, committee drift
-  pipeline.py          wires the sections together
-  cli.py               the report
-  sources/
-    voteview.py        senator coordinates + the seat-dedupe guard
-    rosters.py         who actually holds a seat right now
-    state_prefs.py     the bridging interface — THE swappable part
+  config.py          every definitional choice that changes a published number
+  pipeline.py        builds the report
+  peers.py           Pillar 4: the caucus-group peer comparison
+  representation.py  the retired regression (diagnostics only) and Pillar 5's seats-vs-nation figure
+  chamber.py         Senate middle and 60-vote point
+  committees.py, output_ideology.py, gatekeeping.py   Pillar 6
+  receipts.py        the recent passage votes on each card
+  build_demo.py      the page's data blocks and the methodology report
+  agents/            snapshot fetch, verify, supervisor
+  explain/           Pillar 1: binding.py, bind.py (Stage 2); relevance.py, context.py (Stage 2.5)
+  sources/           Voteview, rosters, bill status, Senate votes, U.S. Code, Public Laws, Federal Register, elections
 ```
 
-## What the live page shows
+`HANDOFF.md` is the current, detailed project state; `METHODOLOGY.md` and the
+published methodology report explain the methods and their limits.
 
-The live page (`demo/senator-check.html`, `demo/methodology.html`) leads with a
-**peer comparison** (`peers.py`): each senator against senators in the same
-caucus group (the Republican caucus; or the Democratic caucus, meaning Democrats
-plus the Independents whose roster entry records that they caucus with them) from
-*other* states whose two-party presidential vote, averaged over 2016/2020/2024,
-is within ±4 points of the senator's state. The page shows the observed lowest,
-highest and middle peer record and the senator's own record, all on the
-Voteview scale, and one of five sentences: within the observed range; outside it
-on the more liberal side; outside it on the more conservative side; the
-conclusion changes with the window (checked at ±2, ±3, ±4, ±5); too few peers
-(minimum six). Nothing widens the window, nothing ranks anyone, and the survey
-estimate never enters the comparison. The most recent passage votes with each
-senator's Yea/Nay sit under the card as evidence.
+## Two data bugs this repo guards against
 
-The regression of senator position on state vote share (method A below,
-`representation.py`) is retained for diagnostics and for the methodology's
-audit of why it was retired from the page: its fitted line mostly measures the
-party split and, in competitive states, falls in a gap where no senator sits.
-It is no longer used for any published classification.
+Both were found in real data; neither raises an error on its own; both have
+regression tests.
 
-The senator's position against the Senate middle is secondary context, and the
-American Ideology Project estimate (2020 wave) is shown separately on the
-voters' scale. The page never subtracts the survey estimate from a voting score:
-a direct senator-versus-state measure on those two scales requires a validated
-statistical bridge, which CivicAlign does not have.
-
-## Pillar 1, Stage 2: deterministic vote binding (no summaries yet)
-
-`python -m civicalign.explain.bind` classifies every Senate roll call from the
-official question, and for passage votes on bills and joint resolutions binds
-the vote to the Senate's own record (senate.gov XML), the bill's GovInfo status
-record and the exact GovInfo text version as voted on, cross-checking identity,
-tallies, every member's vote and the recorded-vote link. Bindings live in
-`data/explanations/<congress>/` with source hashes and history; the supervisor
-re-derives each one. Nothing is summarised and the page does not read the
-bindings; that is Stages 3–5.
-
-Stage 2.5 (`python -m civicalign.explain.context`, offline) adds the source
-context: structured citations from the voted XML, the required U.S. Code
-sections extracted byte-exact from the Law Revision Counsel's release point in
-force at the vote (never a later one, never today's law as a fallback), cited
-Public Laws from GovInfo USLM, the CRS summary with its version relationship,
-and for CRA resolutions the Federal Register document bound by citation plus
-5 U.S.C. 801 from the Code in force. Each vote gets a tracked context record
-with completeness and generation states, and ready votes get a source packet
-that is the future Maker's entire factual universe.
-
-## What works today, and what does not
-
-**Working, on real 119th Congress data.**
-
-- Everything senator-to-senator: committee drift, chamber median, cloture pivot,
-  party medians. One ruler, no bridging needed.
-- **Pillar 4**, via regression on real election results. Fit senator ideology
-  against their state's presidential vote share (averaged over 2016/2020/2024)
-  and read the residual. This never subtracts the two scales, so their units
-  never have to match. State results explain **69%** of senator ideology, so the
-  residual is deviation from a strong pattern.
-- **Pillar 5's apportionment skew**, in vote-share units: the average state vote
-  share per Senate seat vs. the national vote share. Election results on both
-  sides, so again no bridging. **+3.37 points.**
-- **Committees vs. the public**, same way, reported both against the nation and
-  against the Senate's own average (which strips out the structural skew and
-  majority control, leaving the committee-specific part).
-
-**Still unavailable: absolute distance to the median voter.** The regression
-answers "is this senator more extreme than their state's own result predicts?"
-It cannot answer "how far is this senator from their state's median voter?" --
-that is an absolute distance and does need bridged survey data. See
-`sources/state_prefs.py` and METHODOLOGY.md.
-
-## Two bugs this repo is built to prevent
-
-Both were found in real data. Neither raises an error on its own — each just
-produces a confident wrong number. Both have regression tests.
-
-**1. Seat double-counting.** Filtering Voteview on `congress == 119` gives **104
-Senate rows for 100 seats**: FL, OH, OK and SC each carry a departed member
-alongside their replacement. All four extras are Republicans, so the naive
-chamber median is `+0.3645` instead of the correct `+0.3100`. That 0.045 artifact
-is a large fraction of an apportionment skew which is itself only 0.1–0.3 wide.
-Fixed by requiring a roster in `load_scores()` and rejecting any state with more
-than two senators.
-
-**2. Frozen scores.** `nominate_dim1` **never changes over a career** — Murkowski
-is `0.204` in all ten of her Congresses. Building Pillar 4 on it freezes every
-alignment gap for life and makes every time series a flat line. The per-Congress
-column that actually moves is `nokken_poole_dim1`, which is what `config.py`
-selects. Trade-off documented there.
-
-## Current numbers (119th Congress)
-
-```
-apportionment skew             +3.37 points  (range +2.66 to +4.08 across cycles)
-state results explain           69%  of senator ideology (r-squared 0.687)
-senators significantly off       6  of 100 (|t| > 2, leverage-corrected)
-committee CCDs publishable       0  of 19  -- see below
-
-chamber median                 +0.3100
-60th-vote pivot (cloture)      +0.4400   (+0.130 vs median)
-majority (R) median            +0.5640
-minority median                −0.3780
-party gap                       0.9420
-```
-
-Most-drifted committees, `CCD = committee median − chamber median`:
-
-| committee | n | median | CCD | chair | chair − cmte |
-|---|---|---|---|---|---|
-| Environment | 18 | +0.003 | −0.307 | +0.412 | +0.409 |
-| Appropriations | 28 | +0.004 | −0.306 | +0.170 | +0.166 |
-| Foreign Relations | 22 | +0.535 | +0.225 | +0.640 | +0.105 |
-| Homeland/Govt Affairs | 15 | +0.521 | +0.211 | +0.812 | +0.291 |
-| Budget | 20 | +0.128 | −0.182 | **+0.897** | **+0.769** |
-| Commerce | 28 | +0.326 | +0.016 | **+0.865** | **+0.539** |
-| Judiciary | 21 | +0.361 | +0.051 | +0.461 | +0.100 |
-
-Most out of step with their own state (residual from the fitted line):
-
-| senator | state | state vote | ideology | predicted | residual |
-|---|---|---|---|---|---|
-| Ron Johnson | WI | 50.4% | +0.897 | −0.003 | **+0.900** |
-| Rick Scott | FL | 56.6% | +0.926 | +0.254 | +0.672 |
-| Ted Budd | NC | 51.6% | +0.693 | +0.046 | +0.647 |
-| Jon Ossoff | GA | 51.1% | −0.547 | +0.025 | −0.572 |
-| Shelley Moore Capito | WV | 71.3% | +0.412 | +0.869 | −0.457 |
-
-See `METHODOLOGY.md` for what these do and do not support — including the
-whitepaper claim about Judiciary that this data does not back.
+1. **Seat double-counting.** Filtering Voteview on the current Congress returns
+   more Senate rows than seats (members who left sit beside their
+   replacements), which shifts the chamber middle. `load_scores()` requires the
+   current roster and rejects any state with more than two senators.
+2. **Frozen scores.** Voteview's career score (`nominate_dim1`) never changes
+   over a career. The per-Congress score (`nokken_poole_dim1`) is used instead;
+   the trade-off is documented in `config.py`.

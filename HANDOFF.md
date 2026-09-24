@@ -1,8 +1,8 @@
 # Project handoff — CivicAlign, Pillars 4–6 and Pillar 1 (Stages 2–2.5)
 
-Updated 24 September 2026. Scope: **Pillars 4, 5 and 6** (the live page) and the
-deterministic foundation of **Pillar 1** (vote bindings and source packets; no
-generated text). Pillars 2, 3 and 7 belong to someone else. The repository, the
+Updated 24 September 2026, after the pre-Stage-3 correction pass. Scope:
+**Pillars 4, 5 and 6** (the live page) and the deterministic foundation of
+**Pillar 1** (vote bindings and source packets; no generated text). Pillars 2, 3 and 7 belong to someone else. The repository, the
 live site and the claude.ai copy are in step.
 
 ## Where things are
@@ -90,7 +90,10 @@ What never changes without a deliberate decision:
    801. No model memory, no browsing, no fallback to today's law, no summary of
    a text the Senate later amended. CRA explanations are limited to the
    resolution's own effect unless the rule is bound and separately validated;
-   Senate passage is never described as enactment. No model has been called
+   Senate passage is never described as enactment. The vote's actual result
+   and the next legislative step are fixed deterministic text; a failed vote is
+   never described as advancing. A packet carries only the law the measure
+   needs, at the node cited; nothing is truncated. No model has been called
    yet.
 
 All ten are enforced by tests that run in the weekly job.
@@ -190,7 +193,27 @@ and `index.json`, tracked, history kept on change).
   amendments before a vote with no engrossment, or two engrossments, are
   ambiguous; the GovInfo file's `bill-stage` must match. CRA metadata from the
   two official title forms only. The receipt scaffold (headings, what Yea and
-  Nay mean, next step) is fixed per kind.
+  Nay mean) is fixed per kind.
+- Result and next step (`binding.next_step`, since 24 Sept): two separate
+  fields. `receipt.vote_result` = what this vote actually did (outcome PASSED
+  / REJECTED from the official result, cross-checked against the tally and
+  threshold; "The Senate passed the bill." / "The joint resolution did not pass
+  the Senate in this vote."). `receipt.next_step` = case, `actual`, and, for a
+  failed vote only, `hypothetical` ("If the Senate had passed it, …"). Cases
+  come from the measure number (bill / joint resolution; S. and S.J.Res. are
+  Senate origin, H.R. and H.J.Res. House origin, which must agree with bill
+  status), whether the Senate changed the text (kind, "As Amended", "with an
+  amendment", or an `eas` text), and House passage recorded on or before the
+  vote: SENATE_ORIGIN ("It next goes to the House."), HOUSE_ORIGIN_SAME_TEXT
+  ("…can proceed to presentment to the President."), HOUSE_ORIGIN_AMENDED
+  ("The House must agree to the Senate changes…"). Anything inconsistent or
+  missing is UNDETERMINED (no text); constitutional-amendment resolutions are
+  UNSUPPORTED. Nothing after the vote date is used. The old kind-only
+  sentence told S.2 (a Senate bill) that it "goes back to the House" and gave
+  failed resolutions an "after both chambers pass it" line; both are gone.
+  Today: 18 Senate-origin passed, 6 Senate-origin rejected, 20 House-origin
+  same-text passed, 2 House-origin same-text rejected, 8 House-origin amended
+  passed; none undetermined.
 - Verification: Senate record exists; congress/session/vote number, date,
   question, tallies and threshold match Voteview; every member's vote matches
   (LIS id → bioguide from the roster; former members by exact last name, first
@@ -204,11 +227,40 @@ and `index.json`, tracked, history kept on change).
 `--offline`, `--only=S2,HR4`; an offline job, NOT in the weekly workflow because
 the title archives are slow; the workflow only re-verifies the tracked records).
 - References: structured `external-xref` citations from the voted XML (no prose
-  regex for the Code); amendatory status from the innermost enclosing block.
-- Selection policy (`select_sections`): sections cited in amendatory
-  instructions, else all cited sections, capped at 12; above the cap, and for
-  voted texts over 30,000 words, the context stays PENDING until a
-  large-measure policy exists.
+  regex for the Code). Relevance (`explain/relevance.py`, since 24 Sept):
+  each citation's relationship is read from where it sits in the voted XML,
+  never a model. AMENDED_TARGET / REPLACED_TEXT (amendatory instruction outside
+  quoted text), DEFINITION_REQUIRED (inside one of the measure's definitions:
+  a header saying "defin…" or a `<term>`; or "as defined in"),
+  CROSS_REFERENCE_REQUIRED (applied as a test or acted under: "described in",
+  "pursuant to section …"; also the fail-closed default), CROSS_REFERENCE_ONLY
+  ("et seq." whole-Act cites, whole Public Laws or divisions, "the …
+  system/agreements/program under section …"), SUPPORTING_CONTEXT (5 U.S.C.
+  801 for CRA, added by rule). Those needing content are
+  CONTENT_INCLUDED_FOR_GENERATION; CROSS_REFERENCE_ONLY is REFERENCE_TRACKED
+  (in-force hash, no content; the Maker may name it, not describe it).
+- Selection policy (`select_sections`): required provisions at the node the
+  citation's own text names ("8 U.S.C. 1182(a)(2)" → `/us/usc/t8/s1182/a/2`,
+  cut byte-exact with the number/heading/chapeau lead-in of each provision
+  above it); a whole section only when the citation names only the section,
+  and never above 50,000 characters (`FULL_SECTION_MAX_CHARS`; above it the
+  record is `fragment_selection_required` and the context PENDING). Capped at
+  12 required provisions; voted texts over 30,000 words stay PENDING until a
+  large-measure policy exists. Citation gaps are detected (a pattern used only
+  to find gaps, never to source content): an untagged "N U.S.C. …", a tagged
+  cite whose list continues untagged ("8 U.S.C. 1226, 1231(a), or 1357"), or
+  cite text that does not match its structured cite. A gap where content is
+  needed → `unresolved_citations` → PENDING. A Public Law cited only as a
+  whole where content is needed (an amendment to "division A of Public Law
+  119-37") is PENDING too.
+- Packet budget: `metrics` (voted_text_chars, context_chars,
+  official_summary_chars, total_source_chars, source_count,
+  included_context_fragment_count, hierarchy_fragment_count,
+  tracked_reference_count) and `budget` (REVIEW_REQUIRED above 150,000 source
+  characters, `PACKET_REVIEW_CHARS`; never truncated; a flagged packet needs a
+  recorded human review before any Maker reads it). All current packets are
+  WITHIN_BUDGET. A packet's history keeps a digest of each superseded packet
+  (hash, metrics, source hashes); the full old packet is in git.
 - The Code in force (`sources/uscode.py`): OLRC release points, one per enacted
   Public Law. Rule: the latest release point on or before the vote **whose
   archive for the title is published**; every release point between it and the
@@ -239,23 +291,34 @@ the title archives are slow; the workflow only re-verifies the tracked records).
   messages are kept out of tracked records, so an offline rerun writes nothing
   when nothing changed. Completeness COMPLETE / LIMITED / PENDING / AMBIGUOUS →
   generation READY_FOR_GENERATION / READY_WITH_LIMITS / SOURCE_CONTEXT_PENDING /
-  SOURCE_CONTEXT_AMBIGUOUS. Today: 12 ready (S.J.Res.10, 37, 49, 71, 77, 81, 88;
-  H.J.Res.142; S.2; H.R.4; S.331; H.R.7148), 27 ready with limits (all CRA), 13
-  pending (large texts or pre-USLM laws), 2 ambiguous (S.5 by the in-force rule
-  itself; H.R.6938 by intervening laws).
+  SOURCE_CONTEXT_AMBIGUOUS. Today: 9 ready (S.J.Res.10, 37, 49, 71, 77, 81, 88;
+  H.J.Res.142; H.R.4), 27 ready with limits (all CRA), 16 pending (large texts
+  or pre-USLM laws, plus since 24 Sept S.2, S.331 and H.R.7148), 2 ambiguous
+  (S.5 by the in-force rule itself; H.R.6938 by intervening laws). S.2 is
+  pending on two unresolved citations in its "covered unlawful alien"
+  definition; S.331 on 21 U.S.C. 802 and 823, amended but cited only as whole
+  sections of 158 KB and 127 KB; H.R.7148 on an amended date in a Public Law
+  division cited only as a whole.
 - Raw cache: `data/raw/explanations/` (Senate XML, texts, title archives,
   release-point pages, classification tables, law XML, FR queries and documents;
   about 360 MB, ignored by git) with `MANIFEST.json`; immutable artefacts are
   served from the cache once recorded.
 
 **Decisions on record.** First Maker/Checker cohort: the 8 self-contained
-resolutions (S.J.Res.10, 37, 49, 71, 77, 81, 88; H.J.Res.142) + S.2 + H.R.4, all
-READY with COMPLETE packets. S.5 stays ambiguous; do not solve it with current
+resolutions (S.J.Res.10, 37, 49, 71, 77, 81, 88; H.J.Res.142) + S.2 + H.R.4.
+Since the 24 Sept correction pass nine are READY with COMPLETE packets and S.2
+is SOURCE_CONTEXT_PENDING; no substitute was added, and what to do about S.2
+is an open decision. Before the pass S.2's packet was 974 KB because the whole
+of 8 U.S.C. 1182 (680 KB, more than half of it OLRC notes) was included for a
+citation of 1182(a)(2) inside a definition; that paragraph is 13.6 KB.
+S.J.Res.10 and 71 carried 50 U.S.C. 1601 (the first section of an "et seq."
+cite, about emergencies that existed in 1976); H.R.4 carried 2 U.S.C. 682 from
+an "et seq." cite. All three are now tracked, not included. S.5 stays ambiguous; do not solve it with current
 law. CRA explanations wait for a separate validation cohort (one rule-bound,
 one GAO-deemed) and are never published before it passes.
 
-**Not built.** Maker, Checker, the evaluation run, any UI change, the
-large-measure section-selection policy, Statutes at Large for pre-USLM laws,
+**Not built.** Maker, Checker, the evaluation run, any UI change, a parser
+for untagged statutory citations, the large-measure section-selection policy, Statutes at Large for pre-USLM laws,
 retrieval of GAO opinions from the Congressional Record. When Stage 3 starts:
 the Maker runs sandboxed on the packet alone; the Checker uses a different
 prompt (ideally a different model) from the Maker; model provider, prompt
@@ -345,21 +408,40 @@ de-duplication guard (104 Voteview rows for 100 seats) is in
 - `agents/` — `base.py` (snapshot, `sha256_bytes`), `sources.py` (agents with
   validators and vintages), `verify.py`, `supervisor.py`. `whitepaper.py` —
   figure refresher.
-- `explain/` — `binding.py` (rules), `bind.py` (Stage 2 runner), `context.py`
-  (Stage 2.5 runner and packet builder), `fetch.py` (cache with manifest,
+- `explain/` — `binding.py` (rules, including `next_step`), `bind.py` (Stage 2
+  runner), `relevance.py` (citation relationships and gaps), `context.py`
+  (Stage 2.5 runner, selection policy, packet builder and metrics), `fetch.py` (cache with manifest,
   retries, immutable entries). `sources/senate_votes.py`, `sources/billstatus.py`,
-  `sources/uscode.py`, `sources/publaw.py`, `sources/federal_register.py`.
+  `sources/uscode.py` (sections; nodes via `extract_node`, `lead_in`),
+  `sources/publaw.py`, `sources/federal_register.py`.
   `config.py` holds the archive and directory paths.
 - Tests: `test_published_pages.py` (the public contract: G1–G6, UX guarantees,
   presentation guarantees, V1–V20), `test_perspective.py` (product hierarchy),
   `test_peers.py` (the peer rule, caucus grouping, thresholds), `test_binding.py`
-  and `test_context.py` (Pillar 1), `test_update_chain.py`, `test_supervisor.py`,
+  and `test_context.py` (Pillar 1, including every origin/result/change
+  combination of the next step and the relevance classes), `test_readme.py`
+  (the README describes the current product), `test_update_chain.py`, `test_supervisor.py`,
   `test_independent.py`, `test_floor_votes.py`, `test_math.py`,
   `test_regressions.py`, `test_representation.py`, `test_uncertainty.py`,
-  `test_whitepaper.py`. 249 pass as of this handoff; supervisor 36/36; verify
-  12/12.
+  `test_whitepaper.py`. 275 pass as of this handoff; supervisor 36/36; verify
+  12/12. The supervisor re-derives every binding's result and next step with
+  its own code, re-cuts every node and lead-in from the cached archive with
+  its own scanner, re-checks the relevance rules and gap scan against the
+  voted XML, and recomputes every packet's metrics and budget.
 
 ## Open items
+
+- **S.2 and the first cohort (decision needed before Stage 3).** S.2's
+  definition of "covered unlawful alien" (sec. 202(9)(D)) cites 8 U.S.C.
+  1231(a) and 1357 in a list whose first item alone is tagged, and 8 U.S.C.
+  1325 and 1326 with no tag at all. Options: run Stage 3 on the nine ready
+  cases; allow definitional citations to be repeated in the bill's own words
+  without their content (S.2 would become READY_WITH_LIMITS); or build a
+  narrow, tested parser for parenthetical U.S.C. citations. Resolved, S.2's
+  packet would be about 115,000 source characters, under the review threshold.
+- `METHODOLOGY.md` (repo only; the published report is built from
+  `demo/methodology.template.html`) still has passages written around a
+  senator-to-state distance and needs the clean-up the README got.
 
 - Pillar 1 Stage 3 and after: Maker/Checker on the ten-case cohort, then the
   CRA validation cohort, then a large-measure section-selection policy (13
@@ -413,6 +495,12 @@ de-duplication guard (104 Voteview rows for 100 seats) is in
   cross-window check), with the survey estimate as separate context; "same
   party" was corrected to caucus groups with fail-closed grouping and the
   30-vote wording became a display rule. Version 31 is the Pillar 4 baseline.
+- 24 Sept, pre-Stage-3 correction pass: deterministic result and next-step
+  fields replace the kind-only sentence; citation relevance classes,
+  node-level law extraction, gap detection, the 50,000-character whole-section
+  rule and packet metrics replace "all cited sections"; S.2, S.331 and
+  H.R.7148 moved to pending; README rewritten for the current product. No page
+  change.
 - 23–24 Sept: Pillar 1 Stage 1 design; Stage 2 bindings (54 votes verified
   against Senate.gov, GovInfo and Voteview; bind step added to the weekly job);
   Stage 2.5 source context and packets (12 ready, 27 limited, 13 pending, 2

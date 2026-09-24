@@ -102,6 +102,44 @@ def extract_section(title_xml: bytes, identifier: str) -> bytes | None:
     return None
 
 
+USLM_LEVELS = (b"subsection", b"paragraph", b"subparagraph", b"clause", b"subclause", b"item", b"subitem")
+
+
+def _element_at(xml: bytes, start: int, tag: bytes) -> bytes | None:
+    """The balanced <tag …> … </tag> element that opens at `start`."""
+    pat = re.compile(rb"<(/?)" + re.escape(tag) + rb"\b[^>]*?(/?)>")
+    depth = 0
+    for t in pat.finditer(xml, start):
+        if t.group(2) == b"/":
+            if depth == 0:
+                return xml[start:t.end()]
+            continue
+        depth += -1 if t.group(1) else 1
+        if depth == 0:
+            return xml[start:t.end()]
+    return None
+
+
+def extract_node(section_xml: bytes, identifier: str) -> tuple[bytes, str] | None:
+    """A sub-section node (subsection, paragraph, …) by its USLM identifier,
+    byte-exact from the already extracted section, e.g. /us/usc/t8/s1182/a/2.
+    Returns (bytes, tag) or None."""
+    for ident in (identifier, identifier.replace("-", "\u2013")):
+        m = re.search(rb'<(' + b"|".join(USLM_LEVELS) + rb')\b[^>]*identifier="' + re.escape(ident.encode("utf8")) + rb'"[^>]*>', section_xml)
+        if m:
+            el = _element_at(section_xml, m.start(), m.group(1))
+            return (el, m.group(1).decode()) if el is not None else None
+    return None
+
+
+def lead_in(element_xml: bytes) -> bytes:
+    """The part of a provision before its first lower-level provision: its number,
+    heading and chapeau. For an ancestor of a cited node this is the context a
+    reader needs to know what the node belongs to. Byte-exact prefix."""
+    first = re.search(rb"<(?:" + b"|".join(USLM_LEVELS) + rb")\b[^>]*identifier=", element_xml[1:])
+    return element_xml[: first.start() + 1] if first else element_xml
+
+
 def section_heading(section_xml: bytes) -> str:
     m = re.search(rb"<heading[^>]*>(.*?)</heading>", section_xml, re.S)
     return re.sub(r"\s+", " ", re.sub(r"<[^>]+>", "", m.group(1).decode("utf8", "ignore"))).strip() if m else ""

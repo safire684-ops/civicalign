@@ -75,7 +75,24 @@
   "heading_failure": "If the bill does not pass",
   "yea_means": "A Yea vote is a vote to pass the bill as the Senate amended it.",
   "nay_means": "A Nay vote is a vote against passing the amended bill.",
-  "next_step": "Because the Senate changed the text, the amended bill goes back to the House, which must agree to the Senate's version before it can become law.",
+  "vote_result": {
+   "outcome": "PASSED",
+   "official_result": "Bill Passed",
+   "statement": "The Senate passed an amended version of the bill."
+  },
+  "next_step": {
+   "case": "HOUSE_ORIGIN_AMENDED",
+   "actual": "The Senate passed an amended version. The House must agree to the Senate changes before the measure can proceed to presentment to the President.",
+   "hypothetical": null,
+   "basis": {
+    "measure_type": "bill",
+    "origin_chamber": "House",
+    "billstatus_origin_chamber": "House",
+    "senate_changed_text": true,
+    "house_passage_before_vote": "2025-09-19: Passed/agreed to in House: On passage Passed by the Yeas and Nays: 217 - 212 (Roll no. 281",
+    "official_result": "Bill Passed (60-40, 1/2 required)"
+   }
+  },
   "sources": [
    {
     "what": "Senate roll-call record",
@@ -150,6 +167,161 @@
    }
   ]
  },
- "history": [],
- "recorded_utc": "2026-09-24T01:15:28Z"
+ "history": [
+  {
+   "schema": "civicalign.binding/1.0",
+   "vote": {
+    "congress": 119,
+    "session": 1,
+    "clerk_number": 618,
+    "voteview_id": 618,
+    "date": "2025-11-10",
+    "question": "On Passage of the Bill",
+    "result": "Bill Passed",
+    "required": "1/2",
+    "yeas": 60,
+    "nays": 40,
+    "measure": "HR5371",
+    "senate_url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1191/vote_119_1_00618.xml",
+    "senate_sha256": "ab81bac6e53d98c8cc170882c53231ee2cc9fd0a4b4addbbdd264879d17e0129",
+    "senate_title": "H.R. 5371, As Amended",
+    "senate_document_text": "A bill making continuing appropriations and extensions for fiscal year 2026, and for other purposes.",
+    "amendment_number": null,
+    "voteview_url": "https://voteview.com/rollcall/RS1190618"
+   },
+   "classification": {
+    "kind": "PASSAGE_AS_AMENDED",
+    "summary_eligible": true,
+    "kind_supported": true,
+    "basis": [
+     "voteview.question='On Passage of the Bill'",
+     "senate.question='On Passage of the Bill'",
+     "senate.title=As Amended"
+    ],
+    "conflict": null
+   },
+   "object": {
+    "type": "bill",
+    "id": "HR5371",
+    "title": "Continuing Appropriations, Agriculture, Legislative Branch, Military Construction and Veterans Affairs, and Extensions Act, 2026",
+    "short_title": "Legislative Branch Appropriations Act, 2026",
+    "origin_chamber": "House",
+    "billstatus_source": "https://www.govinfo.gov/bulkdata/BILLSTATUS/119/hr/BILLSTATUS-119hr5371.xml",
+    "billstatus_sha256": "044b0c48f481ee87e898f7a7c58aa2e85e9c7ca5ac555523b5e78ce8a4a58947",
+    "billstatus_update_date": "2026-09-16T17:49:32Z",
+    "passage_action_text": "Passed Senate with an amendment by Yea-Nay Vote. 60 - 40. Record Vote Number: 618."
+   },
+   "text_binding": {
+    "status": "TEXT_BOUND",
+    "version_code": "eas",
+    "version_name": "Engrossed Amendment Senate",
+    "version_date": "2025-11-10",
+    "govinfo_url": "https://www.govinfo.gov/content/pkg/BILLS-119hr5371eas/xml/BILLS-119hr5371eas.xml",
+    "sha256": "71dfa524bb7ef21aed18b00cedfa9b188af74fe05d486f4c64ce257cbfcd46cc",
+    "bytes": 749413,
+    "stage_attribute_matches": null,
+    "selection_reason": "engrossed by the Senate on the vote date (eas): the measure as passed",
+    "candidates": [
+     "enr@-",
+     "eas@2025-11-10",
+     "pcs@2025-09-19",
+     "eh@2025-09-19",
+     "ih@2025-09-16",
+     "pl@2025-11-13"
+    ]
+   },
+   "cra": {
+    "is_cra": false,
+    "agency": null,
+    "rule_title": null,
+    "title_form": null,
+    "consequence_ref": null,
+    "underlying_rule_source": null,
+    "underlying_rule_sha256": null
+   },
+   "receipt": {
+    "deciding": "On Passage of the Bill H.R. 5371",
+    "heading_success": "If the bill, as amended, passes",
+    "heading_failure": "If the bill does not pass",
+    "yea_means": "A Yea vote is a vote to pass the bill as the Senate amended it.",
+    "nay_means": "A Nay vote is a vote against passing the amended bill.",
+    "next_step": "Because the Senate changed the text, the amended bill goes back to the House, which must agree to the Senate's version before it can become law.",
+    "sources": [
+     {
+      "what": "Senate roll-call record",
+      "url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1191/vote_119_1_00618.xml"
+     },
+     {
+      "what": "Bill status (GovInfo)",
+      "url": "https://www.govinfo.gov/bulkdata/BILLSTATUS/119/hr/BILLSTATUS-119hr5371.xml"
+     },
+     {
+      "what": "Text as voted on (Engrossed Amendment Senate)",
+      "url": "https://www.govinfo.gov/content/pkg/BILLS-119hr5371eas/xml/BILLS-119hr5371eas.xml"
+     },
+     {
+      "what": "Roll call at Voteview",
+      "url": "https://voteview.com/rollcall/RS1190618"
+     }
+    ]
+   },
+   "verification": {
+    "status": "VERIFIED",
+    "checks": [
+     {
+      "check": "senate_record_exists",
+      "ok": true,
+      "detail": ""
+     },
+     {
+      "check": "identity_matches",
+      "ok": true,
+      "detail": "senate 119/1/618 vs voteview 119/1/618"
+     },
+     {
+      "check": "date_compatible",
+      "ok": true,
+      "detail": "senate 2025-11-10 vs voteview 2025-11-10"
+     },
+     {
+      "check": "question_matches",
+      "ok": true,
+      "detail": "'On Passage of the Bill' vs 'On Passage of the Bill'"
+     },
+     {
+      "check": "tallies_match",
+      "ok": true,
+      "detail": "senate 60-40 vs voteview 60-40"
+     },
+     {
+      "check": "threshold_matches",
+      "ok": true,
+      "detail": "1/2 vs 1/2"
+     },
+     {
+      "check": "member_votes_match",
+      "ok": true,
+      "detail": "yea 60/60 nay 40/40; former members matched by name+state+party {'S293': 'G000359', 'S419': 'M001190'}"
+     },
+     {
+      "check": "measure_matches",
+      "ok": true,
+      "detail": "senate 'HR5371' vs voteview 'HR5371'"
+     },
+     {
+      "check": "billstatus_present",
+      "ok": true,
+      "detail": "BILLSTATUS-119hr5371.xml"
+     },
+     {
+      "check": "billstatus_links_vote",
+      "ok": true,
+      "detail": "recorded-vote link to this Senate vote number"
+     }
+    ]
+   },
+   "superseded_utc": "2026-09-24T12:05:13Z"
+  }
+ ],
+ "recorded_utc": "2026-09-24T12:05:13Z"
 }

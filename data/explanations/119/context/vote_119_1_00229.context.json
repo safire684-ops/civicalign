@@ -1,5 +1,5 @@
 {
- "schema": "civicalign.context/1.0",
+ "schema": "civicalign.context/1.1",
  "vote": {
   "congress": 119,
   "session": 1,
@@ -18,17 +18,29 @@
    "legal_doc": "usc-chapter",
    "cite": "usc-chapter/5/8",
    "text": "chapter 8",
-   "amendatory": false,
+   "location": [],
+   "in_quoted_text": false,
+   "scope": "unparsed",
+   "pinpoint": [],
+   "display_matches_cite": false,
+   "relationship": "CROSS_REFERENCE_REQUIRED",
+   "basis": "operative reference with no narrower rule (fail closed: content required)",
    "pl_section": null,
    "pl_division": null
   }
  ],
+ "citation_gaps": [],
  "selection": {
-  "policy": "cra: the resolution's own text and the CRA consequence section; cited authorities are not extracted",
+  "policy": "cra: the resolution's own text and the CRA consequence section; cited authorities are tracked, not extracted",
   "section_cap": 12,
+  "full_section_max_chars": 50000,
   "required": [],
+  "tracked_only": [],
+  "relationships": {},
+  "bases": {},
   "cited": [],
   "amended": [],
+  "unresolved_citations": [],
   "status": "ok"
  },
  "release_point": {
@@ -65,7 +77,7 @@
    "fragment_sha256": "428e76f02b92afb745472c99f9d0f3059376320e60727f9e4f10a30788be6daf",
    "bytes": 33022,
    "heading": "Congressional review",
-   "relationship": "cra_statutory_consequence",
+   "relationship": "SUPPORTING_CONTEXT",
    "status": "fetched",
    "in_force_check": {
     "status": "ok",
@@ -73,7 +85,9 @@
     "intervening": [],
     "affected_by": [],
     "check": "no intervening release point"
-   }
+   },
+   "inclusion": "CONTENT_INCLUDED_FOR_GENERATION",
+   "basis": "fixed rule: the CRA consequence section in force at the vote"
   },
   "underlying_rule": {
    "status": "RULE_BOUND",
@@ -102,6 +116,128 @@
  "generation": {
   "status": "READY_WITH_LIMITS"
  },
- "history": [],
- "recorded_utc": "2026-09-24T03:29:19Z"
+ "metrics": {
+  "voted_text_chars": 2625,
+  "context_chars": 32792,
+  "official_summary_chars": 0,
+  "total_source_chars": 35417,
+  "source_count": 2,
+  "included_context_fragment_count": 1,
+  "hierarchy_fragment_count": 0,
+  "tracked_reference_count": 0
+ },
+ "budget": {
+  "review_threshold_chars": 150000,
+  "status": "WITHIN_BUDGET",
+  "rule": "no truncation; a packet over the threshold needs a recorded human review before generation"
+ },
+ "history": [
+  {
+   "schema": "civicalign.context/1.0",
+   "vote": {
+    "congress": 119,
+    "session": 1,
+    "clerk_number": 229,
+    "date": "2025-05-01",
+    "measure": "SJRES31"
+   },
+   "binding": {
+    "kind": "JOINT_RESOLUTION_PASSAGE",
+    "verification": "VERIFIED",
+    "text_status": "TEXT_BOUND",
+    "text_sha256": "ae5ed421781c9e0d66b012d85ed129316f2179ce8917e3e09006c80a8e1d03e2"
+   },
+   "references": [
+    {
+     "legal_doc": "usc-chapter",
+     "cite": "usc-chapter/5/8",
+     "text": "chapter 8",
+     "amendatory": false,
+     "pl_section": null,
+     "pl_division": null
+    }
+   ],
+   "selection": {
+    "policy": "cra: the resolution's own text and the CRA consequence section; cited authorities are not extracted",
+    "section_cap": 12,
+    "required": [],
+    "cited": [],
+    "amended": [],
+    "status": "ok"
+   },
+   "release_point": {
+    "label": "119-4",
+    "date": "2025-03-15",
+    "note": "latest release point on or before the vote; per-section archives may come from an earlier published one"
+   },
+   "existing_law_context": [],
+   "public_laws": [],
+   "official_summary": {
+    "status": "available",
+    "version_code": "00",
+    "action_desc": "Introduced in Senate",
+    "action_date": "2025-03-06",
+    "sha256": "8adae57d052b6a548e49aa1f0d6b6f8f7dcd7a5f4efe12110658a6a8c98e6f2f",
+    "version_relationship": "PRE_AMENDMENT",
+    "usable": false
+   },
+   "cra": {
+    "mode": "rule_bound",
+    "rule_status": "RULE_BOUND",
+    "consequence_source": {
+     "type": "us_code",
+     "identifier": "/us/usc/t5/s801",
+     "title": "5",
+     "section": "801",
+     "as_of": {
+      "release_point": "119-4",
+      "date": "2025-03-15",
+      "rule": "latest OLRC release point on or before the vote with a published archive; intervening laws checked against the classification table"
+     },
+     "source_url": "https://uscode.house.gov/download/releasepoints/us/pl/119/4/xml_usc05@119-4.zip",
+     "archive_sha256": "67b23ff2bb7b69db1c9aa892dcfdf0fb378b8aa042d097cafb20931596149f82",
+     "fragment_sha256": "428e76f02b92afb745472c99f9d0f3059376320e60727f9e4f10a30788be6daf",
+     "bytes": 33022,
+     "heading": "Congressional review",
+     "relationship": "cra_statutory_consequence",
+     "status": "fetched",
+     "in_force_check": {
+      "status": "ok",
+      "archive": "xml_usc05@119-4.zip",
+      "intervening": [],
+      "affected_by": [],
+      "check": "no intervening release point"
+     }
+    },
+    "underlying_rule": {
+     "status": "RULE_BOUND",
+     "citation": "89 FR 73293",
+     "document_number": "2024-20074",
+     "fr_title": "Review of Final Rule Reclassification of Major Sources as Area Sources Under Section 112 of the Clean Air Act",
+     "type": "Rule",
+     "publication_date": "2024-09-10",
+     "agencies": [
+      "Environmental Protection Agency"
+     ],
+     "source_url": "https://www.federalregister.gov/documents/2024/09/10/2024-20074/review-of-final-rule-reclassification-of-major-sources-as-area-sources-under-section-112-of-the",
+     "full_text_xml_url": "https://www.federalregister.gov/documents/full_text/xml/2024/09/10/2024-20074.xml",
+     "sha256": "b5b8f3cf5ecfafd5eb918c377e59d3f07f7e41a886f7ad1c66f67dbaad7b0772",
+     "bytes": 129031
+    },
+    "gao_determination": null
+   },
+   "completeness": {
+    "status": "LIMITED",
+    "missing": [],
+    "notes": [
+     "CRA: the resolution's own effect may be explained; the underlying rule's substance may not unless the rule is bound and separately verified"
+    ]
+   },
+   "generation": {
+    "status": "READY_WITH_LIMITS"
+   },
+   "superseded_utc": "2026-09-24T12:22:16Z"
+  }
+ ],
+ "recorded_utc": "2026-09-24T12:22:16Z"
 }
