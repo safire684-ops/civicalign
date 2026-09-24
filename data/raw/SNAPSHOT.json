@@ -1,5 +1,5 @@
 {
- "run_utc": "2026-09-24T01:06:46Z",
+ "run_utc": "2026-09-24T01:17:47Z",
  "accepted": true,
  "sources": [
   {
@@ -14,7 +14,7 @@
    "content_key": "c2d2b2b44e5406faf4e2129d58a4c957742ade222ffbcdcd4173adfaac5de871",
    "changed": false,
    "content_changed_utc": "2026-09-23T13:05:55Z",
-   "checked_utc": "2026-09-24T01:06:46Z"
+   "checked_utc": "2026-09-24T01:17:47Z"
   },
   {
    "name": "seated senators",
@@ -28,7 +28,7 @@
    "content_key": "19b49014bfbfb0defd3bc7b6ba8e279a63931427af9464b0f014a9bfb541ec5d",
    "changed": false,
    "content_changed_utc": "2026-09-23T13:05:55Z",
-   "checked_utc": "2026-09-24T01:06:46Z"
+   "checked_utc": "2026-09-24T01:17:47Z"
   },
   {
    "name": "committee rosters",
@@ -42,7 +42,7 @@
    "content_key": "b478738edf3b3b13bfa4057a1e04e8ea1f53d4e1f7adaf8f446db20102c22b2c",
    "changed": false,
    "content_changed_utc": "2026-09-23T13:05:55Z",
-   "checked_utc": "2026-09-24T01:06:46Z"
+   "checked_utc": "2026-09-24T01:17:47Z"
   },
   {
    "name": "bill flow",
@@ -51,12 +51,12 @@
    "critical": true,
    "vintage": "current Congress; GovInfo republishes daily",
    "bytes": 12888273,
-   "previous_bytes": 12887506,
+   "previous_bytes": 12888273,
    "sha256": "4ba0e45d67749076b199e6744918399292a345047181241e84e88183d6172e08",
    "content_key": "72573cb9b46152600595cbd3467f9d6d62c1b1bb3b72edaa66c69c82dd96252a",
-   "changed": true,
+   "changed": false,
    "content_changed_utc": "2026-09-24T01:06:46Z",
-   "checked_utc": "2026-09-24T01:06:46Z"
+   "checked_utc": "2026-09-24T01:17:47Z"
   },
   {
    "name": "bill flow (House bills)",
@@ -65,12 +65,12 @@
    "critical": true,
    "vintage": "current Congress; GovInfo republishes daily",
    "bytes": 31767059,
-   "previous_bytes": 31767012,
+   "previous_bytes": 31767059,
    "sha256": "c8192b4f0e97e7dce2ff0fea250c4fbc4da74c378765ad921967b2b58ae308db",
    "content_key": "c51a43007e93b4f37a5c1258a53c220dc6af6bfb7d0290f9e23be975a677e9c5",
-   "changed": true,
+   "changed": false,
    "content_changed_utc": "2026-09-24T01:06:46Z",
-   "checked_utc": "2026-09-24T01:06:46Z"
+   "checked_utc": "2026-09-24T01:17:47Z"
   },
   {
    "name": "floor roll calls",
@@ -84,7 +84,7 @@
    "content_key": "d3bff6948067d7a261cb7aadeae0a56bebf7d89c2ebb108ec2a8797a4f02d6ba",
    "changed": false,
    "content_changed_utc": "2026-09-23T13:05:55Z",
-   "checked_utc": "2026-09-24T01:06:46Z"
+   "checked_utc": "2026-09-24T01:17:47Z"
   },
   {
    "name": "senator votes",
@@ -98,7 +98,7 @@
    "content_key": "bbb79179205500a3ff6260524d5fe20d898e4144f70f99cfe4d587ed9232c7f5",
    "changed": false,
    "content_changed_utc": "2026-09-23T13:05:55Z",
-   "checked_utc": "2026-09-24T01:06:46Z"
+   "checked_utc": "2026-09-24T01:17:47Z"
   },
   {
    "name": "state ideology",
@@ -112,7 +112,7 @@
    "content_key": "3ba4d42dc321fb717f2f86e09074136858753a64a0a546e0c5a468f739cb87e6",
    "changed": false,
    "content_changed_utc": "2026-09-23T13:05:55Z",
-   "checked_utc": "2026-09-24T01:06:46Z"
+   "checked_utc": "2026-09-24T01:17:47Z"
   },
   {
    "name": "election results",
@@ -126,7 +126,7 @@
    "content_key": "9936410a6dd4ecc8be7fe202c6dff5b5f8fee59d88f35ab542ed12879941dcb7",
    "changed": false,
    "content_changed_utc": "2026-09-23T13:05:55Z",
-   "checked_utc": "2026-09-24T01:06:46Z"
+   "checked_utc": "2026-09-24T01:17:47Z"
   },
   {
    "name": "joint resolutions (Senate)",
@@ -135,12 +135,12 @@
    "critical": false,
    "vintage": "current Congress; GovInfo republishes daily",
    "bytes": 530017,
-   "previous_bytes": 0,
+   "previous_bytes": 530017,
    "sha256": "343a9cd18bb4487b99a9a527450981b6241aa6c589dae8e23b055e8b1d2674d4",
    "content_key": "bce92c16566f5874b4c33bc04eb045a90d0723052b8c421a7d0024caab27c4ae",
-   "changed": true,
+   "changed": false,
    "content_changed_utc": "2026-09-24T01:06:46Z",
-   "checked_utc": "2026-09-24T01:06:46Z"
+   "checked_utc": "2026-09-24T01:17:47Z"
   },
   {
    "name": "joint resolutions (House)",
@@ -149,12 +149,12 @@
    "critical": false,
    "vintage": "current Congress; GovInfo republishes daily",
    "bytes": 670531,
-   "previous_bytes": 0,
+   "previous_bytes": 670531,
    "sha256": "5cde3ea1829577d09df53c384de6aa63ebec745fcbf9f79ffab422036032596a",
    "content_key": "2d74d0c44b82877cc7f4361300f96ad60f049beb7eb4703bf8449ac8b2f93f04",
-   "changed": true,
+   "changed": false,
    "content_changed_utc": "2026-09-24T01:06:46Z",
-   "checked_utc": "2026-09-24T01:06:46Z"
+   "checked_utc": "2026-09-24T01:17:47Z"
   },
   {
    "name": "state populations",
@@ -168,7 +168,7 @@
    "content_key": "b8b50bd345d8a5f33d5c8a28c95aeaa0a50971356f000d9b48276a65fd9022a7",
    "changed": false,
    "content_changed_utc": "2026-09-23T13:05:55Z",
-   "checked_utc": "2026-09-24T01:06:46Z"
+   "checked_utc": "2026-09-24T01:17:47Z"
   }
  ]
 }
