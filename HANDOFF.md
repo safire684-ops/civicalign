@@ -249,8 +249,21 @@ the title archives are slow; the workflow only re-verifies the tracked records).
   large-measure policy exists. Citation gaps are detected (a pattern used only
   to find gaps, never to source content): an untagged "N U.S.C. …", a tagged
   cite whose list continues untagged ("8 U.S.C. 1226, 1231(a), or 1357"), or
-  cite text that does not match its structured cite. A gap where content is
-  needed → `unresolved_citations` → PENDING. A Public Law cited only as a
+  cite text that does not match its structured cite. Gaps are counted per
+  citation group; each gap lists the provisions it names and which of them are
+  untagged. A narrow fallback grammar (`relevance.FALLBACK_R1/R2`) recovers
+  exactly two forms, and only when the whole parenthetical matches: R1 "(8
+  U.S.C. 1325 or 1326)", one title and a list of sections; R2 "(<tagged 8
+  U.S.C. 1226>, 1231(a), or 1357)", a tagged citation whose list continues,
+  title inherited from its structured cite. Section numbers are digits plus at
+  most three lower-case letters (no dashes, so no ranges), pinpoints explicit;
+  "et seq.", "note", "App.", chapters, ranges, mixed titles and vague phrases
+  ("that section", "this chapter") are never resolved. Each recovered citation
+  records source `fallback_explicit_usc` (structured ones `structured_xref`),
+  the rule, the exact parenthetical, the voted text's SHA-256, its container
+  element id, the text part and character offsets; it is then classified and
+  bound to the Code in force exactly like a tagged citation. A gap left
+  unresolved where content is needed → `unresolved_citations` → PENDING. A Public Law cited only as a
   whole where content is needed (an amendment to "division A of Public Law
   119-37") is PENDING too.
 - Packet budget: `metrics` (voted_text_chars, context_chars,
@@ -258,8 +271,8 @@ the title archives are slow; the workflow only re-verifies the tracked records).
   included_context_fragment_count, hierarchy_fragment_count,
   tracked_reference_count) and `budget` (REVIEW_REQUIRED above 150,000 source
   characters, `PACKET_REVIEW_CHARS`; never truncated; a flagged packet needs a
-  recorded human review before any Maker reads it). All current packets are
-  WITHIN_BUDGET. A packet's history keeps a digest of each superseded packet
+  recorded human review before any Maker reads it). Every current packet is
+  WITHIN_BUDGET except S.2's (178,614 characters: REVIEW_REQUIRED). A packet's history keeps a digest of each superseded packet
   (hash, metrics, source hashes); the full old packet is in git.
 - The Code in force (`sources/uscode.py`): OLRC release points, one per enacted
   Public Law. Rule: the latest release point on or before the vote **whose
@@ -291,14 +304,13 @@ the title archives are slow; the workflow only re-verifies the tracked records).
   messages are kept out of tracked records, so an offline rerun writes nothing
   when nothing changed. Completeness COMPLETE / LIMITED / PENDING / AMBIGUOUS →
   generation READY_FOR_GENERATION / READY_WITH_LIMITS / SOURCE_CONTEXT_PENDING /
-  SOURCE_CONTEXT_AMBIGUOUS. Today: 9 ready (S.J.Res.10, 37, 49, 71, 77, 81, 88;
-  H.J.Res.142; H.R.4), 27 ready with limits (all CRA), 16 pending (large texts
-  or pre-USLM laws, plus since 24 Sept S.2, S.331 and H.R.7148), 2 ambiguous
-  (S.5 by the in-force rule itself; H.R.6938 by intervening laws). S.2 is
-  pending on two unresolved citations in its "covered unlawful alien"
-  definition; S.331 on 21 U.S.C. 802 and 823, amended but cited only as whole
-  sections of 158 KB and 127 KB; H.R.7148 on an amended date in a Public Law
-  division cited only as a whole.
+  SOURCE_CONTEXT_AMBIGUOUS. Today: 10 ready (S.J.Res.10, 37, 49, 71, 77, 81, 88;
+  H.J.Res.142; S.2; H.R.4), 27 ready with limits (all CRA), 15 pending (large
+  texts or pre-USLM laws, plus since 24 Sept S.331 and H.R.7148), 2 ambiguous
+  (S.5 by the in-force rule itself; H.R.6938 by intervening laws). S.331 is
+  pending on 21 U.S.C. 802 and 823, amended but cited only as whole sections of
+  158 KB and 127 KB; H.R.7148 on an amended date in a Public Law division cited
+  only as a whole.
 - Raw cache: `data/raw/explanations/` (Senate XML, texts, title archives,
   release-point pages, classification tables, law XML, FR queries and documents;
   about 360 MB, ignored by git) with `MANIFEST.json`; immutable artefacts are
@@ -306,9 +318,13 @@ the title archives are slow; the workflow only re-verifies the tracked records).
 
 **Decisions on record.** First Maker/Checker cohort: the 8 self-contained
 resolutions (S.J.Res.10, 37, 49, 71, 77, 81, 88; H.J.Res.142) + S.2 + H.R.4.
-Since the 24 Sept correction pass nine are READY with COMPLETE packets and S.2
-is SOURCE_CONTEXT_PENDING; no substitute was added, and what to do about S.2
-is an open decision. Before the pass S.2's packet was 974 KB because the whole
+All ten are READY_FOR_GENERATION with COMPLETE packets. S.2 was pending
+after the first correction pass (its "covered unlawful alien" definition names
+five provisions in two citation groups, four of them untagged: 8 U.S.C.
+1231(a), 1357, 1325, 1326); the fallback grammar recovered them and each bound
+to release point 119-95, so S.2 is complete again. Its packet is over the
+review threshold and needs a recorded human review before Stage 3 reads it.
+Before the first pass S.2's packet was 974 KB because the whole
 of 8 U.S.C. 1182 (680 KB, more than half of it OLRC notes) was included for a
 citation of 1182(a)(2) inside a definition; that paragraph is 13.6 KB.
 S.J.Res.10 and 71 carried 50 U.S.C. 1601 (the first section of an "et seq."
@@ -317,8 +333,8 @@ an "et seq." cite. All three are now tracked, not included. S.5 stays ambiguous;
 law. CRA explanations wait for a separate validation cohort (one rule-bound,
 one GAO-deemed) and are never published before it passes.
 
-**Not built.** Maker, Checker, the evaluation run, any UI change, a parser
-for untagged statutory citations, the large-measure section-selection policy, Statutes at Large for pre-USLM laws,
+**Not built.** Maker, Checker, the evaluation run, any UI change, citation
+forms beyond the two fallback rules, the large-measure section-selection policy, Statutes at Large for pre-USLM laws,
 retrieval of GAO opinions from the Congressional Record. When Stage 3 starts:
 the Maker runs sandboxed on the packet alone; the Checker uses a different
 prompt (ideally a different model) from the Maker; model provider, prompt
@@ -420,10 +436,11 @@ de-duplication guard (104 Voteview rows for 100 seats) is in
   `test_peers.py` (the peer rule, caucus grouping, thresholds), `test_binding.py`
   and `test_context.py` (Pillar 1, including every origin/result/change
   combination of the next step and the relevance classes), `test_readme.py`
-  (the README describes the current product), `test_update_chain.py`, `test_supervisor.py`,
+  (the README describes the current product), `test_docs.py` (README, HANDOFF
+  and METHODOLOGY name retired methods only as retired), `test_update_chain.py`, `test_supervisor.py`,
   `test_independent.py`, `test_floor_votes.py`, `test_math.py`,
   `test_regressions.py`, `test_representation.py`, `test_uncertainty.py`,
-  `test_whitepaper.py`. 275 pass as of this handoff; supervisor 36/36; verify
+  `test_whitepaper.py`. 284 pass as of this handoff; supervisor 36/36; verify
   12/12. The supervisor re-derives every binding's result and next step with
   its own code, re-cuts every node and lead-in from the cached archive with
   its own scanner, re-checks the relevance rules and gap scan against the
@@ -431,22 +448,14 @@ de-duplication guard (104 Voteview rows for 100 seats) is in
 
 ## Open items
 
-- **S.2 and the first cohort (decision needed before Stage 3).** S.2's
-  definition of "covered unlawful alien" (sec. 202(9)(D)) cites 8 U.S.C.
-  1231(a) and 1357 in a list whose first item alone is tagged, and 8 U.S.C.
-  1325 and 1326 with no tag at all. Options: run Stage 3 on the nine ready
-  cases; allow definitional citations to be repeated in the bill's own words
-  without their content (S.2 would become READY_WITH_LIMITS); or build a
-  narrow, tested parser for parenthetical U.S.C. citations. Resolved, S.2's
-  packet would be about 115,000 source characters, under the review threshold.
-- `METHODOLOGY.md` (repo only; the published report is built from
-  `demo/methodology.template.html`) still has passages written around a
-  senator-to-state distance and needs the clean-up the README got.
-
-- Pillar 1 Stage 3 and after: Maker/Checker on the ten-case cohort, then the
-  CRA validation cohort, then a large-measure section-selection policy (13
-  votes pending on it), Statutes at Large for pre-USLM laws, GAO opinion
-  retrieval from the Congressional Record (GovInfo CREC by date and page).
+- **S.2 packet review (before Stage 3 reads it).** 178,614 source characters
+  (text 23,118; law 153,677; CRS summary 1,819), over the 150,000 threshold.
+  The largest parts are whole sections the definition cites without a pinpoint
+  (8 U.S.C. 1226, 36,859; 1357, 28,697; 1326, 18,648; 1325, 9,781). About
+  46,000 of those characters are OLRC notes appended to the sections; they
+  were kept because statutory notes can be law (for example, 1326's note on
+  what an order of removal includes) and dropping them would be a new policy.
+  Needs a person to confirm the size or decide a notes policy.
 - The peer rule leaves three senators without a comparison (both Wyoming
   senators; Maine's Republican) and nine with window-dependent conclusions; the
   page says so for each.
@@ -495,6 +504,11 @@ de-duplication guard (104 Voteview rows for 100 seats) is in
   cross-window check), with the survey estimate as separate context; "same
   party" was corrected to caucus groups with fail-closed grouping and the
   30-vote wording became a display rule. Version 31 is the Pillar 4 baseline.
+- 24 Sept, final pre-Stage-3 pass: narrow fallback grammar for untagged
+  U.S.C. citations with provenance; S.2 complete again (review flag); the
+  first cohort is all ten; METHODOLOGY.md corrected (peer comparison current,
+  regression and alignment score labelled retired, voter estimate as separate
+  context); cross-document test added.
 - 24 Sept, pre-Stage-3 correction pass: deterministic result and next-step
   fields replace the kind-only sentence; citation relevance classes,
   node-level law extraction, gap detection, the 50,000-character whole-section

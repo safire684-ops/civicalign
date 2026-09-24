@@ -31,6 +31,7 @@ deterministically. Such gaps are detected here (a pattern match used ONLY to fin
 gaps, never to source content); in a location that needs content they hold the
 context at SOURCE_CONTEXT_PENDING.
 """
+import hashlib
 import io
 import re
 import xml.etree.ElementTree as ET
@@ -185,16 +186,72 @@ def node_identifier(title: str, section: str, pinpoint: list[str]) -> str:
     return f"/us/usc/t{title}/s{section}" + "".join(f"/{p}" for p in pinpoint)
 
 
+# ---- fallback: explicit U.S. Code citations the XML leaves untagged ---------------
+#
+# Structured external-xref citations are always preferred. This narrow grammar
+# covers only the two forms found in voted texts, and only when the whole
+# parenthetical matches it; anything else stays an unresolved gap:
+#   R1  "(8 U.S.C. 1325 or 1326)"                 one title, a list of sections
+#   R2  "(<xref>8 U.S.C. 1226</xref>, 1231(a), or 1357)"
+#                                                  a tagged citation whose list continues
+#                                                  untagged; the title is inherited from it
+#   REF = a section number (digits, then at most three lower-case letters; no
+#         dashes, so no ranges or hyphenated numbers) with optional explicit
+#         pinpoints "(a)(1)"; separators ", ", " or ", " and ", ", or ", ", and ".
+# Vague references ("that section", "this chapter", "applicable law"), "et seq.",
+# "note", "App.", chapter citations, ranges and mixed titles are never resolved.
+_REF = r"[0-9]+[a-z]{0,3}(?:\([0-9A-Za-z]{1,4}\))*"
+_SEP = r"(?:,\s+or\s+|,\s+and\s+|\s+or\s+|\s+and\s+|,\s+)"
+FALLBACK_R1 = re.compile(r"\((?P<title>[0-9]{1,2}) U\.S\.C\. (?P<refs>" + _REF + "(?:" + _SEP + _REF + r")*)\)")
+FALLBACK_R2 = re.compile(r"(?P<refs>(?:" + _SEP + _REF + r")+)\)")
+RULE_R1 = "R1: parenthetical of one title and a list of sections"
+RULE_R2 = "R2: list continuing after a tagged citation; title inherited from its structured cite"
+
+
+def _clean(text: str) -> str:
+    """Trailing punctuation off a citation's text, keeping a pinpoint's own ")"."""
+    t = _norm(text).rstrip(".;,")
+    while t.endswith(")") and t.count(")") > t.count("("):
+        t = t[:-1].rstrip(".;,")
+    return t
+
+
+def split_refs(refs: str) -> list[tuple[str, list[str]]]:
+    """'1226, 1231(a), or 1357' -> [('1226', []), ('1231', ['a']), ('1357', [])]."""
+    out = []
+    for m in re.finditer(_REF, refs):
+        out.append((re.match(r"[0-9]+[a-z]{0,3}", m.group(0)).group(0), re.findall(r"\(([0-9A-Za-z]+)\)", m.group(0))))
+    return out
+
+
+def _container(anc: list[ET.Element]) -> dict:
+    holder = next((a for a in anc if a.get("id")), None)
+    return {"tag": anc[0].tag if anc else None, "id": holder.get("id") if holder is not None else None,
+            "id_on": holder.tag if holder is not None else None}
+
+
+def _fallback_ref(title, section, pins, rule, fragment, sha, loc, rel, basis, container, part, start, end) -> dict:
+    return {"legal_doc": "usc", "cite": f"usc/{title}/{section}", "text": f"{title} U.S.C. {section}" + "".join(f"({p})" for p in pins),
+            "location": loc["path"], "in_quoted_text": loc["in_quoted_text"], "scope": "node" if pins else "section", "pinpoint": pins,
+            "display_matches_cite": True, "relationship": rel, "basis": basis, "pl_section": None, "pl_division": None,
+            "source": "fallback_explicit_usc", "rule": rule, "source_fragment": fragment, "source_sha256": sha,
+            "container": container, "text_part": part, "char_start": start, "char_end": end}
+
+
 def analyse(xml_bytes: bytes) -> dict:
-    """Every tagged citation with its location, scope and relationship, plus the
-    statutory citations the XML leaves untagged or only partly structured."""
+    """Every tagged citation with its location, scope and relationship; the
+    statutory citations the XML leaves untagged or only partly structured (one
+    gap per citation group); and, for groups the narrow fallback grammar
+    recognises, the explicit citations it recovers, with full provenance."""
     root = ET.parse(io.BytesIO(xml_bytes)).getroot()
     parent = {c: p for p in root.iter() for c in p}
-    refs, gaps = [], []
+    sha = hashlib.sha256(xml_bytes).hexdigest()
+    refs, gaps, fallback = [], [], []
     for x in root.iter("external-xref"):
         ld, cite = x.get("legal-doc", ""), x.get("parsable-cite", "")
         display = _norm("".join(x.itertext()))
-        loc = _location(_ancestors(x, parent))
+        anc = _ancestors(x, parent)
+        loc = _location(anc)
         block = loc["block"]
         block_text = _norm("".join(block.itertext())) if block is not None else ""
         before = _text_before(block, x) if block is not None else ""
@@ -209,25 +266,45 @@ def analyse(xml_bytes: bytes) -> dict:
         rel, basis = classify(before, block_text, loc, d["scope"], ld)
         refs.append({"legal_doc": ld, "cite": cite, "text": display, "location": loc["path"], "in_quoted_text": loc["in_quoted_text"],
                      "scope": d["scope"], "pinpoint": d["pinpoint"], "display_matches_cite": d["display_matches_cite"],
-                     "relationship": rel, "basis": basis, "pl_section": d.get("pl_section"), "pl_division": d.get("pl_division")})
+                     "relationship": rel, "basis": basis, "pl_section": d.get("pl_section"), "pl_division": d.get("pl_division"),
+                     "source": "structured_xref"})
         cont = CONTINUES_LIST.match(x.tail or "")
         if ld == "usc" and cont:
-            gaps.append({"kind": "citation_list_continues_untagged", "text": _norm(display + cont.group(0)).rstrip(").;,"), "cite": cite, "location": loc["path"],
-                         "relationship": rel, "basis": basis})
+            gap = {"kind": "citation_list_continues_untagged", "text": _clean(display + cont.group(0)), "cite": cite, "location": loc["path"],
+                   "relationship": rel, "basis": basis, "provisions": [], "untagged_provisions": [], "resolved": False, "rule": None}
+            r2 = FALLBACK_R2.match(x.tail or "")
+            title = (cite.split("/") + ["", ""])[1]
+            if r2 and before.endswith("(") and d["display_matches_cite"] and d["scope"] in ("section", "node") and re.fullmatch(r"[0-9]{1,2}", title):
+                fragment = "(" + display + r2.group(0)
+                gap["provisions"] = [display] + [f"{title} U.S.C. {sec}" + "".join(f"({p})" for p in pins) for sec, pins in split_refs(r2.group("refs"))]
+                gap["untagged_provisions"] = gap["provisions"][1:]
+                gap.update({"resolved": True, "rule": RULE_R2})
+                for sec, pins in split_refs(r2.group("refs")):
+                    fallback.append(_fallback_ref(title, sec, pins, RULE_R2, fragment, sha, loc, rel, basis, _container(anc),
+                                                  "tail of external-xref", 0, r2.end()))
+            gaps.append(gap)
         if ld == "usc" and not d["display_matches_cite"]:
             gaps.append({"kind": "citation_text_not_parsed", "text": display, "cite": cite, "location": loc["path"],
-                         "relationship": rel, "basis": basis})
+                         "relationship": rel, "basis": basis, "provisions": [], "untagged_provisions": [], "resolved": False, "rule": None})
     # untagged "N U.S.C. …" citations: text directly inside an element (its .text) or
     # after it inside its parent (its .tail), never the text of an external-xref itself
     for el in root.iter():
-        chunks = [] if el.tag == "external-xref" else [(el.text, [el] + _ancestors(el, parent))]
+        chunks = [] if el.tag == "external-xref" else [(el.text, [el] + _ancestors(el, parent), "text")]
         if parent.get(el) is not None:
-            chunks.append((el.tail, _ancestors(el, parent)))
-        for chunk, anc in chunks:
+            chunks.append((el.tail, _ancestors(el, parent), f"tail of {el.tag}"))
+        for chunk, anc, part in chunks:
             for m in UNTAGGED_USC.finditer(chunk or ""):
                 loc = _location(anc)
                 block_text = _norm("".join(loc["block"].itertext())) if loc["block"] is not None else ""
                 rel, basis = classify(_norm(chunk[:m.start()]), block_text, loc, "section", "usc")
-                gaps.append({"kind": "untagged_citation", "text": _norm(m.group(0)).rstrip(").;,"), "cite": None, "location": loc["path"],
-                             "relationship": rel, "basis": basis})
-    return {"references": refs, "gaps": gaps}
+                gap = {"kind": "untagged_citation", "text": _clean(m.group(0)), "cite": None, "location": loc["path"],
+                       "relationship": rel, "basis": basis, "provisions": [], "untagged_provisions": [], "resolved": False, "rule": None}
+                r1 = FALLBACK_R1.match(chunk, m.start() - 1) if m.start() > 0 else None
+                if r1:
+                    title = r1.group("title")
+                    gap["provisions"] = gap["untagged_provisions"] = [f"{title} U.S.C. {sec}" + "".join(f"({p})" for p in pins) for sec, pins in split_refs(r1.group("refs"))]
+                    gap.update({"resolved": True, "rule": RULE_R1})
+                    for sec, pins in split_refs(r1.group("refs")):
+                        fallback.append(_fallback_ref(title, sec, pins, RULE_R1, r1.group(0), sha, loc, rel, basis, _container(anc), part, r1.start(), r1.end()))
+                gaps.append(gap)
+    return {"references": refs + fallback, "gaps": gaps}

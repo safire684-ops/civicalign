@@ -29,7 +29,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites an Act or chapter as a whole (et seq.)",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -47,7 +48,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": "division F"
+   "pl_division": "division F",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -65,7 +67,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": "division A"
+   "pl_division": "division A",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -83,7 +86,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": "division F"
+   "pl_division": "division F",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -101,7 +105,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": "division A"
+   "pl_division": "division A",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -119,7 +124,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": "division A"
+   "pl_division": "division A",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -137,7 +143,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": "division A"
+   "pl_division": "division A",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -155,7 +162,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": "division A"
+   "pl_division": "division A",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -173,7 +181,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": "division A"
+   "pl_division": "division A",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -191,7 +200,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": "division A"
+   "pl_division": "division A",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -209,7 +219,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": "division A"
+   "pl_division": "division A",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -227,7 +238,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": "division A"
+   "pl_division": "division A",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -245,7 +257,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": "division A"
+   "pl_division": "division A",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -263,7 +276,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": "division A"
+   "pl_division": "division A",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -281,7 +295,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": "division A"
+   "pl_division": "division A",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -299,7 +314,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": "division A"
+   "pl_division": "division A",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -317,7 +333,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": "division A"
+   "pl_division": "division A",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -335,7 +352,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": "division A"
+   "pl_division": "division A",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -353,7 +371,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": "division A"
+   "pl_division": "division A",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -371,7 +390,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": "division A"
+   "pl_division": "division A",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -390,7 +410,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -409,7 +430,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   }
  ],
  "citation_gaps": [],
@@ -431,11 +453,21 @@
     "cites an Act or chapter as a whole (et seq.)"
    ]
   },
+  "cited_as": {
+   "/us/usc/t2/s682": [
+    {
+     "text": "2 U.S.C. 682 et seq.",
+     "source": "structured_xref",
+     "rule": null
+    }
+   ]
+  },
   "cited": [
    "/us/usc/t2/s682"
   ],
   "amended": [],
   "unresolved_citations": [],
+  "resolved_by_fallback": [],
   "status": "ok"
  },
  "release_point": {
@@ -482,7 +514,14 @@
    "inclusion": "REFERENCE_TRACKED",
    "hierarchy": [],
    "section_fragment_sha256": "0b779e5fc0a7b98e551debbf1484ec7fb1cca2f11fc2f6e2b1c54e4303cb1f3a",
-   "section_bytes": 5036
+   "section_bytes": 5036,
+   "cited_as": [
+    {
+     "text": "2 U.S.C. 682 et seq.",
+     "source": "structured_xref",
+     "rule": null
+    }
+   ]
   }
  ],
  "public_laws": [
@@ -868,7 +907,576 @@
     "status": "READY_FOR_GENERATION"
    },
    "superseded_utc": "2026-09-24T12:22:17Z"
+  },
+  {
+   "schema": "civicalign.context/1.1",
+   "vote": {
+    "congress": 119,
+    "session": 1,
+    "clerk_number": 411,
+    "date": "2025-07-17",
+    "measure": "HR4"
+   },
+   "binding": {
+    "kind": "PASSAGE_AS_AMENDED",
+    "verification": "VERIFIED",
+    "text_status": "TEXT_BOUND",
+    "text_sha256": "d456fc67c51208445d8134c4eeec74decac685cc7454fa1d5dc138b3b5a5fa3e"
+   },
+   "references": [
+    {
+     "legal_doc": "usc",
+     "cite": "usc/2/682",
+     "text": "2 U.S.C. 682 et seq.",
+     "location": [
+      "section:2.",
+      "subsection:(a)"
+     ],
+     "in_quoted_text": false,
+     "scope": "act_as_a_whole",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites an Act or chapter as a whole (et seq.)",
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/118/47",
+     "text": "Public Law 118–47",
+     "location": [
+      "section:2.",
+      "subsection:(b)",
+      "paragraph:(1)"
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": "division F"
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/119/4",
+     "text": "Public Law 119–4",
+     "location": [
+      "section:2.",
+      "subsection:(b)",
+      "paragraph:(2)"
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": "division A"
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/118/47",
+     "text": "Public Law 118–47",
+     "location": [
+      "section:2.",
+      "subsection:(b)",
+      "paragraph:(3)"
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": "division F"
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/119/4",
+     "text": "Public Law 119–4",
+     "location": [
+      "section:2.",
+      "subsection:(b)",
+      "paragraph:(4)"
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": "division A"
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/119/4",
+     "text": "Public Law 119–4",
+     "location": [
+      "section:2.",
+      "subsection:(b)",
+      "paragraph:(5)"
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": "division A"
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/119/4",
+     "text": "Public Law 119–4",
+     "location": [
+      "section:2.",
+      "subsection:(b)",
+      "paragraph:(6)"
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": "division A"
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/119/4",
+     "text": "Public Law 119–4",
+     "location": [
+      "section:2.",
+      "subsection:(b)",
+      "paragraph:(7)"
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": "division A"
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/119/4",
+     "text": "Public Law 119–4",
+     "location": [
+      "section:2.",
+      "subsection:(b)",
+      "paragraph:(8)"
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": "division A"
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/119/4",
+     "text": "Public Law 119–4",
+     "location": [
+      "section:2.",
+      "subsection:(b)",
+      "paragraph:(9)"
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": "division A"
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/119/4",
+     "text": "Public Law 119–4",
+     "location": [
+      "section:2.",
+      "subsection:(b)",
+      "paragraph:(10)"
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": "division A"
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/119/4",
+     "text": "Public Law 119–4",
+     "location": [
+      "section:2.",
+      "subsection:(b)",
+      "paragraph:(11)"
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": "division A"
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/119/4",
+     "text": "Public Law 119–4",
+     "location": [
+      "section:2.",
+      "subsection:(b)",
+      "paragraph:(12)"
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": "division A"
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/119/4",
+     "text": "Public Law 119–4",
+     "location": [
+      "section:2.",
+      "subsection:(b)",
+      "paragraph:(13)"
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": "division A"
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/119/4",
+     "text": "Public Law 119–4",
+     "location": [
+      "section:2.",
+      "subsection:(b)",
+      "paragraph:(14)"
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": "division A"
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/119/4",
+     "text": "Public Law 119–4",
+     "location": [
+      "section:2.",
+      "subsection:(b)",
+      "paragraph:(15)"
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": "division A"
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/119/4",
+     "text": "Public Law 119–4",
+     "location": [
+      "section:2.",
+      "subsection:(b)",
+      "paragraph:(16)"
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": "division A"
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/119/4",
+     "text": "Public Law 119–4",
+     "location": [
+      "section:2.",
+      "subsection:(b)",
+      "paragraph:(17)"
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": "division A"
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/119/4",
+     "text": "Public Law 119–4",
+     "location": [
+      "section:2.",
+      "subsection:(b)",
+      "paragraph:(18)"
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": "division A"
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/119/4",
+     "text": "Public Law 119–4",
+     "location": [
+      "section:2.",
+      "subsection:(b)",
+      "paragraph:(19)"
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": "division A"
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/118/47",
+     "text": "Public Law 118–47",
+     "location": [
+      "section:2.",
+      "subsection:(b)",
+      "paragraph:(20)",
+      "subparagraph:(A)"
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/119/4",
+     "text": "Public Law 119–4",
+     "location": [
+      "section:2.",
+      "subsection:(b)",
+      "paragraph:(20)",
+      "subparagraph:(B)"
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": null
+    }
+   ],
+   "citation_gaps": [],
+   "selection": {
+    "policy": "provisions whose relationship needs content, at the cited node; others tracked only; capped",
+    "section_cap": 12,
+    "full_section_max_chars": 50000,
+    "required": [],
+    "tracked_only": [
+     "/us/usc/t2/s682"
+    ],
+    "relationships": {
+     "/us/usc/t2/s682": [
+      "CROSS_REFERENCE_ONLY"
+     ]
+    },
+    "bases": {
+     "/us/usc/t2/s682": [
+      "cites an Act or chapter as a whole (et seq.)"
+     ]
+    },
+    "cited": [
+     "/us/usc/t2/s682"
+    ],
+    "amended": [],
+    "unresolved_citations": [],
+    "status": "ok"
+   },
+   "release_point": {
+    "label": "119-26",
+    "date": "2025-07-16",
+    "note": "latest release point on or before the vote; per-section archives may come from an earlier published one"
+   },
+   "existing_law_context": [
+    {
+     "type": "us_code",
+     "identifier": "/us/usc/t2/s682",
+     "title": "2",
+     "section": "682",
+     "as_of": {
+      "release_point": "119-18",
+      "date": "2025-06-12",
+      "rule": "latest OLRC release point on or before the vote with a published archive; intervening laws checked against the classification table"
+     },
+     "source_url": "https://uscode.house.gov/download/releasepoints/us/pl/119/18/xml_usc02@119-18.zip",
+     "archive_sha256": "8700f1c68a89a27617c13b2a1e7b9938d2f515733a76794dd5cd8946b1e571f9",
+     "fragment_sha256": "0b779e5fc0a7b98e551debbf1484ec7fb1cca2f11fc2f6e2b1c54e4303cb1f3a",
+     "bytes": 5036,
+     "heading": "Definitions",
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "status": "fetched",
+     "in_force_check": {
+      "status": "ok",
+      "archive": "xml_usc02@119-18.zip",
+      "intervening": [
+       "119-23",
+       "119-26"
+      ],
+      "affected_by": [],
+      "check": "OLRC classification table"
+     },
+     "section_identifier": "/us/usc/t2/s682",
+     "scope": "section",
+     "relationships": [
+      "CROSS_REFERENCE_ONLY"
+     ],
+     "bases": [
+      "cites an Act or chapter as a whole (et seq.)"
+     ],
+     "inclusion": "REFERENCE_TRACKED",
+     "hierarchy": [],
+     "section_fragment_sha256": "0b779e5fc0a7b98e551debbf1484ec7fb1cca2f11fc2f6e2b1c54e4303cb1f3a",
+     "section_bytes": 5036
+    }
+   ],
+   "public_laws": [
+    {
+     "type": "public_law",
+     "cite": "pl/118/47",
+     "congress": 118,
+     "law": 47,
+     "source_url": "https://www.govinfo.gov/content/pkg/PLAW-118publ47/uslm/PLAW-118publ47.xml",
+     "sha256": "c1881917117e38de52ebd13aef206516376a3f53d07a69e1a84b10dd7822907b",
+     "bytes": 2373860,
+     "sections": [],
+     "divisions": [
+      "division F"
+     ],
+     "fragments": [],
+     "status": "identified",
+     "relationships": [
+      "CROSS_REFERENCE_ONLY"
+     ]
+    },
+    {
+     "type": "public_law",
+     "cite": "pl/119/4",
+     "congress": 119,
+     "law": 4,
+     "source_url": "https://www.govinfo.gov/content/pkg/PLAW-119publ4/uslm/PLAW-119publ4.xml",
+     "sha256": "1806832d2d7c6563ae0cc8beb69b8b5536e89f0408682c3a250b0e452e44885e",
+     "bytes": 313404,
+     "sections": [],
+     "divisions": [
+      "division A"
+     ],
+     "fragments": [],
+     "status": "identified",
+     "relationships": [
+      "CROSS_REFERENCE_ONLY"
+     ]
+    }
+   ],
+   "official_summary": {
+    "status": "available",
+    "version_code": "53",
+    "action_desc": "Passed House",
+    "action_date": "2025-06-12",
+    "sha256": "bfa1c1550be5a04f7a671f10aba4216170f46b370e49376abb12a80d4f57df57",
+    "version_relationship": "PRE_AMENDMENT",
+    "usable": false
+   },
+   "cra": {
+    "mode": "not_cra",
+    "rule_status": null,
+    "consequence_source": null,
+    "underlying_rule": null,
+    "gao_determination": null
+   },
+   "completeness": {
+    "status": "COMPLETE",
+    "missing": [],
+    "notes": [
+     "pl/118/47 cited as a whole law (division F): identified and hashed, no section extracted; the Maker may not describe its contents",
+     "pl/119/4 cited as a whole law (division A): identified and hashed, no section extracted; the Maker may not describe its contents"
+    ]
+   },
+   "generation": {
+    "status": "READY_FOR_GENERATION"
+   },
+   "metrics": {
+    "voted_text_chars": 14832,
+    "context_chars": 0,
+    "official_summary_chars": 0,
+    "total_source_chars": 14832,
+    "source_count": 1,
+    "included_context_fragment_count": 0,
+    "hierarchy_fragment_count": 0,
+    "tracked_reference_count": 3
+   },
+   "budget": {
+    "review_threshold_chars": 150000,
+    "status": "WITHIN_BUDGET",
+    "rule": "no truncation; a packet over the threshold needs a recorded human review before generation"
+   },
+   "superseded_utc": "2026-09-24T12:38:05Z"
   }
  ],
- "recorded_utc": "2026-09-24T12:22:17Z"
+ "recorded_utc": "2026-09-24T12:38:05Z"
 }

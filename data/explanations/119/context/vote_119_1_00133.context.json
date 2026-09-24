@@ -30,7 +30,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": "division B"
+   "pl_division": "division B",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -48,7 +49,8 @@
    "relationship": "AMENDED_TARGET",
    "basis": "amendatory instruction that inserts, adds or redesignates",
    "pl_section": null,
-   "pl_division": "division C"
+   "pl_division": "division C",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -66,7 +68,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": "division C"
+   "pl_division": "division C",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -84,7 +87,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": "division A"
+   "pl_division": "division A",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -102,7 +106,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": "division D"
+   "pl_division": "division D",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -120,7 +125,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": "division B"
+   "pl_division": "division B",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -138,7 +144,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": "division C"
+   "pl_division": "division C",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -156,7 +163,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": "division C"
+   "pl_division": "division C",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -174,7 +182,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": "division E"
+   "pl_division": "division E",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -192,7 +201,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": "division D"
+   "pl_division": "division D",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -210,7 +220,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": "division E"
+   "pl_division": "division E",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -228,7 +239,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": "division E"
+   "pl_division": "division E",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -246,7 +258,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": "division A"
+   "pl_division": "division A",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -264,7 +277,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": "division F"
+   "pl_division": "division F",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -282,7 +296,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": "division F"
+   "pl_division": "division F",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -298,7 +313,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -316,7 +332,8 @@
    "relationship": "CROSS_REFERENCE_REQUIRED",
    "basis": "operative reference with no narrower rule (fail closed: content required)",
    "pl_section": "10",
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "usc",
@@ -332,7 +349,8 @@
    "relationship": "CROSS_REFERENCE_REQUIRED",
    "basis": "operative reference with no narrower rule (fail closed: content required)",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "usc",
@@ -348,7 +366,8 @@
    "relationship": "CROSS_REFERENCE_REQUIRED",
    "basis": "operative reference with no narrower rule (fail closed: content required)",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "usc",
@@ -364,7 +383,8 @@
    "relationship": "CROSS_REFERENCE_REQUIRED",
    "basis": "operative reference with no narrower rule (fail closed: content required)",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "usc",
@@ -383,7 +403,8 @@
    "relationship": "CROSS_REFERENCE_REQUIRED",
    "basis": "operative reference with no narrower rule (fail closed: content required)",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -400,7 +421,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": "division B"
+   "pl_division": "division B",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -417,7 +439,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": "division J"
+   "pl_division": "division J",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -434,7 +457,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": "division G"
+   "pl_division": "division G",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -451,7 +475,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": "division A"
+   "pl_division": "division A",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "usc",
@@ -467,7 +492,8 @@
    "relationship": "CROSS_REFERENCE_REQUIRED",
    "basis": "operative reference with no narrower rule (fail closed: content required)",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -483,7 +509,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "usc-chapter",
@@ -499,7 +526,8 @@
    "relationship": "CROSS_REFERENCE_REQUIRED",
    "basis": "operative reference with no narrower rule (fail closed: content required)",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "usc",
@@ -516,7 +544,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites an Act or chapter as a whole (et seq.)",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -533,7 +562,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "usc",
@@ -550,7 +580,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites an Act or chapter as a whole (et seq.)",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "usc",
@@ -567,7 +598,8 @@
    "relationship": "REPLACED_TEXT",
    "basis": "amendatory instruction that strikes, repeals or rewrites existing text",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "usc",
@@ -584,7 +616,8 @@
    "relationship": "REPLACED_TEXT",
    "basis": "amendatory instruction that strikes, repeals or rewrites existing text",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -601,7 +634,8 @@
    "relationship": "REPLACED_TEXT",
    "basis": "amendatory instruction that strikes, repeals or rewrites existing text",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -617,7 +651,8 @@
    "relationship": "REPLACED_TEXT",
    "basis": "amendatory instruction that strikes, repeals or rewrites existing text",
    "pl_section": null,
-   "pl_division": "division B"
+   "pl_division": "division B",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "usc",
@@ -639,7 +674,8 @@
    "relationship": "CROSS_REFERENCE_REQUIRED",
    "basis": "operative reference with no narrower rule (fail closed: content required)",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -655,7 +691,8 @@
    "relationship": "AMENDED_TARGET",
    "basis": "amendatory instruction that inserts, adds or redesignates",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "usc",
@@ -671,7 +708,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "names an instrument by its statutory home ('Program under')",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -687,7 +725,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": "division A"
+   "pl_division": "division A",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -703,7 +742,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": "division A"
+   "pl_division": "division A",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -719,7 +759,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": "division A"
+   "pl_division": "division A",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -735,7 +776,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": "division A"
+   "pl_division": "division A",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -751,7 +793,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": "division A"
+   "pl_division": "division A",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -767,7 +810,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": "division A"
+   "pl_division": "division A",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -783,7 +827,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -799,7 +844,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": "division A"
+   "pl_division": "division A",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -816,7 +862,8 @@
    "relationship": "REPLACED_TEXT",
    "basis": "amendatory instruction that strikes, repeals or rewrites existing text",
    "pl_section": null,
-   "pl_division": "division A"
+   "pl_division": "division A",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -833,7 +880,8 @@
    "relationship": "REPLACED_TEXT",
    "basis": "amendatory instruction that strikes, repeals or rewrites existing text",
    "pl_section": null,
-   "pl_division": "division A"
+   "pl_division": "division A",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -851,7 +899,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": "division A"
+   "pl_division": "division A",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -867,7 +916,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": "division A"
+   "pl_division": "division A",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -883,7 +933,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": "division A"
+   "pl_division": "division A",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -899,7 +950,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": "division A"
+   "pl_division": "division A",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -915,7 +967,8 @@
    "relationship": "REPLACED_TEXT",
    "basis": "amendatory instruction that strikes, repeals or rewrites existing text",
    "pl_section": null,
-   "pl_division": "division A"
+   "pl_division": "division A",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -931,7 +984,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": "division A"
+   "pl_division": "division A",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -949,7 +1003,8 @@
    "relationship": "CROSS_REFERENCE_REQUIRED",
    "basis": "operative reference with no narrower rule (fail closed: content required)",
    "pl_section": "905",
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -965,7 +1020,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": "division A"
+   "pl_division": "division A",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -982,7 +1038,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": "division A"
+   "pl_division": "division A",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -999,7 +1056,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": "division A"
+   "pl_division": "division A",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -1016,7 +1074,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": "division D"
+   "pl_division": "division D",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -1033,7 +1092,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": "division D"
+   "pl_division": "division D",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -1049,7 +1109,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -1065,7 +1126,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": "division D"
+   "pl_division": "division D",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -1081,7 +1143,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": "title X"
+   "pl_division": "title X",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -1100,7 +1163,8 @@
    "relationship": "CROSS_REFERENCE_REQUIRED",
    "basis": "operative provision applies or acts under it ('In accordance with')",
    "pl_section": "4007",
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -1119,7 +1183,8 @@
    "relationship": "CROSS_REFERENCE_REQUIRED",
    "basis": "operative provision applies or acts under it ('In accordance with')",
    "pl_section": "4009",
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -1135,7 +1200,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": "division B"
+   "pl_division": "division B",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -1152,7 +1218,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": "division B"
+   "pl_division": "division B",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -1169,7 +1236,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": "division B"
+   "pl_division": "division B",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -1185,7 +1253,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": "division B"
+   "pl_division": "division B",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "usc",
@@ -1203,7 +1272,8 @@
    "relationship": "CROSS_REFERENCE_REQUIRED",
    "basis": "operative provision applies or acts under it ('pursuant to')",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -1219,7 +1289,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": "division B"
+   "pl_division": "division B",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -1236,7 +1307,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": "division B"
+   "pl_division": "division B",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -1253,7 +1325,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": "division E"
+   "pl_division": "division E",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -1269,7 +1342,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": "division B"
+   "pl_division": "division B",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -1285,7 +1359,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": "title III"
+   "pl_division": "title III",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -1302,7 +1377,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": "division C"
+   "pl_division": "division C",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "usc",
@@ -1319,7 +1395,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites an Act or chapter as a whole (et seq.)",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -1335,7 +1412,8 @@
    "relationship": "REPLACED_TEXT",
    "basis": "amendatory instruction that strikes, repeals or rewrites existing text",
    "pl_section": null,
-   "pl_division": "division K"
+   "pl_division": "division K",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -1351,7 +1429,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": "division C"
+   "pl_division": "division C",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -1367,7 +1446,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": "division C"
+   "pl_division": "division C",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -1383,7 +1463,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": "division C"
+   "pl_division": "division C",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -1399,7 +1480,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": "division F"
+   "pl_division": "division F",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -1416,7 +1498,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -1433,7 +1516,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": "division A"
+   "pl_division": "division A",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "usc",
@@ -1452,7 +1536,8 @@
    "relationship": "CROSS_REFERENCE_REQUIRED",
    "basis": "operative reference with no narrower rule (fail closed: content required)",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -1469,7 +1554,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": "division E"
+   "pl_division": "division E",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -1486,7 +1572,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": "division E"
+   "pl_division": "division E",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -1503,7 +1590,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": "division E"
+   "pl_division": "division E",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -1520,7 +1608,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": "division E"
+   "pl_division": "division E",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -1537,7 +1626,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": "division E"
+   "pl_division": "division E",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -1554,7 +1644,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": "division B"
+   "pl_division": "division B",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -1570,7 +1661,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": "division G"
+   "pl_division": "division G",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -1587,7 +1679,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": "division D"
+   "pl_division": "division D",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -1604,7 +1697,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": "division D"
+   "pl_division": "division D",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -1621,7 +1715,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": "division D"
+   "pl_division": "division D",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -1637,7 +1732,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": "division D"
+   "pl_division": "division D",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -1655,7 +1751,8 @@
    "relationship": "CROSS_REFERENCE_REQUIRED",
    "basis": "operative provision applies or acts under it ('under')",
    "pl_section": "4002",
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "usc",
@@ -1671,7 +1768,8 @@
    "relationship": "CROSS_REFERENCE_REQUIRED",
    "basis": "operative reference with no narrower rule (fail closed: content required)",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -1687,7 +1785,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": "division D"
+   "pl_division": "division D",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -1703,7 +1802,8 @@
    "relationship": "REPLACED_TEXT",
    "basis": "amendatory instruction that strikes, repeals or rewrites existing text",
    "pl_section": null,
-   "pl_division": "division D"
+   "pl_division": "division D",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -1719,7 +1819,8 @@
    "relationship": "REPLACED_TEXT",
    "basis": "amendatory instruction that strikes, repeals or rewrites existing text",
    "pl_section": null,
-   "pl_division": "division D"
+   "pl_division": "division D",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -1735,7 +1836,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": "division D"
+   "pl_division": "division D",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -1751,7 +1853,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": "division D"
+   "pl_division": "division D",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -1767,7 +1870,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": "division A"
+   "pl_division": "division A",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -1783,7 +1887,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": "division A"
+   "pl_division": "division A",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -1799,7 +1904,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": "division A"
+   "pl_division": "division A",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -1815,7 +1921,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": "division A"
+   "pl_division": "division A",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -1831,7 +1938,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": "division F"
+   "pl_division": "division F",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -1847,7 +1955,8 @@
    "relationship": "AMENDED_TARGET",
    "basis": "amendatory instruction that inserts, adds or redesignates",
    "pl_section": null,
-   "pl_division": "division F"
+   "pl_division": "division F",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -1863,7 +1972,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": "division F"
+   "pl_division": "division F",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -1879,7 +1989,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": "division F"
+   "pl_division": "division F",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -1895,7 +2006,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": "division F"
+   "pl_division": "division F",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -1911,7 +2023,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": "division F"
+   "pl_division": "division F",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -1927,7 +2040,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": "division F"
+   "pl_division": "division F",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -1944,7 +2058,8 @@
    "relationship": "AMENDED_TARGET",
    "basis": "amendatory instruction that inserts, adds or redesignates",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "usc",
@@ -1962,7 +2077,8 @@
    "relationship": "CROSS_REFERENCE_REQUIRED",
    "basis": "operative reference with no narrower rule (fail closed: content required)",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "usc",
@@ -1980,7 +2096,8 @@
    "relationship": "REPLACED_TEXT",
    "basis": "amendatory instruction that strikes, repeals or rewrites existing text",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "usc",
@@ -1997,7 +2114,8 @@
    "relationship": "REPLACED_TEXT",
    "basis": "amendatory instruction that strikes, repeals or rewrites existing text",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -2014,7 +2132,8 @@
    "relationship": "AMENDED_TARGET",
    "basis": "amendatory instruction that inserts, adds or redesignates",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "usc",
@@ -2035,7 +2154,8 @@
    "relationship": "REPLACED_TEXT",
    "basis": "amendatory instruction that strikes, repeals or rewrites existing text",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -2052,7 +2172,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -2071,7 +2192,8 @@
    "relationship": "CROSS_REFERENCE_REQUIRED",
    "basis": "operative reference with no narrower rule (fail closed: content required)",
    "pl_section": "101",
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -2088,7 +2210,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": "division F"
+   "pl_division": "division F",
+   "source": "structured_xref"
   },
   {
    "legal_doc": "usc",
@@ -2108,7 +2231,8 @@
    "relationship": "AMENDED_TARGET",
    "basis": "amendatory instruction that inserts, adds or redesignates",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "usc",
@@ -2128,7 +2252,8 @@
    "relationship": "AMENDED_TARGET",
    "basis": "amendatory instruction that inserts, adds or redesignates",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "usc",
@@ -2148,7 +2273,8 @@
    "relationship": "AMENDED_TARGET",
    "basis": "amendatory instruction that inserts, adds or redesignates",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -2165,7 +2291,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "usc",
@@ -2182,7 +2309,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites an Act or chapter as a whole (et seq.)",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "usc",
@@ -2202,7 +2330,8 @@
    "relationship": "AMENDED_TARGET",
    "basis": "amendatory instruction that inserts, adds or redesignates",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "usc",
@@ -2222,7 +2351,8 @@
    "relationship": "AMENDED_TARGET",
    "basis": "amendatory instruction that inserts, adds or redesignates",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "usc",
@@ -2242,7 +2372,8 @@
    "relationship": "REPLACED_TEXT",
    "basis": "amendatory instruction that strikes, repeals or rewrites existing text",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "usc",
@@ -2263,7 +2394,8 @@
    "relationship": "REPLACED_TEXT",
    "basis": "amendatory instruction that strikes, repeals or rewrites existing text",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "usc",
@@ -2283,7 +2415,8 @@
    "relationship": "AMENDED_TARGET",
    "basis": "amendatory instruction that inserts, adds or redesignates",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "usc",
@@ -2304,7 +2437,8 @@
    "relationship": "AMENDED_TARGET",
    "basis": "amendatory instruction that inserts, adds or redesignates",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "usc",
@@ -2326,7 +2460,8 @@
    "relationship": "AMENDED_TARGET",
    "basis": "amendatory instruction that inserts, adds or redesignates",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "usc",
@@ -2344,7 +2479,8 @@
    "relationship": "REPLACED_TEXT",
    "basis": "amendatory instruction that strikes, repeals or rewrites existing text",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "usc",
@@ -2362,7 +2498,8 @@
    "relationship": "AMENDED_TARGET",
    "basis": "amendatory instruction that inserts, adds or redesignates",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "usc",
@@ -2381,7 +2518,8 @@
    "relationship": "AMENDED_TARGET",
    "basis": "amendatory instruction that inserts, adds or redesignates",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "usc",
@@ -2398,7 +2536,8 @@
    "relationship": "REPLACED_TEXT",
    "basis": "amendatory instruction that strikes, repeals or rewrites existing text",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "usc",
@@ -2418,7 +2557,8 @@
    "relationship": "REPLACED_TEXT",
    "basis": "amendatory instruction that strikes, repeals or rewrites existing text",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "usc",
@@ -2437,7 +2577,8 @@
    "relationship": "AMENDED_TARGET",
    "basis": "amendatory instruction that inserts, adds or redesignates",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "usc",
@@ -2458,7 +2599,8 @@
    "relationship": "REPLACED_TEXT",
    "basis": "amendatory instruction that strikes, repeals or rewrites existing text",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "usc",
@@ -2479,7 +2621,8 @@
    "relationship": "REPLACED_TEXT",
    "basis": "amendatory instruction that strikes, repeals or rewrites existing text",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "usc",
@@ -2502,7 +2645,8 @@
    "relationship": "REPLACED_TEXT",
    "basis": "amendatory instruction that strikes, repeals or rewrites existing text",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "usc",
@@ -2523,7 +2667,8 @@
    "relationship": "REPLACED_TEXT",
    "basis": "amendatory instruction that strikes, repeals or rewrites existing text",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "usc",
@@ -2545,7 +2690,8 @@
    "relationship": "REPLACED_TEXT",
    "basis": "amendatory instruction that strikes, repeals or rewrites existing text",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "usc",
@@ -2565,7 +2711,8 @@
    "relationship": "REPLACED_TEXT",
    "basis": "amendatory instruction that strikes, repeals or rewrites existing text",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "usc",
@@ -2588,7 +2735,8 @@
    "relationship": "REPLACED_TEXT",
    "basis": "amendatory instruction that strikes, repeals or rewrites existing text",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "usc",
@@ -2607,7 +2755,8 @@
    "relationship": "REPLACED_TEXT",
    "basis": "amendatory instruction that strikes, repeals or rewrites existing text",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "usc",
@@ -2627,7 +2776,8 @@
    "relationship": "REPLACED_TEXT",
    "basis": "amendatory instruction that strikes, repeals or rewrites existing text",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "usc",
@@ -2646,7 +2796,8 @@
    "relationship": "REPLACED_TEXT",
    "basis": "amendatory instruction that strikes, repeals or rewrites existing text",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "usc",
@@ -2665,7 +2816,8 @@
    "relationship": "AMENDED_TARGET",
    "basis": "amendatory instruction that inserts, adds or redesignates",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "usc",
@@ -2681,7 +2833,8 @@
    "relationship": "AMENDED_TARGET",
    "basis": "amendatory instruction that inserts, adds or redesignates",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "usc",
@@ -2697,7 +2850,8 @@
    "relationship": "AMENDED_TARGET",
    "basis": "amendatory instruction that inserts, adds or redesignates",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "usc",
@@ -2718,7 +2872,8 @@
    "relationship": "REPLACED_TEXT",
    "basis": "amendatory instruction that strikes, repeals or rewrites existing text",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "usc",
@@ -2738,7 +2893,8 @@
    "relationship": "AMENDED_TARGET",
    "basis": "amendatory instruction that inserts, adds or redesignates",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -2754,7 +2910,8 @@
    "relationship": "REPLACED_TEXT",
    "basis": "amendatory instruction that strikes, repeals or rewrites existing text",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "usc",
@@ -2772,7 +2929,8 @@
    "relationship": "REPLACED_TEXT",
    "basis": "amendatory instruction that strikes, repeals or rewrites existing text",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "usc",
@@ -2790,7 +2948,8 @@
    "relationship": "REPLACED_TEXT",
    "basis": "amendatory instruction that strikes, repeals or rewrites existing text",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -2806,7 +2965,37 @@
    "relationship": "REPLACED_TEXT",
    "basis": "amendatory instruction that strikes, repeals or rewrites existing text",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/42/4026",
+   "text": "42 U.S.C. 4026",
+   "location": [
+    "section:1709.",
+    "subsection:(a)"
+   ],
+   "in_quoted_text": false,
+   "scope": "section",
+   "pinpoint": [],
+   "display_matches_cite": true,
+   "relationship": "CROSS_REFERENCE_REQUIRED",
+   "basis": "operative reference with no narrower rule (fail closed: content required)",
+   "pl_section": null,
+   "pl_division": null,
+   "source": "fallback_explicit_usc",
+   "rule": "R2: list continuing after a tagged citation; title inherited from its structured cite",
+   "source_fragment": "(42 U.S.C. 4016(a) and 4026)",
+   "source_sha256": "db8e2596dd52e974f4bd42b4cff6df382f9f9e14c61fa6abdbc7ae257d184728",
+   "container": {
+    "tag": "text",
+    "id": "H1AAD96136AD64D279BB028502CAF37F1",
+    "id_on": "subsection"
+   },
+   "text_part": "tail of external-xref",
+   "char_start": 0,
+   "char_end": 10
   }
  ],
  "citation_gaps": [
@@ -2819,7 +3008,16 @@
     "subsection:(a)"
    ],
    "relationship": "CROSS_REFERENCE_REQUIRED",
-   "basis": "operative reference with no narrower rule (fail closed: content required)"
+   "basis": "operative reference with no narrower rule (fail closed: content required)",
+   "provisions": [
+    "42 U.S.C. 4016(a)",
+    "42 U.S.C. 4026"
+   ],
+   "untagged_provisions": [
+    "42 U.S.C. 4026"
+   ],
+   "resolved": true,
+   "rule": "R2: list continuing after a tagged citation; title inherited from its structured cite"
   },
   {
    "kind": "untagged_citation",
@@ -2831,33 +3029,45 @@
     "paragraph:(3)"
    ],
    "relationship": "CROSS_REFERENCE_REQUIRED",
-   "basis": "operative reference with no narrower rule (fail closed: content required)"
+   "basis": "operative reference with no narrower rule (fail closed: content required)",
+   "provisions": [],
+   "untagged_provisions": [],
+   "resolved": false,
+   "rule": null
   },
   {
    "kind": "untagged_citation",
-   "text": "42 U.S.C. 247d–7e(e)(1)(D",
+   "text": "42 U.S.C. 247d–7e(e)(1)(D)",
    "cite": null,
    "location": [
     "section:2103.",
     "subsection:(b)"
    ],
    "relationship": "REPLACED_TEXT",
-   "basis": "amendatory instruction that strikes, repeals or rewrites existing text"
+   "basis": "amendatory instruction that strikes, repeals or rewrites existing text",
+   "provisions": [],
+   "untagged_provisions": [],
+   "resolved": false,
+   "rule": null
   },
   {
    "kind": "untagged_citation",
-   "text": "42 U.S.C. 247d–7f(b",
+   "text": "42 U.S.C. 247d–7f(b)",
    "cite": null,
    "location": [
     "section:2103.",
     "subsection:(c)"
    ],
    "relationship": "REPLACED_TEXT",
-   "basis": "amendatory instruction that strikes, repeals or rewrites existing text"
+   "basis": "amendatory instruction that strikes, repeals or rewrites existing text",
+   "provisions": [],
+   "untagged_provisions": [],
+   "resolved": false,
+   "rule": null
   },
   {
    "kind": "untagged_citation",
-   "text": "42 U.S.C. 300hh–10b(g",
+   "text": "42 U.S.C. 300hh–10b(g)",
    "cite": null,
    "location": [
     "section:2103.",
@@ -2865,11 +3075,15 @@
     "paragraph:(1)"
    ],
    "relationship": "REPLACED_TEXT",
-   "basis": "amendatory instruction that strikes, repeals or rewrites existing text"
+   "basis": "amendatory instruction that strikes, repeals or rewrites existing text",
+   "provisions": [],
+   "untagged_provisions": [],
+   "resolved": false,
+   "rule": null
   },
   {
    "kind": "untagged_citation",
-   "text": "42 U.S.C. 300hh–10c(g)(1",
+   "text": "42 U.S.C. 300hh–10c(g)(1)",
    "cite": null,
    "location": [
     "section:2103.",
@@ -2877,11 +3091,15 @@
     "paragraph:(2)"
    ],
    "relationship": "REPLACED_TEXT",
-   "basis": "amendatory instruction that strikes, repeals or rewrites existing text"
+   "basis": "amendatory instruction that strikes, repeals or rewrites existing text",
+   "provisions": [],
+   "untagged_provisions": [],
+   "resolved": false,
+   "rule": null
   },
   {
    "kind": "untagged_citation",
-   "text": "42 U.S.C. 300hh–10d(g)(1",
+   "text": "42 U.S.C. 300hh–10d(g)(1)",
    "cite": null,
    "location": [
     "section:2103.",
@@ -2889,7 +3107,11 @@
     "paragraph:(3)"
    ],
    "relationship": "REPLACED_TEXT",
-   "basis": "amendatory instruction that strikes, repeals or rewrites existing text"
+   "basis": "amendatory instruction that strikes, repeals or rewrites existing text",
+   "provisions": [],
+   "untagged_provisions": [],
+   "resolved": false,
+   "rule": null
   }
  ],
  "selection": {
@@ -2987,6 +3209,9 @@
     "CROSS_REFERENCE_REQUIRED"
    ],
    "/us/usc/t42/s4016/a": [
+    "CROSS_REFERENCE_REQUIRED"
+   ],
+   "/us/usc/t42/s4026": [
     "CROSS_REFERENCE_REQUIRED"
    ],
    "/us/usc/t42/s5122/2": [
@@ -3129,6 +3354,9 @@
    "/us/usc/t42/s4016/a": [
     "operative reference with no narrower rule (fail closed: content required)"
    ],
+   "/us/usc/t42/s4026": [
+    "operative reference with no narrower rule (fail closed: content required)"
+   ],
    "/us/usc/t42/s5122/2": [
     "operative provision applies or acts under it ('pursuant to')"
    ],
@@ -3184,6 +3412,372 @@
     "cites an Act or chapter as a whole (et seq.)"
    ]
   },
+  "cited_as": {
+   "/us/usc/t18/s3551": [
+    {
+     "text": "18 U.S.C. 3551",
+     "source": "structured_xref",
+     "rule": null
+    }
+   ],
+   "/us/usc/t2/s901a/6/D": [
+    {
+     "text": "2 U.S.C. 901a(6)(D)",
+     "source": "structured_xref",
+     "rule": null
+    }
+   ],
+   "/us/usc/t22/s2321h/b/2/A": [
+    {
+     "text": "22 U.S.C. 2321h(b)(2)(A)",
+     "source": "structured_xref",
+     "rule": null
+    }
+   ],
+   "/us/usc/t22/s2412": [
+    {
+     "text": "22 U.S.C. 2412",
+     "source": "structured_xref",
+     "rule": null
+    }
+   ],
+   "/us/usc/t22/s2680": [
+    {
+     "text": "22 U.S.C. 2680",
+     "source": "structured_xref",
+     "rule": null
+    }
+   ],
+   "/us/usc/t22/s6212": [
+    {
+     "text": "22 U.S.C. 6212",
+     "source": "structured_xref",
+     "rule": null
+    }
+   ],
+   "/us/usc/t42/s1395aaa/d/2": [
+    {
+     "text": "42 U.S.C. 1395aaa(d)(2)",
+     "source": "structured_xref",
+     "rule": null
+    }
+   ],
+   "/us/usc/t42/s1395b-3": [
+    {
+     "text": "42 U.S.C. 1395b–3",
+     "source": "structured_xref",
+     "rule": null
+    }
+   ],
+   "/us/usc/t42/s1395cc-7/a/1": [
+    {
+     "text": "42 U.S.C. 1395cc–7(a)(1)",
+     "source": "structured_xref",
+     "rule": null
+    }
+   ],
+   "/us/usc/t42/s1395f/a/7/D/i/II": [
+    {
+     "text": "42 U.S.C. 1395f(a)(7)(D)(i)(II)",
+     "source": "structured_xref",
+     "rule": null
+    }
+   ],
+   "/us/usc/t42/s1395iii/b/1": [
+    {
+     "text": "42 U.S.C. 1395iii(b)(1)",
+     "source": "structured_xref",
+     "rule": null
+    }
+   ],
+   "/us/usc/t42/s1395m/l": [
+    {
+     "text": "42 U.S.C. 1395m(l)",
+     "source": "structured_xref",
+     "rule": null
+    }
+   ],
+   "/us/usc/t42/s1395m/m": [
+    {
+     "text": "42 U.S.C. 1395m(m)",
+     "source": "structured_xref",
+     "rule": null
+    },
+    {
+     "text": "42 U.S.C. 1395m(m)(4)(E)",
+     "source": "structured_xref",
+     "rule": null
+    },
+    {
+     "text": "42 U.S.C. 1395m(m)(8)(A)",
+     "source": "structured_xref",
+     "rule": null
+    },
+    {
+     "text": "42 U.S.C. 1395m(m)(7)(B)(i)",
+     "source": "structured_xref",
+     "rule": null
+    },
+    {
+     "text": "42 U.S.C. 1395m(m)(9)",
+     "source": "structured_xref",
+     "rule": null
+    }
+   ],
+   "/us/usc/t42/s1395m/o/4/B": [
+    {
+     "text": "42 U.S.C. 1395m(o)(4)(B)",
+     "source": "structured_xref",
+     "rule": null
+    }
+   ],
+   "/us/usc/t42/s1395m/y/2": [
+    {
+     "text": "42 U.S.C. 1395m(y)(2)",
+     "source": "structured_xref",
+     "rule": null
+    }
+   ],
+   "/us/usc/t42/s1395w-102/e/1/C": [
+    {
+     "text": "42 U.S.C. 1395w–102(e)(1)(C)",
+     "source": "structured_xref",
+     "rule": null
+    }
+   ],
+   "/us/usc/t42/s1395w-4/e/1/E": [
+    {
+     "text": "42 U.S.C. 1395w–4(e)(1)(E)",
+     "source": "structured_xref",
+     "rule": null
+    }
+   ],
+   "/us/usc/t42/s1395ww": [
+    {
+     "text": "42 U.S.C. 1395ww",
+     "source": "structured_xref",
+     "rule": null
+    },
+    {
+     "text": "42 U.S.C. 1395ww(d)(12)",
+     "source": "structured_xref",
+     "rule": null
+    },
+    {
+     "text": "42 U.S.C. 1395ww(d)(5)(G)",
+     "source": "structured_xref",
+     "rule": null
+    },
+    {
+     "text": "42 U.S.C. 1395ww(b)(3)(D)",
+     "source": "structured_xref",
+     "rule": null
+    }
+   ],
+   "/us/usc/t42/s1396r-4/f/7/A": [
+    {
+     "text": "42 U.S.C. 1396r–4(f)(7)(A)",
+     "source": "structured_xref",
+     "rule": null
+    }
+   ],
+   "/us/usc/t42/s247d/e/8": [
+    {
+     "text": "42 U.S.C. 247d(e)(8)",
+     "source": "structured_xref",
+     "rule": null
+    }
+   ],
+   "/us/usc/t42/s254b-2/b/1": [
+    {
+     "text": "42 U.S.C. 254b–2(b)(1)",
+     "source": "structured_xref",
+     "rule": null
+    }
+   ],
+   "/us/usc/t42/s254b-2/b/2": [
+    {
+     "text": "42 U.S.C. 254b–2(b)(2)",
+     "source": "structured_xref",
+     "rule": null
+    }
+   ],
+   "/us/usc/t42/s254c-2/b/2": [
+    {
+     "text": "42 U.S.C. 254c–2(b)(2)",
+     "source": "structured_xref",
+     "rule": null
+    }
+   ],
+   "/us/usc/t42/s254c-3/c/2": [
+    {
+     "text": "42 U.S.C. 254c–3(c)(2)",
+     "source": "structured_xref",
+     "rule": null
+    }
+   ],
+   "/us/usc/t42/s256h/g/1": [
+    {
+     "text": "42 U.S.C. 256h(g)(1)",
+     "source": "structured_xref",
+     "rule": null
+    }
+   ],
+   "/us/usc/t42/s300hh-11/c/4/B": [
+    {
+     "text": "42 U.S.C. 300hh–11(c)(4)(B)",
+     "source": "structured_xref",
+     "rule": null
+    }
+   ],
+   "/us/usc/t42/s300u-11": [
+    {
+     "text": "42 U.S.C. 300u–11",
+     "source": "structured_xref",
+     "rule": null
+    }
+   ],
+   "/us/usc/t42/s4016/a": [
+    {
+     "text": "42 U.S.C. 4016(a)",
+     "source": "structured_xref",
+     "rule": null
+    }
+   ],
+   "/us/usc/t42/s4026": [
+    {
+     "text": "42 U.S.C. 4026",
+     "source": "fallback_explicit_usc",
+     "rule": "R2: list continuing after a tagged citation; title inherited from its structured cite"
+    }
+   ],
+   "/us/usc/t42/s5122/2": [
+    {
+     "text": "42 U.S.C. 5122(2)",
+     "source": "structured_xref",
+     "rule": null
+    }
+   ],
+   "/us/usc/t42/s701/c/1/A/viii": [
+    {
+     "text": "42 U.S.C. 701(c)(1)(A)(viii)",
+     "source": "structured_xref",
+     "rule": null
+    }
+   ],
+   "/us/usc/t42/s710": [
+    {
+     "text": "42 U.S.C. 710",
+     "source": "structured_xref",
+     "rule": null
+    }
+   ],
+   "/us/usc/t42/s713": [
+    {
+     "text": "42 U.S.C. 713",
+     "source": "structured_xref",
+     "rule": null
+    }
+   ],
+   "/us/usc/t50/s3094/a/1": [
+    {
+     "text": "50 U.S.C. 3094(a)(1)",
+     "source": "structured_xref",
+     "rule": null
+    }
+   ],
+   "/us/usc/t6/s124n/i": [
+    {
+     "text": "6 U.S.C. 124n(i)",
+     "source": "structured_xref",
+     "rule": null
+    }
+   ],
+   "/us/usc/t6/s1525/a": [
+    {
+     "text": "6 U.S.C. 1525(a)",
+     "source": "structured_xref",
+     "rule": null
+    }
+   ],
+   "/us/usc/t7/s1635": [
+    {
+     "text": "7 U.S.C. 1635",
+     "source": "structured_xref",
+     "rule": null
+    }
+   ],
+   "/us/usc/t7/s1636i": [
+    {
+     "text": "7 U.S.C. 1636i",
+     "source": "structured_xref",
+     "rule": null
+    }
+   ],
+   "/us/usc/t7/s1994/b/2/A/i/I": [
+    {
+     "text": "7 U.S.C. 1994(b)(2)(A)(i)(I)",
+     "source": "structured_xref",
+     "rule": null
+    }
+   ],
+   "/us/usc/t8/s1101": [
+    {
+     "text": "8 U.S.C. 1101",
+     "source": "structured_xref",
+     "rule": null
+    }
+   ],
+   "/us/usc/t8/s1157": [
+    {
+     "text": "8 U.S.C. 1157",
+     "source": "structured_xref",
+     "rule": null
+    }
+   ],
+   "/us/usc/t8/s1255": [
+    {
+     "text": "8 U.S.C. 1255",
+     "source": "structured_xref",
+     "rule": null
+    }
+   ],
+   "/us/usc/t42/s254b": [
+    {
+     "text": "42 U.S.C. 254b et seq.",
+     "source": "structured_xref",
+     "rule": null
+    }
+   ],
+   "/us/usc/t42/s5121": [
+    {
+     "text": "42 U.S.C. 5121 et seq.",
+     "source": "structured_xref",
+     "rule": null
+    }
+   ],
+   "/us/usc/t7/s7333": [
+    {
+     "text": "7 U.S.C. 7333",
+     "source": "structured_xref",
+     "rule": null
+    }
+   ],
+   "/us/usc/t7/s901": [
+    {
+     "text": "7 U.S.C. 901 et seq.",
+     "source": "structured_xref",
+     "rule": null
+    }
+   ],
+   "/us/usc/t7/s950aaa": [
+    {
+     "text": "7 U.S.C. 950aaa et seq.",
+     "source": "structured_xref",
+     "rule": null
+    }
+   ]
+  },
   "cited": [
    "/us/usc/t18/s3551",
    "/us/usc/t2/s901a",
@@ -3210,6 +3804,7 @@
    "/us/usc/t42/s300hh-11",
    "/us/usc/t42/s300u-11",
    "/us/usc/t42/s4016",
+   "/us/usc/t42/s4026",
    "/us/usc/t42/s5121",
    "/us/usc/t42/s5122",
    "/us/usc/t42/s701",
@@ -3263,17 +3858,6 @@
   ],
   "unresolved_citations": [
    {
-    "kind": "citation_list_continues_untagged",
-    "text": "42 U.S.C. 4016(a) and 4026",
-    "cite": "usc/42/4016",
-    "location": [
-     "section:1709.",
-     "subsection:(a)"
-    ],
-    "relationship": "CROSS_REFERENCE_REQUIRED",
-    "basis": "operative reference with no narrower rule (fail closed: content required)"
-   },
-   {
     "kind": "untagged_citation",
     "text": "24 U.S.C. ch",
     "cite": null,
@@ -3283,33 +3867,45 @@
      "paragraph:(3)"
     ],
     "relationship": "CROSS_REFERENCE_REQUIRED",
-    "basis": "operative reference with no narrower rule (fail closed: content required)"
+    "basis": "operative reference with no narrower rule (fail closed: content required)",
+    "provisions": [],
+    "untagged_provisions": [],
+    "resolved": false,
+    "rule": null
    },
    {
     "kind": "untagged_citation",
-    "text": "42 U.S.C. 247d–7e(e)(1)(D",
+    "text": "42 U.S.C. 247d–7e(e)(1)(D)",
     "cite": null,
     "location": [
      "section:2103.",
      "subsection:(b)"
     ],
     "relationship": "REPLACED_TEXT",
-    "basis": "amendatory instruction that strikes, repeals or rewrites existing text"
+    "basis": "amendatory instruction that strikes, repeals or rewrites existing text",
+    "provisions": [],
+    "untagged_provisions": [],
+    "resolved": false,
+    "rule": null
    },
    {
     "kind": "untagged_citation",
-    "text": "42 U.S.C. 247d–7f(b",
+    "text": "42 U.S.C. 247d–7f(b)",
     "cite": null,
     "location": [
      "section:2103.",
      "subsection:(c)"
     ],
     "relationship": "REPLACED_TEXT",
-    "basis": "amendatory instruction that strikes, repeals or rewrites existing text"
+    "basis": "amendatory instruction that strikes, repeals or rewrites existing text",
+    "provisions": [],
+    "untagged_provisions": [],
+    "resolved": false,
+    "rule": null
    },
    {
     "kind": "untagged_citation",
-    "text": "42 U.S.C. 300hh–10b(g",
+    "text": "42 U.S.C. 300hh–10b(g)",
     "cite": null,
     "location": [
      "section:2103.",
@@ -3317,11 +3913,15 @@
      "paragraph:(1)"
     ],
     "relationship": "REPLACED_TEXT",
-    "basis": "amendatory instruction that strikes, repeals or rewrites existing text"
+    "basis": "amendatory instruction that strikes, repeals or rewrites existing text",
+    "provisions": [],
+    "untagged_provisions": [],
+    "resolved": false,
+    "rule": null
    },
    {
     "kind": "untagged_citation",
-    "text": "42 U.S.C. 300hh–10c(g)(1",
+    "text": "42 U.S.C. 300hh–10c(g)(1)",
     "cite": null,
     "location": [
      "section:2103.",
@@ -3329,11 +3929,15 @@
      "paragraph:(2)"
     ],
     "relationship": "REPLACED_TEXT",
-    "basis": "amendatory instruction that strikes, repeals or rewrites existing text"
+    "basis": "amendatory instruction that strikes, repeals or rewrites existing text",
+    "provisions": [],
+    "untagged_provisions": [],
+    "resolved": false,
+    "rule": null
    },
    {
     "kind": "untagged_citation",
-    "text": "42 U.S.C. 300hh–10d(g)(1",
+    "text": "42 U.S.C. 300hh–10d(g)(1)",
     "cite": null,
     "location": [
      "section:2103.",
@@ -3341,11 +3945,37 @@
      "paragraph:(3)"
     ],
     "relationship": "REPLACED_TEXT",
-    "basis": "amendatory instruction that strikes, repeals or rewrites existing text"
+    "basis": "amendatory instruction that strikes, repeals or rewrites existing text",
+    "provisions": [],
+    "untagged_provisions": [],
+    "resolved": false,
+    "rule": null
+   }
+  ],
+  "resolved_by_fallback": [
+   {
+    "kind": "citation_list_continues_untagged",
+    "text": "42 U.S.C. 4016(a) and 4026",
+    "cite": "usc/42/4016",
+    "location": [
+     "section:1709.",
+     "subsection:(a)"
+    ],
+    "relationship": "CROSS_REFERENCE_REQUIRED",
+    "basis": "operative reference with no narrower rule (fail closed: content required)",
+    "provisions": [
+     "42 U.S.C. 4016(a)",
+     "42 U.S.C. 4026"
+    ],
+    "untagged_provisions": [
+     "42 U.S.C. 4026"
+    ],
+    "resolved": true,
+    "rule": "R2: list continuing after a tagged citation; title inherited from its structured cite"
    }
   ],
   "status": "exceeds_cap",
-  "reason": "41 provisions exceed the cap of 12; the large-measure selection policy is not built"
+  "reason": "42 provisions exceed the cap of 12; the large-measure selection policy is not built"
  },
  "release_point": {
   "label": "119-1",
@@ -3387,7 +4017,14 @@
     "cites an Act or chapter as a whole (et seq.)"
    ],
    "inclusion": "REFERENCE_TRACKED",
-   "hierarchy": []
+   "hierarchy": [],
+   "cited_as": [
+    {
+     "text": "42 U.S.C. 254b et seq.",
+     "source": "structured_xref",
+     "rule": null
+    }
+   ]
   },
   {
    "type": "us_code",
@@ -3423,7 +4060,14 @@
     "cites an Act or chapter as a whole (et seq.)"
    ],
    "inclusion": "REFERENCE_TRACKED",
-   "hierarchy": []
+   "hierarchy": [],
+   "cited_as": [
+    {
+     "text": "42 U.S.C. 5121 et seq.",
+     "source": "structured_xref",
+     "rule": null
+    }
+   ]
   },
   {
    "type": "us_code",
@@ -3459,7 +4103,14 @@
     "names an instrument by its statutory home ('Program under')"
    ],
    "inclusion": "REFERENCE_TRACKED",
-   "hierarchy": []
+   "hierarchy": [],
+   "cited_as": [
+    {
+     "text": "7 U.S.C. 7333",
+     "source": "structured_xref",
+     "rule": null
+    }
+   ]
   },
   {
    "type": "us_code",
@@ -3495,7 +4146,14 @@
     "cites an Act or chapter as a whole (et seq.)"
    ],
    "inclusion": "REFERENCE_TRACKED",
-   "hierarchy": []
+   "hierarchy": [],
+   "cited_as": [
+    {
+     "text": "7 U.S.C. 901 et seq.",
+     "source": "structured_xref",
+     "rule": null
+    }
+   ]
   },
   {
    "type": "us_code",
@@ -3531,7 +4189,14 @@
     "cites an Act or chapter as a whole (et seq.)"
    ],
    "inclusion": "REFERENCE_TRACKED",
-   "hierarchy": []
+   "hierarchy": [],
+   "cited_as": [
+    {
+     "text": "7 U.S.C. 950aaa et seq.",
+     "source": "structured_xref",
+     "rule": null
+    }
+   ]
   }
  ],
  "public_laws": [
@@ -4074,7 +4739,7 @@
    "public_law:pl/116/114 (needed as REPLACED_TEXT but cited as a whole law; no section can be selected)"
   ],
   "notes": [
-   "41 provisions exceed the cap of 12; the large-measure selection policy is not built",
+   "42 provisions exceed the cap of 12; the large-measure selection policy is not built",
    "pl/118/42 cited as a whole law (division A, division B, division C, division D, division E, division F): identified and hashed, no section extracted; the Maker may not describe its contents",
    "pl/118/47 cited as a whole law (division A, division B, division C, division D, division E, division F): identified and hashed, no section extracted; the Maker may not describe its contents",
    "pl/118/83 cited as a whole law: identified and hashed, no section extracted; the Maker may not describe its contents",
@@ -5963,7 +6628,4105 @@
     "status": "SOURCE_CONTEXT_PENDING"
    },
    "superseded_utc": "2026-09-24T12:22:16Z"
+  },
+  {
+   "schema": "civicalign.context/1.1",
+   "vote": {
+    "congress": 119,
+    "session": 1,
+    "clerk_number": 133,
+    "date": "2025-03-14",
+    "measure": "HR1968"
+   },
+   "binding": {
+    "kind": "PASSAGE",
+    "verification": "VERIFIED",
+    "text_status": "TEXT_BOUND",
+    "text_sha256": "db8e2596dd52e974f4bd42b4cff6df382f9f9e14c61fa6abdbc7ae257d184728"
+   },
+   "references": [
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/118/42",
+     "text": "Public Law 118–42",
+     "location": [
+      "section:1101.",
+      "subsection:(a)",
+      "paragraph:(1)"
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": "division B"
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/118/42",
+     "text": "Public Law 118–42",
+     "location": [
+      "section:1101.",
+      "subsection:(a)",
+      "paragraph:(2)"
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "AMENDED_TARGET",
+     "basis": "amendatory instruction that inserts, adds or redesignates",
+     "pl_section": null,
+     "pl_division": "division C"
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/118/42",
+     "text": "Public Law 118–42",
+     "location": [
+      "section:1101.",
+      "subsection:(a)",
+      "paragraph:(2)"
+     ],
+     "in_quoted_text": true,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": "division C"
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/118/47",
+     "text": "Public Law 118–47",
+     "location": [
+      "section:1101.",
+      "subsection:(a)",
+      "paragraph:(3)"
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": "division A"
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/118/42",
+     "text": "Public Law 118–42",
+     "location": [
+      "section:1101.",
+      "subsection:(a)",
+      "paragraph:(4)"
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": "division D"
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/118/47",
+     "text": "Public Law 118–47",
+     "location": [
+      "section:1101.",
+      "subsection:(a)",
+      "paragraph:(5)"
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": "division B"
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/118/47",
+     "text": "Public Law 118–47",
+     "location": [
+      "section:1101.",
+      "subsection:(a)",
+      "paragraph:(6)"
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": "division C"
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/118/47",
+     "text": "Public Law 118–47",
+     "location": [
+      "section:1101.",
+      "subsection:(a)",
+      "paragraph:(6)"
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": "division C"
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/118/42",
+     "text": "Public Law 118–42",
+     "location": [
+      "section:1101.",
+      "subsection:(a)",
+      "paragraph:(7)"
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": "division E"
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/118/47",
+     "text": "Public Law 118–47",
+     "location": [
+      "section:1101.",
+      "subsection:(a)",
+      "paragraph:(8)"
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": "division D"
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/118/47",
+     "text": "Public Law 118–47",
+     "location": [
+      "section:1101.",
+      "subsection:(a)",
+      "paragraph:(9)"
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": "division E"
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/118/47",
+     "text": "Public Law 118–47",
+     "location": [
+      "section:1101.",
+      "subsection:(a)",
+      "paragraph:(9)"
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": "division E"
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/118/42",
+     "text": "Public Law 118–42",
+     "location": [
+      "section:1101.",
+      "subsection:(a)",
+      "paragraph:(10)"
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": "division A"
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/118/47",
+     "text": "Public Law 118–47",
+     "location": [
+      "section:1101.",
+      "subsection:(a)",
+      "paragraph:(11)"
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": "division F"
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/118/42",
+     "text": "Public Law 118–42",
+     "location": [
+      "section:1101.",
+      "subsection:(a)",
+      "paragraph:(12)"
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": "division F"
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/118/83",
+     "text": "Public Law 118–83",
+     "location": [
+      "section:1107."
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/91/672",
+     "text": "Public Law 91–672",
+     "location": [
+      "section:1108."
+     ],
+     "in_quoted_text": false,
+     "scope": "section",
+     "pinpoint": [
+      "10"
+     ],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_REQUIRED",
+     "basis": "operative reference with no narrower rule (fail closed: content required)",
+     "pl_section": "10",
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/22/2412",
+     "text": "22 U.S.C. 2412",
+     "location": [
+      "section:1108."
+     ],
+     "in_quoted_text": false,
+     "scope": "section",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_REQUIRED",
+     "basis": "operative reference with no narrower rule (fail closed: content required)",
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/22/2680",
+     "text": "22 U.S.C. 2680",
+     "location": [
+      "section:1108."
+     ],
+     "in_quoted_text": false,
+     "scope": "section",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_REQUIRED",
+     "basis": "operative reference with no narrower rule (fail closed: content required)",
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/22/6212",
+     "text": "22 U.S.C. 6212",
+     "location": [
+      "section:1108."
+     ],
+     "in_quoted_text": false,
+     "scope": "section",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_REQUIRED",
+     "basis": "operative reference with no narrower rule (fail closed: content required)",
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/50/3094",
+     "text": "50 U.S.C. 3094(a)(1)",
+     "location": [
+      "section:1108."
+     ],
+     "in_quoted_text": false,
+     "scope": "node",
+     "pinpoint": [
+      "a",
+      "1"
+     ],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_REQUIRED",
+     "basis": "operative reference with no narrower rule (fail closed: content required)",
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/117/159",
+     "text": "Public Law 117–159",
+     "location": [
+      "section:1110.",
+      "subsection:(c)"
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": "division B"
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/117/58",
+     "text": "Public Law 117–58",
+     "location": [
+      "section:1110.",
+      "subsection:(c)"
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": "division J"
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/117/328",
+     "text": "Public Law 117–328",
+     "location": [
+      "section:1110.",
+      "subsection:(c)"
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": "division G"
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/118/5",
+     "text": "Public Law 118–5",
+     "location": [
+      "section:1110.",
+      "subsection:(c)"
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": "division A"
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/18/3551",
+     "text": "18 U.S.C. 3551",
+     "location": [
+      "section:1115."
+     ],
+     "in_quoted_text": false,
+     "scope": "section",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_REQUIRED",
+     "basis": "operative reference with no narrower rule (fail closed: content required)",
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/98/473",
+     "text": "Public Law 98–473",
+     "location": [
+      "section:1115."
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc-chapter",
+     "cite": "usc-chapter/18/311",
+     "text": "chapter 311",
+     "location": [
+      "section:1115."
+     ],
+     "in_quoted_text": false,
+     "scope": "unparsed",
+     "pinpoint": [],
+     "display_matches_cite": false,
+     "relationship": "CROSS_REFERENCE_REQUIRED",
+     "basis": "operative reference with no narrower rule (fail closed: content required)",
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/7/950aaa",
+     "text": "7 U.S.C. 950aaa et seq.",
+     "location": [
+      "section:1201.",
+      "paragraph:(6)"
+     ],
+     "in_quoted_text": false,
+     "scope": "act_as_a_whole",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites an Act or chapter as a whole (et seq.)",
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/115/141",
+     "text": "Public Law 115–141",
+     "location": [
+      "section:1201.",
+      "paragraph:(7)"
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/7/901",
+     "text": "7 U.S.C. 901 et seq.",
+     "location": [
+      "section:1201.",
+      "paragraph:(7)"
+     ],
+     "in_quoted_text": false,
+     "scope": "act_as_a_whole",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites an Act or chapter as a whole (et seq.)",
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/7/1636i",
+     "text": "7 U.S.C. 1636i",
+     "location": [
+      "section:1203.",
+      "subsection:(a)"
+     ],
+     "in_quoted_text": false,
+     "scope": "section",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "REPLACED_TEXT",
+     "basis": "amendatory instruction that strikes, repeals or rewrites existing text",
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/7/1635",
+     "text": "7 U.S.C. 1635",
+     "location": [
+      "section:1203.",
+      "subsection:(b)"
+     ],
+     "in_quoted_text": false,
+     "scope": "section",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "REPLACED_TEXT",
+     "basis": "amendatory instruction that strikes, repeals or rewrites existing text",
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/106/78",
+     "text": "Public Law 106–78",
+     "location": [
+      "section:1203.",
+      "subsection:(b)"
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "REPLACED_TEXT",
+     "basis": "amendatory instruction that strikes, repeals or rewrites existing text",
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/118/42",
+     "text": "Public Law 118–42",
+     "location": [
+      "section:1204."
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "REPLACED_TEXT",
+     "basis": "amendatory instruction that strikes, repeals or rewrites existing text",
+     "pl_section": null,
+     "pl_division": "division B"
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/7/1994",
+     "text": "7 U.S.C. 1994(b)(2)(A)(i)(I)",
+     "location": [
+      "section:1205."
+     ],
+     "in_quoted_text": false,
+     "scope": "node",
+     "pinpoint": [
+      "b",
+      "2",
+      "A",
+      "i",
+      "I"
+     ],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_REQUIRED",
+     "basis": "operative reference with no narrower rule (fail closed: content required)",
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/117/328",
+     "text": "Public Law 117–328",
+     "location": [
+      "section:1207."
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "AMENDED_TARGET",
+     "basis": "amendatory instruction that inserts, adds or redesignates",
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/7/7333",
+     "text": "7 U.S.C. 7333",
+     "location": [
+      "section:1207."
+     ],
+     "in_quoted_text": true,
+     "scope": "section",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "names an instrument by its statutory home ('Program under')",
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/118/47",
+     "text": "Public Law 118–47",
+     "location": [
+      "section:1401."
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": "division A"
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/118/47",
+     "text": "Public Law 118–47",
+     "location": [
+      "section:1402."
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": "division A"
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/118/47",
+     "text": "Public Law 118–47",
+     "location": [
+      "section:1403."
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": "division A"
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/118/47",
+     "text": "Public Law 118–47",
+     "location": [
+      "section:1405."
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": "division A"
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/118/47",
+     "text": "Public Law 118–47",
+     "location": [
+      "section:1407."
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": "division A"
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/118/47",
+     "text": "Public Law 118–47",
+     "location": [
+      "section:1408."
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": "division A"
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/118/47",
+     "text": "Public Law 118–47",
+     "location": [
+      "section:1410."
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/118/47",
+     "text": "Public Law 118–47",
+     "location": [
+      "section:1411."
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": "division A"
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/118/47",
+     "text": "Public Law 118–47",
+     "location": [
+      "section:1412.",
+      "subsection:(a)"
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "REPLACED_TEXT",
+     "basis": "amendatory instruction that strikes, repeals or rewrites existing text",
+     "pl_section": null,
+     "pl_division": "division A"
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/118/47",
+     "text": "Public Law 118–47",
+     "location": [
+      "section:1412.",
+      "subsection:(a)"
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "REPLACED_TEXT",
+     "basis": "amendatory instruction that strikes, repeals or rewrites existing text",
+     "pl_section": null,
+     "pl_division": "division A"
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/118/47",
+     "text": "Public Law 118–47",
+     "location": [
+      "section:1412.",
+      "subsection:(a)",
+      "paragraph:(b)"
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": "division A"
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/118/47",
+     "text": "Public Law 118–47",
+     "location": [
+      "section:1413."
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": "division A"
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/118/47",
+     "text": "Public Law 118–47",
+     "location": [
+      "section:1414."
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": "division A"
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/118/47",
+     "text": "Public Law 118–47",
+     "location": [
+      "section:1415."
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": "division A"
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/118/47",
+     "text": "Public Law 118–47",
+     "location": [
+      "section:1418."
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "REPLACED_TEXT",
+     "basis": "amendatory instruction that strikes, repeals or rewrites existing text",
+     "pl_section": null,
+     "pl_division": "division A"
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/118/47",
+     "text": "Public Law 118–47",
+     "location": [
+      "section:1419."
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": "division A"
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/118/159",
+     "text": "Public Law 118–159",
+     "location": [
+      "section:1420."
+     ],
+     "in_quoted_text": false,
+     "scope": "section",
+     "pinpoint": [
+      "905"
+     ],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_REQUIRED",
+     "basis": "operative reference with no narrower rule (fail closed: content required)",
+     "pl_section": "905",
+     "pl_division": null
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/118/47",
+     "text": "Public Law 118–47",
+     "location": [
+      "section:1420."
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": "division A"
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/118/47",
+     "text": "Public Law 118–47",
+     "location": [
+      "section:1422.",
+      "subsection:(a)"
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": "division A"
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/118/47",
+     "text": "Public Law 118–47",
+     "location": [
+      "section:1422.",
+      "subsection:(c)"
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": "division A"
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/118/42",
+     "text": "Public Law 118–42",
+     "location": [
+      "section:1503.",
+      "subsection:(a)"
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": "division D"
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/118/42",
+     "text": "Public Law 118–42",
+     "location": [
+      "section:1503.",
+      "subsection:(b)"
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": "division D"
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/118/42",
+     "text": "Public Law 118–42",
+     "location": [
+      "section:1504."
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/118/42",
+     "text": "Public Law 118–42",
+     "location": [
+      "section:1505."
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": "division D"
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/111/11",
+     "text": "Public Law 111–11",
+     "location": [
+      "section:1506."
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": "title X"
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/114/322",
+     "text": "Public Law 114–322",
+     "location": [
+      "section:1507.",
+      "subsection:(a)"
+     ],
+     "in_quoted_text": false,
+     "scope": "section",
+     "pinpoint": [
+      "4007"
+     ],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_REQUIRED",
+     "basis": "operative provision applies or acts under it ('In accordance with')",
+     "pl_section": "4007",
+     "pl_division": null
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/114/322",
+     "text": "Public Law 114–322",
+     "location": [
+      "section:1507.",
+      "subsection:(b)"
+     ],
+     "in_quoted_text": false,
+     "scope": "section",
+     "pinpoint": [
+      "4009"
+     ],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_REQUIRED",
+     "basis": "operative provision applies or acts under it ('In accordance with')",
+     "pl_section": "4009",
+     "pl_division": null
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/118/47",
+     "text": "Public Law 118–47",
+     "location": [
+      "section:1601."
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": "division B"
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/118/47",
+     "text": "Public Law 118–47",
+     "location": [
+      "section:1602.",
+      "subsection:(2)"
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": "division B"
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/118/47",
+     "text": "Public Law 118–47",
+     "location": [
+      "section:1602.",
+      "subsection:(3)"
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": "division B"
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/118/47",
+     "text": "Public Law 118–47",
+     "location": [
+      "section:1604."
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": "division B"
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/42/5122",
+     "text": "42 U.S.C. 5122(2)",
+     "location": [
+      "section:1604."
+     ],
+     "in_quoted_text": false,
+     "scope": "node",
+     "pinpoint": [
+      "2"
+     ],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_REQUIRED",
+     "basis": "operative provision applies or acts under it ('pursuant to')",
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/118/47",
+     "text": "Public Law 118–47",
+     "location": [
+      "section:1605."
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": "division B"
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/118/47",
+     "text": "Public Law 118–47",
+     "location": [
+      "section:1605.",
+      "subsection:(4)"
+     ],
+     "in_quoted_text": true,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": "division B"
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/117/328",
+     "text": "Public Law 117–328",
+     "location": [
+      "section:1605.",
+      "subsection:(4)"
+     ],
+     "in_quoted_text": true,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": "division E"
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/118/47",
+     "text": "Public Law 118–47",
+     "location": [
+      "section:1606."
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": "division B"
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/108/494",
+     "text": "Public Law 108–494",
+     "location": [
+      "section:1607."
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": "title III"
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/118/47",
+     "text": "Public Law 118–47",
+     "location": [
+      "section:1701.",
+      "subsection:(4)"
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": "division C"
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/42/5121",
+     "text": "42 U.S.C. 5121 et seq.",
+     "location": [
+      "section:1701.",
+      "subsection:(5)"
+     ],
+     "in_quoted_text": false,
+     "scope": "act_as_a_whole",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites an Act or chapter as a whole (et seq.)",
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/117/263",
+     "text": "Public Law 117–263",
+     "location": [
+      "section:1702."
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "REPLACED_TEXT",
+     "basis": "amendatory instruction that strikes, repeals or rewrites existing text",
+     "pl_section": null,
+     "pl_division": "division K"
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/118/47",
+     "text": "Public Law 118–47",
+     "location": [
+      "section:1704."
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": "division C"
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/118/47",
+     "text": "Public Law 118–47",
+     "location": [
+      "section:1705."
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": "division C"
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/118/47",
+     "text": "Public Law 118–47",
+     "location": [
+      "section:1706."
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": "division C"
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/117/103",
+     "text": "Public Law 117–103",
+     "location": [
+      "section:1707."
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": "division F"
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/117/58",
+     "text": "Public Law 117–58",
+     "location": [
+      "section:1708.",
+      "subsection:(a)"
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/118/5",
+     "text": "Public Law 118–5",
+     "location": [
+      "section:1708.",
+      "subsection:(b)"
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": "division A"
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/42/4016",
+     "text": "42 U.S.C. 4016(a)",
+     "location": [
+      "section:1709.",
+      "subsection:(a)"
+     ],
+     "in_quoted_text": false,
+     "scope": "node",
+     "pinpoint": [
+      "a"
+     ],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_REQUIRED",
+     "basis": "operative reference with no narrower rule (fail closed: content required)",
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/118/42",
+     "text": "Public Law 118–42",
+     "location": [
+      "section:1801.",
+      "subsection:(1)"
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": "division E"
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/118/42",
+     "text": "Public Law 118–42",
+     "location": [
+      "section:1801.",
+      "subsection:(7)"
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": "division E"
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/118/42",
+     "text": "Public Law 118–42",
+     "location": [
+      "section:1801.",
+      "subsection:(8)"
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": "division E"
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/118/42",
+     "text": "Public Law 118–42",
+     "location": [
+      "section:1801.",
+      "subsection:(8)"
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": "division E"
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/118/42",
+     "text": "Public Law 118–42",
+     "location": [
+      "section:1804.",
+      "subsection:(a)"
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": "division E"
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/115/123",
+     "text": "Public Law 115–123",
+     "location": [
+      "section:1808.",
+      "subsection:(a)"
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": "division B"
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/113/76",
+     "text": "Public Law 113–76",
+     "location": [
+      "section:1809."
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": "division G"
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/118/47",
+     "text": "Public Law 118–47",
+     "location": [
+      "section:1902.",
+      "subsection:(a)"
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": "division D"
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/118/47",
+     "text": "Public Law 118–47",
+     "location": [
+      "section:1902.",
+      "subsection:(b)"
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": "division D"
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/118/47",
+     "text": "Public Law 118–47",
+     "location": [
+      "section:1902.",
+      "subsection:(c)"
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": "division D"
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/118/47",
+     "text": "Public Law 118–47",
+     "location": [
+      "section:1903."
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": "division D"
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/111/148",
+     "text": "Public Law 111–148",
+     "location": [
+      "section:1906."
+     ],
+     "in_quoted_text": false,
+     "scope": "section",
+     "pinpoint": [
+      "4002"
+     ],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_REQUIRED",
+     "basis": "operative provision applies or acts under it ('under')",
+     "pl_section": "4002",
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/42/300u-11",
+     "text": "42 U.S.C. 300u–11",
+     "location": [
+      "section:1906."
+     ],
+     "in_quoted_text": false,
+     "scope": "section",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_REQUIRED",
+     "basis": "operative reference with no narrower rule (fail closed: content required)",
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/118/47",
+     "text": "Public Law 118–47",
+     "location": [
+      "section:1906."
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": "division D"
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/118/47",
+     "text": "Public Law 118–47",
+     "location": [
+      "section:1907."
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "REPLACED_TEXT",
+     "basis": "amendatory instruction that strikes, repeals or rewrites existing text",
+     "pl_section": null,
+     "pl_division": "division D"
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/118/47",
+     "text": "Public Law 118–47",
+     "location": [
+      "section:1909."
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "REPLACED_TEXT",
+     "basis": "amendatory instruction that strikes, repeals or rewrites existing text",
+     "pl_section": null,
+     "pl_division": "division D"
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/118/47",
+     "text": "Public Law 118–47",
+     "location": [
+      "section:1910."
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": "division D"
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/118/47",
+     "text": "Public Law 118–47",
+     "location": [
+      "section:1911."
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": "division D"
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/118/42",
+     "text": "Public Law 118–42",
+     "location": [
+      "section:11104."
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": "division A"
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/118/42",
+     "text": "Public Law 118–42",
+     "location": [
+      "section:11105."
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": "division A"
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/118/42",
+     "text": "Public Law 118–42",
+     "location": [
+      "section:11106."
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": "division A"
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/118/42",
+     "text": "Public Law 118–42",
+     "location": [
+      "section:11108."
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": "division A"
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/118/47",
+     "text": "Public Law 118–47",
+     "location": [
+      "section:11201."
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": "division F"
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/118/47",
+     "text": "Public Law 118–47",
+     "location": [
+      "section:11202."
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "AMENDED_TARGET",
+     "basis": "amendatory instruction that inserts, adds or redesignates",
+     "pl_section": null,
+     "pl_division": "division F"
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/118/47",
+     "text": "Public Law 118–47",
+     "location": [
+      "section:11203."
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": "division F"
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/118/47",
+     "text": "Public Law 118–47",
+     "location": [
+      "section:11204."
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": "division F"
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/118/47",
+     "text": "Public Law 118–47",
+     "location": [
+      "section:11205."
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": "division F"
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/118/47",
+     "text": "Public Law 118–47",
+     "location": [
+      "section:11206."
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": "division F"
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/118/47",
+     "text": "Public Law 118–47",
+     "location": [
+      "section:11207."
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": "division F"
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/101/167",
+     "text": "Public Law 101–167",
+     "location": [
+      "section:11208.",
+      "subsection:(a)"
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "AMENDED_TARGET",
+     "basis": "amendatory instruction that inserts, adds or redesignates",
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/8/1157",
+     "text": "8 U.S.C. 1157",
+     "location": [
+      "section:11208.",
+      "subsection:(a)",
+      "paragraph:(1)"
+     ],
+     "in_quoted_text": false,
+     "scope": "section",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_REQUIRED",
+     "basis": "operative reference with no narrower rule (fail closed: content required)",
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/8/1255",
+     "text": "8 U.S.C. 1255",
+     "location": [
+      "section:11208.",
+      "subsection:(a)",
+      "paragraph:(2)"
+     ],
+     "in_quoted_text": false,
+     "scope": "section",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "REPLACED_TEXT",
+     "basis": "amendatory instruction that strikes, repeals or rewrites existing text",
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/8/1101",
+     "text": "8 U.S.C. 1101",
+     "location": [
+      "section:11208.",
+      "subsection:(b)"
+     ],
+     "in_quoted_text": false,
+     "scope": "section",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "REPLACED_TEXT",
+     "basis": "amendatory instruction that strikes, repeals or rewrites existing text",
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/108/11",
+     "text": "Public Law 108–11",
+     "location": [
+      "section:11208.",
+      "subsection:(c)"
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "AMENDED_TARGET",
+     "basis": "amendatory instruction that inserts, adds or redesignates",
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/22/2321h",
+     "text": "22 U.S.C. 2321h(b)(2)(A)",
+     "location": [
+      "section:11208.",
+      "subsection:(d)"
+     ],
+     "in_quoted_text": false,
+     "scope": "node",
+     "pinpoint": [
+      "b",
+      "2",
+      "A"
+     ],
+     "display_matches_cite": true,
+     "relationship": "REPLACED_TEXT",
+     "basis": "amendatory instruction that strikes, repeals or rewrites existing text",
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/117/58",
+     "text": "Public Law 117–58",
+     "location": [
+      "section:11302.",
+      "subsection:(a)"
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/118/63",
+     "text": "Public Law 118–63",
+     "location": [
+      "section:11302.",
+      "subsection:(b)"
+     ],
+     "in_quoted_text": false,
+     "scope": "section",
+     "pinpoint": [
+      "101"
+     ],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_REQUIRED",
+     "basis": "operative reference with no narrower rule (fail closed: content required)",
+     "pl_section": "101",
+     "pl_division": null
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/118/42",
+     "text": "Public Law 118–42",
+     "location": [
+      "section:11303.",
+      "subsection:(4)"
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": "division F"
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/42/254b-2",
+     "text": "42 U.S.C. 254b–2(b)(1)",
+     "location": [
+      "section:2101.",
+      "subsection:(a)"
+     ],
+     "in_quoted_text": false,
+     "scope": "node",
+     "pinpoint": [
+      "b",
+      "1"
+     ],
+     "display_matches_cite": true,
+     "relationship": "AMENDED_TARGET",
+     "basis": "amendatory instruction that inserts, adds or redesignates",
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/42/254b-2",
+     "text": "42 U.S.C. 254b–2(b)(2)",
+     "location": [
+      "section:2101.",
+      "subsection:(b)"
+     ],
+     "in_quoted_text": false,
+     "scope": "node",
+     "pinpoint": [
+      "b",
+      "2"
+     ],
+     "display_matches_cite": true,
+     "relationship": "AMENDED_TARGET",
+     "basis": "amendatory instruction that inserts, adds or redesignates",
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/42/256h",
+     "text": "42 U.S.C. 256h(g)(1)",
+     "location": [
+      "section:2101.",
+      "subsection:(c)"
+     ],
+     "in_quoted_text": false,
+     "scope": "node",
+     "pinpoint": [
+      "g",
+      "1"
+     ],
+     "display_matches_cite": true,
+     "relationship": "AMENDED_TARGET",
+     "basis": "amendatory instruction that inserts, adds or redesignates",
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/117/328",
+     "text": "Public Law 117–328",
+     "location": [
+      "section:2101.",
+      "subsection:(d)"
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/42/254b",
+     "text": "42 U.S.C. 254b et seq.",
+     "location": [
+      "section:2101.",
+      "subsection:(d)"
+     ],
+     "in_quoted_text": false,
+     "scope": "act_as_a_whole",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites an Act or chapter as a whole (et seq.)",
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/42/254c-2",
+     "text": "42 U.S.C. 254c–2(b)(2)",
+     "location": [
+      "section:2102.",
+      "subsection:(a)"
+     ],
+     "in_quoted_text": false,
+     "scope": "node",
+     "pinpoint": [
+      "b",
+      "2"
+     ],
+     "display_matches_cite": true,
+     "relationship": "AMENDED_TARGET",
+     "basis": "amendatory instruction that inserts, adds or redesignates",
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/42/254c-3",
+     "text": "42 U.S.C. 254c–3(c)(2)",
+     "location": [
+      "section:2102.",
+      "subsection:(b)"
+     ],
+     "in_quoted_text": false,
+     "scope": "node",
+     "pinpoint": [
+      "c",
+      "2"
+     ],
+     "display_matches_cite": true,
+     "relationship": "AMENDED_TARGET",
+     "basis": "amendatory instruction that inserts, adds or redesignates",
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/42/247d",
+     "text": "42 U.S.C. 247d(e)(8)",
+     "location": [
+      "section:2103.",
+      "subsection:(a)"
+     ],
+     "in_quoted_text": false,
+     "scope": "node",
+     "pinpoint": [
+      "e",
+      "8"
+     ],
+     "display_matches_cite": true,
+     "relationship": "REPLACED_TEXT",
+     "basis": "amendatory instruction that strikes, repeals or rewrites existing text",
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/42/300hh-11",
+     "text": "42 U.S.C. 300hh–11(c)(4)(B)",
+     "location": [
+      "section:2103.",
+      "subsection:(e)"
+     ],
+     "in_quoted_text": false,
+     "scope": "node",
+     "pinpoint": [
+      "c",
+      "4",
+      "B"
+     ],
+     "display_matches_cite": true,
+     "relationship": "REPLACED_TEXT",
+     "basis": "amendatory instruction that strikes, repeals or rewrites existing text",
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/42/1395ww",
+     "text": "42 U.S.C. 1395ww(d)(12)",
+     "location": [
+      "section:2201.",
+      "subsection:(a)"
+     ],
+     "in_quoted_text": false,
+     "scope": "node",
+     "pinpoint": [
+      "d",
+      "12"
+     ],
+     "display_matches_cite": true,
+     "relationship": "AMENDED_TARGET",
+     "basis": "amendatory instruction that inserts, adds or redesignates",
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/42/1395ww",
+     "text": "42 U.S.C. 1395ww(d)(5)(G)",
+     "location": [
+      "section:2202.",
+      "subsection:(a)"
+     ],
+     "in_quoted_text": false,
+     "scope": "node",
+     "pinpoint": [
+      "d",
+      "5",
+      "G"
+     ],
+     "display_matches_cite": true,
+     "relationship": "AMENDED_TARGET",
+     "basis": "amendatory instruction that inserts, adds or redesignates",
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/42/1395ww",
+     "text": "42 U.S.C. 1395ww(b)(3)(D)",
+     "location": [
+      "section:2202.",
+      "subsection:(b)",
+      "paragraph:(1)"
+     ],
+     "in_quoted_text": false,
+     "scope": "node",
+     "pinpoint": [
+      "b",
+      "3",
+      "D"
+     ],
+     "display_matches_cite": true,
+     "relationship": "AMENDED_TARGET",
+     "basis": "amendatory instruction that inserts, adds or redesignates",
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/42/1395ww",
+     "text": "42 U.S.C. 1395ww",
+     "location": [
+      "section:2202.",
+      "subsection:(b)",
+      "paragraph:(2)"
+     ],
+     "in_quoted_text": false,
+     "scope": "section",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "REPLACED_TEXT",
+     "basis": "amendatory instruction that strikes, repeals or rewrites existing text",
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/42/1395m",
+     "text": "42 U.S.C. 1395m(l)",
+     "location": [
+      "section:2203."
+     ],
+     "in_quoted_text": false,
+     "scope": "node",
+     "pinpoint": [
+      "l"
+     ],
+     "display_matches_cite": true,
+     "relationship": "AMENDED_TARGET",
+     "basis": "amendatory instruction that inserts, adds or redesignates",
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/42/1395aaa",
+     "text": "42 U.S.C. 1395aaa(d)(2)",
+     "location": [
+      "section:2204."
+     ],
+     "in_quoted_text": false,
+     "scope": "node",
+     "pinpoint": [
+      "d",
+      "2"
+     ],
+     "display_matches_cite": true,
+     "relationship": "AMENDED_TARGET",
+     "basis": "amendatory instruction that inserts, adds or redesignates",
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/42/1395b-3",
+     "text": "42 U.S.C. 1395b–3",
+     "location": [
+      "section:2205.",
+      "subsection:(a)"
+     ],
+     "in_quoted_text": false,
+     "scope": "section",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "REPLACED_TEXT",
+     "basis": "amendatory instruction that strikes, repeals or rewrites existing text",
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/42/1395w-4",
+     "text": "42 U.S.C. 1395w–4(e)(1)(E)",
+     "location": [
+      "section:2206."
+     ],
+     "in_quoted_text": false,
+     "scope": "node",
+     "pinpoint": [
+      "e",
+      "1",
+      "E"
+     ],
+     "display_matches_cite": true,
+     "relationship": "REPLACED_TEXT",
+     "basis": "amendatory instruction that strikes, repeals or rewrites existing text",
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/42/1395m",
+     "text": "42 U.S.C. 1395m(m)",
+     "location": [
+      "section:2207.",
+      "subsection:(a)"
+     ],
+     "in_quoted_text": false,
+     "scope": "node",
+     "pinpoint": [
+      "m"
+     ],
+     "display_matches_cite": true,
+     "relationship": "AMENDED_TARGET",
+     "basis": "amendatory instruction that inserts, adds or redesignates",
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/42/1395m",
+     "text": "42 U.S.C. 1395m(m)(4)(E)",
+     "location": [
+      "section:2207.",
+      "subsection:(b)"
+     ],
+     "in_quoted_text": false,
+     "scope": "node",
+     "pinpoint": [
+      "m",
+      "4",
+      "E"
+     ],
+     "display_matches_cite": true,
+     "relationship": "REPLACED_TEXT",
+     "basis": "amendatory instruction that strikes, repeals or rewrites existing text",
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/42/1395m",
+     "text": "42 U.S.C. 1395m(m)(8)(A)",
+     "location": [
+      "section:2207.",
+      "subsection:(c)"
+     ],
+     "in_quoted_text": false,
+     "scope": "node",
+     "pinpoint": [
+      "m",
+      "8",
+      "A"
+     ],
+     "display_matches_cite": true,
+     "relationship": "REPLACED_TEXT",
+     "basis": "amendatory instruction that strikes, repeals or rewrites existing text",
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/42/1395m",
+     "text": "42 U.S.C. 1395m(m)(7)(B)(i)",
+     "location": [
+      "section:2207.",
+      "subsection:(d)",
+      "paragraph:(1)"
+     ],
+     "in_quoted_text": false,
+     "scope": "node",
+     "pinpoint": [
+      "m",
+      "7",
+      "B",
+      "i"
+     ],
+     "display_matches_cite": true,
+     "relationship": "REPLACED_TEXT",
+     "basis": "amendatory instruction that strikes, repeals or rewrites existing text",
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/42/1395m",
+     "text": "42 U.S.C. 1395m(y)(2)",
+     "location": [
+      "section:2207.",
+      "subsection:(d)",
+      "paragraph:(2)"
+     ],
+     "in_quoted_text": false,
+     "scope": "node",
+     "pinpoint": [
+      "y",
+      "2"
+     ],
+     "display_matches_cite": true,
+     "relationship": "REPLACED_TEXT",
+     "basis": "amendatory instruction that strikes, repeals or rewrites existing text",
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/42/1395m",
+     "text": "42 U.S.C. 1395m(o)(4)(B)",
+     "location": [
+      "section:2207.",
+      "subsection:(d)",
+      "paragraph:(3)"
+     ],
+     "in_quoted_text": false,
+     "scope": "node",
+     "pinpoint": [
+      "o",
+      "4",
+      "B"
+     ],
+     "display_matches_cite": true,
+     "relationship": "REPLACED_TEXT",
+     "basis": "amendatory instruction that strikes, repeals or rewrites existing text",
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/42/1395m",
+     "text": "42 U.S.C. 1395m(m)(9)",
+     "location": [
+      "section:2207.",
+      "subsection:(e)"
+     ],
+     "in_quoted_text": false,
+     "scope": "node",
+     "pinpoint": [
+      "m",
+      "9"
+     ],
+     "display_matches_cite": true,
+     "relationship": "REPLACED_TEXT",
+     "basis": "amendatory instruction that strikes, repeals or rewrites existing text",
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/42/1395f",
+     "text": "42 U.S.C. 1395f(a)(7)(D)(i)(II)",
+     "location": [
+      "section:2207.",
+      "subsection:(f)"
+     ],
+     "in_quoted_text": false,
+     "scope": "node",
+     "pinpoint": [
+      "a",
+      "7",
+      "D",
+      "i",
+      "II"
+     ],
+     "display_matches_cite": true,
+     "relationship": "REPLACED_TEXT",
+     "basis": "amendatory instruction that strikes, repeals or rewrites existing text",
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/42/1395cc-7",
+     "text": "42 U.S.C. 1395cc–7(a)(1)",
+     "location": [
+      "section:2208."
+     ],
+     "in_quoted_text": false,
+     "scope": "node",
+     "pinpoint": [
+      "a",
+      "1"
+     ],
+     "display_matches_cite": true,
+     "relationship": "REPLACED_TEXT",
+     "basis": "amendatory instruction that strikes, repeals or rewrites existing text",
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/42/1395w-102",
+     "text": "42 U.S.C. 1395w–102(e)(1)(C)",
+     "location": [
+      "section:2209."
+     ],
+     "in_quoted_text": false,
+     "scope": "node",
+     "pinpoint": [
+      "e",
+      "1",
+      "C"
+     ],
+     "display_matches_cite": true,
+     "relationship": "REPLACED_TEXT",
+     "basis": "amendatory instruction that strikes, repeals or rewrites existing text",
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/42/1395iii",
+     "text": "42 U.S.C. 1395iii(b)(1)",
+     "location": [
+      "section:2210."
+     ],
+     "in_quoted_text": false,
+     "scope": "node",
+     "pinpoint": [
+      "b",
+      "1"
+     ],
+     "display_matches_cite": true,
+     "relationship": "REPLACED_TEXT",
+     "basis": "amendatory instruction that strikes, repeals or rewrites existing text",
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/2/901a",
+     "text": "2 U.S.C. 901a(6)(D)",
+     "location": [
+      "section:2211."
+     ],
+     "in_quoted_text": false,
+     "scope": "node",
+     "pinpoint": [
+      "6",
+      "D"
+     ],
+     "display_matches_cite": true,
+     "relationship": "AMENDED_TARGET",
+     "basis": "amendatory instruction that inserts, adds or redesignates",
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/42/710",
+     "text": "42 U.S.C. 710",
+     "location": [
+      "section:2301."
+     ],
+     "in_quoted_text": false,
+     "scope": "section",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "AMENDED_TARGET",
+     "basis": "amendatory instruction that inserts, adds or redesignates",
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/42/713",
+     "text": "42 U.S.C. 713",
+     "location": [
+      "section:2302."
+     ],
+     "in_quoted_text": false,
+     "scope": "section",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "AMENDED_TARGET",
+     "basis": "amendatory instruction that inserts, adds or redesignates",
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/42/701",
+     "text": "42 U.S.C. 701(c)(1)(A)(viii)",
+     "location": [
+      "section:2303."
+     ],
+     "in_quoted_text": false,
+     "scope": "node",
+     "pinpoint": [
+      "c",
+      "1",
+      "A",
+      "viii"
+     ],
+     "display_matches_cite": true,
+     "relationship": "REPLACED_TEXT",
+     "basis": "amendatory instruction that strikes, repeals or rewrites existing text",
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/42/1396r-4",
+     "text": "42 U.S.C. 1396r–4(f)(7)(A)",
+     "location": [
+      "section:2401."
+     ],
+     "in_quoted_text": false,
+     "scope": "node",
+     "pinpoint": [
+      "f",
+      "7",
+      "A"
+     ],
+     "display_matches_cite": true,
+     "relationship": "AMENDED_TARGET",
+     "basis": "amendatory instruction that inserts, adds or redesignates",
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/117/25",
+     "text": "Public Law 117–25",
+     "location": [
+      "section:3101."
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "REPLACED_TEXT",
+     "basis": "amendatory instruction that strikes, repeals or rewrites existing text",
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/6/124n",
+     "text": "6 U.S.C. 124n(i)",
+     "location": [
+      "section:3102."
+     ],
+     "in_quoted_text": false,
+     "scope": "node",
+     "pinpoint": [
+      "i"
+     ],
+     "display_matches_cite": true,
+     "relationship": "REPLACED_TEXT",
+     "basis": "amendatory instruction that strikes, repeals or rewrites existing text",
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/6/1525",
+     "text": "6 U.S.C. 1525(a)",
+     "location": [
+      "section:3104."
+     ],
+     "in_quoted_text": false,
+     "scope": "node",
+     "pinpoint": [
+      "a"
+     ],
+     "display_matches_cite": true,
+     "relationship": "REPLACED_TEXT",
+     "basis": "amendatory instruction that strikes, repeals or rewrites existing text",
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/116/114",
+     "text": "Public Law 116–114",
+     "location": [
+      "section:3105."
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "REPLACED_TEXT",
+     "basis": "amendatory instruction that strikes, repeals or rewrites existing text",
+     "pl_section": null,
+     "pl_division": null
+    }
+   ],
+   "citation_gaps": [
+    {
+     "kind": "citation_list_continues_untagged",
+     "text": "42 U.S.C. 4016(a) and 4026",
+     "cite": "usc/42/4016",
+     "location": [
+      "section:1709.",
+      "subsection:(a)"
+     ],
+     "relationship": "CROSS_REFERENCE_REQUIRED",
+     "basis": "operative reference with no narrower rule (fail closed: content required)"
+    },
+    {
+     "kind": "untagged_citation",
+     "text": "24 U.S.C. ch",
+     "cite": null,
+     "location": [
+      "section:1109.",
+      "subsection:(b)",
+      "paragraph:(3)"
+     ],
+     "relationship": "CROSS_REFERENCE_REQUIRED",
+     "basis": "operative reference with no narrower rule (fail closed: content required)"
+    },
+    {
+     "kind": "untagged_citation",
+     "text": "42 U.S.C. 247d–7e(e)(1)(D",
+     "cite": null,
+     "location": [
+      "section:2103.",
+      "subsection:(b)"
+     ],
+     "relationship": "REPLACED_TEXT",
+     "basis": "amendatory instruction that strikes, repeals or rewrites existing text"
+    },
+    {
+     "kind": "untagged_citation",
+     "text": "42 U.S.C. 247d–7f(b",
+     "cite": null,
+     "location": [
+      "section:2103.",
+      "subsection:(c)"
+     ],
+     "relationship": "REPLACED_TEXT",
+     "basis": "amendatory instruction that strikes, repeals or rewrites existing text"
+    },
+    {
+     "kind": "untagged_citation",
+     "text": "42 U.S.C. 300hh–10b(g",
+     "cite": null,
+     "location": [
+      "section:2103.",
+      "subsection:(d)",
+      "paragraph:(1)"
+     ],
+     "relationship": "REPLACED_TEXT",
+     "basis": "amendatory instruction that strikes, repeals or rewrites existing text"
+    },
+    {
+     "kind": "untagged_citation",
+     "text": "42 U.S.C. 300hh–10c(g)(1",
+     "cite": null,
+     "location": [
+      "section:2103.",
+      "subsection:(d)",
+      "paragraph:(2)"
+     ],
+     "relationship": "REPLACED_TEXT",
+     "basis": "amendatory instruction that strikes, repeals or rewrites existing text"
+    },
+    {
+     "kind": "untagged_citation",
+     "text": "42 U.S.C. 300hh–10d(g)(1",
+     "cite": null,
+     "location": [
+      "section:2103.",
+      "subsection:(d)",
+      "paragraph:(3)"
+     ],
+     "relationship": "REPLACED_TEXT",
+     "basis": "amendatory instruction that strikes, repeals or rewrites existing text"
+    }
+   ],
+   "selection": {
+    "policy": "provisions whose relationship needs content, at the cited node; others tracked only; capped",
+    "section_cap": 12,
+    "full_section_max_chars": 50000,
+    "required": [],
+    "tracked_only": [
+     "/us/usc/t42/s254b",
+     "/us/usc/t42/s5121",
+     "/us/usc/t7/s7333",
+     "/us/usc/t7/s901",
+     "/us/usc/t7/s950aaa"
+    ],
+    "relationships": {
+     "/us/usc/t18/s3551": [
+      "CROSS_REFERENCE_REQUIRED"
+     ],
+     "/us/usc/t2/s901a/6/D": [
+      "AMENDED_TARGET"
+     ],
+     "/us/usc/t22/s2321h/b/2/A": [
+      "REPLACED_TEXT"
+     ],
+     "/us/usc/t22/s2412": [
+      "CROSS_REFERENCE_REQUIRED"
+     ],
+     "/us/usc/t22/s2680": [
+      "CROSS_REFERENCE_REQUIRED"
+     ],
+     "/us/usc/t22/s6212": [
+      "CROSS_REFERENCE_REQUIRED"
+     ],
+     "/us/usc/t42/s1395aaa/d/2": [
+      "AMENDED_TARGET"
+     ],
+     "/us/usc/t42/s1395b-3": [
+      "REPLACED_TEXT"
+     ],
+     "/us/usc/t42/s1395cc-7/a/1": [
+      "REPLACED_TEXT"
+     ],
+     "/us/usc/t42/s1395f/a/7/D/i/II": [
+      "REPLACED_TEXT"
+     ],
+     "/us/usc/t42/s1395iii/b/1": [
+      "REPLACED_TEXT"
+     ],
+     "/us/usc/t42/s1395m/l": [
+      "AMENDED_TARGET"
+     ],
+     "/us/usc/t42/s1395m/m": [
+      "AMENDED_TARGET"
+     ],
+     "/us/usc/t42/s1395m/o/4/B": [
+      "REPLACED_TEXT"
+     ],
+     "/us/usc/t42/s1395m/y/2": [
+      "REPLACED_TEXT"
+     ],
+     "/us/usc/t42/s1395w-102/e/1/C": [
+      "REPLACED_TEXT"
+     ],
+     "/us/usc/t42/s1395w-4/e/1/E": [
+      "REPLACED_TEXT"
+     ],
+     "/us/usc/t42/s1395ww": [
+      "REPLACED_TEXT"
+     ],
+     "/us/usc/t42/s1396r-4/f/7/A": [
+      "AMENDED_TARGET"
+     ],
+     "/us/usc/t42/s247d/e/8": [
+      "REPLACED_TEXT"
+     ],
+     "/us/usc/t42/s254b-2/b/1": [
+      "AMENDED_TARGET"
+     ],
+     "/us/usc/t42/s254b-2/b/2": [
+      "AMENDED_TARGET"
+     ],
+     "/us/usc/t42/s254c-2/b/2": [
+      "AMENDED_TARGET"
+     ],
+     "/us/usc/t42/s254c-3/c/2": [
+      "AMENDED_TARGET"
+     ],
+     "/us/usc/t42/s256h/g/1": [
+      "AMENDED_TARGET"
+     ],
+     "/us/usc/t42/s300hh-11/c/4/B": [
+      "REPLACED_TEXT"
+     ],
+     "/us/usc/t42/s300u-11": [
+      "CROSS_REFERENCE_REQUIRED"
+     ],
+     "/us/usc/t42/s4016/a": [
+      "CROSS_REFERENCE_REQUIRED"
+     ],
+     "/us/usc/t42/s5122/2": [
+      "CROSS_REFERENCE_REQUIRED"
+     ],
+     "/us/usc/t42/s701/c/1/A/viii": [
+      "REPLACED_TEXT"
+     ],
+     "/us/usc/t42/s710": [
+      "AMENDED_TARGET"
+     ],
+     "/us/usc/t42/s713": [
+      "AMENDED_TARGET"
+     ],
+     "/us/usc/t50/s3094/a/1": [
+      "CROSS_REFERENCE_REQUIRED"
+     ],
+     "/us/usc/t6/s124n/i": [
+      "REPLACED_TEXT"
+     ],
+     "/us/usc/t6/s1525/a": [
+      "REPLACED_TEXT"
+     ],
+     "/us/usc/t7/s1635": [
+      "REPLACED_TEXT"
+     ],
+     "/us/usc/t7/s1636i": [
+      "REPLACED_TEXT"
+     ],
+     "/us/usc/t7/s1994/b/2/A/i/I": [
+      "CROSS_REFERENCE_REQUIRED"
+     ],
+     "/us/usc/t8/s1101": [
+      "REPLACED_TEXT"
+     ],
+     "/us/usc/t8/s1157": [
+      "CROSS_REFERENCE_REQUIRED"
+     ],
+     "/us/usc/t8/s1255": [
+      "REPLACED_TEXT"
+     ],
+     "/us/usc/t42/s254b": [
+      "CROSS_REFERENCE_ONLY"
+     ],
+     "/us/usc/t42/s5121": [
+      "CROSS_REFERENCE_ONLY"
+     ],
+     "/us/usc/t7/s7333": [
+      "CROSS_REFERENCE_ONLY"
+     ],
+     "/us/usc/t7/s901": [
+      "CROSS_REFERENCE_ONLY"
+     ],
+     "/us/usc/t7/s950aaa": [
+      "CROSS_REFERENCE_ONLY"
+     ]
+    },
+    "bases": {
+     "/us/usc/t18/s3551": [
+      "operative reference with no narrower rule (fail closed: content required)"
+     ],
+     "/us/usc/t2/s901a/6/D": [
+      "amendatory instruction that inserts, adds or redesignates"
+     ],
+     "/us/usc/t22/s2321h/b/2/A": [
+      "amendatory instruction that strikes, repeals or rewrites existing text"
+     ],
+     "/us/usc/t22/s2412": [
+      "operative reference with no narrower rule (fail closed: content required)"
+     ],
+     "/us/usc/t22/s2680": [
+      "operative reference with no narrower rule (fail closed: content required)"
+     ],
+     "/us/usc/t22/s6212": [
+      "operative reference with no narrower rule (fail closed: content required)"
+     ],
+     "/us/usc/t42/s1395aaa/d/2": [
+      "amendatory instruction that inserts, adds or redesignates"
+     ],
+     "/us/usc/t42/s1395b-3": [
+      "amendatory instruction that strikes, repeals or rewrites existing text"
+     ],
+     "/us/usc/t42/s1395cc-7/a/1": [
+      "amendatory instruction that strikes, repeals or rewrites existing text"
+     ],
+     "/us/usc/t42/s1395f/a/7/D/i/II": [
+      "amendatory instruction that strikes, repeals or rewrites existing text"
+     ],
+     "/us/usc/t42/s1395iii/b/1": [
+      "amendatory instruction that strikes, repeals or rewrites existing text"
+     ],
+     "/us/usc/t42/s1395m/l": [
+      "amendatory instruction that inserts, adds or redesignates"
+     ],
+     "/us/usc/t42/s1395m/m": [
+      "amendatory instruction that inserts, adds or redesignates"
+     ],
+     "/us/usc/t42/s1395m/o/4/B": [
+      "amendatory instruction that strikes, repeals or rewrites existing text"
+     ],
+     "/us/usc/t42/s1395m/y/2": [
+      "amendatory instruction that strikes, repeals or rewrites existing text"
+     ],
+     "/us/usc/t42/s1395w-102/e/1/C": [
+      "amendatory instruction that strikes, repeals or rewrites existing text"
+     ],
+     "/us/usc/t42/s1395w-4/e/1/E": [
+      "amendatory instruction that strikes, repeals or rewrites existing text"
+     ],
+     "/us/usc/t42/s1395ww": [
+      "amendatory instruction that strikes, repeals or rewrites existing text"
+     ],
+     "/us/usc/t42/s1396r-4/f/7/A": [
+      "amendatory instruction that inserts, adds or redesignates"
+     ],
+     "/us/usc/t42/s247d/e/8": [
+      "amendatory instruction that strikes, repeals or rewrites existing text"
+     ],
+     "/us/usc/t42/s254b-2/b/1": [
+      "amendatory instruction that inserts, adds or redesignates"
+     ],
+     "/us/usc/t42/s254b-2/b/2": [
+      "amendatory instruction that inserts, adds or redesignates"
+     ],
+     "/us/usc/t42/s254c-2/b/2": [
+      "amendatory instruction that inserts, adds or redesignates"
+     ],
+     "/us/usc/t42/s254c-3/c/2": [
+      "amendatory instruction that inserts, adds or redesignates"
+     ],
+     "/us/usc/t42/s256h/g/1": [
+      "amendatory instruction that inserts, adds or redesignates"
+     ],
+     "/us/usc/t42/s300hh-11/c/4/B": [
+      "amendatory instruction that strikes, repeals or rewrites existing text"
+     ],
+     "/us/usc/t42/s300u-11": [
+      "operative reference with no narrower rule (fail closed: content required)"
+     ],
+     "/us/usc/t42/s4016/a": [
+      "operative reference with no narrower rule (fail closed: content required)"
+     ],
+     "/us/usc/t42/s5122/2": [
+      "operative provision applies or acts under it ('pursuant to')"
+     ],
+     "/us/usc/t42/s701/c/1/A/viii": [
+      "amendatory instruction that strikes, repeals or rewrites existing text"
+     ],
+     "/us/usc/t42/s710": [
+      "amendatory instruction that inserts, adds or redesignates"
+     ],
+     "/us/usc/t42/s713": [
+      "amendatory instruction that inserts, adds or redesignates"
+     ],
+     "/us/usc/t50/s3094/a/1": [
+      "operative reference with no narrower rule (fail closed: content required)"
+     ],
+     "/us/usc/t6/s124n/i": [
+      "amendatory instruction that strikes, repeals or rewrites existing text"
+     ],
+     "/us/usc/t6/s1525/a": [
+      "amendatory instruction that strikes, repeals or rewrites existing text"
+     ],
+     "/us/usc/t7/s1635": [
+      "amendatory instruction that strikes, repeals or rewrites existing text"
+     ],
+     "/us/usc/t7/s1636i": [
+      "amendatory instruction that strikes, repeals or rewrites existing text"
+     ],
+     "/us/usc/t7/s1994/b/2/A/i/I": [
+      "operative reference with no narrower rule (fail closed: content required)"
+     ],
+     "/us/usc/t8/s1101": [
+      "amendatory instruction that strikes, repeals or rewrites existing text"
+     ],
+     "/us/usc/t8/s1157": [
+      "operative reference with no narrower rule (fail closed: content required)"
+     ],
+     "/us/usc/t8/s1255": [
+      "amendatory instruction that strikes, repeals or rewrites existing text"
+     ],
+     "/us/usc/t42/s254b": [
+      "cites an Act or chapter as a whole (et seq.)"
+     ],
+     "/us/usc/t42/s5121": [
+      "cites an Act or chapter as a whole (et seq.)"
+     ],
+     "/us/usc/t7/s7333": [
+      "names an instrument by its statutory home ('Program under')"
+     ],
+     "/us/usc/t7/s901": [
+      "cites an Act or chapter as a whole (et seq.)"
+     ],
+     "/us/usc/t7/s950aaa": [
+      "cites an Act or chapter as a whole (et seq.)"
+     ]
+    },
+    "cited": [
+     "/us/usc/t18/s3551",
+     "/us/usc/t2/s901a",
+     "/us/usc/t22/s2321h",
+     "/us/usc/t22/s2412",
+     "/us/usc/t22/s2680",
+     "/us/usc/t22/s6212",
+     "/us/usc/t42/s1395aaa",
+     "/us/usc/t42/s1395b-3",
+     "/us/usc/t42/s1395cc-7",
+     "/us/usc/t42/s1395f",
+     "/us/usc/t42/s1395iii",
+     "/us/usc/t42/s1395m",
+     "/us/usc/t42/s1395w-102",
+     "/us/usc/t42/s1395w-4",
+     "/us/usc/t42/s1395ww",
+     "/us/usc/t42/s1396r-4",
+     "/us/usc/t42/s247d",
+     "/us/usc/t42/s254b",
+     "/us/usc/t42/s254b-2",
+     "/us/usc/t42/s254c-2",
+     "/us/usc/t42/s254c-3",
+     "/us/usc/t42/s256h",
+     "/us/usc/t42/s300hh-11",
+     "/us/usc/t42/s300u-11",
+     "/us/usc/t42/s4016",
+     "/us/usc/t42/s5121",
+     "/us/usc/t42/s5122",
+     "/us/usc/t42/s701",
+     "/us/usc/t42/s710",
+     "/us/usc/t42/s713",
+     "/us/usc/t50/s3094",
+     "/us/usc/t6/s124n",
+     "/us/usc/t6/s1525",
+     "/us/usc/t7/s1635",
+     "/us/usc/t7/s1636i",
+     "/us/usc/t7/s1994",
+     "/us/usc/t7/s7333",
+     "/us/usc/t7/s901",
+     "/us/usc/t7/s950aaa",
+     "/us/usc/t8/s1101",
+     "/us/usc/t8/s1157",
+     "/us/usc/t8/s1255"
+    ],
+    "amended": [
+     "/us/usc/t2/s901a/6/D",
+     "/us/usc/t22/s2321h/b/2/A",
+     "/us/usc/t42/s1395aaa/d/2",
+     "/us/usc/t42/s1395b-3",
+     "/us/usc/t42/s1395cc-7/a/1",
+     "/us/usc/t42/s1395f/a/7/D/i/II",
+     "/us/usc/t42/s1395iii/b/1",
+     "/us/usc/t42/s1395m/l",
+     "/us/usc/t42/s1395m/m",
+     "/us/usc/t42/s1395m/o/4/B",
+     "/us/usc/t42/s1395m/y/2",
+     "/us/usc/t42/s1395w-102/e/1/C",
+     "/us/usc/t42/s1395w-4/e/1/E",
+     "/us/usc/t42/s1395ww",
+     "/us/usc/t42/s1396r-4/f/7/A",
+     "/us/usc/t42/s247d/e/8",
+     "/us/usc/t42/s254b-2/b/1",
+     "/us/usc/t42/s254b-2/b/2",
+     "/us/usc/t42/s254c-2/b/2",
+     "/us/usc/t42/s254c-3/c/2",
+     "/us/usc/t42/s256h/g/1",
+     "/us/usc/t42/s300hh-11/c/4/B",
+     "/us/usc/t42/s701/c/1/A/viii",
+     "/us/usc/t42/s710",
+     "/us/usc/t42/s713",
+     "/us/usc/t6/s124n/i",
+     "/us/usc/t6/s1525/a",
+     "/us/usc/t7/s1635",
+     "/us/usc/t7/s1636i",
+     "/us/usc/t8/s1101",
+     "/us/usc/t8/s1255"
+    ],
+    "unresolved_citations": [
+     {
+      "kind": "citation_list_continues_untagged",
+      "text": "42 U.S.C. 4016(a) and 4026",
+      "cite": "usc/42/4016",
+      "location": [
+       "section:1709.",
+       "subsection:(a)"
+      ],
+      "relationship": "CROSS_REFERENCE_REQUIRED",
+      "basis": "operative reference with no narrower rule (fail closed: content required)"
+     },
+     {
+      "kind": "untagged_citation",
+      "text": "24 U.S.C. ch",
+      "cite": null,
+      "location": [
+       "section:1109.",
+       "subsection:(b)",
+       "paragraph:(3)"
+      ],
+      "relationship": "CROSS_REFERENCE_REQUIRED",
+      "basis": "operative reference with no narrower rule (fail closed: content required)"
+     },
+     {
+      "kind": "untagged_citation",
+      "text": "42 U.S.C. 247d–7e(e)(1)(D",
+      "cite": null,
+      "location": [
+       "section:2103.",
+       "subsection:(b)"
+      ],
+      "relationship": "REPLACED_TEXT",
+      "basis": "amendatory instruction that strikes, repeals or rewrites existing text"
+     },
+     {
+      "kind": "untagged_citation",
+      "text": "42 U.S.C. 247d–7f(b",
+      "cite": null,
+      "location": [
+       "section:2103.",
+       "subsection:(c)"
+      ],
+      "relationship": "REPLACED_TEXT",
+      "basis": "amendatory instruction that strikes, repeals or rewrites existing text"
+     },
+     {
+      "kind": "untagged_citation",
+      "text": "42 U.S.C. 300hh–10b(g",
+      "cite": null,
+      "location": [
+       "section:2103.",
+       "subsection:(d)",
+       "paragraph:(1)"
+      ],
+      "relationship": "REPLACED_TEXT",
+      "basis": "amendatory instruction that strikes, repeals or rewrites existing text"
+     },
+     {
+      "kind": "untagged_citation",
+      "text": "42 U.S.C. 300hh–10c(g)(1",
+      "cite": null,
+      "location": [
+       "section:2103.",
+       "subsection:(d)",
+       "paragraph:(2)"
+      ],
+      "relationship": "REPLACED_TEXT",
+      "basis": "amendatory instruction that strikes, repeals or rewrites existing text"
+     },
+     {
+      "kind": "untagged_citation",
+      "text": "42 U.S.C. 300hh–10d(g)(1",
+      "cite": null,
+      "location": [
+       "section:2103.",
+       "subsection:(d)",
+       "paragraph:(3)"
+      ],
+      "relationship": "REPLACED_TEXT",
+      "basis": "amendatory instruction that strikes, repeals or rewrites existing text"
+     }
+    ],
+    "status": "exceeds_cap",
+    "reason": "41 provisions exceed the cap of 12; the large-measure selection policy is not built"
+   },
+   "release_point": {
+    "label": "119-1",
+    "date": "2025-01-29",
+    "note": "latest release point on or before the vote; per-section archives may come from an earlier published one"
+   },
+   "existing_law_context": [
+    {
+     "type": "us_code",
+     "identifier": "/us/usc/t42/s254b",
+     "title": "42",
+     "section": "254b",
+     "as_of": {
+      "release_point": "119-1",
+      "date": "2025-01-29",
+      "rule": "latest OLRC release point on or before the vote with a published archive; intervening laws checked against the classification table"
+     },
+     "source_url": "https://uscode.house.gov/download/releasepoints/us/pl/119/1/xml_usc42@119-1.zip",
+     "archive_sha256": null,
+     "fragment_sha256": null,
+     "bytes": null,
+     "heading": null,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "status": "archive_unavailable",
+     "in_force_check": {
+      "status": "ok",
+      "archive": "xml_usc42@119-1.zip",
+      "intervening": [],
+      "affected_by": [],
+      "check": "no intervening release point"
+     },
+     "reason": "archive not retrievable",
+     "section_identifier": "/us/usc/t42/s254b",
+     "scope": "section",
+     "relationships": [
+      "CROSS_REFERENCE_ONLY"
+     ],
+     "bases": [
+      "cites an Act or chapter as a whole (et seq.)"
+     ],
+     "inclusion": "REFERENCE_TRACKED",
+     "hierarchy": []
+    },
+    {
+     "type": "us_code",
+     "identifier": "/us/usc/t42/s5121",
+     "title": "42",
+     "section": "5121",
+     "as_of": {
+      "release_point": "119-1",
+      "date": "2025-01-29",
+      "rule": "latest OLRC release point on or before the vote with a published archive; intervening laws checked against the classification table"
+     },
+     "source_url": "https://uscode.house.gov/download/releasepoints/us/pl/119/1/xml_usc42@119-1.zip",
+     "archive_sha256": null,
+     "fragment_sha256": null,
+     "bytes": null,
+     "heading": null,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "status": "archive_unavailable",
+     "in_force_check": {
+      "status": "ok",
+      "archive": "xml_usc42@119-1.zip",
+      "intervening": [],
+      "affected_by": [],
+      "check": "no intervening release point"
+     },
+     "reason": "archive not retrievable",
+     "section_identifier": "/us/usc/t42/s5121",
+     "scope": "section",
+     "relationships": [
+      "CROSS_REFERENCE_ONLY"
+     ],
+     "bases": [
+      "cites an Act or chapter as a whole (et seq.)"
+     ],
+     "inclusion": "REFERENCE_TRACKED",
+     "hierarchy": []
+    },
+    {
+     "type": "us_code",
+     "identifier": "/us/usc/t7/s7333",
+     "title": "7",
+     "section": "7333",
+     "as_of": {
+      "release_point": "119-1",
+      "date": "2025-01-29",
+      "rule": "latest OLRC release point on or before the vote with a published archive; intervening laws checked against the classification table"
+     },
+     "source_url": "https://uscode.house.gov/download/releasepoints/us/pl/119/1/xml_usc07@119-1.zip",
+     "archive_sha256": null,
+     "fragment_sha256": null,
+     "bytes": null,
+     "heading": null,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "status": "archive_unavailable",
+     "in_force_check": {
+      "status": "ok",
+      "archive": "xml_usc07@119-1.zip",
+      "intervening": [],
+      "affected_by": [],
+      "check": "no intervening release point"
+     },
+     "reason": "archive not retrievable",
+     "section_identifier": "/us/usc/t7/s7333",
+     "scope": "section",
+     "relationships": [
+      "CROSS_REFERENCE_ONLY"
+     ],
+     "bases": [
+      "names an instrument by its statutory home ('Program under')"
+     ],
+     "inclusion": "REFERENCE_TRACKED",
+     "hierarchy": []
+    },
+    {
+     "type": "us_code",
+     "identifier": "/us/usc/t7/s901",
+     "title": "7",
+     "section": "901",
+     "as_of": {
+      "release_point": "119-1",
+      "date": "2025-01-29",
+      "rule": "latest OLRC release point on or before the vote with a published archive; intervening laws checked against the classification table"
+     },
+     "source_url": "https://uscode.house.gov/download/releasepoints/us/pl/119/1/xml_usc07@119-1.zip",
+     "archive_sha256": null,
+     "fragment_sha256": null,
+     "bytes": null,
+     "heading": null,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "status": "archive_unavailable",
+     "in_force_check": {
+      "status": "ok",
+      "archive": "xml_usc07@119-1.zip",
+      "intervening": [],
+      "affected_by": [],
+      "check": "no intervening release point"
+     },
+     "reason": "archive not retrievable",
+     "section_identifier": "/us/usc/t7/s901",
+     "scope": "section",
+     "relationships": [
+      "CROSS_REFERENCE_ONLY"
+     ],
+     "bases": [
+      "cites an Act or chapter as a whole (et seq.)"
+     ],
+     "inclusion": "REFERENCE_TRACKED",
+     "hierarchy": []
+    },
+    {
+     "type": "us_code",
+     "identifier": "/us/usc/t7/s950aaa",
+     "title": "7",
+     "section": "950aaa",
+     "as_of": {
+      "release_point": "119-1",
+      "date": "2025-01-29",
+      "rule": "latest OLRC release point on or before the vote with a published archive; intervening laws checked against the classification table"
+     },
+     "source_url": "https://uscode.house.gov/download/releasepoints/us/pl/119/1/xml_usc07@119-1.zip",
+     "archive_sha256": null,
+     "fragment_sha256": null,
+     "bytes": null,
+     "heading": null,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "status": "archive_unavailable",
+     "in_force_check": {
+      "status": "ok",
+      "archive": "xml_usc07@119-1.zip",
+      "intervening": [],
+      "affected_by": [],
+      "check": "no intervening release point"
+     },
+     "reason": "archive not retrievable",
+     "section_identifier": "/us/usc/t7/s950aaa",
+     "scope": "section",
+     "relationships": [
+      "CROSS_REFERENCE_ONLY"
+     ],
+     "bases": [
+      "cites an Act or chapter as a whole (et seq.)"
+     ],
+     "inclusion": "REFERENCE_TRACKED",
+     "hierarchy": []
+    }
+   ],
+   "public_laws": [
+    {
+     "type": "public_law",
+     "cite": "pl/118/42",
+     "congress": 118,
+     "law": 42,
+     "source_url": "https://www.govinfo.gov/content/pkg/PLAW-118publ42/uslm/PLAW-118publ42.xml",
+     "sha256": "563491684e2c60d3f80b6cc642c2bc92b9c91b08cbbcc5270de22d436ae80ddf",
+     "bytes": 2586115,
+     "sections": [],
+     "divisions": [
+      "division A",
+      "division B",
+      "division C",
+      "division D",
+      "division E",
+      "division F"
+     ],
+     "fragments": [],
+     "status": "identified",
+     "relationships": [
+      "AMENDED_TARGET",
+      "REPLACED_TEXT",
+      "CROSS_REFERENCE_ONLY"
+     ]
+    },
+    {
+     "type": "public_law",
+     "cite": "pl/118/47",
+     "congress": 118,
+     "law": 47,
+     "source_url": "https://www.govinfo.gov/content/pkg/PLAW-118publ47/uslm/PLAW-118publ47.xml",
+     "sha256": "c1881917117e38de52ebd13aef206516376a3f53d07a69e1a84b10dd7822907b",
+     "bytes": 2373860,
+     "sections": [],
+     "divisions": [
+      "division A",
+      "division B",
+      "division C",
+      "division D",
+      "division E",
+      "division F"
+     ],
+     "fragments": [],
+     "status": "identified",
+     "relationships": [
+      "AMENDED_TARGET",
+      "REPLACED_TEXT",
+      "CROSS_REFERENCE_ONLY"
+     ]
+    },
+    {
+     "type": "public_law",
+     "cite": "pl/118/83",
+     "congress": 118,
+     "law": 83,
+     "source_url": "https://www.govinfo.gov/content/pkg/PLAW-118publ83/uslm/PLAW-118publ83.xml",
+     "sha256": "bb92f27c1f6aaf5ed5f57dc74cb250f3603978642dce5fd21aecd24cbc4e2bbf",
+     "bytes": 140419,
+     "sections": [],
+     "divisions": [],
+     "fragments": [],
+     "status": "identified",
+     "relationships": [
+      "CROSS_REFERENCE_ONLY"
+     ]
+    },
+    {
+     "type": "public_law",
+     "cite": "pl/91/672",
+     "congress": 91,
+     "law": 672,
+     "source_url": "https://www.govinfo.gov/content/pkg/PLAW-91publ672/uslm/PLAW-91publ672.xml",
+     "sha256": null,
+     "bytes": null,
+     "sections": [
+      "10"
+     ],
+     "divisions": [],
+     "fragments": [],
+     "status": "unavailable",
+     "relationships": [
+      "CROSS_REFERENCE_REQUIRED"
+     ],
+     "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+    },
+    {
+     "type": "public_law",
+     "cite": "pl/117/159",
+     "congress": 117,
+     "law": 159,
+     "source_url": "https://www.govinfo.gov/content/pkg/PLAW-117publ159/uslm/PLAW-117publ159.xml",
+     "sha256": "1a635d135d91487b2bf92fb825bcd389f2957ad352316d0cd898a3dc77f0bcb2",
+     "bytes": 243116,
+     "sections": [],
+     "divisions": [
+      "division B"
+     ],
+     "fragments": [],
+     "status": "identified",
+     "relationships": [
+      "CROSS_REFERENCE_ONLY"
+     ]
+    },
+    {
+     "type": "public_law",
+     "cite": "pl/117/58",
+     "congress": 117,
+     "law": 58,
+     "source_url": "https://www.govinfo.gov/content/pkg/PLAW-117publ58/uslm/PLAW-117publ58.xml",
+     "sha256": "e2d2f2450ea2c42aef7c06e590bba95d721a058409d643d63679810b8c0e1ba4",
+     "bytes": 8696772,
+     "sections": [],
+     "divisions": [
+      "division J"
+     ],
+     "fragments": [],
+     "status": "identified",
+     "relationships": [
+      "CROSS_REFERENCE_ONLY"
+     ]
+    },
+    {
+     "type": "public_law",
+     "cite": "pl/117/328",
+     "congress": 117,
+     "law": 328,
+     "source_url": "https://www.govinfo.gov/content/pkg/PLAW-117publ328/uslm/PLAW-117publ328.xml",
+     "sha256": "c85b2c8cb1494a52997e321f7ffbc5bdbdd9c61ad711db94a2bbad4be216188b",
+     "bytes": 11275250,
+     "sections": [],
+     "divisions": [
+      "division E",
+      "division G"
+     ],
+     "fragments": [],
+     "status": "identified",
+     "relationships": [
+      "AMENDED_TARGET",
+      "CROSS_REFERENCE_ONLY"
+     ]
+    },
+    {
+     "type": "public_law",
+     "cite": "pl/118/5",
+     "congress": 118,
+     "law": 5,
+     "source_url": "https://www.govinfo.gov/content/pkg/PLAW-118publ5/uslm/PLAW-118publ5.xml",
+     "sha256": "16dfc0bc57dbdcd92601d9ea182ca2eef49917eb00e7d157df4246314a5ab618",
+     "bytes": 293608,
+     "sections": [],
+     "divisions": [
+      "division A"
+     ],
+     "fragments": [],
+     "status": "identified",
+     "relationships": [
+      "CROSS_REFERENCE_ONLY"
+     ]
+    },
+    {
+     "type": "public_law",
+     "cite": "pl/98/473",
+     "congress": 98,
+     "law": 473,
+     "source_url": "https://www.govinfo.gov/content/pkg/PLAW-98publ473/uslm/PLAW-98publ473.xml",
+     "sha256": null,
+     "bytes": null,
+     "sections": [],
+     "divisions": [],
+     "fragments": [],
+     "status": "unavailable",
+     "relationships": [
+      "CROSS_REFERENCE_ONLY"
+     ],
+     "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+    },
+    {
+     "type": "public_law",
+     "cite": "pl/115/141",
+     "congress": 115,
+     "law": 141,
+     "source_url": "https://www.govinfo.gov/content/pkg/PLAW-115publ141/uslm/PLAW-115publ141.xml",
+     "sha256": "31162bed833f157973d0acb672d3fda049c5d3493ecf74187831edf2fa8d9d4b",
+     "bytes": 5144295,
+     "sections": [],
+     "divisions": [],
+     "fragments": [],
+     "status": "identified",
+     "relationships": [
+      "CROSS_REFERENCE_ONLY"
+     ]
+    },
+    {
+     "type": "public_law",
+     "cite": "pl/106/78",
+     "congress": 106,
+     "law": 78,
+     "source_url": "https://www.govinfo.gov/content/pkg/PLAW-106publ78/uslm/PLAW-106publ78.xml",
+     "sha256": null,
+     "bytes": null,
+     "sections": [],
+     "divisions": [],
+     "fragments": [],
+     "status": "unavailable",
+     "relationships": [
+      "REPLACED_TEXT"
+     ],
+     "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+    },
+    {
+     "type": "public_law",
+     "cite": "pl/118/159",
+     "congress": 118,
+     "law": 159,
+     "source_url": "https://www.govinfo.gov/content/pkg/PLAW-118publ159/uslm/PLAW-118publ159.xml",
+     "sha256": "0a399fcebee0e63d1cebf9ef90c21920e87bc2dc0f52ac36a44532f6793a514a",
+     "bytes": 9094859,
+     "sections": [
+      "905"
+     ],
+     "divisions": [],
+     "fragments": [
+      {
+       "section": "905",
+       "relationships": [
+        "CROSS_REFERENCE_REQUIRED"
+       ],
+       "inclusion": "CONTENT_INCLUDED_FOR_GENERATION",
+       "fragment_sha256": "1833619311dd43ec93bc06600c65e16ced7dd3f4ab4d1a2e9ccc647dd8acb258",
+       "bytes": 22626,
+       "status": "fetched"
+      }
+     ],
+     "status": "identified",
+     "relationships": [
+      "CROSS_REFERENCE_REQUIRED"
+     ]
+    },
+    {
+     "type": "public_law",
+     "cite": "pl/111/11",
+     "congress": 111,
+     "law": 11,
+     "source_url": "https://www.govinfo.gov/content/pkg/PLAW-111publ11/uslm/PLAW-111publ11.xml",
+     "sha256": null,
+     "bytes": null,
+     "sections": [],
+     "divisions": [
+      "title X"
+     ],
+     "fragments": [],
+     "status": "unavailable",
+     "relationships": [
+      "CROSS_REFERENCE_ONLY"
+     ],
+     "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+    },
+    {
+     "type": "public_law",
+     "cite": "pl/114/322",
+     "congress": 114,
+     "law": 322,
+     "source_url": "https://www.govinfo.gov/content/pkg/PLAW-114publ322/uslm/PLAW-114publ322.xml",
+     "sha256": "2b2ec6837236865eeb0f7d736809bac22ee155415a24dc1f0e177b18c2c4fdf5",
+     "bytes": 2190019,
+     "sections": [
+      "4007",
+      "4009"
+     ],
+     "divisions": [],
+     "fragments": [
+      {
+       "section": "4007",
+       "relationships": [
+        "CROSS_REFERENCE_REQUIRED"
+       ],
+       "inclusion": "CONTENT_INCLUDED_FOR_GENERATION",
+       "fragment_sha256": "e6e6a9bbe30f787a857d857ac13217abe82fb1797f8c5aaa13787d8f4d0ec177",
+       "bytes": 20299,
+       "status": "fetched"
+      },
+      {
+       "section": "4009",
+       "relationships": [
+        "CROSS_REFERENCE_REQUIRED"
+       ],
+       "inclusion": "CONTENT_INCLUDED_FOR_GENERATION",
+       "fragment_sha256": "9feb0714dd9f512e49b4cc2c066302b92c22237ca437b3208f5b8289dd99977d",
+       "bytes": 22073,
+       "status": "fetched"
+      }
+     ],
+     "status": "identified",
+     "relationships": [
+      "CROSS_REFERENCE_REQUIRED"
+     ]
+    },
+    {
+     "type": "public_law",
+     "cite": "pl/108/494",
+     "congress": 108,
+     "law": 494,
+     "source_url": "https://www.govinfo.gov/content/pkg/PLAW-108publ494/uslm/PLAW-108publ494.xml",
+     "sha256": null,
+     "bytes": null,
+     "sections": [],
+     "divisions": [
+      "title III"
+     ],
+     "fragments": [],
+     "status": "unavailable",
+     "relationships": [
+      "CROSS_REFERENCE_ONLY"
+     ],
+     "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+    },
+    {
+     "type": "public_law",
+     "cite": "pl/117/263",
+     "congress": 117,
+     "law": 263,
+     "source_url": "https://www.govinfo.gov/content/pkg/PLAW-117publ263/uslm/PLAW-117publ263.xml",
+     "sha256": "5a4288f957c08bc6e84b3c9ba6b311d18b9eddb8685ac6a6b4eddba8c1cf228e",
+     "bytes": 17104658,
+     "sections": [],
+     "divisions": [
+      "division K"
+     ],
+     "fragments": [],
+     "status": "identified",
+     "relationships": [
+      "REPLACED_TEXT"
+     ]
+    },
+    {
+     "type": "public_law",
+     "cite": "pl/117/103",
+     "congress": 117,
+     "law": 103,
+     "source_url": "https://www.govinfo.gov/content/pkg/PLAW-117publ103/uslm/PLAW-117publ103.xml",
+     "sha256": "ca62c9533ded8c85868fe71d3ad52f8535fa5c467fde2d0bcc7ec15fe07c109f",
+     "bytes": 6768471,
+     "sections": [],
+     "divisions": [
+      "division F"
+     ],
+     "fragments": [],
+     "status": "identified",
+     "relationships": [
+      "CROSS_REFERENCE_ONLY"
+     ]
+    },
+    {
+     "type": "public_law",
+     "cite": "pl/115/123",
+     "congress": 115,
+     "law": 123,
+     "source_url": "https://www.govinfo.gov/content/pkg/PLAW-115publ123/uslm/PLAW-115publ123.xml",
+     "sha256": "52bed83555f94997486ebfd089beae1b255476f720f63edfa6b43f201d1c9621",
+     "bytes": 1827012,
+     "sections": [],
+     "divisions": [
+      "division B"
+     ],
+     "fragments": [],
+     "status": "identified",
+     "relationships": [
+      "CROSS_REFERENCE_ONLY"
+     ]
+    },
+    {
+     "type": "public_law",
+     "cite": "pl/113/76",
+     "congress": 113,
+     "law": 76,
+     "source_url": "https://www.govinfo.gov/content/pkg/PLAW-113publ76/uslm/PLAW-113publ76.xml",
+     "sha256": "508814611737b48276d45f17a49f719f9873cb11614a5ade97dd277c207a7429",
+     "bytes": 3206910,
+     "sections": [],
+     "divisions": [
+      "division G"
+     ],
+     "fragments": [],
+     "status": "identified",
+     "relationships": [
+      "CROSS_REFERENCE_ONLY"
+     ]
+    },
+    {
+     "type": "public_law",
+     "cite": "pl/111/148",
+     "congress": 111,
+     "law": 148,
+     "source_url": "https://www.govinfo.gov/content/pkg/PLAW-111publ148/uslm/PLAW-111publ148.xml",
+     "sha256": null,
+     "bytes": null,
+     "sections": [
+      "4002"
+     ],
+     "divisions": [],
+     "fragments": [],
+     "status": "unavailable",
+     "relationships": [
+      "CROSS_REFERENCE_REQUIRED"
+     ],
+     "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+    },
+    {
+     "type": "public_law",
+     "cite": "pl/101/167",
+     "congress": 101,
+     "law": 167,
+     "source_url": "https://www.govinfo.gov/content/pkg/PLAW-101publ167/uslm/PLAW-101publ167.xml",
+     "sha256": null,
+     "bytes": null,
+     "sections": [],
+     "divisions": [],
+     "fragments": [],
+     "status": "unavailable",
+     "relationships": [
+      "AMENDED_TARGET"
+     ],
+     "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+    },
+    {
+     "type": "public_law",
+     "cite": "pl/108/11",
+     "congress": 108,
+     "law": 11,
+     "source_url": "https://www.govinfo.gov/content/pkg/PLAW-108publ11/uslm/PLAW-108publ11.xml",
+     "sha256": null,
+     "bytes": null,
+     "sections": [],
+     "divisions": [],
+     "fragments": [],
+     "status": "unavailable",
+     "relationships": [
+      "AMENDED_TARGET"
+     ],
+     "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+    },
+    {
+     "type": "public_law",
+     "cite": "pl/118/63",
+     "congress": 118,
+     "law": 63,
+     "source_url": "https://www.govinfo.gov/content/pkg/PLAW-118publ63/uslm/PLAW-118publ63.xml",
+     "sha256": "7e1d782b0986269bd14bb23edc0675cccf7f5e78013a099e3cdf9c1cf91d3d58",
+     "bytes": 3554999,
+     "sections": [
+      "101"
+     ],
+     "divisions": [],
+     "fragments": [
+      {
+       "section": "101",
+       "relationships": [
+        "CROSS_REFERENCE_REQUIRED"
+       ],
+       "inclusion": "CONTENT_INCLUDED_FOR_GENERATION",
+       "fragment_sha256": "4804b49fd38fc9acb8183d85dae211aa1c90e3bde9be23011f356ff19e336a6a",
+       "bytes": 3614,
+       "status": "fetched"
+      }
+     ],
+     "status": "identified",
+     "relationships": [
+      "CROSS_REFERENCE_REQUIRED"
+     ]
+    },
+    {
+     "type": "public_law",
+     "cite": "pl/117/25",
+     "congress": 117,
+     "law": 25,
+     "source_url": "https://www.govinfo.gov/content/pkg/PLAW-117publ25/uslm/PLAW-117publ25.xml",
+     "sha256": "21e1f7c0848266c584a6c31fecd59410ae30cc8133ff66a474f23198ba3611f5",
+     "bytes": 9118,
+     "sections": [],
+     "divisions": [],
+     "fragments": [],
+     "status": "identified",
+     "relationships": [
+      "REPLACED_TEXT"
+     ]
+    },
+    {
+     "type": "public_law",
+     "cite": "pl/116/114",
+     "congress": 116,
+     "law": 114,
+     "source_url": "https://www.govinfo.gov/content/pkg/PLAW-116publ114/uslm/PLAW-116publ114.xml",
+     "sha256": "90c6751160244634479add1e55a8f62903b9247ca2f245e03d42990923b014fc",
+     "bytes": 20270,
+     "sections": [],
+     "divisions": [],
+     "fragments": [],
+     "status": "identified",
+     "relationships": [
+      "REPLACED_TEXT"
+     ]
+    }
+   ],
+   "official_summary": {
+    "status": "available",
+    "version_code": "00",
+    "action_desc": "Introduced in House",
+    "action_date": "2025-03-10",
+    "sha256": "fbaa0cae5a7864847d544ade60568bf11408f999532db643c668b56ba0115ea9",
+    "version_relationship": "EARLIER_SAME_TEXT",
+    "usable": true
+   },
+   "cra": {
+    "mode": "not_cra",
+    "rule_status": null,
+    "consequence_source": null,
+    "underlying_rule": null,
+    "gao_determination": null
+   },
+   "completeness": {
+    "status": "PENDING",
+    "missing": [
+     "section selection for a large measure",
+     "public_law:pl/118/42 (needed as AMENDED_TARGET but cited as a whole law; no section can be selected)",
+     "public_law:pl/118/47 (needed as AMENDED_TARGET but cited as a whole law; no section can be selected)",
+     "public_law:pl/91/672 (text pending)",
+     "public_law:pl/117/328 (needed as AMENDED_TARGET but cited as a whole law; no section can be selected)",
+     "public_law:pl/98/473 (text pending)",
+     "public_law:pl/106/78 (text pending)",
+     "public_law:pl/111/11 (text pending)",
+     "public_law:pl/108/494 (text pending)",
+     "public_law:pl/117/263 (needed as REPLACED_TEXT but cited as a whole law; no section can be selected)",
+     "public_law:pl/111/148 (text pending)",
+     "public_law:pl/101/167 (text pending)",
+     "public_law:pl/108/11 (text pending)",
+     "public_law:pl/117/25 (needed as REPLACED_TEXT but cited as a whole law; no section can be selected)",
+     "public_law:pl/116/114 (needed as REPLACED_TEXT but cited as a whole law; no section can be selected)"
+    ],
+    "notes": [
+     "41 provisions exceed the cap of 12; the large-measure selection policy is not built",
+     "pl/118/42 cited as a whole law (division A, division B, division C, division D, division E, division F): identified and hashed, no section extracted; the Maker may not describe its contents",
+     "pl/118/47 cited as a whole law (division A, division B, division C, division D, division E, division F): identified and hashed, no section extracted; the Maker may not describe its contents",
+     "pl/118/83 cited as a whole law: identified and hashed, no section extracted; the Maker may not describe its contents",
+     "pl/117/159 cited as a whole law (division B): identified and hashed, no section extracted; the Maker may not describe its contents",
+     "pl/117/58 cited as a whole law (division J): identified and hashed, no section extracted; the Maker may not describe its contents",
+     "pl/117/328 cited as a whole law (division E, division G): identified and hashed, no section extracted; the Maker may not describe its contents",
+     "pl/118/5 cited as a whole law (division A): identified and hashed, no section extracted; the Maker may not describe its contents",
+     "pl/115/141 cited as a whole law: identified and hashed, no section extracted; the Maker may not describe its contents",
+     "pl/117/263 cited as a whole law (division K): identified and hashed, no section extracted; the Maker may not describe its contents",
+     "pl/117/103 cited as a whole law (division F): identified and hashed, no section extracted; the Maker may not describe its contents",
+     "pl/115/123 cited as a whole law (division B): identified and hashed, no section extracted; the Maker may not describe its contents",
+     "pl/113/76 cited as a whole law (division G): identified and hashed, no section extracted; the Maker may not describe its contents",
+     "pl/117/25 cited as a whole law: identified and hashed, no section extracted; the Maker may not describe its contents",
+     "pl/116/114 cited as a whole law: identified and hashed, no section extracted; the Maker may not describe its contents"
+    ]
+   },
+   "generation": {
+    "status": "SOURCE_CONTEXT_PENDING"
+   },
+   "superseded_utc": "2026-09-24T12:38:04Z"
   }
  ],
- "recorded_utc": "2026-09-24T12:22:16Z"
+ "recorded_utc": "2026-09-24T12:38:04Z"
 }

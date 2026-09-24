@@ -28,7 +28,8 @@
    "relationship": "CROSS_REFERENCE_REQUIRED",
    "basis": "operative provision applies or acts under it ('pursuant to')",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   }
  ],
  "citation_gaps": [],
@@ -50,11 +51,21 @@
     "operative provision applies or acts under it ('pursuant to')"
    ]
   },
+  "cited_as": {
+   "/us/usc/t50/s1622": [
+    {
+     "text": "50 U.S.C. 1622",
+     "source": "structured_xref",
+     "rule": null
+    }
+   ]
+  },
   "cited": [
    "/us/usc/t50/s1622"
   ],
   "amended": [],
   "unresolved_citations": [],
+  "resolved_by_fallback": [],
   "status": "ok"
  },
  "release_point": {
@@ -98,7 +109,14 @@
    "inclusion": "CONTENT_INCLUDED_FOR_GENERATION",
    "hierarchy": [],
    "section_fragment_sha256": "793e63af14e06cfea6326b3770afe90c7a2bfa0a6a9de2ced658afe6ff72b1fa",
-   "section_bytes": 9969
+   "section_bytes": 9969,
+   "cited_as": [
+    {
+     "text": "50 U.S.C. 1622",
+     "source": "structured_xref",
+     "rule": null
+    }
+   ]
   }
  ],
  "public_laws": [],
@@ -237,7 +255,152 @@
     "status": "READY_FOR_GENERATION"
    },
    "superseded_utc": "2026-09-24T12:22:18Z"
+  },
+  {
+   "schema": "civicalign.context/1.1",
+   "vote": {
+    "congress": 119,
+    "session": 1,
+    "clerk_number": 594,
+    "date": "2025-10-28",
+    "measure": "SJRES81"
+   },
+   "binding": {
+    "kind": "JOINT_RESOLUTION_PASSAGE",
+    "verification": "VERIFIED",
+    "text_status": "TEXT_BOUND",
+    "text_sha256": "edacdeca712ac1dbe360d74df7481031d77f1344965a09a9b07a47e2ca5f3d25"
+   },
+   "references": [
+    {
+     "legal_doc": "usc",
+     "cite": "usc/50/1622",
+     "text": "50 U.S.C. 1622",
+     "location": [
+      "section:"
+     ],
+     "in_quoted_text": false,
+     "scope": "section",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_REQUIRED",
+     "basis": "operative provision applies or acts under it ('pursuant to')",
+     "pl_section": null,
+     "pl_division": null
+    }
+   ],
+   "citation_gaps": [],
+   "selection": {
+    "policy": "provisions whose relationship needs content, at the cited node; others tracked only; capped",
+    "section_cap": 12,
+    "full_section_max_chars": 50000,
+    "required": [
+     "/us/usc/t50/s1622"
+    ],
+    "tracked_only": [],
+    "relationships": {
+     "/us/usc/t50/s1622": [
+      "CROSS_REFERENCE_REQUIRED"
+     ]
+    },
+    "bases": {
+     "/us/usc/t50/s1622": [
+      "operative provision applies or acts under it ('pursuant to')"
+     ]
+    },
+    "cited": [
+     "/us/usc/t50/s1622"
+    ],
+    "amended": [],
+    "unresolved_citations": [],
+    "status": "ok"
+   },
+   "release_point": {
+    "label": "119-36",
+    "date": "2025-09-05",
+    "note": "latest release point on or before the vote; per-section archives may come from an earlier published one"
+   },
+   "existing_law_context": [
+    {
+     "type": "us_code",
+     "identifier": "/us/usc/t50/s1622",
+     "title": "50",
+     "section": "1622",
+     "as_of": {
+      "release_point": "119-36",
+      "date": "2025-09-05",
+      "rule": "latest OLRC release point on or before the vote with a published archive; intervening laws checked against the classification table"
+     },
+     "source_url": "https://uscode.house.gov/download/releasepoints/us/pl/119/36/xml_usc50@119-36.zip",
+     "archive_sha256": "944fca716c734baf457d8479308926b8694c3668d823d330331b47c7b4a032a3",
+     "fragment_sha256": "793e63af14e06cfea6326b3770afe90c7a2bfa0a6a9de2ced658afe6ff72b1fa",
+     "bytes": 9969,
+     "heading": "National emergencies",
+     "relationship": "CROSS_REFERENCE_REQUIRED",
+     "status": "fetched",
+     "in_force_check": {
+      "status": "ok",
+      "archive": "xml_usc50@119-36.zip",
+      "intervening": [],
+      "affected_by": [],
+      "check": "no intervening release point"
+     },
+     "section_identifier": "/us/usc/t50/s1622",
+     "scope": "section",
+     "relationships": [
+      "CROSS_REFERENCE_REQUIRED"
+     ],
+     "bases": [
+      "operative provision applies or acts under it ('pursuant to')"
+     ],
+     "inclusion": "CONTENT_INCLUDED_FOR_GENERATION",
+     "hierarchy": [],
+     "section_fragment_sha256": "793e63af14e06cfea6326b3770afe90c7a2bfa0a6a9de2ced658afe6ff72b1fa",
+     "section_bytes": 9969
+    }
+   ],
+   "public_laws": [],
+   "official_summary": {
+    "status": "available",
+    "version_code": "00",
+    "action_desc": "Introduced in Senate",
+    "action_date": "2025-09-18",
+    "sha256": "bf55f11e906cf2f721bfe30abf9534ea78eb04ee85771aa5d47eeb572e7175fe",
+    "version_relationship": "PRE_AMENDMENT",
+    "usable": false
+   },
+   "cra": {
+    "mode": "not_cra",
+    "rule_status": null,
+    "consequence_source": null,
+    "underlying_rule": null,
+    "gao_determination": null
+   },
+   "completeness": {
+    "status": "COMPLETE",
+    "missing": [],
+    "notes": []
+   },
+   "generation": {
+    "status": "READY_FOR_GENERATION"
+   },
+   "metrics": {
+    "voted_text_chars": 2138,
+    "context_chars": 9928,
+    "official_summary_chars": 0,
+    "total_source_chars": 12066,
+    "source_count": 2,
+    "included_context_fragment_count": 1,
+    "hierarchy_fragment_count": 0,
+    "tracked_reference_count": 0
+   },
+   "budget": {
+    "review_threshold_chars": 150000,
+    "status": "WITHIN_BUDGET",
+    "rule": "no truncation; a packet over the threshold needs a recorded human review before generation"
+   },
+   "superseded_utc": "2026-09-24T12:38:06Z"
   }
  ],
- "recorded_utc": "2026-09-24T12:22:18Z"
+ "recorded_utc": "2026-09-24T12:38:06Z"
 }

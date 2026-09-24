@@ -98,6 +98,13 @@
    "relationships": [
     "CROSS_REFERENCE_REQUIRED"
    ],
+   "cited_as": [
+    {
+     "text": "50 U.S.C. 1622",
+     "source": "structured_xref",
+     "rule": null
+    }
+   ],
    "inclusion": "CONTENT_INCLUDED_FOR_GENERATION",
    "hierarchy": [],
    "sha256": "793e63af14e06cfea6326b3770afe90c7a2bfa0a6a9de2ced658afe6ff72b1fa",
@@ -160,7 +167,27 @@
     "793e63af14e06cfea6326b3770afe90c7a2bfa0a6a9de2ced658afe6ff72b1fa"
    ],
    "superseded_utc": "2026-09-24T12:22:18Z"
+  },
+  {
+   "packet_sha256": "25192be8965fcf20c0c638adb224aefd30cac44b8eb641cf115b59db0f5b66c6",
+   "packet_schema": "civicalign.packet/1.1",
+   "generation": "READY_FOR_GENERATION",
+   "metrics": {
+    "voted_text_chars": 2153,
+    "context_chars": 9928,
+    "official_summary_chars": 235,
+    "total_source_chars": 12316,
+    "source_count": 3,
+    "included_context_fragment_count": 1,
+    "hierarchy_fragment_count": 0,
+    "tracked_reference_count": 0
+   },
+   "voted_text_sha256": "64d111f8e6b0d492b6718b02bce3f206c9c2ea89b624e1dbf381b124a5df3681",
+   "law_sha256": [
+    "793e63af14e06cfea6326b3770afe90c7a2bfa0a6a9de2ced658afe6ff72b1fa"
+   ],
+   "superseded_utc": "2026-09-24T12:38:06Z"
   }
  ],
- "recorded_utc": "2026-09-24T12:22:18Z"
+ "recorded_utc": "2026-09-24T12:38:06Z"
 }

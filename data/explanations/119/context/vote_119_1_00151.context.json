@@ -26,7 +26,8 @@
    "relationship": "CROSS_REFERENCE_REQUIRED",
    "basis": "operative reference with no narrower rule (fail closed: content required)",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   }
  ],
  "citation_gaps": [],
@@ -38,9 +39,11 @@
   "tracked_only": [],
   "relationships": {},
   "bases": {},
+  "cited_as": {},
   "cited": [],
   "amended": [],
   "unresolved_citations": [],
+  "resolved_by_fallback": [],
   "status": "ok"
  },
  "release_point": {
@@ -239,7 +242,143 @@
     "status": "READY_WITH_LIMITS"
    },
    "superseded_utc": "2026-09-24T12:22:16Z"
+  },
+  {
+   "schema": "civicalign.context/1.1",
+   "vote": {
+    "congress": 119,
+    "session": 1,
+    "clerk_number": 151,
+    "date": "2025-03-26",
+    "measure": "HJRES25"
+   },
+   "binding": {
+    "kind": "JOINT_RESOLUTION_PASSAGE",
+    "verification": "VERIFIED",
+    "text_status": "TEXT_BOUND",
+    "text_sha256": "c0ebf99b63fa6ff81c8732cc9d7aff6f4c78da150ddc07c359bcecbaf354cfcf"
+   },
+   "references": [
+    {
+     "legal_doc": "usc-chapter",
+     "cite": "usc-chapter/5/8",
+     "text": "chapter 8",
+     "location": [],
+     "in_quoted_text": false,
+     "scope": "unparsed",
+     "pinpoint": [],
+     "display_matches_cite": false,
+     "relationship": "CROSS_REFERENCE_REQUIRED",
+     "basis": "operative reference with no narrower rule (fail closed: content required)",
+     "pl_section": null,
+     "pl_division": null
+    }
+   ],
+   "citation_gaps": [],
+   "selection": {
+    "policy": "cra: the resolution's own text and the CRA consequence section; cited authorities are tracked, not extracted",
+    "section_cap": 12,
+    "full_section_max_chars": 50000,
+    "required": [],
+    "tracked_only": [],
+    "relationships": {},
+    "bases": {},
+    "cited": [],
+    "amended": [],
+    "unresolved_citations": [],
+    "status": "ok"
+   },
+   "release_point": {
+    "label": "119-4",
+    "date": "2025-03-15",
+    "note": "latest release point on or before the vote; per-section archives may come from an earlier published one"
+   },
+   "existing_law_context": [],
+   "public_laws": [],
+   "official_summary": {
+    "status": "available",
+    "version_code": "00",
+    "action_desc": "Introduced in House",
+    "action_date": "2025-01-21",
+    "sha256": "2b70b2f0c82863fb82fd4ae1ee0f2a477ed4841f6163cf1c5534945763054ef4",
+    "version_relationship": "EARLIER_SAME_TEXT",
+    "usable": true
+   },
+   "cra": {
+    "mode": "rule_bound",
+    "rule_status": "RULE_BOUND",
+    "consequence_source": {
+     "type": "us_code",
+     "identifier": "/us/usc/t5/s801",
+     "title": "5",
+     "section": "801",
+     "as_of": {
+      "release_point": "119-4",
+      "date": "2025-03-15",
+      "rule": "latest OLRC release point on or before the vote with a published archive; intervening laws checked against the classification table"
+     },
+     "source_url": "https://uscode.house.gov/download/releasepoints/us/pl/119/4/xml_usc05@119-4.zip",
+     "archive_sha256": "67b23ff2bb7b69db1c9aa892dcfdf0fb378b8aa042d097cafb20931596149f82",
+     "fragment_sha256": "428e76f02b92afb745472c99f9d0f3059376320e60727f9e4f10a30788be6daf",
+     "bytes": 33022,
+     "heading": "Congressional review",
+     "relationship": "SUPPORTING_CONTEXT",
+     "status": "fetched",
+     "in_force_check": {
+      "status": "ok",
+      "archive": "xml_usc05@119-4.zip",
+      "intervening": [],
+      "affected_by": [],
+      "check": "no intervening release point"
+     },
+     "inclusion": "CONTENT_INCLUDED_FOR_GENERATION",
+     "basis": "fixed rule: the CRA consequence section in force at the vote"
+    },
+    "underlying_rule": {
+     "status": "RULE_BOUND",
+     "citation": "89 FR 106928",
+     "document_number": "2024-30496",
+     "fr_title": "Gross Proceeds Reporting by Brokers That Regularly Provide Services Effectuating Digital Asset Sales",
+     "type": "Rule",
+     "publication_date": "2024-12-30",
+     "agencies": [
+      "Treasury Department",
+      "Internal Revenue Service"
+     ],
+     "source_url": "https://www.federalregister.gov/documents/2024/12/30/2024-30496/gross-proceeds-reporting-by-brokers-that-regularly-provide-services-effectuating-digital-asset-sales",
+     "full_text_xml_url": "https://www.federalregister.gov/documents/full_text/xml/2024/12/30/2024-30496.xml",
+     "sha256": "66a3ab6a5da0f8d0dd007eb1c0d0cd88278d47f2818bb83075d6cef2bc0b82dc",
+     "bytes": 293358
+    },
+    "gao_determination": null
+   },
+   "completeness": {
+    "status": "LIMITED",
+    "missing": [],
+    "notes": [
+     "CRA: the resolution's own effect may be explained; the underlying rule's substance may not unless the rule is bound and separately verified"
+    ]
+   },
+   "generation": {
+    "status": "READY_WITH_LIMITS"
+   },
+   "metrics": {
+    "voted_text_chars": 2948,
+    "context_chars": 32792,
+    "official_summary_chars": 437,
+    "total_source_chars": 36177,
+    "source_count": 3,
+    "included_context_fragment_count": 1,
+    "hierarchy_fragment_count": 0,
+    "tracked_reference_count": 0
+   },
+   "budget": {
+    "review_threshold_chars": 150000,
+    "status": "WITHIN_BUDGET",
+    "rule": "no truncation; a packet over the threshold needs a recorded human review before generation"
+   },
+   "superseded_utc": "2026-09-24T12:38:04Z"
   }
  ],
- "recorded_utc": "2026-09-24T12:22:16Z"
+ "recorded_utc": "2026-09-24T12:38:04Z"
 }

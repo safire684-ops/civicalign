@@ -73,11 +73,53 @@ def test_relevance_classes_come_from_location_in_the_voted_xml():
     gaps = {g["kind"]: g for g in a["gaps"]}
     assert gaps["citation_list_continues_untagged"]["text"] == "8 U.S.C. 1226, 1231(a), or 1357"
     assert gaps["untagged_citation"]["text"] == "8 U.S.C. 1325 or 1326"
-    assert all(g["relationship"] == R.DEFINITION_REQUIRED for g in a["gaps"])
+    assert all(g["relationship"] == R.DEFINITION_REQUIRED and g["resolved"] for g in a["gaps"])
     sel = C.select_sections(a["references"], False, a["gaps"])
-    assert sel["status"] == "unresolved_citations" and "/us/usc/t8/s1365b" in sel["tracked_only"]
+    assert sel["status"] == "ok" and "/us/usc/t8/s1365b" in sel["tracked_only"]
     assert "/us/usc/t8/s1182/a/2" in sel["required"] and "/us/usc/t8/s1182" not in sel["required"]
+    assert {"/us/usc/t8/s1231/a", "/us/usc/t8/s1325", "/us/usc/t8/s1326", "/us/usc/t8/s1357"} <= set(sel["required"])
     assert "/us/usc/t50/s1601" in sel["tracked_only"]
+    # an unresolvable group in the same place keeps the context pending
+    bad = DEF_XML.replace(b"(8 U.S.C. 1325 or 1326)", b"(8 U.S.C. 1325\xe2\x80\x931330)")
+    b2 = R.analyse(bad)
+    assert C.select_sections(b2["references"], False, b2["gaps"])["status"] == "unresolved_citations"
+
+
+def _parse(text):
+    """Fallback citations from one untagged clause inside a definition."""
+    xml = ('<bill><legis-body><section><enum>1.</enum><header>Terms defined</header><text>' + text + '</text></section></legis-body></bill>').encode()
+    a = R.analyse(xml)
+    return [(r["text"], r["rule"][:2]) for r in a["references"] if r["source"] == "fallback_explicit_usc"], a
+
+
+def test_fallback_grammar_recognises_only_the_demonstrated_forms():
+    assert _parse("an offense described in section 275 or 276 of such Act (8 U.S.C. 1325 or 1326).")[0] == [("8 U.S.C. 1325", "R1"), ("8 U.S.C. 1326", "R1")]
+    assert _parse("under such Act (42 U.S.C. 1484, 1485, and 1486(a)(2)).")[0] == [("42 U.S.C. 1484", "R1"), ("42 U.S.C. 1485", "R1"), ("42 U.S.C. 1486(a)(2)", "R1")]
+    assert _parse("section 7 (15 U.S.C. 78m(a), 78o(d)).")[0] == [("15 U.S.C. 78m(a)", "R1"), ("15 U.S.C. 78o(d)", "R1")]
+    for vague in ("that section", "this chapter", "applicable law", "section 275 of such Act", "such Act (8 U.S.C. 1101 et seq.)",
+                  "(5 U.S.C. 551\u2013558)", "(42 U.S.C. 247d\u20137e(e)(1)(D))", "(50 U.S.C. App. 2401)", "(8 U.S.C. 1325; 18 U.S.C. 1)",
+                  "(8 U.S.C. 1101 note)", "(24 U.S.C. ch. 5)", "8 U.S.C. 1325 or 1326 without a parenthesis", "(8 U.S.C. 1325 or section 3)"):
+        found, a = _parse(vague)
+        assert found == [], vague
+        assert all(not g["resolved"] for g in a["gaps"]), vague
+
+
+def test_fallback_inherits_the_title_of_a_tagged_citation_and_keeps_provenance():
+    xml = ('<bill><legis-body><section id="s9"><enum>9.</enum><header>Terms defined</header><text>a detainer issued pursuant to section 236, 241(a), '
+           'or 287 of such Act (<external-xref legal-doc="usc" parsable-cite="usc/8/1226">8 U.S.C. 1226</external-xref>, 1231(a), or 1357); or</text>'
+           '</section></legis-body></bill>').encode()
+    a = R.analyse(xml)
+    fb = [r for r in a["references"] if r["source"] == "fallback_explicit_usc"]
+    assert [(r["cite"], r["pinpoint"], r["scope"]) for r in fb] == [("usc/8/1231", ["a"], "node"), ("usc/8/1357", [], "section")]
+    r = fb[0]
+    assert r["rule"].startswith("R2") and r["source_fragment"] == "(8 U.S.C. 1226, 1231(a), or 1357)"
+    assert r["source_sha256"] == hashlib.sha256(xml).hexdigest() and r["container"]["id"] == "s9" and r["text_part"] == "tail of external-xref"
+    assert (r["char_start"], r["char_end"]) == (0, len(", 1231(a), or 1357)"))
+    assert [x["source"] for x in a["references"]] == ["structured_xref", "fallback_explicit_usc", "fallback_explicit_usc"]
+    g = a["gaps"][0]
+    assert g["provisions"] == ["8 U.S.C. 1226", "8 U.S.C. 1231(a)", "8 U.S.C. 1357"] and g["untagged_provisions"] == ["8 U.S.C. 1231(a)", "8 U.S.C. 1357"]
+    # a tagged citation not opening the parenthetical is not continued
+    assert not R.analyse(xml.replace(b"of such Act (<external", b"of such Act <external"))["gaps"][0]["resolved"]
 
 
 def test_governing_phrase_strips_only_the_designation():
@@ -287,24 +329,33 @@ def test_packets_contain_only_hashed_artefacts(records):
 
 
 def test_first_cohort_readiness(records):
-    """Nine of the ten are source-complete under the relevance rules. S.2 is not:
-    its definition of "covered unlawful alien" cites 8 U.S.C. 1231(a), 1357, 1325
-    and 1326 in text the XML does not structure, so the required context cannot
-    be selected deterministically. It must stay pending until that is resolved,
-    and it must never again carry the whole of 8 U.S.C. 1182."""
+    """All ten first-cohort cases are source-complete. S.2 became complete only
+    when its four untagged provisions (two citation groups naming five provisions,
+    one of them tagged) were recovered by the narrow fallback grammar and bound to
+    the Code in force at the vote. Its packet exceeds the review threshold, so a
+    person must confirm its size before any Maker reads it."""
     by = {c["vote"]["measure"]: c for c in records.values()}
-    ready = ["SJRES10", "SJRES37", "SJRES49", "SJRES71", "SJRES81", "SJRES77", "SJRES88", "HJRES142", "HR4"]
-    for m in ready:
+    cohort = ["SJRES10", "SJRES37", "SJRES49", "SJRES71", "SJRES81", "SJRES77", "SJRES88", "HJRES142", "S2", "HR4"]
+    for m in cohort:
         assert by[m]["generation"]["status"] == "READY_FOR_GENERATION", (m, by[m]["completeness"])
-        assert by[m]["budget"]["status"] == "WITHIN_BUDGET"
+        assert by[m]["budget"]["status"] == ("REVIEW_REQUIRED" if m == "S2" else "WITHIN_BUDGET"), m
     s2 = by["S2"]
-    assert s2["generation"]["status"] == "SOURCE_CONTEXT_PENDING"
-    assert s2["selection"]["status"] == "unresolved_citations"
-    assert {g["text"] for g in s2["selection"]["unresolved_citations"]} == {"8 U.S.C. 1226, 1231(a), or 1357", "8 U.S.C. 1325 or 1326"}
+    groups = s2["citation_gaps"]
+    assert len(groups) == 2 and all(g["resolved"] for g in groups)
+    assert sum(len(g["provisions"]) for g in groups) == 5 and sum(len(g["untagged_provisions"]) for g in groups) == 4
+    assert sorted(p for g in groups for p in g["untagged_provisions"]) == ["8 U.S.C. 1231(a)", "8 U.S.C. 1325", "8 U.S.C. 1326", "8 U.S.C. 1357"]
     law = {e["identifier"]: e for e in s2["existing_law_context"]}
     assert "/us/usc/t8/s1182" not in law and law["/us/usc/t8/s1182/a/2"]["relationships"] == [R.DEFINITION_REQUIRED]
-    assert law["/us/usc/t8/s1182/a/2"]["bytes"] < 20000 and law["/us/usc/t8/s1365b"]["inclusion"] == R.REFERENCE_TRACKED
-    assert not (PDIR / "vote_119_2_00163.packet.json").exists()
+    for ident in ("/us/usc/t8/s1231/a", "/us/usc/t8/s1325", "/us/usc/t8/s1326", "/us/usc/t8/s1357"):
+        e = law[ident]
+        assert e["status"] == "fetched" and e["inclusion"] == R.CONTENT_INCLUDED and e["as_of"]["release_point"] == "119-95", ident
+        assert any(x["source"] == "fallback_explicit_usc" for x in e["cited_as"]), ident
+    assert law["/us/usc/t8/s1231/a"]["scope"] == "node" and law["/us/usc/t8/s1231/a"]["bytes"] < law["/us/usc/t8/s1231/a"]["section_bytes"]
+    assert law["/us/usc/t8/s1365b"]["inclusion"] == R.REFERENCE_TRACKED
+    assert all(len(json.dumps(e)) < 10 ** 6 for e in s2["existing_law_context"])
+    pk = json.loads((PDIR / "vote_119_2_00163.packet.json").read_text())
+    assert pk["metrics"]["total_source_chars"] > C.PACKET_REVIEW_CHARS and pk["budget"]["status"] == "REVIEW_REQUIRED"
+    assert all(len(e["content"]) <= C.FULL_SECTION_MAX_CHARS for e in pk["existing_law_context"] if e["scope"] == "section")
     # "et seq." citations are tracked, not injected (50 U.S.C. 1601 is not the termination rule)
     for m in ("SJRES10", "SJRES71"):
         assert [(e["identifier"], e["inclusion"]) for e in by[m]["existing_law_context"]] == [("/us/usc/t50/s1601", R.REFERENCE_TRACKED)]

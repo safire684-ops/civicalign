@@ -26,7 +26,8 @@
    "relationship": "CROSS_REFERENCE_REQUIRED",
    "basis": "operative reference with no narrower rule (fail closed: content required)",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   }
  ],
  "citation_gaps": [],
@@ -38,9 +39,11 @@
   "tracked_only": [],
   "relationships": {},
   "bases": {},
+  "cited_as": {},
   "cited": [],
   "amended": [],
   "unresolved_citations": [],
+  "resolved_by_fallback": [],
   "status": "ok"
  },
  "release_point": {
@@ -237,7 +240,142 @@
     "status": "READY_WITH_LIMITS"
    },
    "superseded_utc": "2026-09-24T12:22:16Z"
+  },
+  {
+   "schema": "civicalign.context/1.1",
+   "vote": {
+    "congress": 119,
+    "session": 1,
+    "clerk_number": 277,
+    "date": "2025-05-22",
+    "measure": "HJRES88"
+   },
+   "binding": {
+    "kind": "JOINT_RESOLUTION_PASSAGE",
+    "verification": "VERIFIED",
+    "text_status": "TEXT_BOUND",
+    "text_sha256": "1504b8884bd6dc4ab50ff91a5261df89fcb5a4c5a6781d185da784f60ac4514a"
+   },
+   "references": [
+    {
+     "legal_doc": "usc-chapter",
+     "cite": "usc-chapter/5/8",
+     "text": "chapter 8",
+     "location": [],
+     "in_quoted_text": false,
+     "scope": "unparsed",
+     "pinpoint": [],
+     "display_matches_cite": false,
+     "relationship": "CROSS_REFERENCE_REQUIRED",
+     "basis": "operative reference with no narrower rule (fail closed: content required)",
+     "pl_section": null,
+     "pl_division": null
+    }
+   ],
+   "citation_gaps": [],
+   "selection": {
+    "policy": "cra: the resolution's own text and the CRA consequence section; cited authorities are tracked, not extracted",
+    "section_cap": 12,
+    "full_section_max_chars": 50000,
+    "required": [],
+    "tracked_only": [],
+    "relationships": {},
+    "bases": {},
+    "cited": [],
+    "amended": [],
+    "unresolved_citations": [],
+    "status": "ok"
+   },
+   "release_point": {
+    "label": "119-12",
+    "date": "2025-05-19",
+    "note": "latest release point on or before the vote; per-section archives may come from an earlier published one"
+   },
+   "existing_law_context": [],
+   "public_laws": [],
+   "official_summary": {
+    "status": "available",
+    "version_code": "00",
+    "action_desc": "Introduced in House",
+    "action_date": "2025-04-02",
+    "sha256": "2957713d412ec53e2b4e9d82fd9987445142b4c8af799a65ed2139037cdd7657",
+    "version_relationship": "EARLIER_SAME_TEXT",
+    "usable": true
+   },
+   "cra": {
+    "mode": "rule_bound",
+    "rule_status": "RULE_BOUND",
+    "consequence_source": {
+     "type": "us_code",
+     "identifier": "/us/usc/t5/s801",
+     "title": "5",
+     "section": "801",
+     "as_of": {
+      "release_point": "119-12",
+      "date": "2025-05-19",
+      "rule": "latest OLRC release point on or before the vote with a published archive; intervening laws checked against the classification table"
+     },
+     "source_url": "https://uscode.house.gov/download/releasepoints/us/pl/119/12/xml_usc05@119-12.zip",
+     "archive_sha256": "f46adb55ae38c30bcf1b894bb288a8267ac7fa4fd0020e0cc328bba044abd5af",
+     "fragment_sha256": "428e76f02b92afb745472c99f9d0f3059376320e60727f9e4f10a30788be6daf",
+     "bytes": 33022,
+     "heading": "Congressional review",
+     "relationship": "SUPPORTING_CONTEXT",
+     "status": "fetched",
+     "in_force_check": {
+      "status": "ok",
+      "archive": "xml_usc05@119-12.zip",
+      "intervening": [],
+      "affected_by": [],
+      "check": "no intervening release point"
+     },
+     "inclusion": "CONTENT_INCLUDED_FOR_GENERATION",
+     "basis": "fixed rule: the CRA consequence section in force at the vote"
+    },
+    "underlying_rule": {
+     "status": "RULE_BOUND",
+     "citation": "90 FR 642",
+     "document_number": "2024-31128",
+     "fr_title": "California State Motor Vehicle and Engine Pollution Control Standards; Advanced Clean Cars II; Waiver of Preemption; Notice of Decision",
+     "type": "Notice",
+     "publication_date": "2025-01-06",
+     "agencies": [
+      "Environmental Protection Agency"
+     ],
+     "source_url": "https://www.federalregister.gov/documents/2025/01/06/2024-31128/california-state-motor-vehicle-and-engine-pollution-control-standards-advanced-clean-cars-ii-waiver",
+     "full_text_xml_url": "https://www.federalregister.gov/documents/full_text/xml/2025/01/06/2024-31128.xml",
+     "sha256": "88a2826c0a37027dae1fd4c118b0a644efd97ee783aadcf3d5920b9a080c437b",
+     "bytes": 12005
+    },
+    "gao_determination": null
+   },
+   "completeness": {
+    "status": "LIMITED",
+    "missing": [],
+    "notes": [
+     "CRA: the resolution's own effect may be explained; the underlying rule's substance may not unless the rule is bound and separately verified"
+    ]
+   },
+   "generation": {
+    "status": "READY_WITH_LIMITS"
+   },
+   "metrics": {
+    "voted_text_chars": 2846,
+    "context_chars": 32792,
+    "official_summary_chars": 575,
+    "total_source_chars": 36213,
+    "source_count": 3,
+    "included_context_fragment_count": 1,
+    "hierarchy_fragment_count": 0,
+    "tracked_reference_count": 0
+   },
+   "budget": {
+    "review_threshold_chars": 150000,
+    "status": "WITHIN_BUDGET",
+    "rule": "no truncation; a packet over the threshold needs a recorded human review before generation"
+   },
+   "superseded_utc": "2026-09-24T12:38:04Z"
   }
  ],
- "recorded_utc": "2026-09-24T12:22:16Z"
+ "recorded_utc": "2026-09-24T12:38:04Z"
 }

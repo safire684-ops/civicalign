@@ -1,7 +1,9 @@
 # Methodology and known limits
 
 Drafted to be published, not hidden. Every item here is something an expert
-reader would otherwise find first.
+reader would otherwise find first. Figures quoted below are illustrations from
+the time of writing; the site rebuilds weekly, and the published methodology
+report carries the current figures.
 
 ## The one-dimension assumption
 
@@ -11,8 +13,9 @@ roll-call voting, where one dimension explains most of the variance. It holds up
 considerably worse for voters, whose economic and social views do not line up as
 neatly.
 
-So "this senator is 0.4 away from their state" is a real measurement of one
-particular summary of politics. It is not a measurement of politics.
+So a senator's position on the Senate voting scale is a real measurement of one
+particular summary of roll-call voting. It is not a measurement of politics, and
+it is not on the same scale as any measure of voters.
 
 ## Senator coordinates
 
@@ -30,46 +33,53 @@ Two limits:
 The alternative, `nominate_dim1`, is a career-long constant and cannot support
 any claim about change over time. See `config.py`.
 
-## Pillar 4 without a shared ruler
+## Pillar 4: comparison with comparable senators
 
 Voteview publishes four datasets -- Member Ideology, Congressional Votes,
 Members' Votes, Congressional Parties -- and all four are roll calls and the
-people who cast them. Its scores update live as new votes are recorded, which is
-genuinely useful, but no version of them contains a position for the public. So
-senator-vs-public cannot be a subtraction inside that data.
+people who cast them. None contains a position for the public, so no comparison
+of a senator with the public can be made inside that data, and CivicAlign does
+not make one.
 
-It does not have to be a subtraction. Two comparisons work with no shared scale
-at all:
+What the site shows instead stays on one scale. Each senator is compared with
+senators **in the same caucus group** who represent **other states with similar
+recent presidential voting** (`peers.py`):
 
-**1. Regression, not subtraction.** Fit
+- Caucus groups: the Republican caucus; the Democratic caucus, meaning Democrats
+  plus the Independents whose Senate roster entry records that they caucus with
+  them. An unrecognised or missing party or caucus value gets no comparison.
+- Similar states: the two-party presidential share (2016, 2020 and 2024 averaged
+  equally) within ±4 percentage points of the senator's state.
+- At least six peers; the conclusion is published only if it is the same at
+  ±2, ±3, ±4 and ±5 points. Otherwise the page says the result depends on the
+  window, or that there are too few comparable senators.
+- The result says whether the senator's record is within the observed range of
+  the peers' records, or outside it on the more liberal or more conservative
+  side. Peers are listed by state, never ordered, and nothing is ranked.
 
-    senator ideology = a + b x (state presidential vote share)
+This describes where a voting record sits among comparable senators. It does
+not measure whether a senator represents, agrees with or matches the state's
+voters.
 
-across all 100 senators, then read the **residual**: actual minus predicted. The
-fitted line says what ideology a state's election result typically produces; the
-residual says how far a senator sits from that expectation. Units are ideology
-units the whole way through -- the two scales are never subtracted, so they never
-have to match. On 2024 results the fit is r-squared **0.687**, so state election
-results explain about 69% of senator ideology, and a residual is deviation from a
-strong pattern rather than from noise.
+**Retired: the state-vote regression.** An earlier version fitted
+`senator score = a + b x (state presidential vote share)` across all senators
+and read each senator's residual. It is kept in `representation.py` for
+diagnostics only and produces no published classification. It was retired
+because the fitted line mostly measured the party split (senators cluster in two
+groups, and the line runs between them), so in competitive states the "expected"
+position fell in a gap where no senator of either party sits, and residuals
+there described party membership rather than anything about the senator.
 
-*What it answers:* "Is this senator more extreme than their own state's election
-result predicts, compared with how every other senator relates to theirs?"
+## Pillar 5: Senate seats and the national vote
 
-*What it does not answer:* "How far is this senator from their state's median
-voter?" That is an absolute distance and still needs bridged survey data. The
-residual is **relative to the Senate-wide pattern** -- a uniform shift of every
-senator changes no residual at all, which is pinned as a test. If the whole Senate
-moved right, this measure would not show it.
-
-**2. Election results on both sides.** Apportionment skew becomes the average
+**Election results on both sides.** Apportionment skew becomes the average
 state vote share per Senate seat minus the national vote share: **+3.37 points**
 averaged over 2016/2020/2024. Each state gets two senators regardless of population, so small states
 are over-weighted, and this measures exactly that. Vote share against vote share,
 identical units, no assumption whatsoever. It is a structural claim about seats,
 not a claim about senators' opinions.
 
-The same method gives committees-vs-public. Report it **against the Senate's own
+The same method gives committees against the country. Report it **against the Senate's own
 average**, not just the nation: the gap against the nation mostly reflects the
 +2.66pt structural skew plus the fact that the majority party holds most seats on
 every committee, neither of which is about the committee. Against the Senate, the
@@ -77,12 +87,12 @@ picture inverts for some -- Judiciary is +0.23 vs the nation but **-3.14 vs the
 Senate**.
 
 State lean is the average two-party presidential share over 2016, 2020 and 2024,
-each election weighted equally, as partisan-lean indices such as Cook PVI do.
-Three cycles is steadier than one but slower to reflect a state that is genuinely
-moving, so `StateLean.swing` reports the spread between a state's most and least
-Republican year -- Florida moved 6.0 points across the three, California 5.7. A
-large swing means the average is hiding real movement and the residual built on
-it deserves less weight.
+each election weighted equally, as partisan-lean indices such as Cook PVI do. It
+is used to pick comparable states for Pillar 4 and for the seats-vs-nation
+figure. Three cycles is steadier than one but slower to reflect a state that is
+genuinely moving, so `StateLean.swing` reports the spread between a state's most
+and least Republican year -- Florida moved 6.0 points across the three,
+California 5.7.
 
 Source: MIT Election Data and Science Lab, U.S. President 1976-2024, Harvard
 Dataverse doi:10.7910/DVN/42MVDX. Chosen after rejecting a county-level
@@ -95,62 +105,47 @@ Remaining limits of vote share as the state measure: it is partisan choice rathe
 than policy preference, and a two-party share discards third-party votes. It
 measures what voters *did*, not what they *think*.
 
-## The survey-bridging problem (why absolute distances are still not live)
+## The voter estimate: separate context, never compared directly
 
-DW-NOMINATE places senators using how they vote on bills. Surveys place voters
-using what they tell a pollster. Two rulers, two zero points. Subtracting one from
-the other is subtracting Celsius from Fahrenheit: it returns a number, and the
-number means nothing.
+The site shows each state's voter estimate from the American Ideology Project
+(Tausanovitch & Warshaw, newest wave 2020) as supporting context, on its own
+voter-estimate scale. It is never subtracted from a senator's voting score,
+never tested against the senator's score, and never used to rank senators.
 
-Bridging requires something present in both datasets. Three options, in
-`sources/state_prefs.py`:
+The reason: DW-NOMINATE and Nokken-Poole place senators using how they vote on
+bills; surveys place voters using what they tell a pollster. Two rulers, two
+zero points. Subtracting one from the other is subtracting Celsius from
+Fahrenheit: it returns a number, and the number means nothing.
 
-- **Option A (recommended).** Published bridged MRP estimates — Tausanovitch &
-  Warshaw (2013), *Journal of Politics* — built to be comparable with legislator
-  scores. Bridge already done and peer-reviewed. About a week of work.
-- **Option B (most rigorous).** Build it from shared items: the Cooperative
-  Election Study asks respondents about *specific actual bills* Congress voted on,
-  so those bills bridge voters and senators inside one item-response model. This
-  is Bafumi & Herron's leapfrog-representation design. Needs CCES data, an ACS
-  poststratification frame, a Stan model and statistical review — two to three
-  months.
-- **Option C (placeholder only).** Stretch an existing state ideology index onto
-  [−1, +1]. Fast, correlated with the right answer, but **not a bridge** — the
-  distances are not real distances. If it reaches the frontend, the frontend must
-  say so.
-
-Until one is configured, the pipeline prints `NOT AVAILABLE` for absolute
-distances specifically. A missing dataset should be a visible gap in the product,
-not a plausible-looking number. Note this now blocks only the absolute-distance
-metric -- the regression route above is live and needs none of it.
+A direct comparison would need a validated bridge -- something present in both
+datasets, such as published bridged estimates built to be comparable with
+legislator scores, or survey items on the actual bills Congress voted on,
+modelled together with the roll calls. CivicAlign has no such bridge, and none
+is configured (`sources/state_prefs.py`). Stretching a state index onto the
+senators' scale is not a bridge and is not used. Until a bridge exists and has
+been reviewed, no senator-to-voter comparison is published.
 
 ## Definitional choices that move the headline
 
 - **Mean vs. median.** The spec says *median* voter, but MRP naturally yields a
   mean or a distribution. These differ whenever a state's opinion is lopsided.
-  Pick one and use it everywhere — Pillar 5 compares a state median to a chamber
-  median, and mixing the two silently breaks the comparison.
+  This matters only for the voter-estimate context and any future bridge; no
+  published figure compares a state's voters with a senator or the chamber.
 - **Who is "the electorate."** Adults, citizens, registered voters, or actual
-  voters. Turnout weighting moves the national coordinate, and every Pillar 5
-  headline depends on it. Set in `config.electorate` and stated publicly.
+  voters. Turnout weighting moves any national voter coordinate. Set in
+  `config.electorate` and stated publicly.
 - **National median, two definitions.** The population-weighted median of
   individuals is *not* the median of the 50 state medians. The spec means the
   former.
 
 ## Departures from the spec
 
-**The alignment score compresses.** The spec's `(1 − gap/2) × 100` divides by the
-theoretical max distance of 2.0, but real senators span roughly −0.75 to +0.94 and
-state medians will bunch near the middle, so real gaps run 0 to about 1.1 and the
-score almost never leaves 45–100%. Every senator looks at least half-aligned,
-including the worst. A gap of 1.0 — enormous — still prints as 50%. Retained for
-continuity but shown alongside a rank: "worse aligned than 94 of 100 senators".
-
-**The sign is kept.** The spec takes an absolute value immediately. Two senators
-with an identical 0.5 gap can differ completely: one is more extreme than their
-state in the same direction, the other has crossed past the middle to the
-*opposite* side of their own electorate. The second is far more damning and the
-absolute value erases it. `Alignment.crosses_over` exposes it.
+**Retired: the alignment score.** The original spec scored each senator
+against an estimate of the state's voters with `(1 − gap/2) × 100`. It required
+subtracting a voter estimate from a senator score, which the scales do not
+support (see above), and it invited ranking senators against one another. It
+was removed from the code and the site, along with the signed gap and the
+ranking built on it. Nothing replaces it; Pillar 4 uses the peer comparison.
 
 **The median senator is not the pivot.** Legislation needs 60 votes for cloture,
 so the 60th senator from the left decides whether a bill advances — in the 119th
@@ -168,8 +163,9 @@ committees as an artifact — Small Business and Homeland both read +0.211; Rule
 and Agriculture both +0.018. **9 of 19 committees fall below the 0.10 noise
 floor** and are flagged rather than published.
 
-**The chair is the real signal.** Pillar 6 exists to explain where bills get
-stuck, and the chair decides what gets a hearing. Nearly every chair sits far
+**Chairs sit away from their committees.** Pillar 6 is descriptive: it shows
+how each committee compares with the Senate, without claiming why a bill moved or
+did not. One pattern worth knowing is that nearly every chair sits far
 right of their own committee's median — Budget's chair is +0.897 against a median
 of +0.128, Commerce's +0.865 against +0.326. Gaps of 0.5–0.8, two to three times
 any CCD. Caveat: chairs come from the majority party, so part of this is plain
@@ -201,13 +197,10 @@ The remaining two are stable but below the noise floor. A bootstrap was not used
 because it would imply members were sampled from a population; they were
 appointed.
 
-**The regression — genuine model uncertainty, computed analytically.** Slope
-+4.007 with a 95% interval of [+3.472, +4.542], nowhere near zero. Residual
-standard error 0.285, so a residual needs to clear roughly 0.57 to mean anything.
-Residuals are leverage-corrected (studentized) because a raw residual is easier to
-produce by chance at the edges of the vote-share range, where the line is least
-constrained — otherwise senators from very safe states get flagged merely for
-sitting at the end of the scale. Only **6 of 100** senators clear |t| > 2.
+**The retired regression.** Its analytic standard errors, leverage and
+prediction band are still computed (`uncertainty.py`) so the methodology report
+can show why it was retired. They do not support any statement about an
+individual senator, and none is published.
 
 **Apportionment skew — a census of ballots, so almost no statistical error.** Its
 real sensitivity is which elections were included, reported as the spread across
@@ -224,5 +217,5 @@ over. It is the one remaining gap in the uncertainty treatment.
   subcommittees are excluded by the four-character code filter. Both rules should
   be deliberate and documented rather than incidental.
 - **Float comparison.** Coordinates are binary floats: `0.7 − 0.2` is
-  `0.49999999999999994`. Anywhere they are compared for equality — ranking ties,
-  deduplicating medians — needs a tolerance.
+  `0.49999999999999994`. Anywhere they are compared for equality — ties at a range
+  boundary, deduplicating medians — needs a tolerance.

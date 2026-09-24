@@ -30,7 +30,8 @@
    "relationship": "AMENDED_TARGET",
    "basis": "amendatory instruction that inserts, adds or redesignates",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "usc",
@@ -47,7 +48,8 @@
    "relationship": "AMENDED_TARGET",
    "basis": "amendatory instruction that inserts, adds or redesignates",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "usc",
@@ -70,7 +72,8 @@
    "relationship": "CROSS_REFERENCE_REQUIRED",
    "basis": "operative provision applies or acts under it ('under')",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "usc",
@@ -96,7 +99,8 @@
    "relationship": "CROSS_REFERENCE_REQUIRED",
    "basis": "operative provision applies or acts under it ('under')",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "usc",
@@ -116,7 +120,8 @@
    "relationship": "AMENDED_TARGET",
    "basis": "amendatory instruction that inserts, adds or redesignates",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "usc",
@@ -137,7 +142,8 @@
    "relationship": "REPLACED_TEXT",
    "basis": "amendatory instruction that strikes, repeals or rewrites existing text",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "usc",
@@ -156,7 +162,8 @@
    "relationship": "AMENDED_TARGET",
    "basis": "amendatory instruction that inserts, adds or redesignates",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "usc",
@@ -175,7 +182,8 @@
    "relationship": "AMENDED_TARGET",
    "basis": "amendatory instruction that inserts, adds or redesignates",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "usc",
@@ -192,7 +200,8 @@
    "relationship": "AMENDED_TARGET",
    "basis": "amendatory instruction that inserts, adds or redesignates",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "usc",
@@ -209,7 +218,8 @@
    "relationship": "AMENDED_TARGET",
    "basis": "amendatory instruction that inserts, adds or redesignates",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "usc",
@@ -231,7 +241,8 @@
    "relationship": "CROSS_REFERENCE_REQUIRED",
    "basis": "operative provision applies or acts under it ('under')",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "usc",
@@ -248,7 +259,8 @@
    "relationship": "AMENDED_TARGET",
    "basis": "amendatory instruction that inserts, adds or redesignates",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -264,7 +276,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites a Public Law or division as a whole",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -281,7 +294,8 @@
    "relationship": "REPLACED_TEXT",
    "basis": "amendatory instruction that strikes, repeals or rewrites existing text",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -298,7 +312,8 @@
    "relationship": "AMENDED_TARGET",
    "basis": "amendatory instruction that inserts, adds or redesignates",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -315,7 +330,8 @@
    "relationship": "AMENDED_TARGET",
    "basis": "amendatory instruction that inserts, adds or redesignates",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "usc",
@@ -336,7 +352,8 @@
    "relationship": "CROSS_REFERENCE_REQUIRED",
    "basis": "operative reference with no narrower rule (fail closed: content required)",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "usc",
@@ -357,7 +374,8 @@
    "relationship": "CROSS_REFERENCE_REQUIRED",
    "basis": "operative reference with no narrower rule (fail closed: content required)",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "usc",
@@ -377,7 +395,8 @@
    "relationship": "AMENDED_TARGET",
    "basis": "amendatory instruction that inserts, adds or redesignates",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "usc",
@@ -396,7 +415,8 @@
    "relationship": "AMENDED_TARGET",
    "basis": "amendatory instruction that inserts, adds or redesignates",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "usc",
@@ -413,7 +433,8 @@
    "relationship": "AMENDED_TARGET",
    "basis": "amendatory instruction that inserts, adds or redesignates",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "usc",
@@ -433,7 +454,8 @@
    "relationship": "CROSS_REFERENCE_REQUIRED",
    "basis": "operative reference with no narrower rule (fail closed: content required)",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "usc",
@@ -452,7 +474,8 @@
    "relationship": "CROSS_REFERENCE_REQUIRED",
    "basis": "operative reference with no narrower rule (fail closed: content required)",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "usc",
@@ -469,7 +492,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "cites an Act or chapter as a whole (et seq.)",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   }
  ],
  "citation_gaps": [],
@@ -545,6 +569,94 @@
     "cites an Act or chapter as a whole (et seq.)"
    ]
   },
+  "cited_as": {
+   "/us/usc/t21/s355/i": [
+    {
+     "text": "21 U.S.C. 355(i)",
+     "source": "structured_xref",
+     "rule": null
+    }
+   ],
+   "/us/usc/t21/s802": [
+    {
+     "text": "21 U.S.C. 802",
+     "source": "structured_xref",
+     "rule": null
+    }
+   ],
+   "/us/usc/t21/s812/c": [
+    {
+     "text": "21 U.S.C. 812(c)",
+     "source": "structured_xref",
+     "rule": null
+    }
+   ],
+   "/us/usc/t21/s822": [
+    {
+     "text": "21 U.S.C. 822",
+     "source": "structured_xref",
+     "rule": null
+    },
+    {
+     "text": "21 U.S.C. 822(c)",
+     "source": "structured_xref",
+     "rule": null
+    },
+    {
+     "text": "21 U.S.C. 822(c)(3)",
+     "source": "structured_xref",
+     "rule": null
+    },
+    {
+     "text": "21 U.S.C. 822(e)",
+     "source": "structured_xref",
+     "rule": null
+    },
+    {
+     "text": "21 U.S.C. 822(f)",
+     "source": "structured_xref",
+     "rule": null
+    }
+   ],
+   "/us/usc/t21/s823": [
+    {
+     "text": "21 U.S.C. 823",
+     "source": "structured_xref",
+     "rule": null
+    },
+    {
+     "text": "21 U.S.C. 823(g)(2)",
+     "source": "structured_xref",
+     "rule": null
+    },
+    {
+     "text": "21 U.S.C. 823(h)(2)",
+     "source": "structured_xref",
+     "rule": null
+    }
+   ],
+   "/us/usc/t21/s841/b/1": [
+    {
+     "text": "21 U.S.C. 841(b)(1)",
+     "source": "structured_xref",
+     "rule": null
+    }
+   ],
+   "/us/usc/t21/s960/b": [
+    {
+     "text": "21 U.S.C. 960(b)",
+     "source": "structured_xref",
+     "rule": null
+    }
+   ],
+   "/us/usc/t21/s801": [
+    {
+     "text": "21 U.S.C. 801 et seq.",
+     "source": "structured_xref",
+     "rule": null
+    }
+   ]
+  },
   "cited": [
    "/us/usc/t21/s355",
    "/us/usc/t21/s801",
@@ -564,6 +676,7 @@
    "/us/usc/t21/s960/b"
   ],
   "unresolved_citations": [],
+  "resolved_by_fallback": [],
   "status": "ok"
  },
  "release_point": {
@@ -613,7 +726,14 @@
     }
    ],
    "section_fragment_sha256": "38a651d67e47ab99525334cae62b6f2c589b2dc33bb1b89e07a09d44654230e3",
-   "section_bytes": 469316
+   "section_bytes": 469316,
+   "cited_as": [
+    {
+     "text": "21 U.S.C. 355(i)",
+     "source": "structured_xref",
+     "rule": null
+    }
+   ]
   },
   {
    "type": "us_code",
@@ -651,7 +771,14 @@
    "hierarchy": [],
    "section_fragment_sha256": "da967c5f7f73343e009dbeafa96703ea8fdffca2fc8aab2a96ac7d6979ba7e54",
    "section_bytes": 157598,
-   "reason": "the citation names only the whole section (157,598 bytes, over 50,000 characters); a deterministic fragment cannot be chosen, so it is not injected"
+   "reason": "the citation names only the whole section (157,598 bytes, over 50,000 characters); a deterministic fragment cannot be chosen, so it is not injected",
+   "cited_as": [
+    {
+     "text": "21 U.S.C. 802",
+     "source": "structured_xref",
+     "rule": null
+    }
+   ]
   },
   {
    "type": "us_code",
@@ -694,7 +821,14 @@
     }
    ],
    "section_fragment_sha256": "50d3e245cc1a1db9983487465788e5440556848f9c5521ac650baf3a65b9f1a4",
-   "section_bytes": 71503
+   "section_bytes": 71503,
+   "cited_as": [
+    {
+     "text": "21 U.S.C. 812(c)",
+     "source": "structured_xref",
+     "rule": null
+    }
+   ]
   },
   {
    "type": "us_code",
@@ -731,7 +865,34 @@
    "inclusion": "CONTENT_INCLUDED_FOR_GENERATION",
    "hierarchy": [],
    "section_fragment_sha256": "7dba779b3f12835959fe16215d0539787639e6fc87fb7bd19fba2a582da13da1",
-   "section_bytes": 39796
+   "section_bytes": 39796,
+   "cited_as": [
+    {
+     "text": "21 U.S.C. 822",
+     "source": "structured_xref",
+     "rule": null
+    },
+    {
+     "text": "21 U.S.C. 822(c)",
+     "source": "structured_xref",
+     "rule": null
+    },
+    {
+     "text": "21 U.S.C. 822(c)(3)",
+     "source": "structured_xref",
+     "rule": null
+    },
+    {
+     "text": "21 U.S.C. 822(e)",
+     "source": "structured_xref",
+     "rule": null
+    },
+    {
+     "text": "21 U.S.C. 822(f)",
+     "source": "structured_xref",
+     "rule": null
+    }
+   ]
   },
   {
    "type": "us_code",
@@ -769,7 +930,24 @@
    "hierarchy": [],
    "section_fragment_sha256": "1df077b0a4d0eba47e99e7bad069ebc9e94aae7a135f687b0d350536dbf56774",
    "section_bytes": 126856,
-   "reason": "the citation names only the whole section (126,856 bytes, over 50,000 characters); a deterministic fragment cannot be chosen, so it is not injected"
+   "reason": "the citation names only the whole section (126,856 bytes, over 50,000 characters); a deterministic fragment cannot be chosen, so it is not injected",
+   "cited_as": [
+    {
+     "text": "21 U.S.C. 823",
+     "source": "structured_xref",
+     "rule": null
+    },
+    {
+     "text": "21 U.S.C. 823(g)(2)",
+     "source": "structured_xref",
+     "rule": null
+    },
+    {
+     "text": "21 U.S.C. 823(h)(2)",
+     "source": "structured_xref",
+     "rule": null
+    }
+   ]
   },
   {
    "type": "us_code",
@@ -819,7 +997,14 @@
     }
    ],
    "section_fragment_sha256": "e8c611f1b08ac5eca44542ee24e836568e83b522261db8eeeebd29f75fb3a705",
-   "section_bytes": 91170
+   "section_bytes": 91170,
+   "cited_as": [
+    {
+     "text": "21 U.S.C. 841(b)(1)",
+     "source": "structured_xref",
+     "rule": null
+    }
+   ]
   },
   {
    "type": "us_code",
@@ -864,7 +1049,14 @@
     }
    ],
    "section_fragment_sha256": "bc919282ae603ad3d844637fed45138a8e02291bedffa4cb42670e09e47faac5",
-   "section_bytes": 49709
+   "section_bytes": 49709,
+   "cited_as": [
+    {
+     "text": "21 U.S.C. 960(b)",
+     "source": "structured_xref",
+     "rule": null
+    }
+   ]
   },
   {
    "type": "us_code",
@@ -901,7 +1093,14 @@
    "inclusion": "REFERENCE_TRACKED",
    "hierarchy": [],
    "section_fragment_sha256": "cbe2a111727aceaeb6af044125176a6fc001b65536a7215340057e4d4e1d199e",
-   "section_bytes": 118747
+   "section_bytes": 118747,
+   "cited_as": [
+    {
+     "text": "21 U.S.C. 801 et seq.",
+     "source": "structured_xref",
+     "rule": null
+    }
+   ]
   }
  ],
  "public_laws": [
@@ -1397,7 +1596,967 @@
     "status": "READY_FOR_GENERATION"
    },
    "superseded_utc": "2026-09-24T12:22:16Z"
+  },
+  {
+   "schema": "civicalign.context/1.1",
+   "vote": {
+    "congress": 119,
+    "session": 1,
+    "clerk_number": 127,
+    "date": "2025-03-14",
+    "measure": "S331"
+   },
+   "binding": {
+    "kind": "PASSAGE_AS_AMENDED",
+    "verification": "VERIFIED",
+    "text_status": "TEXT_BOUND",
+    "text_sha256": "4e907878b839c14cda219f2ce5eed1c3ce7014f8a586e0e1ff75dee2a808a376"
+   },
+   "references": [
+    {
+     "legal_doc": "usc",
+     "cite": "usc/21/812",
+     "text": "21 U.S.C. 812(c)",
+     "location": [
+      "section:2."
+     ],
+     "in_quoted_text": false,
+     "scope": "node",
+     "pinpoint": [
+      "c"
+     ],
+     "display_matches_cite": true,
+     "relationship": "AMENDED_TARGET",
+     "basis": "amendatory instruction that inserts, adds or redesignates",
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/21/823",
+     "text": "21 U.S.C. 823",
+     "location": [
+      "section:3.",
+      "subsection:(a)"
+     ],
+     "in_quoted_text": false,
+     "scope": "section",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "AMENDED_TARGET",
+     "basis": "amendatory instruction that inserts, adds or redesignates",
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/21/355",
+     "text": "21 U.S.C. 355(i)",
+     "location": [
+      "section:3.",
+      "subsection:(a)",
+      "paragraph:(2)",
+      "subsection:(n)",
+      "paragraph:(2)",
+      "subparagraph:(A)"
+     ],
+     "in_quoted_text": true,
+     "scope": "node",
+     "pinpoint": [
+      "i"
+     ],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_REQUIRED",
+     "basis": "operative provision applies or acts under it ('under')",
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/21/355",
+     "text": "21 U.S.C. 355(i)",
+     "location": [
+      "section:3.",
+      "subsection:(a)",
+      "paragraph:(2)",
+      "subsection:(n)",
+      "paragraph:(3)",
+      "subparagraph:(A)",
+      "clause:(i)",
+      "subclause:(III)",
+      "item:(bb)"
+     ],
+     "in_quoted_text": true,
+     "scope": "node",
+     "pinpoint": [
+      "i"
+     ],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_REQUIRED",
+     "basis": "operative provision applies or acts under it ('under')",
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/21/822",
+     "text": "21 U.S.C. 822(c)",
+     "location": [
+      "section:3.",
+      "subsection:(b)",
+      "paragraph:(1)"
+     ],
+     "in_quoted_text": false,
+     "scope": "node",
+     "pinpoint": [
+      "c"
+     ],
+     "display_matches_cite": true,
+     "relationship": "AMENDED_TARGET",
+     "basis": "amendatory instruction that inserts, adds or redesignates",
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/21/822",
+     "text": "21 U.S.C. 822(c)(3)",
+     "location": [
+      "section:3.",
+      "subsection:(b)",
+      "paragraph:(2)"
+     ],
+     "in_quoted_text": false,
+     "scope": "node",
+     "pinpoint": [
+      "c",
+      "3"
+     ],
+     "display_matches_cite": true,
+     "relationship": "REPLACED_TEXT",
+     "basis": "amendatory instruction that strikes, repeals or rewrites existing text",
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/21/822",
+     "text": "21 U.S.C. 822(e)",
+     "location": [
+      "section:3.",
+      "subsection:(c)"
+     ],
+     "in_quoted_text": false,
+     "scope": "node",
+     "pinpoint": [
+      "e"
+     ],
+     "display_matches_cite": true,
+     "relationship": "AMENDED_TARGET",
+     "basis": "amendatory instruction that inserts, adds or redesignates",
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/21/822",
+     "text": "21 U.S.C. 822(f)",
+     "location": [
+      "section:3.",
+      "subsection:(d)"
+     ],
+     "in_quoted_text": false,
+     "scope": "node",
+     "pinpoint": [
+      "f"
+     ],
+     "display_matches_cite": true,
+     "relationship": "AMENDED_TARGET",
+     "basis": "amendatory instruction that inserts, adds or redesignates",
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/21/822",
+     "text": "21 U.S.C. 822",
+     "location": [
+      "section:3.",
+      "subsection:(e)"
+     ],
+     "in_quoted_text": false,
+     "scope": "section",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "AMENDED_TARGET",
+     "basis": "amendatory instruction that inserts, adds or redesignates",
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/21/822",
+     "text": "21 U.S.C. 822",
+     "location": [
+      "section:3.",
+      "subsection:(f)"
+     ],
+     "in_quoted_text": false,
+     "scope": "section",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "AMENDED_TARGET",
+     "basis": "amendatory instruction that inserts, adds or redesignates",
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/21/355",
+     "text": "21 U.S.C. 355(i)",
+     "location": [
+      "section:3.",
+      "subsection:(f)",
+      "subsection:(i)",
+      "paragraph:(2)",
+      "subparagraph:(B)"
+     ],
+     "in_quoted_text": true,
+     "scope": "node",
+     "pinpoint": [
+      "i"
+     ],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_REQUIRED",
+     "basis": "operative provision applies or acts under it ('under')",
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/21/823",
+     "text": "21 U.S.C. 823",
+     "location": [
+      "section:3.",
+      "subsection:(g)"
+     ],
+     "in_quoted_text": false,
+     "scope": "section",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "AMENDED_TARGET",
+     "basis": "amendatory instruction that inserts, adds or redesignates",
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/117/328",
+     "text": "Public Law 117–328",
+     "location": [
+      "section:4."
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites a Public Law or division as a whole",
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/117/328",
+     "text": "Public Law 117–328",
+     "location": [
+      "section:4.",
+      "paragraph:(1)"
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "REPLACED_TEXT",
+     "basis": "amendatory instruction that strikes, repeals or rewrites existing text",
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/117/328",
+     "text": "Public Law 117–328",
+     "location": [
+      "section:4.",
+      "paragraph:(2)"
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "AMENDED_TARGET",
+     "basis": "amendatory instruction that inserts, adds or redesignates",
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/117/328",
+     "text": "Public Law 117–328",
+     "location": [
+      "section:4.",
+      "paragraph:(3)"
+     ],
+     "in_quoted_text": false,
+     "scope": "whole_law",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "AMENDED_TARGET",
+     "basis": "amendatory instruction that inserts, adds or redesignates",
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/21/823",
+     "text": "21 U.S.C. 823(g)(2)",
+     "location": [
+      "section:4.",
+      "paragraph:(3)",
+      "subparagraph:(B)"
+     ],
+     "in_quoted_text": true,
+     "scope": "node",
+     "pinpoint": [
+      "g",
+      "2"
+     ],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_REQUIRED",
+     "basis": "operative reference with no narrower rule (fail closed: content required)",
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/21/823",
+     "text": "21 U.S.C. 823(h)(2)",
+     "location": [
+      "section:4.",
+      "paragraph:(3)",
+      "subparagraph:(B)"
+     ],
+     "in_quoted_text": true,
+     "scope": "node",
+     "pinpoint": [
+      "h",
+      "2"
+     ],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_REQUIRED",
+     "basis": "operative reference with no narrower rule (fail closed: content required)",
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/21/841",
+     "text": "21 U.S.C. 841(b)(1)",
+     "location": [
+      "section:6.",
+      "subsection:(a)"
+     ],
+     "in_quoted_text": false,
+     "scope": "node",
+     "pinpoint": [
+      "b",
+      "1"
+     ],
+     "display_matches_cite": true,
+     "relationship": "AMENDED_TARGET",
+     "basis": "amendatory instruction that inserts, adds or redesignates",
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/21/960",
+     "text": "21 U.S.C. 960(b)",
+     "location": [
+      "section:6.",
+      "subsection:(b)"
+     ],
+     "in_quoted_text": false,
+     "scope": "node",
+     "pinpoint": [
+      "b"
+     ],
+     "display_matches_cite": true,
+     "relationship": "AMENDED_TARGET",
+     "basis": "amendatory instruction that inserts, adds or redesignates",
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/21/802",
+     "text": "21 U.S.C. 802",
+     "location": [
+      "section:6.",
+      "subsection:(c)"
+     ],
+     "in_quoted_text": false,
+     "scope": "section",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "AMENDED_TARGET",
+     "basis": "amendatory instruction that inserts, adds or redesignates",
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/21/841",
+     "text": "21 U.S.C. 841(b)(1)",
+     "location": [
+      "section:7.",
+      "subsection:(b)"
+     ],
+     "in_quoted_text": false,
+     "scope": "node",
+     "pinpoint": [
+      "b",
+      "1"
+     ],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_REQUIRED",
+     "basis": "operative reference with no narrower rule (fail closed: content required)",
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/21/960",
+     "text": "21 U.S.C. 960(b)",
+     "location": [
+      "section:7.",
+      "subsection:(b)"
+     ],
+     "in_quoted_text": false,
+     "scope": "node",
+     "pinpoint": [
+      "b"
+     ],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_REQUIRED",
+     "basis": "operative reference with no narrower rule (fail closed: content required)",
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/21/801",
+     "text": "21 U.S.C. 801 et seq.",
+     "location": [
+      "section:7.",
+      "subsection:(c)"
+     ],
+     "in_quoted_text": false,
+     "scope": "act_as_a_whole",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "cites an Act or chapter as a whole (et seq.)",
+     "pl_section": null,
+     "pl_division": null
+    }
+   ],
+   "citation_gaps": [],
+   "selection": {
+    "policy": "provisions whose relationship needs content, at the cited node; others tracked only; capped",
+    "section_cap": 12,
+    "full_section_max_chars": 50000,
+    "required": [
+     "/us/usc/t21/s355/i",
+     "/us/usc/t21/s802",
+     "/us/usc/t21/s812/c",
+     "/us/usc/t21/s822",
+     "/us/usc/t21/s823",
+     "/us/usc/t21/s841/b/1",
+     "/us/usc/t21/s960/b"
+    ],
+    "tracked_only": [
+     "/us/usc/t21/s801"
+    ],
+    "relationships": {
+     "/us/usc/t21/s355/i": [
+      "CROSS_REFERENCE_REQUIRED"
+     ],
+     "/us/usc/t21/s802": [
+      "AMENDED_TARGET"
+     ],
+     "/us/usc/t21/s812/c": [
+      "AMENDED_TARGET"
+     ],
+     "/us/usc/t21/s822": [
+      "AMENDED_TARGET"
+     ],
+     "/us/usc/t21/s823": [
+      "AMENDED_TARGET"
+     ],
+     "/us/usc/t21/s841/b/1": [
+      "AMENDED_TARGET",
+      "CROSS_REFERENCE_REQUIRED"
+     ],
+     "/us/usc/t21/s960/b": [
+      "AMENDED_TARGET",
+      "CROSS_REFERENCE_REQUIRED"
+     ],
+     "/us/usc/t21/s801": [
+      "CROSS_REFERENCE_ONLY"
+     ]
+    },
+    "bases": {
+     "/us/usc/t21/s355/i": [
+      "operative provision applies or acts under it ('under')"
+     ],
+     "/us/usc/t21/s802": [
+      "amendatory instruction that inserts, adds or redesignates"
+     ],
+     "/us/usc/t21/s812/c": [
+      "amendatory instruction that inserts, adds or redesignates"
+     ],
+     "/us/usc/t21/s822": [
+      "amendatory instruction that inserts, adds or redesignates"
+     ],
+     "/us/usc/t21/s823": [
+      "amendatory instruction that inserts, adds or redesignates"
+     ],
+     "/us/usc/t21/s841/b/1": [
+      "amendatory instruction that inserts, adds or redesignates",
+      "operative reference with no narrower rule (fail closed: content required)"
+     ],
+     "/us/usc/t21/s960/b": [
+      "amendatory instruction that inserts, adds or redesignates",
+      "operative reference with no narrower rule (fail closed: content required)"
+     ],
+     "/us/usc/t21/s801": [
+      "cites an Act or chapter as a whole (et seq.)"
+     ]
+    },
+    "cited": [
+     "/us/usc/t21/s355",
+     "/us/usc/t21/s801",
+     "/us/usc/t21/s802",
+     "/us/usc/t21/s812",
+     "/us/usc/t21/s822",
+     "/us/usc/t21/s823",
+     "/us/usc/t21/s841",
+     "/us/usc/t21/s960"
+    ],
+    "amended": [
+     "/us/usc/t21/s802",
+     "/us/usc/t21/s812/c",
+     "/us/usc/t21/s822",
+     "/us/usc/t21/s823",
+     "/us/usc/t21/s841/b/1",
+     "/us/usc/t21/s960/b"
+    ],
+    "unresolved_citations": [],
+    "status": "ok"
+   },
+   "release_point": {
+    "label": "119-1",
+    "date": "2025-01-29",
+    "note": "latest release point on or before the vote; per-section archives may come from an earlier published one"
+   },
+   "existing_law_context": [
+    {
+     "type": "us_code",
+     "identifier": "/us/usc/t21/s355/i",
+     "title": "21",
+     "section": "355",
+     "as_of": {
+      "release_point": "119-1",
+      "date": "2025-01-29",
+      "rule": "latest OLRC release point on or before the vote with a published archive; intervening laws checked against the classification table"
+     },
+     "source_url": "https://uscode.house.gov/download/releasepoints/us/pl/119/1/xml_usc21@119-1.zip",
+     "archive_sha256": "d7b14417ebdeab82ab47abce59c6147f17f35c7a4b9e57f46b72a1c52e82de4c",
+     "fragment_sha256": "460f9761fb845cc1db0937d51f49d4b11bc88436a86feca3482fb4718daa09e3",
+     "bytes": 8496,
+     "heading": "Exemptions of drugs for research; discretionary and mandatory conditions; direct reports to Secretary",
+     "relationship": "CROSS_REFERENCE_REQUIRED",
+     "status": "fetched",
+     "in_force_check": {
+      "status": "ok",
+      "archive": "xml_usc21@119-1.zip",
+      "intervening": [],
+      "affected_by": [],
+      "check": "no intervening release point"
+     },
+     "section_identifier": "/us/usc/t21/s355",
+     "scope": "node",
+     "relationships": [
+      "CROSS_REFERENCE_REQUIRED"
+     ],
+     "bases": [
+      "operative provision applies or acts under it ('under')"
+     ],
+     "inclusion": "CONTENT_INCLUDED_FOR_GENERATION",
+     "hierarchy": [
+      {
+       "identifier": "/us/usc/t21/s355",
+       "sha256": "2c799e966ff2c206eeecf664a58eace9a66f20e99da7a4c64c31aa5bc88408fe",
+       "bytes": 165
+      }
+     ],
+     "section_fragment_sha256": "38a651d67e47ab99525334cae62b6f2c589b2dc33bb1b89e07a09d44654230e3",
+     "section_bytes": 469316
+    },
+    {
+     "type": "us_code",
+     "identifier": "/us/usc/t21/s802",
+     "title": "21",
+     "section": "802",
+     "as_of": {
+      "release_point": "119-1",
+      "date": "2025-01-29",
+      "rule": "latest OLRC release point on or before the vote with a published archive; intervening laws checked against the classification table"
+     },
+     "source_url": "https://uscode.house.gov/download/releasepoints/us/pl/119/1/xml_usc21@119-1.zip",
+     "archive_sha256": "d7b14417ebdeab82ab47abce59c6147f17f35c7a4b9e57f46b72a1c52e82de4c",
+     "fragment_sha256": "da967c5f7f73343e009dbeafa96703ea8fdffca2fc8aab2a96ac7d6979ba7e54",
+     "bytes": 157598,
+     "heading": "Definitions",
+     "relationship": "AMENDED_TARGET",
+     "status": "fragment_selection_required",
+     "in_force_check": {
+      "status": "ok",
+      "archive": "xml_usc21@119-1.zip",
+      "intervening": [],
+      "affected_by": [],
+      "check": "no intervening release point"
+     },
+     "section_identifier": "/us/usc/t21/s802",
+     "scope": "section",
+     "relationships": [
+      "AMENDED_TARGET"
+     ],
+     "bases": [
+      "amendatory instruction that inserts, adds or redesignates"
+     ],
+     "inclusion": "REFERENCE_TRACKED",
+     "hierarchy": [],
+     "section_fragment_sha256": "da967c5f7f73343e009dbeafa96703ea8fdffca2fc8aab2a96ac7d6979ba7e54",
+     "section_bytes": 157598,
+     "reason": "the citation names only the whole section (157,598 bytes, over 50,000 characters); a deterministic fragment cannot be chosen, so it is not injected"
+    },
+    {
+     "type": "us_code",
+     "identifier": "/us/usc/t21/s812/c",
+     "title": "21",
+     "section": "812",
+     "as_of": {
+      "release_point": "119-1",
+      "date": "2025-01-29",
+      "rule": "latest OLRC release point on or before the vote with a published archive; intervening laws checked against the classification table"
+     },
+     "source_url": "https://uscode.house.gov/download/releasepoints/us/pl/119/1/xml_usc21@119-1.zip",
+     "archive_sha256": "d7b14417ebdeab82ab47abce59c6147f17f35c7a4b9e57f46b72a1c52e82de4c",
+     "fragment_sha256": "705388c5571fee6446fe21043391570edfcf30888ab4620541001768222179ff",
+     "bytes": 620,
+     "heading": "Initial schedules of controlled substances",
+     "relationship": "AMENDED_TARGET",
+     "status": "fetched",
+     "in_force_check": {
+      "status": "ok",
+      "archive": "xml_usc21@119-1.zip",
+      "intervening": [],
+      "affected_by": [],
+      "check": "no intervening release point"
+     },
+     "section_identifier": "/us/usc/t21/s812",
+     "scope": "node",
+     "relationships": [
+      "AMENDED_TARGET"
+     ],
+     "bases": [
+      "amendatory instruction that inserts, adds or redesignates"
+     ],
+     "inclusion": "CONTENT_INCLUDED_FOR_GENERATION",
+     "hierarchy": [
+      {
+       "identifier": "/us/usc/t21/s812",
+       "sha256": "a86bf9f32bca262012a611019c8c88c2e48ec8969cc959510feaab6e1f3451e2",
+       "bytes": 190
+      }
+     ],
+     "section_fragment_sha256": "50d3e245cc1a1db9983487465788e5440556848f9c5521ac650baf3a65b9f1a4",
+     "section_bytes": 71503
+    },
+    {
+     "type": "us_code",
+     "identifier": "/us/usc/t21/s822",
+     "title": "21",
+     "section": "822",
+     "as_of": {
+      "release_point": "119-1",
+      "date": "2025-01-29",
+      "rule": "latest OLRC release point on or before the vote with a published archive; intervening laws checked against the classification table"
+     },
+     "source_url": "https://uscode.house.gov/download/releasepoints/us/pl/119/1/xml_usc21@119-1.zip",
+     "archive_sha256": "d7b14417ebdeab82ab47abce59c6147f17f35c7a4b9e57f46b72a1c52e82de4c",
+     "fragment_sha256": "7dba779b3f12835959fe16215d0539787639e6fc87fb7bd19fba2a582da13da1",
+     "bytes": 39796,
+     "heading": "Persons required to register",
+     "relationship": "AMENDED_TARGET",
+     "status": "fetched",
+     "in_force_check": {
+      "status": "ok",
+      "archive": "xml_usc21@119-1.zip",
+      "intervening": [],
+      "affected_by": [],
+      "check": "no intervening release point"
+     },
+     "section_identifier": "/us/usc/t21/s822",
+     "scope": "section",
+     "relationships": [
+      "AMENDED_TARGET"
+     ],
+     "bases": [
+      "amendatory instruction that inserts, adds or redesignates"
+     ],
+     "inclusion": "CONTENT_INCLUDED_FOR_GENERATION",
+     "hierarchy": [],
+     "section_fragment_sha256": "7dba779b3f12835959fe16215d0539787639e6fc87fb7bd19fba2a582da13da1",
+     "section_bytes": 39796
+    },
+    {
+     "type": "us_code",
+     "identifier": "/us/usc/t21/s823",
+     "title": "21",
+     "section": "823",
+     "as_of": {
+      "release_point": "119-1",
+      "date": "2025-01-29",
+      "rule": "latest OLRC release point on or before the vote with a published archive; intervening laws checked against the classification table"
+     },
+     "source_url": "https://uscode.house.gov/download/releasepoints/us/pl/119/1/xml_usc21@119-1.zip",
+     "archive_sha256": "d7b14417ebdeab82ab47abce59c6147f17f35c7a4b9e57f46b72a1c52e82de4c",
+     "fragment_sha256": "1df077b0a4d0eba47e99e7bad069ebc9e94aae7a135f687b0d350536dbf56774",
+     "bytes": 126856,
+     "heading": "Registration requirements",
+     "relationship": "AMENDED_TARGET",
+     "status": "fragment_selection_required",
+     "in_force_check": {
+      "status": "ok",
+      "archive": "xml_usc21@119-1.zip",
+      "intervening": [],
+      "affected_by": [],
+      "check": "no intervening release point"
+     },
+     "section_identifier": "/us/usc/t21/s823",
+     "scope": "section",
+     "relationships": [
+      "AMENDED_TARGET"
+     ],
+     "bases": [
+      "amendatory instruction that inserts, adds or redesignates"
+     ],
+     "inclusion": "REFERENCE_TRACKED",
+     "hierarchy": [],
+     "section_fragment_sha256": "1df077b0a4d0eba47e99e7bad069ebc9e94aae7a135f687b0d350536dbf56774",
+     "section_bytes": 126856,
+     "reason": "the citation names only the whole section (126,856 bytes, over 50,000 characters); a deterministic fragment cannot be chosen, so it is not injected"
+    },
+    {
+     "type": "us_code",
+     "identifier": "/us/usc/t21/s841/b/1",
+     "title": "21",
+     "section": "841",
+     "as_of": {
+      "release_point": "119-1",
+      "date": "2025-01-29",
+      "rule": "latest OLRC release point on or before the vote with a published archive; intervening laws checked against the classification table"
+     },
+     "source_url": "https://uscode.house.gov/download/releasepoints/us/pl/119/1/xml_usc21@119-1.zip",
+     "archive_sha256": "d7b14417ebdeab82ab47abce59c6147f17f35c7a4b9e57f46b72a1c52e82de4c",
+     "fragment_sha256": "6f988b39fe59dddcc8f6c13a15dbc4123c41587646ab66a4617a28462689148a",
+     "bytes": 18575,
+     "heading": "",
+     "relationship": "AMENDED_TARGET",
+     "status": "fetched",
+     "in_force_check": {
+      "status": "ok",
+      "archive": "xml_usc21@119-1.zip",
+      "intervening": [],
+      "affected_by": [],
+      "check": "no intervening release point"
+     },
+     "section_identifier": "/us/usc/t21/s841",
+     "scope": "node",
+     "relationships": [
+      "AMENDED_TARGET",
+      "CROSS_REFERENCE_REQUIRED"
+     ],
+     "bases": [
+      "amendatory instruction that inserts, adds or redesignates",
+      "operative reference with no narrower rule (fail closed: content required)"
+     ],
+     "inclusion": "CONTENT_INCLUDED_FOR_GENERATION",
+     "hierarchy": [
+      {
+       "identifier": "/us/usc/t21/s841",
+       "sha256": "5a0ec98a3721f1e6e212c451e4f20636d677469c62f06ff1fa7d06f63a483f28",
+       "bytes": 173
+      },
+      {
+       "identifier": "/us/usc/t21/s841/b",
+       "sha256": "4bdef1a7eca52a9d8cb2ca657959373074d5c9b14552f8802a12fcc8a0af6b57",
+       "bytes": 436
+      }
+     ],
+     "section_fragment_sha256": "e8c611f1b08ac5eca44542ee24e836568e83b522261db8eeeebd29f75fb3a705",
+     "section_bytes": 91170
+    },
+    {
+     "type": "us_code",
+     "identifier": "/us/usc/t21/s960/b",
+     "title": "21",
+     "section": "960",
+     "as_of": {
+      "release_point": "119-1",
+      "date": "2025-01-29",
+      "rule": "latest OLRC release point on or before the vote with a published archive; intervening laws checked against the classification table"
+     },
+     "source_url": "https://uscode.house.gov/download/releasepoints/us/pl/119/1/xml_usc21@119-1.zip",
+     "archive_sha256": "d7b14417ebdeab82ab47abce59c6147f17f35c7a4b9e57f46b72a1c52e82de4c",
+     "fragment_sha256": "afb6d387fbf3d51d56b7b0b3b9875407450ea7ab4157f8d205e09dcd4a97f2be",
+     "bytes": 16493,
+     "heading": "Penalties",
+     "relationship": "AMENDED_TARGET",
+     "status": "fetched",
+     "in_force_check": {
+      "status": "ok",
+      "archive": "xml_usc21@119-1.zip",
+      "intervening": [],
+      "affected_by": [],
+      "check": "no intervening release point"
+     },
+     "section_identifier": "/us/usc/t21/s960",
+     "scope": "node",
+     "relationships": [
+      "AMENDED_TARGET",
+      "CROSS_REFERENCE_REQUIRED"
+     ],
+     "bases": [
+      "amendatory instruction that inserts, adds or redesignates",
+      "operative reference with no narrower rule (fail closed: content required)"
+     ],
+     "inclusion": "CONTENT_INCLUDED_FOR_GENERATION",
+     "hierarchy": [
+      {
+       "identifier": "/us/usc/t21/s960",
+       "sha256": "dd3f714bb42a45ef51eefa2b5c07b945eeb5642614c36031595ef33a520bf18a",
+       "bytes": 173
+      }
+     ],
+     "section_fragment_sha256": "bc919282ae603ad3d844637fed45138a8e02291bedffa4cb42670e09e47faac5",
+     "section_bytes": 49709
+    },
+    {
+     "type": "us_code",
+     "identifier": "/us/usc/t21/s801",
+     "title": "21",
+     "section": "801",
+     "as_of": {
+      "release_point": "119-1",
+      "date": "2025-01-29",
+      "rule": "latest OLRC release point on or before the vote with a published archive; intervening laws checked against the classification table"
+     },
+     "source_url": "https://uscode.house.gov/download/releasepoints/us/pl/119/1/xml_usc21@119-1.zip",
+     "archive_sha256": "d7b14417ebdeab82ab47abce59c6147f17f35c7a4b9e57f46b72a1c52e82de4c",
+     "fragment_sha256": "cbe2a111727aceaeb6af044125176a6fc001b65536a7215340057e4d4e1d199e",
+     "bytes": 118747,
+     "heading": "Congressional findings and declarations: controlled substances",
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "status": "fetched",
+     "in_force_check": {
+      "status": "ok",
+      "archive": "xml_usc21@119-1.zip",
+      "intervening": [],
+      "affected_by": [],
+      "check": "no intervening release point"
+     },
+     "section_identifier": "/us/usc/t21/s801",
+     "scope": "section",
+     "relationships": [
+      "CROSS_REFERENCE_ONLY"
+     ],
+     "bases": [
+      "cites an Act or chapter as a whole (et seq.)"
+     ],
+     "inclusion": "REFERENCE_TRACKED",
+     "hierarchy": [],
+     "section_fragment_sha256": "cbe2a111727aceaeb6af044125176a6fc001b65536a7215340057e4d4e1d199e",
+     "section_bytes": 118747
+    }
+   ],
+   "public_laws": [
+    {
+     "type": "public_law",
+     "cite": "pl/117/328",
+     "congress": 117,
+     "law": 328,
+     "source_url": "https://www.govinfo.gov/content/pkg/PLAW-117publ328/uslm/PLAW-117publ328.xml",
+     "sha256": "c85b2c8cb1494a52997e321f7ffbc5bdbdd9c61ad711db94a2bbad4be216188b",
+     "bytes": 11275250,
+     "sections": [],
+     "divisions": [],
+     "fragments": [],
+     "status": "identified",
+     "relationships": [
+      "AMENDED_TARGET",
+      "REPLACED_TEXT",
+      "CROSS_REFERENCE_ONLY"
+     ]
+    }
+   ],
+   "official_summary": {
+    "status": "available",
+    "version_code": "00",
+    "action_desc": "Introduced in Senate",
+    "action_date": "2025-01-30",
+    "sha256": "5ec9662dca75381bbfee67b0c2b75717b73e475ae2fa7df174e2e43611b81876",
+    "version_relationship": "PRE_AMENDMENT",
+    "usable": false
+   },
+   "cra": {
+    "mode": "not_cra",
+    "rule_status": null,
+    "consequence_source": null,
+    "underlying_rule": null,
+    "gao_determination": null
+   },
+   "completeness": {
+    "status": "PENDING",
+    "missing": [
+     "us_code:/us/usc/t21/s802 (fragment_selection_required)",
+     "us_code:/us/usc/t21/s823 (fragment_selection_required)",
+     "public_law:pl/117/328 (needed as AMENDED_TARGET but cited as a whole law; no section can be selected)"
+    ],
+    "notes": [
+     "the citation names only the whole section (157,598 bytes, over 50,000 characters); a deterministic fragment cannot be chosen, so it is not injected",
+     "the citation names only the whole section (126,856 bytes, over 50,000 characters); a deterministic fragment cannot be chosen, so it is not injected",
+     "pl/117/328 cited as a whole law: identified and hashed, no section extracted; the Maker may not describe its contents"
+    ]
+   },
+   "generation": {
+    "status": "SOURCE_CONTEXT_PENDING"
+   },
+   "superseded_utc": "2026-09-24T12:38:04Z"
   }
  ],
- "recorded_utc": "2026-09-24T12:22:16Z"
+ "recorded_utc": "2026-09-24T12:38:04Z"
 }

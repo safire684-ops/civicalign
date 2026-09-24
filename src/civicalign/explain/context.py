@@ -82,18 +82,25 @@ def select_sections(refs: list[dict], is_cra: bool, gaps: list[dict] | None = No
                                       "relationships": [], "bases": []})
         if r["relationship"] not in e["relationships"]:
             e["relationships"].append(r["relationship"]); e["bases"].append(r["basis"])
+        cited_as = {"text": r["text"], "source": r.get("source", "structured_xref"), "rule": r.get("rule")}
+        e.setdefault("cited_as", [])
+        if cited_as not in e["cited_as"]:
+            e["cited_as"].append(cited_as)
     required = sorted(k for k in need if not _subsumed(k, set(need)))
     tracked_only = sorted(k for k in tracked if k not in need and not _subsumed(k, set(need)))
     relationships = {k: need[k]["relationships"] for k in required} | {k: tracked[k]["relationships"] for k in tracked_only}
     bases = {k: need[k]["bases"] for k in required} | {k: tracked[k]["bases"] for k in tracked_only}
-    unresolved = [g for g in (gaps or []) if g["relationship"] in R.REQUIRED and not is_cra]
+    # a required provision also carries the citations of the nodes it covers
+    cited_as = {k: need[k]["cited_as"] + [c for n in need if _subsumed(n, {k}) for c in need[n]["cited_as"] if c not in need[k]["cited_as"]]
+                for k in required} | {k: tracked[k]["cited_as"] for k in tracked_only}
+    unresolved = [g for g in (gaps or []) if g["relationship"] in R.REQUIRED and not g.get("resolved") and not is_cra]
     base = {"policy": ("cra: the resolution's own text and the CRA consequence section; cited authorities are tracked, not extracted" if is_cra else
                        "provisions whose relationship needs content, at the cited node; others tracked only; capped"),
             "section_cap": SECTION_CAP, "full_section_max_chars": FULL_SECTION_MAX_CHARS,
-            "required": required, "tracked_only": tracked_only, "relationships": relationships, "bases": bases,
+            "required": required, "tracked_only": tracked_only, "relationships": relationships, "bases": bases, "cited_as": cited_as,
             "cited": sorted({e["section_identifier"] for e in list(need.values()) + list(tracked.values())}),
             "amended": sorted(k for k in required if set(need[k]["relationships"]) & {R.AMENDED_TARGET, R.REPLACED_TEXT}),
-            "unresolved_citations": unresolved, "status": "ok"}
+            "unresolved_citations": unresolved, "resolved_by_fallback": [g for g in (gaps or []) if g.get("resolved")], "status": "ok"}
     if unresolved:
         base["status"] = "unresolved_citations"
         base["reason"] = f"{len(unresolved)} citation(s) in provisions that need content are not structured in the voted XML: {[g['text'] for g in unresolved]}"
@@ -375,6 +382,7 @@ def build_context(cfg: Config, b: dict, store: Store, code: Code, offline: bool)
                 ambiguous = ambiguous or bool(code.points)
             continue
         rec = code.provision(ident, t, sec, v["date"], rels, sel["bases"][ident], include)
+        rec["cited_as"] = sel["cited_as"][ident]
         ctx["existing_law_context"].append(rec)
         if not include:
             continue
@@ -499,6 +507,7 @@ def build_packet(b: dict, ctx: dict, xml_bytes: bytes, store: Store) -> dict:
         if rec["status"] == "fetched" and rec["inclusion"] == R.CONTENT_INCLUDED:
             law.append({"type": "us_code", "identifier": rec["identifier"], "section_identifier": rec["section_identifier"], "scope": rec["scope"],
                         "heading": rec["heading"], "as_of": rec["as_of"], "relationship": rec["relationship"], "relationships": rec["relationships"],
+                        "cited_as": rec["cited_as"],
                         "inclusion": rec["inclusion"],
                         "hierarchy": [{"identifier": h["identifier"], "sha256": h["sha256"], "content": h["_content"]} for h in rec["hierarchy"]],
                         "sha256": rec["fragment_sha256"], "content": rec["_content"]})

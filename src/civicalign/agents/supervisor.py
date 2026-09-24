@@ -497,6 +497,75 @@ def _own_metrics(pk: dict) -> dict:
             "tracked_reference_count": len(pk.get("tracked_references", [])) + len(pk["cited_public_laws_not_included"])}
 
 
+def _own_group(content: str) -> list[tuple[str, tuple]] | None:
+    """'1231(a), or 1357' -> [('1231', ('a',)), ('1357', ())], or None if any
+    piece is outside the narrow grammar (dashes, ranges, words)."""
+    import re as _re
+    pieces = [p for p in _re.split(r",\s+or\s+|,\s+and\s+|\s+or\s+|\s+and\s+|,\s+", content)]
+    out = []
+    for p in pieces:
+        m = _re.fullmatch(r"(\d+[a-z]{0,3})((?:\([0-9A-Za-z]{1,4}\))*)", p)
+        if not m:
+            return None
+        out.append((m.group(1), tuple(_re.findall(r"\(([0-9A-Za-z]+)\)", m.group(2)))))
+    return out
+
+
+def _close(text: str, start: int) -> int | None:
+    """Index of the ")" closing a parenthetical whose content starts at `start`."""
+    depth = 1
+    for i in range(start, len(text)):
+        depth += {"(": 1, ")": -1}.get(text[i], 0)
+        if depth == 0:
+            return i
+    return None
+
+
+def _fallback_problems(name: str, root, parent, c: dict, b: dict) -> list[str]:
+    """Separate reading of the two fallback forms: a whole parenthetical
+    "(T U.S.C. A, B(x), or C)" in untagged text, and a tagged citation whose
+    parenthetical list continues untagged. The recovered set must equal the
+    recorded fallback citations, each tied to the voted text's hash."""
+    import re as _re
+    own = set()
+    for el in root.iter():
+        chunks = [] if el.tag == "external-xref" else [el.text or ""]
+        chunks += [el.tail or ""] if parent.get(el) is not None and el.tag != "external-xref" else []
+        for chunk in chunks:
+            for m in _re.finditer(r"\((\d{1,2}) U\.S\.C\. ", chunk):
+                end = _close(chunk, m.start() + 1)
+                group = _own_group(chunk[m.end():end]) if end is not None else None
+                for sec, pins in group or []:
+                    own.add((f"usc/{m.group(1)}/{sec}", pins, "R1", chunk[m.start():end + 1]))
+        if el.tag == "external-xref" and el.get("legal-doc") == "usc":
+            shown = " ".join("".join(el.itertext()).split())
+            head = _re.fullmatch(r"(\d{1,2}) U\.S\.C\. [0-9A-Za-z]+(?:\([0-9A-Za-z]+\))*", shown)
+            prev = parent[el]
+            kids = list(prev)
+            i = kids.index(el)
+            preceding = (kids[i - 1].tail if i else prev.text) or ""
+            tail = el.tail or ""
+            end = _close(tail, 0)
+            lead = _re.match(r"(?:,\s+or\s+|,\s+and\s+|\s+or\s+|\s+and\s+|,\s+)", tail)
+            if head and preceding.rstrip().endswith("(") and end is not None and lead:
+                group = _own_group(tail[lead.end():end])
+                if group and el.get("parsable-cite", "").split("/")[1:2] == [head.group(1)]:
+                    for sec, pins in group:
+                        own.add((f"usc/{head.group(1)}/{sec}", pins, "R2", "(" + shown + tail[:end + 1]))
+    recorded = {(r["cite"], tuple(r["pinpoint"]), r["rule"][:2], r["source_fragment"]) for r in c["references"] if r.get("source") == "fallback_explicit_usc"}
+    out = []
+    if own != recorded:
+        out.append(f"{name}: fallback citations {sorted(recorded ^ own)[:4]} do not reproduce")
+    for r in c["references"]:
+        if r.get("source") == "fallback_explicit_usc" and r["source_sha256"] != b["text_binding"]["sha256"]:
+            out.append(f"{name}: fallback citation {r['text']} not tied to the voted text's hash")
+    for g in c.get("citation_gaps", []):
+        found = {r["text"] for r in c["references"] if r.get("source") == "fallback_explicit_usc" and r["location"] == g["location"]}
+        if g["resolved"] and not (g["untagged_provisions"] and set(g["untagged_provisions"]) <= found):
+            out.append(f"{name}: resolved group {g['text']!r} does not account for each untagged provision")
+    return out
+
+
 def _relevance_problems(name: str, c: dict, b: dict, text_path) -> list[str]:
     """Separate checks of the relevance rules against the voted XML: an 'et seq.'
     or whole-law citation is never given content; a citation under a header that
@@ -510,10 +579,12 @@ def _relevance_problems(name: str, c: dict, b: dict, text_path) -> list[str]:
     root = _ET.parse(_io.BytesIO(text_path.read_bytes())).getroot()
     parent = {ch: p for p in root.iter() for ch in p}
     xrefs = list(root.iter("external-xref"))
-    if len(xrefs) != len(c["references"]):
-        return [f"{name}: {len(xrefs)} citations in the XML, {len(c['references'])} recorded"]
+    structured = [r for r in c["references"] if r.get("source", "structured_xref") == "structured_xref"]
+    if len(xrefs) != len(structured):
+        return [f"{name}: {len(xrefs)} citations in the XML, {len(structured)} recorded"]
+    out += _fallback_problems(name, root, parent, c, b)
     sel = c["selection"] or {}
-    for x, r in zip(xrefs, c["references"]):
+    for x, r in zip(xrefs, structured):
         shown = " ".join("".join(x.itertext()).split())
         if shown != r["text"] or x.get("parsable-cite", "") != r["cite"]:
             out.append(f"{name}: citation {shown!r} recorded as {r['text']!r}"); continue
@@ -545,7 +616,7 @@ def _relevance_problems(name: str, c: dict, b: dict, text_path) -> list[str]:
     if own_gaps != len(c.get("citation_gaps", [])):
         out.append(f"{name}: {own_gaps} unstructured citations found, {len(c.get('citation_gaps', []))} recorded")
     if c["generation"]["status"] in ("READY_FOR_GENERATION", "READY_WITH_LIMITS") and not b["cra"]["is_cra"]:
-        if any(g["relationship"] in _NEEDS_CONTENT for g in c.get("citation_gaps", [])):
+        if any(g["relationship"] in _NEEDS_CONTENT and not g.get("resolved") for g in c.get("citation_gaps", [])):
             out.append(f"{name}: READY with an unresolved citation that needs content")
         for rec in c["existing_law_context"]:
             if rec.get("inclusion") == "CONTENT_INCLUDED_FOR_GENERATION" and rec["status"] != "fetched":

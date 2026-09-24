@@ -30,7 +30,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "names an instrument by its statutory home ('system under')",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "usc",
@@ -49,7 +50,8 @@
    "relationship": "CROSS_REFERENCE_ONLY",
    "basis": "names an instrument by its statutory home ('agreements under')",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "usc",
@@ -70,7 +72,8 @@
    "relationship": "DEFINITION_REQUIRED",
    "basis": "inside the measure's definition (subparagraph (B) Qualified cooperating jurisdiction defined)",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "usc",
@@ -89,7 +92,8 @@
    "relationship": "DEFINITION_REQUIRED",
    "basis": "inside the measure's definition (subparagraph (B) Qualified cooperating jurisdiction defined)",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "usc",
@@ -108,7 +112,8 @@
    "relationship": "DEFINITION_REQUIRED",
    "basis": "inside the measure's definition (subparagraph (B) Qualified cooperating jurisdiction defined)",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "usc",
@@ -130,7 +135,8 @@
    "relationship": "DEFINITION_REQUIRED",
    "basis": "inside the measure's definition (subparagraph (D) Covered unlawful alien defined)",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "usc",
@@ -152,7 +158,8 @@
    "relationship": "DEFINITION_REQUIRED",
    "basis": "inside the measure's definition (subparagraph (D) Covered unlawful alien defined)",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "usc",
@@ -174,7 +181,8 @@
    "relationship": "DEFINITION_REQUIRED",
    "basis": "inside the measure's definition (subparagraph (D) Covered unlawful alien defined)",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "usc",
@@ -193,7 +201,8 @@
    "relationship": "DEFINITION_REQUIRED",
    "basis": "inside the measure's definition (subparagraph (D) Covered unlawful alien defined)",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   },
   {
    "legal_doc": "public-law",
@@ -211,7 +220,134 @@
    "relationship": "CROSS_REFERENCE_REQUIRED",
    "basis": "operative reference with no narrower rule (fail closed: content required)",
    "pl_section": "100051",
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/8/1231",
+   "text": "8 U.S.C. 1231(a)",
+   "location": [
+    "section:202.",
+    "paragraph:(9)",
+    "subparagraph:(D)",
+    "clause:(iv)"
+   ],
+   "in_quoted_text": false,
+   "scope": "node",
+   "pinpoint": [
+    "a"
+   ],
+   "display_matches_cite": true,
+   "relationship": "DEFINITION_REQUIRED",
+   "basis": "inside the measure's definition (subparagraph (D) Covered unlawful alien defined)",
+   "pl_section": null,
+   "pl_division": null,
+   "source": "fallback_explicit_usc",
+   "rule": "R2: list continuing after a tagged citation; title inherited from its structured cite",
+   "source_fragment": "(8 U.S.C. 1226, 1231(a), or 1357)",
+   "source_sha256": "d7d307b0a00c7ed1b4b66088a3a35473b0003574db8ac9d0da87a293400533b6",
+   "container": {
+    "tag": "text",
+    "id": "ide2037e627ac44399b374d07c43dfdf89",
+    "id_on": "clause"
+   },
+   "text_part": "tail of external-xref",
+   "char_start": 0,
+   "char_end": 19
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/8/1357",
+   "text": "8 U.S.C. 1357",
+   "location": [
+    "section:202.",
+    "paragraph:(9)",
+    "subparagraph:(D)",
+    "clause:(iv)"
+   ],
+   "in_quoted_text": false,
+   "scope": "section",
+   "pinpoint": [],
+   "display_matches_cite": true,
+   "relationship": "DEFINITION_REQUIRED",
+   "basis": "inside the measure's definition (subparagraph (D) Covered unlawful alien defined)",
+   "pl_section": null,
+   "pl_division": null,
+   "source": "fallback_explicit_usc",
+   "rule": "R2: list continuing after a tagged citation; title inherited from its structured cite",
+   "source_fragment": "(8 U.S.C. 1226, 1231(a), or 1357)",
+   "source_sha256": "d7d307b0a00c7ed1b4b66088a3a35473b0003574db8ac9d0da87a293400533b6",
+   "container": {
+    "tag": "text",
+    "id": "ide2037e627ac44399b374d07c43dfdf89",
+    "id_on": "clause"
+   },
+   "text_part": "tail of external-xref",
+   "char_start": 0,
+   "char_end": 19
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/8/1325",
+   "text": "8 U.S.C. 1325",
+   "location": [
+    "section:202.",
+    "paragraph:(9)",
+    "subparagraph:(D)",
+    "clause:(v)"
+   ],
+   "in_quoted_text": false,
+   "scope": "section",
+   "pinpoint": [],
+   "display_matches_cite": true,
+   "relationship": "DEFINITION_REQUIRED",
+   "basis": "inside the measure's definition (subparagraph (D) Covered unlawful alien defined)",
+   "pl_section": null,
+   "pl_division": null,
+   "source": "fallback_explicit_usc",
+   "rule": "R1: parenthetical of one title and a list of sections",
+   "source_fragment": "(8 U.S.C. 1325 or 1326)",
+   "source_sha256": "d7d307b0a00c7ed1b4b66088a3a35473b0003574db8ac9d0da87a293400533b6",
+   "container": {
+    "tag": "text",
+    "id": "id59f1c0ad05a84789a20be6b22033813a",
+    "id_on": "clause"
+   },
+   "text_part": "text",
+   "char_start": 93,
+   "char_end": 116
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/8/1326",
+   "text": "8 U.S.C. 1326",
+   "location": [
+    "section:202.",
+    "paragraph:(9)",
+    "subparagraph:(D)",
+    "clause:(v)"
+   ],
+   "in_quoted_text": false,
+   "scope": "section",
+   "pinpoint": [],
+   "display_matches_cite": true,
+   "relationship": "DEFINITION_REQUIRED",
+   "basis": "inside the measure's definition (subparagraph (D) Covered unlawful alien defined)",
+   "pl_section": null,
+   "pl_division": null,
+   "source": "fallback_explicit_usc",
+   "rule": "R1: parenthetical of one title and a list of sections",
+   "source_fragment": "(8 U.S.C. 1325 or 1326)",
+   "source_sha256": "d7d307b0a00c7ed1b4b66088a3a35473b0003574db8ac9d0da87a293400533b6",
+   "container": {
+    "tag": "text",
+    "id": "id59f1c0ad05a84789a20be6b22033813a",
+    "id_on": "clause"
+   },
+   "text_part": "text",
+   "char_start": 93,
+   "char_end": 116
   }
  ],
  "citation_gaps": [
@@ -226,7 +362,18 @@
     "clause:(iv)"
    ],
    "relationship": "DEFINITION_REQUIRED",
-   "basis": "inside the measure's definition (subparagraph (D) Covered unlawful alien defined)"
+   "basis": "inside the measure's definition (subparagraph (D) Covered unlawful alien defined)",
+   "provisions": [
+    "8 U.S.C. 1226",
+    "8 U.S.C. 1231(a)",
+    "8 U.S.C. 1357"
+   ],
+   "untagged_provisions": [
+    "8 U.S.C. 1231(a)",
+    "8 U.S.C. 1357"
+   ],
+   "resolved": true,
+   "rule": "R2: list continuing after a tagged citation; title inherited from its structured cite"
   },
   {
    "kind": "untagged_citation",
@@ -239,7 +386,17 @@
     "clause:(v)"
    ],
    "relationship": "DEFINITION_REQUIRED",
-   "basis": "inside the measure's definition (subparagraph (D) Covered unlawful alien defined)"
+   "basis": "inside the measure's definition (subparagraph (D) Covered unlawful alien defined)",
+   "provisions": [
+    "8 U.S.C. 1325",
+    "8 U.S.C. 1326"
+   ],
+   "untagged_provisions": [
+    "8 U.S.C. 1325",
+    "8 U.S.C. 1326"
+   ],
+   "resolved": true,
+   "rule": "R1: parenthetical of one title and a list of sections"
   }
  ],
  "selection": {
@@ -250,7 +407,10 @@
    "/us/usc/t8/s1182/a/2",
    "/us/usc/t8/s1226",
    "/us/usc/t8/s1227/a/2",
-   "/us/usc/t8/s1357/g",
+   "/us/usc/t8/s1231/a",
+   "/us/usc/t8/s1325",
+   "/us/usc/t8/s1326",
+   "/us/usc/t8/s1357",
    "/us/usc/t8/s1373",
    "/us/usc/t8/s1644"
   ],
@@ -267,7 +427,16 @@
    "/us/usc/t8/s1227/a/2": [
     "DEFINITION_REQUIRED"
    ],
-   "/us/usc/t8/s1357/g": [
+   "/us/usc/t8/s1231/a": [
+    "DEFINITION_REQUIRED"
+   ],
+   "/us/usc/t8/s1325": [
+    "DEFINITION_REQUIRED"
+   ],
+   "/us/usc/t8/s1326": [
+    "DEFINITION_REQUIRED"
+   ],
+   "/us/usc/t8/s1357": [
     "DEFINITION_REQUIRED"
    ],
    "/us/usc/t8/s1373": [
@@ -290,8 +459,17 @@
    "/us/usc/t8/s1227/a/2": [
     "inside the measure's definition (subparagraph (D) Covered unlawful alien defined)"
    ],
-   "/us/usc/t8/s1357/g": [
-    "inside the measure's definition (subparagraph (B) Qualified cooperating jurisdiction defined)"
+   "/us/usc/t8/s1231/a": [
+    "inside the measure's definition (subparagraph (D) Covered unlawful alien defined)"
+   ],
+   "/us/usc/t8/s1325": [
+    "inside the measure's definition (subparagraph (D) Covered unlawful alien defined)"
+   ],
+   "/us/usc/t8/s1326": [
+    "inside the measure's definition (subparagraph (D) Covered unlawful alien defined)"
+   ],
+   "/us/usc/t8/s1357": [
+    "inside the measure's definition (subparagraph (D) Covered unlawful alien defined)"
    ],
    "/us/usc/t8/s1373": [
     "inside the measure's definition (subparagraph (B) Qualified cooperating jurisdiction defined)"
@@ -303,17 +481,103 @@
     "names an instrument by its statutory home ('system under')"
    ]
   },
+  "cited_as": {
+   "/us/usc/t8/s1182/a/2": [
+    {
+     "text": "8 U.S.C. 1182(a)(2)",
+     "source": "structured_xref",
+     "rule": null
+    }
+   ],
+   "/us/usc/t8/s1226": [
+    {
+     "text": "8 U.S.C. 1226",
+     "source": "structured_xref",
+     "rule": null
+    },
+    {
+     "text": "8 U.S.C. 1226(c)(1)",
+     "source": "structured_xref",
+     "rule": null
+    }
+   ],
+   "/us/usc/t8/s1227/a/2": [
+    {
+     "text": "8 U.S.C. 1227(a)(2)",
+     "source": "structured_xref",
+     "rule": null
+    }
+   ],
+   "/us/usc/t8/s1231/a": [
+    {
+     "text": "8 U.S.C. 1231(a)",
+     "source": "fallback_explicit_usc",
+     "rule": "R2: list continuing after a tagged citation; title inherited from its structured cite"
+    }
+   ],
+   "/us/usc/t8/s1325": [
+    {
+     "text": "8 U.S.C. 1325",
+     "source": "fallback_explicit_usc",
+     "rule": "R1: parenthetical of one title and a list of sections"
+    }
+   ],
+   "/us/usc/t8/s1326": [
+    {
+     "text": "8 U.S.C. 1326",
+     "source": "fallback_explicit_usc",
+     "rule": "R1: parenthetical of one title and a list of sections"
+    }
+   ],
+   "/us/usc/t8/s1357": [
+    {
+     "text": "8 U.S.C. 1357",
+     "source": "fallback_explicit_usc",
+     "rule": "R2: list continuing after a tagged citation; title inherited from its structured cite"
+    },
+    {
+     "text": "8 U.S.C. 1357(g)",
+     "source": "structured_xref",
+     "rule": null
+    }
+   ],
+   "/us/usc/t8/s1373": [
+    {
+     "text": "8 U.S.C. 1373",
+     "source": "structured_xref",
+     "rule": null
+    }
+   ],
+   "/us/usc/t8/s1644": [
+    {
+     "text": "8 U.S.C. 1644",
+     "source": "structured_xref",
+     "rule": null
+    }
+   ],
+   "/us/usc/t8/s1365b": [
+    {
+     "text": "8 U.S.C. 1365b",
+     "source": "structured_xref",
+     "rule": null
+    }
+   ]
+  },
   "cited": [
    "/us/usc/t8/s1182",
    "/us/usc/t8/s1226",
    "/us/usc/t8/s1227",
+   "/us/usc/t8/s1231",
+   "/us/usc/t8/s1325",
+   "/us/usc/t8/s1326",
    "/us/usc/t8/s1357",
    "/us/usc/t8/s1365b",
    "/us/usc/t8/s1373",
    "/us/usc/t8/s1644"
   ],
   "amended": [],
-  "unresolved_citations": [
+  "unresolved_citations": [],
+  "resolved_by_fallback": [
    {
     "kind": "citation_list_continues_untagged",
     "text": "8 U.S.C. 1226, 1231(a), or 1357",
@@ -325,7 +589,18 @@
      "clause:(iv)"
     ],
     "relationship": "DEFINITION_REQUIRED",
-    "basis": "inside the measure's definition (subparagraph (D) Covered unlawful alien defined)"
+    "basis": "inside the measure's definition (subparagraph (D) Covered unlawful alien defined)",
+    "provisions": [
+     "8 U.S.C. 1226",
+     "8 U.S.C. 1231(a)",
+     "8 U.S.C. 1357"
+    ],
+    "untagged_provisions": [
+     "8 U.S.C. 1231(a)",
+     "8 U.S.C. 1357"
+    ],
+    "resolved": true,
+    "rule": "R2: list continuing after a tagged citation; title inherited from its structured cite"
    },
    {
     "kind": "untagged_citation",
@@ -338,11 +613,20 @@
      "clause:(v)"
     ],
     "relationship": "DEFINITION_REQUIRED",
-    "basis": "inside the measure's definition (subparagraph (D) Covered unlawful alien defined)"
+    "basis": "inside the measure's definition (subparagraph (D) Covered unlawful alien defined)",
+    "provisions": [
+     "8 U.S.C. 1325",
+     "8 U.S.C. 1326"
+    ],
+    "untagged_provisions": [
+     "8 U.S.C. 1325",
+     "8 U.S.C. 1326"
+    ],
+    "resolved": true,
+    "rule": "R1: parenthetical of one title and a list of sections"
    }
   ],
-  "status": "unresolved_citations",
-  "reason": "2 citation(s) in provisions that need content are not structured in the voted XML: ['8 U.S.C. 1226, 1231(a), or 1357', '8 U.S.C. 1325 or 1326']"
+  "status": "ok"
  },
  "release_point": {
   "label": "119-95",
@@ -396,7 +680,14 @@
     }
    ],
    "section_fragment_sha256": "f3b7b3f9bab11905344eef3ef85ea3519b7c9491ffaaa5f5aa3a8a17d438583e",
-   "section_bytes": 679905
+   "section_bytes": 679905,
+   "cited_as": [
+    {
+     "text": "8 U.S.C. 1182(a)(2)",
+     "source": "structured_xref",
+     "rule": null
+    }
+   ]
   },
   {
    "type": "us_code",
@@ -433,7 +724,19 @@
    "inclusion": "CONTENT_INCLUDED_FOR_GENERATION",
    "hierarchy": [],
    "section_fragment_sha256": "0130513f3c9c6c8e2cbd0f3fc3578599308ef1e93ad20bc4b544a45497e47231",
-   "section_bytes": 36859
+   "section_bytes": 36859,
+   "cited_as": [
+    {
+     "text": "8 U.S.C. 1226",
+     "source": "structured_xref",
+     "rule": null
+    },
+    {
+     "text": "8 U.S.C. 1226(c)(1)",
+     "source": "structured_xref",
+     "rule": null
+    }
+   ]
   },
   {
    "type": "us_code",
@@ -481,11 +784,156 @@
     }
    ],
    "section_fragment_sha256": "11a4252853024d03a8c82fd52bd04b5a2cbc4c75be4f027082d18a7a071a679b",
-   "section_bytes": 107067
+   "section_bytes": 107067,
+   "cited_as": [
+    {
+     "text": "8 U.S.C. 1227(a)(2)",
+     "source": "structured_xref",
+     "rule": null
+    }
+   ]
   },
   {
    "type": "us_code",
-   "identifier": "/us/usc/t8/s1357/g",
+   "identifier": "/us/usc/t8/s1231/a",
+   "title": "8",
+   "section": "1231",
+   "as_of": {
+    "release_point": "119-95",
+    "date": "2026-05-29",
+    "rule": "latest OLRC release point on or before the vote with a published archive; intervening laws checked against the classification table"
+   },
+   "source_url": "https://uscode.house.gov/download/releasepoints/us/pl/119/95/xml_usc08@119-95.zip",
+   "archive_sha256": "a66b51e9deae5606ba6d7cad0c8fa920fa96f16a3a4e15e9548767284bfd63c1",
+   "fragment_sha256": "3a4ff1e9966a246262f496a30bb1f5420c6d447bf70a1c14e296b3f9506a35d5",
+   "bytes": 13741,
+   "heading": "Detention, release, and removal of aliens ordered removed",
+   "relationship": "DEFINITION_REQUIRED",
+   "status": "fetched",
+   "in_force_check": {
+    "status": "ok",
+    "archive": "xml_usc08@119-95.zip",
+    "intervening": [],
+    "affected_by": [],
+    "check": "no intervening release point"
+   },
+   "section_identifier": "/us/usc/t8/s1231",
+   "scope": "node",
+   "relationships": [
+    "DEFINITION_REQUIRED"
+   ],
+   "bases": [
+    "inside the measure's definition (subparagraph (D) Covered unlawful alien defined)"
+   ],
+   "inclusion": "CONTENT_INCLUDED_FOR_GENERATION",
+   "hierarchy": [
+    {
+     "identifier": "/us/usc/t8/s1231",
+     "sha256": "826a5bf1a2c8484e42e4a6844df1407c82b3e72afdde7e7f56f411dec8e03fbe",
+     "bytes": 205
+    }
+   ],
+   "section_fragment_sha256": "9b50023d2da621bdd6bf83aa8b4bc371e3d57b98e76b435da7ec553d6a2c50dc",
+   "section_bytes": 84806,
+   "cited_as": [
+    {
+     "text": "8 U.S.C. 1231(a)",
+     "source": "fallback_explicit_usc",
+     "rule": "R2: list continuing after a tagged citation; title inherited from its structured cite"
+    }
+   ]
+  },
+  {
+   "type": "us_code",
+   "identifier": "/us/usc/t8/s1325",
+   "title": "8",
+   "section": "1325",
+   "as_of": {
+    "release_point": "119-95",
+    "date": "2026-05-29",
+    "rule": "latest OLRC release point on or before the vote with a published archive; intervening laws checked against the classification table"
+   },
+   "source_url": "https://uscode.house.gov/download/releasepoints/us/pl/119/95/xml_usc08@119-95.zip",
+   "archive_sha256": "a66b51e9deae5606ba6d7cad0c8fa920fa96f16a3a4e15e9548767284bfd63c1",
+   "fragment_sha256": "e085c85cb91de7c726ce5c283540d79b4199f651b22b3ed8c5e04ee06a652b64",
+   "bytes": 9781,
+   "heading": "Improper entry by alien",
+   "relationship": "DEFINITION_REQUIRED",
+   "status": "fetched",
+   "in_force_check": {
+    "status": "ok",
+    "archive": "xml_usc08@119-95.zip",
+    "intervening": [],
+    "affected_by": [],
+    "check": "no intervening release point"
+   },
+   "section_identifier": "/us/usc/t8/s1325",
+   "scope": "section",
+   "relationships": [
+    "DEFINITION_REQUIRED"
+   ],
+   "bases": [
+    "inside the measure's definition (subparagraph (D) Covered unlawful alien defined)"
+   ],
+   "inclusion": "CONTENT_INCLUDED_FOR_GENERATION",
+   "hierarchy": [],
+   "section_fragment_sha256": "e085c85cb91de7c726ce5c283540d79b4199f651b22b3ed8c5e04ee06a652b64",
+   "section_bytes": 9781,
+   "cited_as": [
+    {
+     "text": "8 U.S.C. 1325",
+     "source": "fallback_explicit_usc",
+     "rule": "R1: parenthetical of one title and a list of sections"
+    }
+   ]
+  },
+  {
+   "type": "us_code",
+   "identifier": "/us/usc/t8/s1326",
+   "title": "8",
+   "section": "1326",
+   "as_of": {
+    "release_point": "119-95",
+    "date": "2026-05-29",
+    "rule": "latest OLRC release point on or before the vote with a published archive; intervening laws checked against the classification table"
+   },
+   "source_url": "https://uscode.house.gov/download/releasepoints/us/pl/119/95/xml_usc08@119-95.zip",
+   "archive_sha256": "a66b51e9deae5606ba6d7cad0c8fa920fa96f16a3a4e15e9548767284bfd63c1",
+   "fragment_sha256": "f616a5db03fae9c7c9c44498efd8ab3e742d5cd43c7daeee15e65db00414731b",
+   "bytes": 18648,
+   "heading": "Reentry of removed aliens",
+   "relationship": "DEFINITION_REQUIRED",
+   "status": "fetched",
+   "in_force_check": {
+    "status": "ok",
+    "archive": "xml_usc08@119-95.zip",
+    "intervening": [],
+    "affected_by": [],
+    "check": "no intervening release point"
+   },
+   "section_identifier": "/us/usc/t8/s1326",
+   "scope": "section",
+   "relationships": [
+    "DEFINITION_REQUIRED"
+   ],
+   "bases": [
+    "inside the measure's definition (subparagraph (D) Covered unlawful alien defined)"
+   ],
+   "inclusion": "CONTENT_INCLUDED_FOR_GENERATION",
+   "hierarchy": [],
+   "section_fragment_sha256": "f616a5db03fae9c7c9c44498efd8ab3e742d5cd43c7daeee15e65db00414731b",
+   "section_bytes": 18648,
+   "cited_as": [
+    {
+     "text": "8 U.S.C. 1326",
+     "source": "fallback_explicit_usc",
+     "rule": "R1: parenthetical of one title and a list of sections"
+    }
+   ]
+  },
+  {
+   "type": "us_code",
+   "identifier": "/us/usc/t8/s1357",
    "title": "8",
    "section": "1357",
    "as_of": {
@@ -495,9 +943,9 @@
    },
    "source_url": "https://uscode.house.gov/download/releasepoints/us/pl/119/95/xml_usc08@119-95.zip",
    "archive_sha256": "a66b51e9deae5606ba6d7cad0c8fa920fa96f16a3a4e15e9548767284bfd63c1",
-   "fragment_sha256": "c234a4ce0a5121d36204ade491a508dbb8010948f879f408d5acb13706e4f643",
-   "bytes": 6219,
-   "heading": "Performance of immigration officer functions by State officers and employees",
+   "fragment_sha256": "80a69a0c14910ccabe9c1e1762d250d784d5bc52223e714aad6d1157fedf412c",
+   "bytes": 28697,
+   "heading": "Powers of immigration officers and employees",
    "relationship": "DEFINITION_REQUIRED",
    "status": "fetched",
    "in_force_check": {
@@ -508,23 +956,29 @@
     "check": "no intervening release point"
    },
    "section_identifier": "/us/usc/t8/s1357",
-   "scope": "node",
+   "scope": "section",
    "relationships": [
     "DEFINITION_REQUIRED"
    ],
    "bases": [
-    "inside the measure's definition (subparagraph (B) Qualified cooperating jurisdiction defined)"
+    "inside the measure's definition (subparagraph (D) Covered unlawful alien defined)"
    ],
    "inclusion": "CONTENT_INCLUDED_FOR_GENERATION",
-   "hierarchy": [
-    {
-     "identifier": "/us/usc/t8/s1357",
-     "sha256": "e50214da31a4aa7c2c34ebb454ff2e1454422fc5a58b96eb7940ccaaddb39b67",
-     "bytes": 202
-    }
-   ],
+   "hierarchy": [],
    "section_fragment_sha256": "80a69a0c14910ccabe9c1e1762d250d784d5bc52223e714aad6d1157fedf412c",
-   "section_bytes": 28697
+   "section_bytes": 28697,
+   "cited_as": [
+    {
+     "text": "8 U.S.C. 1357",
+     "source": "fallback_explicit_usc",
+     "rule": "R2: list continuing after a tagged citation; title inherited from its structured cite"
+    },
+    {
+     "text": "8 U.S.C. 1357(g)",
+     "source": "structured_xref",
+     "rule": null
+    }
+   ]
   },
   {
    "type": "us_code",
@@ -561,7 +1015,14 @@
    "inclusion": "CONTENT_INCLUDED_FOR_GENERATION",
    "hierarchy": [],
    "section_fragment_sha256": "8a6cc3c584faab86ba87ce7a05711766501b88fbc6daa2bd80e2bfe013676af0",
-   "section_bytes": 4686
+   "section_bytes": 4686,
+   "cited_as": [
+    {
+     "text": "8 U.S.C. 1373",
+     "source": "structured_xref",
+     "rule": null
+    }
+   ]
   },
   {
    "type": "us_code",
@@ -598,7 +1059,14 @@
    "inclusion": "CONTENT_INCLUDED_FOR_GENERATION",
    "hierarchy": [],
    "section_fragment_sha256": "286b4c12167831bbb3d2b209effa55d63d32ac16b6552b0be098b5bc6724686a",
-   "section_bytes": 1667
+   "section_bytes": 1667,
+   "cited_as": [
+    {
+     "text": "8 U.S.C. 1644",
+     "source": "structured_xref",
+     "rule": null
+    }
+   ]
   },
   {
    "type": "us_code",
@@ -635,7 +1103,14 @@
    "inclusion": "REFERENCE_TRACKED",
    "hierarchy": [],
    "section_fragment_sha256": "b5f2d720005d047af55e1e4a74d3ba67b3152fcfd8587381e78b58907e03f578",
-   "section_bytes": 42802
+   "section_bytes": 42802,
+   "cited_as": [
+    {
+     "text": "8 U.S.C. 1365b",
+     "source": "structured_xref",
+     "rule": null
+    }
+   ]
   }
  ],
  "public_laws": [
@@ -686,16 +1161,27 @@
   "gao_determination": null
  },
  "completeness": {
-  "status": "PENDING",
-  "missing": [
-   "unresolved statutory citations in provisions that need content"
-  ],
-  "notes": [
-   "2 citation(s) in provisions that need content are not structured in the voted XML: ['8 U.S.C. 1226, 1231(a), or 1357', '8 U.S.C. 1325 or 1326']"
-  ]
+  "status": "COMPLETE",
+  "missing": [],
+  "notes": []
  },
  "generation": {
-  "status": "SOURCE_CONTEXT_PENDING"
+  "status": "READY_FOR_GENERATION"
+ },
+ "metrics": {
+  "voted_text_chars": 23118,
+  "context_chars": 153677,
+  "official_summary_chars": 1819,
+  "total_source_chars": 178614,
+  "source_count": 12,
+  "included_context_fragment_count": 10,
+  "hierarchy_fragment_count": 5,
+  "tracked_reference_count": 1
+ },
+ "budget": {
+  "review_threshold_chars": 150000,
+  "status": "REVIEW_REQUIRED",
+  "rule": "no truncation; a packet over the threshold needs a recorded human review before generation"
  },
  "history": [
   {
@@ -1051,7 +1537,708 @@
     "status": "READY_FOR_GENERATION"
    },
    "superseded_utc": "2026-09-24T12:22:19Z"
+  },
+  {
+   "schema": "civicalign.context/1.1",
+   "vote": {
+    "congress": 119,
+    "session": 2,
+    "clerk_number": 163,
+    "date": "2026-06-05",
+    "measure": "S2"
+   },
+   "binding": {
+    "kind": "PASSAGE_AS_AMENDED",
+    "verification": "VERIFIED",
+    "text_status": "TEXT_BOUND",
+    "text_sha256": "d7d307b0a00c7ed1b4b66088a3a35473b0003574db8ac9d0da87a293400533b6"
+   },
+   "references": [
+    {
+     "legal_doc": "usc",
+     "cite": "usc/8/1365b",
+     "text": "8 U.S.C. 1365b",
+     "location": [
+      "section:103.",
+      "subsection:(a)",
+      "paragraph:(4)"
+     ],
+     "in_quoted_text": false,
+     "scope": "section",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "names an instrument by its statutory home ('system under')",
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/8/1357",
+     "text": "8 U.S.C. 1357(g)",
+     "location": [
+      "section:202.",
+      "paragraph:(6)"
+     ],
+     "in_quoted_text": false,
+     "scope": "node",
+     "pinpoint": [
+      "g"
+     ],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "basis": "names an instrument by its statutory home ('agreements under')",
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/8/1357",
+     "text": "8 U.S.C. 1357(g)",
+     "location": [
+      "section:202.",
+      "paragraph:(9)",
+      "subparagraph:(B)",
+      "clause:(i)"
+     ],
+     "in_quoted_text": false,
+     "scope": "node",
+     "pinpoint": [
+      "g"
+     ],
+     "display_matches_cite": true,
+     "relationship": "DEFINITION_REQUIRED",
+     "basis": "inside the measure's definition (subparagraph (B) Qualified cooperating jurisdiction defined)",
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/8/1373",
+     "text": "8 U.S.C. 1373",
+     "location": [
+      "section:202.",
+      "paragraph:(9)",
+      "subparagraph:(B)",
+      "clause:(ii)"
+     ],
+     "in_quoted_text": false,
+     "scope": "section",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "DEFINITION_REQUIRED",
+     "basis": "inside the measure's definition (subparagraph (B) Qualified cooperating jurisdiction defined)",
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/8/1644",
+     "text": "8 U.S.C. 1644",
+     "location": [
+      "section:202.",
+      "paragraph:(9)",
+      "subparagraph:(B)",
+      "clause:(ii)"
+     ],
+     "in_quoted_text": false,
+     "scope": "section",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "DEFINITION_REQUIRED",
+     "basis": "inside the measure's definition (subparagraph (B) Qualified cooperating jurisdiction defined)",
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/8/1226",
+     "text": "8 U.S.C. 1226(c)(1)",
+     "location": [
+      "section:202.",
+      "paragraph:(9)",
+      "subparagraph:(D)",
+      "clause:(i)"
+     ],
+     "in_quoted_text": false,
+     "scope": "node",
+     "pinpoint": [
+      "c",
+      "1"
+     ],
+     "display_matches_cite": true,
+     "relationship": "DEFINITION_REQUIRED",
+     "basis": "inside the measure's definition (subparagraph (D) Covered unlawful alien defined)",
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/8/1182",
+     "text": "8 U.S.C. 1182(a)(2)",
+     "location": [
+      "section:202.",
+      "paragraph:(9)",
+      "subparagraph:(D)",
+      "clause:(ii)"
+     ],
+     "in_quoted_text": false,
+     "scope": "node",
+     "pinpoint": [
+      "a",
+      "2"
+     ],
+     "display_matches_cite": true,
+     "relationship": "DEFINITION_REQUIRED",
+     "basis": "inside the measure's definition (subparagraph (D) Covered unlawful alien defined)",
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/8/1227",
+     "text": "8 U.S.C. 1227(a)(2)",
+     "location": [
+      "section:202.",
+      "paragraph:(9)",
+      "subparagraph:(D)",
+      "clause:(iii)"
+     ],
+     "in_quoted_text": false,
+     "scope": "node",
+     "pinpoint": [
+      "a",
+      "2"
+     ],
+     "display_matches_cite": true,
+     "relationship": "DEFINITION_REQUIRED",
+     "basis": "inside the measure's definition (subparagraph (D) Covered unlawful alien defined)",
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "usc",
+     "cite": "usc/8/1226",
+     "text": "8 U.S.C. 1226",
+     "location": [
+      "section:202.",
+      "paragraph:(9)",
+      "subparagraph:(D)",
+      "clause:(iv)"
+     ],
+     "in_quoted_text": false,
+     "scope": "section",
+     "pinpoint": [],
+     "display_matches_cite": true,
+     "relationship": "DEFINITION_REQUIRED",
+     "basis": "inside the measure's definition (subparagraph (D) Covered unlawful alien defined)",
+     "pl_section": null,
+     "pl_division": null
+    },
+    {
+     "legal_doc": "public-law",
+     "cite": "pl/119/21",
+     "text": "Public Law 119–21",
+     "location": [
+      "section:203."
+     ],
+     "in_quoted_text": false,
+     "scope": "section",
+     "pinpoint": [
+      "100051"
+     ],
+     "display_matches_cite": true,
+     "relationship": "CROSS_REFERENCE_REQUIRED",
+     "basis": "operative reference with no narrower rule (fail closed: content required)",
+     "pl_section": "100051",
+     "pl_division": null
+    }
+   ],
+   "citation_gaps": [
+    {
+     "kind": "citation_list_continues_untagged",
+     "text": "8 U.S.C. 1226, 1231(a), or 1357",
+     "cite": "usc/8/1226",
+     "location": [
+      "section:202.",
+      "paragraph:(9)",
+      "subparagraph:(D)",
+      "clause:(iv)"
+     ],
+     "relationship": "DEFINITION_REQUIRED",
+     "basis": "inside the measure's definition (subparagraph (D) Covered unlawful alien defined)"
+    },
+    {
+     "kind": "untagged_citation",
+     "text": "8 U.S.C. 1325 or 1326",
+     "cite": null,
+     "location": [
+      "section:202.",
+      "paragraph:(9)",
+      "subparagraph:(D)",
+      "clause:(v)"
+     ],
+     "relationship": "DEFINITION_REQUIRED",
+     "basis": "inside the measure's definition (subparagraph (D) Covered unlawful alien defined)"
+    }
+   ],
+   "selection": {
+    "policy": "provisions whose relationship needs content, at the cited node; others tracked only; capped",
+    "section_cap": 12,
+    "full_section_max_chars": 50000,
+    "required": [
+     "/us/usc/t8/s1182/a/2",
+     "/us/usc/t8/s1226",
+     "/us/usc/t8/s1227/a/2",
+     "/us/usc/t8/s1357/g",
+     "/us/usc/t8/s1373",
+     "/us/usc/t8/s1644"
+    ],
+    "tracked_only": [
+     "/us/usc/t8/s1365b"
+    ],
+    "relationships": {
+     "/us/usc/t8/s1182/a/2": [
+      "DEFINITION_REQUIRED"
+     ],
+     "/us/usc/t8/s1226": [
+      "DEFINITION_REQUIRED"
+     ],
+     "/us/usc/t8/s1227/a/2": [
+      "DEFINITION_REQUIRED"
+     ],
+     "/us/usc/t8/s1357/g": [
+      "DEFINITION_REQUIRED"
+     ],
+     "/us/usc/t8/s1373": [
+      "DEFINITION_REQUIRED"
+     ],
+     "/us/usc/t8/s1644": [
+      "DEFINITION_REQUIRED"
+     ],
+     "/us/usc/t8/s1365b": [
+      "CROSS_REFERENCE_ONLY"
+     ]
+    },
+    "bases": {
+     "/us/usc/t8/s1182/a/2": [
+      "inside the measure's definition (subparagraph (D) Covered unlawful alien defined)"
+     ],
+     "/us/usc/t8/s1226": [
+      "inside the measure's definition (subparagraph (D) Covered unlawful alien defined)"
+     ],
+     "/us/usc/t8/s1227/a/2": [
+      "inside the measure's definition (subparagraph (D) Covered unlawful alien defined)"
+     ],
+     "/us/usc/t8/s1357/g": [
+      "inside the measure's definition (subparagraph (B) Qualified cooperating jurisdiction defined)"
+     ],
+     "/us/usc/t8/s1373": [
+      "inside the measure's definition (subparagraph (B) Qualified cooperating jurisdiction defined)"
+     ],
+     "/us/usc/t8/s1644": [
+      "inside the measure's definition (subparagraph (B) Qualified cooperating jurisdiction defined)"
+     ],
+     "/us/usc/t8/s1365b": [
+      "names an instrument by its statutory home ('system under')"
+     ]
+    },
+    "cited": [
+     "/us/usc/t8/s1182",
+     "/us/usc/t8/s1226",
+     "/us/usc/t8/s1227",
+     "/us/usc/t8/s1357",
+     "/us/usc/t8/s1365b",
+     "/us/usc/t8/s1373",
+     "/us/usc/t8/s1644"
+    ],
+    "amended": [],
+    "unresolved_citations": [
+     {
+      "kind": "citation_list_continues_untagged",
+      "text": "8 U.S.C. 1226, 1231(a), or 1357",
+      "cite": "usc/8/1226",
+      "location": [
+       "section:202.",
+       "paragraph:(9)",
+       "subparagraph:(D)",
+       "clause:(iv)"
+      ],
+      "relationship": "DEFINITION_REQUIRED",
+      "basis": "inside the measure's definition (subparagraph (D) Covered unlawful alien defined)"
+     },
+     {
+      "kind": "untagged_citation",
+      "text": "8 U.S.C. 1325 or 1326",
+      "cite": null,
+      "location": [
+       "section:202.",
+       "paragraph:(9)",
+       "subparagraph:(D)",
+       "clause:(v)"
+      ],
+      "relationship": "DEFINITION_REQUIRED",
+      "basis": "inside the measure's definition (subparagraph (D) Covered unlawful alien defined)"
+     }
+    ],
+    "status": "unresolved_citations",
+    "reason": "2 citation(s) in provisions that need content are not structured in the voted XML: ['8 U.S.C. 1226, 1231(a), or 1357', '8 U.S.C. 1325 or 1326']"
+   },
+   "release_point": {
+    "label": "119-95",
+    "date": "2026-05-29",
+    "note": "latest release point on or before the vote; per-section archives may come from an earlier published one"
+   },
+   "existing_law_context": [
+    {
+     "type": "us_code",
+     "identifier": "/us/usc/t8/s1182/a/2",
+     "title": "8",
+     "section": "1182",
+     "as_of": {
+      "release_point": "119-95",
+      "date": "2026-05-29",
+      "rule": "latest OLRC release point on or before the vote with a published archive; intervening laws checked against the classification table"
+     },
+     "source_url": "https://uscode.house.gov/download/releasepoints/us/pl/119/95/xml_usc08@119-95.zip",
+     "archive_sha256": "a66b51e9deae5606ba6d7cad0c8fa920fa96f16a3a4e15e9548767284bfd63c1",
+     "fragment_sha256": "4b9582e26d18b283fe0ee450d6dbdbcd01e0214416163de2aeb2c3baec634c57",
+     "bytes": 13630,
+     "heading": "Criminal and related grounds",
+     "relationship": "DEFINITION_REQUIRED",
+     "status": "fetched",
+     "in_force_check": {
+      "status": "ok",
+      "archive": "xml_usc08@119-95.zip",
+      "intervening": [],
+      "affected_by": [],
+      "check": "no intervening release point"
+     },
+     "section_identifier": "/us/usc/t8/s1182",
+     "scope": "node",
+     "relationships": [
+      "DEFINITION_REQUIRED"
+     ],
+     "bases": [
+      "inside the measure's definition (subparagraph (D) Covered unlawful alien defined)"
+     ],
+     "inclusion": "CONTENT_INCLUDED_FOR_GENERATION",
+     "hierarchy": [
+      {
+       "identifier": "/us/usc/t8/s1182",
+       "sha256": "21dca5d80643122a66bd828b7cfbf93299daf0ebebde03d7f8321bba0897abbd",
+       "bytes": 177
+      },
+      {
+       "identifier": "/us/usc/t8/s1182/a",
+       "sha256": "4796d768bbe0bff905c1a53e33bae1b65049425657a825555f1d5dc7c3d5edab",
+       "bytes": 504
+      }
+     ],
+     "section_fragment_sha256": "f3b7b3f9bab11905344eef3ef85ea3519b7c9491ffaaa5f5aa3a8a17d438583e",
+     "section_bytes": 679905
+    },
+    {
+     "type": "us_code",
+     "identifier": "/us/usc/t8/s1226",
+     "title": "8",
+     "section": "1226",
+     "as_of": {
+      "release_point": "119-95",
+      "date": "2026-05-29",
+      "rule": "latest OLRC release point on or before the vote with a published archive; intervening laws checked against the classification table"
+     },
+     "source_url": "https://uscode.house.gov/download/releasepoints/us/pl/119/95/xml_usc08@119-95.zip",
+     "archive_sha256": "a66b51e9deae5606ba6d7cad0c8fa920fa96f16a3a4e15e9548767284bfd63c1",
+     "fragment_sha256": "0130513f3c9c6c8e2cbd0f3fc3578599308ef1e93ad20bc4b544a45497e47231",
+     "bytes": 36859,
+     "heading": "Apprehension and detention of aliens",
+     "relationship": "DEFINITION_REQUIRED",
+     "status": "fetched",
+     "in_force_check": {
+      "status": "ok",
+      "archive": "xml_usc08@119-95.zip",
+      "intervening": [],
+      "affected_by": [],
+      "check": "no intervening release point"
+     },
+     "section_identifier": "/us/usc/t8/s1226",
+     "scope": "section",
+     "relationships": [
+      "DEFINITION_REQUIRED"
+     ],
+     "bases": [
+      "inside the measure's definition (subparagraph (D) Covered unlawful alien defined)"
+     ],
+     "inclusion": "CONTENT_INCLUDED_FOR_GENERATION",
+     "hierarchy": [],
+     "section_fragment_sha256": "0130513f3c9c6c8e2cbd0f3fc3578599308ef1e93ad20bc4b544a45497e47231",
+     "section_bytes": 36859
+    },
+    {
+     "type": "us_code",
+     "identifier": "/us/usc/t8/s1227/a/2",
+     "title": "8",
+     "section": "1227",
+     "as_of": {
+      "release_point": "119-95",
+      "date": "2026-05-29",
+      "rule": "latest OLRC release point on or before the vote with a published archive; intervening laws checked against the classification table"
+     },
+     "source_url": "https://uscode.house.gov/download/releasepoints/us/pl/119/95/xml_usc08@119-95.zip",
+     "archive_sha256": "a66b51e9deae5606ba6d7cad0c8fa920fa96f16a3a4e15e9548767284bfd63c1",
+     "fragment_sha256": "292f6a95ba8bcb10f80f0cdec0df8e7e0b59f18e928ff95e5f5edbb8c07e54f7",
+     "bytes": 11363,
+     "heading": "Criminal offenses",
+     "relationship": "DEFINITION_REQUIRED",
+     "status": "fetched",
+     "in_force_check": {
+      "status": "ok",
+      "archive": "xml_usc08@119-95.zip",
+      "intervening": [],
+      "affected_by": [],
+      "check": "no intervening release point"
+     },
+     "section_identifier": "/us/usc/t8/s1227",
+     "scope": "node",
+     "relationships": [
+      "DEFINITION_REQUIRED"
+     ],
+     "bases": [
+      "inside the measure's definition (subparagraph (D) Covered unlawful alien defined)"
+     ],
+     "inclusion": "CONTENT_INCLUDED_FOR_GENERATION",
+     "hierarchy": [
+      {
+       "identifier": "/us/usc/t8/s1227",
+       "sha256": "a9f706258b42e080a002731e15e4e39af6d5200ef30e9d6f37e258d89a02b3cf",
+       "bytes": 175
+      },
+      {
+       "identifier": "/us/usc/t8/s1227/a",
+       "sha256": "c531eb15bcf1ed7a2c63b190a15178b1c363883be024cb138af33798dc8a3799",
+       "bytes": 508
+      }
+     ],
+     "section_fragment_sha256": "11a4252853024d03a8c82fd52bd04b5a2cbc4c75be4f027082d18a7a071a679b",
+     "section_bytes": 107067
+    },
+    {
+     "type": "us_code",
+     "identifier": "/us/usc/t8/s1357/g",
+     "title": "8",
+     "section": "1357",
+     "as_of": {
+      "release_point": "119-95",
+      "date": "2026-05-29",
+      "rule": "latest OLRC release point on or before the vote with a published archive; intervening laws checked against the classification table"
+     },
+     "source_url": "https://uscode.house.gov/download/releasepoints/us/pl/119/95/xml_usc08@119-95.zip",
+     "archive_sha256": "a66b51e9deae5606ba6d7cad0c8fa920fa96f16a3a4e15e9548767284bfd63c1",
+     "fragment_sha256": "c234a4ce0a5121d36204ade491a508dbb8010948f879f408d5acb13706e4f643",
+     "bytes": 6219,
+     "heading": "Performance of immigration officer functions by State officers and employees",
+     "relationship": "DEFINITION_REQUIRED",
+     "status": "fetched",
+     "in_force_check": {
+      "status": "ok",
+      "archive": "xml_usc08@119-95.zip",
+      "intervening": [],
+      "affected_by": [],
+      "check": "no intervening release point"
+     },
+     "section_identifier": "/us/usc/t8/s1357",
+     "scope": "node",
+     "relationships": [
+      "DEFINITION_REQUIRED"
+     ],
+     "bases": [
+      "inside the measure's definition (subparagraph (B) Qualified cooperating jurisdiction defined)"
+     ],
+     "inclusion": "CONTENT_INCLUDED_FOR_GENERATION",
+     "hierarchy": [
+      {
+       "identifier": "/us/usc/t8/s1357",
+       "sha256": "e50214da31a4aa7c2c34ebb454ff2e1454422fc5a58b96eb7940ccaaddb39b67",
+       "bytes": 202
+      }
+     ],
+     "section_fragment_sha256": "80a69a0c14910ccabe9c1e1762d250d784d5bc52223e714aad6d1157fedf412c",
+     "section_bytes": 28697
+    },
+    {
+     "type": "us_code",
+     "identifier": "/us/usc/t8/s1373",
+     "title": "8",
+     "section": "1373",
+     "as_of": {
+      "release_point": "119-95",
+      "date": "2026-05-29",
+      "rule": "latest OLRC release point on or before the vote with a published archive; intervening laws checked against the classification table"
+     },
+     "source_url": "https://uscode.house.gov/download/releasepoints/us/pl/119/95/xml_usc08@119-95.zip",
+     "archive_sha256": "a66b51e9deae5606ba6d7cad0c8fa920fa96f16a3a4e15e9548767284bfd63c1",
+     "fragment_sha256": "8a6cc3c584faab86ba87ce7a05711766501b88fbc6daa2bd80e2bfe013676af0",
+     "bytes": 4686,
+     "heading": "Communication between government agencies and the Immigration and Naturalization Service",
+     "relationship": "DEFINITION_REQUIRED",
+     "status": "fetched",
+     "in_force_check": {
+      "status": "ok",
+      "archive": "xml_usc08@119-95.zip",
+      "intervening": [],
+      "affected_by": [],
+      "check": "no intervening release point"
+     },
+     "section_identifier": "/us/usc/t8/s1373",
+     "scope": "section",
+     "relationships": [
+      "DEFINITION_REQUIRED"
+     ],
+     "bases": [
+      "inside the measure's definition (subparagraph (B) Qualified cooperating jurisdiction defined)"
+     ],
+     "inclusion": "CONTENT_INCLUDED_FOR_GENERATION",
+     "hierarchy": [],
+     "section_fragment_sha256": "8a6cc3c584faab86ba87ce7a05711766501b88fbc6daa2bd80e2bfe013676af0",
+     "section_bytes": 4686
+    },
+    {
+     "type": "us_code",
+     "identifier": "/us/usc/t8/s1644",
+     "title": "8",
+     "section": "1644",
+     "as_of": {
+      "release_point": "119-95",
+      "date": "2026-05-29",
+      "rule": "latest OLRC release point on or before the vote with a published archive; intervening laws checked against the classification table"
+     },
+     "source_url": "https://uscode.house.gov/download/releasepoints/us/pl/119/95/xml_usc08@119-95.zip",
+     "archive_sha256": "a66b51e9deae5606ba6d7cad0c8fa920fa96f16a3a4e15e9548767284bfd63c1",
+     "fragment_sha256": "286b4c12167831bbb3d2b209effa55d63d32ac16b6552b0be098b5bc6724686a",
+     "bytes": 1667,
+     "heading": "Communication between State and local government agencies and Immigration and Naturalization Service",
+     "relationship": "DEFINITION_REQUIRED",
+     "status": "fetched",
+     "in_force_check": {
+      "status": "ok",
+      "archive": "xml_usc08@119-95.zip",
+      "intervening": [],
+      "affected_by": [],
+      "check": "no intervening release point"
+     },
+     "section_identifier": "/us/usc/t8/s1644",
+     "scope": "section",
+     "relationships": [
+      "DEFINITION_REQUIRED"
+     ],
+     "bases": [
+      "inside the measure's definition (subparagraph (B) Qualified cooperating jurisdiction defined)"
+     ],
+     "inclusion": "CONTENT_INCLUDED_FOR_GENERATION",
+     "hierarchy": [],
+     "section_fragment_sha256": "286b4c12167831bbb3d2b209effa55d63d32ac16b6552b0be098b5bc6724686a",
+     "section_bytes": 1667
+    },
+    {
+     "type": "us_code",
+     "identifier": "/us/usc/t8/s1365b",
+     "title": "8",
+     "section": "1365b",
+     "as_of": {
+      "release_point": "119-95",
+      "date": "2026-05-29",
+      "rule": "latest OLRC release point on or before the vote with a published archive; intervening laws checked against the classification table"
+     },
+     "source_url": "https://uscode.house.gov/download/releasepoints/us/pl/119/95/xml_usc08@119-95.zip",
+     "archive_sha256": "a66b51e9deae5606ba6d7cad0c8fa920fa96f16a3a4e15e9548767284bfd63c1",
+     "fragment_sha256": "b5f2d720005d047af55e1e4a74d3ba67b3152fcfd8587381e78b58907e03f578",
+     "bytes": 42802,
+     "heading": "Biometric entry and exit data system",
+     "relationship": "CROSS_REFERENCE_ONLY",
+     "status": "fetched",
+     "in_force_check": {
+      "status": "ok",
+      "archive": "xml_usc08@119-95.zip",
+      "intervening": [],
+      "affected_by": [],
+      "check": "no intervening release point"
+     },
+     "section_identifier": "/us/usc/t8/s1365b",
+     "scope": "section",
+     "relationships": [
+      "CROSS_REFERENCE_ONLY"
+     ],
+     "bases": [
+      "names an instrument by its statutory home ('system under')"
+     ],
+     "inclusion": "REFERENCE_TRACKED",
+     "hierarchy": [],
+     "section_fragment_sha256": "b5f2d720005d047af55e1e4a74d3ba67b3152fcfd8587381e78b58907e03f578",
+     "section_bytes": 42802
+    }
+   ],
+   "public_laws": [
+    {
+     "type": "public_law",
+     "cite": "pl/119/21",
+     "congress": 119,
+     "law": 21,
+     "source_url": "https://www.govinfo.gov/content/pkg/PLAW-119publ21/uslm/PLAW-119publ21.xml",
+     "sha256": "762ae9af06640f023ddb9eb6f474ff7cfa275691de338d4fd985cfb04a7b6dea",
+     "bytes": 2787974,
+     "sections": [
+      "100051"
+     ],
+     "divisions": [],
+     "fragments": [
+      {
+       "section": "100051",
+       "relationships": [
+        "CROSS_REFERENCE_REQUIRED"
+       ],
+       "inclusion": "CONTENT_INCLUDED_FOR_GENERATION",
+       "fragment_sha256": "5c447a24dffc4075cf46a6f54d46385ddfaec8db0f97825bd7dbdeb5b19b0a10",
+       "bytes": 14226,
+       "status": "fetched"
+      }
+     ],
+     "status": "identified",
+     "relationships": [
+      "CROSS_REFERENCE_REQUIRED"
+     ]
+    }
+   ],
+   "official_summary": {
+    "status": "available",
+    "version_code": "55",
+    "action_desc": "Passed Senate",
+    "action_date": "2026-06-05",
+    "sha256": "8d239cb75b165e008bdfad407a8d22e9e3aadd389f499a2c9830dd5b0ddbb733",
+    "version_relationship": "MATCHED",
+    "usable": true
+   },
+   "cra": {
+    "mode": "not_cra",
+    "rule_status": null,
+    "consequence_source": null,
+    "underlying_rule": null,
+    "gao_determination": null
+   },
+   "completeness": {
+    "status": "PENDING",
+    "missing": [
+     "unresolved statutory citations in provisions that need content"
+    ],
+    "notes": [
+     "2 citation(s) in provisions that need content are not structured in the voted XML: ['8 U.S.C. 1226, 1231(a), or 1357', '8 U.S.C. 1325 or 1326']"
+    ]
+   },
+   "generation": {
+    "status": "SOURCE_CONTEXT_PENDING"
+   },
+   "superseded_utc": "2026-09-24T12:38:07Z"
   }
  ],
- "recorded_utc": "2026-09-24T12:22:19Z"
+ "recorded_utc": "2026-09-24T12:38:07Z"
 }

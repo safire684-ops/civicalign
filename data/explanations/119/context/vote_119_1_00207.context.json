@@ -26,7 +26,8 @@
    "relationship": "CROSS_REFERENCE_REQUIRED",
    "basis": "operative reference with no narrower rule (fail closed: content required)",
    "pl_section": null,
-   "pl_division": null
+   "pl_division": null,
+   "source": "structured_xref"
   }
  ],
  "citation_gaps": [],
@@ -38,9 +39,11 @@
   "tracked_only": [],
   "relationships": {},
   "bases": {},
+  "cited_as": {},
   "cited": [],
   "amended": [],
   "unresolved_citations": [],
+  "resolved_by_fallback": [],
   "status": "ok"
  },
  "release_point": {
@@ -237,7 +240,142 @@
     "status": "READY_WITH_LIMITS"
    },
    "superseded_utc": "2026-09-24T12:22:16Z"
+  },
+  {
+   "schema": "civicalign.context/1.1",
+   "vote": {
+    "congress": 119,
+    "session": 1,
+    "clerk_number": 207,
+    "date": "2025-04-10",
+    "measure": "HJRES20"
+   },
+   "binding": {
+    "kind": "JOINT_RESOLUTION_PASSAGE",
+    "verification": "VERIFIED",
+    "text_status": "TEXT_BOUND",
+    "text_sha256": "7cbd839d235a7f066fdbe76fc0ecfa6dc97bee1c8b564ea3cbe914e54978d309"
+   },
+   "references": [
+    {
+     "legal_doc": "usc-chapter",
+     "cite": "usc-chapter/5/8",
+     "text": "chapter 8",
+     "location": [],
+     "in_quoted_text": false,
+     "scope": "unparsed",
+     "pinpoint": [],
+     "display_matches_cite": false,
+     "relationship": "CROSS_REFERENCE_REQUIRED",
+     "basis": "operative reference with no narrower rule (fail closed: content required)",
+     "pl_section": null,
+     "pl_division": null
+    }
+   ],
+   "citation_gaps": [],
+   "selection": {
+    "policy": "cra: the resolution's own text and the CRA consequence section; cited authorities are tracked, not extracted",
+    "section_cap": 12,
+    "full_section_max_chars": 50000,
+    "required": [],
+    "tracked_only": [],
+    "relationships": {},
+    "bases": {},
+    "cited": [],
+    "amended": [],
+    "unresolved_citations": [],
+    "status": "ok"
+   },
+   "release_point": {
+    "label": "119-4",
+    "date": "2025-03-15",
+    "note": "latest release point on or before the vote; per-section archives may come from an earlier published one"
+   },
+   "existing_law_context": [],
+   "public_laws": [],
+   "official_summary": {
+    "status": "available",
+    "version_code": "00",
+    "action_desc": "Introduced in House",
+    "action_date": "2025-01-15",
+    "sha256": "224ae5df11bb7b241825b4e16bbf1d75c5ed5bfad12cd765943e97c016f45de9",
+    "version_relationship": "EARLIER_SAME_TEXT",
+    "usable": true
+   },
+   "cra": {
+    "mode": "rule_bound",
+    "rule_status": "RULE_BOUND",
+    "consequence_source": {
+     "type": "us_code",
+     "identifier": "/us/usc/t5/s801",
+     "title": "5",
+     "section": "801",
+     "as_of": {
+      "release_point": "119-4",
+      "date": "2025-03-15",
+      "rule": "latest OLRC release point on or before the vote with a published archive; intervening laws checked against the classification table"
+     },
+     "source_url": "https://uscode.house.gov/download/releasepoints/us/pl/119/4/xml_usc05@119-4.zip",
+     "archive_sha256": "67b23ff2bb7b69db1c9aa892dcfdf0fb378b8aa042d097cafb20931596149f82",
+     "fragment_sha256": "428e76f02b92afb745472c99f9d0f3059376320e60727f9e4f10a30788be6daf",
+     "bytes": 33022,
+     "heading": "Congressional review",
+     "relationship": "SUPPORTING_CONTEXT",
+     "status": "fetched",
+     "in_force_check": {
+      "status": "ok",
+      "archive": "xml_usc05@119-4.zip",
+      "intervening": [],
+      "affected_by": [],
+      "check": "no intervening release point"
+     },
+     "inclusion": "CONTENT_INCLUDED_FOR_GENERATION",
+     "basis": "fixed rule: the CRA consequence section in force at the vote"
+    },
+    "underlying_rule": {
+     "status": "RULE_BOUND",
+     "citation": "89 FR 105188",
+     "document_number": "2024-30369",
+     "fr_title": "Energy Conservation Program: Energy Conservation Standards for Consumer Gas-fired Instantaneous Water Heaters",
+     "type": "Rule",
+     "publication_date": "2024-12-26",
+     "agencies": [
+      "Energy Department"
+     ],
+     "source_url": "https://www.federalregister.gov/documents/2024/12/26/2024-30369/energy-conservation-program-energy-conservation-standards-for-consumer-gas-fired-instantaneous-water",
+     "full_text_xml_url": "https://www.federalregister.gov/documents/full_text/xml/2024/12/26/2024-30369.xml",
+     "sha256": "39627864af3f5bd8ec8b7de5bf22358b4ec74c7876e445dfd4ac0b6f42bb6ae7",
+     "bytes": 970895
+    },
+    "gao_determination": null
+   },
+   "completeness": {
+    "status": "LIMITED",
+    "missing": [],
+    "notes": [
+     "CRA: the resolution's own effect may be explained; the underlying rule's substance may not unless the rule is bound and separately verified"
+    ]
+   },
+   "generation": {
+    "status": "READY_WITH_LIMITS"
+   },
+   "metrics": {
+    "voted_text_chars": 2964,
+    "context_chars": 32792,
+    "official_summary_chars": 484,
+    "total_source_chars": 36240,
+    "source_count": 3,
+    "included_context_fragment_count": 1,
+    "hierarchy_fragment_count": 0,
+    "tracked_reference_count": 0
+   },
+   "budget": {
+    "review_threshold_chars": 150000,
+    "status": "WITHIN_BUDGET",
+    "rule": "no truncation; a packet over the threshold needs a recorded human review before generation"
+   },
+   "superseded_utc": "2026-09-24T12:38:04Z"
   }
  ],
- "recorded_utc": "2026-09-24T12:22:16Z"
+ "recorded_utc": "2026-09-24T12:38:04Z"
 }
