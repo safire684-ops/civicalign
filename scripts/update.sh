@@ -24,6 +24,9 @@ echo
 echo "2/6  verifying the snapshot"
 PYTHONPATH=src $PY -m civicalign.agents.verify || exit 2
 
+echo "     binding Senate passage votes to their official records (Pillar 1, deterministic)"
+PYTHONPATH=src $PY -m civicalign.explain.bind || echo "  binding step reported a problem; previous bindings stand"
+
 echo
 echo "3/6  recomputing every figure from the raw files"
 if ! $PY -m pytest -q --ignore=tests/test_published_pages.py --ignore=tests/test_whitepaper.py; then

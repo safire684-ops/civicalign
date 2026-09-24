@@ -54,6 +54,14 @@ jobs:
       - name: 2/6 Verify the snapshot (roster, join keys, record counts)
         run: PYTHONPATH=src python -m civicalign.agents.verify
 
+      - name: Bind Senate passage votes to their official records (Pillar 1, deterministic)
+        # Fetches the Senate's own record of each eligible vote and the GovInfo
+        # text as voted on, cross-checks them against Voteview and the bill
+        # status, and writes tracked bindings. A network failure leaves the
+        # previous bindings in place (the runner records it; the supervisor
+        # judges them); nothing here calls a model.
+        run: PYTHONPATH=src python -m civicalign.explain.bind
+
       - name: 3/6 Recompute every figure from the raw files (data tests)
         run: >
           python -m pytest -q
@@ -86,7 +94,7 @@ jobs:
         run: |
           git config user.name  "civicalign-bot"
           git config user.email "civicalign-bot@users.noreply.github.com"
-          git add demo/senator-check.html demo/methodology.html data/raw/PROVENANCE.tsv
+          git add demo/senator-check.html demo/methodology.html data/raw/PROVENANCE.tsv data/explanations
           if git diff --cached --quiet; then
             echo "No figures moved this week; the snapshot's check stamp alone is not committed."
             git checkout -- data/raw/SNAPSHOT.json

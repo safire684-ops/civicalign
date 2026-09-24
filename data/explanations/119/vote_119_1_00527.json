@@ -1,0 +1,150 @@
+{
+ "schema": "civicalign.binding/1.0",
+ "vote": {
+  "congress": 119,
+  "session": 1,
+  "clerk_number": 527,
+  "voteview_id": 527,
+  "date": "2025-09-19",
+  "question": "On Passage of the Bill",
+  "result": "Bill Defeated",
+  "required": "3/5",
+  "yeas": 47,
+  "nays": 45,
+  "measure": "S2882",
+  "senate_url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1191/vote_119_1_00527.xml",
+  "senate_sha256": "a112b7adc7f38cc1789d28b07a68c0d88b29564c7b3fda455a432b5ff40a5970",
+  "senate_title": "S. 2882",
+  "senate_document_text": "A bill making continuing appropriations for the fiscal year ending September 30, 2026, and for other purposes.",
+  "amendment_number": null,
+  "voteview_url": "https://voteview.com/rollcall/RS1190527"
+ },
+ "classification": {
+  "kind": "PASSAGE",
+  "summary_eligible": true,
+  "kind_supported": true,
+  "basis": [
+   "voteview.question='On Passage of the Bill'",
+   "senate.question='On Passage of the Bill'"
+  ],
+  "conflict": null
+ },
+ "object": {
+  "type": "bill",
+  "id": "S2882",
+  "title": "Continuing Appropriations and Extensions and Other Matters Act, 2026",
+  "short_title": "Continuing Appropriations Act, 2026",
+  "origin_chamber": "Senate",
+  "billstatus_source": "https://www.govinfo.gov/bulkdata/BILLSTATUS/119/s/BILLSTATUS-119s2882.xml",
+  "billstatus_sha256": "b7467b60f5407cac29febefa02886736ca25bdb85d5df601d677c1607bc3534e",
+  "billstatus_update_date": "2026-06-16T16:14:35Z",
+  "passage_action_text": "Under the order of 9/18/2025, not having achieved 60 votes in the affirmative, failed of passage in Senate by Yea-Nay Vote. 47 - 45. Record Vote Number: 527."
+ },
+ "text_binding": {
+  "status": "TEXT_BOUND",
+  "version_code": "pcs",
+  "version_name": "Placed on Calendar Senate",
+  "version_date": "2025-09-19",
+  "govinfo_url": "https://www.govinfo.gov/content/pkg/BILLS-119s2882pcs/xml/BILLS-119s2882pcs.xml",
+  "sha256": "bcd583267f0d83252390204078e36b5f237c7471619bfd4a4b29100f23590b75",
+  "bytes": 139776,
+  "stage_attribute_matches": true,
+  "selection_reason": "latest pre-vote version (pcs, 2025-09-19); no Senate amendment recorded",
+  "candidates": [
+   "pcs@2025-09-19",
+   "is@2025-09-18"
+  ]
+ },
+ "cra": {
+  "is_cra": false,
+  "agency": null,
+  "rule_title": null,
+  "title_form": null,
+  "consequence_ref": null,
+  "underlying_rule_source": null,
+  "underlying_rule_sha256": null
+ },
+ "receipt": {
+  "deciding": "On Passage of the Bill S. 2882",
+  "heading_success": "If the bill passes",
+  "heading_failure": "If the bill does not pass",
+  "yea_means": "A Yea vote is a vote to pass the bill in the Senate.",
+  "nay_means": "A Nay vote is a vote against passing the bill.",
+  "next_step": "A bill the Senate passes goes to the House (or, if the House already passed the same text, to the President).",
+  "sources": [
+   {
+    "what": "Senate roll-call record",
+    "url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1191/vote_119_1_00527.xml"
+   },
+   {
+    "what": "Bill status (GovInfo)",
+    "url": "https://www.govinfo.gov/bulkdata/BILLSTATUS/119/s/BILLSTATUS-119s2882.xml"
+   },
+   {
+    "what": "Text as voted on (Placed on Calendar Senate)",
+    "url": "https://www.govinfo.gov/content/pkg/BILLS-119s2882pcs/xml/BILLS-119s2882pcs.xml"
+   },
+   {
+    "what": "Roll call at Voteview",
+    "url": "https://voteview.com/rollcall/RS1190527"
+   }
+  ]
+ },
+ "verification": {
+  "status": "VERIFIED",
+  "checks": [
+   {
+    "check": "senate_record_exists",
+    "ok": true,
+    "detail": ""
+   },
+   {
+    "check": "identity_matches",
+    "ok": true,
+    "detail": "senate 119/1/527 vs voteview 119/1/527"
+   },
+   {
+    "check": "date_compatible",
+    "ok": true,
+    "detail": "senate 2025-09-19 vs voteview 2025-09-19"
+   },
+   {
+    "check": "question_matches",
+    "ok": true,
+    "detail": "'On Passage of the Bill' vs 'On Passage of the Bill'"
+   },
+   {
+    "check": "tallies_match",
+    "ok": true,
+    "detail": "senate 47-45 vs voteview 47-45"
+   },
+   {
+    "check": "threshold_matches",
+    "ok": true,
+    "detail": "3/5 vs 3/5"
+   },
+   {
+    "check": "member_votes_match",
+    "ok": true,
+    "detail": "yea 47/47 nay 45/45; former members matched by name+state+party {'S293': 'G000359', 'S419': 'M001190'}"
+   },
+   {
+    "check": "measure_matches",
+    "ok": true,
+    "detail": "senate 'S2882' vs voteview 'S2882'"
+   },
+   {
+    "check": "billstatus_present",
+    "ok": true,
+    "detail": "BILLSTATUS-119s2882.xml"
+   },
+   {
+    "check": "billstatus_links_vote",
+    "ok": true,
+    "detail": "recorded-vote link to this Senate vote number"
+   }
+  ]
+ },
+ "history": [],
+ "recorded_utc": "2026-09-24T01:15:23Z"
+}

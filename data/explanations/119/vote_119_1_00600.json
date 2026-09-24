@@ -1,0 +1,150 @@
+{
+ "schema": "civicalign.binding/1.0",
+ "vote": {
+  "congress": 119,
+  "session": 1,
+  "clerk_number": 600,
+  "voteview_id": 600,
+  "date": "2025-10-30",
+  "question": "On the Joint Resolution",
+  "result": "Joint Resolution Passed",
+  "required": "1/2",
+  "yeas": 51,
+  "nays": 47,
+  "measure": "SJRES88",
+  "senate_url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1191/vote_119_1_00600.xml",
+  "senate_sha256": "443e963bb198d3cd21a90ab45c5a9094b3b32122b9c96a1b427357fc22a29255",
+  "senate_title": "S.J.Res. 88",
+  "senate_document_text": "A joint resolution terminating the national emergency declared to impose global tariffs.",
+  "amendment_number": null,
+  "voteview_url": "https://voteview.com/rollcall/RS1190600"
+ },
+ "classification": {
+  "kind": "JOINT_RESOLUTION_PASSAGE",
+  "summary_eligible": true,
+  "kind_supported": true,
+  "basis": [
+   "voteview.question='On the Joint Resolution'",
+   "senate.question='On the Joint Resolution'"
+  ],
+  "conflict": null
+ },
+ "object": {
+  "type": "joint_resolution",
+  "id": "SJRES88",
+  "title": "A joint resolution terminating the national emergency declared to impose global tariffs.",
+  "short_title": "",
+  "origin_chamber": "Senate",
+  "billstatus_source": "https://www.govinfo.gov/bulkdata/BILLSTATUS/119/sjres/BILLSTATUS-119sjres88.xml",
+  "billstatus_sha256": "e20d50e0f3fc8cbf6764616d529dd119b14efcc31a75e651772a2e118555d03d",
+  "billstatus_update_date": "2026-02-27T09:06:47Z",
+  "passage_action_text": "Passed Senate without amendment by Yea-Nay Vote. 51 - 47. Record Vote Number: 600. (text: CR S7843)"
+ },
+ "text_binding": {
+  "status": "TEXT_BOUND",
+  "version_code": "es",
+  "version_name": "Engrossed in Senate",
+  "version_date": "2025-10-30",
+  "govinfo_url": "https://www.govinfo.gov/content/pkg/BILLS-119sjres88es/xml/BILLS-119sjres88es.xml",
+  "sha256": "64d111f8e6b0d492b6718b02bce3f206c9c2ea89b624e1dbf381b124a5df3681",
+  "bytes": 2153,
+  "stage_attribute_matches": null,
+  "selection_reason": "engrossed by the Senate on the vote date (es): the measure as passed",
+  "candidates": [
+   "es@2025-10-30",
+   "is@2025-10-07"
+  ]
+ },
+ "cra": {
+  "is_cra": false,
+  "agency": null,
+  "rule_title": null,
+  "title_form": null,
+  "consequence_ref": null,
+  "underlying_rule_source": null,
+  "underlying_rule_sha256": null
+ },
+ "receipt": {
+  "deciding": "On the Joint Resolution S.J.Res. 88",
+  "heading_success": "If the resolution passes",
+  "heading_failure": "If the resolution does not pass",
+  "yea_means": "A Yea vote is a vote to pass the joint resolution in the Senate.",
+  "nay_means": "A Nay vote is a vote against passing the joint resolution.",
+  "next_step": "A joint resolution has the force of a bill: after both chambers pass it, it goes to the President.",
+  "sources": [
+   {
+    "what": "Senate roll-call record",
+    "url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1191/vote_119_1_00600.xml"
+   },
+   {
+    "what": "Bill status (GovInfo)",
+    "url": "https://www.govinfo.gov/bulkdata/BILLSTATUS/119/sjres/BILLSTATUS-119sjres88.xml"
+   },
+   {
+    "what": "Text as voted on (Engrossed in Senate)",
+    "url": "https://www.govinfo.gov/content/pkg/BILLS-119sjres88es/xml/BILLS-119sjres88es.xml"
+   },
+   {
+    "what": "Roll call at Voteview",
+    "url": "https://voteview.com/rollcall/RS1190600"
+   }
+  ]
+ },
+ "verification": {
+  "status": "VERIFIED",
+  "checks": [
+   {
+    "check": "senate_record_exists",
+    "ok": true,
+    "detail": ""
+   },
+   {
+    "check": "identity_matches",
+    "ok": true,
+    "detail": "senate 119/1/600 vs voteview 119/1/600"
+   },
+   {
+    "check": "date_compatible",
+    "ok": true,
+    "detail": "senate 2025-10-30 vs voteview 2025-10-30"
+   },
+   {
+    "check": "question_matches",
+    "ok": true,
+    "detail": "'On the Joint Resolution' vs 'On the Joint Resolution'"
+   },
+   {
+    "check": "tallies_match",
+    "ok": true,
+    "detail": "senate 51-47 vs voteview 51-47"
+   },
+   {
+    "check": "threshold_matches",
+    "ok": true,
+    "detail": "1/2 vs 1/2"
+   },
+   {
+    "check": "member_votes_match",
+    "ok": true,
+    "detail": "yea 51/51 nay 47/47; former members matched by name+state+party {'S293': 'G000359', 'S419': 'M001190'}"
+   },
+   {
+    "check": "measure_matches",
+    "ok": true,
+    "detail": "senate 'SJRES88' vs voteview 'SJRES88'"
+   },
+   {
+    "check": "billstatus_present",
+    "ok": true,
+    "detail": "BILLSTATUS-119sjres88.xml"
+   },
+   {
+    "check": "billstatus_links_vote",
+    "ok": true,
+    "detail": "recorded-vote link to this Senate vote number"
+   }
+  ]
+ },
+ "history": [],
+ "recorded_utc": "2026-09-24T01:15:28Z"
+}

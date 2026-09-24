@@ -93,6 +93,24 @@ class Config:
     def billflow_house_zip(self) -> Path:
         return self.raw_dir / f"BILLSTATUS-{self.congress}-hr.zip"
 
+    # Joint resolutions, for Pillar 1's vote binding (non-critical sources).
+    @property
+    def billstatus_sjres_zip(self) -> Path:
+        return self.raw_dir / f"BILLSTATUS-{self.congress}-sjres.zip"
+
+    @property
+    def billstatus_hjres_zip(self) -> Path:
+        return self.raw_dir / f"BILLSTATUS-{self.congress}-hjres.zip"
+
+    # Pillar 1 binding artefacts: raw fetches (ignored by git) and the tracked bindings.
+    @property
+    def explain_raw_dir(self) -> Path:
+        return self.raw_dir / "explanations"
+
+    @property
+    def bindings_dir(self) -> Path:
+        return ROOT / "data" / "explanations" / str(self.congress)
+
     @property
     def rollcalls_csv(self) -> Path:
         return self.raw_dir / f"S{self.congress}_rollcalls.csv"

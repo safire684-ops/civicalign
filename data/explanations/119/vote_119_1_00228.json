@@ -1,0 +1,153 @@
+{
+ "schema": "civicalign.binding/1.0",
+ "vote": {
+  "congress": 119,
+  "session": 1,
+  "clerk_number": 228,
+  "voteview_id": 228,
+  "date": "2025-05-01",
+  "question": "On the Joint Resolution",
+  "result": "Joint Resolution Passed",
+  "required": "1/2",
+  "yeas": 52,
+  "nays": 45,
+  "measure": "HJRES75",
+  "senate_url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1191/vote_119_1_00228.xml",
+  "senate_sha256": "ebff7b04ed27aa526d5f2966755b3db1df1ccf0f02ccb5147e053524c726e12c",
+  "senate_title": "H.J.Res. 75",
+  "senate_document_text": "A joint resolution providing for congressional disapproval under chapter 8 of title 5, United States Code, of the rule submitted by the Office of Energy Efficiency and Renewable Energy, Department of Energy relating to \"Energy Conservation Program: Energy Conservation Standards for Commercial Refrigerators, Freezers, and Refrigerator-Freezers\".",
+  "amendment_number": null,
+  "voteview_url": "https://voteview.com/rollcall/RS1190228"
+ },
+ "classification": {
+  "kind": "JOINT_RESOLUTION_PASSAGE",
+  "summary_eligible": true,
+  "kind_supported": true,
+  "basis": [
+   "voteview.question='On the Joint Resolution'",
+   "senate.question='On the Joint Resolution'"
+  ],
+  "conflict": null
+ },
+ "object": {
+  "type": "joint_resolution",
+  "id": "HJRES75",
+  "title": "Providing for congressional disapproval under chapter 8 of title 5, United States Code, of the rule submitted by the Office of Energy Efficiency and Renewable Energy, Department of Energy relating to \"Energy Conservation Program: Energy Conservation Standards for Commercial Refrigerators, Freezers, and Refrigerator-Freezers\".",
+  "short_title": "",
+  "origin_chamber": "House",
+  "billstatus_source": "https://www.govinfo.gov/bulkdata/BILLSTATUS/119/hjres/BILLSTATUS-119hjres75.xml",
+  "billstatus_sha256": "c41337a52be0ecc9783cf534bf4c56fb6073d63d2f7748d1b91586e639113f81",
+  "billstatus_update_date": "2026-07-10T15:38:29Z",
+  "passage_action_text": "Passed Senate without amendment by Yea-Nay Vote. 52 - 45. Record Vote Number: 228. (consideration: CR S2726-2727)"
+ },
+ "text_binding": {
+  "status": "TEXT_BOUND",
+  "version_code": "rds",
+  "version_name": "Received in Senate",
+  "version_date": "2025-03-31",
+  "govinfo_url": "https://www.govinfo.gov/content/pkg/BILLS-119hjres75rds/xml/BILLS-119hjres75rds.xml",
+  "sha256": "3cc726debfe0febdffff5e0d02ef79a4c8728ceb5e441f42d34363fdf52f1c72",
+  "bytes": 2948,
+  "stage_attribute_matches": null,
+  "selection_reason": "latest pre-vote version (rds, 2025-03-31); no Senate amendment recorded",
+  "candidates": [
+   "enr@-",
+   "rds@2025-03-31",
+   "eh@2025-03-27",
+   "ih@2025-03-10",
+   "pl@2025-05-10"
+  ]
+ },
+ "cra": {
+  "is_cra": true,
+  "agency": "Office of Energy Efficiency and Renewable Energy, Department of Energy",
+  "rule_title": "Energy Conservation Program: Energy Conservation Standards for Commercial Refrigerators, Freezers, and Refrigerator-Freezers",
+  "title_form": "chapter 8 of title 5",
+  "consequence_ref": "Congressional Review Act, 5 U.S.C. 801(b): a rule disapproved by an enacted joint resolution shall not take effect (or shall not continue in effect) and may not be reissued in substantially the same form without subsequent statutory authorization.",
+  "underlying_rule_source": null,
+  "underlying_rule_sha256": null
+ },
+ "receipt": {
+  "deciding": "On the Joint Resolution H.J.Res. 75",
+  "heading_success": "If the resolution passes",
+  "heading_failure": "If the resolution does not pass",
+  "yea_means": "A Yea vote is a vote to pass the joint resolution in the Senate.",
+  "nay_means": "A Nay vote is a vote against passing the joint resolution.",
+  "next_step": "A joint resolution has the force of a bill: after both chambers pass it, it goes to the President.",
+  "sources": [
+   {
+    "what": "Senate roll-call record",
+    "url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1191/vote_119_1_00228.xml"
+   },
+   {
+    "what": "Bill status (GovInfo)",
+    "url": "https://www.govinfo.gov/bulkdata/BILLSTATUS/119/hjres/BILLSTATUS-119hjres75.xml"
+   },
+   {
+    "what": "Text as voted on (Received in Senate)",
+    "url": "https://www.govinfo.gov/content/pkg/BILLS-119hjres75rds/xml/BILLS-119hjres75rds.xml"
+   },
+   {
+    "what": "Roll call at Voteview",
+    "url": "https://voteview.com/rollcall/RS1190228"
+   }
+  ]
+ },
+ "verification": {
+  "status": "VERIFIED",
+  "checks": [
+   {
+    "check": "senate_record_exists",
+    "ok": true,
+    "detail": ""
+   },
+   {
+    "check": "identity_matches",
+    "ok": true,
+    "detail": "senate 119/1/228 vs voteview 119/1/228"
+   },
+   {
+    "check": "date_compatible",
+    "ok": true,
+    "detail": "senate 2025-05-01 vs voteview 2025-05-01"
+   },
+   {
+    "check": "question_matches",
+    "ok": true,
+    "detail": "'On the Joint Resolution' vs 'On the Joint Resolution'"
+   },
+   {
+    "check": "tallies_match",
+    "ok": true,
+    "detail": "senate 52-45 vs voteview 52-45"
+   },
+   {
+    "check": "threshold_matches",
+    "ok": true,
+    "detail": "1/2 vs 1/2"
+   },
+   {
+    "check": "member_votes_match",
+    "ok": true,
+    "detail": "yea 52/52 nay 45/45; former members matched by name+state+party {'S293': 'G000359', 'S419': 'M001190'}"
+   },
+   {
+    "check": "measure_matches",
+    "ok": true,
+    "detail": "senate 'HJRES75' vs voteview 'HJRES75'"
+   },
+   {
+    "check": "billstatus_present",
+    "ok": true,
+    "detail": "BILLSTATUS-119hjres75.xml"
+   },
+   {
+    "check": "billstatus_links_vote",
+    "ok": true,
+    "detail": "recorded-vote link to this Senate vote number"
+   }
+  ]
+ },
+ "history": [],
+ "recorded_utc": "2026-09-24T01:15:19Z"
+}

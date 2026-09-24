@@ -24,6 +24,12 @@ It checks, from the raw files:
     caucus read from the roster, nothing inferred
     its count, lowest, highest and middle record, the published conclusion, and
     the cross-window sensitivity behind it
+  * every Pillar 1 vote binding: the Senate record's identity, tallies and
+    member votes re-read from the cached XML, the measure id, the bill-status
+    recorded-vote link, the classification from the official question, the
+    selected text version's existence, date and hash, and that only supported,
+    verified, text-bound votes are marked eligible (with the CRA fields read
+    from the official title and no underlying-rule description present)
 and, once the page is built, that the page's data blocks say the same.
 
 Run:  PYTHONPATH=src python -m civicalign.agents.supervisor
@@ -265,6 +271,120 @@ def _peer_results(roster: dict, scores: dict[str, float], avg: dict[str, float],
     return out
 
 
+def _binding_checks(cfg: Config, roster: dict, scores: dict[str, float]) -> list[Check]:
+    """Re-derive every tracked binding from the cached first-party files with
+    separate code. Bindings that could not be verified by the runner are
+    reported, not failed; a binding the runner marked VERIFIED or eligible that
+    this code cannot reproduce fails."""
+    import hashlib
+    from ..explain import binding as B
+    from ..sources.senate_votes import parse_senate_vote
+    from ..sources import billstatus
+    out: list[Check] = []
+    bdir = cfg.bindings_dir
+    files = sorted(bdir.glob("vote_*.json")) if bdir.exists() else []
+    if not files:
+        out.append(Check("Pillar 1 bindings present", True, "none yet"))
+        return out
+    vv = {}
+    with cfg.rollcalls_csv.open() as fh:
+        for row in csv.DictReader(fh):
+            if row["chamber"] == "Senate" and row["congress"] == str(cfg.congress):
+                vv[(int(row["session"]), int(row["clerk_rollnumber"]))] = row
+    bills = billstatus.load_records(cfg.billflow_zip, cfg.billflow_house_zip, cfg.billstatus_sjres_zip, cfg.billstatus_hjres_zip)
+    raw = cfg.explain_raw_dir
+    manifest = json.loads((raw / "MANIFEST.json").read_text()) if (raw / "MANIFEST.json").exists() else {}
+    problems, checked, eligible, unverifiable = [], 0, 0, 0
+    kinds = {}
+    for f in files:
+        b = json.loads(f.read_text()); v = b["vote"]; checked += 1
+        key = (v["session"], v["clerk_number"]); row = vv.get(key)
+        if row is None:
+            problems.append(f"{f.name}: no Voteview row"); continue
+        # classification from the official question alone must agree with the stored base kind
+        q = row["vote_question"].strip(); base = B.QUESTION_KINDS.get(q, B.OTHER)
+        stored = b["classification"]["kind"]
+        if not (stored == base or (base == B.PASSAGE and stored == B.PASSAGE_AS_AMENDED) or stored == B.OTHER):
+            problems.append(f"{f.name}: kind {stored} not derivable from {q!r}")
+        if b["classification"]["summary_eligible"] and stored not in B.SUPPORTED_KINDS:
+            problems.append(f"{f.name}: eligible but kind {stored} unsupported")
+        kinds[stored] = kinds.get(stored, 0) + 1
+        senate_path = raw / f"senate/vote_{v['congress']}_{v['session']}_{v['clerk_number']:05d}.xml"
+        if b["verification"]["status"] in ("UNAVAILABLE",):
+            unverifiable += 1; continue
+        if not senate_path.exists():
+            problems.append(f"{f.name}: Senate XML not cached"); continue
+        data = senate_path.read_bytes()
+        if v["senate_sha256"] and hashlib.sha256(data).hexdigest() != v["senate_sha256"]:
+            problems.append(f"{f.name}: Senate XML hash changed since binding")
+        s = parse_senate_vote(senate_path)
+        if (s.congress, s.session, s.number) != (v["congress"], v["session"], v["clerk_number"]) or s.date != row["date"] \
+                or (s.yeas, s.nays) != (int(row["yea_count"]), int(row["nay_count"])) or s.question != q:
+            problems.append(f"{f.name}: Senate record disagrees with Voteview on identity/date/tallies/question")
+        if stored == B.PASSAGE_AS_AMENDED and not s.as_amended:
+            problems.append(f"{f.name}: PASSAGE_AS_AMENDED but Senate title lacks 'As Amended'")
+        measure = "".join(ch for ch in row["bill_number"].upper() if ch.isalnum())
+        if measure and s.measure != measure:
+            problems.append(f"{f.name}: measure {s.measure!r} vs Voteview {measure!r}")
+        if b["object"]["id"] and b["object"]["id"] != measure:
+            problems.append(f"{f.name}: object id {b['object']['id']} vs {measure}")
+        bill = bills.get(measure)
+        ver = b["verification"]["status"]
+        if ver == "VERIFIED":
+            if bill is None:
+                problems.append(f"{f.name}: VERIFIED without a bill-status record")
+            else:
+                linked = any(rv.chamber == "Senate" and rv.number == v["clerk_number"] for a in bill.actions for rv in a.recorded_votes)
+                if not linked:
+                    problems.append(f"{f.name}: VERIFIED but bill status has no recorded-vote link to vote {v['clerk_number']}")
+                if bill.sha256 != b["object"]["billstatus_sha256"]:
+                    problems.append(f"{f.name}: bill-status hash changed since binding")
+        tb = b["text_binding"]
+        if tb["status"] == "TEXT_BOUND":
+            if bill is None:
+                problems.append(f"{f.name}: TEXT_BOUND without a bill record")
+            else:
+                match = [tv for tv in bill.text_versions if tv.url == tb["govinfo_url"]]
+                if len(match) != 1:
+                    problems.append(f"{f.name}: selected text URL not in the bill's text versions")
+                elif tb["version_code"] in B.NEVER or match[0].code in B.NEVER:
+                    problems.append(f"{f.name}: an enrolled/public-law text was selected")
+                elif match[0].date and match[0].date > row["date"] and (
+                        __import__("datetime").date.fromisoformat(match[0].date) - __import__("datetime").date.fromisoformat(row["date"])).days > 3:
+                    problems.append(f"{f.name}: selected text dated more than 3 days after the vote")
+                elif B.select_text(stored, bill, row["date"]).version != match[0]:
+                    problems.append(f"{f.name}: selection rule does not reproduce the stored version")
+                tpath = raw / f"text/{tb['govinfo_url'].rsplit('/', 1)[-1]}"
+                if not tpath.exists():
+                    problems.append(f"{f.name}: selected text not cached")
+                elif hashlib.sha256(tpath.read_bytes()).hexdigest() != tb["sha256"]:
+                    problems.append(f"{f.name}: text hash changed since binding")
+                elif B.stage_matches(tb["version_code"], tpath.read_bytes()[:4000]) is False:
+                    problems.append(f"{f.name}: cached text's bill-stage does not match the selected version")
+        if b["classification"]["summary_eligible"]:
+            eligible += 1
+            if ver != "VERIFIED" or tb["status"] != "TEXT_BOUND":
+                problems.append(f"{f.name}: eligible without VERIFIED + TEXT_BOUND")
+        cra = b["cra"]
+        if bill is not None and b["object"]["type"] == "joint_resolution":
+            own = B.cra_from_title(bill.title)
+            if (own.is_cra, own.agency, own.rule_title) != (cra["is_cra"], cra["agency"], cra["rule_title"]):
+                problems.append(f"{f.name}: CRA fields differ from the official title")
+        if cra["is_cra"] and cra["underlying_rule_source"] is None:
+            for k in ("rule_summary", "rule_effects", "if_succeeds", "if_fails"):
+                if k in b:
+                    problems.append(f"{f.name}: underlying-rule description without an underlying-rule source")
+        for k in ("decision", "if_succeeds", "if_fails", "summary"):
+            if k in b:
+                problems.append(f"{f.name}: generated field {k!r} present in a Stage 2 binding")
+        for rec in b["history"]:
+            if rec.get("vote", {}).get("clerk_number") != v["clerk_number"]:
+                problems.append(f"{f.name}: history entry for a different vote")
+    out.append(Check("Pillar 1 bindings re-derived from cached first-party files", not problems,
+                     f"{checked} bindings, {eligible} eligible, {unverifiable} unverifiable; kinds {kinds}" + (f"; problems {problems[:6]}" if problems else "")))
+    return out
+
+
 # ---- the comparison ------------------------------------------------------------
 
 def checks(report: Report, cfg: Config = DEFAULT, page: Path | None = None) -> list[Check]:
@@ -380,6 +500,9 @@ def checks(report: Report, cfg: Config = DEFAULT, page: Path | None = None) -> l
         counts = {s: sum(1 for d in pr.values() if d["status"] == s) for s in ("within", "outside_liberal", "outside_conservative", "unstable", "insufficient", "unsupported")}
         out.append(Check("peer rule: fixed window, minimum and cross-window check", WINDOW == 0.04 and MIN_PEERS == 6 and WINDOWS == (0.02, 0.03, 0.04, 0.05),
                          f"±{WINDOW*100:g} pts, min {MIN_PEERS}, windows {[w*100 for w in WINDOWS]}; statuses {counts}"))
+
+    if cfg.rollcalls_csv.exists() and scores:
+        out.extend(_binding_checks(cfg, roster, scores))
 
     if page is not None and page.exists():
         html = page.read_text()

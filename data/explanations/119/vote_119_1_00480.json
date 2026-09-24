@@ -1,0 +1,154 @@
+{
+ "schema": "civicalign.binding/1.0",
+ "vote": {
+  "congress": 119,
+  "session": 1,
+  "clerk_number": 480,
+  "voteview_id": 480,
+  "date": "2025-08-01",
+  "question": "On Passage of the Bill",
+  "result": "Bill Passed",
+  "required": "3/5",
+  "yeas": 87,
+  "nays": 9,
+  "measure": "HR3944",
+  "senate_url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1191/vote_119_1_00480.xml",
+  "senate_sha256": "eb2b6356a221df2f8b1dd5ec3e0f573b463750321122c6e62d9974e608dab45b",
+  "senate_title": "H. R. 3944, as amended",
+  "senate_document_text": "A bill making appropriations for military construction, the Department of Veterans Affairs, and related agencies for the fiscal year ending September 30, 2026, and for other purposes.",
+  "amendment_number": null,
+  "voteview_url": "https://voteview.com/rollcall/RS1190480"
+ },
+ "classification": {
+  "kind": "PASSAGE_AS_AMENDED",
+  "summary_eligible": true,
+  "kind_supported": true,
+  "basis": [
+   "voteview.question='On Passage of the Bill'",
+   "senate.question='On Passage of the Bill'",
+   "senate.title=As Amended"
+  ],
+  "conflict": null
+ },
+ "object": {
+  "type": "bill",
+  "id": "HR3944",
+  "title": "Military Construction and Veterans Affairs, Agriculture, and Legislative Branch Appropriations Act, 2026",
+  "short_title": "Military Construction, Veterans Affairs, and Related Agencies Appropriations Act, 2026",
+  "origin_chamber": "House",
+  "billstatus_source": "https://www.govinfo.gov/bulkdata/BILLSTATUS/119/hr/BILLSTATUS-119hr3944.xml",
+  "billstatus_sha256": "6dc0efbd098a978c0739ff086b8c66f1144516e6f070fec24455fc38974a9fce",
+  "billstatus_update_date": "2026-07-27T16:03:35Z",
+  "passage_action_text": "Passed Senate under the order of 8/1/2025, having achieved 60 votes in the affirmative, with an amendment by Yea-Nay Vote. 87 - 9. Record Vote Number: 480."
+ },
+ "text_binding": {
+  "status": "TEXT_BOUND",
+  "version_code": "eas",
+  "version_name": "Engrossed Amendment Senate",
+  "version_date": "2025-08-01",
+  "govinfo_url": "https://www.govinfo.gov/content/pkg/BILLS-119hr3944eas/xml/BILLS-119hr3944eas.xml",
+  "sha256": "ce07e72aaba0045a10c1bab0ad8bfea53a3653f5cb02f5749e7de5b49a0c4389",
+  "bytes": 471237,
+  "stage_attribute_matches": null,
+  "selection_reason": "engrossed by the Senate on the vote date (eas): the measure as passed",
+  "candidates": [
+   "eas@2025-08-01",
+   "rs@2025-07-17",
+   "rfs@2025-06-30",
+   "eh@2025-06-25",
+   "rh@2025-06-12"
+  ]
+ },
+ "cra": {
+  "is_cra": false,
+  "agency": null,
+  "rule_title": null,
+  "title_form": null,
+  "consequence_ref": null,
+  "underlying_rule_source": null,
+  "underlying_rule_sha256": null
+ },
+ "receipt": {
+  "deciding": "On Passage of the Bill H.R. 3944",
+  "heading_success": "If the bill, as amended, passes",
+  "heading_failure": "If the bill does not pass",
+  "yea_means": "A Yea vote is a vote to pass the bill as the Senate amended it.",
+  "nay_means": "A Nay vote is a vote against passing the amended bill.",
+  "next_step": "Because the Senate changed the text, the amended bill goes back to the House, which must agree to the Senate's version before it can become law.",
+  "sources": [
+   {
+    "what": "Senate roll-call record",
+    "url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1191/vote_119_1_00480.xml"
+   },
+   {
+    "what": "Bill status (GovInfo)",
+    "url": "https://www.govinfo.gov/bulkdata/BILLSTATUS/119/hr/BILLSTATUS-119hr3944.xml"
+   },
+   {
+    "what": "Text as voted on (Engrossed Amendment Senate)",
+    "url": "https://www.govinfo.gov/content/pkg/BILLS-119hr3944eas/xml/BILLS-119hr3944eas.xml"
+   },
+   {
+    "what": "Roll call at Voteview",
+    "url": "https://voteview.com/rollcall/RS1190480"
+   }
+  ]
+ },
+ "verification": {
+  "status": "VERIFIED",
+  "checks": [
+   {
+    "check": "senate_record_exists",
+    "ok": true,
+    "detail": ""
+   },
+   {
+    "check": "identity_matches",
+    "ok": true,
+    "detail": "senate 119/1/480 vs voteview 119/1/480"
+   },
+   {
+    "check": "date_compatible",
+    "ok": true,
+    "detail": "senate 2025-08-01 vs voteview 2025-08-01"
+   },
+   {
+    "check": "question_matches",
+    "ok": true,
+    "detail": "'On Passage of the Bill' vs 'On Passage of the Bill'"
+   },
+   {
+    "check": "tallies_match",
+    "ok": true,
+    "detail": "senate 87-9 vs voteview 87-9"
+   },
+   {
+    "check": "threshold_matches",
+    "ok": true,
+    "detail": "3/5 vs 3/5"
+   },
+   {
+    "check": "member_votes_match",
+    "ok": true,
+    "detail": "yea 87/87 nay 9/9; former members matched by name+state+party {'S293': 'G000359', 'S419': 'M001190'}"
+   },
+   {
+    "check": "measure_matches",
+    "ok": true,
+    "detail": "senate 'HR3944' vs voteview 'HR3944'"
+   },
+   {
+    "check": "billstatus_present",
+    "ok": true,
+    "detail": "BILLSTATUS-119hr3944.xml"
+   },
+   {
+    "check": "billstatus_links_vote",
+    "ok": true,
+    "detail": "recorded-vote link to this Senate vote number"
+   }
+  ]
+ },
+ "history": [],
+ "recorded_utc": "2026-09-24T01:15:23Z"
+}

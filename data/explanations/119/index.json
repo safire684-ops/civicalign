@@ -1,0 +1,517 @@
+{
+ "schema": "civicalign.binding/1.0",
+ "congress": 119,
+ "rule": {
+  "supported_kinds": [
+   "JOINT_RESOLUTION_PASSAGE",
+   "PASSAGE",
+   "PASSAGE_AS_AMENDED"
+  ],
+  "pending_window_days": 45,
+  "never_selected_versions": [
+   "enr",
+   "pap",
+   "pl",
+   "ppl"
+  ]
+ },
+ "classified": {
+  "CLOTURE": 290,
+  "MOTION_TO_PROCEED": 86,
+  "AMENDMENT": 98,
+  "PASSAGE": 19,
+  "NOMINATION": 221,
+  "MOTION_TO_TABLE": 18,
+  "OTHER": 128,
+  "JOINT_RESOLUTION_PASSAGE": 35,
+  "POINT_OF_ORDER": 4
+ },
+ "bound": [
+  {
+   "file": "vote_119_1_00007.json",
+   "measure": "S5",
+   "kind": "PASSAGE_AS_AMENDED",
+   "verification": "VERIFIED",
+   "text": "TEXT_BOUND",
+   "summary_eligible": true,
+   "cra": false
+  },
+  {
+   "file": "vote_119_1_00092.json",
+   "measure": "SJRES11",
+   "kind": "JOINT_RESOLUTION_PASSAGE",
+   "verification": "VERIFIED",
+   "text": "TEXT_BOUND",
+   "summary_eligible": true,
+   "cra": true
+  },
+  {
+   "file": "vote_119_1_00095.json",
+   "measure": "SJRES10",
+   "kind": "JOINT_RESOLUTION_PASSAGE",
+   "verification": "VERIFIED",
+   "text": "TEXT_BOUND",
+   "summary_eligible": true,
+   "cra": false
+  },
+  {
+   "file": "vote_119_1_00097.json",
+   "measure": "HJRES35",
+   "kind": "JOINT_RESOLUTION_PASSAGE",
+   "verification": "VERIFIED",
+   "text": "TEXT_BOUND",
+   "summary_eligible": true,
+   "cra": true
+  },
+  {
+   "file": "vote_119_1_00102.json",
+   "measure": "SJRES3",
+   "kind": "JOINT_RESOLUTION_PASSAGE",
+   "verification": "VERIFIED",
+   "text": "TEXT_BOUND",
+   "summary_eligible": true,
+   "cra": true
+  },
+  {
+   "file": "vote_119_1_00106.json",
+   "measure": "SJRES28",
+   "kind": "JOINT_RESOLUTION_PASSAGE",
+   "verification": "VERIFIED",
+   "text": "TEXT_BOUND",
+   "summary_eligible": true,
+   "cra": true
+  },
+  {
+   "file": "vote_119_1_00127.json",
+   "measure": "S331",
+   "kind": "PASSAGE_AS_AMENDED",
+   "verification": "VERIFIED",
+   "text": "TEXT_BOUND",
+   "summary_eligible": true,
+   "cra": false
+  },
+  {
+   "file": "vote_119_1_00133.json",
+   "measure": "HR1968",
+   "kind": "PASSAGE",
+   "verification": "VERIFIED",
+   "text": "TEXT_BOUND",
+   "summary_eligible": true,
+   "cra": false
+  },
+  {
+   "file": "vote_119_1_00151.json",
+   "measure": "HJRES25",
+   "kind": "JOINT_RESOLUTION_PASSAGE",
+   "verification": "VERIFIED",
+   "text": "TEXT_BOUND",
+   "summary_eligible": true,
+   "cra": true
+  },
+  {
+   "file": "vote_119_1_00153.json",
+   "measure": "SJRES18",
+   "kind": "JOINT_RESOLUTION_PASSAGE",
+   "verification": "VERIFIED",
+   "text": "TEXT_BOUND",
+   "summary_eligible": true,
+   "cra": true
+  },
+  {
+   "file": "vote_119_1_00160.json",
+   "measure": "SJRES37",
+   "kind": "JOINT_RESOLUTION_PASSAGE",
+   "verification": "VERIFIED",
+   "text": "TEXT_BOUND",
+   "summary_eligible": true,
+   "cra": false
+  },
+  {
+   "file": "vote_119_1_00162.json",
+   "measure": "HJRES24",
+   "kind": "JOINT_RESOLUTION_PASSAGE",
+   "verification": "VERIFIED",
+   "text": "TEXT_BOUND",
+   "summary_eligible": true,
+   "cra": true
+  },
+  {
+   "file": "vote_119_1_00207.json",
+   "measure": "HJRES20",
+   "kind": "JOINT_RESOLUTION_PASSAGE",
+   "verification": "VERIFIED",
+   "text": "TEXT_BOUND",
+   "summary_eligible": true,
+   "cra": true
+  },
+  {
+   "file": "vote_119_1_00223.json",
+   "measure": "HJRES42",
+   "kind": "JOINT_RESOLUTION_PASSAGE",
+   "verification": "VERIFIED",
+   "text": "TEXT_BOUND",
+   "summary_eligible": true,
+   "cra": true
+  },
+  {
+   "file": "vote_119_1_00225.json",
+   "measure": "SJRES49",
+   "kind": "JOINT_RESOLUTION_PASSAGE",
+   "verification": "VERIFIED",
+   "text": "TEXT_BOUND",
+   "summary_eligible": true,
+   "cra": false
+  },
+  {
+   "file": "vote_119_1_00228.json",
+   "measure": "HJRES75",
+   "kind": "JOINT_RESOLUTION_PASSAGE",
+   "verification": "VERIFIED",
+   "text": "TEXT_BOUND",
+   "summary_eligible": true,
+   "cra": true
+  },
+  {
+   "file": "vote_119_1_00229.json",
+   "measure": "SJRES31",
+   "kind": "JOINT_RESOLUTION_PASSAGE",
+   "verification": "VERIFIED",
+   "text": "TEXT_BOUND",
+   "summary_eligible": true,
+   "cra": true
+  },
+  {
+   "file": "vote_119_1_00232.json",
+   "measure": "HJRES61",
+   "kind": "JOINT_RESOLUTION_PASSAGE",
+   "verification": "VERIFIED",
+   "text": "TEXT_BOUND",
+   "summary_eligible": true,
+   "cra": true
+  },
+  {
+   "file": "vote_119_1_00237.json",
+   "measure": "SJRES13",
+   "kind": "JOINT_RESOLUTION_PASSAGE",
+   "verification": "VERIFIED",
+   "text": "TEXT_BOUND",
+   "summary_eligible": true,
+   "cra": true
+  },
+  {
+   "file": "vote_119_1_00238.json",
+   "measure": "SJRES7",
+   "kind": "JOINT_RESOLUTION_PASSAGE",
+   "verification": "VERIFIED",
+   "text": "TEXT_BOUND",
+   "summary_eligible": true,
+   "cra": true
+  },
+  {
+   "file": "vote_119_1_00239.json",
+   "measure": "HJRES60",
+   "kind": "JOINT_RESOLUTION_PASSAGE",
+   "verification": "VERIFIED",
+   "text": "TEXT_BOUND",
+   "summary_eligible": true,
+   "cra": true
+  },
+  {
+   "file": "vote_119_1_00275.json",
+   "measure": "SJRES55",
+   "kind": "JOINT_RESOLUTION_PASSAGE",
+   "verification": "VERIFIED",
+   "text": "TEXT_BOUND",
+   "summary_eligible": true,
+   "cra": true
+  },
+  {
+   "file": "vote_119_1_00277.json",
+   "measure": "HJRES88",
+   "kind": "JOINT_RESOLUTION_PASSAGE",
+   "verification": "VERIFIED",
+   "text": "TEXT_BOUND",
+   "summary_eligible": true,
+   "cra": true
+  },
+  {
+   "file": "vote_119_1_00279.json",
+   "measure": "HJRES87",
+   "kind": "JOINT_RESOLUTION_PASSAGE",
+   "verification": "VERIFIED",
+   "text": "TEXT_BOUND",
+   "summary_eligible": true,
+   "cra": true
+  },
+  {
+   "file": "vote_119_1_00281.json",
+   "measure": "HJRES89",
+   "kind": "JOINT_RESOLUTION_PASSAGE",
+   "verification": "VERIFIED",
+   "text": "TEXT_BOUND",
+   "summary_eligible": true,
+   "cra": true
+  },
+  {
+   "file": "vote_119_1_00318.json",
+   "measure": "S1582",
+   "kind": "PASSAGE_AS_AMENDED",
+   "verification": "VERIFIED",
+   "text": "TEXT_BOUND",
+   "summary_eligible": true,
+   "cra": false
+  },
+  {
+   "file": "vote_119_1_00372.json",
+   "measure": "HR1",
+   "kind": "PASSAGE_AS_AMENDED",
+   "verification": "VERIFIED",
+   "text": "TEXT_BOUND",
+   "summary_eligible": true,
+   "cra": false
+  },
+  {
+   "file": "vote_119_1_00411.json",
+   "measure": "HR4",
+   "kind": "PASSAGE_AS_AMENDED",
+   "verification": "VERIFIED",
+   "text": "TEXT_BOUND",
+   "summary_eligible": true,
+   "cra": false
+  },
+  {
+   "file": "vote_119_1_00480.json",
+   "measure": "HR3944",
+   "kind": "PASSAGE_AS_AMENDED",
+   "verification": "VERIFIED",
+   "text": "TEXT_BOUND",
+   "summary_eligible": true,
+   "cra": false
+  },
+  {
+   "file": "vote_119_1_00527.json",
+   "measure": "S2882",
+   "kind": "PASSAGE",
+   "verification": "VERIFIED",
+   "text": "TEXT_BOUND",
+   "summary_eligible": true,
+   "cra": false
+  },
+  {
+   "file": "vote_119_1_00528.json",
+   "measure": "HR5371",
+   "kind": "PASSAGE",
+   "verification": "VERIFIED",
+   "text": "TEXT_BOUND",
+   "summary_eligible": true,
+   "cra": false
+  },
+  {
+   "file": "vote_119_1_00534.json",
+   "measure": "S2882",
+   "kind": "PASSAGE",
+   "verification": "VERIFIED",
+   "text": "TEXT_BOUND",
+   "summary_eligible": true,
+   "cra": false
+  },
+  {
+   "file": "vote_119_1_00535.json",
+   "measure": "HR5371",
+   "kind": "PASSAGE",
+   "verification": "VERIFIED",
+   "text": "TEXT_BOUND",
+   "summary_eligible": true,
+   "cra": false
+  },
+  {
+   "file": "vote_119_1_00549.json",
+   "measure": "HJRES104",
+   "kind": "JOINT_RESOLUTION_PASSAGE",
+   "verification": "VERIFIED",
+   "text": "TEXT_BOUND",
+   "summary_eligible": true,
+   "cra": true
+  },
+  {
+   "file": "vote_119_1_00554.json",
+   "measure": "SJRES71",
+   "kind": "JOINT_RESOLUTION_PASSAGE",
+   "verification": "VERIFIED",
+   "text": "TEXT_BOUND",
+   "summary_eligible": true,
+   "cra": false
+  },
+  {
+   "file": "vote_119_1_00556.json",
+   "measure": "HJRES105",
+   "kind": "JOINT_RESOLUTION_PASSAGE",
+   "verification": "VERIFIED",
+   "text": "TEXT_BOUND",
+   "summary_eligible": true,
+   "cra": true
+  },
+  {
+   "file": "vote_119_1_00560.json",
+   "measure": "HJRES106",
+   "kind": "JOINT_RESOLUTION_PASSAGE",
+   "verification": "VERIFIED",
+   "text": "TEXT_BOUND",
+   "summary_eligible": true,
+   "cra": true
+  },
+  {
+   "file": "vote_119_1_00570.json",
+   "measure": "S2296",
+   "kind": "PASSAGE_AS_AMENDED",
+   "verification": "VERIFIED",
+   "text": "TEXT_BOUND",
+   "summary_eligible": true,
+   "cra": false
+  },
+  {
+   "file": "vote_119_1_00594.json",
+   "measure": "SJRES81",
+   "kind": "JOINT_RESOLUTION_PASSAGE",
+   "verification": "VERIFIED",
+   "text": "TEXT_BOUND",
+   "summary_eligible": true,
+   "cra": false
+  },
+  {
+   "file": "vote_119_1_00598.json",
+   "measure": "SJRES77",
+   "kind": "JOINT_RESOLUTION_PASSAGE",
+   "verification": "VERIFIED",
+   "text": "TEXT_BOUND",
+   "summary_eligible": true,
+   "cra": false
+  },
+  {
+   "file": "vote_119_1_00599.json",
+   "measure": "SJRES80",
+   "kind": "JOINT_RESOLUTION_PASSAGE",
+   "verification": "VERIFIED",
+   "text": "TEXT_BOUND",
+   "summary_eligible": true,
+   "cra": true
+  },
+  {
+   "file": "vote_119_1_00600.json",
+   "measure": "SJRES88",
+   "kind": "JOINT_RESOLUTION_PASSAGE",
+   "verification": "VERIFIED",
+   "text": "TEXT_BOUND",
+   "summary_eligible": true,
+   "cra": false
+  },
+  {
+   "file": "vote_119_1_00618.json",
+   "measure": "HR5371",
+   "kind": "PASSAGE_AS_AMENDED",
+   "verification": "VERIFIED",
+   "text": "TEXT_BOUND",
+   "summary_eligible": true,
+   "cra": false
+  },
+  {
+   "file": "vote_119_1_00623.json",
+   "measure": "HJRES130",
+   "kind": "JOINT_RESOLUTION_PASSAGE",
+   "verification": "VERIFIED",
+   "text": "TEXT_BOUND",
+   "summary_eligible": true,
+   "cra": true
+  },
+  {
+   "file": "vote_119_1_00632.json",
+   "measure": "HJRES131",
+   "kind": "JOINT_RESOLUTION_PASSAGE",
+   "verification": "VERIFIED",
+   "text": "TEXT_BOUND",
+   "summary_eligible": true,
+   "cra": true
+  },
+  {
+   "file": "vote_119_1_00654.json",
+   "measure": "SJRES82",
+   "kind": "JOINT_RESOLUTION_PASSAGE",
+   "verification": "VERIFIED",
+   "text": "TEXT_BOUND",
+   "summary_eligible": true,
+   "cra": true
+  },
+  {
+   "file": "vote_119_2_00011.json",
+   "measure": "HR6938",
+   "kind": "PASSAGE",
+   "verification": "VERIFIED",
+   "text": "TEXT_BOUND",
+   "summary_eligible": true,
+   "cra": false
+  },
+  {
+   "file": "vote_119_2_00020.json",
+   "measure": "HR7148",
+   "kind": "PASSAGE_AS_AMENDED",
+   "verification": "VERIFIED",
+   "text": "TEXT_BOUND",
+   "summary_eligible": true,
+   "cra": false
+  },
+  {
+   "file": "vote_119_2_00037.json",
+   "measure": "HJRES142",
+   "kind": "JOINT_RESOLUTION_PASSAGE",
+   "verification": "VERIFIED",
+   "text": "TEXT_BOUND",
+   "summary_eligible": true,
+   "cra": false
+  },
+  {
+   "file": "vote_119_2_00053.json",
+   "measure": "HR6644",
+   "kind": "PASSAGE_AS_AMENDED",
+   "verification": "VERIFIED",
+   "text": "TEXT_BOUND",
+   "summary_eligible": true,
+   "cra": false
+  },
+  {
+   "file": "vote_119_2_00084.json",
+   "measure": "HJRES140",
+   "kind": "JOINT_RESOLUTION_PASSAGE",
+   "verification": "VERIFIED",
+   "text": "TEXT_BOUND",
+   "summary_eligible": true,
+   "cra": true
+  },
+  {
+   "file": "vote_119_2_00163.json",
+   "measure": "S2",
+   "kind": "PASSAGE_AS_AMENDED",
+   "verification": "VERIFIED",
+   "text": "TEXT_BOUND",
+   "summary_eligible": true,
+   "cra": false
+  },
+  {
+   "file": "vote_119_2_00224.json",
+   "measure": "HR5334",
+   "kind": "PASSAGE_AS_AMENDED",
+   "verification": "VERIFIED",
+   "text": "TEXT_BOUND",
+   "summary_eligible": true,
+   "cra": false
+  },
+  {
+   "file": "vote_119_2_00228.json",
+   "measure": "HR6500",
+   "kind": "PASSAGE_AS_AMENDED",
+   "verification": "VERIFIED",
+   "text": "TEXT_BOUND",
+   "summary_eligible": true,
+   "cra": false
+  }
+ ]
+}

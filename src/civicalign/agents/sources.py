@@ -66,6 +66,18 @@ def _bill_flow(path: Path) -> str | None:
     return None
 
 
+def _joint_resolutions(path: Path) -> str | None:
+    """The joint-resolution archives are small: dozens to a few hundred files."""
+    try:
+        with zipfile.ZipFile(path) as z:
+            xml = [n for n in z.namelist() if n.endswith(".xml")]
+    except zipfile.BadZipFile:
+        return "not a valid zip -- the server probably returned an error page"
+    if len(xml) < 10:
+        return f"only {len(xml)} joint resolutions in the archive; expected dozens"
+    return None
+
+
 def _populations(path: Path) -> str | None:
     col = f"POPESTIMATE{DEFAULT.population_year}"
     with path.open() as fh:
@@ -211,6 +223,26 @@ def all_agents() -> list[Agent]:
             target=RAW / "mit_president_1976_2024.csv",
             validate=_elections,
             min_bytes=100_000,
+        ),
+        Agent(
+            name="joint resolutions (Senate)",
+            vintage="current Congress; GovInfo republishes daily",
+            url=f"https://www.govinfo.gov/bulkdata/BILLSTATUS/{DEFAULT.congress}/sjres/BILLSTATUS-{DEFAULT.congress}-sjres.zip",
+            target=RAW / f"BILLSTATUS-{DEFAULT.congress}-sjres.zip",
+            validate=_joint_resolutions,
+            min_bytes=50_000,
+            critical=False,
+            content_key=zip_content_key,
+        ),
+        Agent(
+            name="joint resolutions (House)",
+            vintage="current Congress; GovInfo republishes daily",
+            url=f"https://www.govinfo.gov/bulkdata/BILLSTATUS/{DEFAULT.congress}/hjres/BILLSTATUS-{DEFAULT.congress}-hjres.zip",
+            target=RAW / f"BILLSTATUS-{DEFAULT.congress}-hjres.zip",
+            validate=_joint_resolutions,
+            min_bytes=50_000,
+            critical=False,
+            content_key=zip_content_key,
         ),
         Agent(
             name="state populations",

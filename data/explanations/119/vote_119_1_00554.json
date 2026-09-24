@@ -1,0 +1,149 @@
+{
+ "schema": "civicalign.binding/1.0",
+ "vote": {
+  "congress": 119,
+  "session": 1,
+  "clerk_number": 554,
+  "voteview_id": 554,
+  "date": "2025-10-08",
+  "question": "On the Joint Resolution",
+  "result": "Joint Resolution Defeated",
+  "required": "1/2",
+  "yeas": 47,
+  "nays": 51,
+  "measure": "SJRES71",
+  "senate_url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1191/vote_119_1_00554.xml",
+  "senate_sha256": "f1ac8430c62ffaf7e31df10711f2864ff4401afe00d7c9903b6ca8ea4b655e56",
+  "senate_title": "S. J. Res. 71",
+  "senate_document_text": "A joint resolution terminating the national emergency declared with respect to energy.",
+  "amendment_number": null,
+  "voteview_url": "https://voteview.com/rollcall/RS1190554"
+ },
+ "classification": {
+  "kind": "JOINT_RESOLUTION_PASSAGE",
+  "summary_eligible": true,
+  "kind_supported": true,
+  "basis": [
+   "voteview.question='On the Joint Resolution'",
+   "senate.question='On the Joint Resolution'"
+  ],
+  "conflict": null
+ },
+ "object": {
+  "type": "joint_resolution",
+  "id": "SJRES71",
+  "title": "A joint resolution terminating the national emergency declared with respect to energy.",
+  "short_title": "",
+  "origin_chamber": "Senate",
+  "billstatus_source": "https://www.govinfo.gov/bulkdata/BILLSTATUS/119/sjres/BILLSTATUS-119sjres71.xml",
+  "billstatus_sha256": "2db28ab0fb438965624694b5dba9fdf264c4718093b9cd732a458efa4adba2b7",
+  "billstatus_update_date": "2026-09-08T18:09:59Z",
+  "passage_action_text": "Failed of passage in Senate by Yea-Nay Vote. 47 - 51. Record Vote Number: 554."
+ },
+ "text_binding": {
+  "status": "TEXT_BOUND",
+  "version_code": "is",
+  "version_name": "Introduced in Senate",
+  "version_date": "2025-07-31",
+  "govinfo_url": "https://www.govinfo.gov/content/pkg/BILLS-119sjres71is/xml/BILLS-119sjres71is.xml",
+  "sha256": "0b52c7a27c9de381a46205f7c1c1582480725e6c2c7f8365a916000bced30b32",
+  "bytes": 2275,
+  "stage_attribute_matches": null,
+  "selection_reason": "latest pre-vote version (is, 2025-07-31); no Senate amendment recorded",
+  "candidates": [
+   "is@2025-07-31"
+  ]
+ },
+ "cra": {
+  "is_cra": false,
+  "agency": null,
+  "rule_title": null,
+  "title_form": null,
+  "consequence_ref": null,
+  "underlying_rule_source": null,
+  "underlying_rule_sha256": null
+ },
+ "receipt": {
+  "deciding": "On the Joint Resolution S.J.Res. 71",
+  "heading_success": "If the resolution passes",
+  "heading_failure": "If the resolution does not pass",
+  "yea_means": "A Yea vote is a vote to pass the joint resolution in the Senate.",
+  "nay_means": "A Nay vote is a vote against passing the joint resolution.",
+  "next_step": "A joint resolution has the force of a bill: after both chambers pass it, it goes to the President.",
+  "sources": [
+   {
+    "what": "Senate roll-call record",
+    "url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1191/vote_119_1_00554.xml"
+   },
+   {
+    "what": "Bill status (GovInfo)",
+    "url": "https://www.govinfo.gov/bulkdata/BILLSTATUS/119/sjres/BILLSTATUS-119sjres71.xml"
+   },
+   {
+    "what": "Text as voted on (Introduced in Senate)",
+    "url": "https://www.govinfo.gov/content/pkg/BILLS-119sjres71is/xml/BILLS-119sjres71is.xml"
+   },
+   {
+    "what": "Roll call at Voteview",
+    "url": "https://voteview.com/rollcall/RS1190554"
+   }
+  ]
+ },
+ "verification": {
+  "status": "VERIFIED",
+  "checks": [
+   {
+    "check": "senate_record_exists",
+    "ok": true,
+    "detail": ""
+   },
+   {
+    "check": "identity_matches",
+    "ok": true,
+    "detail": "senate 119/1/554 vs voteview 119/1/554"
+   },
+   {
+    "check": "date_compatible",
+    "ok": true,
+    "detail": "senate 2025-10-08 vs voteview 2025-10-08"
+   },
+   {
+    "check": "question_matches",
+    "ok": true,
+    "detail": "'On the Joint Resolution' vs 'On the Joint Resolution'"
+   },
+   {
+    "check": "tallies_match",
+    "ok": true,
+    "detail": "senate 47-51 vs voteview 47-51"
+   },
+   {
+    "check": "threshold_matches",
+    "ok": true,
+    "detail": "1/2 vs 1/2"
+   },
+   {
+    "check": "member_votes_match",
+    "ok": true,
+    "detail": "yea 47/47 nay 51/51; former members matched by name+state+party {'S293': 'G000359', 'S419': 'M001190'}"
+   },
+   {
+    "check": "measure_matches",
+    "ok": true,
+    "detail": "senate 'SJRES71' vs voteview 'SJRES71'"
+   },
+   {
+    "check": "billstatus_present",
+    "ok": true,
+    "detail": "BILLSTATUS-119sjres71.xml"
+   },
+   {
+    "check": "billstatus_links_vote",
+    "ok": true,
+    "detail": "recorded-vote link to this Senate vote number"
+   }
+  ]
+ },
+ "history": [],
+ "recorded_utc": "2026-09-24T01:15:25Z"
+}

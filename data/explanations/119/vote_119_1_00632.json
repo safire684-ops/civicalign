@@ -1,0 +1,152 @@
+{
+ "schema": "civicalign.binding/1.0",
+ "vote": {
+  "congress": 119,
+  "session": 1,
+  "clerk_number": 632,
+  "voteview_id": 632,
+  "date": "2025-12-04",
+  "question": "On the Joint Resolution",
+  "result": "Joint Resolution Passed",
+  "required": "1/2",
+  "yeas": 49,
+  "nays": 45,
+  "measure": "HJRES131",
+  "senate_url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1191/vote_119_1_00632.xml",
+  "senate_sha256": "4a17db3e379f8831f74e02f72782f57e95348796671ac586fd44ba9b5ced3540",
+  "senate_title": "H.J. Res. 131",
+  "senate_document_text": "A joint resolution providing for congressional disapproval under chapter 8 of title 5, United States Code, of the rule submitted by the Bureau of Land Management relating to \"Coastal Plain Oil and Gas Leasing Program Record of Decision\".",
+  "amendment_number": null,
+  "voteview_url": "https://voteview.com/rollcall/RS1190632"
+ },
+ "classification": {
+  "kind": "JOINT_RESOLUTION_PASSAGE",
+  "summary_eligible": true,
+  "kind_supported": true,
+  "basis": [
+   "voteview.question='On the Joint Resolution'",
+   "senate.question='On the Joint Resolution'"
+  ],
+  "conflict": null
+ },
+ "object": {
+  "type": "joint_resolution",
+  "id": "HJRES131",
+  "title": "Providing for congressional disapproval under chapter 8 of title 5, United States Code, of the rule submitted by the Bureau of Land Management relating to Coastal Plain Oil and Gas Leasing Program Record of Decision.",
+  "short_title": "",
+  "origin_chamber": "House",
+  "billstatus_source": "https://www.govinfo.gov/bulkdata/BILLSTATUS/119/hjres/BILLSTATUS-119hjres131.xml",
+  "billstatus_sha256": "ebd6013f48a1a8205c2a99494870511d29683661c12ebba4abf2df20c16993e9",
+  "billstatus_update_date": "2026-08-11T17:14:44Z",
+  "passage_action_text": "Passed Senate without amendment by Yea-Nay Vote. 49 - 45. Record Vote Number: 632."
+ },
+ "text_binding": {
+  "status": "TEXT_BOUND",
+  "version_code": "eh",
+  "version_name": "Engrossed in House",
+  "version_date": "2025-11-18",
+  "govinfo_url": "https://www.govinfo.gov/content/pkg/BILLS-119hjres131eh/xml/BILLS-119hjres131eh.xml",
+  "sha256": "e44b42fe06758284fcc0d66cfa214fcce2ed80b19aae0bb43d0b43e0800b1fa6",
+  "bytes": 2788,
+  "stage_attribute_matches": null,
+  "selection_reason": "latest pre-vote version (eh, 2025-11-18); no Senate amendment recorded",
+  "candidates": [
+   "enr@-",
+   "eh@2025-11-18",
+   "ih@2025-10-10",
+   "pl@2025-12-12"
+  ]
+ },
+ "cra": {
+  "is_cra": true,
+  "agency": "Bureau of Land Management",
+  "rule_title": "Coastal Plain Oil and Gas Leasing Program Record of Decision",
+  "title_form": "chapter 8 of title 5",
+  "consequence_ref": "Congressional Review Act, 5 U.S.C. 801(b): a rule disapproved by an enacted joint resolution shall not take effect (or shall not continue in effect) and may not be reissued in substantially the same form without subsequent statutory authorization.",
+  "underlying_rule_source": null,
+  "underlying_rule_sha256": null
+ },
+ "receipt": {
+  "deciding": "On the Joint Resolution H.J.Res. 131",
+  "heading_success": "If the resolution passes",
+  "heading_failure": "If the resolution does not pass",
+  "yea_means": "A Yea vote is a vote to pass the joint resolution in the Senate.",
+  "nay_means": "A Nay vote is a vote against passing the joint resolution.",
+  "next_step": "A joint resolution has the force of a bill: after both chambers pass it, it goes to the President.",
+  "sources": [
+   {
+    "what": "Senate roll-call record",
+    "url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1191/vote_119_1_00632.xml"
+   },
+   {
+    "what": "Bill status (GovInfo)",
+    "url": "https://www.govinfo.gov/bulkdata/BILLSTATUS/119/hjres/BILLSTATUS-119hjres131.xml"
+   },
+   {
+    "what": "Text as voted on (Engrossed in House)",
+    "url": "https://www.govinfo.gov/content/pkg/BILLS-119hjres131eh/xml/BILLS-119hjres131eh.xml"
+   },
+   {
+    "what": "Roll call at Voteview",
+    "url": "https://voteview.com/rollcall/RS1190632"
+   }
+  ]
+ },
+ "verification": {
+  "status": "VERIFIED",
+  "checks": [
+   {
+    "check": "senate_record_exists",
+    "ok": true,
+    "detail": ""
+   },
+   {
+    "check": "identity_matches",
+    "ok": true,
+    "detail": "senate 119/1/632 vs voteview 119/1/632"
+   },
+   {
+    "check": "date_compatible",
+    "ok": true,
+    "detail": "senate 2025-12-04 vs voteview 2025-12-04"
+   },
+   {
+    "check": "question_matches",
+    "ok": true,
+    "detail": "'On the Joint Resolution' vs 'On the Joint Resolution'"
+   },
+   {
+    "check": "tallies_match",
+    "ok": true,
+    "detail": "senate 49-45 vs voteview 49-45"
+   },
+   {
+    "check": "threshold_matches",
+    "ok": true,
+    "detail": "1/2 vs 1/2"
+   },
+   {
+    "check": "member_votes_match",
+    "ok": true,
+    "detail": "yea 49/49 nay 45/45; former members matched by name+state+party {'S293': 'G000359', 'S419': 'M001190'}"
+   },
+   {
+    "check": "measure_matches",
+    "ok": true,
+    "detail": "senate 'HJRES131' vs voteview 'HJRES131'"
+   },
+   {
+    "check": "billstatus_present",
+    "ok": true,
+    "detail": "BILLSTATUS-119hjres131.xml"
+   },
+   {
+    "check": "billstatus_links_vote",
+    "ok": true,
+    "detail": "recorded-vote link to this Senate vote number"
+   }
+  ]
+ },
+ "history": [],
+ "recorded_utc": "2026-09-24T01:15:29Z"
+}

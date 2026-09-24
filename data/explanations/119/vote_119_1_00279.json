@@ -1,0 +1,153 @@
+{
+ "schema": "civicalign.binding/1.0",
+ "vote": {
+  "congress": 119,
+  "session": 1,
+  "clerk_number": 279,
+  "voteview_id": 279,
+  "date": "2025-05-22",
+  "question": "On the Joint Resolution",
+  "result": "Joint Resolution Passed",
+  "required": "1/2",
+  "yeas": 51,
+  "nays": 45,
+  "measure": "HJRES87",
+  "senate_url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1191/vote_119_1_00279.xml",
+  "senate_sha256": "940e181e8a365bc5e2d90633c6f614e7a9b0fa30fb97e5fdd76de68ff3f2c35b",
+  "senate_title": "H.J.Res. 87",
+  "senate_document_text": "A joint resolution providing congressional disapproval under chapter 8 of title 5, United States Code, of the rule submitted by the Environmental Protection Agency relating to \"California State Motor Vehicle and Engine Pollution Control Standards; Heavy-Duty Vehicle and Engine Emission Warranty and Maintenance Provisions; Advanced Clean Trucks; Zero Emission Airport Shuttle; Zero-Emission Power Train Certification; Waiver of Preemption; Notice of Decision\".",
+  "amendment_number": null,
+  "voteview_url": "https://voteview.com/rollcall/RS1190279"
+ },
+ "classification": {
+  "kind": "JOINT_RESOLUTION_PASSAGE",
+  "summary_eligible": true,
+  "kind_supported": true,
+  "basis": [
+   "voteview.question='On the Joint Resolution'",
+   "senate.question='On the Joint Resolution'"
+  ],
+  "conflict": null
+ },
+ "object": {
+  "type": "joint_resolution",
+  "id": "HJRES87",
+  "title": "Providing congressional disapproval under chapter 8 of title 5, United States Code, of the rule submitted by the Environmental Protection Agency relating to \"California State Motor Vehicle and Engine Pollution Control Standards; Heavy-Duty Vehicle and Engine Emission Warranty and Maintenance Provisions; Advanced Clean Trucks; Zero Emission Airport Shuttle; Zero-Emission Power Train Certification; Waiver of Preemption; Notice of Decision\".",
+  "short_title": "",
+  "origin_chamber": "House",
+  "billstatus_source": "https://www.govinfo.gov/bulkdata/BILLSTATUS/119/hjres/BILLSTATUS-119hjres87.xml",
+  "billstatus_sha256": "6e6d7691da366ca4fb1be51ee32d381e52863290a9d688dd8fc0676a312d6605",
+  "billstatus_update_date": "2026-08-11T17:13:45Z",
+  "passage_action_text": "Passed Senate without amendment by Yea-Nay Vote. 51 - 45. Record Vote Number: 279."
+ },
+ "text_binding": {
+  "status": "TEXT_BOUND",
+  "version_code": "rds",
+  "version_name": "Received in Senate",
+  "version_date": "2025-05-21",
+  "govinfo_url": "https://www.govinfo.gov/content/pkg/BILLS-119hjres87rds/xml/BILLS-119hjres87rds.xml",
+  "sha256": "94eec12bcb4e91cc43696ba79be88b091f348f58a1f5740dfdb870a487a40c68",
+  "bytes": 3294,
+  "stage_attribute_matches": null,
+  "selection_reason": "latest pre-vote version (rds, 2025-05-21); no Senate amendment recorded",
+  "candidates": [
+   "enr@-",
+   "rds@2025-05-21",
+   "eh@2025-04-30",
+   "ih@2025-04-02",
+   "pl@2025-06-13"
+  ]
+ },
+ "cra": {
+  "is_cra": true,
+  "agency": "Environmental Protection Agency",
+  "rule_title": "California State Motor Vehicle and Engine Pollution Control Standards; Heavy-Duty Vehicle and Engine Emission Warranty and Maintenance Provisions; Advanced Clean Trucks; Zero Emission Airport Shuttle; Zero-Emission Power Train Certification; Waiver of Preemption; Notice of Decision",
+  "title_form": "chapter 8 of title 5",
+  "consequence_ref": "Congressional Review Act, 5 U.S.C. 801(b): a rule disapproved by an enacted joint resolution shall not take effect (or shall not continue in effect) and may not be reissued in substantially the same form without subsequent statutory authorization.",
+  "underlying_rule_source": null,
+  "underlying_rule_sha256": null
+ },
+ "receipt": {
+  "deciding": "On the Joint Resolution H.J.Res. 87",
+  "heading_success": "If the resolution passes",
+  "heading_failure": "If the resolution does not pass",
+  "yea_means": "A Yea vote is a vote to pass the joint resolution in the Senate.",
+  "nay_means": "A Nay vote is a vote against passing the joint resolution.",
+  "next_step": "A joint resolution has the force of a bill: after both chambers pass it, it goes to the President.",
+  "sources": [
+   {
+    "what": "Senate roll-call record",
+    "url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1191/vote_119_1_00279.xml"
+   },
+   {
+    "what": "Bill status (GovInfo)",
+    "url": "https://www.govinfo.gov/bulkdata/BILLSTATUS/119/hjres/BILLSTATUS-119hjres87.xml"
+   },
+   {
+    "what": "Text as voted on (Received in Senate)",
+    "url": "https://www.govinfo.gov/content/pkg/BILLS-119hjres87rds/xml/BILLS-119hjres87rds.xml"
+   },
+   {
+    "what": "Roll call at Voteview",
+    "url": "https://voteview.com/rollcall/RS1190279"
+   }
+  ]
+ },
+ "verification": {
+  "status": "VERIFIED",
+  "checks": [
+   {
+    "check": "senate_record_exists",
+    "ok": true,
+    "detail": ""
+   },
+   {
+    "check": "identity_matches",
+    "ok": true,
+    "detail": "senate 119/1/279 vs voteview 119/1/279"
+   },
+   {
+    "check": "date_compatible",
+    "ok": true,
+    "detail": "senate 2025-05-22 vs voteview 2025-05-22"
+   },
+   {
+    "check": "question_matches",
+    "ok": true,
+    "detail": "'On the Joint Resolution' vs 'On the Joint Resolution'"
+   },
+   {
+    "check": "tallies_match",
+    "ok": true,
+    "detail": "senate 51-45 vs voteview 51-45"
+   },
+   {
+    "check": "threshold_matches",
+    "ok": true,
+    "detail": "1/2 vs 1/2"
+   },
+   {
+    "check": "member_votes_match",
+    "ok": true,
+    "detail": "yea 51/51 nay 45/45; former members matched by name+state+party {'S293': 'G000359', 'S419': 'M001190'}"
+   },
+   {
+    "check": "measure_matches",
+    "ok": true,
+    "detail": "senate 'HJRES87' vs voteview 'HJRES87'"
+   },
+   {
+    "check": "billstatus_present",
+    "ok": true,
+    "detail": "BILLSTATUS-119hjres87.xml"
+   },
+   {
+    "check": "billstatus_links_vote",
+    "ok": true,
+    "detail": "recorded-vote link to this Senate vote number"
+   }
+  ]
+ },
+ "history": [],
+ "recorded_utc": "2026-09-24T01:15:21Z"
+}

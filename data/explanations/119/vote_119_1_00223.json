@@ -1,0 +1,153 @@
+{
+ "schema": "civicalign.binding/1.0",
+ "vote": {
+  "congress": 119,
+  "session": 1,
+  "clerk_number": 223,
+  "voteview_id": 223,
+  "date": "2025-04-30",
+  "question": "On the Joint Resolution",
+  "result": "Joint Resolution Passed",
+  "required": "1/2",
+  "yeas": 52,
+  "nays": 46,
+  "measure": "HJRES42",
+  "senate_url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1191/vote_119_1_00223.xml",
+  "senate_sha256": "7b8e805f70b3cfcb3352c2dc9f0ee421b05d5b3a86daae9ce5a6e5b3704aa77a",
+  "senate_title": "H.J.Res. 42",
+  "senate_document_text": "A joint resolution providing for congressional disapproval under chapter 8 of title 5, United States Code, of the rule submitted by the Department of Energy relating to \"Energy Conservation Program for Appliance Standards: Certification Requirements, Labeling Requirements, and Enforcement Provisions for Certain Consumer Products and Commercial Equipment\".",
+  "amendment_number": null,
+  "voteview_url": "https://voteview.com/rollcall/RS1190223"
+ },
+ "classification": {
+  "kind": "JOINT_RESOLUTION_PASSAGE",
+  "summary_eligible": true,
+  "kind_supported": true,
+  "basis": [
+   "voteview.question='On the Joint Resolution'",
+   "senate.question='On the Joint Resolution'"
+  ],
+  "conflict": null
+ },
+ "object": {
+  "type": "joint_resolution",
+  "id": "HJRES42",
+  "title": "Providing for congressional disapproval under chapter 8 of title 5, United States Code, of the rule submitted by the Department of Energy relating to \"Energy Conservation Program for Appliance Standards: Certification Requirements, Labeling Requirements, and Enforcement Provisions for Certain Consumer Products and Commercial Equipment\".",
+  "short_title": "",
+  "origin_chamber": "House",
+  "billstatus_source": "https://www.govinfo.gov/bulkdata/BILLSTATUS/119/hjres/BILLSTATUS-119hjres42.xml",
+  "billstatus_sha256": "75ced70c99b85549c21154b7b9e1f2e8f952730a3d57556ae0089f641752a41c",
+  "billstatus_update_date": "2026-07-17T18:37:45Z",
+  "passage_action_text": "Passed Senate without amendment by Yea-Nay Vote. 52 - 46. Record Vote Number: 223."
+ },
+ "text_binding": {
+  "status": "TEXT_BOUND",
+  "version_code": "rds",
+  "version_name": "Received in Senate",
+  "version_date": "2025-03-06",
+  "govinfo_url": "https://www.govinfo.gov/content/pkg/BILLS-119hjres42rds/xml/BILLS-119hjres42rds.xml",
+  "sha256": "1401c9331986c97b044d2a8a317fc1e8cc6d264f63007cf0b62e72c97e59594b",
+  "bytes": 2992,
+  "stage_attribute_matches": null,
+  "selection_reason": "latest pre-vote version (rds, 2025-03-06); no Senate amendment recorded",
+  "candidates": [
+   "enr@-",
+   "rds@2025-03-06",
+   "eh@2025-03-05",
+   "ih@2025-02-12",
+   "pl@2025-05-10"
+  ]
+ },
+ "cra": {
+  "is_cra": true,
+  "agency": "Department of Energy",
+  "rule_title": "Energy Conservation Program for Appliance Standards: Certification Requirements, Labeling Requirements, and Enforcement Provisions for Certain Consumer Products and Commercial Equipment",
+  "title_form": "chapter 8 of title 5",
+  "consequence_ref": "Congressional Review Act, 5 U.S.C. 801(b): a rule disapproved by an enacted joint resolution shall not take effect (or shall not continue in effect) and may not be reissued in substantially the same form without subsequent statutory authorization.",
+  "underlying_rule_source": null,
+  "underlying_rule_sha256": null
+ },
+ "receipt": {
+  "deciding": "On the Joint Resolution H.J.Res. 42",
+  "heading_success": "If the resolution passes",
+  "heading_failure": "If the resolution does not pass",
+  "yea_means": "A Yea vote is a vote to pass the joint resolution in the Senate.",
+  "nay_means": "A Nay vote is a vote against passing the joint resolution.",
+  "next_step": "A joint resolution has the force of a bill: after both chambers pass it, it goes to the President.",
+  "sources": [
+   {
+    "what": "Senate roll-call record",
+    "url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1191/vote_119_1_00223.xml"
+   },
+   {
+    "what": "Bill status (GovInfo)",
+    "url": "https://www.govinfo.gov/bulkdata/BILLSTATUS/119/hjres/BILLSTATUS-119hjres42.xml"
+   },
+   {
+    "what": "Text as voted on (Received in Senate)",
+    "url": "https://www.govinfo.gov/content/pkg/BILLS-119hjres42rds/xml/BILLS-119hjres42rds.xml"
+   },
+   {
+    "what": "Roll call at Voteview",
+    "url": "https://voteview.com/rollcall/RS1190223"
+   }
+  ]
+ },
+ "verification": {
+  "status": "VERIFIED",
+  "checks": [
+   {
+    "check": "senate_record_exists",
+    "ok": true,
+    "detail": ""
+   },
+   {
+    "check": "identity_matches",
+    "ok": true,
+    "detail": "senate 119/1/223 vs voteview 119/1/223"
+   },
+   {
+    "check": "date_compatible",
+    "ok": true,
+    "detail": "senate 2025-04-30 vs voteview 2025-04-30"
+   },
+   {
+    "check": "question_matches",
+    "ok": true,
+    "detail": "'On the Joint Resolution' vs 'On the Joint Resolution'"
+   },
+   {
+    "check": "tallies_match",
+    "ok": true,
+    "detail": "senate 52-46 vs voteview 52-46"
+   },
+   {
+    "check": "threshold_matches",
+    "ok": true,
+    "detail": "1/2 vs 1/2"
+   },
+   {
+    "check": "member_votes_match",
+    "ok": true,
+    "detail": "yea 52/52 nay 46/46; former members matched by name+state+party {'S293': 'G000359', 'S419': 'M001190'}"
+   },
+   {
+    "check": "measure_matches",
+    "ok": true,
+    "detail": "senate 'HJRES42' vs voteview 'HJRES42'"
+   },
+   {
+    "check": "billstatus_present",
+    "ok": true,
+    "detail": "BILLSTATUS-119hjres42.xml"
+   },
+   {
+    "check": "billstatus_links_vote",
+    "ok": true,
+    "detail": "recorded-vote link to this Senate vote number"
+   }
+  ]
+ },
+ "history": [],
+ "recorded_utc": "2026-09-24T01:15:18Z"
+}

@@ -1,0 +1,155 @@
+{
+ "schema": "civicalign.binding/1.0",
+ "vote": {
+  "congress": 119,
+  "session": 2,
+  "clerk_number": 20,
+  "voteview_id": 679,
+  "date": "2026-01-30",
+  "question": "On Passage of the Bill",
+  "result": "Bill Passed",
+  "required": "3/5",
+  "yeas": 71,
+  "nays": 29,
+  "measure": "HR7148",
+  "senate_url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1192/vote_119_2_00020.xml",
+  "senate_sha256": "46610848870b2036c5a52225a8faef45b5d45c71afdd5973fe44d0b0f16a5a04",
+  "senate_title": "H.R. 7148, as Amended",
+  "senate_document_text": "A bill making further consolidated appropriations for the fiscal year ending September 30, 2026, and for other purposes.",
+  "amendment_number": null,
+  "voteview_url": "https://voteview.com/rollcall/RS1190679"
+ },
+ "classification": {
+  "kind": "PASSAGE_AS_AMENDED",
+  "summary_eligible": true,
+  "kind_supported": true,
+  "basis": [
+   "voteview.question='On Passage of the Bill'",
+   "senate.question='On Passage of the Bill'",
+   "senate.title=As Amended"
+  ],
+  "conflict": null
+ },
+ "object": {
+  "type": "bill",
+  "id": "HR7148",
+  "title": "Consolidated Appropriations Act, 2026",
+  "short_title": "Transportation, Housing and Urban Development, and Related Agencies Appropriations Act, 2026",
+  "origin_chamber": "House",
+  "billstatus_source": "https://www.govinfo.gov/bulkdata/BILLSTATUS/119/hr/BILLSTATUS-119hr7148.xml",
+  "billstatus_sha256": "ea2ded49a08c82f474c2e7052fb08b11a012972da404cb188da0dc82ff5af248",
+  "billstatus_update_date": "2026-09-08T19:31:27Z",
+  "passage_action_text": "Passed Senate, under the order of 1/30/2026, having achieved 60 votes in the affirmative, with amendments by Yea-Nay Vote. 71 - 29. Record Vote Number: 20."
+ },
+ "text_binding": {
+  "status": "TEXT_BOUND",
+  "version_code": "eas",
+  "version_name": "Engrossed Amendment Senate",
+  "version_date": "2026-01-30",
+  "govinfo_url": "https://www.govinfo.gov/content/pkg/BILLS-119hr7148eas/xml/BILLS-119hr7148eas.xml",
+  "sha256": "d4d149518143680839e0e59a3867fba4219bdbb62fea4c77cb96939894e62ecb",
+  "bytes": 5675,
+  "stage_attribute_matches": null,
+  "selection_reason": "engrossed by the Senate on the vote date (eas): the measure as passed",
+  "candidates": [
+   "enr@-",
+   "eas@2026-01-30",
+   "pcs@2026-01-26",
+   "eh@2026-01-22",
+   "ih@2026-01-20",
+   "pl@2026-02-04"
+  ]
+ },
+ "cra": {
+  "is_cra": false,
+  "agency": null,
+  "rule_title": null,
+  "title_form": null,
+  "consequence_ref": null,
+  "underlying_rule_source": null,
+  "underlying_rule_sha256": null
+ },
+ "receipt": {
+  "deciding": "On Passage of the Bill H.R. 7148",
+  "heading_success": "If the bill, as amended, passes",
+  "heading_failure": "If the bill does not pass",
+  "yea_means": "A Yea vote is a vote to pass the bill as the Senate amended it.",
+  "nay_means": "A Nay vote is a vote against passing the amended bill.",
+  "next_step": "Because the Senate changed the text, the amended bill goes back to the House, which must agree to the Senate's version before it can become law.",
+  "sources": [
+   {
+    "what": "Senate roll-call record",
+    "url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1192/vote_119_2_00020.xml"
+   },
+   {
+    "what": "Bill status (GovInfo)",
+    "url": "https://www.govinfo.gov/bulkdata/BILLSTATUS/119/hr/BILLSTATUS-119hr7148.xml"
+   },
+   {
+    "what": "Text as voted on (Engrossed Amendment Senate)",
+    "url": "https://www.govinfo.gov/content/pkg/BILLS-119hr7148eas/xml/BILLS-119hr7148eas.xml"
+   },
+   {
+    "what": "Roll call at Voteview",
+    "url": "https://voteview.com/rollcall/RS1190679"
+   }
+  ]
+ },
+ "verification": {
+  "status": "VERIFIED",
+  "checks": [
+   {
+    "check": "senate_record_exists",
+    "ok": true,
+    "detail": ""
+   },
+   {
+    "check": "identity_matches",
+    "ok": true,
+    "detail": "senate 119/2/20 vs voteview 119/2/20"
+   },
+   {
+    "check": "date_compatible",
+    "ok": true,
+    "detail": "senate 2026-01-30 vs voteview 2026-01-30"
+   },
+   {
+    "check": "question_matches",
+    "ok": true,
+    "detail": "'On Passage of the Bill' vs 'On Passage of the Bill'"
+   },
+   {
+    "check": "tallies_match",
+    "ok": true,
+    "detail": "senate 71-29 vs voteview 71-29"
+   },
+   {
+    "check": "threshold_matches",
+    "ok": true,
+    "detail": "3/5 vs 3/5"
+   },
+   {
+    "check": "member_votes_match",
+    "ok": true,
+    "detail": "yea 71/71 nay 29/29; former members matched by name+state+party {'S293': 'G000359', 'S419': 'M001190'}"
+   },
+   {
+    "check": "measure_matches",
+    "ok": true,
+    "detail": "senate 'HR7148' vs voteview 'HR7148'"
+   },
+   {
+    "check": "billstatus_present",
+    "ok": true,
+    "detail": "BILLSTATUS-119hr7148.xml"
+   },
+   {
+    "check": "billstatus_links_vote",
+    "ok": true,
+    "detail": "recorded-vote link to this Senate vote number"
+   }
+  ]
+ },
+ "history": [],
+ "recorded_utc": "2026-09-24T01:15:30Z"
+}

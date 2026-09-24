@@ -73,6 +73,17 @@ voters' scale. The page never subtracts the survey estimate from a voting score:
 a direct senator-versus-state measure on those two scales requires a validated
 statistical bridge, which CivicAlign does not have.
 
+## Pillar 1, Stage 2: deterministic vote binding (no summaries yet)
+
+`python -m civicalign.explain.bind` classifies every Senate roll call from the
+official question, and for passage votes on bills and joint resolutions binds
+the vote to the Senate's own record (senate.gov XML), the bill's GovInfo status
+record and the exact GovInfo text version as voted on, cross-checking identity,
+tallies, every member's vote and the recorded-vote link. Bindings live in
+`data/explanations/<congress>/` with source hashes and history; the supervisor
+re-derives each one. Nothing is summarised and the page does not read the
+bindings; that is Stages 3–5.
+
 ## What works today, and what does not
 
 **Working, on real 119th Congress data.**

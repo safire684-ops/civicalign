@@ -131,19 +131,75 @@ All seven are enforced by tests that run in the weekly job.
 - Footer: sources (now eight, including the MIT election file) with publisher,
   link, vintage and retrieval date.
 
+## Pillar 1 (the concrete receipt): Stage 2 built, Stages 3–5 not started
+
+The product target from the original directive stands: turn "Recent votes in
+this record" into a verified receipt (what the Senate was deciding, the exact
+text before it, what a Yea and a Nay would do, how this senator voted, and the
+official sources behind each line). Stage 2 is the deterministic foundation
+and is live in the weekly job; **no summary is generated, no model is called,
+and the page does not read any of it yet.**
+
+- `sources/senate_votes.py` reads the Senate's own roll-call XML (senate.gov
+  LIS, keyless); `sources/billstatus.py` reads a bill's full BILLSTATUS record
+  (text versions with GovInfo URLs and dates, actions with recorded-vote
+  links, CRS summaries are available but unused). The joint-resolution
+  archives (`sjres`, `hjres`) are fetched as non-critical sources.
+- `explain/binding.py` — pure rules: kind from the official question only
+  (`QUESTION_KINDS`; anything else is OTHER), PASSAGE_AS_AMENDED only when the
+  Senate title says "As Amended" and/or the bill's action says "with an
+  amendment" and the two agree; text selection (`select_text`): the Senate
+  engrossment on the vote date (`es`/`cps`, or `eas` for a House bill passed
+  with a Senate amendment) is the measure as passed; otherwise the latest
+  pre-vote version by precedence (`pcs > rs > rds > rfs > eh`; Senate-origin
+  `pcs > rs > is`); enrolled and public-law texts are never selected; an
+  amended measure without an engrossment is TEXT_PENDING for 45 days then
+  TEXT_AMBIGUOUS; floor amendments before a vote with no engrossment are
+  ambiguous; two engrossments are ambiguous. CRA metadata (`cra_from_title`)
+  comes only from the two official title forms; `underlying_rule_source` is
+  a future slot and stays null. The receipt scaffold (headings, what Yea and
+  Nay mean, next step) is fixed per kind, never generated.
+- `explain/bind.py` (`python -m civicalign.explain.bind`, `--offline` to use
+  the cache) classifies all Senate roll calls, binds the supported kinds
+  (PASSAGE, PASSAGE_AS_AMENDED, JOINT_RESOLUTION_PASSAGE), fetches the Senate
+  XML and the selected text into `data/raw/explanations/` (ignored, with a
+  MANIFEST of hashes and stamps), verifies identity, date, question, tallies,
+  threshold, member votes (LIS id → bioguide from the roster; former members
+  by exact last name, first name, state and party against Voteview's member
+  file, failing closed on ambiguity), measure id and the bill-status
+  recorded-vote link, and writes one tracked JSON per vote under
+  `data/explanations/119/` plus `index.json`. A re-run that changes nothing
+  writes nothing; a changed source hash or status keeps the old record under
+  `history`. Verification statuses: VERIFIED, BOUND_AWAITING_BILLSTATUS,
+  FAILED, UNAVAILABLE. `summary_eligible` requires a supported kind, VERIFIED
+  and TEXT_BOUND.
+- Supervisor: one check re-derives every binding from the cached files with
+  its own code (identity, tallies, question, measure, recorded-vote link,
+  hashes, selected version exists / not enrolled / not later than three days
+  after the vote / reproduced by the rule / stage attribute, eligibility, CRA
+  fields from the title, no generated field present).
+- Tests: `tests/test_binding.py`.
+- Not done: Maker, Checker, evaluation set, any UI change. The Congress.gov
+  API is not used. When Stage 3 starts, the model provider, prompt versions
+  and iteration counts go into the binding's provenance, and only `verified`
+  summaries may reach block `F`.
+
 ## How the weekly update works
 
 `.github/workflows/update.yml` (Mondays 11:00 UTC, or "Run workflow"), mirrored
 by `scripts/update.sh`. Every step is a gate; a failure fails the Action, commits
 nothing, and leaves the previously verified site live.
 
-1. **Fetch as one snapshot** (`python -m civicalign.agents`): all ten sources are
+1. **Fetch as one snapshot** (`python -m civicalign.agents`): all ten critical sources are
    downloaded and validated into staging; if any critical source fails, nothing
    is installed and the run stops. All ten are critical: Voteview members, roll
    calls, votes; congress-legislators roster and committee membership; American
    Ideology Project state estimates; Census populations; Senate and House
    bill-status archives; MIT election results (the state input for Pillar 4 and
-   the seat comparison for Pillar 5). Change detection is by content
+   the seat comparison for Pillar 5). Two non-critical sources, the Senate and
+   House joint-resolution archives, are fetched for Pillar 1; if they fail the
+   previous file stands and the run continues. The binding step
+   (`python -m civicalign.explain.bind`) runs after verify. Change detection is by content
    (zip members, not archive timestamps). `data/raw/SNAPSHOT.json` (tracked)
    records per source: URL, file, bytes, SHA-256, content key, changed flag,
    content-changed date, checked date, vintage. `PROVENANCE.tsv` logs content
@@ -209,7 +265,9 @@ guard (104 Voteview rows for 100 seats) is in `sources/voteview.py`.
   (`rel_words`, `peer_words`).
 - `agents/` — `base.py` (snapshot), `sources.py` (ten agents with validators and
   vintages), `verify.py`, `supervisor.py`. `whitepaper.py` — figure refresher.
-- Tests: `test_published_pages.py` (contract: no cross-scale arithmetic G1–G6,
+- `explain/` — Pillar 1 Stage 2 (see above); `sources/senate_votes.py`,
+  `sources/billstatus.py`.
+- Tests: `test_binding.py` (Pillar 1), `test_published_pages.py` (contract: no cross-scale arithmetic G1–G6,
   no bill ideology, no dead bills, twelve UX guarantees, ten presentation
   guarantees, twenty average-voter guarantees V1–V20), `test_perspective.py`
   (the product hierarchy: state-relative primary result, regression not survey
