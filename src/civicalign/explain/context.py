@@ -658,7 +658,73 @@ def run(cfg: Config = DEFAULT, offline: bool = False, verbose: bool = True, only
     return {"generation": dict(gen), "completeness": dict(comp), "writes": dict(writes)}
 
 
+def freshness(cfg: Config = DEFAULT) -> dict:
+    """Whether the tracked Stage 2.5 records still belong to the current snapshot.
+
+    The context job needs the U.S. Code archives and runs offline, so the weekly
+    job cannot rebuild it. Instead it checks, without the network, that every
+    context record and packet was built from the bindings just re-derived from
+    this week's snapshot and from this week's bill-status summaries. Anything
+    built from other inputs is STALE and fails the run (fail closed: rerun the
+    context job). A binding with no context record yet has no packet, so it
+    cannot be explained; it is reported, not mixed in."""
+    bdir = cfg.bindings_dir; cdir = bdir / "context"; pdir = bdir / "packets"
+    stale, missing, checked = [], [], 0
+    bindings = {f.name: json.loads(f.read_text()) for f in sorted(bdir.glob("vote_*.json"))}
+    for f in sorted(cdir.glob("vote_*.context.json")) if cdir.exists() else []:
+        if f.name.replace(".context.json", ".json") not in bindings:
+            stale.append(f"{f.name}: context record with no binding")
+    for name, b in bindings.items():
+        cpath = cdir / name.replace(".json", ".context.json"); ppath = pdir / name.replace(".json", ".packet.json")
+        if not cpath.exists():
+            missing.append(name)
+            if ppath.exists():
+                stale.append(f"{ppath.name}: packet with no context record")
+            continue
+        checked += 1
+        c = json.loads(cpath.read_text()); v, tb, obj = b["vote"], b["text_binding"], b["object"]
+        if (c["vote"]["session"], c["vote"]["clerk_number"], c["vote"]["date"], c["vote"]["measure"]) != (v["session"], v["clerk_number"], v["date"], obj["id"]):
+            stale.append(f"{cpath.name}: vote identity differs from the binding")
+        want = {"kind": b["classification"]["kind"], "verification": b["verification"]["status"], "text_status": tb["status"], "text_sha256": tb["sha256"]}
+        if c["binding"] != want:
+            stale.append(f"{cpath.name}: built from binding {c['binding']}, binding is now {want}")
+        if c["selection"] is not None:   # the record got past the binding checks, so its summary was derived
+            now = summary_relationship(bill_summaries(cfg, (obj["id"] or "").rstrip("0123456789"), Path(obj["billstatus_source"] or "").name),
+                                       v["date"], tb["version_code"])
+            keys = ("status", "version_relationship", "version_code", "action_date", "sha256")
+            if {k: now.get(k) for k in keys} != {k: c["official_summary"].get(k) for k in keys}:
+                stale.append(f"{cpath.name}: CRS summary is now {now.get('version_relationship')} {now.get('version_code')}, record has "
+                             f"{c['official_summary'].get('version_relationship')} {c['official_summary'].get('version_code')}")
+        ready = c["generation"]["status"] in ("READY_FOR_GENERATION", "READY_WITH_LIMITS")
+        if ready != ppath.exists():
+            stale.append(f"{name}: generation {c['generation']['status']} but packet {'missing' if ready else 'present'}")
+        if ready and ppath.exists():
+            pk = json.loads(ppath.read_text())
+            if pk["receipt_scaffold"] != b["receipt"]:
+                stale.append(f"{ppath.name}: receipt differs from the binding's")
+            if {k: pk["vote"].get(k) for k in v} != v:
+                stale.append(f"{ppath.name}: vote record differs from the binding's")
+            if pk["voted_text"]["sha256"] != tb["sha256"] or pk["generation"] != c["generation"]:
+                stale.append(f"{ppath.name}: voted text or generation state differs")
+            lo = pk["legislative_object"]
+            if (lo["id"], lo["title"], lo["origin_chamber"]) != (obj["id"], obj["title"], obj["origin_chamber"]):
+                stale.append(f"{ppath.name}: legislative object differs from the binding's")
+    return {"checked": checked, "stale": stale, "no_context_yet": missing}
+
+
 def main() -> int:
+    if "--check-fresh" in sys.argv:
+        r = freshness(DEFAULT)
+        print(f"  {r['checked']} context records checked against the current bindings and bill status")
+        for m in r["no_context_yet"]:
+            print(f"  note  {m}: no context record yet (no packet, so it cannot be explained until the offline context job runs)")
+        for s_ in r["stale"]:
+            print(f"  STALE {s_}")
+        if r["stale"]:
+            print("  Stage 2.5 records were built from a different snapshot. Rerun: PYTHONPATH=src python -m civicalign.explain.context")
+            return 1
+        print("  Stage 2.5 records belong to this snapshot.")
+        return 0
     offline = "--offline" in sys.argv
     only = {a.split("=", 1)[1] for a in sys.argv if a.startswith("--only=")}
     only = set(",".join(only).split(",")) if only else None

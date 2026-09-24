@@ -108,18 +108,105 @@ def test_verify_passes_on_the_current_snapshot():
     assert len(results) >= 8 and not failed, "\n".join(failed)
 
 
+def _order_is_kept(text: str, steps: list[str]) -> bool:
+    pos = [text.index(s) for s in steps]
+    return pos == sorted(pos)
+
+
 def test_workflow_gates_publication_on_every_check():
     y = WORKFLOW.read_text()
     assert "|| echo" not in y and "FETCH_FAILED" not in y, "a fetch failure must fail the job"
-    order = ["python -m civicalign.agents\n", "civicalign.agents.verify", "--ignore=tests/test_published_pages.py",
-             "civicalign.build_demo", "pytest -q tests/test_published_pages.py", "civicalign.agents.supervisor",
-             "git add demo/senator-check.html demo/methodology.html data/raw/PROVENANCE.tsv",
+    order = ["python -m civicalign.agents\n", "civicalign.agents.verify", "civicalign.explain.bind", "civicalign.explain.context --check-fresh",
+             "civicalign.build_demo", "--ignore=tests/test_published_pages.py", "pytest -q tests/test_published_pages.py",
+             "civicalign.agents.supervisor", "git add demo/senator-check.html demo/methodology.html data/raw/PROVENANCE.tsv",
              "upload-pages-artifact"]
-    pos = [y.index(s) for s in order]
-    assert pos == sorted(pos), "steps must run fetch -> verify -> data tests -> rebuild -> page tests -> supervisor -> commit -> upload"
+    assert _order_is_kept(y, order), \
+        "fetch -> verify -> bind -> Stage 2.5 check -> rebuild -> data tests -> page tests -> supervisor -> commit -> upload"
     assert "needs: update" in y and "needs.update.result == 'success'" in y
     assert 'cron: "0 11 * * 1"' in y, "the weekly schedule stays"
     assert "continue-on-error" not in y
+
+
+@pytest.mark.parametrize("path", [WORKFLOW, ROOT / "scripts" / "update.sh"], ids=["workflow", "update.sh"])
+def test_no_test_runs_before_the_pages_are_rebuilt(path):
+    """The invariant behind the 24 Sept CI failure: tests compare the pages with
+    the raw files, so every test and the supervisor must run after the pages
+    have been rebuilt from the snapshot just fetched, and the rebuild must come
+    after the bindings and the Stage 2.5 check for that snapshot."""
+    text = path.read_text()
+    body = text[text.index("civicalign.agents") :]            # skip the header comment
+    rebuild = body.index("civicalign.build_demo")
+    for probe in ("pytest", "civicalign.agents.supervisor"):
+        first = min(i for i in (m.start() for m in __import__("re").finditer(__import__("re").escape(probe), body)))
+        assert first > rebuild, f"{probe} runs before the rebuild in {path.name}"
+    assert body.index("civicalign.explain.bind") < rebuild and body.index("--check-fresh") < rebuild
+    if path == WORKFLOW:
+        assert body.index("git commit") > body.index("civicalign.agents.supervisor"), "commit only after every gate"
+
+
+def test_a_stale_page_fails_and_the_rebuilt_page_passes(tmp_path, monkeypatch):
+    """Regression fixture for the 24 Sept CI failure. A senator's score moves from
+    0.670 to 0.671 in a fresh snapshot while the committed page still says 0.670.
+    Checked BEFORE the rebuild, the page is stale and the checks fail; rebuilt from
+    the fresh snapshot, it carries 0.671 and the same checks pass, at the same
+    tolerance. This is why the workflow rebuilds before it tests."""
+    import csv
+    import dataclasses
+    import re
+    import shutil
+    from civicalign import build_demo
+    from civicalign.agents import supervisor
+    from civicalign.pipeline import run
+
+    raw = tmp_path / "raw"; raw.mkdir()
+    for entry in DEFAULT.raw_dir.iterdir():
+        if entry.name != "HSall_members.csv":
+            (raw / entry.name).symlink_to(entry)
+    who = "B001319"                                    # Katie Boyd Britt, a seated senator
+
+    def snapshot(score: str):
+        with DEFAULT.members_csv.open() as fh:
+            rows = list(csv.reader(fh))
+        head = rows[0]; col, bio, cong, ch = (head.index(k) for k in ("nokken_poole_dim1", "bioguide_id", "congress", "chamber"))
+        hits = 0
+        for r in rows[1:]:
+            if r[bio] == who and r[cong] == str(DEFAULT.congress) and r[ch] == "Senate":
+                r[col] = score; hits += 1
+        assert hits == 1
+        with (raw / "HSall_members.csv").open("w", newline="") as fh:
+            csv.writer(fh).writerows(rows)
+        return dataclasses.replace(DEFAULT, raw_dir=raw)
+
+    def page_score(page: Path) -> float:
+        R = __import__("json").loads(re.search(r"const R=(\{.*?\});", page.read_text(), re.S).group(1))
+        return R["senators"][who]["actual"]
+
+    # the Pillar 1 checks do not read the page; skip them here for speed
+    monkeypatch.setattr(supervisor, "_binding_checks", lambda *a, **k: [])
+    monkeypatch.setattr(supervisor, "_context_checks", lambda *a, **k: [])
+    monkeypatch.setattr(build_demo, "REPORT", tmp_path / "methodology.html")
+
+    def page_checks(cfg, page):
+        return {c.name: c for c in supervisor.checks(run(cfg), cfg, page) if c.name.startswith("page:")}
+
+    old_cfg = snapshot("0.670")
+    committed = tmp_path / "committed.html"
+    shutil.copy(ROOT / "demo" / "senator-check.html", committed)
+    build_demo.build(old_cfg, committed)
+    assert page_score(committed) == 0.67
+    assert all(c.ok for c in page_checks(old_cfg, committed).values()), "the committed page matched its own snapshot"
+
+    new_cfg = snapshot("0.671")                        # the fresh fetch
+    before = page_checks(new_cfg, committed)
+    assert not before["page: every senator's position"].ok, "BEFORE rebuild: the committed page is stale"
+    assert not before["page: every senator's peer comparison rebuilt from raw files"].ok
+
+    rebuilt = tmp_path / "rebuilt.html"
+    shutil.copy(committed, rebuilt)
+    build_demo.build(new_cfg, rebuilt)
+    assert page_score(rebuilt) == 0.671, "AFTER rebuild: the page carries the fresh value"
+    after = page_checks(new_cfg, rebuilt)
+    assert all(c.ok for c in after.values()), [c.line() for c in after.values() if not c.ok]
 
 
 def test_data_updated_line_distinguishes_retrieval_from_vintage():

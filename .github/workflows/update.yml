@@ -6,15 +6,27 @@
 #   1 fetch      every source into staging; all critical sources succeed or NONE
 #                is installed (the previous snapshot stays intact) and the job fails
 #   2 verify     roster, join keys, record counts, no drastic shrinkage
-#   3 data tests recompute every figure from the raw files
-#   4 rebuild    both pages from the snapshot
-#   5 page tests the public-claim contract (no cross-scale comparisons, no bill
-#                ideology, no dead/killed wording, sponsor not bill, etc.)
-#   6 supervisor separate code re-reads the raw files and reproduces every figure
-#   7 commit     only if the generated pages or the provenance changed
-#   8 publish    only if every step above passed
-# If any step fails the job fails, nothing is committed, and GitHub Pages keeps
-# serving the last verified site.
+#   3 bind       Pillar 1 bindings re-derived from this snapshot
+#   4 context    Stage 2.5 records checked against those bindings and this
+#                snapshot's bill status (the archive-backed context job runs
+#                offline; anything built from other inputs fails the run)
+#   5 rebuild    both pages from this snapshot -- IN THE WORKSPACE ONLY
+#   6 data tests every figure recomputed from the raw files and compared with
+#                the pages rebuilt in step 5
+#   7 page tests the public-claim contract on the rebuilt pages
+#   8 supervisor separate code re-reads the raw files and reproduces every figure
+#   9 commit     only if every step above passed, and only if something changed
+#  10 publish    only if every step above passed
+#
+# THE ORDER IS THE INVARIANT: no test may compare current source data with a page
+# generated from a different snapshot. So the rebuild comes before every test,
+# and nothing that reads a page runs until the page has been rebuilt from the
+# snapshot fetched in step 1 (tests/test_update_chain.py pins this).
+#
+# Rebuilding early is not publishing early. Steps 3-5 only change files in this
+# runner's checkout. If any later test, public-claim check, supervisor check or
+# provenance check fails, the job fails: nothing is committed, the publish job
+# does not run, and GitHub Pages keeps serving the last verified site.
 
 name: Weekly update
 
@@ -46,35 +58,43 @@ jobs:
       - name: Install test runner
         run: pip install pytest
 
-      - name: 1/6 Fetch every source as one snapshot (all or nothing)
+      - name: 1/10 Fetch every source as one snapshot (all or nothing)
         # A failed critical source means NO file is replaced and the job stops
         # here. The previous verified snapshot, and the live site, are untouched.
         run: PYTHONPATH=src python -m civicalign.agents
 
-      - name: 2/6 Verify the snapshot (roster, join keys, record counts)
+      - name: 2/10 Verify the snapshot (roster, join keys, record counts)
         run: PYTHONPATH=src python -m civicalign.agents.verify
 
-      - name: Bind Senate passage votes to their official records (Pillar 1, deterministic)
+      - name: 3/10 Bind Senate passage votes to their official records (Pillar 1, deterministic)
         # Fetches the Senate's own record of each eligible vote and the GovInfo
-        # text as voted on, cross-checks them against Voteview and the bill
-        # status, and writes tracked bindings. A network failure leaves the
-        # previous bindings in place (the runner records it; the supervisor
+        # text as voted on, cross-checks them against this snapshot's Voteview
+        # and bill status, and writes tracked bindings. A network failure leaves
+        # the previous bindings in place (the runner records it; the supervisor
         # judges them); nothing here calls a model.
         run: PYTHONPATH=src python -m civicalign.explain.bind
 
-      - name: 3/6 Recompute every figure from the raw files (data tests)
+      - name: 4/10 Stage 2.5 records belong to this snapshot (fails on anything stale)
+        # Every context record and source packet must have been built from the
+        # bindings just re-derived and from this snapshot's bill-status
+        # summaries. A stale record fails the run rather than mixing a fresh
+        # snapshot with old context; a new vote with no context yet has no
+        # packet and is only reported.
+        run: PYTHONPATH=src python -m civicalign.explain.context --check-fresh
+
+      - name: 5/10 Rebuild both pages from this snapshot (workspace only; nothing is published here)
+        run: PYTHONPATH=src python -m civicalign.build_demo
+
+      - name: 6/10 Recompute every figure from the raw files and compare with the rebuilt pages (data tests)
         run: >
           python -m pytest -q
           --ignore=tests/test_published_pages.py
           --ignore=tests/test_whitepaper.py
 
-      - name: 4/6 Rebuild both pages from the snapshot
-        run: PYTHONPATH=src python -m civicalign.build_demo
-
-      - name: 5/6 Check the public-claim contract on the rebuilt pages
+      - name: 7/10 Check the public-claim contract on the rebuilt pages
         run: python -m pytest -q tests/test_published_pages.py
 
-      - name: 6/6 Supervisor -- independent recount of every published figure
+      - name: 8/10 Supervisor -- independent recount of every published figure
         run: PYTHONPATH=src python -m civicalign.agents.supervisor
 
       - name: Check the hand-written whitepaper (warns, never blocks)
@@ -87,7 +107,7 @@ jobs:
             echo "::warning::was still published. Update the prose when convenient."
           fi
 
-      - name: Commit the rebuilt pages and provenance if anything substantive changed
+      - name: 9/10 Commit the rebuilt pages, provenance and bindings (only reached if every gate passed)
         # A week where no source's CONTENT changed produces identical pages and
         # an unchanged provenance log; only the snapshot's "last checked" stamp
         # moves, and a timestamp alone is not worth a commit.
@@ -104,7 +124,7 @@ jobs:
             git push
           fi
 
-      - name: Upload the site
+      - name: 10/10 Upload the verified site (the publish job deploys it only if this job succeeded)
         uses: actions/upload-pages-artifact@v5
         with:
           path: demo

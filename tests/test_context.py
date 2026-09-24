@@ -371,3 +371,49 @@ def test_supervisor_reproduces_context(records):
     results = checks(run(DEFAULT), DEFAULT, ROOT / "demo" / "senator-check.html")
     c = next(x for x in results if x.name.startswith("Pillar 1 context"))
     assert c.ok, c.detail
+
+
+def _scratch_records(tmp_path):
+    import dataclasses
+    import shutil
+    from civicalign.config import Config
+    dst = tmp_path / "119"
+    shutil.copytree(BDIR, dst)
+
+    class Scratch(Config):
+        @property
+        def bindings_dir(self):
+            return dst
+    return Scratch(**{f.name: getattr(DEFAULT, f.name) for f in dataclasses.fields(DEFAULT)}), dst
+
+
+def _rewrite(path, fn):
+    doc = json.loads(path.read_text()); fn(doc); path.write_text(json.dumps(doc, indent=1, ensure_ascii=False) + "\n")
+
+
+def test_stage_2_5_records_belong_to_the_current_snapshot(records):
+    r = C.freshness(DEFAULT)
+    assert r["checked"] == len(records) and not r["stale"] and not r["no_context_yet"], r
+
+
+def test_freshness_gate_fails_on_records_from_another_snapshot(tmp_path):
+    cfg, d = _scratch_records(tmp_path)
+    assert not C.freshness(cfg)["stale"]
+    # a binding re-derived with a different text than its context was built from
+    _rewrite(d / "vote_119_2_00163.json", lambda b: b["text_binding"].update(sha256="0" * 64))
+    # a CRS summary that no longer matches this snapshot's bill status
+    _rewrite(d / "context" / "vote_119_1_00095.context.json", lambda c: c["official_summary"].update(version_code="99"))
+    # a packet whose receipt came from an older binding
+    _rewrite(d / "packets" / "vote_119_1_00160.packet.json", lambda p: p["receipt_scaffold"]["vote_result"].update(statement="old"))
+    stale = " ".join(C.freshness(cfg)["stale"])
+    assert "vote_119_2_00163.context.json: built from binding" in stale
+    assert "vote_119_1_00095.context.json: CRS summary" in stale
+    assert "vote_119_1_00160.packet.json: receipt differs" in stale
+
+
+def test_a_new_vote_without_context_is_reported_not_mixed(tmp_path):
+    cfg, d = _scratch_records(tmp_path)
+    (d / "context" / "vote_119_1_00095.context.json").unlink()
+    r = C.freshness(cfg)
+    assert r["no_context_yet"] == ["vote_119_1_00095.json"]
+    assert any("packet with no context record" in s for s in r["stale"]), "a packet may never outlive its context"

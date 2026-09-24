@@ -341,13 +341,25 @@ prompt (ideally a different model) from the Maker; model provider, prompt
 versions and iteration counts go into the packet's provenance; only `verified`
 summaries may reach block `F`; the deterministic checks in the Stage 1 design
 (identity, hash, Yea/Nay semantics, every effect cited, no stale summary after
-a source change) gate publication.
+a source change) gate publication. Provider size guard (required, not built):
+before any Maker call the provider adapter must know the model's actual input
+limit; if the full serialized packet plus the prompts does not fit, the case is
+PROVIDER_INPUT_TOO_LARGE. No truncation, no omitted source, no automatic
+substitution of another case or model.
 
 ## How the weekly update works
 
 `.github/workflows/update.yml` (Mondays 11:00 UTC, or "Run workflow"), mirrored
 by `scripts/update.sh`. Every step is a gate; a failure fails the Action, commits
-nothing, and leaves the previously verified site live.
+nothing, and leaves the previously verified site live. **The order is the
+invariant: no test may compare current source data with a page generated from
+a different snapshot**, so the pages are rebuilt (in the runner's workspace
+only) before any test runs. Until 24 Sept the data tests ran before the rebuild;
+the first run whose snapshot moved senator scores (roster, scores, roll calls
+and votes all changed) failed on four tests that compared the old committed page
+with the new data (for example 0.671 on the page against 0.670 in the fresh
+file). `tests/test_update_chain.py` pins the order in both the workflow and
+`update.sh` and replays that failure with a fixture.
 
 1. **Fetch as one snapshot** (`python -m civicalign.agents`): all ten critical
    sources (Voteview members, roll calls, votes; congress-legislators roster and
@@ -362,13 +374,22 @@ nothing, and leaves the previously verified site live.
 2. **Verify** (`python -m civicalign.agents.verify`): 100 seats, ≤ 2 senators per
    state, scored senators and committee members on the current roster, record
    counts sane, no source shrank > 30 %.
-3. **Bind** (`python -m civicalign.explain.bind`): Pillar 1 Stage 2; a network
-   failure leaves previous bindings in place.
-4. **Data tests** (`pytest`, excluding the page and whitepaper tests).
+3. **Bind** (`python -m civicalign.explain.bind`): Pillar 1 Stage 2 from this
+   snapshot; a network failure leaves previous bindings in place.
+4. **Stage 2.5 freshness** (`python -m civicalign.explain.context
+   --check-fresh`): the context job needs the Code archives and runs offline,
+   so the workflow checks instead that every context record and packet was
+   built from the bindings just re-derived and from this snapshot's bill-status
+   CRS summaries (identity, kind, verification, text hash, summary
+   relationship, receipt, vote record, legislative object, packet present iff
+   ready). Anything stale fails the run: rerun the context job and commit. A
+   new vote with no context yet has no packet and is reported, not mixed in.
 5. **Rebuild** (`python -m civicalign.build_demo`): the page's data blocks and
-   `demo/methodology.html` from the template.
-6. **Page tests** (`tests/test_published_pages.py`): the public-claim contract.
-7. **Supervisor** (`python -m civicalign.agents.supervisor`): separate code
+   `demo/methodology.html` from the template, in the workspace only.
+6. **Data tests** (`pytest`, excluding the page and whitepaper tests), which
+   compare the raw files with the pages rebuilt in step 5.
+7. **Page tests** (`tests/test_published_pages.py`): the public-claim contract.
+8. **Supervisor** (`python -m civicalign.agents.supervisor`): separate code
    re-reads the raw files and reproduces 36 checks: scores, middle, 60th vote,
    survey estimates, bill counts, every state's three-cycle two-party share and
    the national shares, the seats-minus-nation figure, the retired line (own OLS
@@ -380,8 +401,9 @@ nothing, and leaves the previously verified site live.
    selection, in-force archive, fragment hashes, packet hashes, CRS relationship,
    CRA mode, generation state, no generated field), and that the payload carries
    no cross-scale, ranking or unverified-summary field.
-8. **Commit** only if the pages, provenance or bindings changed (a check-stamp-only
-   snapshot change is discarded). **Publish** only if every step passed.
+9. **Commit** only if every gate passed and the pages, provenance or bindings
+   changed (a check-stamp-only snapshot change is discarded). **Publish** (a
+   separate job) only if every step passed.
 
 Roster changes flow through the roster join; a senator with fewer than 30 roll
 calls gets the waiting card, never a predecessor's score. The seat
@@ -448,14 +470,18 @@ de-duplication guard (104 Voteview rows for 100 seats) is in
 
 ## Open items
 
-- **S.2 packet review (before Stage 3 reads it).** 178,614 source characters
+- **S.2 packet size (decided 24 Sept).** S.2 stays in the first cohort as
+  READY_FOR_GENERATION + REVIEW_REQUIRED; Stage 3 is evaluation-only and
+  acknowledges the flag explicitly. The threshold is not raised, OLRC notes are
+  not removed, nothing is truncated and completeness is not downgraded.
+  178,614 source characters
   (text 23,118; law 153,677; CRS summary 1,819), over the 150,000 threshold.
   The largest parts are whole sections the definition cites without a pinpoint
   (8 U.S.C. 1226, 36,859; 1357, 28,697; 1326, 18,648; 1325, 9,781). About
   46,000 of those characters are OLRC notes appended to the sections; they
   were kept because statutory notes can be law (for example, 1326's note on
   what an order of removal includes) and dropping them would be a new policy.
-  Needs a person to confirm the size or decide a notes policy.
+  A notes policy remains a possible later decision.
 - The peer rule leaves three senators without a comparison (both Wyoming
   senators; Maine's Republican) and nine with window-dependent conclusions; the
   page says so for each.
@@ -504,6 +530,10 @@ de-duplication guard (104 Voteview rows for 100 seats) is in
   cross-window check), with the survey estimate as separate context; "same
   party" was corrected to caucus groups with fail-closed grouping and the
   30-vote wording became a display rule. Version 31 is the Pillar 4 baseline.
+- 24 Sept, workflow-only fix: the weekly job rebuilds the pages before any test
+  (the order invariant above), checks Stage 2.5 records against the fresh
+  snapshot, and replays the stale-page failure in a test. S.2 kept as ready
+  with its review flag; the provider size guard recorded for Stage 3.
 - 24 Sept, final pre-Stage-3 pass: narrow fallback grammar for untagged
   U.S.C. citations with provenance; S.2 complete again (review flag); the
   first cohort is all ten; METHODOLOGY.md corrected (peer comparison current,
