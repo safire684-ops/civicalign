@@ -12,7 +12,7 @@ in step.
 - Repo: https://github.com/safire684-ops/civicalign (branch `main`; the weekly
   job commits as `civicalign-bot`)
 - Claude.ai copy (manual republish, stylesheet inlined, does not update itself):
-  https://claude.ai/artifact/Ft6hU6XZUnWHPhZwzwmzaj (version 31)
+  https://claude.ai/artifact/Ft6hU6XZUnWHPhZwzwmzaj (version 32)
 - Shared doc (hand-mirrored, methodology only):
   https://claude.ai/code/artifact/683a9e36-3046-4827-a7af-7442b49ef7e3
 
@@ -278,7 +278,7 @@ guard (104 Voteview rows for 100 seats) is in `sources/voteview.py`.
   `test_supervisor.py`, `test_independent.py` (raw-file recomputation),
   `test_floor_votes.py`, `test_math.py`, `test_regressions.py`,
   `test_representation.py`, `test_uncertainty.py`, `test_whitepaper.py`.
-  219 pass as of this handoff; supervisor 34/34; verify 12/12.
+  236 pass as of this handoff; supervisor 35/35; verify 12/12.
 
 ## Open items
 
