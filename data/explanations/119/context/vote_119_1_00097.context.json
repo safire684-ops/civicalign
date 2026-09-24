@@ -1,0 +1,107 @@
+{
+ "schema": "civicalign.context/1.0",
+ "vote": {
+  "congress": 119,
+  "session": 1,
+  "clerk_number": 97,
+  "date": "2025-02-27",
+  "measure": "HJRES35"
+ },
+ "binding": {
+  "kind": "JOINT_RESOLUTION_PASSAGE",
+  "verification": "VERIFIED",
+  "text_status": "TEXT_BOUND",
+  "text_sha256": "9b0c8ceda87aa3791d72aa2f923c2b229783bee55ecbfd7c9e2af92642cfeb2e"
+ },
+ "references": [
+  {
+   "legal_doc": "usc-chapter",
+   "cite": "usc-chapter/5/8",
+   "text": "chapter 8",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  }
+ ],
+ "selection": {
+  "policy": "cra: the resolution's own text and the CRA consequence section; cited authorities are not extracted",
+  "section_cap": 12,
+  "required": [],
+  "cited": [],
+  "amended": [],
+  "status": "ok"
+ },
+ "release_point": {
+  "label": "119-1",
+  "date": "2025-01-29",
+  "note": "latest release point on or before the vote; per-section archives may come from an earlier published one"
+ },
+ "existing_law_context": [],
+ "public_laws": [],
+ "official_summary": {
+  "status": "available",
+  "version_code": "00",
+  "action_desc": "Introduced in House",
+  "action_date": "2025-02-04",
+  "sha256": "c144e2090176d9581a26e0097b409aa205add2d771cf2897322c3685f715701c",
+  "version_relationship": "EARLIER_SAME_TEXT",
+  "usable": true
+ },
+ "cra": {
+  "mode": "rule_bound",
+  "rule_status": "RULE_BOUND",
+  "consequence_source": {
+   "type": "us_code",
+   "identifier": "/us/usc/t5/s801",
+   "title": "5",
+   "section": "801",
+   "as_of": {
+    "release_point": "119-1",
+    "date": "2025-01-29",
+    "rule": "latest OLRC release point on or before the vote with a published archive; intervening laws checked against the classification table"
+   },
+   "source_url": "https://uscode.house.gov/download/releasepoints/us/pl/119/1/xml_usc05@119-1.zip",
+   "archive_sha256": "3fd99b8e4a18222bd7e17158a62208b854d38d3a569d106dd8bcdaf982fca6ee",
+   "fragment_sha256": "a56e77835ff998b4da66d1b431856bf08c53ffaa2c055f50ea0a5ba888ba1852",
+   "bytes": 33022,
+   "heading": "Congressional review",
+   "relationship": "cra_statutory_consequence",
+   "status": "fetched",
+   "in_force_check": {
+    "status": "ok",
+    "archive": "xml_usc05@119-1.zip",
+    "intervening": [],
+    "affected_by": [],
+    "check": "no intervening release point"
+   }
+  },
+  "underlying_rule": {
+   "status": "RULE_BOUND",
+   "citation": "89 FR 91094",
+   "document_number": "2024-26643",
+   "fr_title": "Waste Emissions Charge for Petroleum and Natural Gas Systems: Procedures for Facilitating Compliance, Including Netting and Exemptions",
+   "type": "Rule",
+   "publication_date": "2024-11-18",
+   "agencies": [
+    "Environmental Protection Agency"
+   ],
+   "source_url": "https://www.federalregister.gov/documents/2024/11/18/2024-26643/waste-emissions-charge-for-petroleum-and-natural-gas-systems-procedures-for-facilitating-compliance",
+   "full_text_xml_url": "https://www.federalregister.gov/documents/full_text/xml/2024/11/18/2024-26643.xml",
+   "sha256": "d565a7843ced9126bbd9d034bd606a46e71b169d74acb9a045009b9af2f0d2ae",
+   "bytes": 974907
+  },
+  "gao_determination": null
+ },
+ "completeness": {
+  "status": "LIMITED",
+  "missing": [],
+  "notes": [
+   "CRA: the resolution's own effect may be explained; the underlying rule's substance may not unless the rule is bound and separately verified"
+  ]
+ },
+ "generation": {
+  "status": "READY_WITH_LIMITS"
+ },
+ "history": [],
+ "recorded_utc": "2026-09-24T03:29:14Z"
+}

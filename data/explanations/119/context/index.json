@@ -1,0 +1,565 @@
+{
+ "schema": "civicalign.context/1.0",
+ "rule": {
+  "section_cap": 12,
+  "large_text_words": 30000,
+  "cra_consequence": "/us/usc/t5/s801",
+  "release_point_rule": "latest OLRC release point dated on or before the vote; never a later one"
+ },
+ "generation": {
+  "SOURCE_CONTEXT_AMBIGUOUS": 2,
+  "READY_WITH_LIMITS": 27,
+  "READY_FOR_GENERATION": 12,
+  "SOURCE_CONTEXT_PENDING": 13
+ },
+ "completeness": {
+  "AMBIGUOUS": 2,
+  "LIMITED": 27,
+  "COMPLETE": 12,
+  "PENDING": 13
+ },
+ "votes": [
+  {
+   "measure": "S5",
+   "date": "2025-01-20",
+   "generation": "SOURCE_CONTEXT_AMBIGUOUS",
+   "completeness": "AMBIGUOUS",
+   "cra_mode": "not_cra",
+   "rule_status": null,
+   "summary": "PRE_AMENDMENT",
+   "law_sections": 0
+  },
+  {
+   "measure": "SJRES11",
+   "date": "2025-02-25",
+   "generation": "READY_WITH_LIMITS",
+   "completeness": "LIMITED",
+   "cra_mode": "rule_bound",
+   "rule_status": "RULE_BOUND",
+   "summary": "PRE_AMENDMENT",
+   "law_sections": 0
+  },
+  {
+   "measure": "SJRES10",
+   "date": "2025-02-26",
+   "generation": "READY_FOR_GENERATION",
+   "completeness": "COMPLETE",
+   "cra_mode": "not_cra",
+   "rule_status": null,
+   "summary": "EARLIER_SAME_TEXT",
+   "law_sections": 1
+  },
+  {
+   "measure": "HJRES35",
+   "date": "2025-02-27",
+   "generation": "READY_WITH_LIMITS",
+   "completeness": "LIMITED",
+   "cra_mode": "rule_bound",
+   "rule_status": "RULE_BOUND",
+   "summary": "EARLIER_SAME_TEXT",
+   "law_sections": 0
+  },
+  {
+   "measure": "SJRES3",
+   "date": "2025-03-04",
+   "generation": "READY_WITH_LIMITS",
+   "completeness": "LIMITED",
+   "cra_mode": "rule_bound",
+   "rule_status": "RULE_BOUND",
+   "summary": "PRE_AMENDMENT",
+   "law_sections": 0
+  },
+  {
+   "measure": "SJRES28",
+   "date": "2025-03-05",
+   "generation": "READY_WITH_LIMITS",
+   "completeness": "LIMITED",
+   "cra_mode": "rule_bound",
+   "rule_status": "RULE_BOUND",
+   "summary": "PRE_AMENDMENT",
+   "law_sections": 0
+  },
+  {
+   "measure": "S331",
+   "date": "2025-03-14",
+   "generation": "READY_FOR_GENERATION",
+   "completeness": "COMPLETE",
+   "cra_mode": "not_cra",
+   "rule_status": null,
+   "summary": "PRE_AMENDMENT",
+   "law_sections": 6
+  },
+  {
+   "measure": "HR1968",
+   "date": "2025-03-14",
+   "generation": "SOURCE_CONTEXT_PENDING",
+   "completeness": "PENDING",
+   "cra_mode": "not_cra",
+   "rule_status": null,
+   "summary": "EARLIER_SAME_TEXT",
+   "law_sections": 0
+  },
+  {
+   "measure": "HJRES25",
+   "date": "2025-03-26",
+   "generation": "READY_WITH_LIMITS",
+   "completeness": "LIMITED",
+   "cra_mode": "rule_bound",
+   "rule_status": "RULE_BOUND",
+   "summary": "EARLIER_SAME_TEXT",
+   "law_sections": 0
+  },
+  {
+   "measure": "SJRES18",
+   "date": "2025-03-27",
+   "generation": "READY_WITH_LIMITS",
+   "completeness": "LIMITED",
+   "cra_mode": "rule_bound",
+   "rule_status": "RULE_BOUND",
+   "summary": "PRE_AMENDMENT",
+   "law_sections": 0
+  },
+  {
+   "measure": "SJRES37",
+   "date": "2025-04-02",
+   "generation": "READY_FOR_GENERATION",
+   "completeness": "COMPLETE",
+   "cra_mode": "not_cra",
+   "rule_status": null,
+   "summary": "PRE_AMENDMENT",
+   "law_sections": 1
+  },
+  {
+   "measure": "HJRES24",
+   "date": "2025-04-03",
+   "generation": "READY_WITH_LIMITS",
+   "completeness": "LIMITED",
+   "cra_mode": "rule_bound",
+   "rule_status": "RULE_BOUND",
+   "summary": "EARLIER_SAME_TEXT",
+   "law_sections": 0
+  },
+  {
+   "measure": "HJRES20",
+   "date": "2025-04-10",
+   "generation": "READY_WITH_LIMITS",
+   "completeness": "LIMITED",
+   "cra_mode": "rule_bound",
+   "rule_status": "RULE_BOUND",
+   "summary": "EARLIER_SAME_TEXT",
+   "law_sections": 0
+  },
+  {
+   "measure": "HJRES42",
+   "date": "2025-04-30",
+   "generation": "READY_WITH_LIMITS",
+   "completeness": "LIMITED",
+   "cra_mode": "rule_bound",
+   "rule_status": "RULE_BOUND",
+   "summary": "EARLIER_SAME_TEXT",
+   "law_sections": 0
+  },
+  {
+   "measure": "SJRES49",
+   "date": "2025-04-30",
+   "generation": "READY_FOR_GENERATION",
+   "completeness": "COMPLETE",
+   "cra_mode": "not_cra",
+   "rule_status": null,
+   "summary": "EARLIER_SAME_TEXT",
+   "law_sections": 1
+  },
+  {
+   "measure": "HJRES75",
+   "date": "2025-05-01",
+   "generation": "READY_WITH_LIMITS",
+   "completeness": "LIMITED",
+   "cra_mode": "rule_bound",
+   "rule_status": "RULE_BOUND",
+   "summary": "EARLIER_SAME_TEXT",
+   "law_sections": 0
+  },
+  {
+   "measure": "SJRES31",
+   "date": "2025-05-01",
+   "generation": "READY_WITH_LIMITS",
+   "completeness": "LIMITED",
+   "cra_mode": "rule_bound",
+   "rule_status": "RULE_BOUND",
+   "summary": "PRE_AMENDMENT",
+   "law_sections": 0
+  },
+  {
+   "measure": "HJRES61",
+   "date": "2025-05-06",
+   "generation": "READY_WITH_LIMITS",
+   "completeness": "LIMITED",
+   "cra_mode": "rule_bound",
+   "rule_status": "RULE_BOUND",
+   "summary": "EARLIER_SAME_TEXT",
+   "law_sections": 0
+  },
+  {
+   "measure": "SJRES13",
+   "date": "2025-05-07",
+   "generation": "READY_WITH_LIMITS",
+   "completeness": "LIMITED",
+   "cra_mode": "rule_bound",
+   "rule_status": "RULE_BOUND_TITLE_DIFFERS",
+   "summary": "PRE_AMENDMENT",
+   "law_sections": 0
+  },
+  {
+   "measure": "SJRES7",
+   "date": "2025-05-08",
+   "generation": "READY_WITH_LIMITS",
+   "completeness": "LIMITED",
+   "cra_mode": "rule_bound",
+   "rule_status": "RULE_BOUND",
+   "summary": "PRE_AMENDMENT",
+   "law_sections": 0
+  },
+  {
+   "measure": "HJRES60",
+   "date": "2025-05-08",
+   "generation": "READY_WITH_LIMITS",
+   "completeness": "LIMITED",
+   "cra_mode": "rule_bound",
+   "rule_status": "RULE_BOUND",
+   "summary": "EARLIER_SAME_TEXT",
+   "law_sections": 0
+  },
+  {
+   "measure": "SJRES55",
+   "date": "2025-05-21",
+   "generation": "READY_WITH_LIMITS",
+   "completeness": "LIMITED",
+   "cra_mode": "rule_bound",
+   "rule_status": "RULE_BOUND",
+   "summary": "PRE_AMENDMENT",
+   "law_sections": 0
+  },
+  {
+   "measure": "HJRES88",
+   "date": "2025-05-22",
+   "generation": "READY_WITH_LIMITS",
+   "completeness": "LIMITED",
+   "cra_mode": "rule_bound",
+   "rule_status": "RULE_BOUND",
+   "summary": "EARLIER_SAME_TEXT",
+   "law_sections": 0
+  },
+  {
+   "measure": "HJRES87",
+   "date": "2025-05-22",
+   "generation": "READY_WITH_LIMITS",
+   "completeness": "LIMITED",
+   "cra_mode": "rule_bound",
+   "rule_status": "RULE_BOUND",
+   "summary": "EARLIER_SAME_TEXT",
+   "law_sections": 0
+  },
+  {
+   "measure": "HJRES89",
+   "date": "2025-05-22",
+   "generation": "READY_WITH_LIMITS",
+   "completeness": "LIMITED",
+   "cra_mode": "rule_bound",
+   "rule_status": "RULE_BOUND",
+   "summary": "EARLIER_SAME_TEXT",
+   "law_sections": 0
+  },
+  {
+   "measure": "S1582",
+   "date": "2025-06-17",
+   "generation": "SOURCE_CONTEXT_PENDING",
+   "completeness": "PENDING",
+   "cra_mode": "not_cra",
+   "rule_status": null,
+   "summary": "PRE_AMENDMENT",
+   "law_sections": 8
+  },
+  {
+   "measure": "HR1",
+   "date": "2025-07-01",
+   "generation": "SOURCE_CONTEXT_PENDING",
+   "completeness": "PENDING",
+   "cra_mode": "not_cra",
+   "rule_status": null,
+   "summary": "MATCHED",
+   "law_sections": 0
+  },
+  {
+   "measure": "HR4",
+   "date": "2025-07-17",
+   "generation": "READY_FOR_GENERATION",
+   "completeness": "COMPLETE",
+   "cra_mode": "not_cra",
+   "rule_status": null,
+   "summary": "PRE_AMENDMENT",
+   "law_sections": 1
+  },
+  {
+   "measure": "HR3944",
+   "date": "2025-08-01",
+   "generation": "SOURCE_CONTEXT_PENDING",
+   "completeness": "PENDING",
+   "cra_mode": "not_cra",
+   "rule_status": null,
+   "summary": "MATCHED",
+   "law_sections": 11
+  },
+  {
+   "measure": "S2882",
+   "date": "2025-09-19",
+   "generation": "SOURCE_CONTEXT_PENDING",
+   "completeness": "PENDING",
+   "cra_mode": "not_cra",
+   "rule_status": null,
+   "summary": "EARLIER_SAME_TEXT",
+   "law_sections": 0
+  },
+  {
+   "measure": "HR5371",
+   "date": "2025-09-19",
+   "generation": "SOURCE_CONTEXT_PENDING",
+   "completeness": "PENDING",
+   "cra_mode": "not_cra",
+   "rule_status": null,
+   "summary": "EARLIER_SAME_TEXT",
+   "law_sections": 0
+  },
+  {
+   "measure": "S2882",
+   "date": "2025-09-30",
+   "generation": "SOURCE_CONTEXT_PENDING",
+   "completeness": "PENDING",
+   "cra_mode": "not_cra",
+   "rule_status": null,
+   "summary": "EARLIER_SAME_TEXT",
+   "law_sections": 0
+  },
+  {
+   "measure": "HR5371",
+   "date": "2025-09-30",
+   "generation": "SOURCE_CONTEXT_PENDING",
+   "completeness": "PENDING",
+   "cra_mode": "not_cra",
+   "rule_status": null,
+   "summary": "EARLIER_SAME_TEXT",
+   "law_sections": 0
+  },
+  {
+   "measure": "HJRES104",
+   "date": "2025-10-08",
+   "generation": "READY_WITH_LIMITS",
+   "completeness": "LIMITED",
+   "cra_mode": "resolution_only",
+   "rule_status": "GAO_RULE_DETERMINATION",
+   "summary": "EARLIER_SAME_TEXT",
+   "law_sections": 0
+  },
+  {
+   "measure": "SJRES71",
+   "date": "2025-10-08",
+   "generation": "READY_FOR_GENERATION",
+   "completeness": "COMPLETE",
+   "cra_mode": "not_cra",
+   "rule_status": null,
+   "summary": "EARLIER_SAME_TEXT",
+   "law_sections": 1
+  },
+  {
+   "measure": "HJRES105",
+   "date": "2025-10-08",
+   "generation": "READY_WITH_LIMITS",
+   "completeness": "LIMITED",
+   "cra_mode": "resolution_only",
+   "rule_status": "GAO_RULE_DETERMINATION",
+   "summary": "EARLIER_SAME_TEXT",
+   "law_sections": 0
+  },
+  {
+   "measure": "HJRES106",
+   "date": "2025-10-09",
+   "generation": "READY_WITH_LIMITS",
+   "completeness": "LIMITED",
+   "cra_mode": "resolution_only",
+   "rule_status": "GAO_RULE_DETERMINATION",
+   "summary": "EARLIER_SAME_TEXT",
+   "law_sections": 0
+  },
+  {
+   "measure": "S2296",
+   "date": "2025-10-09",
+   "generation": "SOURCE_CONTEXT_PENDING",
+   "completeness": "PENDING",
+   "cra_mode": "not_cra",
+   "rule_status": null,
+   "summary": "PRE_AMENDMENT",
+   "law_sections": 0
+  },
+  {
+   "measure": "SJRES81",
+   "date": "2025-10-28",
+   "generation": "READY_FOR_GENERATION",
+   "completeness": "COMPLETE",
+   "cra_mode": "not_cra",
+   "rule_status": null,
+   "summary": "PRE_AMENDMENT",
+   "law_sections": 1
+  },
+  {
+   "measure": "SJRES77",
+   "date": "2025-10-29",
+   "generation": "READY_FOR_GENERATION",
+   "completeness": "COMPLETE",
+   "cra_mode": "not_cra",
+   "rule_status": null,
+   "summary": "PRE_AMENDMENT",
+   "law_sections": 1
+  },
+  {
+   "measure": "SJRES80",
+   "date": "2025-10-30",
+   "generation": "READY_WITH_LIMITS",
+   "completeness": "LIMITED",
+   "cra_mode": "resolution_only",
+   "rule_status": "GAO_RULE_DETERMINATION",
+   "summary": "MATCHED",
+   "law_sections": 0
+  },
+  {
+   "measure": "SJRES88",
+   "date": "2025-10-30",
+   "generation": "READY_FOR_GENERATION",
+   "completeness": "COMPLETE",
+   "cra_mode": "not_cra",
+   "rule_status": null,
+   "summary": "MATCHED",
+   "law_sections": 1
+  },
+  {
+   "measure": "HR5371",
+   "date": "2025-11-10",
+   "generation": "SOURCE_CONTEXT_PENDING",
+   "completeness": "PENDING",
+   "cra_mode": "not_cra",
+   "rule_status": null,
+   "summary": "MATCHED",
+   "law_sections": 0
+  },
+  {
+   "measure": "HJRES130",
+   "date": "2025-11-20",
+   "generation": "READY_WITH_LIMITS",
+   "completeness": "LIMITED",
+   "cra_mode": "resolution_only",
+   "rule_status": "GAO_RULE_DETERMINATION",
+   "summary": "EARLIER_SAME_TEXT",
+   "law_sections": 0
+  },
+  {
+   "measure": "HJRES131",
+   "date": "2025-12-04",
+   "generation": "READY_WITH_LIMITS",
+   "completeness": "LIMITED",
+   "cra_mode": "resolution_only",
+   "rule_status": "GAO_RULE_DETERMINATION",
+   "summary": "EARLIER_SAME_TEXT",
+   "law_sections": 0
+  },
+  {
+   "measure": "SJRES82",
+   "date": "2025-12-18",
+   "generation": "READY_WITH_LIMITS",
+   "completeness": "LIMITED",
+   "cra_mode": "resolution_only",
+   "rule_status": "GAO_RULE_DETERMINATION",
+   "summary": "UNKNOWN",
+   "law_sections": 0
+  },
+  {
+   "measure": "HR6938",
+   "date": "2026-01-15",
+   "generation": "SOURCE_CONTEXT_AMBIGUOUS",
+   "completeness": "AMBIGUOUS",
+   "cra_mode": "not_cra",
+   "rule_status": null,
+   "summary": "EARLIER_SAME_TEXT",
+   "law_sections": 0
+  },
+  {
+   "measure": "HR7148",
+   "date": "2026-01-30",
+   "generation": "READY_FOR_GENERATION",
+   "completeness": "COMPLETE",
+   "cra_mode": "not_cra",
+   "rule_status": null,
+   "summary": "PRE_AMENDMENT",
+   "law_sections": 0
+  },
+  {
+   "measure": "HJRES142",
+   "date": "2026-02-12",
+   "generation": "READY_FOR_GENERATION",
+   "completeness": "COMPLETE",
+   "cra_mode": "not_cra",
+   "rule_status": null,
+   "summary": "EARLIER_SAME_TEXT",
+   "law_sections": 0
+  },
+  {
+   "measure": "HR6644",
+   "date": "2026-03-12",
+   "generation": "SOURCE_CONTEXT_PENDING",
+   "completeness": "PENDING",
+   "cra_mode": "not_cra",
+   "rule_status": null,
+   "summary": "PRE_AMENDMENT",
+   "law_sections": 0
+  },
+  {
+   "measure": "HJRES140",
+   "date": "2026-04-16",
+   "generation": "READY_WITH_LIMITS",
+   "completeness": "LIMITED",
+   "cra_mode": "rule_bound",
+   "rule_status": "RULE_BOUND",
+   "summary": "EARLIER_SAME_TEXT",
+   "law_sections": 0
+  },
+  {
+   "measure": "S2",
+   "date": "2026-06-05",
+   "generation": "READY_FOR_GENERATION",
+   "completeness": "COMPLETE",
+   "cra_mode": "not_cra",
+   "rule_status": null,
+   "summary": "MATCHED",
+   "law_sections": 7
+  },
+  {
+   "measure": "HR5334",
+   "date": "2026-08-07",
+   "generation": "SOURCE_CONTEXT_PENDING",
+   "completeness": "PENDING",
+   "cra_mode": "not_cra",
+   "rule_status": null,
+   "summary": "MATCHED",
+   "law_sections": 1
+  },
+  {
+   "measure": "HR6500",
+   "date": "2026-08-08",
+   "generation": "SOURCE_CONTEXT_PENDING",
+   "completeness": "PENDING",
+   "cra_mode": "not_cra",
+   "rule_status": null,
+   "summary": "MATCHED",
+   "law_sections": 0
+  }
+ ],
+ "history": [],
+ "recorded_utc": "2026-09-24T03:36:35Z"
+}

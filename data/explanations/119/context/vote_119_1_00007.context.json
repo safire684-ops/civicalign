@@ -1,0 +1,372 @@
+{
+ "schema": "civicalign.context/1.0",
+ "vote": {
+  "congress": 119,
+  "session": 1,
+  "clerk_number": 7,
+  "date": "2025-01-20",
+  "measure": "S5"
+ },
+ "binding": {
+  "kind": "PASSAGE_AS_AMENDED",
+  "verification": "VERIFIED",
+  "text_status": "TEXT_BOUND",
+  "text_sha256": "bebf01a558f947933e2d9ff55403cdec0bff030a51782456457baff66e2e7a9f"
+ },
+ "references": [
+  {
+   "legal_doc": "usc",
+   "cite": "usc/8/1226",
+   "text": "8 U.S.C. 1226(c)",
+   "amendatory": true,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/8/1225",
+   "text": "8 U.S.C. 1225(b)",
+   "amendatory": true,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/8/1226",
+   "text": "8 U.S.C. 1226",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/8/1253",
+   "text": "8 U.S.C. 1253",
+   "amendatory": true,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/8/1182",
+   "text": "8 U.S.C. 1182(d)(5)",
+   "amendatory": true,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/8/1231",
+   "text": "8 U.S.C. 1231(a)(2)",
+   "amendatory": true,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/8/1252",
+   "text": "8 U.S.C. 1252(f)",
+   "amendatory": true,
+   "pl_section": null,
+   "pl_division": null
+  }
+ ],
+ "selection": {
+  "policy": "amended sections if any, else all cited sections; capped",
+  "section_cap": 12,
+  "required": [
+   "/us/usc/t8/s1182",
+   "/us/usc/t8/s1225",
+   "/us/usc/t8/s1226",
+   "/us/usc/t8/s1231",
+   "/us/usc/t8/s1252",
+   "/us/usc/t8/s1253"
+  ],
+  "cited": [
+   "/us/usc/t8/s1182",
+   "/us/usc/t8/s1225",
+   "/us/usc/t8/s1226",
+   "/us/usc/t8/s1231",
+   "/us/usc/t8/s1252",
+   "/us/usc/t8/s1253"
+  ],
+  "amended": [
+   "/us/usc/t8/s1182",
+   "/us/usc/t8/s1225",
+   "/us/usc/t8/s1226",
+   "/us/usc/t8/s1231",
+   "/us/usc/t8/s1252",
+   "/us/usc/t8/s1253"
+  ],
+  "status": "ok"
+ },
+ "release_point": {
+  "label": "118-274",
+  "date": "2025-01-06",
+  "note": "latest release point on or before the vote; per-section archives may come from an earlier published one"
+ },
+ "existing_law_context": [
+  {
+   "type": "us_code",
+   "identifier": "/us/usc/t8/s1182",
+   "title": "8",
+   "section": "1182",
+   "as_of": {
+    "release_point": "118-158",
+    "date": "2024-12-21",
+    "rule": "latest OLRC release point on or before the vote with a published archive; intervening laws checked against the classification table"
+   },
+   "source_url": "https://uscode.house.gov/download/releasepoints/us/pl/118/158/xml_usc08@118-158.zip",
+   "archive_sha256": null,
+   "fragment_sha256": null,
+   "bytes": null,
+   "heading": null,
+   "relationship": "amended_by_bound_measure",
+   "status": "in_force_ambiguous",
+   "in_force_check": {
+    "status": "ambiguous",
+    "archive": "xml_usc08@118-158.zip",
+    "intervening": [
+     "118-209",
+     "118-233",
+     "118-250",
+     "118-271",
+     "118-274"
+    ],
+    "affected_by": [
+     "118-209 (not in classification table)",
+     "118-233 (not in classification table)",
+     "118-250 (not in classification table)",
+     "118-271 (not in classification table)",
+     "118-274 (not in classification table)"
+    ],
+    "check": "OLRC classification table"
+   },
+   "reason": "laws enacted after the last published archive may have changed this section: ['118-209 (not in classification table)', '118-233 (not in classification table)', '118-250 (not in classification table)', '118-271 (not in classification table)', '118-274 (not in classification table)']"
+  },
+  {
+   "type": "us_code",
+   "identifier": "/us/usc/t8/s1225",
+   "title": "8",
+   "section": "1225",
+   "as_of": {
+    "release_point": "118-158",
+    "date": "2024-12-21",
+    "rule": "latest OLRC release point on or before the vote with a published archive; intervening laws checked against the classification table"
+   },
+   "source_url": "https://uscode.house.gov/download/releasepoints/us/pl/118/158/xml_usc08@118-158.zip",
+   "archive_sha256": null,
+   "fragment_sha256": null,
+   "bytes": null,
+   "heading": null,
+   "relationship": "amended_by_bound_measure",
+   "status": "in_force_ambiguous",
+   "in_force_check": {
+    "status": "ambiguous",
+    "archive": "xml_usc08@118-158.zip",
+    "intervening": [
+     "118-209",
+     "118-233",
+     "118-250",
+     "118-271",
+     "118-274"
+    ],
+    "affected_by": [
+     "118-209 (not in classification table)",
+     "118-233 (not in classification table)",
+     "118-250 (not in classification table)",
+     "118-271 (not in classification table)",
+     "118-274 (not in classification table)"
+    ],
+    "check": "OLRC classification table"
+   },
+   "reason": "laws enacted after the last published archive may have changed this section: ['118-209 (not in classification table)', '118-233 (not in classification table)', '118-250 (not in classification table)', '118-271 (not in classification table)', '118-274 (not in classification table)']"
+  },
+  {
+   "type": "us_code",
+   "identifier": "/us/usc/t8/s1226",
+   "title": "8",
+   "section": "1226",
+   "as_of": {
+    "release_point": "118-158",
+    "date": "2024-12-21",
+    "rule": "latest OLRC release point on or before the vote with a published archive; intervening laws checked against the classification table"
+   },
+   "source_url": "https://uscode.house.gov/download/releasepoints/us/pl/118/158/xml_usc08@118-158.zip",
+   "archive_sha256": null,
+   "fragment_sha256": null,
+   "bytes": null,
+   "heading": null,
+   "relationship": "amended_by_bound_measure",
+   "status": "in_force_ambiguous",
+   "in_force_check": {
+    "status": "ambiguous",
+    "archive": "xml_usc08@118-158.zip",
+    "intervening": [
+     "118-209",
+     "118-233",
+     "118-250",
+     "118-271",
+     "118-274"
+    ],
+    "affected_by": [
+     "118-209 (not in classification table)",
+     "118-233 (not in classification table)",
+     "118-250 (not in classification table)",
+     "118-271 (not in classification table)",
+     "118-274 (not in classification table)"
+    ],
+    "check": "OLRC classification table"
+   },
+   "reason": "laws enacted after the last published archive may have changed this section: ['118-209 (not in classification table)', '118-233 (not in classification table)', '118-250 (not in classification table)', '118-271 (not in classification table)', '118-274 (not in classification table)']"
+  },
+  {
+   "type": "us_code",
+   "identifier": "/us/usc/t8/s1231",
+   "title": "8",
+   "section": "1231",
+   "as_of": {
+    "release_point": "118-158",
+    "date": "2024-12-21",
+    "rule": "latest OLRC release point on or before the vote with a published archive; intervening laws checked against the classification table"
+   },
+   "source_url": "https://uscode.house.gov/download/releasepoints/us/pl/118/158/xml_usc08@118-158.zip",
+   "archive_sha256": null,
+   "fragment_sha256": null,
+   "bytes": null,
+   "heading": null,
+   "relationship": "amended_by_bound_measure",
+   "status": "in_force_ambiguous",
+   "in_force_check": {
+    "status": "ambiguous",
+    "archive": "xml_usc08@118-158.zip",
+    "intervening": [
+     "118-209",
+     "118-233",
+     "118-250",
+     "118-271",
+     "118-274"
+    ],
+    "affected_by": [
+     "118-209 (not in classification table)",
+     "118-233 (not in classification table)",
+     "118-250 (not in classification table)",
+     "118-271 (not in classification table)",
+     "118-274 (not in classification table)"
+    ],
+    "check": "OLRC classification table"
+   },
+   "reason": "laws enacted after the last published archive may have changed this section: ['118-209 (not in classification table)', '118-233 (not in classification table)', '118-250 (not in classification table)', '118-271 (not in classification table)', '118-274 (not in classification table)']"
+  },
+  {
+   "type": "us_code",
+   "identifier": "/us/usc/t8/s1252",
+   "title": "8",
+   "section": "1252",
+   "as_of": {
+    "release_point": "118-158",
+    "date": "2024-12-21",
+    "rule": "latest OLRC release point on or before the vote with a published archive; intervening laws checked against the classification table"
+   },
+   "source_url": "https://uscode.house.gov/download/releasepoints/us/pl/118/158/xml_usc08@118-158.zip",
+   "archive_sha256": null,
+   "fragment_sha256": null,
+   "bytes": null,
+   "heading": null,
+   "relationship": "amended_by_bound_measure",
+   "status": "in_force_ambiguous",
+   "in_force_check": {
+    "status": "ambiguous",
+    "archive": "xml_usc08@118-158.zip",
+    "intervening": [
+     "118-209",
+     "118-233",
+     "118-250",
+     "118-271",
+     "118-274"
+    ],
+    "affected_by": [
+     "118-209 (not in classification table)",
+     "118-233 (not in classification table)",
+     "118-250 (not in classification table)",
+     "118-271 (not in classification table)",
+     "118-274 (not in classification table)"
+    ],
+    "check": "OLRC classification table"
+   },
+   "reason": "laws enacted after the last published archive may have changed this section: ['118-209 (not in classification table)', '118-233 (not in classification table)', '118-250 (not in classification table)', '118-271 (not in classification table)', '118-274 (not in classification table)']"
+  },
+  {
+   "type": "us_code",
+   "identifier": "/us/usc/t8/s1253",
+   "title": "8",
+   "section": "1253",
+   "as_of": {
+    "release_point": "118-158",
+    "date": "2024-12-21",
+    "rule": "latest OLRC release point on or before the vote with a published archive; intervening laws checked against the classification table"
+   },
+   "source_url": "https://uscode.house.gov/download/releasepoints/us/pl/118/158/xml_usc08@118-158.zip",
+   "archive_sha256": null,
+   "fragment_sha256": null,
+   "bytes": null,
+   "heading": null,
+   "relationship": "amended_by_bound_measure",
+   "status": "in_force_ambiguous",
+   "in_force_check": {
+    "status": "ambiguous",
+    "archive": "xml_usc08@118-158.zip",
+    "intervening": [
+     "118-209",
+     "118-233",
+     "118-250",
+     "118-271",
+     "118-274"
+    ],
+    "affected_by": [
+     "118-209 (not in classification table)",
+     "118-233 (not in classification table)",
+     "118-250 (not in classification table)",
+     "118-271 (not in classification table)",
+     "118-274 (not in classification table)"
+    ],
+    "check": "OLRC classification table"
+   },
+   "reason": "laws enacted after the last published archive may have changed this section: ['118-209 (not in classification table)', '118-233 (not in classification table)', '118-250 (not in classification table)', '118-271 (not in classification table)', '118-274 (not in classification table)']"
+  }
+ ],
+ "public_laws": [],
+ "official_summary": {
+  "status": "available",
+  "version_code": "00",
+  "action_desc": "Introduced in Senate",
+  "action_date": "2025-01-06",
+  "sha256": "7441fdc4f3bb555af7c1f4b958e69fa6ba9957a24e68f2fc992e933180727af2",
+  "version_relationship": "PRE_AMENDMENT",
+  "usable": false
+ },
+ "cra": {
+  "mode": "not_cra",
+  "rule_status": null,
+  "consequence_source": null,
+  "underlying_rule": null,
+  "gao_determination": null
+ },
+ "completeness": {
+  "status": "AMBIGUOUS",
+  "missing": [
+   "us_code:/us/usc/t8/s1182 (in_force_ambiguous)",
+   "us_code:/us/usc/t8/s1225 (in_force_ambiguous)",
+   "us_code:/us/usc/t8/s1226 (in_force_ambiguous)",
+   "us_code:/us/usc/t8/s1231 (in_force_ambiguous)",
+   "us_code:/us/usc/t8/s1252 (in_force_ambiguous)",
+   "us_code:/us/usc/t8/s1253 (in_force_ambiguous)"
+  ],
+  "notes": []
+ },
+ "generation": {
+  "status": "SOURCE_CONTEXT_AMBIGUOUS"
+ },
+ "history": [],
+ "recorded_utc": "2026-09-24T03:29:13Z"
+}

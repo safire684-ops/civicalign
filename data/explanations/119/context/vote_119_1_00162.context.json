@@ -1,0 +1,107 @@
+{
+ "schema": "civicalign.context/1.0",
+ "vote": {
+  "congress": 119,
+  "session": 1,
+  "clerk_number": 162,
+  "date": "2025-04-03",
+  "measure": "HJRES24"
+ },
+ "binding": {
+  "kind": "JOINT_RESOLUTION_PASSAGE",
+  "verification": "VERIFIED",
+  "text_status": "TEXT_BOUND",
+  "text_sha256": "dd3192def665f8087b801ba7213be28a52ac51032d964500ffe240dd8fd5a320"
+ },
+ "references": [
+  {
+   "legal_doc": "usc-chapter",
+   "cite": "usc-chapter/5/8",
+   "text": "chapter 8",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  }
+ ],
+ "selection": {
+  "policy": "cra: the resolution's own text and the CRA consequence section; cited authorities are not extracted",
+  "section_cap": 12,
+  "required": [],
+  "cited": [],
+  "amended": [],
+  "status": "ok"
+ },
+ "release_point": {
+  "label": "119-4",
+  "date": "2025-03-15",
+  "note": "latest release point on or before the vote; per-section archives may come from an earlier published one"
+ },
+ "existing_law_context": [],
+ "public_laws": [],
+ "official_summary": {
+  "status": "available",
+  "version_code": "00",
+  "action_desc": "Introduced in House",
+  "action_date": "2025-01-16",
+  "sha256": "dbe864718087566aa3e484568491f8a9263d57aa1ce1ec36ac69c83821a7738a",
+  "version_relationship": "EARLIER_SAME_TEXT",
+  "usable": true
+ },
+ "cra": {
+  "mode": "rule_bound",
+  "rule_status": "RULE_BOUND",
+  "consequence_source": {
+   "type": "us_code",
+   "identifier": "/us/usc/t5/s801",
+   "title": "5",
+   "section": "801",
+   "as_of": {
+    "release_point": "119-4",
+    "date": "2025-03-15",
+    "rule": "latest OLRC release point on or before the vote with a published archive; intervening laws checked against the classification table"
+   },
+   "source_url": "https://uscode.house.gov/download/releasepoints/us/pl/119/4/xml_usc05@119-4.zip",
+   "archive_sha256": "67b23ff2bb7b69db1c9aa892dcfdf0fb378b8aa042d097cafb20931596149f82",
+   "fragment_sha256": "428e76f02b92afb745472c99f9d0f3059376320e60727f9e4f10a30788be6daf",
+   "bytes": 33022,
+   "heading": "Congressional review",
+   "relationship": "cra_statutory_consequence",
+   "status": "fetched",
+   "in_force_check": {
+    "status": "ok",
+    "archive": "xml_usc05@119-4.zip",
+    "intervening": [],
+    "affected_by": [],
+    "check": "no intervening release point"
+   }
+  },
+  "underlying_rule": {
+   "status": "RULE_BOUND",
+   "citation": "89 FR 104616",
+   "document_number": "2024-28474",
+   "fr_title": "Energy Conservation Program: Energy Conservation Standards for Walk-In Coolers and Walk-In Freezers",
+   "type": "Rule",
+   "publication_date": "2024-12-23",
+   "agencies": [
+    "Energy Department"
+   ],
+   "source_url": "https://www.federalregister.gov/documents/2024/12/23/2024-28474/energy-conservation-program-energy-conservation-standards-for-walk-in-coolers-and-walk-in-freezers",
+   "full_text_xml_url": "https://www.federalregister.gov/documents/full_text/xml/2024/12/23/2024-28474.xml",
+   "sha256": "dfef7af802bb4ddbb78e7d8e64d4ec8a5763efc7901b73b833ab318cb9dd0896",
+   "bytes": 984717
+  },
+  "gao_determination": null
+ },
+ "completeness": {
+  "status": "LIMITED",
+  "missing": [],
+  "notes": [
+   "CRA: the resolution's own effect may be explained; the underlying rule's substance may not unless the rule is bound and separately verified"
+  ]
+ },
+ "generation": {
+  "status": "READY_WITH_LIMITS"
+ },
+ "history": [],
+ "recorded_utc": "2026-09-24T03:29:18Z"
+}

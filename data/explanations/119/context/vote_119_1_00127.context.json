@@ -1,0 +1,442 @@
+{
+ "schema": "civicalign.context/1.0",
+ "vote": {
+  "congress": 119,
+  "session": 1,
+  "clerk_number": 127,
+  "date": "2025-03-14",
+  "measure": "S331"
+ },
+ "binding": {
+  "kind": "PASSAGE_AS_AMENDED",
+  "verification": "VERIFIED",
+  "text_status": "TEXT_BOUND",
+  "text_sha256": "4e907878b839c14cda219f2ce5eed1c3ce7014f8a586e0e1ff75dee2a808a376"
+ },
+ "references": [
+  {
+   "legal_doc": "usc",
+   "cite": "usc/21/812",
+   "text": "21 U.S.C. 812(c)",
+   "amendatory": true,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/21/823",
+   "text": "21 U.S.C. 823",
+   "amendatory": true,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/21/355",
+   "text": "21 U.S.C. 355(i)",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/21/355",
+   "text": "21 U.S.C. 355(i)",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/21/822",
+   "text": "21 U.S.C. 822(c)",
+   "amendatory": true,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/21/822",
+   "text": "21 U.S.C. 822(c)(3)",
+   "amendatory": true,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/21/822",
+   "text": "21 U.S.C. 822(e)",
+   "amendatory": true,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/21/822",
+   "text": "21 U.S.C. 822(f)",
+   "amendatory": true,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/21/822",
+   "text": "21 U.S.C. 822",
+   "amendatory": true,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/21/822",
+   "text": "21 U.S.C. 822",
+   "amendatory": true,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/21/355",
+   "text": "21 U.S.C. 355(i)",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/21/823",
+   "text": "21 U.S.C. 823",
+   "amendatory": true,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/117/328",
+   "text": "Public Law 117–328",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/117/328",
+   "text": "Public Law 117–328",
+   "amendatory": true,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/117/328",
+   "text": "Public Law 117–328",
+   "amendatory": true,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/117/328",
+   "text": "Public Law 117–328",
+   "amendatory": true,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/21/823",
+   "text": "21 U.S.C. 823(g)(2)",
+   "amendatory": true,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/21/823",
+   "text": "21 U.S.C. 823(h)(2)",
+   "amendatory": true,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/21/841",
+   "text": "21 U.S.C. 841(b)(1)",
+   "amendatory": true,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/21/960",
+   "text": "21 U.S.C. 960(b)",
+   "amendatory": true,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/21/802",
+   "text": "21 U.S.C. 802",
+   "amendatory": true,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/21/841",
+   "text": "21 U.S.C. 841(b)(1)",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/21/960",
+   "text": "21 U.S.C. 960(b)",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/21/801",
+   "text": "21 U.S.C. 801 et seq.",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  }
+ ],
+ "selection": {
+  "policy": "amended sections if any, else all cited sections; capped",
+  "section_cap": 12,
+  "required": [
+   "/us/usc/t21/s802",
+   "/us/usc/t21/s812",
+   "/us/usc/t21/s822",
+   "/us/usc/t21/s823",
+   "/us/usc/t21/s841",
+   "/us/usc/t21/s960"
+  ],
+  "cited": [
+   "/us/usc/t21/s355",
+   "/us/usc/t21/s801",
+   "/us/usc/t21/s802",
+   "/us/usc/t21/s812",
+   "/us/usc/t21/s822",
+   "/us/usc/t21/s823",
+   "/us/usc/t21/s841",
+   "/us/usc/t21/s960"
+  ],
+  "amended": [
+   "/us/usc/t21/s802",
+   "/us/usc/t21/s812",
+   "/us/usc/t21/s822",
+   "/us/usc/t21/s823",
+   "/us/usc/t21/s841",
+   "/us/usc/t21/s960"
+  ],
+  "status": "ok"
+ },
+ "release_point": {
+  "label": "119-1",
+  "date": "2025-01-29",
+  "note": "latest release point on or before the vote; per-section archives may come from an earlier published one"
+ },
+ "existing_law_context": [
+  {
+   "type": "us_code",
+   "identifier": "/us/usc/t21/s802",
+   "title": "21",
+   "section": "802",
+   "as_of": {
+    "release_point": "119-1",
+    "date": "2025-01-29",
+    "rule": "latest OLRC release point on or before the vote with a published archive; intervening laws checked against the classification table"
+   },
+   "source_url": "https://uscode.house.gov/download/releasepoints/us/pl/119/1/xml_usc21@119-1.zip",
+   "archive_sha256": "d7b14417ebdeab82ab47abce59c6147f17f35c7a4b9e57f46b72a1c52e82de4c",
+   "fragment_sha256": "da967c5f7f73343e009dbeafa96703ea8fdffca2fc8aab2a96ac7d6979ba7e54",
+   "bytes": 157598,
+   "heading": "Definitions",
+   "relationship": "amended_by_bound_measure",
+   "status": "fetched",
+   "in_force_check": {
+    "status": "ok",
+    "archive": "xml_usc21@119-1.zip",
+    "intervening": [],
+    "affected_by": [],
+    "check": "no intervening release point"
+   }
+  },
+  {
+   "type": "us_code",
+   "identifier": "/us/usc/t21/s812",
+   "title": "21",
+   "section": "812",
+   "as_of": {
+    "release_point": "119-1",
+    "date": "2025-01-29",
+    "rule": "latest OLRC release point on or before the vote with a published archive; intervening laws checked against the classification table"
+   },
+   "source_url": "https://uscode.house.gov/download/releasepoints/us/pl/119/1/xml_usc21@119-1.zip",
+   "archive_sha256": "d7b14417ebdeab82ab47abce59c6147f17f35c7a4b9e57f46b72a1c52e82de4c",
+   "fragment_sha256": "50d3e245cc1a1db9983487465788e5440556848f9c5521ac650baf3a65b9f1a4",
+   "bytes": 71503,
+   "heading": "Schedules of controlled substances",
+   "relationship": "amended_by_bound_measure",
+   "status": "fetched",
+   "in_force_check": {
+    "status": "ok",
+    "archive": "xml_usc21@119-1.zip",
+    "intervening": [],
+    "affected_by": [],
+    "check": "no intervening release point"
+   }
+  },
+  {
+   "type": "us_code",
+   "identifier": "/us/usc/t21/s822",
+   "title": "21",
+   "section": "822",
+   "as_of": {
+    "release_point": "119-1",
+    "date": "2025-01-29",
+    "rule": "latest OLRC release point on or before the vote with a published archive; intervening laws checked against the classification table"
+   },
+   "source_url": "https://uscode.house.gov/download/releasepoints/us/pl/119/1/xml_usc21@119-1.zip",
+   "archive_sha256": "d7b14417ebdeab82ab47abce59c6147f17f35c7a4b9e57f46b72a1c52e82de4c",
+   "fragment_sha256": "7dba779b3f12835959fe16215d0539787639e6fc87fb7bd19fba2a582da13da1",
+   "bytes": 39796,
+   "heading": "Persons required to register",
+   "relationship": "amended_by_bound_measure",
+   "status": "fetched",
+   "in_force_check": {
+    "status": "ok",
+    "archive": "xml_usc21@119-1.zip",
+    "intervening": [],
+    "affected_by": [],
+    "check": "no intervening release point"
+   }
+  },
+  {
+   "type": "us_code",
+   "identifier": "/us/usc/t21/s823",
+   "title": "21",
+   "section": "823",
+   "as_of": {
+    "release_point": "119-1",
+    "date": "2025-01-29",
+    "rule": "latest OLRC release point on or before the vote with a published archive; intervening laws checked against the classification table"
+   },
+   "source_url": "https://uscode.house.gov/download/releasepoints/us/pl/119/1/xml_usc21@119-1.zip",
+   "archive_sha256": "d7b14417ebdeab82ab47abce59c6147f17f35c7a4b9e57f46b72a1c52e82de4c",
+   "fragment_sha256": "1df077b0a4d0eba47e99e7bad069ebc9e94aae7a135f687b0d350536dbf56774",
+   "bytes": 126856,
+   "heading": "Registration requirements",
+   "relationship": "amended_by_bound_measure",
+   "status": "fetched",
+   "in_force_check": {
+    "status": "ok",
+    "archive": "xml_usc21@119-1.zip",
+    "intervening": [],
+    "affected_by": [],
+    "check": "no intervening release point"
+   }
+  },
+  {
+   "type": "us_code",
+   "identifier": "/us/usc/t21/s841",
+   "title": "21",
+   "section": "841",
+   "as_of": {
+    "release_point": "119-1",
+    "date": "2025-01-29",
+    "rule": "latest OLRC release point on or before the vote with a published archive; intervening laws checked against the classification table"
+   },
+   "source_url": "https://uscode.house.gov/download/releasepoints/us/pl/119/1/xml_usc21@119-1.zip",
+   "archive_sha256": "d7b14417ebdeab82ab47abce59c6147f17f35c7a4b9e57f46b72a1c52e82de4c",
+   "fragment_sha256": "e8c611f1b08ac5eca44542ee24e836568e83b522261db8eeeebd29f75fb3a705",
+   "bytes": 91170,
+   "heading": "Prohibited acts A",
+   "relationship": "amended_by_bound_measure",
+   "status": "fetched",
+   "in_force_check": {
+    "status": "ok",
+    "archive": "xml_usc21@119-1.zip",
+    "intervening": [],
+    "affected_by": [],
+    "check": "no intervening release point"
+   }
+  },
+  {
+   "type": "us_code",
+   "identifier": "/us/usc/t21/s960",
+   "title": "21",
+   "section": "960",
+   "as_of": {
+    "release_point": "119-1",
+    "date": "2025-01-29",
+    "rule": "latest OLRC release point on or before the vote with a published archive; intervening laws checked against the classification table"
+   },
+   "source_url": "https://uscode.house.gov/download/releasepoints/us/pl/119/1/xml_usc21@119-1.zip",
+   "archive_sha256": "d7b14417ebdeab82ab47abce59c6147f17f35c7a4b9e57f46b72a1c52e82de4c",
+   "fragment_sha256": "bc919282ae603ad3d844637fed45138a8e02291bedffa4cb42670e09e47faac5",
+   "bytes": 49709,
+   "heading": "Prohibited acts A",
+   "relationship": "amended_by_bound_measure",
+   "status": "fetched",
+   "in_force_check": {
+    "status": "ok",
+    "archive": "xml_usc21@119-1.zip",
+    "intervening": [],
+    "affected_by": [],
+    "check": "no intervening release point"
+   }
+  }
+ ],
+ "public_laws": [
+  {
+   "type": "public_law",
+   "cite": "pl/117/328",
+   "congress": 117,
+   "law": 328,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-117publ328/uslm/PLAW-117publ328.xml",
+   "sha256": "c85b2c8cb1494a52997e321f7ffbc5bdbdd9c61ad711db94a2bbad4be216188b",
+   "bytes": 11275250,
+   "sections": [],
+   "divisions": [],
+   "fragments": [],
+   "status": "identified",
+   "relationship": "amended_by_bound_measure"
+  }
+ ],
+ "official_summary": {
+  "status": "available",
+  "version_code": "00",
+  "action_desc": "Introduced in Senate",
+  "action_date": "2025-01-30",
+  "sha256": "5ec9662dca75381bbfee67b0c2b75717b73e475ae2fa7df174e2e43611b81876",
+  "version_relationship": "PRE_AMENDMENT",
+  "usable": false
+ },
+ "cra": {
+  "mode": "not_cra",
+  "rule_status": null,
+  "consequence_source": null,
+  "underlying_rule": null,
+  "gao_determination": null
+ },
+ "completeness": {
+  "status": "COMPLETE",
+  "missing": [],
+  "notes": [
+   "pl/117/328 cited as a whole law: identified and hashed, no section extracted; the Maker may not describe its contents"
+  ]
+ },
+ "generation": {
+  "status": "READY_FOR_GENERATION"
+ },
+ "history": [],
+ "recorded_utc": "2026-09-24T03:29:14Z"
+}

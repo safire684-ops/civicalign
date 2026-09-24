@@ -84,6 +84,16 @@ tallies, every member's vote and the recorded-vote link. Bindings live in
 re-derives each one. Nothing is summarised and the page does not read the
 bindings; that is Stages 3–5.
 
+Stage 2.5 (`python -m civicalign.explain.context`, offline) adds the source
+context: structured citations from the voted XML, the required U.S. Code
+sections extracted byte-exact from the Law Revision Counsel's release point in
+force at the vote (never a later one, never today's law as a fallback), cited
+Public Laws from GovInfo USLM, the CRS summary with its version relationship,
+and for CRA resolutions the Federal Register document bound by citation plus
+5 U.S.C. 801 from the Code in force. Each vote gets a tracked context record
+with completeness and generation states, and ready votes get a source packet
+that is the future Maker's entire factual universe.
+
 ## What works today, and what does not
 
 **Working, on real 119th Congress data.**

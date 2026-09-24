@@ -1,0 +1,123 @@
+{
+ "schema": "civicalign.context/1.0",
+ "vote": {
+  "congress": 119,
+  "session": 1,
+  "clerk_number": 654,
+  "date": "2025-12-18",
+  "measure": "SJRES82"
+ },
+ "binding": {
+  "kind": "JOINT_RESOLUTION_PASSAGE",
+  "verification": "VERIFIED",
+  "text_status": "TEXT_BOUND",
+  "text_sha256": "55e21e3615bf3babc0540f3d54da055615dc67fb3398516128c207622084ec65"
+ },
+ "references": [
+  {
+   "legal_doc": "usc",
+   "cite": "usc/5/802",
+   "text": "5 U.S.C. 802(c)",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc-chapter",
+   "cite": "usc-chapter/5/8",
+   "text": "chapter 8",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc-chapter",
+   "cite": "usc-chapter/5/8",
+   "text": "chapter 8",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/5/802",
+   "text": "5 U.S.C. 802(c)",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  }
+ ],
+ "selection": {
+  "policy": "cra: the resolution's own text and the CRA consequence section; cited authorities are not extracted",
+  "section_cap": 12,
+  "required": [],
+  "cited": [
+   "/us/usc/t5/s802"
+  ],
+  "amended": [],
+  "status": "ok"
+ },
+ "release_point": {
+  "label": "119-59",
+  "date": "2025-12-18",
+  "note": "latest release point on or before the vote; per-section archives may come from an earlier published one"
+ },
+ "existing_law_context": [],
+ "public_laws": [],
+ "official_summary": {
+  "status": "none",
+  "version_relationship": "UNKNOWN",
+  "usable": false
+ },
+ "cra": {
+  "mode": "resolution_only",
+  "rule_status": "GAO_RULE_DETERMINATION",
+  "consequence_source": {
+   "type": "us_code",
+   "identifier": "/us/usc/t5/s801",
+   "title": "5",
+   "section": "801",
+   "as_of": {
+    "release_point": "119-59",
+    "date": "2025-12-18",
+    "rule": "latest OLRC release point on or before the vote with a published archive; intervening laws checked against the classification table"
+   },
+   "source_url": "https://uscode.house.gov/download/releasepoints/us/pl/119/59/xml_usc05@119-59.zip",
+   "archive_sha256": "eb85c1c9ad092e9ec953d0f790f6a1f525cbd6a6bc79b095027889f2100941a0",
+   "fragment_sha256": "1e0086b1f6690faa671bf9ffb2264c853de1e873445eb77e1e1b6c20a172c8b4",
+   "bytes": 33022,
+   "heading": "Congressional review",
+   "relationship": "cra_statutory_consequence",
+   "status": "fetched",
+   "in_force_check": {
+    "status": "ok",
+    "archive": "xml_usc05@119-59.zip",
+    "intervening": [],
+    "affected_by": [],
+    "check": "no intervening release point"
+   }
+  },
+  "underlying_rule": null,
+  "gao_determination": {
+   "type": "GAO_RULE_DETERMINATION",
+   "opinion_date": "2025-08-27",
+   "congressional_record_date": "2025-09-03",
+   "congressional_record_pages": "S6003-S6005",
+   "status": "identified_not_retrieved",
+   "source_url": null,
+   "sha256": null
+  }
+ },
+ "completeness": {
+  "status": "LIMITED",
+  "missing": [],
+  "notes": [
+   "CRA: the resolution's own effect may be explained; the underlying rule's substance may not unless the rule is bound and separately verified"
+  ]
+ },
+ "generation": {
+  "status": "READY_WITH_LIMITS"
+ },
+ "history": [],
+ "recorded_utc": "2026-09-24T03:32:59Z"
+}

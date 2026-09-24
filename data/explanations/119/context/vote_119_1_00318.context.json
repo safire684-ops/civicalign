@@ -1,0 +1,852 @@
+{
+ "schema": "civicalign.context/1.0",
+ "vote": {
+  "congress": 119,
+  "session": 1,
+  "clerk_number": 318,
+  "date": "2025-06-17",
+  "measure": "S1582"
+ },
+ "binding": {
+  "kind": "PASSAGE_AS_AMENDED",
+  "verification": "VERIFIED",
+  "text_status": "TEXT_BOUND",
+  "text_sha256": "7213845fbbd107555db9c19596e78aff202d897d1e70ea220c6dc19b4f9c0de3"
+ },
+ "references": [
+  {
+   "legal_doc": "usc",
+   "cite": "usc/12/1813",
+   "text": "12 U.S.C. 1813",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/12/1829b",
+   "text": "12 U.S.C. 1829b",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/91/508",
+   "text": "Public Law 91–508",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": "title I"
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/12/1951",
+   "text": "12 U.S.C. 1951 et seq.",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc-chapter",
+   "cite": "usc-chapter/31/53",
+   "text": "chapter 53",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/12/1813",
+   "text": "12 U.S.C. 1813",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/12/1752",
+   "text": "12 U.S.C. 1752",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/12/1813",
+   "text": "12 U.S.C. 1813",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/12/1813",
+   "text": "12 U.S.C. 1813",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/12/411",
+   "text": "12 U.S.C. 411",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/12/1813",
+   "text": "12 U.S.C. 1813",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/15/77b",
+   "text": "15 U.S.C. 77b",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/15/78c",
+   "text": "15 U.S.C. 78c",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/15/80a-2",
+   "text": "15 U.S.C. 80a–2",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/15/7201",
+   "text": "15 U.S.C. 7201",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/12/1813",
+   "text": "12 U.S.C. 1813(c)",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/12/1813",
+   "text": "12 U.S.C. 1813",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/12/1757",
+   "text": "12 U.S.C. 1757(7)(I)",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/15/80a-8",
+   "text": "15 U.S.C. 80a–8(a)",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/12/5371",
+   "text": "12 U.S.C. 5371(a)(3)",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/12/5371",
+   "text": "12 U.S.C. 5371",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc-chapter",
+   "cite": "usc-chapter/31/53",
+   "text": "chapter 53",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/15/78m",
+   "text": "15 U.S.C. 78m",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/12/1843",
+   "text": "12 U.S.C. 1843(k)",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/15/78m",
+   "text": "15 U.S.C. 78m(a)",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/12/25b",
+   "text": "12 U.S.C. 25b",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/12/1465",
+   "text": "12 U.S.C. 1465",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/12/1",
+   "text": "12 U.S.C. 1(b)",
+   "amendatory": true,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/12/1828",
+   "text": "12 U.S.C. 1828(a)(4)",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/12/1461",
+   "text": "12 U.S.C. 1461 et seq.",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/12/1467a",
+   "text": "12 U.S.C. 1467a(m)",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/8/1189",
+   "text": "8 U.S.C. 1189",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc-chapter",
+   "cite": "usc-chapter/31/53",
+   "text": "chapter 53",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/12/1818",
+   "text": "12 U.S.C. 1818",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/12/1786",
+   "text": "12 U.S.C. 1786(e)",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/12/1818",
+   "text": "12 U.S.C. 1818(h)",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/12/1786",
+   "text": "12 U.S.C. 1786(j)",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/12/1818",
+   "text": "12 U.S.C. 1818(i)(1)",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/12/1786",
+   "text": "12 U.S.C. 1786(k)(1)",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/12/1818",
+   "text": "12 U.S.C. 1818(c)",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/12/1786",
+   "text": "12 U.S.C. 1786(f)",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/12/1818",
+   "text": "12 U.S.C. 1818(i)(2)",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/12/1786",
+   "text": "12 U.S.C. 1786(k)(2)",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/15/41",
+   "text": "15 U.S.C. 41 et seq.",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/50/3091",
+   "text": "50 U.S.C. 3091 et seq.",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/115/44",
+   "text": "Public Law 115–44",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/12/5301",
+   "text": "12 U.S.C. 5301(12)",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/12/1813",
+   "text": "12 U.S.C. 1813",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/31/5311",
+   "text": "31 U.S.C. 5311",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/12/1813",
+   "text": "12 U.S.C. 1813",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/12/1813",
+   "text": "12 U.S.C. 1813",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/104/113",
+   "text": "Public Law 104–113",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/12/5322",
+   "text": "12 U.S.C. 5322(a)(2)(N)",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/15/80b-2",
+   "text": "15 U.S.C. 80b–2(a)(18)",
+   "amendatory": true,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/15/80a-1",
+   "text": "15 U.S.C. 80a–1 et seq.",
+   "amendatory": true,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/15/80a-2",
+   "text": "15 U.S.C. 80a–2(a)(36)",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/15/80a-3",
+   "text": "15 U.S.C. 80a–3(c)(3)",
+   "amendatory": true,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/15/77b",
+   "text": "15 U.S.C. 77b(a)(1)",
+   "amendatory": true,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/15/78c",
+   "text": "15 U.S.C. 78c(a)(10)",
+   "amendatory": true,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/15/78lll",
+   "text": "15 U.S.C. 78lll(14)",
+   "amendatory": true,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/7/1a",
+   "text": "7 U.S.C. 1a(9)",
+   "amendatory": true,
+   "pl_section": null,
+   "pl_division": null
+  }
+ ],
+ "selection": {
+  "policy": "amended sections if any, else all cited sections; capped",
+  "section_cap": 12,
+  "required": [
+   "/us/usc/t12/s1",
+   "/us/usc/t15/s77b",
+   "/us/usc/t15/s78c",
+   "/us/usc/t15/s78lll",
+   "/us/usc/t15/s80a-1",
+   "/us/usc/t15/s80a-3",
+   "/us/usc/t15/s80b-2",
+   "/us/usc/t7/s1a"
+  ],
+  "cited": [
+   "/us/usc/t12/s1",
+   "/us/usc/t12/s1461",
+   "/us/usc/t12/s1465",
+   "/us/usc/t12/s1467a",
+   "/us/usc/t12/s1752",
+   "/us/usc/t12/s1757",
+   "/us/usc/t12/s1786",
+   "/us/usc/t12/s1813",
+   "/us/usc/t12/s1818",
+   "/us/usc/t12/s1828",
+   "/us/usc/t12/s1829b",
+   "/us/usc/t12/s1843",
+   "/us/usc/t12/s1951",
+   "/us/usc/t12/s25b",
+   "/us/usc/t12/s411",
+   "/us/usc/t12/s5301",
+   "/us/usc/t12/s5322",
+   "/us/usc/t12/s5371",
+   "/us/usc/t15/s41",
+   "/us/usc/t15/s7201",
+   "/us/usc/t15/s77b",
+   "/us/usc/t15/s78c",
+   "/us/usc/t15/s78lll",
+   "/us/usc/t15/s78m",
+   "/us/usc/t15/s80a-1",
+   "/us/usc/t15/s80a-2",
+   "/us/usc/t15/s80a-3",
+   "/us/usc/t15/s80a-8",
+   "/us/usc/t15/s80b-2",
+   "/us/usc/t31/s5311",
+   "/us/usc/t50/s3091",
+   "/us/usc/t7/s1a",
+   "/us/usc/t8/s1189"
+  ],
+  "amended": [
+   "/us/usc/t12/s1",
+   "/us/usc/t15/s77b",
+   "/us/usc/t15/s78c",
+   "/us/usc/t15/s78lll",
+   "/us/usc/t15/s80a-1",
+   "/us/usc/t15/s80a-3",
+   "/us/usc/t15/s80b-2",
+   "/us/usc/t7/s1a"
+  ],
+  "status": "ok"
+ },
+ "release_point": {
+  "label": "119-18",
+  "date": "2025-06-12",
+  "note": "latest release point on or before the vote; per-section archives may come from an earlier published one"
+ },
+ "existing_law_context": [
+  {
+   "type": "us_code",
+   "identifier": "/us/usc/t12/s1",
+   "title": "12",
+   "section": "1",
+   "as_of": {
+    "release_point": "119-18",
+    "date": "2025-06-12",
+    "rule": "latest OLRC release point on or before the vote with a published archive; intervening laws checked against the classification table"
+   },
+   "source_url": "https://uscode.house.gov/download/releasepoints/us/pl/119/18/xml_usc12@119-18.zip",
+   "archive_sha256": "1d5edff85ba8429c882e8fb3363ccad440321b5d2243e3ace83ec2c3cf7adef4",
+   "fragment_sha256": "839a9ffbd96c9d4fe4d02c2102e71b5b1fc4961ed0505184e342c654e10f14d9",
+   "bytes": 9687,
+   "heading": "Office of the Comptroller of the Currency",
+   "relationship": "amended_by_bound_measure",
+   "status": "fetched",
+   "in_force_check": {
+    "status": "ok",
+    "archive": "xml_usc12@119-18.zip",
+    "intervening": [],
+    "affected_by": [],
+    "check": "no intervening release point"
+   }
+  },
+  {
+   "type": "us_code",
+   "identifier": "/us/usc/t15/s77b",
+   "title": "15",
+   "section": "77b",
+   "as_of": {
+    "release_point": "119-18",
+    "date": "2025-06-12",
+    "rule": "latest OLRC release point on or before the vote with a published archive; intervening laws checked against the classification table"
+   },
+   "source_url": "https://uscode.house.gov/download/releasepoints/us/pl/119/18/xml_usc15@119-18.zip",
+   "archive_sha256": "77f709b59ef9a6415c7a0c5c4c2f40687fe69644ea85421b664132aebda22222",
+   "fragment_sha256": "b77a10f6213fb333b31c6a2d68a478e809d357bf61d8c87d7cf83a13ebfcae91",
+   "bytes": 39954,
+   "heading": "Definitions; promotion of efficiency, competition, and capital formation",
+   "relationship": "amended_by_bound_measure",
+   "status": "fetched",
+   "in_force_check": {
+    "status": "ok",
+    "archive": "xml_usc15@119-18.zip",
+    "intervening": [],
+    "affected_by": [],
+    "check": "no intervening release point"
+   }
+  },
+  {
+   "type": "us_code",
+   "identifier": "/us/usc/t15/s78c",
+   "title": "15",
+   "section": "78c",
+   "as_of": {
+    "release_point": "119-18",
+    "date": "2025-06-12",
+    "rule": "latest OLRC release point on or before the vote with a published archive; intervening laws checked against the classification table"
+   },
+   "source_url": "https://uscode.house.gov/download/releasepoints/us/pl/119/18/xml_usc15@119-18.zip",
+   "archive_sha256": "77f709b59ef9a6415c7a0c5c4c2f40687fe69644ea85421b664132aebda22222",
+   "fragment_sha256": "38d01cfea0953a5b9793ecac3dc3f50410b540ffbc5ddd09805ceea1007335fe",
+   "bytes": 290093,
+   "heading": "Definitions and application",
+   "relationship": "amended_by_bound_measure",
+   "status": "fetched",
+   "in_force_check": {
+    "status": "ok",
+    "archive": "xml_usc15@119-18.zip",
+    "intervening": [],
+    "affected_by": [],
+    "check": "no intervening release point"
+   }
+  },
+  {
+   "type": "us_code",
+   "identifier": "/us/usc/t15/s78lll",
+   "title": "15",
+   "section": "78lll",
+   "as_of": {
+    "release_point": "119-18",
+    "date": "2025-06-12",
+    "rule": "latest OLRC release point on or before the vote with a published archive; intervening laws checked against the classification table"
+   },
+   "source_url": "https://uscode.house.gov/download/releasepoints/us/pl/119/18/xml_usc15@119-18.zip",
+   "archive_sha256": "77f709b59ef9a6415c7a0c5c4c2f40687fe69644ea85421b664132aebda22222",
+   "fragment_sha256": "e863b10dc6541f583952a847c128818aa555b4d8ff48b442c3b339a65d9b5fac",
+   "bytes": 33310,
+   "heading": "Definitions",
+   "relationship": "amended_by_bound_measure",
+   "status": "fetched",
+   "in_force_check": {
+    "status": "ok",
+    "archive": "xml_usc15@119-18.zip",
+    "intervening": [],
+    "affected_by": [],
+    "check": "no intervening release point"
+   }
+  },
+  {
+   "type": "us_code",
+   "identifier": "/us/usc/t15/s80a-1",
+   "title": "15",
+   "section": "80a-1",
+   "as_of": {
+    "release_point": "119-18",
+    "date": "2025-06-12",
+    "rule": "latest OLRC release point on or before the vote with a published archive; intervening laws checked against the classification table"
+   },
+   "source_url": "https://uscode.house.gov/download/releasepoints/us/pl/119/18/xml_usc15@119-18.zip",
+   "archive_sha256": "77f709b59ef9a6415c7a0c5c4c2f40687fe69644ea85421b664132aebda22222",
+   "fragment_sha256": "fb718084fd9b8e6a1aa1cfecca57f92cbccbfbad8e8807fe40c1d5f134425890",
+   "bytes": 9586,
+   "heading": "Findings and declaration of policy",
+   "relationship": "amended_by_bound_measure",
+   "status": "fetched",
+   "in_force_check": {
+    "status": "ok",
+    "archive": "xml_usc15@119-18.zip",
+    "intervening": [],
+    "affected_by": [],
+    "check": "no intervening release point"
+   }
+  },
+  {
+   "type": "us_code",
+   "identifier": "/us/usc/t15/s80a-3",
+   "title": "15",
+   "section": "80a-3",
+   "as_of": {
+    "release_point": "119-18",
+    "date": "2025-06-12",
+    "rule": "latest OLRC release point on or before the vote with a published archive; intervening laws checked against the classification table"
+   },
+   "source_url": "https://uscode.house.gov/download/releasepoints/us/pl/119/18/xml_usc15@119-18.zip",
+   "archive_sha256": "77f709b59ef9a6415c7a0c5c4c2f40687fe69644ea85421b664132aebda22222",
+   "fragment_sha256": "4e737f165a614c5cc68ff920982f54ca1e8e1a29d2d22eeed979a602ffa789de",
+   "bytes": 65787,
+   "heading": "Definition of investment company",
+   "relationship": "amended_by_bound_measure",
+   "status": "fetched",
+   "in_force_check": {
+    "status": "ok",
+    "archive": "xml_usc15@119-18.zip",
+    "intervening": [],
+    "affected_by": [],
+    "check": "no intervening release point"
+   }
+  },
+  {
+   "type": "us_code",
+   "identifier": "/us/usc/t15/s80b-2",
+   "title": "15",
+   "section": "80b-2",
+   "as_of": {
+    "release_point": "119-18",
+    "date": "2025-06-12",
+    "rule": "latest OLRC release point on or before the vote with a published archive; intervening laws checked against the classification table"
+   },
+   "source_url": "https://uscode.house.gov/download/releasepoints/us/pl/119/18/xml_usc15@119-18.zip",
+   "archive_sha256": "77f709b59ef9a6415c7a0c5c4c2f40687fe69644ea85421b664132aebda22222",
+   "fragment_sha256": "17abff1f62afc7bd9804283df671e7fed7364b9037345b23a11e1351cbd18a3d",
+   "bytes": 53747,
+   "heading": "Definitions",
+   "relationship": "amended_by_bound_measure",
+   "status": "fetched",
+   "in_force_check": {
+    "status": "ok",
+    "archive": "xml_usc15@119-18.zip",
+    "intervening": [],
+    "affected_by": [],
+    "check": "no intervening release point"
+   }
+  },
+  {
+   "type": "us_code",
+   "identifier": "/us/usc/t7/s1a",
+   "title": "7",
+   "section": "1a",
+   "as_of": {
+    "release_point": "119-18",
+    "date": "2025-06-12",
+    "rule": "latest OLRC release point on or before the vote with a published archive; intervening laws checked against the classification table"
+   },
+   "source_url": "https://uscode.house.gov/download/releasepoints/us/pl/119/18/xml_usc07@119-18.zip",
+   "archive_sha256": "094ffced08077b45cb6907eba9714dd7f965f425e6c82ad87883d78012e1353a",
+   "fragment_sha256": "e70e71c51aea988d80e35c2593c0a8cd5acabc8b785c8cf0c63f58253c276fb6",
+   "bytes": 168650,
+   "heading": "Definitions",
+   "relationship": "amended_by_bound_measure",
+   "status": "fetched",
+   "in_force_check": {
+    "status": "ok",
+    "archive": "xml_usc07@119-18.zip",
+    "intervening": [],
+    "affected_by": [],
+    "check": "no intervening release point"
+   }
+  }
+ ],
+ "public_laws": [
+  {
+   "type": "public_law",
+   "cite": "pl/91/508",
+   "congress": 91,
+   "law": 508,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-91publ508/uslm/PLAW-91publ508.xml",
+   "sha256": null,
+   "bytes": null,
+   "sections": [],
+   "divisions": [
+    "title I"
+   ],
+   "fragments": [],
+   "status": "unavailable",
+   "relationship": "cited",
+   "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/115/44",
+   "congress": 115,
+   "law": 44,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-115publ44/uslm/PLAW-115publ44.xml",
+   "sha256": "c4dd23a96454b20a8550f85b98830bb702670f8d4d24faccac1132663090e05c",
+   "bytes": 535971,
+   "sections": [],
+   "divisions": [],
+   "fragments": [],
+   "status": "identified",
+   "relationship": "cited"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/104/113",
+   "congress": 104,
+   "law": 113,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-104publ113/uslm/PLAW-104publ113.xml",
+   "sha256": null,
+   "bytes": null,
+   "sections": [],
+   "divisions": [],
+   "fragments": [],
+   "status": "unavailable",
+   "relationship": "cited",
+   "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+  }
+ ],
+ "official_summary": {
+  "status": "available",
+  "version_code": "00",
+  "action_desc": "Introduced in Senate",
+  "action_date": "2025-05-01",
+  "sha256": "50b634d26b454f3c6f7379beb39fb3148e58868bf335d31d9e54e435778cd0d5",
+  "version_relationship": "PRE_AMENDMENT",
+  "usable": false
+ },
+ "cra": {
+  "mode": "not_cra",
+  "rule_status": null,
+  "consequence_source": null,
+  "underlying_rule": null,
+  "gao_determination": null
+ },
+ "completeness": {
+  "status": "PENDING",
+  "missing": [
+   "public_law:pl/91/508 (text pending)",
+   "public_law:pl/104/113 (text pending)"
+  ],
+  "notes": [
+   "pl/115/44 cited as a whole law: identified and hashed, no section extracted; the Maker may not describe its contents"
+  ]
+ },
+ "generation": {
+  "status": "SOURCE_CONTEXT_PENDING"
+ },
+ "history": [],
+ "recorded_utc": "2026-09-24T03:29:26Z"
+}

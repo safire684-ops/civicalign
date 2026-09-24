@@ -1,0 +1,355 @@
+{
+ "schema": "civicalign.context/1.0",
+ "vote": {
+  "congress": 119,
+  "session": 2,
+  "clerk_number": 163,
+  "date": "2026-06-05",
+  "measure": "S2"
+ },
+ "binding": {
+  "kind": "PASSAGE_AS_AMENDED",
+  "verification": "VERIFIED",
+  "text_status": "TEXT_BOUND",
+  "text_sha256": "d7d307b0a00c7ed1b4b66088a3a35473b0003574db8ac9d0da87a293400533b6"
+ },
+ "references": [
+  {
+   "legal_doc": "usc",
+   "cite": "usc/8/1365b",
+   "text": "8 U.S.C. 1365b",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/8/1357",
+   "text": "8 U.S.C. 1357(g)",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/8/1357",
+   "text": "8 U.S.C. 1357(g)",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/8/1373",
+   "text": "8 U.S.C. 1373",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/8/1644",
+   "text": "8 U.S.C. 1644",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/8/1226",
+   "text": "8 U.S.C. 1226(c)(1)",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/8/1182",
+   "text": "8 U.S.C. 1182(a)(2)",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/8/1227",
+   "text": "8 U.S.C. 1227(a)(2)",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/8/1226",
+   "text": "8 U.S.C. 1226",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/119/21",
+   "text": "Public Law 119–21",
+   "amendatory": false,
+   "pl_section": "100051",
+   "pl_division": null
+  }
+ ],
+ "selection": {
+  "policy": "amended sections if any, else all cited sections; capped",
+  "section_cap": 12,
+  "required": [
+   "/us/usc/t8/s1182",
+   "/us/usc/t8/s1226",
+   "/us/usc/t8/s1227",
+   "/us/usc/t8/s1357",
+   "/us/usc/t8/s1365b",
+   "/us/usc/t8/s1373",
+   "/us/usc/t8/s1644"
+  ],
+  "cited": [
+   "/us/usc/t8/s1182",
+   "/us/usc/t8/s1226",
+   "/us/usc/t8/s1227",
+   "/us/usc/t8/s1357",
+   "/us/usc/t8/s1365b",
+   "/us/usc/t8/s1373",
+   "/us/usc/t8/s1644"
+  ],
+  "amended": [],
+  "status": "ok"
+ },
+ "release_point": {
+  "label": "119-95",
+  "date": "2026-05-29",
+  "note": "latest release point on or before the vote; per-section archives may come from an earlier published one"
+ },
+ "existing_law_context": [
+  {
+   "type": "us_code",
+   "identifier": "/us/usc/t8/s1182",
+   "title": "8",
+   "section": "1182",
+   "as_of": {
+    "release_point": "119-95",
+    "date": "2026-05-29",
+    "rule": "latest OLRC release point on or before the vote with a published archive; intervening laws checked against the classification table"
+   },
+   "source_url": "https://uscode.house.gov/download/releasepoints/us/pl/119/95/xml_usc08@119-95.zip",
+   "archive_sha256": "a66b51e9deae5606ba6d7cad0c8fa920fa96f16a3a4e15e9548767284bfd63c1",
+   "fragment_sha256": "f3b7b3f9bab11905344eef3ef85ea3519b7c9491ffaaa5f5aa3a8a17d438583e",
+   "bytes": 679905,
+   "heading": "Inadmissible aliens",
+   "relationship": "cited_as_authority",
+   "status": "fetched",
+   "in_force_check": {
+    "status": "ok",
+    "archive": "xml_usc08@119-95.zip",
+    "intervening": [],
+    "affected_by": [],
+    "check": "no intervening release point"
+   }
+  },
+  {
+   "type": "us_code",
+   "identifier": "/us/usc/t8/s1226",
+   "title": "8",
+   "section": "1226",
+   "as_of": {
+    "release_point": "119-95",
+    "date": "2026-05-29",
+    "rule": "latest OLRC release point on or before the vote with a published archive; intervening laws checked against the classification table"
+   },
+   "source_url": "https://uscode.house.gov/download/releasepoints/us/pl/119/95/xml_usc08@119-95.zip",
+   "archive_sha256": "a66b51e9deae5606ba6d7cad0c8fa920fa96f16a3a4e15e9548767284bfd63c1",
+   "fragment_sha256": "0130513f3c9c6c8e2cbd0f3fc3578599308ef1e93ad20bc4b544a45497e47231",
+   "bytes": 36859,
+   "heading": "Apprehension and detention of aliens",
+   "relationship": "cited_as_authority",
+   "status": "fetched",
+   "in_force_check": {
+    "status": "ok",
+    "archive": "xml_usc08@119-95.zip",
+    "intervening": [],
+    "affected_by": [],
+    "check": "no intervening release point"
+   }
+  },
+  {
+   "type": "us_code",
+   "identifier": "/us/usc/t8/s1227",
+   "title": "8",
+   "section": "1227",
+   "as_of": {
+    "release_point": "119-95",
+    "date": "2026-05-29",
+    "rule": "latest OLRC release point on or before the vote with a published archive; intervening laws checked against the classification table"
+   },
+   "source_url": "https://uscode.house.gov/download/releasepoints/us/pl/119/95/xml_usc08@119-95.zip",
+   "archive_sha256": "a66b51e9deae5606ba6d7cad0c8fa920fa96f16a3a4e15e9548767284bfd63c1",
+   "fragment_sha256": "11a4252853024d03a8c82fd52bd04b5a2cbc4c75be4f027082d18a7a071a679b",
+   "bytes": 107067,
+   "heading": "Deportable aliens",
+   "relationship": "cited_as_authority",
+   "status": "fetched",
+   "in_force_check": {
+    "status": "ok",
+    "archive": "xml_usc08@119-95.zip",
+    "intervening": [],
+    "affected_by": [],
+    "check": "no intervening release point"
+   }
+  },
+  {
+   "type": "us_code",
+   "identifier": "/us/usc/t8/s1357",
+   "title": "8",
+   "section": "1357",
+   "as_of": {
+    "release_point": "119-95",
+    "date": "2026-05-29",
+    "rule": "latest OLRC release point on or before the vote with a published archive; intervening laws checked against the classification table"
+   },
+   "source_url": "https://uscode.house.gov/download/releasepoints/us/pl/119/95/xml_usc08@119-95.zip",
+   "archive_sha256": "a66b51e9deae5606ba6d7cad0c8fa920fa96f16a3a4e15e9548767284bfd63c1",
+   "fragment_sha256": "80a69a0c14910ccabe9c1e1762d250d784d5bc52223e714aad6d1157fedf412c",
+   "bytes": 28697,
+   "heading": "Powers of immigration officers and employees",
+   "relationship": "cited_as_authority",
+   "status": "fetched",
+   "in_force_check": {
+    "status": "ok",
+    "archive": "xml_usc08@119-95.zip",
+    "intervening": [],
+    "affected_by": [],
+    "check": "no intervening release point"
+   }
+  },
+  {
+   "type": "us_code",
+   "identifier": "/us/usc/t8/s1365b",
+   "title": "8",
+   "section": "1365b",
+   "as_of": {
+    "release_point": "119-95",
+    "date": "2026-05-29",
+    "rule": "latest OLRC release point on or before the vote with a published archive; intervening laws checked against the classification table"
+   },
+   "source_url": "https://uscode.house.gov/download/releasepoints/us/pl/119/95/xml_usc08@119-95.zip",
+   "archive_sha256": "a66b51e9deae5606ba6d7cad0c8fa920fa96f16a3a4e15e9548767284bfd63c1",
+   "fragment_sha256": "b5f2d720005d047af55e1e4a74d3ba67b3152fcfd8587381e78b58907e03f578",
+   "bytes": 42802,
+   "heading": "Biometric entry and exit data system",
+   "relationship": "cited_as_authority",
+   "status": "fetched",
+   "in_force_check": {
+    "status": "ok",
+    "archive": "xml_usc08@119-95.zip",
+    "intervening": [],
+    "affected_by": [],
+    "check": "no intervening release point"
+   }
+  },
+  {
+   "type": "us_code",
+   "identifier": "/us/usc/t8/s1373",
+   "title": "8",
+   "section": "1373",
+   "as_of": {
+    "release_point": "119-95",
+    "date": "2026-05-29",
+    "rule": "latest OLRC release point on or before the vote with a published archive; intervening laws checked against the classification table"
+   },
+   "source_url": "https://uscode.house.gov/download/releasepoints/us/pl/119/95/xml_usc08@119-95.zip",
+   "archive_sha256": "a66b51e9deae5606ba6d7cad0c8fa920fa96f16a3a4e15e9548767284bfd63c1",
+   "fragment_sha256": "8a6cc3c584faab86ba87ce7a05711766501b88fbc6daa2bd80e2bfe013676af0",
+   "bytes": 4686,
+   "heading": "Communication between government agencies and the Immigration and Naturalization Service",
+   "relationship": "cited_as_authority",
+   "status": "fetched",
+   "in_force_check": {
+    "status": "ok",
+    "archive": "xml_usc08@119-95.zip",
+    "intervening": [],
+    "affected_by": [],
+    "check": "no intervening release point"
+   }
+  },
+  {
+   "type": "us_code",
+   "identifier": "/us/usc/t8/s1644",
+   "title": "8",
+   "section": "1644",
+   "as_of": {
+    "release_point": "119-95",
+    "date": "2026-05-29",
+    "rule": "latest OLRC release point on or before the vote with a published archive; intervening laws checked against the classification table"
+   },
+   "source_url": "https://uscode.house.gov/download/releasepoints/us/pl/119/95/xml_usc08@119-95.zip",
+   "archive_sha256": "a66b51e9deae5606ba6d7cad0c8fa920fa96f16a3a4e15e9548767284bfd63c1",
+   "fragment_sha256": "286b4c12167831bbb3d2b209effa55d63d32ac16b6552b0be098b5bc6724686a",
+   "bytes": 1667,
+   "heading": "Communication between State and local government agencies and Immigration and Naturalization Service",
+   "relationship": "cited_as_authority",
+   "status": "fetched",
+   "in_force_check": {
+    "status": "ok",
+    "archive": "xml_usc08@119-95.zip",
+    "intervening": [],
+    "affected_by": [],
+    "check": "no intervening release point"
+   }
+  }
+ ],
+ "public_laws": [
+  {
+   "type": "public_law",
+   "cite": "pl/119/21",
+   "congress": 119,
+   "law": 21,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-119publ21/uslm/PLAW-119publ21.xml",
+   "sha256": "762ae9af06640f023ddb9eb6f474ff7cfa275691de338d4fd985cfb04a7b6dea",
+   "bytes": 2787974,
+   "sections": [
+    "100051"
+   ],
+   "divisions": [],
+   "fragments": [
+    {
+     "section": "100051",
+     "fragment_sha256": "5c447a24dffc4075cf46a6f54d46385ddfaec8db0f97825bd7dbdeb5b19b0a10",
+     "bytes": 14226,
+     "status": "fetched"
+    }
+   ],
+   "status": "identified",
+   "relationship": "cited"
+  }
+ ],
+ "official_summary": {
+  "status": "available",
+  "version_code": "55",
+  "action_desc": "Passed Senate",
+  "action_date": "2026-06-05",
+  "sha256": "8d239cb75b165e008bdfad407a8d22e9e3aadd389f499a2c9830dd5b0ddbb733",
+  "version_relationship": "MATCHED",
+  "usable": true
+ },
+ "cra": {
+  "mode": "not_cra",
+  "rule_status": null,
+  "consequence_source": null,
+  "underlying_rule": null,
+  "gao_determination": null
+ },
+ "completeness": {
+  "status": "COMPLETE",
+  "missing": [],
+  "notes": []
+ },
+ "generation": {
+  "status": "READY_FOR_GENERATION"
+ },
+ "history": [],
+ "recorded_utc": "2026-09-24T03:36:31Z"
+}

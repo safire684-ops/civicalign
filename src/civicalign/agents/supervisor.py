@@ -385,6 +385,130 @@ def _binding_checks(cfg: Config, roster: dict, scores: dict[str, float]) -> list
     return out
 
 
+def _context_checks(cfg: Config) -> list[Check]:
+    """Re-derive every Stage 2.5 context record and packet from tracked and
+    cached artefacts with separate code: references really occur in the voted
+    XML; the release point precedes the vote; selected sections exist in the
+    cached archive and their bytes reproduce the stored hash; packet content
+    hashes match; the CRS relationship recomputes; the CRA mode follows the
+    rule status; generation state follows completeness; no generated prose."""
+    import hashlib
+    from ..explain import binding as B, context as C
+    from ..sources import uscode
+    out: list[Check] = []
+    cdir = cfg.bindings_dir / "context"; pdir = cfg.bindings_dir / "packets"; raw = cfg.explain_raw_dir
+    files = sorted(cdir.glob("vote_*.context.json")) if cdir.exists() else []
+    if not files:
+        out.append(Check("Pillar 1 context records present", True, "none yet")); return out
+    points = []
+    for rel in ("uscode/priorreleasepoints.htm", "uscode/download.shtml"):
+        if (raw / rel).exists():
+            points += uscode.parse_release_points((raw / rel).read_text(errors="ignore"))
+    points = sorted(set(points), key=lambda p: (p.date, p.congress, p.law))
+    problems, n, gen = [], 0, {}
+    for f in files:
+        c = json.loads(f.read_text()); n += 1; v = c["vote"]
+        bpath = cfg.bindings_dir / f.name.replace(".context.json", ".json")
+        if not bpath.exists():
+            problems.append(f"{f.name}: no binding"); continue
+        b = json.loads(bpath.read_text()); tb = b["text_binding"]
+        gen[c["generation"]["status"]] = gen.get(c["generation"]["status"], 0) + 1
+        for k in ("decision", "if_succeeds", "if_fails", "summary", "explanation"):
+            if k in c:
+                problems.append(f"{f.name}: generated field {k!r}")
+        tpath = raw / "text" / (tb["govinfo_url"] or "").rsplit("/", 1)[-1]
+        if c["references"] and tpath.exists():
+            xml = tpath.read_bytes()
+            own = C.extract_references(xml)
+            if sorted(r["cite"] for r in own) != sorted(r["cite"] for r in c["references"]):
+                problems.append(f"{f.name}: references differ from the voted XML")
+            sel = C.select_sections(own, bool(b["cra"]["is_cra"]))
+            if sel["required"] != c["selection"]["required"] or sel["status"] != c["selection"]["status"]:
+                problems.append(f"{f.name}: selection policy does not reproduce")
+        rp = c.get("release_point")
+        if rp:
+            if rp["date"] > v["date"]:
+                problems.append(f"{f.name}: release point {rp['label']} is after the vote")
+            if points and uscode.in_force(points, v["date"]).label != rp["label"]:
+                problems.append(f"{f.name}: release point {rp['label']} is not the one in force")
+        published = {}
+        for p in points:
+            page = raw / f"uscode/usc-rp@{p.label}.htm"
+            if page.exists():
+                published[p.label] = uscode.archives_listed(page.read_text(errors="ignore"), p)
+        classification = {}
+        for s in ("1st", "2nd"):
+            page = raw / f"uscode/tbl{cfg.congress}pl_{s}.htm"
+            if page.exists():
+                for k, val in uscode.parse_classification(page.read_text(errors="ignore")).items():
+                    classification.setdefault(k, set()).update(val)
+        for rec in c["existing_law_context"] + ([c["cra"]["consequence_source"]] if c["cra"]["consequence_source"] else []):
+            if rec["status"] != "fetched":
+                continue
+            if rec["as_of"]["date"] > v["date"]:
+                problems.append(f"{f.name}: law context {rec['identifier']} dated after the vote")
+            if published and classification:
+                own = uscode.in_force_for_section(points, published, classification, v["date"], rec["title"], rec["section"])
+                if own["status"] != "ok" or own["release_point"].label != rec["as_of"]["release_point"]:
+                    problems.append(f"{f.name}: in-force archive for {rec['identifier']} does not reproduce ({own['status']})")
+            arch = raw / "uscode" / uscode.archive_name(rec["title"], uscode.ReleasePoint(*map(int, rec["as_of"]["release_point"].split("-")), __import__("datetime").date.fromisoformat(rec["as_of"]["date"])))
+            if arch.exists():
+                data = uscode.read_title(arch)
+                frag = uscode.extract_section(data, rec["identifier"])
+                if frag is None or hashlib.sha256(frag).hexdigest() != rec["fragment_sha256"]:
+                    problems.append(f"{f.name}: {rec['identifier']} does not reproduce from the cached archive")
+                if hashlib.sha256(arch.read_bytes()).hexdigest() != rec["archive_sha256"]:
+                    problems.append(f"{f.name}: archive hash changed for {rec['identifier']}")
+        st = c["generation"]["status"]; comp = c["completeness"]["status"]
+        expect = {"COMPLETE": "READY_FOR_GENERATION", "LIMITED": "READY_WITH_LIMITS", "PENDING": "SOURCE_CONTEXT_PENDING", "AMBIGUOUS": "SOURCE_CONTEXT_AMBIGUOUS"}
+        if b["classification"]["kind"] in B.SUPPORTED_KINDS and b["verification"]["status"] == "VERIFIED" and tb["status"] == "TEXT_BOUND":
+            if expect.get(comp) != st:
+                problems.append(f"{f.name}: generation {st} does not follow completeness {comp}")
+            if comp in ("COMPLETE", "LIMITED") and c["completeness"]["missing"]:
+                problems.append(f"{f.name}: complete with missing items")
+            if comp == "COMPLETE" and b["cra"]["is_cra"]:
+                problems.append(f"{f.name}: CRA marked COMPLETE (full mode is not allowed yet)")
+        elif st not in ("UNSUPPORTED", "SOURCE_CONTEXT_PENDING", "SOURCE_CONTEXT_AMBIGUOUS"):
+            problems.append(f"{f.name}: unverified binding with generation {st}")
+        cra = c["cra"]
+        if b["cra"]["is_cra"]:
+            if cra["mode"] == "rule_bound" and not (cra["underlying_rule"] and cra["underlying_rule"].get("sha256")):
+                problems.append(f"{f.name}: rule_bound without a hashed rule")
+            if cra["mode"] == "resolution_only" and cra["underlying_rule"] and cra["underlying_rule"].get("sha256"):
+                problems.append(f"{f.name}: hashed rule but mode resolution_only")
+            if cra["rule_status"] == "GAO_RULE_DETERMINATION" and not cra["gao_determination"]:
+                problems.append(f"{f.name}: GAO status without a determination record")
+        elif cra["mode"] != "not_cra":
+            problems.append(f"{f.name}: CRA mode on a non-CRA measure")
+        if b["object"]["id"] == "S5" and st != "SOURCE_CONTEXT_AMBIGUOUS":
+            problems.append(f"{f.name}: S.5 must remain SOURCE_CONTEXT_AMBIGUOUS")
+        ppath = pdir / f.name.replace(".context.json", ".packet.json")
+        if st in ("READY_FOR_GENERATION", "READY_WITH_LIMITS"):
+            if not ppath.exists():
+                problems.append(f"{f.name}: READY without a packet"); continue
+            pk = json.loads(ppath.read_text())
+            if hashlib.sha256(pk["voted_text"]["content"].encode()).hexdigest() != tb["sha256"]:
+                problems.append(f"{f.name}: packet text does not hash to the bound text")
+            for rec in pk["existing_law_context"]:
+                if hashlib.sha256(rec["content"].encode()).hexdigest() != rec["sha256"]:
+                    problems.append(f"{f.name}: packet law fragment {rec['identifier']} does not match its hash")
+            cons = pk["cra_context"].get("statutory_consequence_source")
+            if cons and hashlib.sha256(cons["content"].encode()).hexdigest() != cons["sha256"]:
+                problems.append(f"{f.name}: packet CRA consequence does not match its hash")
+            if pk["cra_context"]["mode"] != "not_cra" and pk["cra_context"].get("underlying_rule") and pk["cra_context"]["underlying_rule"].get("content_included"):
+                problems.append(f"{f.name}: underlying rule content included before validation")
+            summ = pk["official_summary"]
+            if summ.get("content") and summ["version_relationship"] not in ("MATCHED", "EARLIER_SAME_TEXT"):
+                problems.append(f"{f.name}: mismatched summary content in packet")
+            if summ.get("content") and hashlib.sha256(summ["content"].encode()).hexdigest() != summ["sha256"]:
+                problems.append(f"{f.name}: summary content does not match its hash")
+        elif ppath.exists():
+            problems.append(f"{f.name}: packet exists for a non-ready vote")
+    out.append(Check("Pillar 1 context and packets re-derived from tracked artefacts", not problems,
+                     f"{n} records; generation {gen}" + (f"; problems {problems[:6]}" if problems else "")))
+    return out
+
+
 # ---- the comparison ------------------------------------------------------------
 
 def checks(report: Report, cfg: Config = DEFAULT, page: Path | None = None) -> list[Check]:
@@ -503,6 +627,7 @@ def checks(report: Report, cfg: Config = DEFAULT, page: Path | None = None) -> l
 
     if cfg.rollcalls_csv.exists() and scores:
         out.extend(_binding_checks(cfg, roster, scores))
+        out.extend(_context_checks(cfg))
 
     if page is not None and page.exists():
         html = page.read_text()

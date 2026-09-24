@@ -39,23 +39,37 @@ class Store:
         self.manifest_path = root / "MANIFEST.json"
         self.manifest = json.loads(self.manifest_path.read_text()) if self.manifest_path.exists() else {}
 
-    def fetch(self, url: str, rel: str, timeout: int = 60, min_bytes: int = 200, offline: bool = False) -> Fetched:
+    def fetch(self, url: str, rel: str, timeout: int = 60, min_bytes: int = 200, offline: bool = False, allow_html: bool = False,
+              immutable: bool = False) -> Fetched:
+        """`immutable` artefacts (a release point's archive or page, an enacted
+        law's XML, a published Federal Register document) are served from the
+        cache once recorded; their hash in the manifest is the provenance."""
         path = self.root / rel
         rec = self.manifest.get(rel, {})
+        if immutable and path.exists() and rec.get("sha256"):
+            return Fetched(True, path, rec["sha256"], path.stat().st_size, "cached (immutable)", False)
         if offline:
             if path.exists():
                 return Fetched(True, path, rec.get("sha256", sha256_bytes(path.read_bytes())), path.stat().st_size, "cached", False)
             return Fetched(False, None, "", 0, "offline and not cached", False)
-        try:
-            req = urllib.request.Request(url, headers={"User-Agent": UA, "Accept": "application/xml,text/xml,*/*"})
-            with urllib.request.urlopen(req, timeout=timeout) as resp:
-                data = resp.read()
-        except (urllib.error.URLError, urllib.error.HTTPError, TimeoutError, OSError) as e:
+        import http.client
+        data, err = None, None
+        for attempt in range(3):
+            try:
+                req = urllib.request.Request(url, headers={"User-Agent": UA, "Accept": "application/xml,text/xml,*/*"})
+                with urllib.request.urlopen(req, timeout=timeout) as resp:
+                    data = resp.read()
+                break
+            except (urllib.error.URLError, urllib.error.HTTPError, TimeoutError, OSError, http.client.HTTPException) as e:
+                err = e
+                import time as _t
+                _t.sleep(2 * (attempt + 1))
+        if data is None:
             if path.exists():
                 return Fetched(True, path, rec.get("sha256", sha256_bytes(path.read_bytes())), path.stat().st_size,
-                               f"fetch failed ({e}); using cached copy", False)
-            return Fetched(False, None, "", 0, f"fetch failed: {e}", False)
-        if len(data) < min_bytes or b"<html" in data[:300].lower():
+                               f"fetch failed ({err}); using cached copy", False)
+            return Fetched(False, None, "", 0, f"fetch failed: {err}", False)
+        if len(data) < min_bytes or (not allow_html and b"<html" in data[:600].lower()):
             if path.exists():
                 return Fetched(True, path, rec.get("sha256", ""), path.stat().st_size, "unexpected response; using cached copy", False)
             return Fetched(False, None, "", len(data), "unexpected response (too small or HTML)", False)

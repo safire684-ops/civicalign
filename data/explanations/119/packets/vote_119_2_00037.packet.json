@@ -1,0 +1,98 @@
+{
+ "packet_schema": "civicalign.packet/1.0",
+ "vote": {
+  "congress": 119,
+  "session": 2,
+  "clerk_number": 37,
+  "voteview_id": 696,
+  "date": "2026-02-12",
+  "question": "On the Joint Resolution",
+  "result": "Joint Resolution Passed",
+  "required": "1/2",
+  "yeas": 49,
+  "nays": 47,
+  "measure": "HJRES142",
+  "senate_url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1192/vote_119_2_00037.xml",
+  "senate_sha256": "d6bce6b1aca41efe418c0b8a44f6d7c85af495220df2e26f66ff51847f12dfa0",
+  "senate_title": "H. J. Res. 142",
+  "senate_document_text": "A joint resolution disapproving the action of the District of Columbia Council in approving the D.C. Income and Franchise Tax Conformity and Revision Temporary Amendment Act of 2025.",
+  "amendment_number": null,
+  "voteview_url": "https://voteview.com/rollcall/RS1190696",
+  "senator_votes_source": "block F / S119_votes.csv (not included here)"
+ },
+ "legislative_object": {
+  "type": "joint_resolution",
+  "id": "HJRES142",
+  "title": "Disapproving the action of the District of Columbia Council in approving the D.C. Income and Franchise Tax Conformity and Revision Temporary Amendment Act of 2025.",
+  "short_title": "",
+  "origin_chamber": "House"
+ },
+ "classification": {
+  "kind": "JOINT_RESOLUTION_PASSAGE"
+ },
+ "receipt_scaffold": {
+  "deciding": "On the Joint Resolution H.J.Res. 142",
+  "heading_success": "If the resolution passes",
+  "heading_failure": "If the resolution does not pass",
+  "yea_means": "A Yea vote is a vote to pass the joint resolution in the Senate.",
+  "nay_means": "A Nay vote is a vote against passing the joint resolution.",
+  "next_step": "A joint resolution has the force of a bill: after both chambers pass it, it goes to the President.",
+  "sources": [
+   {
+    "what": "Senate roll-call record",
+    "url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1192/vote_119_2_00037.xml"
+   },
+   {
+    "what": "Bill status (GovInfo)",
+    "url": "https://www.govinfo.gov/bulkdata/BILLSTATUS/119/hjres/BILLSTATUS-119hjres142.xml"
+   },
+   {
+    "what": "Text as voted on (Placed on Calendar Senate)",
+    "url": "https://www.govinfo.gov/content/pkg/BILLS-119hjres142pcs/xml/BILLS-119hjres142pcs.xml"
+   },
+   {
+    "what": "Roll call at Voteview",
+    "url": "https://voteview.com/rollcall/RS1190696"
+   }
+  ]
+ },
+ "voted_text": {
+  "version_code": "pcs",
+  "version_name": "Placed on Calendar Senate",
+  "date": "2026-02-05",
+  "url": "https://www.govinfo.gov/content/pkg/BILLS-119hjres142pcs/xml/BILLS-119hjres142pcs.xml",
+  "sha256": "09bd81f0d153e782116508e89a1a4e2d0939b6407d897c72c0f4f38c70f17f28",
+  "format": "govinfo-bill-xml",
+  "content": "<?xml version=\"1.0\"?>\n<?xml-stylesheet type=\"text/xsl\" href=\"billres.xsl\"?>\n<!DOCTYPE resolution PUBLIC \"-//US Congress//DTDs/res.dtd//EN\" \"res.dtd\">\n<resolution resolution-stage=\"Placed-on-Calendar-Senate\" dms-id=\"H145F68B0E01444B7861429BFA3F9C8A4\" public-private=\"public\" resolution-type=\"house-joint\" star-print=\"no-star-print\" key=\"G\" stage-count=\"1\"><metadata xmlns:dc=\"http://purl.org/dc/elements/1.1/\">\n<dublinCore>\n<dc:title>119 HJ 142 PCS: Disapproving the action of the District of Columbia Council in approving the D.C. Income and Franchise Tax Conformity and Revision Temporary Amendment Act of 2025.</dc:title>\n<dc:publisher>U.S. House of Representatives</dc:publisher>\n<dc:date>2026-02-05</dc:date>\n<dc:format>text/xml</dc:format>\n<dc:language>EN</dc:language>\n<dc:rights>Pursuant to Title 17 Section 105 of the United States Code, this file is not subject to copyright protection and is in the public domain.</dc:rights>\n</dublinCore>\n</metadata>\n<form>\n<distribution-code display=\"yes\">IIA</distribution-code><calendar>Calendar No. 315</calendar><congress display=\"yes\">119th CONGRESS</congress><session display=\"yes\">2d Session</session><legis-num display=\"yes\">H. J. RES. 142</legis-num><current-chamber display=\"yes\">IN THE SENATE OF THE UNITED STATES</current-chamber><action><action-date date=\"20260205\">February 5, 2026</action-date><action-desc>Received; read twice and placed on the calendar</action-desc></action><legis-type>JOINT RESOLUTION</legis-type><official-title display=\"yes\">Disapproving the action of the District of Columbia Council in approving the D.C. Income and Franchise Tax Conformity and Revision Temporary Amendment Act of 2025.</official-title></form><resolution-body style=\"traditional\" id=\"H6821F029798B463E88D26E66164D4460\"><section display-inline=\"yes-display-inline\" section-type=\"undesignated-section\" id=\"HA61D54C28C1648F6A249E6790949725F\"><enum/><text><pagebreak></pagebreak> That </text></section><section id=\"HDF5A80B2240F4DA8A2B70761871B7610\" display-inline=\"yes-display-inline\" section-type=\"undesignated-section\"><text display-inline=\"yes-display-inline\">the Congress disapproves of the action of the District of Columbia Council described as follows: The D.C. Income and Franchise Tax Conformity and Revision Temporary Amendment Act of 2025 (D.C. Act 26–217), enacted by the Council of the District of Columbia on December 20, 2025, and transmitted to Congress pursuant to section 602(c)(1) of the District of Columbia Home Rule Act on December 30, 2025.</text></section></resolution-body><attestation><attestation-group><attestation-date date=\"20260204\" chamber=\"House\">Passed the House of Representatives February 4, 2026.</attestation-date><attestor display=\"yes\">Kevin F. McCumber,</attestor><role>Clerk.</role></attestation-group></attestation><endorsement display=\"yes\"><action-date>February 5, 2026</action-date><action-desc>Received; read twice and placed on the calendar</action-desc></endorsement></resolution> \n\n"
+ },
+ "existing_law_context": [],
+ "cited_public_laws_not_included": [],
+ "official_summary": {
+  "status": "available",
+  "version_relationship": "EARLIER_SAME_TEXT",
+  "usable": true,
+  "version_code": "00",
+  "action_desc": "Introduced in House",
+  "action_date": "2026-01-22",
+  "sha256": "8e927337bc434ee8e08617dc407535c9479d9b570da35bb06d6ef50da7005682",
+  "content": "<p>This joint resolution nullifies legislation enacted by the Council of the District of Columbia (DC) on December 20, 2025, titled DC Income and Franchise Tax Conformity and Revision Temporary Amendment Act of 2025. The nullification reinstates certain DC tax code provisions that were in place before the enactment of the DC legislation and that address, among other things, the standard tax deduction, taxation of tipped wages, and depreciation of qualified property.</p><p>As background, DC automatically adopts, as DC law, changes to federal tax law (known as rolling conformity). Upon enactment of <a href=\"https://www.congress.gov/bill/119th-congress/house-bill/1?s=7&amp;r=1\">H.R.1</a> (commonly known as the&nbsp;One Big Beautiful Bill Act),&nbsp;its tax provisions became DC law, including provisions that increase the standard tax deduction,&nbsp;exempt tips from taxable income, and provide for an elective 100% depreciation allowance for nonresidential real property. The DC legislation subsequently decoupled the DC tax code from&nbsp;these and other tax provisions that originated in H.R.1, and it amended several other provisions in the DC tax code, including restoring the DC child tax credit.</p>"
+ },
+ "cra_context": {
+  "mode": "not_cra"
+ },
+ "completeness": {
+  "status": "COMPLETE",
+  "missing": [],
+  "notes": []
+ },
+ "generation": {
+  "status": "READY_FOR_GENERATION"
+ },
+ "maker_rules": [
+  "factual claims only from the content fields of this packet",
+  "no browsing, no retrieval, no model memory for facts",
+  "derived metadata (headings, relationships, statuses) is not source text"
+ ],
+ "history": [],
+ "recorded_utc": "2026-09-24T03:35:33Z"
+}

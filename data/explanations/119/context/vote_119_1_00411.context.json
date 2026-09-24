@@ -1,0 +1,304 @@
+{
+ "schema": "civicalign.context/1.0",
+ "vote": {
+  "congress": 119,
+  "session": 1,
+  "clerk_number": 411,
+  "date": "2025-07-17",
+  "measure": "HR4"
+ },
+ "binding": {
+  "kind": "PASSAGE_AS_AMENDED",
+  "verification": "VERIFIED",
+  "text_status": "TEXT_BOUND",
+  "text_sha256": "d456fc67c51208445d8134c4eeec74decac685cc7454fa1d5dc138b3b5a5fa3e"
+ },
+ "references": [
+  {
+   "legal_doc": "usc",
+   "cite": "usc/2/682",
+   "text": "2 U.S.C. 682 et seq.",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/118/47",
+   "text": "Public Law 118–47",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": "division F"
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/119/4",
+   "text": "Public Law 119–4",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": "division A"
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/118/47",
+   "text": "Public Law 118–47",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": "division F"
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/119/4",
+   "text": "Public Law 119–4",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": "division A"
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/119/4",
+   "text": "Public Law 119–4",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": "division A"
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/119/4",
+   "text": "Public Law 119–4",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": "division A"
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/119/4",
+   "text": "Public Law 119–4",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": "division A"
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/119/4",
+   "text": "Public Law 119–4",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": "division A"
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/119/4",
+   "text": "Public Law 119–4",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": "division A"
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/119/4",
+   "text": "Public Law 119–4",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": "division A"
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/119/4",
+   "text": "Public Law 119–4",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": "division A"
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/119/4",
+   "text": "Public Law 119–4",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": "division A"
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/119/4",
+   "text": "Public Law 119–4",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": "division A"
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/119/4",
+   "text": "Public Law 119–4",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": "division A"
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/119/4",
+   "text": "Public Law 119–4",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": "division A"
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/119/4",
+   "text": "Public Law 119–4",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": "division A"
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/119/4",
+   "text": "Public Law 119–4",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": "division A"
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/119/4",
+   "text": "Public Law 119–4",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": "division A"
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/119/4",
+   "text": "Public Law 119–4",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": "division A"
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/118/47",
+   "text": "Public Law 118–47",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/119/4",
+   "text": "Public Law 119–4",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  }
+ ],
+ "selection": {
+  "policy": "amended sections if any, else all cited sections; capped",
+  "section_cap": 12,
+  "required": [
+   "/us/usc/t2/s682"
+  ],
+  "cited": [
+   "/us/usc/t2/s682"
+  ],
+  "amended": [],
+  "status": "ok"
+ },
+ "release_point": {
+  "label": "119-26",
+  "date": "2025-07-16",
+  "note": "latest release point on or before the vote; per-section archives may come from an earlier published one"
+ },
+ "existing_law_context": [
+  {
+   "type": "us_code",
+   "identifier": "/us/usc/t2/s682",
+   "title": "2",
+   "section": "682",
+   "as_of": {
+    "release_point": "119-18",
+    "date": "2025-06-12",
+    "rule": "latest OLRC release point on or before the vote with a published archive; intervening laws checked against the classification table"
+   },
+   "source_url": "https://uscode.house.gov/download/releasepoints/us/pl/119/18/xml_usc02@119-18.zip",
+   "archive_sha256": "8700f1c68a89a27617c13b2a1e7b9938d2f515733a76794dd5cd8946b1e571f9",
+   "fragment_sha256": "0b779e5fc0a7b98e551debbf1484ec7fb1cca2f11fc2f6e2b1c54e4303cb1f3a",
+   "bytes": 5036,
+   "heading": "Definitions",
+   "relationship": "cited_as_authority",
+   "status": "fetched",
+   "in_force_check": {
+    "status": "ok",
+    "archive": "xml_usc02@119-18.zip",
+    "intervening": [
+     "119-23",
+     "119-26"
+    ],
+    "affected_by": [],
+    "check": "OLRC classification table"
+   }
+  }
+ ],
+ "public_laws": [
+  {
+   "type": "public_law",
+   "cite": "pl/118/47",
+   "congress": 118,
+   "law": 47,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-118publ47/uslm/PLAW-118publ47.xml",
+   "sha256": "c1881917117e38de52ebd13aef206516376a3f53d07a69e1a84b10dd7822907b",
+   "bytes": 2373860,
+   "sections": [],
+   "divisions": [
+    "division F"
+   ],
+   "fragments": [],
+   "status": "identified",
+   "relationship": "cited"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/119/4",
+   "congress": 119,
+   "law": 4,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-119publ4/uslm/PLAW-119publ4.xml",
+   "sha256": "1806832d2d7c6563ae0cc8beb69b8b5536e89f0408682c3a250b0e452e44885e",
+   "bytes": 313404,
+   "sections": [],
+   "divisions": [
+    "division A"
+   ],
+   "fragments": [],
+   "status": "identified",
+   "relationship": "cited"
+  }
+ ],
+ "official_summary": {
+  "status": "available",
+  "version_code": "53",
+  "action_desc": "Passed House",
+  "action_date": "2025-06-12",
+  "sha256": "bfa1c1550be5a04f7a671f10aba4216170f46b370e49376abb12a80d4f57df57",
+  "version_relationship": "PRE_AMENDMENT",
+  "usable": false
+ },
+ "cra": {
+  "mode": "not_cra",
+  "rule_status": null,
+  "consequence_source": null,
+  "underlying_rule": null,
+  "gao_determination": null
+ },
+ "completeness": {
+  "status": "COMPLETE",
+  "missing": [],
+  "notes": [
+   "pl/118/47 cited as a whole law (division F): identified and hashed, no section extracted; the Maker may not describe its contents",
+   "pl/119/4 cited as a whole law (division A): identified and hashed, no section extracted; the Maker may not describe its contents"
+  ]
+ },
+ "generation": {
+  "status": "READY_FOR_GENERATION"
+ },
+ "history": [],
+ "recorded_utc": "2026-09-24T03:31:20Z"
+}

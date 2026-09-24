@@ -1,0 +1,7819 @@
+{
+ "schema": "civicalign.context/1.0",
+ "vote": {
+  "congress": 119,
+  "session": 2,
+  "clerk_number": 11,
+  "date": "2026-01-15",
+  "measure": "HR6938"
+ },
+ "binding": {
+  "kind": "PASSAGE",
+  "verification": "VERIFIED",
+  "text_status": "TEXT_BOUND",
+  "text_sha256": "b5f8fe857babb44003b253e3c363399a44a036536ee1311b6678d2fcbf9bbbb5"
+ },
+ "references": [
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/117/328",
+   "text": "Public Law 117–328",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/22/2455",
+   "text": "22 U.S.C. 2455(f)",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/115/232",
+   "text": "Public Law 115–232",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/50/4801",
+   "text": "50 U.S.C. 4801 et seq.",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/22/401",
+   "text": "22 U.S.C. 401(b)",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/22/2455",
+   "text": "22 U.S.C. 2455(f)",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/15/3722",
+   "text": "15 U.S.C. 3722–3723",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/31/1535",
+   "text": "31 U.S.C. 1535(d)",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/112/29",
+   "text": "Public Law 112–29",
+   "amendatory": false,
+   "pl_section": "22",
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/15/278c-278e",
+   "text": "15 U.S.C. 278c–278e",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/94/265",
+   "text": "Public Law 94–265",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/99/659",
+   "text": "Public Law 99–659",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": "title III"
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/95/372",
+   "text": "Public Law 95–372",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": "title IV"
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/117/328",
+   "text": "Public Law 117–328",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/15/1514",
+   "text": "15 U.S.C. 1514",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/31/3324",
+   "text": "31 U.S.C. 3324",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/5/3109",
+   "text": "5 U.S.C. 3109",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/5/5901",
+   "text": "5 U.S.C. 5901–5902",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/112/55",
+   "text": "Public Law 112–55",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/113/6",
+   "text": "Public Law 113–6",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": "division B"
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/16/1461",
+   "text": "16 U.S.C. 1461",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/116/93",
+   "text": "Public Law 116–93",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": "division B"
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/5/5738",
+   "text": "5 U.S.C. 5738",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/52/10305",
+   "text": "52 U.S.C. 10305",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/52/10305",
+   "text": "52 U.S.C. 10305",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/15/18a",
+   "text": "15 U.S.C. 18a",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/15/18a",
+   "text": "15 U.S.C. 18a",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/106/310",
+   "text": "Public Law 106–310",
+   "amendatory": false,
+   "pl_section": "3672",
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/115/391",
+   "text": "Public Law 115–391",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/34/10101",
+   "text": "34 U.S.C. 10101 et seq.",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/90/284",
+   "text": "Public Law 90–284",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/103/322",
+   "text": "Public Law 103–322",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/34/12101",
+   "text": "34 U.S.C. 12101 et seq.",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/101/647",
+   "text": "Public Law 101–647",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/108/21",
+   "text": "Public Law 108–21",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/34/11101",
+   "text": "34 U.S.C. 11101 et seq.",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/106/386",
+   "text": "Public Law 106–386",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/108/405",
+   "text": "Public Law 108–405",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/109/162",
+   "text": "Public Law 109–162",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/113/4",
+   "text": "Public Law 113–4",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/114/22",
+   "text": "Public Law 114–22",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/115/392",
+   "text": "Public Law 115–392",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/117/103",
+   "text": "Public Law 117–103",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": "division W"
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/98/473",
+   "text": "Public Law 98–473",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": "title II"
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/34/20101",
+   "text": "34 U.S.C. 20101",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/90/351",
+   "text": "Public Law 90–351",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/103/322",
+   "text": "Public Law 103–322",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/93/415",
+   "text": "Public Law 93–415",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/34/11291",
+   "text": "34 U.S.C. 11291 et seq.",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/108/21",
+   "text": "Public Law 108–21",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/108/405",
+   "text": "Public Law 108–405",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/109/162",
+   "text": "Public Law 109–162",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/101/647",
+   "text": "Public Law 101–647",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": "title II"
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/110/199",
+   "text": "Public Law 110–199",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/98/473",
+   "text": "Public Law 98–473",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": "title II"
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/109/248",
+   "text": "Public Law 109–248",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/110/401",
+   "text": "Public Law 110–401",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/107/296",
+   "text": "Public Law 107–296",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/108/79",
+   "text": "Public Law 108–79",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/110/180",
+   "text": "Public Law 110–180",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/113/4",
+   "text": "Public Law 113–4",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/114/198",
+   "text": "Public Law 114–198",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/115/391",
+   "text": "Public Law 115–391",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/103/322",
+   "text": "Public Law 103–322",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/90/351",
+   "text": "Public Law 90–351",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/108/405",
+   "text": "Public Law 108–405",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/101/647",
+   "text": "Public Law 101–647",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/109/164",
+   "text": "Public Law 109–164",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/109/162",
+   "text": "Public Law 109–162",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/109/248",
+   "text": "Public Law 109–248",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/106/386",
+   "text": "Public Law 106–386",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/110/180",
+   "text": "Public Law 110–180",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/107/296",
+   "text": "Public Law 107–296",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/108/79",
+   "text": "Public Law 108–79",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/110/199",
+   "text": "Public Law 110–199",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/110/403",
+   "text": "Public Law 110–403",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/98/473",
+   "text": "Public Law 98–473",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/110/416",
+   "text": "Public Law 110–416",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/113/4",
+   "text": "Public Law 113–4",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/114/198",
+   "text": "Public Law 114–198",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/114/324",
+   "text": "Public Law 114–324",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/115/141",
+   "text": "Public Law 115–141",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": "division Q"
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/115/141",
+   "text": "Public Law 115–141",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": "division Q"
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/115/141",
+   "text": "Public Law 115–141",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": "division Q"
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/115/141",
+   "text": "Public Law 115–141",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": "division Q"
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/115/185",
+   "text": "Public Law 115–185",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/115/271",
+   "text": "Public Law 115–271",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/115/391",
+   "text": "Public Law 115–391",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/111/84",
+   "text": "Public Law 111–84",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/115/401",
+   "text": "Public Law 115–401",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/116/277",
+   "text": "Public Law 116–277",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/34/30507",
+   "text": "34 U.S.C. 30507",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/117/103",
+   "text": "Public Law 117–103",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": "division W"
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/117/263",
+   "text": "Public Law 117–263",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/117/325",
+   "text": "Public Law 117–325",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/110/315",
+   "text": "Public Law 110–315",
+   "amendatory": false,
+   "pl_section": "952",
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/115/185",
+   "text": "Public Law 115–185",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/108/405",
+   "text": "Public Law 108–405",
+   "amendatory": false,
+   "pl_section": "426",
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/117/328",
+   "text": "Public Law 117–328",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": "division B"
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/115/401",
+   "text": "Public Law 115–401",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/116/277",
+   "text": "Public Law 116–277",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/113/4",
+   "text": "Public Law 113–4",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/110/403",
+   "text": "Public Law 110–403",
+   "amendatory": false,
+   "pl_section": "401",
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/110/180",
+   "text": "Public Law 110–180",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/106/546",
+   "text": "Public Law 106–546",
+   "amendatory": false,
+   "pl_section": "2",
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/108/405",
+   "text": "Public Law 108–405",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/108/405",
+   "text": "Public Law 108–405",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/108/405",
+   "text": "Public Law 108–405",
+   "amendatory": false,
+   "pl_section": "304",
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/110/199",
+   "text": "Public Law 110–199",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/115/391",
+   "text": "Public Law 115–391",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/116/281",
+   "text": "Public Law 116–281",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/110/416",
+   "text": "Public Law 110–416",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/114/325",
+   "text": "Public Law 114–325",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/111/84",
+   "text": "Public Law 111–84",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/117/328",
+   "text": "Public Law 117–328",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": "division B"
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/34/30507",
+   "text": "34 U.S.C. 30507",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/117/263",
+   "text": "Public Law 117–263",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/93/415",
+   "text": "Public Law 93–415",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/90/351",
+   "text": "Public Law 90–351",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/109/162",
+   "text": "Public Law 109–162",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/34/11291",
+   "text": "34 U.S.C. 11291 et seq.",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/108/21",
+   "text": "Public Law 108–21",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/101/647",
+   "text": "Public Law 101–647",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/109/248",
+   "text": "Public Law 109–248",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/110/401",
+   "text": "Public Law 110–401",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/113/4",
+   "text": "Public Law 113–4",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/114/324",
+   "text": "Public Law 114–324",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/115/267",
+   "text": "Public Law 115–267",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/115/385",
+   "text": "Public Law 115–385",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/98/473",
+   "text": "Public Law 98–473",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": "title II"
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/114/198",
+   "text": "Public Law 114–198",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/110/401",
+   "text": "Public Law 110–401",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/103/322",
+   "text": "Public Law 103–322",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/109/162",
+   "text": "Public Law 109–162",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/115/37",
+   "text": "Public Law 115–37",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/115/113",
+   "text": "Public Law 115–113",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/115/271",
+   "text": "Public Law 115–271",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/116/32",
+   "text": "Public Law 116–32",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/117/325",
+   "text": "Public Law 117–325",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/34/10381",
+   "text": "34 U.S.C. 10381",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/34/10384",
+   "text": "34 U.S.C. 10384(c)",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/34/10381",
+   "text": "34 U.S.C. 10381",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/114/199",
+   "text": "Public Law 114–199",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/115/141",
+   "text": "Public Law 115–141",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": "division S"
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/34/10381",
+   "text": "34 U.S.C. 10381",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/34/10383",
+   "text": "34 U.S.C. 10383",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/117/325",
+   "text": "Public Law 117–325",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/34/10631",
+   "text": "34 U.S.C. 10631 et seq.",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/34/10631",
+   "text": "34 U.S.C. 10631(g)(1)",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/34/30305",
+   "text": "34 U.S.C. 30305(c)(3)",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/34/12109",
+   "text": "34 U.S.C. 12109(a)",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/34/40901",
+   "text": "34 U.S.C. 40901",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/102/140",
+   "text": "Public Law 102–140",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": "title I"
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/28/527",
+   "text": "28 U.S.C. 527",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/102/140",
+   "text": "Public Law 102–140",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": "title I"
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/28/527",
+   "text": "28 U.S.C. 527",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/114/113",
+   "text": "Public Law 114–113",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": "division B"
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/115/31",
+   "text": "Public Law 115–31",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": "division B"
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/42/6601",
+   "text": "42 U.S.C. 6601 et seq.",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/100/404",
+   "text": "Public Law 100–404",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/103/327",
+   "text": "Public Law 103–327",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/42/1861",
+   "text": "42 U.S.C. 1861 et seq.",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/86/209",
+   "text": "Public Law 86–209",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/42/1880",
+   "text": "42 U.S.C. 1880 et seq.",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/42/1861",
+   "text": "42 U.S.C. 1861 et seq.",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/42/1861",
+   "text": "42 U.S.C. 1861 et seq.",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/42/1861",
+   "text": "42 U.S.C. 1861 et seq.",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/42/1863",
+   "text": "42 U.S.C. 1863",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/86/209",
+   "text": "Public Law 86–209",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/42/1880",
+   "text": "42 U.S.C. 1880 et seq.",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/42/1975a",
+   "text": "42 U.S.C. 1975a",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/110/233",
+   "text": "Public Law 110–233",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/110/325",
+   "text": "Public Law 110–325",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/111/2",
+   "text": "Public Law 111–2",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/117/328",
+   "text": "Public Law 117–328",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/5/401",
+   "text": "5 U.S.C. 401 et seq.",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/42/2996d",
+   "text": "42 U.S.C. 2996d(d)",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/105/119",
+   "text": "Public Law 105–119",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/105/119",
+   "text": "Public Law 105–119",
+   "amendatory": true,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/42/2996f",
+   "text": "42 U.S.C. 2996f(c)",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/104/134",
+   "text": "Public Law 104–134",
+   "amendatory": true,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/42/2996a",
+   "text": "42 U.S.C. 2996a(8)",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/16/1361",
+   "text": "16 U.S.C. 1361 et seq.",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/19/4405",
+   "text": "19 U.S.C. 4405",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/42/10701",
+   "text": "42 U.S.C. 10701 et seq.",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/98/473",
+   "text": "Public Law 98–473",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": "title II"
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/34/20101",
+   "text": "34 U.S.C. 20101",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/50/3094",
+   "text": "50 U.S.C. 3094",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/117/103",
+   "text": "Public Law 117–103",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": "division B"
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/117/328",
+   "text": "Public Law 117–328",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/118/42",
+   "text": "Public Law 118–42",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": "division C"
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/117/103",
+   "text": "Public Law 117–103",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": "division B"
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/117/328",
+   "text": "Public Law 117–328",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/118/42",
+   "text": "Public Law 118–42",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": "division C"
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/113/79",
+   "text": "Public Law 113–79",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/15/3722",
+   "text": "15 U.S.C. 3722",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/22/2778",
+   "text": "22 U.S.C. 2778(b)(1)(B)",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/22/2680b",
+   "text": "22 U.S.C. 2680b(i)(2)",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/117/167",
+   "text": "Public Law 117–167",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": "division A"
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/118/42",
+   "text": "Public Law 118–42",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": "division C"
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/117/167",
+   "text": "Public Law 117–167",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": "division A"
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/116/283",
+   "text": "Public Law 116–283",
+   "amendatory": false,
+   "pl_section": "9906",
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/117/328",
+   "text": "Public Law 117–328",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": "division B"
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/117/58",
+   "text": "Public Law 117–58",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/118/5",
+   "text": "Public Law 118–5",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": "division A"
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/117/58",
+   "text": "Public Law 117–58",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/118/42",
+   "text": "Public Law 118–42",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/118/5",
+   "text": "Public Law 118–5",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": "division A"
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/117/58",
+   "text": "Public Law 117–58",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/118/42",
+   "text": "Public Law 118–42",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/118/5",
+   "text": "Public Law 118–5",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": "division A"
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/33/576",
+   "text": "33 U.S.C. 576",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/16/460d-3",
+   "text": "16 U.S.C. 460d–3",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/104/303",
+   "text": "Public Law 104–303",
+   "amendatory": false,
+   "pl_section": "217",
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/33/2238c",
+   "text": "33 U.S.C. 2238c",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/116/136",
+   "text": "Public Law 116–136",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/10/7016",
+   "text": "10 U.S.C. 7016(b)(3)",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/113/121",
+   "text": "Public Law 113–121",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/33/3905",
+   "text": "33 U.S.C. 3905(1)(A)",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/116/94",
+   "text": "Public Law 116–94",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/117/58",
+   "text": "Public Law 117–58",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/118/5",
+   "text": "Public Law 118–5",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": "division A"
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/33/1341",
+   "text": "33 U.S.C. 1341",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/33/2211",
+   "text": "33 U.S.C. 2211",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/33/2328",
+   "text": "33 U.S.C. 2328(c)(2)(A)(ii)",
+   "amendatory": true,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/114/322",
+   "text": "Public Law 114–322",
+   "amendatory": false,
+   "pl_section": "4011",
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/106/554",
+   "text": "Public Law 106–554",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/114/322",
+   "text": "Public Law 114–322",
+   "amendatory": false,
+   "pl_section": "4011",
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/114/322",
+   "text": "Public Law 114–322",
+   "amendatory": false,
+   "pl_section": "4011",
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/102/575",
+   "text": "Public Law 102–575",
+   "amendatory": false,
+   "pl_section": "3407",
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/102/575",
+   "text": "Public Law 102–575",
+   "amendatory": false,
+   "pl_section": "3407",
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/43/377",
+   "text": "43 U.S.C. 377",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/42/10364",
+   "text": "42 U.S.C. 10364(e)",
+   "amendatory": true,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/108/361",
+   "text": "Public Law 108–361",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": "Title I"
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/108/361",
+   "text": "Public Law 108–361",
+   "amendatory": true,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/111/11",
+   "text": "Public Law 111–11",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/43/2241",
+   "text": "43 U.S.C. 2241",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/42/10363",
+   "text": "42 U.S.C. 10363(f)",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/43/392a",
+   "text": "43 U.S.C. 392a",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/43/510b",
+   "text": "43 U.S.C. 510b(d)",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/111/11",
+   "text": "Public Law 111–11",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": "title X"
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/111/11",
+   "text": "Public Law 111–11",
+   "amendatory": true,
+   "pl_section": null,
+   "pl_division": "title X"
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/89/108",
+   "text": "Public Law 89–108",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/42/7101",
+   "text": "42 U.S.C. 7101 et seq.",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/42/7101",
+   "text": "42 U.S.C. 7101 et seq.",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/42/7101",
+   "text": "42 U.S.C. 7101 et seq.",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/42/7101",
+   "text": "42 U.S.C. 7101 et seq.",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/42/7101",
+   "text": "42 U.S.C. 7101 et seq.",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/42/7101",
+   "text": "42 U.S.C. 7101 et seq.",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/30/3",
+   "text": "30 U.S.C. 3",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/42/7101",
+   "text": "42 U.S.C. 7101 et seq.",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/42/6201",
+   "text": "42 U.S.C. 6201 et seq.",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/42/6201",
+   "text": "42 U.S.C. 6201 et seq.",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/42/6241",
+   "text": "42 U.S.C. 6241",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/42/6241",
+   "text": "42 U.S.C. 6241",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/42/6241",
+   "text": "42 U.S.C. 6241",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/42/6201",
+   "text": "42 U.S.C. 6201 et seq.",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/42/7101",
+   "text": "42 U.S.C. 7101 et seq.",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/42/6939f",
+   "text": "42 U.S.C. 6939f(b)(1)",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/116/94",
+   "text": "Public Law 116–94",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": "division C"
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/42/7101",
+   "text": "42 U.S.C. 7101 et seq.",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/97/425",
+   "text": "Public Law 97–425",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/110/69",
+   "text": "Public Law 110–69",
+   "amendatory": false,
+   "pl_section": "5012",
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/42/16513",
+   "text": "42 U.S.C. 16513(b)(4)",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/42/2210",
+   "text": "42 U.S.C. 2210",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/42/7101",
+   "text": "42 U.S.C. 7101 et seq.",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/42/7101",
+   "text": "42 U.S.C. 7101 et seq.",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/31/1511",
+   "text": "31 U.S.C. 1511 et seq.",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/95/238",
+   "text": "Public Law 95–238",
+   "amendatory": false,
+   "pl_section": "201",
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/42/7101",
+   "text": "42 U.S.C. 7101 et seq.",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/42/7101",
+   "text": "42 U.S.C. 7101 et seq.",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/42/7101",
+   "text": "42 U.S.C. 7101 et seq.",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/42/7101",
+   "text": "42 U.S.C. 7101 et seq.",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/42/7101",
+   "text": "42 U.S.C. 7101 et seq.",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/93/454",
+   "text": "Public Law 93–454",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/16/825s",
+   "text": "16 U.S.C. 825s",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/31/3302",
+   "text": "31 U.S.C. 3302",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/16/825s",
+   "text": "16 U.S.C. 825s",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/16/825s",
+   "text": "16 U.S.C. 825s",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/31/3302",
+   "text": "31 U.S.C. 3302",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/42/7152",
+   "text": "42 U.S.C. 7152",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/31/3302",
+   "text": "31 U.S.C. 3302",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/16/825s",
+   "text": "16 U.S.C. 825s",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/43/392a",
+   "text": "43 U.S.C. 392a",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/31/3302",
+   "text": "31 U.S.C. 3302",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/31/3302",
+   "text": "31 U.S.C. 3302",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/42/7101",
+   "text": "42 U.S.C. 7101 et seq.",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/5/3109",
+   "text": "5 U.S.C. 3109",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/117/167",
+   "text": "Public Law 117–167",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": "division B"
+  },
+  {
+   "legal_doc": "usc-chapter",
+   "cite": "usc-chapter/44/35",
+   "text": "Chapter 35",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/50/2501",
+   "text": "50 U.S.C. 2501",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/15/638",
+   "text": "15 U.S.C. 638",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/42/16391",
+   "text": "42 U.S.C. 16391",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/85/536",
+   "text": "Public Law 85–536",
+   "amendatory": true,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/15/644",
+   "text": "15 U.S.C. 644(g)(3)",
+   "amendatory": true,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/118/42",
+   "text": "Public Law 118–42",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/42/16279a",
+   "text": "42 U.S.C. 16279a",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/116/94",
+   "text": "Public Law 116–94",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/117/58",
+   "text": "Public Law 117–58",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": "division J"
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/117/58",
+   "text": "Public Law 117–58",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": "division D"
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/118/5",
+   "text": "Public Law 118–5",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": "division A"
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/16/839b",
+   "text": "16 U.S.C. 839b(c)(10)(B)",
+   "amendatory": true,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/5/3109",
+   "text": "5 U.S.C. 3109",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/100/456",
+   "text": "Public Law 100–456",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/106/113",
+   "text": "Public Law 106–113",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/31/3302",
+   "text": "31 U.S.C. 3302",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/100/203",
+   "text": "Public Law 100–203",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/18/1913",
+   "text": "18 U.S.C. 1913",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/96/487",
+   "text": "Public Law 96–487",
+   "amendatory": false,
+   "pl_section": "1010",
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/16/3150",
+   "text": "16 U.S.C. 3150(a)",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/92/195",
+   "text": "Public Law 92–195",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/16/1331",
+   "text": "16 U.S.C. 1331 et seq.",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/115/31",
+   "text": "Public Law 115–31",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": "division G"
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/43/1748c",
+   "text": "43 U.S.C. 1748c(e)(1)(A)",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/43/1751",
+   "text": "43 U.S.C. 1751",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/43/315b",
+   "text": "43 U.S.C. 315b",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/94/579",
+   "text": "Public Law 94–579",
+   "amendatory": false,
+   "pl_section": "305",
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/43/1701",
+   "text": "43 U.S.C. 1701 et seq.",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/30/185",
+   "text": "30 U.S.C. 185",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/94/579",
+   "text": "Public Law 94–579",
+   "amendatory": false,
+   "pl_section": "305",
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/43/1735",
+   "text": "43 U.S.C. 1735(a)",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/43/1735",
+   "text": "43 U.S.C. 1735(c)",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/94/579",
+   "text": "Public Law 94–579",
+   "amendatory": false,
+   "pl_section": "307",
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/43/1737",
+   "text": "43 U.S.C. 1737",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/43/1721",
+   "text": "43 U.S.C. 1721(b)",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/90/620",
+   "text": "Public Law 90–620",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/44/501",
+   "text": "44 U.S.C. 501",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/16/1533",
+   "text": "16 U.S.C. 1533",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/16/1535",
+   "text": "16 U.S.C. 1535",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/16/715s",
+   "text": "16 U.S.C. 715s",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/16/4401",
+   "text": "16 U.S.C. 4401 et seq.",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/16/6101",
+   "text": "16 U.S.C. 6101 et seq.",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/16/4201",
+   "text": "16 U.S.C. 4201 et seq.",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/16/4261",
+   "text": "16 U.S.C. 4261 et seq.",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/16/5301",
+   "text": "16 U.S.C. 5301 et seq.",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/16/6301",
+   "text": "16 U.S.C. 6301 et seq.",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/16/6601",
+   "text": "16 U.S.C. 6601 et seq.",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/44/501",
+   "text": "44 U.S.C. 501",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/31/3302",
+   "text": "31 U.S.C. 3302",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/95/348",
+   "text": "Public Law 95–348",
+   "amendatory": true,
+   "pl_section": "5",
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/115/102",
+   "text": "Public Law 115–102",
+   "amendatory": true,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/116/9",
+   "text": "Public Law 116–9",
+   "amendatory": false,
+   "pl_section": "2404",
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/54/3089",
+   "text": "54 U.S.C. 3089",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/54/302904",
+   "text": "54 U.S.C. 302904",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/109/432",
+   "text": "Public Law 109–432",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/43/1331",
+   "text": "43 U.S.C. 1331",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/23/203",
+   "text": "23 U.S.C. 203",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/43/31",
+   "text": "43 U.S.C. 31",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/30/641",
+   "text": "30 U.S.C. 641",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/30/3",
+   "text": "30 U.S.C. 3",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/50/98g",
+   "text": "50 U.S.C. 98g(a)(1)",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/41/6101",
+   "text": "41 U.S.C. 6101",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc-chapter",
+   "cite": "usc-chapter/28/171",
+   "text": "chapter 171",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/43/1331",
+   "text": "43 U.S.C. 1331 et seq.",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/95/87",
+   "text": "Public Law 95–87",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/95/87",
+   "text": "Public Law 95–87",
+   "amendatory": false,
+   "pl_section": "507",
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/30/1257",
+   "text": "30 U.S.C. 1257",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/95/87",
+   "text": "Public Law 95–87",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": "title IV"
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/97/365",
+   "text": "Public Law 97–365",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/95/87",
+   "text": "Public Law 95–87",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": "title IV"
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/30/1233",
+   "text": "30 U.S.C. 1233(a)",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/30/1233",
+   "text": "30 U.S.C. 1233(a)",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/25/13",
+   "text": "25 U.S.C. 13",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/25/5301",
+   "text": "25 U.S.C. 5301 et seq.",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/23/202",
+   "text": "23 U.S.C. 202(b)(1)",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/106/462",
+   "text": "Public Law 106–462",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/108/374",
+   "text": "Public Law 108–374",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/106/462",
+   "text": "Public Law 106–462",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/25/5324",
+   "text": "25 U.S.C. 5324(l)",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/87/483",
+   "text": "Public Law 87–483",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/25/3804",
+   "text": "25 U.S.C. 3804",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/114/322",
+   "text": "Public Law 114–322",
+   "amendatory": false,
+   "pl_section": "3211",
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/25/13",
+   "text": "25 U.S.C. 13",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/25/5301",
+   "text": "25 U.S.C. 5301 et seq.",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/25/2001",
+   "text": "25 U.S.C. 2001–2019",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/25/2501",
+   "text": "25 U.S.C. 2501 et seq.",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/25/5301",
+   "text": "25 U.S.C. 5301 et seq.",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/25/2008",
+   "text": "25 U.S.C. 2008",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/100/297",
+   "text": "Public Law 100–297",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/25/2501",
+   "text": "25 U.S.C. 2501",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/87/279",
+   "text": "Public Law 87–279",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/25/15",
+   "text": "25 U.S.C. 15",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/103/413",
+   "text": "Public Law 103–413",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/25/5342",
+   "text": "25 U.S.C. 5342 et seq.",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/25/2021",
+   "text": "25 U.S.C. 2021",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc-chapter",
+   "cite": "usc-chapter/28/171",
+   "text": "chapter 171",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/106/113",
+   "text": "Public Law 106–113",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/101/301",
+   "text": "Public Law 101–301",
+   "amendatory": false,
+   "pl_section": "5",
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/25/5301",
+   "text": "25 U.S.C. 5301 et seq.",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/103/412",
+   "text": "Public Law 103–412",
+   "amendatory": false,
+   "pl_section": "102",
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/25/5301",
+   "text": "25 U.S.C. 5301 et seq.",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc-chapter",
+   "cite": "usc-chapter/31/69",
+   "text": "chapter 69",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc-chapter",
+   "cite": "usc-chapter/31/69",
+   "text": "chapter 69",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/108/188",
+   "text": "Public Law 108–188",
+   "amendatory": false,
+   "pl_section": "104",
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/48/1661",
+   "text": "48 U.S.C. 1661(c)",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/94/241",
+   "text": "Public Law 94–241",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc-chapter",
+   "cite": "usc-chapter/31/35",
+   "text": "chapter 35",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/104/134",
+   "text": "Public Law 104–134",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/42/5170c",
+   "text": "42 U.S.C. 5170c",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/108/188",
+   "text": "Public Law 108–188",
+   "amendatory": false,
+   "pl_section": "104",
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/104/134",
+   "text": "Public Law 104–134",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/42/1856d",
+   "text": "42 U.S.C. 1856d",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/42/1856",
+   "text": "42 U.S.C. 1856 et seq.",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/109/154",
+   "text": "Public Law 109–154",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/16/1531",
+   "text": "16 U.S.C. 1531 et seq.",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/42/9601",
+   "text": "42 U.S.C. 9601 et seq.",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/117/58",
+   "text": "Public Law 117–58",
+   "amendatory": false,
+   "pl_section": "40704",
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/30/1245",
+   "text": "30 U.S.C. 1245",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/42/15907",
+   "text": "42 U.S.C. 15907",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/42/9601",
+   "text": "42 U.S.C. 9601 et seq.",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/42/9601",
+   "text": "42 U.S.C. 9601 et seq.",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/33/1251",
+   "text": "33 U.S.C. 1251 et seq.",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/33/2701",
+   "text": "33 U.S.C. 2701 et seq.",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/54/100721",
+   "text": "54 U.S.C. 100721 et seq.",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/93/638",
+   "text": "Public Law 93–638",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/106/224",
+   "text": "Public Law 106–224",
+   "amendatory": false,
+   "pl_section": "417",
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/7/7717",
+   "text": "7 U.S.C. 7717(b)",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/95/87",
+   "text": "Public Law 95–87",
+   "amendatory": false,
+   "pl_section": "410",
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/54/200306",
+   "text": "54 U.S.C. 200306(a)",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/43/1348",
+   "text": "43 U.S.C. 1348(c)",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/100/297",
+   "text": "Public Law 100–297",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/16/1533",
+   "text": "16 U.S.C. 1533",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/113/76",
+   "text": "Public Law 113–76",
+   "amendatory": true,
+   "pl_section": null,
+   "pl_division": "division G"
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/116/6",
+   "text": "Public Law 116–6",
+   "amendatory": true,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/99/338",
+   "text": "Public Law 99–338",
+   "amendatory": true,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc-chapter",
+   "cite": "usc-chapter/5/33",
+   "text": "chapter 33",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/20/4441",
+   "text": "20 U.S.C. 4441",
+   "amendatory": true,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/42/6294a",
+   "text": "42 U.S.C. 6294a(c)",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/43/1601",
+   "text": "43 U.S.C. 1601 et seq.",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/43/1601",
+   "text": "43 U.S.C. 1601 et seq.",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/15/2625",
+   "text": "15 U.S.C. 2625(b)(1)",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/42/9611",
+   "text": "42 U.S.C. 9611",
+   "amendatory": true,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/42/9622",
+   "text": "42 U.S.C. 9622(b)(3)",
+   "amendatory": true,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/117/328",
+   "text": "Public Law 117–328",
+   "amendatory": true,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/118/5",
+   "text": "Public Law 118–5",
+   "amendatory": true,
+   "pl_section": null,
+   "pl_division": "division A"
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/33/1381",
+   "text": "33 U.S.C. 1381",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/92/203",
+   "text": "Public Law 92–203",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/42/300j-12",
+   "text": "42 U.S.C. 300j–12(o)",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/33/1301",
+   "text": "33 U.S.C. 1301",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/7/1921",
+   "text": "7 U.S.C. 1921 et seq.",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/42/300j-19a",
+   "text": "42 U.S.C. 300j–19a",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/42/300j-24",
+   "text": "42 U.S.C. 300j–24(d)",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/42/300j-19b",
+   "text": "42 U.S.C. 300j–19b",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/33/1254",
+   "text": "33 U.S.C. 1254(b)(8)",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/33/1301",
+   "text": "33 U.S.C. 1301",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/115/270",
+   "text": "Public Law 115–270",
+   "amendatory": false,
+   "pl_section": "4304",
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/33/4282",
+   "text": "33 U.S.C. 4282(a)",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/92/203",
+   "text": "Public Law 92–203",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/42/300j-19g",
+   "text": "42 U.S.C. 300j–19g",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/115/270",
+   "text": "Public Law 115–270",
+   "amendatory": false,
+   "pl_section": "2001",
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/33/1302f",
+   "text": "33 U.S.C. 1302f(b)",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/117/58",
+   "text": "Public Law 117–58",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/33/1276",
+   "text": "33 U.S.C. 1276",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/106/554",
+   "text": "Public Law 106–554",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/33/1300",
+   "text": "33 U.S.C. 1300",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/104/134",
+   "text": "Public Law 104–134",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/116/94",
+   "text": "Public Law 116–94",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/31/6303",
+   "text": "31 U.S.C. 6303(1)",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/7/136w-8",
+   "text": "7 U.S.C. 136w–8",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/7/136w-8",
+   "text": "7 U.S.C. 136w–8(d)(2)",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/7/136w-8",
+   "text": "7 U.S.C. 136w–8",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/42/6939g",
+   "text": "42 U.S.C. 6939g",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/33/1377",
+   "text": "33 U.S.C. 1377(f)",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/41/5",
+   "text": "41 U.S.C. 5",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc-chapter",
+   "cite": "usc-chapter/28/171",
+   "text": "chapter 171",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/42/209",
+   "text": "42 U.S.C. 209",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/42/4363",
+   "text": "42 U.S.C. 4363",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/117/169",
+   "text": "Public Law 117–169",
+   "amendatory": false,
+   "pl_section": "13601",
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/117/58",
+   "text": "Public Law 117–58",
+   "amendatory": false,
+   "pl_section": "80201",
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/16/7303",
+   "text": "16 U.S.C. 7303(f)",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/16/7303",
+   "text": "16 U.S.C. 7303(d)(3)(A)",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/16/7303",
+   "text": "16 U.S.C. 7303(d)(3)(B)",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/106/393",
+   "text": "Public Law 106–393",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/7/1012",
+   "text": "7 U.S.C. 1012",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/16/538",
+   "text": "16 U.S.C. 538(a)",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/16/501",
+   "text": "16 U.S.C. 501",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/16/484a",
+   "text": "16 U.S.C. 484a",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/96/586",
+   "text": "Public Law 96–586",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/76/589",
+   "text": "Public Law 76–589",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/76/591",
+   "text": "Public Law 76–591",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/78/310",
+   "text": "Public Law 78–310",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/94/579",
+   "text": "Public Law 94–579",
+   "amendatory": false,
+   "pl_section": "401",
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/16/1643",
+   "text": "16 U.S.C. 1643(b)",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/16/3111",
+   "text": "16 U.S.C. 3111 et seq.",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/115/334",
+   "text": "Public Law 115–334",
+   "amendatory": false,
+   "pl_section": "8705",
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/7/2225",
+   "text": "7 U.S.C. 2225",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/5/3109",
+   "text": "5 U.S.C. 3109",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/7/2250",
+   "text": "7 U.S.C. 2250",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/7/428a",
+   "text": "7 U.S.C. 428a",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/16/558a",
+   "text": "16 U.S.C. 558a",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/5/5901",
+   "text": "5 U.S.C. 5901–5902",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/31/3718",
+   "text": "31 U.S.C. 3718(c)",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/116/94",
+   "text": "Public Law 116–94",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/7/2257",
+   "text": "7 U.S.C. 2257",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/106/224",
+   "text": "Public Law 106–224",
+   "amendatory": false,
+   "pl_section": "442",
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/7/7772",
+   "text": "7 U.S.C. 7772",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/107/171",
+   "text": "Public Law 107–171",
+   "amendatory": false,
+   "pl_section": "10417",
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/7/8316",
+   "text": "7 U.S.C. 8316(b)",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/16/1721",
+   "text": "16 U.S.C. 1721 et seq.",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/101/593",
+   "text": "Public Law 101–593",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/98/244",
+   "text": "Public Law 98–244",
+   "amendatory": false,
+   "pl_section": "2",
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/25/5304",
+   "text": "25 U.S.C. 5304(e)",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc-chapter",
+   "cite": "usc-chapter/31/63",
+   "text": "chapter 63",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/109/54",
+   "text": "Public Law 109–54",
+   "amendatory": true,
+   "pl_section": null,
+   "pl_division": "title III"
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/99/663",
+   "text": "Public Law 99–663",
+   "amendatory": false,
+   "pl_section": "16",
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/42/3056",
+   "text": "42 U.S.C. 3056(c)(2)",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/42/3056",
+   "text": "42 U.S.C. 3056 et seq.",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc-chapter",
+   "cite": "usc-chapter/28/171",
+   "text": "chapter 171",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/29/3197",
+   "text": "29 U.S.C. 3197(d)",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/42/238",
+   "text": "42 U.S.C. 238(b)",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/25/5301",
+   "text": "25 U.S.C. 5301 et seq.",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/25/1616a-1",
+   "text": "25 U.S.C. 1616a–1",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/25/1616a-1",
+   "text": "25 U.S.C. 1616a–1(c)",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/25/1613",
+   "text": "25 U.S.C. 1613",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/25/1613",
+   "text": "25 U.S.C. 1613",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/93/638",
+   "text": "Public Law 93–638",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/20/1400",
+   "text": "20 U.S.C. 1400 et seq.",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/25/5324",
+   "text": "25 U.S.C. 5324(l)",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/42/2004a",
+   "text": "42 U.S.C. 2004a",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/5/5376",
+   "text": "5 U.S.C. 5376",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/5/5901",
+   "text": "5 U.S.C. 5901–5902",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/42/2651",
+   "text": "42 U.S.C. 2651–2653",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/86/121",
+   "text": "Public Law 86–121",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/93/638",
+   "text": "Public Law 93–638",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/25/5301",
+   "text": "25 U.S.C. 5301 et seq.",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/42/9660",
+   "text": "42 U.S.C. 9660(a)",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/5/5901",
+   "text": "5 U.S.C. 5901–5902",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/5/5376",
+   "text": "5 U.S.C. 5376",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/99/498",
+   "text": "Public Law 99–498",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": "title XV"
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/20/4411",
+   "text": "20 U.S.C. 4411 et seq.",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/5/3109",
+   "text": "5 U.S.C. 3109",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/116/94",
+   "text": "Public Law 116–94",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/5/3109",
+   "text": "5 U.S.C. 3109",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/5/3109",
+   "text": "5 U.S.C. 3109",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/5/5901",
+   "text": "5 U.S.C. 5901–5902",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/5/3109",
+   "text": "5 U.S.C. 3109",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc-chapter",
+   "cite": "usc-chapter/40/91",
+   "text": "chapter 91",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/99/190",
+   "text": "Public Law 99–190",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/20/956a",
+   "text": "20 U.S.C. 956a",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/89/665",
+   "text": "Public Law 89–665",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc-chapter",
+   "cite": "usc-chapter/40/87",
+   "text": "chapter 87",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/5/3109",
+   "text": "5 U.S.C. 3109",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/106/292",
+   "text": "Public Law 106–292",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/36/2301",
+   "text": "36 U.S.C. 2301–2310",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/116/282",
+   "text": "Public Law 116–282",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/114/196",
+   "text": "Public Law 114–196",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/18/1913",
+   "text": "18 U.S.C. 1913",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/30/35",
+   "text": "30 U.S.C. 35",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/30/42",
+   "text": "30 U.S.C. 42",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/104/208",
+   "text": "Public Law 104–208",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/113/235",
+   "text": "Public Law 113–235",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/16/1604",
+   "text": "16 U.S.C. 1604(f)(5)(A)",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/16/1600",
+   "text": "16 U.S.C. 1600 et seq.",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/30/181",
+   "text": "30 U.S.C. 181 et seq.",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/43/1331",
+   "text": "43 U.S.C. 1331 et seq.",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/16/431",
+   "text": "16 U.S.C. 431 et seq.",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc-chapter",
+   "cite": "usc-chapter/41/33",
+   "text": "Chapter 33",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc-chapter",
+   "cite": "usc-chapter/10/137",
+   "text": "Chapter 137",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/93/638",
+   "text": "Public Law 93–638",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/25/5301",
+   "text": "25 U.S.C. 5301 et seq.",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/25/5304",
+   "text": "25 U.S.C. 5304(e)",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/42/9902",
+   "text": "42 U.S.C. 9902(2)",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/108/108",
+   "text": "Public Law 108–108",
+   "amendatory": false,
+   "pl_section": "325",
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/43/1752",
+   "text": "43 U.S.C. 1752",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/92/195",
+   "text": "Public Law 92–195",
+   "amendatory": false,
+   "pl_section": "2",
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/16/1332",
+   "text": "16 U.S.C. 1332",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/109/54",
+   "text": "Public Law 109–54",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/16/580d",
+   "text": "16 U.S.C. 580d",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/42/300j-12",
+   "text": "42 U.S.C. 300j–12",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/112/74",
+   "text": "Public Law 112–74",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": "division E"
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/113/76",
+   "text": "Public Law 113–76",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": "division G"
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/16/565a-1",
+   "text": "16 U.S.C. 565a–1",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/106/113",
+   "text": "Public Law 106–113",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/16/528",
+   "text": "16 U.S.C. 528",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/108/108",
+   "text": "Public Law 108–108",
+   "amendatory": false,
+   "pl_section": "335",
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/113/76",
+   "text": "Public Law 113–76",
+   "amendatory": false,
+   "pl_section": "432",
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/116/260",
+   "text": "Public Law 116–260",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/25/5324",
+   "text": "25 U.S.C. 5324(l)",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/25/5324",
+   "text": "25 U.S.C. 5324(l)",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/111/88",
+   "text": "Public Law 111–88",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": "title I"
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/113/235",
+   "text": "Public Law 113–235",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": "division F"
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/116/94",
+   "text": "Public Law 116–94",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/54/200402",
+   "text": "54 U.S.C. 200402(e)",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/54/200402",
+   "text": "54 U.S.C. 200402(f)",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/54/200401",
+   "text": "54 U.S.C. 200401(2)",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/42/7661",
+   "text": "42 U.S.C. 7661 et seq.",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/15/2601",
+   "text": "15 U.S.C. 2601 et seq.",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/5/5547",
+   "text": "5 U.S.C. 5547",
+   "amendatory": true,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/117/103",
+   "text": "Public Law 117–103",
+   "amendatory": true,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/5/5547",
+   "text": "5 U.S.C. 5547",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/117/103",
+   "text": "Public Law 117–103",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/113/76",
+   "text": "Public Law 113–76",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/43/1761",
+   "text": "43 U.S.C. 1761",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/43/1761",
+   "text": "43 U.S.C. 1761",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "usc",
+   "cite": "usc/43/1761",
+   "text": "43 U.S.C. 1761",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/115/141",
+   "text": "Public Law 115–141",
+   "amendatory": true,
+   "pl_section": null,
+   "pl_division": "division O"
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/116/260",
+   "text": "Public Law 116–260",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/117/58",
+   "text": "Public Law 117–58",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/118/5",
+   "text": "Public Law 118–5",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": "division A"
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/117/58",
+   "text": "Public Law 117–58",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/118/5",
+   "text": "Public Law 118–5",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": "division A"
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/117/58",
+   "text": "Public Law 117–58",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/118/5",
+   "text": "Public Law 118–5",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": "division A"
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/112/74",
+   "text": "Public Law 112–74",
+   "amendatory": true,
+   "pl_section": null,
+   "pl_division": "division E"
+  },
+  {
+   "legal_doc": "public-law",
+   "cite": "pl/119/37",
+   "text": "Public Law 119–37",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": "division B"
+  }
+ ],
+ "selection": {
+  "policy": "amended sections if any, else all cited sections; capped",
+  "section_cap": 12,
+  "required": [
+   "/us/usc/t15/s644",
+   "/us/usc/t16/s839b",
+   "/us/usc/t20/s4441",
+   "/us/usc/t33/s2328",
+   "/us/usc/t42/s10364",
+   "/us/usc/t42/s9611",
+   "/us/usc/t42/s9622",
+   "/us/usc/t5/s5547"
+  ],
+  "cited": [
+   "/us/usc/t10/s7016",
+   "/us/usc/t15/s1514",
+   "/us/usc/t15/s18a",
+   "/us/usc/t15/s2601",
+   "/us/usc/t15/s2625",
+   "/us/usc/t15/s278c-278e",
+   "/us/usc/t15/s3722",
+   "/us/usc/t15/s638",
+   "/us/usc/t15/s644",
+   "/us/usc/t16/s1331",
+   "/us/usc/t16/s1332",
+   "/us/usc/t16/s1361",
+   "/us/usc/t16/s1461",
+   "/us/usc/t16/s1531",
+   "/us/usc/t16/s1533",
+   "/us/usc/t16/s1535",
+   "/us/usc/t16/s1600",
+   "/us/usc/t16/s1604",
+   "/us/usc/t16/s1643",
+   "/us/usc/t16/s1721",
+   "/us/usc/t16/s3111",
+   "/us/usc/t16/s3150",
+   "/us/usc/t16/s4201",
+   "/us/usc/t16/s4261",
+   "/us/usc/t16/s431",
+   "/us/usc/t16/s4401",
+   "/us/usc/t16/s460d-3",
+   "/us/usc/t16/s484a",
+   "/us/usc/t16/s501",
+   "/us/usc/t16/s528",
+   "/us/usc/t16/s5301",
+   "/us/usc/t16/s538",
+   "/us/usc/t16/s558a",
+   "/us/usc/t16/s565a-1",
+   "/us/usc/t16/s580d",
+   "/us/usc/t16/s6101",
+   "/us/usc/t16/s6301",
+   "/us/usc/t16/s6601",
+   "/us/usc/t16/s715s",
+   "/us/usc/t16/s7303",
+   "/us/usc/t16/s825s",
+   "/us/usc/t16/s839b",
+   "/us/usc/t18/s1913",
+   "/us/usc/t19/s4405",
+   "/us/usc/t20/s1400",
+   "/us/usc/t20/s4411",
+   "/us/usc/t20/s4441",
+   "/us/usc/t20/s956a",
+   "/us/usc/t22/s2455",
+   "/us/usc/t22/s2680b",
+   "/us/usc/t22/s2778",
+   "/us/usc/t22/s401",
+   "/us/usc/t23/s202",
+   "/us/usc/t23/s203",
+   "/us/usc/t25/s13",
+   "/us/usc/t25/s15",
+   "/us/usc/t25/s1613",
+   "/us/usc/t25/s1616a-1",
+   "/us/usc/t25/s2001",
+   "/us/usc/t25/s2008",
+   "/us/usc/t25/s2021",
+   "/us/usc/t25/s2501",
+   "/us/usc/t25/s3804",
+   "/us/usc/t25/s5301",
+   "/us/usc/t25/s5304",
+   "/us/usc/t25/s5324",
+   "/us/usc/t25/s5342",
+   "/us/usc/t28/s527",
+   "/us/usc/t29/s3197",
+   "/us/usc/t30/s1233",
+   "/us/usc/t30/s1245",
+   "/us/usc/t30/s1257",
+   "/us/usc/t30/s181",
+   "/us/usc/t30/s185",
+   "/us/usc/t30/s3",
+   "/us/usc/t30/s35",
+   "/us/usc/t30/s42",
+   "/us/usc/t30/s641",
+   "/us/usc/t31/s1511",
+   "/us/usc/t31/s1535",
+   "/us/usc/t31/s3302",
+   "/us/usc/t31/s3324",
+   "/us/usc/t31/s3718",
+   "/us/usc/t31/s6303",
+   "/us/usc/t33/s1251",
+   "/us/usc/t33/s1254",
+   "/us/usc/t33/s1276",
+   "/us/usc/t33/s1300",
+   "/us/usc/t33/s1301",
+   "/us/usc/t33/s1302f",
+   "/us/usc/t33/s1341",
+   "/us/usc/t33/s1377",
+   "/us/usc/t33/s1381",
+   "/us/usc/t33/s2211",
+   "/us/usc/t33/s2238c",
+   "/us/usc/t33/s2328",
+   "/us/usc/t33/s2701",
+   "/us/usc/t33/s3905",
+   "/us/usc/t33/s4282",
+   "/us/usc/t33/s576",
+   "/us/usc/t34/s10101",
+   "/us/usc/t34/s10381",
+   "/us/usc/t34/s10383",
+   "/us/usc/t34/s10384",
+   "/us/usc/t34/s10631",
+   "/us/usc/t34/s11101",
+   "/us/usc/t34/s11291",
+   "/us/usc/t34/s12101",
+   "/us/usc/t34/s12109",
+   "/us/usc/t34/s20101",
+   "/us/usc/t34/s30305",
+   "/us/usc/t34/s30507",
+   "/us/usc/t34/s40901",
+   "/us/usc/t36/s2301",
+   "/us/usc/t41/s5",
+   "/us/usc/t41/s6101",
+   "/us/usc/t42/s10363",
+   "/us/usc/t42/s10364",
+   "/us/usc/t42/s10701",
+   "/us/usc/t42/s15907",
+   "/us/usc/t42/s16279a",
+   "/us/usc/t42/s16391",
+   "/us/usc/t42/s16513",
+   "/us/usc/t42/s1856",
+   "/us/usc/t42/s1856d",
+   "/us/usc/t42/s1861",
+   "/us/usc/t42/s1863",
+   "/us/usc/t42/s1880",
+   "/us/usc/t42/s1975a",
+   "/us/usc/t42/s2004a",
+   "/us/usc/t42/s209",
+   "/us/usc/t42/s2210",
+   "/us/usc/t42/s238",
+   "/us/usc/t42/s2651",
+   "/us/usc/t42/s2996a",
+   "/us/usc/t42/s2996d",
+   "/us/usc/t42/s2996f",
+   "/us/usc/t42/s300j-12",
+   "/us/usc/t42/s300j-19a",
+   "/us/usc/t42/s300j-19b",
+   "/us/usc/t42/s300j-19g",
+   "/us/usc/t42/s300j-24",
+   "/us/usc/t42/s3056",
+   "/us/usc/t42/s4363",
+   "/us/usc/t42/s5170c",
+   "/us/usc/t42/s6201",
+   "/us/usc/t42/s6241",
+   "/us/usc/t42/s6294a",
+   "/us/usc/t42/s6601",
+   "/us/usc/t42/s6939f",
+   "/us/usc/t42/s6939g",
+   "/us/usc/t42/s7101",
+   "/us/usc/t42/s7152",
+   "/us/usc/t42/s7661",
+   "/us/usc/t42/s9601",
+   "/us/usc/t42/s9611",
+   "/us/usc/t42/s9622",
+   "/us/usc/t42/s9660",
+   "/us/usc/t42/s9902",
+   "/us/usc/t43/s1331",
+   "/us/usc/t43/s1348",
+   "/us/usc/t43/s1601",
+   "/us/usc/t43/s1701",
+   "/us/usc/t43/s1721",
+   "/us/usc/t43/s1735",
+   "/us/usc/t43/s1737",
+   "/us/usc/t43/s1748c",
+   "/us/usc/t43/s1751",
+   "/us/usc/t43/s1752",
+   "/us/usc/t43/s1761",
+   "/us/usc/t43/s2241",
+   "/us/usc/t43/s31",
+   "/us/usc/t43/s315b",
+   "/us/usc/t43/s377",
+   "/us/usc/t43/s392a",
+   "/us/usc/t43/s510b",
+   "/us/usc/t44/s501",
+   "/us/usc/t48/s1661",
+   "/us/usc/t5/s3109",
+   "/us/usc/t5/s401",
+   "/us/usc/t5/s5376",
+   "/us/usc/t5/s5547",
+   "/us/usc/t5/s5738",
+   "/us/usc/t5/s5901",
+   "/us/usc/t50/s2501",
+   "/us/usc/t50/s3094",
+   "/us/usc/t50/s4801",
+   "/us/usc/t50/s98g",
+   "/us/usc/t52/s10305",
+   "/us/usc/t54/s100721",
+   "/us/usc/t54/s200306",
+   "/us/usc/t54/s200401",
+   "/us/usc/t54/s200402",
+   "/us/usc/t54/s302904",
+   "/us/usc/t54/s3089",
+   "/us/usc/t7/s1012",
+   "/us/usc/t7/s136w-8",
+   "/us/usc/t7/s1921",
+   "/us/usc/t7/s2225",
+   "/us/usc/t7/s2250",
+   "/us/usc/t7/s2257",
+   "/us/usc/t7/s428a",
+   "/us/usc/t7/s7717",
+   "/us/usc/t7/s7772",
+   "/us/usc/t7/s8316"
+  ],
+  "amended": [
+   "/us/usc/t15/s644",
+   "/us/usc/t16/s839b",
+   "/us/usc/t20/s4441",
+   "/us/usc/t33/s2328",
+   "/us/usc/t42/s10364",
+   "/us/usc/t42/s9611",
+   "/us/usc/t42/s9622",
+   "/us/usc/t5/s5547"
+  ],
+  "status": "ok"
+ },
+ "release_point": {
+  "label": "119-69",
+  "date": "2026-01-14",
+  "note": "latest release point on or before the vote; per-section archives may come from an earlier published one"
+ },
+ "existing_law_context": [
+  {
+   "type": "us_code",
+   "identifier": "/us/usc/t15/s644",
+   "title": "15",
+   "section": "644",
+   "as_of": {
+    "release_point": "119-59",
+    "date": "2025-12-18",
+    "rule": "latest OLRC release point on or before the vote with a published archive; intervening laws checked against the classification table"
+   },
+   "source_url": "https://uscode.house.gov/download/releasepoints/us/pl/119/59/xml_usc15@119-59.zip",
+   "archive_sha256": null,
+   "fragment_sha256": null,
+   "bytes": null,
+   "heading": null,
+   "relationship": "amended_by_bound_measure",
+   "status": "in_force_ambiguous",
+   "in_force_check": {
+    "status": "ambiguous",
+    "archive": "xml_usc15@119-59.zip",
+    "intervening": [
+     "119-68",
+     "119-69"
+    ],
+    "affected_by": [
+     "119-68 (not in classification table)"
+    ],
+    "check": "OLRC classification table"
+   },
+   "reason": "laws enacted after the last published archive may have changed this section: ['119-68 (not in classification table)']"
+  },
+  {
+   "type": "us_code",
+   "identifier": "/us/usc/t16/s839b",
+   "title": "16",
+   "section": "839b",
+   "as_of": {
+    "release_point": "119-59",
+    "date": "2025-12-18",
+    "rule": "latest OLRC release point on or before the vote with a published archive; intervening laws checked against the classification table"
+   },
+   "source_url": "https://uscode.house.gov/download/releasepoints/us/pl/119/59/xml_usc16@119-59.zip",
+   "archive_sha256": null,
+   "fragment_sha256": null,
+   "bytes": null,
+   "heading": null,
+   "relationship": "amended_by_bound_measure",
+   "status": "in_force_ambiguous",
+   "in_force_check": {
+    "status": "ambiguous",
+    "archive": "xml_usc16@119-59.zip",
+    "intervening": [
+     "119-68",
+     "119-69"
+    ],
+    "affected_by": [
+     "119-68 (not in classification table)"
+    ],
+    "check": "OLRC classification table"
+   },
+   "reason": "laws enacted after the last published archive may have changed this section: ['119-68 (not in classification table)']"
+  },
+  {
+   "type": "us_code",
+   "identifier": "/us/usc/t20/s4441",
+   "title": "20",
+   "section": "4441",
+   "as_of": {
+    "release_point": "119-59",
+    "date": "2025-12-18",
+    "rule": "latest OLRC release point on or before the vote with a published archive; intervening laws checked against the classification table"
+   },
+   "source_url": "https://uscode.house.gov/download/releasepoints/us/pl/119/59/xml_usc20@119-59.zip",
+   "archive_sha256": null,
+   "fragment_sha256": null,
+   "bytes": null,
+   "heading": null,
+   "relationship": "amended_by_bound_measure",
+   "status": "in_force_ambiguous",
+   "in_force_check": {
+    "status": "ambiguous",
+    "archive": "xml_usc20@119-59.zip",
+    "intervening": [
+     "119-68",
+     "119-69"
+    ],
+    "affected_by": [
+     "119-68 (not in classification table)"
+    ],
+    "check": "OLRC classification table"
+   },
+   "reason": "laws enacted after the last published archive may have changed this section: ['119-68 (not in classification table)']"
+  },
+  {
+   "type": "us_code",
+   "identifier": "/us/usc/t33/s2328",
+   "title": "33",
+   "section": "2328",
+   "as_of": {
+    "release_point": "119-59",
+    "date": "2025-12-18",
+    "rule": "latest OLRC release point on or before the vote with a published archive; intervening laws checked against the classification table"
+   },
+   "source_url": "https://uscode.house.gov/download/releasepoints/us/pl/119/59/xml_usc33@119-59.zip",
+   "archive_sha256": null,
+   "fragment_sha256": null,
+   "bytes": null,
+   "heading": null,
+   "relationship": "amended_by_bound_measure",
+   "status": "in_force_ambiguous",
+   "in_force_check": {
+    "status": "ambiguous",
+    "archive": "xml_usc33@119-59.zip",
+    "intervening": [
+     "119-68",
+     "119-69"
+    ],
+    "affected_by": [
+     "119-68 (not in classification table)"
+    ],
+    "check": "OLRC classification table"
+   },
+   "reason": "laws enacted after the last published archive may have changed this section: ['119-68 (not in classification table)']"
+  },
+  {
+   "type": "us_code",
+   "identifier": "/us/usc/t42/s10364",
+   "title": "42",
+   "section": "10364",
+   "as_of": {
+    "release_point": "119-59",
+    "date": "2025-12-18",
+    "rule": "latest OLRC release point on or before the vote with a published archive; intervening laws checked against the classification table"
+   },
+   "source_url": "https://uscode.house.gov/download/releasepoints/us/pl/119/59/xml_usc42@119-59.zip",
+   "archive_sha256": null,
+   "fragment_sha256": null,
+   "bytes": null,
+   "heading": null,
+   "relationship": "amended_by_bound_measure",
+   "status": "in_force_ambiguous",
+   "in_force_check": {
+    "status": "ambiguous",
+    "archive": "xml_usc42@119-59.zip",
+    "intervening": [
+     "119-68",
+     "119-69"
+    ],
+    "affected_by": [
+     "119-68 (not in classification table)"
+    ],
+    "check": "OLRC classification table"
+   },
+   "reason": "laws enacted after the last published archive may have changed this section: ['119-68 (not in classification table)']"
+  },
+  {
+   "type": "us_code",
+   "identifier": "/us/usc/t42/s9611",
+   "title": "42",
+   "section": "9611",
+   "as_of": {
+    "release_point": "119-59",
+    "date": "2025-12-18",
+    "rule": "latest OLRC release point on or before the vote with a published archive; intervening laws checked against the classification table"
+   },
+   "source_url": "https://uscode.house.gov/download/releasepoints/us/pl/119/59/xml_usc42@119-59.zip",
+   "archive_sha256": null,
+   "fragment_sha256": null,
+   "bytes": null,
+   "heading": null,
+   "relationship": "amended_by_bound_measure",
+   "status": "in_force_ambiguous",
+   "in_force_check": {
+    "status": "ambiguous",
+    "archive": "xml_usc42@119-59.zip",
+    "intervening": [
+     "119-68",
+     "119-69"
+    ],
+    "affected_by": [
+     "119-68 (not in classification table)"
+    ],
+    "check": "OLRC classification table"
+   },
+   "reason": "laws enacted after the last published archive may have changed this section: ['119-68 (not in classification table)']"
+  },
+  {
+   "type": "us_code",
+   "identifier": "/us/usc/t42/s9622",
+   "title": "42",
+   "section": "9622",
+   "as_of": {
+    "release_point": "119-59",
+    "date": "2025-12-18",
+    "rule": "latest OLRC release point on or before the vote with a published archive; intervening laws checked against the classification table"
+   },
+   "source_url": "https://uscode.house.gov/download/releasepoints/us/pl/119/59/xml_usc42@119-59.zip",
+   "archive_sha256": null,
+   "fragment_sha256": null,
+   "bytes": null,
+   "heading": null,
+   "relationship": "amended_by_bound_measure",
+   "status": "in_force_ambiguous",
+   "in_force_check": {
+    "status": "ambiguous",
+    "archive": "xml_usc42@119-59.zip",
+    "intervening": [
+     "119-68",
+     "119-69"
+    ],
+    "affected_by": [
+     "119-68 (not in classification table)"
+    ],
+    "check": "OLRC classification table"
+   },
+   "reason": "laws enacted after the last published archive may have changed this section: ['119-68 (not in classification table)']"
+  },
+  {
+   "type": "us_code",
+   "identifier": "/us/usc/t5/s5547",
+   "title": "5",
+   "section": "5547",
+   "as_of": {
+    "release_point": "119-59",
+    "date": "2025-12-18",
+    "rule": "latest OLRC release point on or before the vote with a published archive; intervening laws checked against the classification table"
+   },
+   "source_url": "https://uscode.house.gov/download/releasepoints/us/pl/119/59/xml_usc05@119-59.zip",
+   "archive_sha256": null,
+   "fragment_sha256": null,
+   "bytes": null,
+   "heading": null,
+   "relationship": "amended_by_bound_measure",
+   "status": "in_force_ambiguous",
+   "in_force_check": {
+    "status": "ambiguous",
+    "archive": "xml_usc05@119-59.zip",
+    "intervening": [
+     "119-68",
+     "119-69"
+    ],
+    "affected_by": [
+     "119-68 (not in classification table)"
+    ],
+    "check": "OLRC classification table"
+   },
+   "reason": "laws enacted after the last published archive may have changed this section: ['119-68 (not in classification table)']"
+  }
+ ],
+ "public_laws": [
+  {
+   "type": "public_law",
+   "cite": "pl/117/328",
+   "congress": 117,
+   "law": 328,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-117publ328/uslm/PLAW-117publ328.xml",
+   "sha256": "c85b2c8cb1494a52997e321f7ffbc5bdbdd9c61ad711db94a2bbad4be216188b",
+   "bytes": 11275250,
+   "sections": [],
+   "divisions": [
+    "division B"
+   ],
+   "fragments": [],
+   "status": "identified",
+   "relationship": "amended_by_bound_measure"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/115/232",
+   "congress": 115,
+   "law": 232,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-115publ232/uslm/PLAW-115publ232.xml",
+   "sha256": "8f429246405c61bd88280c66479061daef28b9a24da535d2965b6598957bcdbf",
+   "bytes": 8889605,
+   "sections": [],
+   "divisions": [],
+   "fragments": [],
+   "status": "identified",
+   "relationship": "cited"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/112/29",
+   "congress": 112,
+   "law": 29,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-112publ29/uslm/PLAW-112publ29.xml",
+   "sha256": null,
+   "bytes": null,
+   "sections": [
+    "22"
+   ],
+   "divisions": [],
+   "fragments": [],
+   "status": "unavailable",
+   "relationship": "cited",
+   "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/94/265",
+   "congress": 94,
+   "law": 265,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-94publ265/uslm/PLAW-94publ265.xml",
+   "sha256": null,
+   "bytes": null,
+   "sections": [],
+   "divisions": [],
+   "fragments": [],
+   "status": "unavailable",
+   "relationship": "cited",
+   "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/99/659",
+   "congress": 99,
+   "law": 659,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-99publ659/uslm/PLAW-99publ659.xml",
+   "sha256": null,
+   "bytes": null,
+   "sections": [],
+   "divisions": [
+    "title III"
+   ],
+   "fragments": [],
+   "status": "unavailable",
+   "relationship": "cited",
+   "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/95/372",
+   "congress": 95,
+   "law": 372,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-95publ372/uslm/PLAW-95publ372.xml",
+   "sha256": null,
+   "bytes": null,
+   "sections": [],
+   "divisions": [
+    "title IV"
+   ],
+   "fragments": [],
+   "status": "unavailable",
+   "relationship": "cited",
+   "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/112/55",
+   "congress": 112,
+   "law": 55,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-112publ55/uslm/PLAW-112publ55.xml",
+   "sha256": null,
+   "bytes": null,
+   "sections": [],
+   "divisions": [],
+   "fragments": [],
+   "status": "unavailable",
+   "relationship": "cited",
+   "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/113/6",
+   "congress": 113,
+   "law": 6,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-113publ6/uslm/PLAW-113publ6.xml",
+   "sha256": "541a735b658d01d03a7c56272f6e0ec408d392d711ba2e68d3a78e9742c47447",
+   "bytes": 1353550,
+   "sections": [],
+   "divisions": [
+    "division B"
+   ],
+   "fragments": [],
+   "status": "identified",
+   "relationship": "cited"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/116/93",
+   "congress": 116,
+   "law": 93,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-116publ93/uslm/PLAW-116publ93.xml",
+   "sha256": "4db44519fcfcaa4ed1cf8eaf9c138df81d69c5848113c75253d6cf2a856038ac",
+   "bytes": 1214510,
+   "sections": [],
+   "divisions": [
+    "division B"
+   ],
+   "fragments": [],
+   "status": "identified",
+   "relationship": "cited"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/106/310",
+   "congress": 106,
+   "law": 310,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-106publ310/uslm/PLAW-106publ310.xml",
+   "sha256": null,
+   "bytes": null,
+   "sections": [
+    "3672"
+   ],
+   "divisions": [],
+   "fragments": [],
+   "status": "unavailable",
+   "relationship": "cited",
+   "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/115/391",
+   "congress": 115,
+   "law": 391,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-115publ391/uslm/PLAW-115publ391.xml",
+   "sha256": "b678f529d65b742b35d12e0e223b021f9258849fb50e76243a4c007eab9f442c",
+   "bytes": 432462,
+   "sections": [],
+   "divisions": [],
+   "fragments": [],
+   "status": "identified",
+   "relationship": "cited"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/90/284",
+   "congress": 90,
+   "law": 284,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-90publ284/uslm/PLAW-90publ284.xml",
+   "sha256": null,
+   "bytes": null,
+   "sections": [],
+   "divisions": [],
+   "fragments": [],
+   "status": "unavailable",
+   "relationship": "cited",
+   "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/103/322",
+   "congress": 103,
+   "law": 322,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-103publ322/uslm/PLAW-103publ322.xml",
+   "sha256": null,
+   "bytes": null,
+   "sections": [],
+   "divisions": [],
+   "fragments": [],
+   "status": "unavailable",
+   "relationship": "cited",
+   "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/101/647",
+   "congress": 101,
+   "law": 647,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-101publ647/uslm/PLAW-101publ647.xml",
+   "sha256": null,
+   "bytes": null,
+   "sections": [],
+   "divisions": [
+    "title II"
+   ],
+   "fragments": [],
+   "status": "unavailable",
+   "relationship": "cited",
+   "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/108/21",
+   "congress": 108,
+   "law": 21,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-108publ21/uslm/PLAW-108publ21.xml",
+   "sha256": null,
+   "bytes": null,
+   "sections": [],
+   "divisions": [],
+   "fragments": [],
+   "status": "unavailable",
+   "relationship": "cited",
+   "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/106/386",
+   "congress": 106,
+   "law": 386,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-106publ386/uslm/PLAW-106publ386.xml",
+   "sha256": null,
+   "bytes": null,
+   "sections": [],
+   "divisions": [],
+   "fragments": [],
+   "status": "unavailable",
+   "relationship": "cited",
+   "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/108/405",
+   "congress": 108,
+   "law": 405,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-108publ405/uslm/PLAW-108publ405.xml",
+   "sha256": null,
+   "bytes": null,
+   "sections": [
+    "304",
+    "426"
+   ],
+   "divisions": [],
+   "fragments": [],
+   "status": "unavailable",
+   "relationship": "cited",
+   "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/109/162",
+   "congress": 109,
+   "law": 162,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-109publ162/uslm/PLAW-109publ162.xml",
+   "sha256": null,
+   "bytes": null,
+   "sections": [],
+   "divisions": [],
+   "fragments": [],
+   "status": "unavailable",
+   "relationship": "cited",
+   "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/113/4",
+   "congress": 113,
+   "law": 4,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-113publ4/uslm/PLAW-113publ4.xml",
+   "sha256": "e634ea70a792f8a218eb3dbfdf0afc8305e63b6b277442955516d06c49173748",
+   "bytes": 814767,
+   "sections": [],
+   "divisions": [],
+   "fragments": [],
+   "status": "identified",
+   "relationship": "cited"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/114/22",
+   "congress": 114,
+   "law": 22,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-114publ22/uslm/PLAW-114publ22.xml",
+   "sha256": "f0770c2049abb654818b9e21022c05ec1b1f6e67d6b720908fcbe017c5e10acd",
+   "bytes": 331467,
+   "sections": [],
+   "divisions": [],
+   "fragments": [],
+   "status": "identified",
+   "relationship": "cited"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/115/392",
+   "congress": 115,
+   "law": 392,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-115publ392/uslm/PLAW-115publ392.xml",
+   "sha256": "058296cd8a1d9648cac0498695e0f573a6f566bf7029fa0ebf705cc6571aeef8",
+   "bytes": 124426,
+   "sections": [],
+   "divisions": [],
+   "fragments": [],
+   "status": "identified",
+   "relationship": "cited"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/117/103",
+   "congress": 117,
+   "law": 103,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-117publ103/uslm/PLAW-117publ103.xml",
+   "sha256": "ca62c9533ded8c85868fe71d3ad52f8535fa5c467fde2d0bcc7ec15fe07c109f",
+   "bytes": 6768471,
+   "sections": [],
+   "divisions": [
+    "division B",
+    "division W"
+   ],
+   "fragments": [],
+   "status": "identified",
+   "relationship": "amended_by_bound_measure"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/98/473",
+   "congress": 98,
+   "law": 473,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-98publ473/uslm/PLAW-98publ473.xml",
+   "sha256": null,
+   "bytes": null,
+   "sections": [],
+   "divisions": [
+    "title II"
+   ],
+   "fragments": [],
+   "status": "unavailable",
+   "relationship": "cited",
+   "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/90/351",
+   "congress": 90,
+   "law": 351,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-90publ351/uslm/PLAW-90publ351.xml",
+   "sha256": null,
+   "bytes": null,
+   "sections": [],
+   "divisions": [],
+   "fragments": [],
+   "status": "unavailable",
+   "relationship": "cited",
+   "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/93/415",
+   "congress": 93,
+   "law": 415,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-93publ415/uslm/PLAW-93publ415.xml",
+   "sha256": null,
+   "bytes": null,
+   "sections": [],
+   "divisions": [],
+   "fragments": [],
+   "status": "unavailable",
+   "relationship": "cited",
+   "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/110/199",
+   "congress": 110,
+   "law": 199,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-110publ199/uslm/PLAW-110publ199.xml",
+   "sha256": null,
+   "bytes": null,
+   "sections": [],
+   "divisions": [],
+   "fragments": [],
+   "status": "unavailable",
+   "relationship": "cited",
+   "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/109/248",
+   "congress": 109,
+   "law": 248,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-109publ248/uslm/PLAW-109publ248.xml",
+   "sha256": null,
+   "bytes": null,
+   "sections": [],
+   "divisions": [],
+   "fragments": [],
+   "status": "unavailable",
+   "relationship": "cited",
+   "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/110/401",
+   "congress": 110,
+   "law": 401,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-110publ401/uslm/PLAW-110publ401.xml",
+   "sha256": null,
+   "bytes": null,
+   "sections": [],
+   "divisions": [],
+   "fragments": [],
+   "status": "unavailable",
+   "relationship": "cited",
+   "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/107/296",
+   "congress": 107,
+   "law": 296,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-107publ296/uslm/PLAW-107publ296.xml",
+   "sha256": null,
+   "bytes": null,
+   "sections": [],
+   "divisions": [],
+   "fragments": [],
+   "status": "unavailable",
+   "relationship": "cited",
+   "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/108/79",
+   "congress": 108,
+   "law": 79,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-108publ79/uslm/PLAW-108publ79.xml",
+   "sha256": null,
+   "bytes": null,
+   "sections": [],
+   "divisions": [],
+   "fragments": [],
+   "status": "unavailable",
+   "relationship": "cited",
+   "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/110/180",
+   "congress": 110,
+   "law": 180,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-110publ180/uslm/PLAW-110publ180.xml",
+   "sha256": null,
+   "bytes": null,
+   "sections": [],
+   "divisions": [],
+   "fragments": [],
+   "status": "unavailable",
+   "relationship": "cited",
+   "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/114/198",
+   "congress": 114,
+   "law": 198,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-114publ198/uslm/PLAW-114publ198.xml",
+   "sha256": "4b12b9dad967f8a5215e632dcd9f6c28171afdd487d63443a00912b7a2eaf2ea",
+   "bytes": 641419,
+   "sections": [],
+   "divisions": [],
+   "fragments": [],
+   "status": "identified",
+   "relationship": "cited"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/109/164",
+   "congress": 109,
+   "law": 164,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-109publ164/uslm/PLAW-109publ164.xml",
+   "sha256": null,
+   "bytes": null,
+   "sections": [],
+   "divisions": [],
+   "fragments": [],
+   "status": "unavailable",
+   "relationship": "cited",
+   "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/110/403",
+   "congress": 110,
+   "law": 403,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-110publ403/uslm/PLAW-110publ403.xml",
+   "sha256": null,
+   "bytes": null,
+   "sections": [
+    "401"
+   ],
+   "divisions": [],
+   "fragments": [],
+   "status": "unavailable",
+   "relationship": "cited",
+   "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/110/416",
+   "congress": 110,
+   "law": 416,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-110publ416/uslm/PLAW-110publ416.xml",
+   "sha256": null,
+   "bytes": null,
+   "sections": [],
+   "divisions": [],
+   "fragments": [],
+   "status": "unavailable",
+   "relationship": "cited",
+   "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/114/324",
+   "congress": 114,
+   "law": 324,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-114publ324/uslm/PLAW-114publ324.xml",
+   "sha256": "34f0ae4170a0745833f123bdabfade94b9e6a7b1f70fd0dac6e0b57ddb2891a0",
+   "bytes": 132809,
+   "sections": [],
+   "divisions": [],
+   "fragments": [],
+   "status": "identified",
+   "relationship": "cited"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/115/141",
+   "congress": 115,
+   "law": 141,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-115publ141/uslm/PLAW-115publ141.xml",
+   "sha256": "31162bed833f157973d0acb672d3fda049c5d3493ecf74187831edf2fa8d9d4b",
+   "bytes": 5144295,
+   "sections": [],
+   "divisions": [
+    "division O",
+    "division Q",
+    "division S"
+   ],
+   "fragments": [],
+   "status": "identified",
+   "relationship": "amended_by_bound_measure"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/115/185",
+   "congress": 115,
+   "law": 185,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-115publ185/uslm/PLAW-115publ185.xml",
+   "sha256": "711d7030566a000be08b0e5a9d31a8a9f33b8726e1068dc722ca983ea9431ba5",
+   "bytes": 14597,
+   "sections": [],
+   "divisions": [],
+   "fragments": [],
+   "status": "identified",
+   "relationship": "cited"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/115/271",
+   "congress": 115,
+   "law": 271,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-115publ271/uslm/PLAW-115publ271.xml",
+   "sha256": "56a99c7e9d78327ea1dcd97aa32a24789dfe7f0c0268ea533f1e2d3b3e22f1f1",
+   "bytes": 1797414,
+   "sections": [],
+   "divisions": [],
+   "fragments": [],
+   "status": "identified",
+   "relationship": "cited"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/111/84",
+   "congress": 111,
+   "law": 84,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-111publ84/uslm/PLAW-111publ84.xml",
+   "sha256": null,
+   "bytes": null,
+   "sections": [],
+   "divisions": [],
+   "fragments": [],
+   "status": "unavailable",
+   "relationship": "cited",
+   "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/115/401",
+   "congress": 115,
+   "law": 401,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-115publ401/uslm/PLAW-115publ401.xml",
+   "sha256": "32b4051aae9f9d7b9c1a4396f69b3c2b578d61571fdad60e996565e9e982cf22",
+   "bytes": 46899,
+   "sections": [],
+   "divisions": [],
+   "fragments": [],
+   "status": "identified",
+   "relationship": "cited"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/116/277",
+   "congress": 116,
+   "law": 277,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-116publ277/uslm/PLAW-116publ277.xml",
+   "sha256": "89eb09ca920898e137d3d1efcc15200f9dfd2a34a6d7761fe72d8047047bd99e",
+   "bytes": 36912,
+   "sections": [],
+   "divisions": [],
+   "fragments": [],
+   "status": "identified",
+   "relationship": "cited"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/117/263",
+   "congress": 117,
+   "law": 263,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-117publ263/uslm/PLAW-117publ263.xml",
+   "sha256": "5a4288f957c08bc6e84b3c9ba6b311d18b9eddb8685ac6a6b4eddba8c1cf228e",
+   "bytes": 17104658,
+   "sections": [],
+   "divisions": [],
+   "fragments": [],
+   "status": "identified",
+   "relationship": "cited"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/117/325",
+   "congress": 117,
+   "law": 325,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-117publ325/uslm/PLAW-117publ325.xml",
+   "sha256": "1f534d2f8f92a8ca8607f621b3c500bf7c03c4967db2dc9d93b8a5a8ac8239c8",
+   "bytes": 74130,
+   "sections": [],
+   "divisions": [],
+   "fragments": [],
+   "status": "identified",
+   "relationship": "cited"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/110/315",
+   "congress": 110,
+   "law": 315,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-110publ315/uslm/PLAW-110publ315.xml",
+   "sha256": null,
+   "bytes": null,
+   "sections": [
+    "952"
+   ],
+   "divisions": [],
+   "fragments": [],
+   "status": "unavailable",
+   "relationship": "cited",
+   "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/106/546",
+   "congress": 106,
+   "law": 546,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-106publ546/uslm/PLAW-106publ546.xml",
+   "sha256": null,
+   "bytes": null,
+   "sections": [
+    "2"
+   ],
+   "divisions": [],
+   "fragments": [],
+   "status": "unavailable",
+   "relationship": "cited",
+   "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/116/281",
+   "congress": 116,
+   "law": 281,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-116publ281/uslm/PLAW-116publ281.xml",
+   "sha256": "5ff1d3299bbad7af558ca7d3ef724aa95dba5653a60133dfe8fb4c5bafeb2a64",
+   "bytes": 27043,
+   "sections": [],
+   "divisions": [],
+   "fragments": [],
+   "status": "identified",
+   "relationship": "cited"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/114/325",
+   "congress": 114,
+   "law": 325,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-114publ325/uslm/PLAW-114publ325.xml",
+   "sha256": "47908c179c3e93da3bf81e9341e54561b1a422ff09b1d990487493c0c4b92921",
+   "bytes": 25427,
+   "sections": [],
+   "divisions": [],
+   "fragments": [],
+   "status": "identified",
+   "relationship": "cited"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/115/267",
+   "congress": 115,
+   "law": 267,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-115publ267/uslm/PLAW-115publ267.xml",
+   "sha256": "58dc9a5c0a6e1032a7e14e4a0b7020de4f2d4ed14ac1e703a5df544cc3323129",
+   "bytes": 44563,
+   "sections": [],
+   "divisions": [],
+   "fragments": [],
+   "status": "identified",
+   "relationship": "cited"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/115/385",
+   "congress": 115,
+   "law": 385,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-115publ385/uslm/PLAW-115publ385.xml",
+   "sha256": "aa2b148d7ab2b645ee82251058524e0eac89f8b38cb4e527e6a3f520942155a5",
+   "bytes": 301034,
+   "sections": [],
+   "divisions": [],
+   "fragments": [],
+   "status": "identified",
+   "relationship": "cited"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/115/37",
+   "congress": 115,
+   "law": 37,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-115publ37/uslm/PLAW-115publ37.xml",
+   "sha256": "3f974efef20cecd306971e90801b77c030469404ed0702fb8aea7548263efb62",
+   "bytes": 5369,
+   "sections": [],
+   "divisions": [],
+   "fragments": [],
+   "status": "identified",
+   "relationship": "cited"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/115/113",
+   "congress": 115,
+   "law": 113,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-115publ113/uslm/PLAW-115publ113.xml",
+   "sha256": "d23291d7798981079a620619e6f691ac8befe6d74997b97b15bb9788bd59af56",
+   "bytes": 14580,
+   "sections": [],
+   "divisions": [],
+   "fragments": [],
+   "status": "identified",
+   "relationship": "cited"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/116/32",
+   "congress": 116,
+   "law": 32,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-116publ32/uslm/PLAW-116publ32.xml",
+   "sha256": "3e877692d146ac06529ec8141741bc62c69e036b9a89d004e3ab7ab36d03c3e2",
+   "bytes": 13389,
+   "sections": [],
+   "divisions": [],
+   "fragments": [],
+   "status": "identified",
+   "relationship": "cited"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/114/199",
+   "congress": 114,
+   "law": 199,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-114publ199/uslm/PLAW-114publ199.xml",
+   "sha256": "9f3319d38dcb37d24ae15639b0b5fe64a12ac3f1942093369d8c3ef73ae5c85e",
+   "bytes": 7140,
+   "sections": [],
+   "divisions": [],
+   "fragments": [],
+   "status": "identified",
+   "relationship": "cited"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/102/140",
+   "congress": 102,
+   "law": 140,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-102publ140/uslm/PLAW-102publ140.xml",
+   "sha256": null,
+   "bytes": null,
+   "sections": [],
+   "divisions": [
+    "title I"
+   ],
+   "fragments": [],
+   "status": "unavailable",
+   "relationship": "cited",
+   "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/114/113",
+   "congress": 114,
+   "law": 113,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-114publ113/uslm/PLAW-114publ113.xml",
+   "sha256": "ee729633fb7417c1c26b86f0382d66b356d73ddaf5f8300857ca5cbdc625bea2",
+   "bytes": 5140039,
+   "sections": [],
+   "divisions": [
+    "division B"
+   ],
+   "fragments": [],
+   "status": "identified",
+   "relationship": "cited"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/115/31",
+   "congress": 115,
+   "law": 31,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-115publ31/uslm/PLAW-115publ31.xml",
+   "sha256": "8d4c8ad46a957cf820c1226bac854a1f74b4fef98ff18c1987b97682550172f8",
+   "bytes": 4123260,
+   "sections": [],
+   "divisions": [
+    "division B",
+    "division G"
+   ],
+   "fragments": [],
+   "status": "identified",
+   "relationship": "cited"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/100/404",
+   "congress": 100,
+   "law": 404,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-100publ404/uslm/PLAW-100publ404.xml",
+   "sha256": null,
+   "bytes": null,
+   "sections": [],
+   "divisions": [],
+   "fragments": [],
+   "status": "unavailable",
+   "relationship": "cited",
+   "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/103/327",
+   "congress": 103,
+   "law": 327,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-103publ327/uslm/PLAW-103publ327.xml",
+   "sha256": null,
+   "bytes": null,
+   "sections": [],
+   "divisions": [],
+   "fragments": [],
+   "status": "unavailable",
+   "relationship": "cited",
+   "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/86/209",
+   "congress": 86,
+   "law": 209,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-86publ209/uslm/PLAW-86publ209.xml",
+   "sha256": null,
+   "bytes": null,
+   "sections": [],
+   "divisions": [],
+   "fragments": [],
+   "status": "unavailable",
+   "relationship": "cited",
+   "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/110/233",
+   "congress": 110,
+   "law": 233,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-110publ233/uslm/PLAW-110publ233.xml",
+   "sha256": null,
+   "bytes": null,
+   "sections": [],
+   "divisions": [],
+   "fragments": [],
+   "status": "unavailable",
+   "relationship": "cited",
+   "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/110/325",
+   "congress": 110,
+   "law": 325,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-110publ325/uslm/PLAW-110publ325.xml",
+   "sha256": null,
+   "bytes": null,
+   "sections": [],
+   "divisions": [],
+   "fragments": [],
+   "status": "unavailable",
+   "relationship": "cited",
+   "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/111/2",
+   "congress": 111,
+   "law": 2,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-111publ2/uslm/PLAW-111publ2.xml",
+   "sha256": null,
+   "bytes": null,
+   "sections": [],
+   "divisions": [],
+   "fragments": [],
+   "status": "unavailable",
+   "relationship": "cited",
+   "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/105/119",
+   "congress": 105,
+   "law": 119,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-105publ119/uslm/PLAW-105publ119.xml",
+   "sha256": null,
+   "bytes": null,
+   "sections": [],
+   "divisions": [],
+   "fragments": [],
+   "status": "unavailable",
+   "relationship": "amended_by_bound_measure",
+   "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/104/134",
+   "congress": 104,
+   "law": 134,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-104publ134/uslm/PLAW-104publ134.xml",
+   "sha256": null,
+   "bytes": null,
+   "sections": [],
+   "divisions": [],
+   "fragments": [],
+   "status": "unavailable",
+   "relationship": "amended_by_bound_measure",
+   "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/118/42",
+   "congress": 118,
+   "law": 42,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-118publ42/uslm/PLAW-118publ42.xml",
+   "sha256": "563491684e2c60d3f80b6cc642c2bc92b9c91b08cbbcc5270de22d436ae80ddf",
+   "bytes": 2586115,
+   "sections": [],
+   "divisions": [
+    "division C"
+   ],
+   "fragments": [],
+   "status": "identified",
+   "relationship": "cited"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/113/79",
+   "congress": 113,
+   "law": 79,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-113publ79/uslm/PLAW-113publ79.xml",
+   "sha256": "1cd4bb29b3146b15c5f950634dc3ac98623b46c4ab6de90b063b6410427d62ea",
+   "bytes": 2911514,
+   "sections": [],
+   "divisions": [],
+   "fragments": [],
+   "status": "identified",
+   "relationship": "cited"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/117/167",
+   "congress": 117,
+   "law": 167,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-117publ167/uslm/PLAW-117publ167.xml",
+   "sha256": "bc9c293d55a9961eeb351441744cf2a8dacf8f5f2da38e295f01a635601e50a5",
+   "bytes": 3145176,
+   "sections": [],
+   "divisions": [
+    "division A",
+    "division B"
+   ],
+   "fragments": [],
+   "status": "identified",
+   "relationship": "cited"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/116/283",
+   "congress": 116,
+   "law": 283,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-116publ283/uslm/PLAW-116publ283.xml",
+   "sha256": "d3d77c3904d7e7ef67364104ca323b04b71abc380adf90b8f6f437d6bfed2a8d",
+   "bytes": 15298619,
+   "sections": [
+    "9906"
+   ],
+   "divisions": [],
+   "fragments": [
+    {
+     "section": "9906",
+     "fragment_sha256": "37b9731e7f3b3c5f30a0fd87dca7c8fac58ab8c5746f6399e7dd28599bbd1b3d",
+     "bytes": 26163,
+     "status": "fetched"
+    }
+   ],
+   "status": "identified",
+   "relationship": "cited"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/117/58",
+   "congress": 117,
+   "law": 58,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-117publ58/uslm/PLAW-117publ58.xml",
+   "sha256": "e2d2f2450ea2c42aef7c06e590bba95d721a058409d643d63679810b8c0e1ba4",
+   "bytes": 8696772,
+   "sections": [
+    "40704",
+    "80201"
+   ],
+   "divisions": [
+    "division D",
+    "division J"
+   ],
+   "fragments": [
+    {
+     "section": "40704",
+     "fragment_sha256": "0aecc3838916bbaedc28b4270d20d1deb751b97141e8e97bbc76552cfc1e79b6",
+     "bytes": 8098,
+     "status": "fetched"
+    },
+    {
+     "section": "80201",
+     "fragment_sha256": "9acc3457b59eaf9434a65848790aa1946bd003f1a1aabe56640f83b55707eec6",
+     "bytes": 23435,
+     "status": "fetched"
+    }
+   ],
+   "status": "identified",
+   "relationship": "cited"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/118/5",
+   "congress": 118,
+   "law": 5,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-118publ5/uslm/PLAW-118publ5.xml",
+   "sha256": "16dfc0bc57dbdcd92601d9ea182ca2eef49917eb00e7d157df4246314a5ab618",
+   "bytes": 293608,
+   "sections": [],
+   "divisions": [
+    "division A"
+   ],
+   "fragments": [],
+   "status": "identified",
+   "relationship": "amended_by_bound_measure"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/104/303",
+   "congress": 104,
+   "law": 303,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-104publ303/uslm/PLAW-104publ303.xml",
+   "sha256": null,
+   "bytes": null,
+   "sections": [
+    "217"
+   ],
+   "divisions": [],
+   "fragments": [],
+   "status": "unavailable",
+   "relationship": "cited",
+   "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/116/136",
+   "congress": 116,
+   "law": 136,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-116publ136/uslm/PLAW-116publ136.xml",
+   "sha256": "51d32a9220c801fbe8ed3ef96a1cf586eec3276902b9f507efeb2f12ee039f1c",
+   "bytes": 2391025,
+   "sections": [],
+   "divisions": [],
+   "fragments": [],
+   "status": "identified",
+   "relationship": "cited"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/113/121",
+   "congress": 113,
+   "law": 121,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-113publ121/uslm/PLAW-113publ121.xml",
+   "sha256": "9f9e1cd9eb8c17209e0e863a11da1e7d041cbf03ac09e457a6beca077fa3ff7e",
+   "bytes": 1491131,
+   "sections": [],
+   "divisions": [],
+   "fragments": [],
+   "status": "identified",
+   "relationship": "cited"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/116/94",
+   "congress": 116,
+   "law": 94,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-116publ94/uslm/PLAW-116publ94.xml",
+   "sha256": "3ffc9803316c9ba4e75542aa2917ddf379e965bce46a9535e484e24eaf427f02",
+   "bytes": 4548548,
+   "sections": [],
+   "divisions": [
+    "division C"
+   ],
+   "fragments": [],
+   "status": "identified",
+   "relationship": "cited"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/114/322",
+   "congress": 114,
+   "law": 322,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-114publ322/uslm/PLAW-114publ322.xml",
+   "sha256": "2b2ec6837236865eeb0f7d736809bac22ee155415a24dc1f0e177b18c2c4fdf5",
+   "bytes": 2190019,
+   "sections": [
+    "3211",
+    "4011"
+   ],
+   "divisions": [],
+   "fragments": [
+    {
+     "section": "3211",
+     "fragment_sha256": "57152a367ce3a3f6c2ac4cbbfcaa7e2b3f1adf7673b266008361c6ad993bca39",
+     "bytes": 1154,
+     "status": "fetched"
+    },
+    {
+     "section": "4011",
+     "fragment_sha256": "a11dc07476f5dae6c7d91c16dd8a1a89f0e1fd0af96a461573ffddabcf4e2ba9",
+     "bytes": 24411,
+     "status": "fetched"
+    }
+   ],
+   "status": "identified",
+   "relationship": "cited"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/106/554",
+   "congress": 106,
+   "law": 554,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-106publ554/uslm/PLAW-106publ554.xml",
+   "sha256": null,
+   "bytes": null,
+   "sections": [],
+   "divisions": [],
+   "fragments": [],
+   "status": "unavailable",
+   "relationship": "cited",
+   "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/102/575",
+   "congress": 102,
+   "law": 575,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-102publ575/uslm/PLAW-102publ575.xml",
+   "sha256": null,
+   "bytes": null,
+   "sections": [
+    "3407"
+   ],
+   "divisions": [],
+   "fragments": [],
+   "status": "unavailable",
+   "relationship": "cited",
+   "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/108/361",
+   "congress": 108,
+   "law": 361,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-108publ361/uslm/PLAW-108publ361.xml",
+   "sha256": null,
+   "bytes": null,
+   "sections": [],
+   "divisions": [
+    "Title I"
+   ],
+   "fragments": [],
+   "status": "unavailable",
+   "relationship": "amended_by_bound_measure",
+   "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/111/11",
+   "congress": 111,
+   "law": 11,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-111publ11/uslm/PLAW-111publ11.xml",
+   "sha256": null,
+   "bytes": null,
+   "sections": [],
+   "divisions": [
+    "title X"
+   ],
+   "fragments": [],
+   "status": "unavailable",
+   "relationship": "amended_by_bound_measure",
+   "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/89/108",
+   "congress": 89,
+   "law": 108,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-89publ108/uslm/PLAW-89publ108.xml",
+   "sha256": null,
+   "bytes": null,
+   "sections": [],
+   "divisions": [],
+   "fragments": [],
+   "status": "unavailable",
+   "relationship": "cited",
+   "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/97/425",
+   "congress": 97,
+   "law": 425,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-97publ425/uslm/PLAW-97publ425.xml",
+   "sha256": null,
+   "bytes": null,
+   "sections": [],
+   "divisions": [],
+   "fragments": [],
+   "status": "unavailable",
+   "relationship": "cited",
+   "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/110/69",
+   "congress": 110,
+   "law": 69,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-110publ69/uslm/PLAW-110publ69.xml",
+   "sha256": null,
+   "bytes": null,
+   "sections": [
+    "5012"
+   ],
+   "divisions": [],
+   "fragments": [],
+   "status": "unavailable",
+   "relationship": "cited",
+   "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/95/238",
+   "congress": 95,
+   "law": 238,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-95publ238/uslm/PLAW-95publ238.xml",
+   "sha256": null,
+   "bytes": null,
+   "sections": [
+    "201"
+   ],
+   "divisions": [],
+   "fragments": [],
+   "status": "unavailable",
+   "relationship": "cited",
+   "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/93/454",
+   "congress": 93,
+   "law": 454,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-93publ454/uslm/PLAW-93publ454.xml",
+   "sha256": null,
+   "bytes": null,
+   "sections": [],
+   "divisions": [],
+   "fragments": [],
+   "status": "unavailable",
+   "relationship": "cited",
+   "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/85/536",
+   "congress": 85,
+   "law": 536,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-85publ536/uslm/PLAW-85publ536.xml",
+   "sha256": null,
+   "bytes": null,
+   "sections": [],
+   "divisions": [],
+   "fragments": [],
+   "status": "unavailable",
+   "relationship": "amended_by_bound_measure",
+   "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/100/456",
+   "congress": 100,
+   "law": 456,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-100publ456/uslm/PLAW-100publ456.xml",
+   "sha256": null,
+   "bytes": null,
+   "sections": [],
+   "divisions": [],
+   "fragments": [],
+   "status": "unavailable",
+   "relationship": "cited",
+   "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/106/113",
+   "congress": 106,
+   "law": 113,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-106publ113/uslm/PLAW-106publ113.xml",
+   "sha256": null,
+   "bytes": null,
+   "sections": [],
+   "divisions": [],
+   "fragments": [],
+   "status": "unavailable",
+   "relationship": "cited",
+   "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/100/203",
+   "congress": 100,
+   "law": 203,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-100publ203/uslm/PLAW-100publ203.xml",
+   "sha256": null,
+   "bytes": null,
+   "sections": [],
+   "divisions": [],
+   "fragments": [],
+   "status": "unavailable",
+   "relationship": "cited",
+   "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/96/487",
+   "congress": 96,
+   "law": 487,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-96publ487/uslm/PLAW-96publ487.xml",
+   "sha256": null,
+   "bytes": null,
+   "sections": [
+    "1010"
+   ],
+   "divisions": [],
+   "fragments": [],
+   "status": "unavailable",
+   "relationship": "cited",
+   "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/92/195",
+   "congress": 92,
+   "law": 195,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-92publ195/uslm/PLAW-92publ195.xml",
+   "sha256": null,
+   "bytes": null,
+   "sections": [
+    "2"
+   ],
+   "divisions": [],
+   "fragments": [],
+   "status": "unavailable",
+   "relationship": "cited",
+   "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/94/579",
+   "congress": 94,
+   "law": 579,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-94publ579/uslm/PLAW-94publ579.xml",
+   "sha256": null,
+   "bytes": null,
+   "sections": [
+    "305",
+    "307",
+    "401"
+   ],
+   "divisions": [],
+   "fragments": [],
+   "status": "unavailable",
+   "relationship": "cited",
+   "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/90/620",
+   "congress": 90,
+   "law": 620,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-90publ620/uslm/PLAW-90publ620.xml",
+   "sha256": null,
+   "bytes": null,
+   "sections": [],
+   "divisions": [],
+   "fragments": [],
+   "status": "unavailable",
+   "relationship": "cited",
+   "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/95/348",
+   "congress": 95,
+   "law": 348,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-95publ348/uslm/PLAW-95publ348.xml",
+   "sha256": null,
+   "bytes": null,
+   "sections": [
+    "5"
+   ],
+   "divisions": [],
+   "fragments": [],
+   "status": "unavailable",
+   "relationship": "amended_by_bound_measure",
+   "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/115/102",
+   "congress": 115,
+   "law": 102,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-115publ102/uslm/PLAW-115publ102.xml",
+   "sha256": "742b658310f1a765eb872b808e5493786303499a350aadd918d0b52b7459b3e6",
+   "bytes": 43137,
+   "sections": [],
+   "divisions": [],
+   "fragments": [],
+   "status": "identified",
+   "relationship": "amended_by_bound_measure"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/116/9",
+   "congress": 116,
+   "law": 9,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-116publ9/uslm/PLAW-116publ9.xml",
+   "sha256": "9fa5c1d84bd9ccae85c3ff5f67f80cc29097bc15502604f453c7534a4603a2b0",
+   "bytes": 2152735,
+   "sections": [
+    "2404"
+   ],
+   "divisions": [],
+   "fragments": [
+    {
+     "section": "2404",
+     "fragment_sha256": "5bdbefbacfedb58f0a080306066c9d108648e12ce057d7a6c78e11bedfef0890",
+     "bytes": 4442,
+     "status": "fetched"
+    }
+   ],
+   "status": "identified",
+   "relationship": "cited"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/109/432",
+   "congress": 109,
+   "law": 432,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-109publ432/uslm/PLAW-109publ432.xml",
+   "sha256": null,
+   "bytes": null,
+   "sections": [],
+   "divisions": [],
+   "fragments": [],
+   "status": "unavailable",
+   "relationship": "cited",
+   "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/95/87",
+   "congress": 95,
+   "law": 87,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-95publ87/uslm/PLAW-95publ87.xml",
+   "sha256": null,
+   "bytes": null,
+   "sections": [
+    "410",
+    "507"
+   ],
+   "divisions": [
+    "title IV"
+   ],
+   "fragments": [],
+   "status": "unavailable",
+   "relationship": "cited",
+   "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/97/365",
+   "congress": 97,
+   "law": 365,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-97publ365/uslm/PLAW-97publ365.xml",
+   "sha256": null,
+   "bytes": null,
+   "sections": [],
+   "divisions": [],
+   "fragments": [],
+   "status": "unavailable",
+   "relationship": "cited",
+   "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/106/462",
+   "congress": 106,
+   "law": 462,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-106publ462/uslm/PLAW-106publ462.xml",
+   "sha256": null,
+   "bytes": null,
+   "sections": [],
+   "divisions": [],
+   "fragments": [],
+   "status": "unavailable",
+   "relationship": "cited",
+   "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/108/374",
+   "congress": 108,
+   "law": 374,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-108publ374/uslm/PLAW-108publ374.xml",
+   "sha256": null,
+   "bytes": null,
+   "sections": [],
+   "divisions": [],
+   "fragments": [],
+   "status": "unavailable",
+   "relationship": "cited",
+   "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/87/483",
+   "congress": 87,
+   "law": 483,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-87publ483/uslm/PLAW-87publ483.xml",
+   "sha256": null,
+   "bytes": null,
+   "sections": [],
+   "divisions": [],
+   "fragments": [],
+   "status": "unavailable",
+   "relationship": "cited",
+   "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/100/297",
+   "congress": 100,
+   "law": 297,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-100publ297/uslm/PLAW-100publ297.xml",
+   "sha256": null,
+   "bytes": null,
+   "sections": [],
+   "divisions": [],
+   "fragments": [],
+   "status": "unavailable",
+   "relationship": "cited",
+   "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/87/279",
+   "congress": 87,
+   "law": 279,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-87publ279/uslm/PLAW-87publ279.xml",
+   "sha256": null,
+   "bytes": null,
+   "sections": [],
+   "divisions": [],
+   "fragments": [],
+   "status": "unavailable",
+   "relationship": "cited",
+   "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/103/413",
+   "congress": 103,
+   "law": 413,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-103publ413/uslm/PLAW-103publ413.xml",
+   "sha256": null,
+   "bytes": null,
+   "sections": [],
+   "divisions": [],
+   "fragments": [],
+   "status": "unavailable",
+   "relationship": "cited",
+   "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/101/301",
+   "congress": 101,
+   "law": 301,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-101publ301/uslm/PLAW-101publ301.xml",
+   "sha256": null,
+   "bytes": null,
+   "sections": [
+    "5"
+   ],
+   "divisions": [],
+   "fragments": [],
+   "status": "unavailable",
+   "relationship": "cited",
+   "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/103/412",
+   "congress": 103,
+   "law": 412,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-103publ412/uslm/PLAW-103publ412.xml",
+   "sha256": null,
+   "bytes": null,
+   "sections": [
+    "102"
+   ],
+   "divisions": [],
+   "fragments": [],
+   "status": "unavailable",
+   "relationship": "cited",
+   "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/108/188",
+   "congress": 108,
+   "law": 188,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-108publ188/uslm/PLAW-108publ188.xml",
+   "sha256": null,
+   "bytes": null,
+   "sections": [
+    "104"
+   ],
+   "divisions": [],
+   "fragments": [],
+   "status": "unavailable",
+   "relationship": "cited",
+   "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/94/241",
+   "congress": 94,
+   "law": 241,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-94publ241/uslm/PLAW-94publ241.xml",
+   "sha256": null,
+   "bytes": null,
+   "sections": [],
+   "divisions": [],
+   "fragments": [],
+   "status": "unavailable",
+   "relationship": "cited",
+   "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/109/154",
+   "congress": 109,
+   "law": 154,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-109publ154/uslm/PLAW-109publ154.xml",
+   "sha256": null,
+   "bytes": null,
+   "sections": [],
+   "divisions": [],
+   "fragments": [],
+   "status": "unavailable",
+   "relationship": "cited",
+   "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/93/638",
+   "congress": 93,
+   "law": 638,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-93publ638/uslm/PLAW-93publ638.xml",
+   "sha256": null,
+   "bytes": null,
+   "sections": [],
+   "divisions": [],
+   "fragments": [],
+   "status": "unavailable",
+   "relationship": "cited",
+   "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/106/224",
+   "congress": 106,
+   "law": 224,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-106publ224/uslm/PLAW-106publ224.xml",
+   "sha256": null,
+   "bytes": null,
+   "sections": [
+    "417",
+    "442"
+   ],
+   "divisions": [],
+   "fragments": [],
+   "status": "unavailable",
+   "relationship": "cited",
+   "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/113/76",
+   "congress": 113,
+   "law": 76,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-113publ76/uslm/PLAW-113publ76.xml",
+   "sha256": "508814611737b48276d45f17a49f719f9873cb11614a5ade97dd277c207a7429",
+   "bytes": 3206910,
+   "sections": [
+    "432"
+   ],
+   "divisions": [
+    "division G"
+   ],
+   "fragments": [
+    {
+     "section": "432",
+     "status": "section_not_found"
+    }
+   ],
+   "status": "identified",
+   "relationship": "amended_by_bound_measure"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/116/6",
+   "congress": 116,
+   "law": 6,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-116publ6/uslm/PLAW-116publ6.xml",
+   "sha256": "55a0329160a80984ac91a48ad41206cf895b2c265b53d9813cfe76b6586b4b91",
+   "bytes": 2391846,
+   "sections": [],
+   "divisions": [],
+   "fragments": [],
+   "status": "identified",
+   "relationship": "amended_by_bound_measure"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/99/338",
+   "congress": 99,
+   "law": 338,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-99publ338/uslm/PLAW-99publ338.xml",
+   "sha256": null,
+   "bytes": null,
+   "sections": [],
+   "divisions": [],
+   "fragments": [],
+   "status": "unavailable",
+   "relationship": "amended_by_bound_measure",
+   "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/92/203",
+   "congress": 92,
+   "law": 203,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-92publ203/uslm/PLAW-92publ203.xml",
+   "sha256": null,
+   "bytes": null,
+   "sections": [],
+   "divisions": [],
+   "fragments": [],
+   "status": "unavailable",
+   "relationship": "cited",
+   "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/115/270",
+   "congress": 115,
+   "law": 270,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-115publ270/uslm/PLAW-115publ270.xml",
+   "sha256": "0030fc33b2fc649175b87c46cb1965eb06c345e8b0b7cca5d4182ee447994dbe",
+   "bytes": 1036876,
+   "sections": [
+    "2001",
+    "4304"
+   ],
+   "divisions": [],
+   "fragments": [
+    {
+     "section": "2001",
+     "fragment_sha256": "e0e58991b974ffab3b1e0e4da9ccdf0f3a0d9236a702589b687403c020105bb2",
+     "bytes": 4039,
+     "status": "fetched"
+    },
+    {
+     "section": "4304",
+     "fragment_sha256": "6c289448cd38d3f2dcaa953903df409587280db679b47cbc2c6b405a1e12ed0f",
+     "bytes": 14722,
+     "status": "fetched"
+    }
+   ],
+   "status": "identified",
+   "relationship": "cited"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/117/169",
+   "congress": 117,
+   "law": 169,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-117publ169/uslm/PLAW-117publ169.xml",
+   "sha256": "354b64592a6c89636934feac72f689a6302f2c25b2363b3e4afa131230970264",
+   "bytes": 2145306,
+   "sections": [
+    "13601"
+   ],
+   "divisions": [],
+   "fragments": [
+    {
+     "section": "13601",
+     "fragment_sha256": "822c955a9f66892b6014dc3bdafe5e1651c4a1d21e347f92b02c9e02419b0e42",
+     "bytes": 5890,
+     "status": "fetched"
+    }
+   ],
+   "status": "identified",
+   "relationship": "cited"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/106/393",
+   "congress": 106,
+   "law": 393,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-106publ393/uslm/PLAW-106publ393.xml",
+   "sha256": null,
+   "bytes": null,
+   "sections": [],
+   "divisions": [],
+   "fragments": [],
+   "status": "unavailable",
+   "relationship": "cited",
+   "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/96/586",
+   "congress": 96,
+   "law": 586,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-96publ586/uslm/PLAW-96publ586.xml",
+   "sha256": null,
+   "bytes": null,
+   "sections": [],
+   "divisions": [],
+   "fragments": [],
+   "status": "unavailable",
+   "relationship": "cited",
+   "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/76/589",
+   "congress": 76,
+   "law": 589,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-76publ589/uslm/PLAW-76publ589.xml",
+   "sha256": null,
+   "bytes": null,
+   "sections": [],
+   "divisions": [],
+   "fragments": [],
+   "status": "unavailable",
+   "relationship": "cited",
+   "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/76/591",
+   "congress": 76,
+   "law": 591,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-76publ591/uslm/PLAW-76publ591.xml",
+   "sha256": null,
+   "bytes": null,
+   "sections": [],
+   "divisions": [],
+   "fragments": [],
+   "status": "unavailable",
+   "relationship": "cited",
+   "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/78/310",
+   "congress": 78,
+   "law": 310,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-78publ310/uslm/PLAW-78publ310.xml",
+   "sha256": null,
+   "bytes": null,
+   "sections": [],
+   "divisions": [],
+   "fragments": [],
+   "status": "unavailable",
+   "relationship": "cited",
+   "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/115/334",
+   "congress": 115,
+   "law": 334,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-115publ334/uslm/PLAW-115publ334.xml",
+   "sha256": "719382fde69388057a0862154a392b461315d7682b561349191787b847666e2e",
+   "bytes": 4417073,
+   "sections": [
+    "8705"
+   ],
+   "divisions": [],
+   "fragments": [
+    {
+     "section": "8705",
+     "fragment_sha256": "8fc6f36cd71f875e611e6df8b276b3751beaf418b76853161c1765c82269ceb4",
+     "bytes": 23656,
+     "status": "fetched"
+    }
+   ],
+   "status": "identified",
+   "relationship": "cited"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/107/171",
+   "congress": 107,
+   "law": 171,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-107publ171/uslm/PLAW-107publ171.xml",
+   "sha256": null,
+   "bytes": null,
+   "sections": [
+    "10417"
+   ],
+   "divisions": [],
+   "fragments": [],
+   "status": "unavailable",
+   "relationship": "cited",
+   "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/101/593",
+   "congress": 101,
+   "law": 593,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-101publ593/uslm/PLAW-101publ593.xml",
+   "sha256": null,
+   "bytes": null,
+   "sections": [],
+   "divisions": [],
+   "fragments": [],
+   "status": "unavailable",
+   "relationship": "cited",
+   "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/98/244",
+   "congress": 98,
+   "law": 244,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-98publ244/uslm/PLAW-98publ244.xml",
+   "sha256": null,
+   "bytes": null,
+   "sections": [
+    "2"
+   ],
+   "divisions": [],
+   "fragments": [],
+   "status": "unavailable",
+   "relationship": "cited",
+   "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/109/54",
+   "congress": 109,
+   "law": 54,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-109publ54/uslm/PLAW-109publ54.xml",
+   "sha256": null,
+   "bytes": null,
+   "sections": [],
+   "divisions": [
+    "title III"
+   ],
+   "fragments": [],
+   "status": "unavailable",
+   "relationship": "amended_by_bound_measure",
+   "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/99/663",
+   "congress": 99,
+   "law": 663,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-99publ663/uslm/PLAW-99publ663.xml",
+   "sha256": null,
+   "bytes": null,
+   "sections": [
+    "16"
+   ],
+   "divisions": [],
+   "fragments": [],
+   "status": "unavailable",
+   "relationship": "cited",
+   "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/86/121",
+   "congress": 86,
+   "law": 121,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-86publ121/uslm/PLAW-86publ121.xml",
+   "sha256": null,
+   "bytes": null,
+   "sections": [],
+   "divisions": [],
+   "fragments": [],
+   "status": "unavailable",
+   "relationship": "cited",
+   "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/99/498",
+   "congress": 99,
+   "law": 498,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-99publ498/uslm/PLAW-99publ498.xml",
+   "sha256": null,
+   "bytes": null,
+   "sections": [],
+   "divisions": [
+    "title XV"
+   ],
+   "fragments": [],
+   "status": "unavailable",
+   "relationship": "cited",
+   "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/99/190",
+   "congress": 99,
+   "law": 190,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-99publ190/uslm/PLAW-99publ190.xml",
+   "sha256": null,
+   "bytes": null,
+   "sections": [],
+   "divisions": [],
+   "fragments": [],
+   "status": "unavailable",
+   "relationship": "cited",
+   "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/89/665",
+   "congress": 89,
+   "law": 665,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-89publ665/uslm/PLAW-89publ665.xml",
+   "sha256": null,
+   "bytes": null,
+   "sections": [],
+   "divisions": [],
+   "fragments": [],
+   "status": "unavailable",
+   "relationship": "cited",
+   "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/106/292",
+   "congress": 106,
+   "law": 292,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-106publ292/uslm/PLAW-106publ292.xml",
+   "sha256": null,
+   "bytes": null,
+   "sections": [],
+   "divisions": [],
+   "fragments": [],
+   "status": "unavailable",
+   "relationship": "cited",
+   "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/116/282",
+   "congress": 116,
+   "law": 282,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-116publ282/uslm/PLAW-116publ282.xml",
+   "sha256": "90298eb9332644ba90f92e6a9501ddb9df173910a8d9112c26ae2e924f35d0e0",
+   "bytes": 17344,
+   "sections": [],
+   "divisions": [],
+   "fragments": [],
+   "status": "identified",
+   "relationship": "cited"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/114/196",
+   "congress": 114,
+   "law": 196,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-114publ196/uslm/PLAW-114publ196.xml",
+   "sha256": "01747733cb62d5bf478939ddce066075cd46e20f0591b7039e25b317798a1613",
+   "bytes": 66120,
+   "sections": [],
+   "divisions": [],
+   "fragments": [],
+   "status": "identified",
+   "relationship": "cited"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/104/208",
+   "congress": 104,
+   "law": 208,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-104publ208/uslm/PLAW-104publ208.xml",
+   "sha256": null,
+   "bytes": null,
+   "sections": [],
+   "divisions": [],
+   "fragments": [],
+   "status": "unavailable",
+   "relationship": "cited",
+   "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/113/235",
+   "congress": 113,
+   "law": 235,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-113publ235/uslm/PLAW-113publ235.xml",
+   "sha256": "c908c1918a7a605fececfb8989e7fd20afaa5b84af89fc622d8870e18e01752e",
+   "bytes": 3656918,
+   "sections": [],
+   "divisions": [
+    "division F"
+   ],
+   "fragments": [],
+   "status": "identified",
+   "relationship": "cited"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/108/108",
+   "congress": 108,
+   "law": 108,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-108publ108/uslm/PLAW-108publ108.xml",
+   "sha256": null,
+   "bytes": null,
+   "sections": [
+    "325",
+    "335"
+   ],
+   "divisions": [],
+   "fragments": [],
+   "status": "unavailable",
+   "relationship": "cited",
+   "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/112/74",
+   "congress": 112,
+   "law": 74,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-112publ74/uslm/PLAW-112publ74.xml",
+   "sha256": null,
+   "bytes": null,
+   "sections": [],
+   "divisions": [
+    "division E"
+   ],
+   "fragments": [],
+   "status": "unavailable",
+   "relationship": "amended_by_bound_measure",
+   "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/116/260",
+   "congress": 116,
+   "law": 260,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-116publ260/uslm/PLAW-116publ260.xml",
+   "sha256": "ce110e27d05c15c9ad62ae5f5b307fc1ddb7d39a8edebda8d8801744628464cb",
+   "bytes": 14966993,
+   "sections": [],
+   "divisions": [],
+   "fragments": [],
+   "status": "identified",
+   "relationship": "cited"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/111/88",
+   "congress": 111,
+   "law": 88,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-111publ88/uslm/PLAW-111publ88.xml",
+   "sha256": null,
+   "bytes": null,
+   "sections": [],
+   "divisions": [
+    "title I"
+   ],
+   "fragments": [],
+   "status": "unavailable",
+   "relationship": "cited",
+   "reason": "GovInfo does not serve this law as USLM (laws before the USLM era need the Statutes at Large)"
+  },
+  {
+   "type": "public_law",
+   "cite": "pl/119/37",
+   "congress": 119,
+   "law": 37,
+   "source_url": "https://www.govinfo.gov/content/pkg/PLAW-119publ37/uslm/PLAW-119publ37.xml",
+   "sha256": "06529f779fb356cb83f7a65bb9acc70c0fecf7dee8411aab8bdd799e129678f1",
+   "bytes": 1000077,
+   "sections": [],
+   "divisions": [
+    "division B"
+   ],
+   "fragments": [],
+   "status": "identified",
+   "relationship": "cited"
+  }
+ ],
+ "official_summary": {
+  "status": "available",
+  "version_code": "00",
+  "action_desc": "Introduced in House",
+  "action_date": "2026-01-06",
+  "sha256": "540972d6e63aa6b1b064d060d5a78c80ac207c930d70aed7a09dd1c2c6c00616",
+  "version_relationship": "EARLIER_SAME_TEXT",
+  "usable": true
+ },
+ "cra": {
+  "mode": "not_cra",
+  "rule_status": null,
+  "consequence_source": null,
+  "underlying_rule": null,
+  "gao_determination": null
+ },
+ "completeness": {
+  "status": "AMBIGUOUS",
+  "missing": [
+   "us_code:/us/usc/t15/s644 (in_force_ambiguous)",
+   "us_code:/us/usc/t16/s839b (in_force_ambiguous)",
+   "us_code:/us/usc/t20/s4441 (in_force_ambiguous)",
+   "us_code:/us/usc/t33/s2328 (in_force_ambiguous)",
+   "us_code:/us/usc/t42/s10364 (in_force_ambiguous)",
+   "us_code:/us/usc/t42/s9611 (in_force_ambiguous)",
+   "us_code:/us/usc/t42/s9622 (in_force_ambiguous)",
+   "us_code:/us/usc/t5/s5547 (in_force_ambiguous)",
+   "text section-selection policy for a large text",
+   "public_law:pl/112/29 (text pending)",
+   "public_law:pl/94/265 (text pending)",
+   "public_law:pl/99/659 (text pending)",
+   "public_law:pl/95/372 (text pending)",
+   "public_law:pl/112/55 (text pending)",
+   "public_law:pl/106/310 (text pending)",
+   "public_law:pl/90/284 (text pending)",
+   "public_law:pl/103/322 (text pending)",
+   "public_law:pl/101/647 (text pending)",
+   "public_law:pl/108/21 (text pending)",
+   "public_law:pl/106/386 (text pending)",
+   "public_law:pl/108/405 (text pending)",
+   "public_law:pl/109/162 (text pending)",
+   "public_law:pl/98/473 (text pending)",
+   "public_law:pl/90/351 (text pending)",
+   "public_law:pl/93/415 (text pending)",
+   "public_law:pl/110/199 (text pending)",
+   "public_law:pl/109/248 (text pending)",
+   "public_law:pl/110/401 (text pending)",
+   "public_law:pl/107/296 (text pending)",
+   "public_law:pl/108/79 (text pending)",
+   "public_law:pl/110/180 (text pending)",
+   "public_law:pl/109/164 (text pending)",
+   "public_law:pl/110/403 (text pending)",
+   "public_law:pl/110/416 (text pending)",
+   "public_law:pl/111/84 (text pending)",
+   "public_law:pl/110/315 (text pending)",
+   "public_law:pl/106/546 (text pending)",
+   "public_law:pl/102/140 (text pending)",
+   "public_law:pl/100/404 (text pending)",
+   "public_law:pl/103/327 (text pending)",
+   "public_law:pl/86/209 (text pending)",
+   "public_law:pl/110/233 (text pending)",
+   "public_law:pl/110/325 (text pending)",
+   "public_law:pl/111/2 (text pending)",
+   "public_law:pl/105/119 (text pending)",
+   "public_law:pl/104/134 (text pending)",
+   "public_law:pl/104/303 (text pending)",
+   "public_law:pl/106/554 (text pending)",
+   "public_law:pl/102/575 (text pending)",
+   "public_law:pl/108/361 (text pending)",
+   "public_law:pl/111/11 (text pending)",
+   "public_law:pl/89/108 (text pending)",
+   "public_law:pl/97/425 (text pending)",
+   "public_law:pl/110/69 (text pending)",
+   "public_law:pl/95/238 (text pending)",
+   "public_law:pl/93/454 (text pending)",
+   "public_law:pl/85/536 (text pending)",
+   "public_law:pl/100/456 (text pending)",
+   "public_law:pl/106/113 (text pending)",
+   "public_law:pl/100/203 (text pending)",
+   "public_law:pl/96/487 (text pending)",
+   "public_law:pl/92/195 (text pending)",
+   "public_law:pl/94/579 (text pending)",
+   "public_law:pl/90/620 (text pending)",
+   "public_law:pl/95/348 (text pending)",
+   "public_law:pl/109/432 (text pending)",
+   "public_law:pl/95/87 (text pending)",
+   "public_law:pl/97/365 (text pending)",
+   "public_law:pl/106/462 (text pending)",
+   "public_law:pl/108/374 (text pending)",
+   "public_law:pl/87/483 (text pending)",
+   "public_law:pl/100/297 (text pending)",
+   "public_law:pl/87/279 (text pending)",
+   "public_law:pl/103/413 (text pending)",
+   "public_law:pl/101/301 (text pending)",
+   "public_law:pl/103/412 (text pending)",
+   "public_law:pl/108/188 (text pending)",
+   "public_law:pl/94/241 (text pending)",
+   "public_law:pl/109/154 (text pending)",
+   "public_law:pl/93/638 (text pending)",
+   "public_law:pl/106/224 (text pending)",
+   "public_law:pl/113/76/s432",
+   "public_law:pl/99/338 (text pending)",
+   "public_law:pl/92/203 (text pending)",
+   "public_law:pl/106/393 (text pending)",
+   "public_law:pl/96/586 (text pending)",
+   "public_law:pl/76/589 (text pending)",
+   "public_law:pl/76/591 (text pending)",
+   "public_law:pl/78/310 (text pending)",
+   "public_law:pl/107/171 (text pending)",
+   "public_law:pl/101/593 (text pending)",
+   "public_law:pl/98/244 (text pending)",
+   "public_law:pl/109/54 (text pending)",
+   "public_law:pl/99/663 (text pending)",
+   "public_law:pl/86/121 (text pending)",
+   "public_law:pl/99/498 (text pending)",
+   "public_law:pl/99/190 (text pending)",
+   "public_law:pl/89/665 (text pending)",
+   "public_law:pl/106/292 (text pending)",
+   "public_law:pl/104/208 (text pending)",
+   "public_law:pl/108/108 (text pending)",
+   "public_law:pl/112/74 (text pending)",
+   "public_law:pl/111/88 (text pending)"
+  ],
+  "notes": [
+   "voted text is 75,318 words",
+   "pl/117/328 cited as a whole law (division B): identified and hashed, no section extracted; the Maker may not describe its contents",
+   "pl/115/232 cited as a whole law: identified and hashed, no section extracted; the Maker may not describe its contents",
+   "pl/113/6 cited as a whole law (division B): identified and hashed, no section extracted; the Maker may not describe its contents",
+   "pl/116/93 cited as a whole law (division B): identified and hashed, no section extracted; the Maker may not describe its contents",
+   "pl/115/391 cited as a whole law: identified and hashed, no section extracted; the Maker may not describe its contents",
+   "pl/113/4 cited as a whole law: identified and hashed, no section extracted; the Maker may not describe its contents",
+   "pl/114/22 cited as a whole law: identified and hashed, no section extracted; the Maker may not describe its contents",
+   "pl/115/392 cited as a whole law: identified and hashed, no section extracted; the Maker may not describe its contents",
+   "pl/117/103 cited as a whole law (division B, division W): identified and hashed, no section extracted; the Maker may not describe its contents",
+   "pl/114/198 cited as a whole law: identified and hashed, no section extracted; the Maker may not describe its contents",
+   "pl/114/324 cited as a whole law: identified and hashed, no section extracted; the Maker may not describe its contents",
+   "pl/115/141 cited as a whole law (division O, division Q, division S): identified and hashed, no section extracted; the Maker may not describe its contents",
+   "pl/115/185 cited as a whole law: identified and hashed, no section extracted; the Maker may not describe its contents",
+   "pl/115/271 cited as a whole law: identified and hashed, no section extracted; the Maker may not describe its contents",
+   "pl/115/401 cited as a whole law: identified and hashed, no section extracted; the Maker may not describe its contents",
+   "pl/116/277 cited as a whole law: identified and hashed, no section extracted; the Maker may not describe its contents",
+   "pl/117/263 cited as a whole law: identified and hashed, no section extracted; the Maker may not describe its contents",
+   "pl/117/325 cited as a whole law: identified and hashed, no section extracted; the Maker may not describe its contents",
+   "pl/116/281 cited as a whole law: identified and hashed, no section extracted; the Maker may not describe its contents",
+   "pl/114/325 cited as a whole law: identified and hashed, no section extracted; the Maker may not describe its contents",
+   "pl/115/267 cited as a whole law: identified and hashed, no section extracted; the Maker may not describe its contents",
+   "pl/115/385 cited as a whole law: identified and hashed, no section extracted; the Maker may not describe its contents",
+   "pl/115/37 cited as a whole law: identified and hashed, no section extracted; the Maker may not describe its contents",
+   "pl/115/113 cited as a whole law: identified and hashed, no section extracted; the Maker may not describe its contents",
+   "pl/116/32 cited as a whole law: identified and hashed, no section extracted; the Maker may not describe its contents",
+   "pl/114/199 cited as a whole law: identified and hashed, no section extracted; the Maker may not describe its contents",
+   "pl/114/113 cited as a whole law (division B): identified and hashed, no section extracted; the Maker may not describe its contents",
+   "pl/115/31 cited as a whole law (division B, division G): identified and hashed, no section extracted; the Maker may not describe its contents",
+   "pl/118/42 cited as a whole law (division C): identified and hashed, no section extracted; the Maker may not describe its contents",
+   "pl/113/79 cited as a whole law: identified and hashed, no section extracted; the Maker may not describe its contents",
+   "pl/117/167 cited as a whole law (division A, division B): identified and hashed, no section extracted; the Maker may not describe its contents",
+   "pl/118/5 cited as a whole law (division A): identified and hashed, no section extracted; the Maker may not describe its contents",
+   "pl/116/136 cited as a whole law: identified and hashed, no section extracted; the Maker may not describe its contents",
+   "pl/113/121 cited as a whole law: identified and hashed, no section extracted; the Maker may not describe its contents",
+   "pl/116/94 cited as a whole law (division C): identified and hashed, no section extracted; the Maker may not describe its contents",
+   "pl/115/102 cited as a whole law: identified and hashed, no section extracted; the Maker may not describe its contents",
+   "pl/116/6 cited as a whole law: identified and hashed, no section extracted; the Maker may not describe its contents",
+   "pl/116/282 cited as a whole law: identified and hashed, no section extracted; the Maker may not describe its contents",
+   "pl/114/196 cited as a whole law: identified and hashed, no section extracted; the Maker may not describe its contents",
+   "pl/113/235 cited as a whole law (division F): identified and hashed, no section extracted; the Maker may not describe its contents",
+   "pl/116/260 cited as a whole law: identified and hashed, no section extracted; the Maker may not describe its contents",
+   "pl/119/37 cited as a whole law (division B): identified and hashed, no section extracted; the Maker may not describe its contents"
+  ]
+ },
+ "generation": {
+  "status": "SOURCE_CONTEXT_AMBIGUOUS"
+ },
+ "history": [],
+ "recorded_utc": "2026-09-24T03:35:33Z"
+}

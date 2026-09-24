@@ -1,0 +1,108 @@
+{
+ "schema": "civicalign.context/1.0",
+ "vote": {
+  "congress": 119,
+  "session": 2,
+  "clerk_number": 84,
+  "date": "2026-04-16",
+  "measure": "HJRES140"
+ },
+ "binding": {
+  "kind": "JOINT_RESOLUTION_PASSAGE",
+  "verification": "VERIFIED",
+  "text_status": "TEXT_BOUND",
+  "text_sha256": "411846571394da14d18b14c0e74d6d54f89eac921022a3d42e11bc038863d989"
+ },
+ "references": [
+  {
+   "legal_doc": "usc-chapter",
+   "cite": "usc-chapter/5/8",
+   "text": "chapter 8",
+   "amendatory": false,
+   "pl_section": null,
+   "pl_division": null
+  }
+ ],
+ "selection": {
+  "policy": "cra: the resolution's own text and the CRA consequence section; cited authorities are not extracted",
+  "section_cap": 12,
+  "required": [],
+  "cited": [],
+  "amended": [],
+  "status": "ok"
+ },
+ "release_point": {
+  "label": "119-83",
+  "date": "2026-04-13",
+  "note": "latest release point on or before the vote; per-section archives may come from an earlier published one"
+ },
+ "existing_law_context": [],
+ "public_laws": [],
+ "official_summary": {
+  "status": "available",
+  "version_code": "00",
+  "action_desc": "Introduced in House",
+  "action_date": "2026-01-12",
+  "sha256": "c3ff7dd1840e679090586eded7687391d069274f80a5c43cae197930a365cd9c",
+  "version_relationship": "EARLIER_SAME_TEXT",
+  "usable": true
+ },
+ "cra": {
+  "mode": "rule_bound",
+  "rule_status": "RULE_BOUND",
+  "consequence_source": {
+   "type": "us_code",
+   "identifier": "/us/usc/t5/s801",
+   "title": "5",
+   "section": "801",
+   "as_of": {
+    "release_point": "119-83",
+    "date": "2026-04-13",
+    "rule": "latest OLRC release point on or before the vote with a published archive; intervening laws checked against the classification table"
+   },
+   "source_url": "https://uscode.house.gov/download/releasepoints/us/pl/119/83/xml_usc05@119-83.zip",
+   "archive_sha256": "ae04fb04ef13235f1f6146f4085812e9f41edde53d07e451b718e1ebcdefc52a",
+   "fragment_sha256": "a6081d513cf64bce3c6289d81355cb54b50ca5a4699eda0c676a32de3b600e8c",
+   "bytes": 33022,
+   "heading": "Congressional review",
+   "relationship": "cra_statutory_consequence",
+   "status": "fetched",
+   "in_force_check": {
+    "status": "ok",
+    "archive": "xml_usc05@119-83.zip",
+    "intervening": [],
+    "affected_by": [],
+    "check": "no intervening release point"
+   }
+  },
+  "underlying_rule": {
+   "status": "RULE_BOUND",
+   "citation": "88 FR 6308",
+   "document_number": "2023-01969",
+   "fr_title": "Public Land Order No. 7917 for Withdrawal of Federal Lands; Cook, Lake, and Saint Louis Counties, MN",
+   "type": "Notice",
+   "publication_date": "2023-01-31",
+   "agencies": [
+    "Interior Department",
+    "Land Management Bureau"
+   ],
+   "source_url": "https://www.federalregister.gov/documents/2023/01/31/2023-01969/public-land-order-no-7917-for-withdrawal-of-federal-lands-cook-lake-and-saint-louis-counties-mn",
+   "full_text_xml_url": "https://www.federalregister.gov/documents/full_text/xml/2023/01/31/2023-01969.xml",
+   "sha256": "d443f6f22c804fec04c2c74e1fe4c946c0c98830811f6894b5cc7e30cb2263cf",
+   "bytes": 7670
+  },
+  "gao_determination": null
+ },
+ "completeness": {
+  "status": "LIMITED",
+  "missing": [],
+  "notes": [
+   "CRA: the resolution's own effect may be explained; the underlying rule's substance may not unless the rule is bound and separately verified"
+  ]
+ },
+ "generation": {
+  "status": "READY_WITH_LIMITS"
+ },
+ "history": [],
+ "recorded_utc": "2026-09-24T03:36:31Z"
+}

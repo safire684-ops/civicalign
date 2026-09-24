@@ -179,9 +179,44 @@ and the page does not read any of it yet.**
   after the vote / reproduced by the rule / stage attribute, eligibility, CRA
   fields from the title, no generated field present).
 - Tests: `tests/test_binding.py`.
-- Not done: Maker, Checker, evaluation set, any UI change. The Congress.gov
-  API is not used. When Stage 3 starts, the model provider, prompt versions
-  and iteration counts go into the binding's provenance, and only `verified`
+- **Stage 2.5 (source context and packets)** is built: `explain/context.py`
+  (`python -m civicalign.explain.context`, `--offline`, `--only=S2,HR4`).
+  For each binding it extracts the structured references from the voted XML
+  (`external-xref` parsable citations; no prose regex for the Code), applies
+  the fixed selection policy (sections cited in amendatory instructions, else
+  all cited sections, capped at 12; above the cap the context is PENDING until
+  a large-measure policy exists), selects the OLRC release point in force
+  (`sources/uscode.py`: the latest dated on or before the vote, never later;
+  a release point that cannot be retrieved leaves the vote AMBIGUOUS, with no
+  fallback to today's law), extracts each required section byte-exact from the
+  cached title archive and hashes it, identifies cited Public Laws
+  (`sources/publaw.py`, GovInfo USLM: a cited section is extracted; a whole-law
+  or division citation is hashed and noted as not to be described), records
+  the CRS summary relationship (MATCHED / EARLIER_SAME_TEXT / PRE_AMENDMENT /
+  UNKNOWN; only the first two are usable), and for CRA resolutions binds the
+  underlying Federal Register document by citation (`sources/federal_register.py`,
+  the FR API with pagination and a client header; GovInfo issue XML is the
+  documented fallback), identifies GAO determinations (dates and Congressional
+  Record pages; identified, not retrieved), and sources 5 U.S.C. 801 from the
+  Code in force as the statutory consequence. Output: one tracked context
+  record per vote under `data/explanations/119/context/` and, for READY
+  states only, a packet under `packets/` whose every `content` field is a
+  byte-exact copy of a hashed artefact. States: completeness COMPLETE /
+  LIMITED / PENDING / AMBIGUOUS → generation READY_FOR_GENERATION /
+  READY_WITH_LIMITS / SOURCE_CONTEXT_PENDING / SOURCE_CONTEXT_AMBIGUOUS;
+  CRA is never COMPLETE (limited mode only: the resolution's own effect;
+  passage is not enactment). Raw archives (title zips, law XML, FR XML) are
+  cached under `data/raw/explanations/` with the manifest; the context build
+  is an offline job (title archives are slow to fetch) and is NOT in the
+  weekly workflow, which only re-verifies the tracked records (supervisor).
+- Decisions on record: first Maker/Checker cohort = the 8 self-contained
+  resolutions + S.2 + H.R.4 (H.R.4 only once its title-2 context is fetched);
+  S.5 stays SOURCE_CONTEXT_AMBIGUOUS (its in-force release point 118-274 has
+  no XML; the next one is S.5 itself); CRA explanations wait for a separate
+  validation cohort (one rule-bound, one GAO-deemed).
+- Not done: Maker, Checker, evaluation, any UI change. The Congress.gov API
+  is not used. When Stage 3 starts, the model provider, prompt versions and
+  iteration counts go into the packet's provenance, and only `verified`
   summaries may reach block `F`.
 
 ## How the weekly update works
@@ -267,7 +302,7 @@ guard (104 Voteview rows for 100 seats) is in `sources/voteview.py`.
   vintages), `verify.py`, `supervisor.py`. `whitepaper.py` — figure refresher.
 - `explain/` — Pillar 1 Stage 2 (see above); `sources/senate_votes.py`,
   `sources/billstatus.py`.
-- Tests: `test_binding.py` (Pillar 1), `test_published_pages.py` (contract: no cross-scale arithmetic G1–G6,
+- Tests: `test_binding.py`, `test_context.py` (Pillar 1), `test_published_pages.py` (contract: no cross-scale arithmetic G1–G6,
   no bill ideology, no dead bills, twelve UX guarantees, ten presentation
   guarantees, twenty average-voter guarantees V1–V20), `test_perspective.py`
   (the product hierarchy: state-relative primary result, regression not survey
@@ -278,7 +313,7 @@ guard (104 Voteview rows for 100 seats) is in `sources/voteview.py`.
   `test_supervisor.py`, `test_independent.py` (raw-file recomputation),
   `test_floor_votes.py`, `test_math.py`, `test_regressions.py`,
   `test_representation.py`, `test_uncertainty.py`, `test_whitepaper.py`.
-  236 pass as of this handoff; supervisor 35/35; verify 12/12.
+  249 pass as of this handoff; supervisor 36/36; verify 12/12.
 
 ## Open items
 

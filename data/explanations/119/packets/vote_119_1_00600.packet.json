@@ -1,0 +1,112 @@
+{
+ "packet_schema": "civicalign.packet/1.0",
+ "vote": {
+  "congress": 119,
+  "session": 1,
+  "clerk_number": 600,
+  "voteview_id": 600,
+  "date": "2025-10-30",
+  "question": "On the Joint Resolution",
+  "result": "Joint Resolution Passed",
+  "required": "1/2",
+  "yeas": 51,
+  "nays": 47,
+  "measure": "SJRES88",
+  "senate_url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1191/vote_119_1_00600.xml",
+  "senate_sha256": "443e963bb198d3cd21a90ab45c5a9094b3b32122b9c96a1b427357fc22a29255",
+  "senate_title": "S.J.Res. 88",
+  "senate_document_text": "A joint resolution terminating the national emergency declared to impose global tariffs.",
+  "amendment_number": null,
+  "voteview_url": "https://voteview.com/rollcall/RS1190600",
+  "senator_votes_source": "block F / S119_votes.csv (not included here)"
+ },
+ "legislative_object": {
+  "type": "joint_resolution",
+  "id": "SJRES88",
+  "title": "A joint resolution terminating the national emergency declared to impose global tariffs.",
+  "short_title": "",
+  "origin_chamber": "Senate"
+ },
+ "classification": {
+  "kind": "JOINT_RESOLUTION_PASSAGE"
+ },
+ "receipt_scaffold": {
+  "deciding": "On the Joint Resolution S.J.Res. 88",
+  "heading_success": "If the resolution passes",
+  "heading_failure": "If the resolution does not pass",
+  "yea_means": "A Yea vote is a vote to pass the joint resolution in the Senate.",
+  "nay_means": "A Nay vote is a vote against passing the joint resolution.",
+  "next_step": "A joint resolution has the force of a bill: after both chambers pass it, it goes to the President.",
+  "sources": [
+   {
+    "what": "Senate roll-call record",
+    "url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1191/vote_119_1_00600.xml"
+   },
+   {
+    "what": "Bill status (GovInfo)",
+    "url": "https://www.govinfo.gov/bulkdata/BILLSTATUS/119/sjres/BILLSTATUS-119sjres88.xml"
+   },
+   {
+    "what": "Text as voted on (Engrossed in Senate)",
+    "url": "https://www.govinfo.gov/content/pkg/BILLS-119sjres88es/xml/BILLS-119sjres88es.xml"
+   },
+   {
+    "what": "Roll call at Voteview",
+    "url": "https://voteview.com/rollcall/RS1190600"
+   }
+  ]
+ },
+ "voted_text": {
+  "version_code": "es",
+  "version_name": "Engrossed in Senate",
+  "date": "2025-10-30",
+  "url": "https://www.govinfo.gov/content/pkg/BILLS-119sjres88es/xml/BILLS-119sjres88es.xml",
+  "sha256": "64d111f8e6b0d492b6718b02bce3f206c9c2ea89b624e1dbf381b124a5df3681",
+  "format": "govinfo-bill-xml",
+  "content": "<?xml version=\"1.0\"?>\n<?xml-stylesheet type=\"text/xsl\" href=\"billres.xsl\"?>\n<!DOCTYPE resolution PUBLIC \"-//US Congress//DTDs/res.dtd//EN\" \"res.dtd\">\n<resolution resolution-type=\"senate-joint\" star-print=\"no-star-print\" public-private=\"public\" resolution-stage=\"Engrossed-in-Senate\" slc-id=\"S1-ROS25I38-JV9-Y0-S16\" stage-count=\"1\" public-print=\"no\"><metadata xmlns:dc=\"http://purl.org/dc/elements/1.1/\">\n<dublinCore>\n<dc:title>119 SJ 88 ES: Terminating the national emergency declared to impose global tariffs.</dc:title>\n<dc:publisher>U.S. Senate</dc:publisher>\n<dc:date></dc:date>\n<dc:format>text/xml</dc:format>\n<dc:language>EN</dc:language>\n<dc:rights>Pursuant to Title 17 Section 105 of the United States Code, this file is not subject to copyright protection and is in the public domain.</dc:rights>\n</dublinCore>\n</metadata>\n<form display=\"yes\">\n<congress display=\"yes\">119th CONGRESS</congress><session display=\"yes\">1st Session</session><legis-num display=\"yes\">S. J. RES. 88</legis-num><current-chamber display=\"no\">IN THE SENATE OF THE UNITED STATES</current-chamber><legis-type display=\"yes\">JOINT RESOLUTION</legis-type><official-title display=\"yes\">Terminating the national emergency declared to impose global tariffs.</official-title></form><resolution-body style=\"OLC\" display-resolving-clause=\"yes-display-resolving-clause\"><section display-inline=\"yes-display-inline\" section-type=\"undesignated-section\" id=\"S1\" commented=\"no\"><text display-inline=\"yes-display-inline\">That, pursuant to section 202 of the National Emergencies Act (<external-xref legal-doc=\"usc\" parsable-cite=\"usc/50/1622\">50 U.S.C. 1622</external-xref>), the national emergency declared on April 2, 2025, by the President in Executive Order 14257 (90 Fed. Reg. 15041) is terminated effective on the date of the enactment of this joint resolution. </text></section></resolution-body><attestation><attestation-group><attestation-date date=\"20251030\" chamber=\"Senate\">Passed the Senate October 30, 2025.</attestation-date><attestor display=\"no\"></attestor><role>Secretary</role></attestation-group></attestation><endorsement display=\"yes\"></endorsement></resolution> \n\n"
+ },
+ "existing_law_context": [
+  {
+   "type": "us_code",
+   "identifier": "/us/usc/t50/s1622",
+   "heading": "National emergencies",
+   "as_of": {
+    "release_point": "119-36",
+    "date": "2025-09-05",
+    "rule": "latest OLRC release point on or before the vote with a published archive; intervening laws checked against the classification table"
+   },
+   "sha256": "793e63af14e06cfea6326b3770afe90c7a2bfa0a6a9de2ced658afe6ff72b1fa",
+   "relationship": "cited_as_authority",
+   "content": "<section style=\"-uslm-lc:I80\" id=\"id9759f65e-7e89-11f0-a93b-d1785429c93b\" identifier=\"/us/usc/t50/s1622\"><num value=\"1622\">§ 1622.</num><heading> National emergencies</heading><subsection style=\"-uslm-lc:I19\" class=\"indent2 firstIndent-2\" id=\"id9759f65f-7e89-11f0-a93b-d1785429c93b\" identifier=\"/us/usc/t50/s1622/a\"><num value=\"a\" class=\"bold\">(a)</num><heading class=\"bold\"> Termination methods</heading><chapeau style=\"-uslm-lc:I11\" class=\"indent0\">Any national emergency declared by the President in accordance with this subchapter shall terminate if—</chapeau><paragraph style=\"-uslm-lc:I12\" class=\"indent1\" id=\"id9759f660-7e89-11f0-a93b-d1785429c93b\" identifier=\"/us/usc/t50/s1622/a/1\"><num value=\"1\">(1)</num><content> there is enacted into law a joint resolution terminating the emergency; or</content>\n</paragraph>\n<paragraph style=\"-uslm-lc:I12\" class=\"indent1\" id=\"id9759f661-7e89-11f0-a93b-d1785429c93b\" identifier=\"/us/usc/t50/s1622/a/2\"><num value=\"2\">(2)</num><content> the President issues a proclamation terminating the emergency.</content>\n</paragraph>\n\n<continuation style=\"-uslm-lc:I10\" class=\"indent0 firstIndent0\">Any national emergency declared by the President shall be terminated on the date specified in any joint resolution referred to in clause (1) or on the date specified in a proclamation by the President terminating the emergency as provided in clause (2) of this subsection, whichever date is earlier, and any powers or authorities exercised by reason of said emergency shall cease to be exercised after such specified date, except that such termination shall not affect—</continuation>\n<subparagraph style=\"-uslm-lc:I12\" class=\"indent1\" id=\"id9759f662-7e89-11f0-a93b-d1785429c93b\" identifier=\"/us/usc/t50/s1622/a/A\"><num value=\"A\">(A)</num><content> any action taken or proceeding pending not finally concluded or determined on such date;</content>\n</subparagraph>\n<subparagraph style=\"-uslm-lc:I12\" class=\"indent1\" id=\"id9759f663-7e89-11f0-a93b-d1785429c93b\" identifier=\"/us/usc/t50/s1622/a/B\"><num value=\"B\">(B)</num><content> any action or proceeding based on any act committed prior to such date; or</content>\n</subparagraph>\n<subparagraph style=\"-uslm-lc:I12\" class=\"indent1\" id=\"id9759f664-7e89-11f0-a93b-d1785429c93b\" identifier=\"/us/usc/t50/s1622/a/C\"><num value=\"C\">(C)</num><content> any rights or duties that matured or penalties that were incurred prior to such date.</content>\n</subparagraph>\n</subsection>\n<subsection style=\"-uslm-lc:I19\" class=\"indent2 firstIndent-2\" id=\"id9759f665-7e89-11f0-a93b-d1785429c93b\" identifier=\"/us/usc/t50/s1622/b\"><num value=\"b\" class=\"bold\">(b)</num><heading class=\"bold\"> Termination review of national emergencies by Congress</heading><content><p style=\"-uslm-lc:I11\" class=\"indent0\">Not later than six months after a national emergency is declared, and not later than the end of each six-month period thereafter that such emergency continues, each House of Congress shall meet to consider a vote on a joint resolution to determine whether that emergency shall be terminated.</p>\n</content>\n</subsection>\n<subsection style=\"-uslm-lc:I19\" class=\"indent2 firstIndent-2\" id=\"id9759f666-7e89-11f0-a93b-d1785429c93b\" identifier=\"/us/usc/t50/s1622/c\"><num value=\"c\" class=\"bold\">(c)</num><heading class=\"bold\"> Joint resolution; referral to Congressional committees; conference committee in event of disagreement; filing of report; termination procedure deemed part of rules of House and Senate</heading><paragraph style=\"-uslm-lc:I11\" class=\"indent0\" id=\"id9759f667-7e89-11f0-a93b-d1785429c93b\" identifier=\"/us/usc/t50/s1622/c/1\"><num value=\"1\">(1)</num><content> A joint resolution to terminate a national emergency declared by the President shall be referred to the appropriate committee of the House of Representatives or the Senate, as the case may be. One such joint resolution shall be reported out by such committee together with its recommendations within fifteen calendar days after the day on which such resolution is referred to such committee, unless such House shall otherwise determine by the yeas and nays.</content>\n</paragraph>\n<paragraph style=\"-uslm-lc:I11\" class=\"indent0\" id=\"id9759f668-7e89-11f0-a93b-d1785429c93b\" identifier=\"/us/usc/t50/s1622/c/2\"><num value=\"2\">(2)</num><content> Any joint resolution so reported shall become the pending business of the House in question (in the case of the Senate the time for debate shall be equally divided between the proponents and the opponents) and shall be voted on within three calendar days after the day on which such resolution is reported, unless such House shall otherwise determine by yeas and nays.</content>\n</paragraph>\n<paragraph style=\"-uslm-lc:I11\" class=\"indent0\" id=\"id9759f669-7e89-11f0-a93b-d1785429c93b\" identifier=\"/us/usc/t50/s1622/c/3\"><num value=\"3\">(3)</num><content> Such a joint resolution passed by one House shall be referred to the appropriate committee of the other House and shall be reported out by such committee together with its recommendations within fifteen calendar days after the day on which such resolution is referred to such committee and shall thereupon become the pending business of such House and shall be voted upon within three calendar days after the day on which such resolution is reported, unless such House shall otherwise determine by yeas and nays.</content>\n</paragraph>\n<paragraph style=\"-uslm-lc:I11\" class=\"indent0\" id=\"id9759f66a-7e89-11f0-a93b-d1785429c93b\" identifier=\"/us/usc/t50/s1622/c/4\"><num value=\"4\">(4)</num><content> In the case of any disagreement between the two Houses of Congress with respect to a joint resolution passed by both Houses, conferees shall be promptly appointed and the committee of conference shall make and file a report with respect to such joint resolution within six calendar days after the day on which managers on the part of the Senate and the House have been appointed. Notwithstanding any rule in either House concerning the printing of conference reports or concerning any delay in the consideration of such reports, such report shall be acted on by both Houses not later than six calendar days after the conference report is filed in the House in which such report is filed first. In the event the conferees are unable to agree within forty-eight hours, they shall report back to their respective Houses in disagreement.</content>\n</paragraph>\n<paragraph style=\"-uslm-lc:I11\" class=\"indent0\" id=\"id9759f66b-7e89-11f0-a93b-d1785429c93b\" identifier=\"/us/usc/t50/s1622/c/5\"><num value=\"5\">(5)</num><chapeau> Paragraphs (1)–(4) of this subsection, subsection (b) of this section, and <ref href=\"/us/usc/t50/s1651/b\">section 1651(b) of this title</ref> are enacted by Congress—</chapeau><subparagraph style=\"-uslm-lc:I12\" class=\"indent1\" id=\"id9759f66c-7e89-11f0-a93b-d1785429c93b\" identifier=\"/us/usc/t50/s1622/c/5/A\"><num value=\"A\">(A)</num><content> as an exercise of the rulemaking power of the Senate and the House of Representatives, respectively, and as such they are deemed a part of the rules of each House, respectively, but applicable only with respect to the procedure to be followed in the House in the case of resolutions described by this subsection; and they supersede other rules only to the extent that they are inconsistent therewith; and</content>\n</subparagraph>\n<subparagraph style=\"-uslm-lc:I12\" class=\"indent1\" id=\"id9759f66d-7e89-11f0-a93b-d1785429c93b\" identifier=\"/us/usc/t50/s1622/c/5/B\"><num value=\"B\">(B)</num><content> with full recognition of the constitutional right of either House to change the rules (so far as relating to the procedure of that House) at any time, in the same manner, and to the same extent as in the case of any other rule of that House.</content>\n</subparagraph>\n</paragraph>\n</subsection>\n<subsection style=\"-uslm-lc:I19\" class=\"indent2 firstIndent-2\" id=\"id9759f66e-7e89-11f0-a93b-d1785429c93b\" identifier=\"/us/usc/t50/s1622/d\"><num value=\"d\" class=\"bold\">(d)</num><heading class=\"bold\"> Automatic termination of national emergency; continuation notice from President to Congress; publication in Federal Register</heading><content><p style=\"-uslm-lc:I11\" class=\"indent0\">Any national emergency declared by the President in accordance with this subchapter, and not otherwise previously terminated, shall terminate on the anniversary of the declaration of that emergency if, within the ninety-day period prior to each anniversary date, the President does not publish in the Federal Register and transmit to the Congress a notice stating that such emergency is to continue in effect after such anniversary.</p>\n</content>\n</subsection>\n<sourceCredit id=\"id9759f66f-7e89-11f0-a93b-d1785429c93b\">(<ref href=\"/us/pl/94/412/tII/s202\">Pub. L. 94–412, title II, § 202</ref>, <date date=\"1976-09-14\">Sept. 14, 1976</date>, <ref href=\"/us/stat/90/1255\">90 Stat. 1255</ref>; <ref href=\"/us/pl/99/93/tVIII/s801\">Pub. L. 99–93, title VIII, § 801</ref>, <date date=\"1985-08-16\">Aug. 16, 1985</date>, <ref href=\"/us/stat/99/448\">99 Stat. 448</ref>.)</sourceCredit>\n<notes type=\"uscNote\" id=\"id9759f670-7e89-11f0-a93b-d1785429c93b\">\n<note style=\"-uslm-lc:I74\" role=\"crossHeading\" topic=\"editorialNotes\" id=\"id9759f671-7e89-11f0-a93b-d1785429c93b\"><heading class=\"centered\"><b>Editorial Notes</b></heading></note>\n<note style=\"-uslm-lc:I74\" topic=\"amendments\" id=\"id9759f672-7e89-11f0-a93b-d1785429c93b\"><heading class=\"centered smallCaps\">Amendments</heading><p style=\"-uslm-lc:I21\" class=\"indent0\">1985—Subsecs. (a) to (c). <ref href=\"/us/pl/99/93\">Pub. L. 99–93</ref> substituted “there is enacted into law a joint resolution terminating the emergency” for “Congress terminates the emergency by concurrent resolution” in par. (1) of subsec. (a), and substituted “joint resolution” for “concurrent resolution” wherever appearing in second sentence of subsec. (a), subsec. (b), and pars. (1) to (4) of subsec. (c).</p>\n</note>\n</notes>\n</section>"
+  }
+ ],
+ "cited_public_laws_not_included": [],
+ "official_summary": {
+  "status": "available",
+  "version_relationship": "MATCHED",
+  "usable": true,
+  "version_code": "55",
+  "action_desc": "Passed Senate",
+  "action_date": "2025-10-30",
+  "sha256": "07ccf3c255aed3b391c039c54cf0386f3361269abb561dd0c35edb87088af6d2",
+  "content": "<p>This joint resolution terminates the national emergency declared by President Donald J. Trump on April 2, 2025, which imposed a 10% tariff on most imports to the United States and additional duties on specified trading partners.</p>"
+ },
+ "cra_context": {
+  "mode": "not_cra"
+ },
+ "completeness": {
+  "status": "COMPLETE",
+  "missing": [],
+  "notes": []
+ },
+ "generation": {
+  "status": "READY_FOR_GENERATION"
+ },
+ "maker_rules": [
+  "factual claims only from the content fields of this packet",
+  "no browsing, no retrieval, no model memory for facts",
+  "derived metadata (headings, relationships, statuses) is not source text"
+ ],
+ "history": [],
+ "recorded_utc": "2026-09-24T03:32:50Z"
+}

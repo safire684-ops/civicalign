@@ -1,0 +1,136 @@
+{
+ "packet_schema": "civicalign.packet/1.0",
+ "vote": {
+  "congress": 119,
+  "session": 1,
+  "clerk_number": 411,
+  "voteview_id": 411,
+  "date": "2025-07-17",
+  "question": "On Passage of the Bill",
+  "result": "Bill Passed",
+  "required": "1/2",
+  "yeas": 51,
+  "nays": 48,
+  "measure": "HR4",
+  "senate_url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1191/vote_119_1_00411.xml",
+  "senate_sha256": "5988b8fb3da987b8d0b30f355598f34af9efbde023150b3f9ffb44cbf9518fe2",
+  "senate_title": "H.R. 4, As Amended",
+  "senate_document_text": "A bill to rescind certain budget authority proposed to be rescinded in special messages transmitted to the Congress by the President on June 3, 2025, in accordance with section 1012(a) of the Congressional Budget and Impoundment Control Act of 1974.",
+  "amendment_number": null,
+  "voteview_url": "https://voteview.com/rollcall/RS1190411",
+  "senator_votes_source": "block F / S119_votes.csv (not included here)"
+ },
+ "legislative_object": {
+  "type": "bill",
+  "id": "HR4",
+  "title": "Rescissions Act of 2025",
+  "short_title": "Rescissions Act of 2025",
+  "origin_chamber": "House"
+ },
+ "classification": {
+  "kind": "PASSAGE_AS_AMENDED"
+ },
+ "receipt_scaffold": {
+  "deciding": "On Passage of the Bill H.R. 4",
+  "heading_success": "If the bill, as amended, passes",
+  "heading_failure": "If the bill does not pass",
+  "yea_means": "A Yea vote is a vote to pass the bill as the Senate amended it.",
+  "nay_means": "A Nay vote is a vote against passing the amended bill.",
+  "next_step": "Because the Senate changed the text, the amended bill goes back to the House, which must agree to the Senate's version before it can become law.",
+  "sources": [
+   {
+    "what": "Senate roll-call record",
+    "url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1191/vote_119_1_00411.xml"
+   },
+   {
+    "what": "Bill status (GovInfo)",
+    "url": "https://www.govinfo.gov/bulkdata/BILLSTATUS/119/hr/BILLSTATUS-119hr4.xml"
+   },
+   {
+    "what": "Text as voted on (Engrossed Amendment Senate)",
+    "url": "https://www.govinfo.gov/content/pkg/BILLS-119hr4eas/xml/BILLS-119hr4eas.xml"
+   },
+   {
+    "what": "Roll call at Voteview",
+    "url": "https://voteview.com/rollcall/RS1190411"
+   }
+  ]
+ },
+ "voted_text": {
+  "version_code": "eas",
+  "version_name": "Engrossed Amendment Senate",
+  "date": "2025-07-17",
+  "url": "https://www.govinfo.gov/content/pkg/BILLS-119hr4eas/xml/BILLS-119hr4eas.xml",
+  "sha256": "d456fc67c51208445d8134c4eeec74decac685cc7454fa1d5dc138b3b5a5fa3e",
+  "format": "govinfo-bill-xml",
+  "content": "<?xml version=\"1.0\"?>\n<?xml-stylesheet type=\"text/xsl\" href=\"billres.xsl\"?>\n<!DOCTYPE amendment-doc PUBLIC \"-//US Congress//DTDs/amend.dtd//EN\" \"amend.dtd\">\n<amendment-doc amend-type=\"engrossed-amendment\" amend-degree=\"first\"><metadata xmlns:dc=\"http://purl.org/dc/elements/1.1/\">\n<dublinCore>\n<dc:title>119 HR 4 EAS: Rescissions Act of 2025</dc:title>\n<dc:publisher>U.S. House of Representatives</dc:publisher>\n<dc:date>2025-07-17</dc:date>\n<dc:format>text/xml</dc:format>\n<dc:language>EN</dc:language>\n<dc:rights>Pursuant to Title 17 Section 105 of the United States Code, this file is not subject to copyright protection and is in the public domain.</dc:rights>\n</dublinCore>\n</metadata>\n<engrossed-amendment-form>\n<congress display=\"no\">119th CONGRESS</congress><session display=\"no\">1st Session</session><legis-num display=\"no\">H.R. 4</legis-num><current-chamber display=\"yes\">In the Senate of the United States,</current-chamber><action><action-date date=\"20250717\" legis-day=\"20250716\">July 17 (legislative day, July 16), 2025.</action-date></action><legis-type display=\"yes\">Amendment:</legis-type></engrossed-amendment-form><engrossed-amendment-body><section id=\"id9027fcbcea614ab7a1c77d24240d8677\" section-type=\"resolved\"><text>That the bill from the House of Representatives (H.R. 4) entitled <quote>An Act to rescind certain budget authority proposed to be rescinded in special messages transmitted to the Congress by the President on June 3, 2025, in accordance with section 1012(a) of the Congressional Budget and Impoundment Control Act of 1974.</quote>, do pass with the following</text></section><amendment><amendment-instruction blank-lines-after=\"0\"><text> Strike all after the enacting clause and insert the following: </text></amendment-instruction><amendment-block blank-lines-after=\"1\" changed=\"added\" reported-display-style=\"italic\"><section section-type=\"section-one\" id=\"H0DB62F6D0C13474589D2F4C2B87BBF40\"><enum>1.</enum><header>Short Title</header><text display-inline=\"no-display-inline\">This Act may be cited as the <quote><short-title>Rescissions Act of 2025</short-title></quote>.</text></section><section id=\"HE064C52D697245E5991DECE8EACCFE37\"><enum>2.</enum><header>Rescissions of budget authority</header><subsection id=\"H75007576265F4EC29BE330CB36B765AC\"><enum>(a)</enum><header>In general</header><text display-inline=\"yes-display-inline\">Pursuant to the special message transmitted by the President on June 3, 2025, to the House of Representatives and the Senate proposing the rescission of budget authority under section 1012 of part B of title X of the Congressional Budget and Impoundment Control Act of 1974 (<external-xref legal-doc=\"usc\" parsable-cite=\"usc/2/682\">2 U.S.C. 682 et seq.</external-xref>), the rescissions described under subsection (b) shall take effect immediately upon the date of enactment of this Act.</text></subsection><subsection id=\"H791EFE42C2D44649A0EC3BEF3BB93816\"><enum>(b)</enum><header>Rescissions</header><text>The rescissions described in this subsection are as follows:</text><paragraph id=\"H34DFEAED976E4241AC6A7E8E2A92A3A3\"><enum>(1)</enum><text>Of the unobligated balances under the heading <quote>International Organizations—Contributions to International Organizations</quote> made available by the Department of State, Foreign Operations, and Related Programs Appropriations Act, 2024 (division F of <external-xref legal-doc=\"public-law\" parsable-cite=\"pl/118/47\">Public Law 118–47</external-xref>), $33,008,764 are rescinded.</text></paragraph><paragraph id=\"HF1EB45BE3F47453BA4D400FFA6575D5A\"><enum>(2)</enum><text display-inline=\"yes-display-inline\">Of the unobligated balances under the heading <quote>International Organizations—Contributions to International Organizations</quote> made available by the Full-Year Continuing Appropriations Act, 2025 (division A of <external-xref legal-doc=\"public-law\" parsable-cite=\"pl/119/4\">Public Law 119–4</external-xref>), $168,837,230 are rescinded.</text></paragraph><paragraph id=\"HF53AA2B5003C4DDC8CC8FC972E5AA8E1\"><enum>(3)</enum><text display-inline=\"yes-display-inline\">Of the unobligated balances under the heading <quote>International Organizations—Contributions for International Peacekeeping Activities</quote> made available by the Department of State, Foreign Operations, and Related Programs Appropriations Act, 2024 (division F of <external-xref legal-doc=\"public-law\" parsable-cite=\"pl/118/47\">Public Law 118–47</external-xref>), $203,328,007 are rescinded.</text></paragraph><paragraph id=\"H6F8EE398503B45E0AD62C867ED75BEDF\"><enum>(4)</enum><text display-inline=\"yes-display-inline\">Of the unobligated balances under the heading <quote>International Organizations—Contributions for International Peacekeeping Activities</quote> made available by the Full-Year Continuing Appropriations Act, 2025 (division A of <external-xref legal-doc=\"public-law\" parsable-cite=\"pl/119/4\">Public Law 119–4</external-xref>), $157,906,000 are rescinded.</text></paragraph><paragraph id=\"H2C87A8B88A6B4C9592F3B21C1A781FF7\"><enum>(5)</enum><text display-inline=\"yes-display-inline\">Of the unobligated balances in the first paragraph under the heading <quote>Bilateral Economic Assistance—Funds Appropriated to the President—Global Health Programs</quote> made available by the Full-Year Continuing Appropriations Act, 2025 (division A of <external-xref legal-doc=\"public-law\" parsable-cite=\"pl/119/4\">Public Law 119–4</external-xref>), $500,000,000 are rescinded: <proviso><italic>Provided,</italic></proviso> That none of the amounts rescinded under this paragraph shall be from the unobligated balances for the following programs: HIV/AIDS, Tuberculosis, Malaria, Nutrition, or Maternal and Child Health: <proviso><italic>Provided further,</italic></proviso> That the preceding proviso does not apply to family planning and reproductive health programs.</text></paragraph><paragraph id=\"H71170F44D20F4A7CBBE4CF8355BE270A\"><enum>(6)</enum><text display-inline=\"yes-display-inline\">Of the unobligated balances under the heading <quote>Department of State—Migration and Refugee Assistance</quote> made available by the Full-Year Continuing Appropriations Act, 2025 (division A of <external-xref legal-doc=\"public-law\" parsable-cite=\"pl/119/4\">Public Law 119–4</external-xref>), $800,000,000 are rescinded.</text></paragraph><paragraph id=\"H14D7874734AC424E94223666178ED0D3\"><enum>(7)</enum><text display-inline=\"yes-display-inline\">Of the unobligated balances under the heading <quote>Bilateral Economic Assistance—Funds Appropriated to the President—Complex Crises Fund</quote> made available by the Full-Year Continuing Appropriations Act, 2025 (division A of <external-xref legal-doc=\"public-law\" parsable-cite=\"pl/119/4\">Public Law 119–4</external-xref>), $43,000,000 are rescinded.</text></paragraph><paragraph id=\"H4709CA5210C74415A83259D945580743\"><enum>(8)</enum><text display-inline=\"yes-display-inline\">Of the unobligated balances under the heading <quote>Bilateral Economic Assistance—Funds Appropriated to the President—Democracy Fund</quote> made available by the Full-Year Continuing Appropriations Act, 2025 (division A of <external-xref legal-doc=\"public-law\" parsable-cite=\"pl/119/4\">Public Law 119–4</external-xref>), $83,000,000 are rescinded.</text></paragraph><paragraph id=\"HAE4CD57042084A0B9149CE364A42319A\"><enum>(9)</enum><text display-inline=\"yes-display-inline\">Of the unobligated balances under the heading <quote>Bilateral Economic Assistance—Funds Appropriated to the President—Economic Support Fund</quote> made available by the Full-Year Continuing Appropriations Act, 2025 (division A of <external-xref legal-doc=\"public-law\" parsable-cite=\"pl/119/4\">Public Law 119–4</external-xref>), $1,650,000,000 are rescinded: <proviso><italic>Provided,</italic></proviso> That none of the funds rescinded under this paragraph shall be from the unobligated balances for assistance to Jordan, Egypt, or the Countering PRC Influence Fund.</text></paragraph><paragraph id=\"HB792850487AB442DA37301767E514695\"><enum>(10)</enum><text display-inline=\"yes-display-inline\">Of the unobligated balances under the heading <quote>Multilateral Assistance—International Financial Institutions—Contribution to the Clean Technology Fund</quote> made available by the Full-Year Continuing Appropriations Act, 2025 (division A of <external-xref legal-doc=\"public-law\" parsable-cite=\"pl/119/4\">Public Law 119–4</external-xref>), $125,000,000 are rescinded.</text></paragraph><paragraph id=\"H1AA150CA0F0B44CFAC35D1DA5668D3AA\"><enum>(11)</enum><text display-inline=\"yes-display-inline\">Of the unobligated balances under the heading <quote>Multilateral Assistance—Funds Appropriated to the President—International Organizations and Programs</quote> made available by the Full-Year Continuing Appropriations Act, 2025 (division A of <external-xref legal-doc=\"public-law\" parsable-cite=\"pl/119/4\">Public Law 119–4</external-xref>), $436,920,000 are rescinded.</text></paragraph><paragraph id=\"HF86DF280EED74FDC9C687165214EDA02\"><enum>(12)</enum><text display-inline=\"yes-display-inline\">Of the unobligated balances under the heading <quote>Bilateral Economic Assistance—Funds Appropriated to the President—Development Assistance</quote> made available by the Full-Year Continuing Appropriations Act, 2025 (division A of <external-xref legal-doc=\"public-law\" parsable-cite=\"pl/119/4\">Public Law 119–4</external-xref>), $2,500,000,000 are rescinded: <proviso><italic>Provided,</italic></proviso> That none of the funds rescinded under this paragraph shall be from the unobligated balances for Feed the Future Innovation Labs or the Countering PRC Influence Fund: <proviso><italic>Provided further,</italic></proviso> That none of the funds rescinded under this paragraph shall affect the administration of United States commodity-based food aid, including the Food for Peace program and the McGovern-Dole International Food for Education and Child Nutrition Program.</text></paragraph><paragraph id=\"H0F8645FDE12A4DD0B4B918E42CC5F86F\"><enum>(13)</enum><text display-inline=\"yes-display-inline\">Of the unobligated balances under the heading <quote>Bilateral Economic Assistance—Funds Appropriated to the President—Assistance for Europe, Eurasia and Central Asia</quote> made available by the Full-Year Continuing Appropriations Act, 2025 (division A of <external-xref legal-doc=\"public-law\" parsable-cite=\"pl/119/4\">Public Law 119–4</external-xref>), $460,000,000 are rescinded.</text></paragraph><paragraph id=\"H3B2B6FCA71F94655B82A3E008E8B18A3\" commented=\"no\" display-inline=\"no-display-inline\"><enum>(14)</enum><text display-inline=\"yes-display-inline\">Of the unobligated balances under the heading <quote>Bilateral Economic Assistance—Funds Appropriated to the President—International Disaster Assistance</quote> made available by the Full-Year Continuing Appropriations Act, 2025 (division A of <external-xref legal-doc=\"public-law\" parsable-cite=\"pl/119/4\">Public Law 119–4</external-xref>), $496,000,000 are rescinded: <proviso><italic>Provided,</italic></proviso> That none of the funds rescinded shall affect the administration of United States commodity-based food aid, including the Food for Peace program and the McGovern-Dole International Food for Education and Child Nutrition Program.</text></paragraph><paragraph id=\"HF2A56802E33D4DA3BAFC249B2088F0BF\"><enum>(15)</enum><text display-inline=\"yes-display-inline\">Of the unobligated balances under the heading <quote>United States Agency for International Development—Funds Appropriated to the President—Operating Expenses</quote> made available by the Full-Year Continuing Appropriations Act, 2025 (division A of <external-xref legal-doc=\"public-law\" parsable-cite=\"pl/119/4\">Public Law 119–4</external-xref>), $125,000,000 are rescinded.</text></paragraph><paragraph id=\"H6594E04733F848F5BD14F4C98807D951\"><enum>(16)</enum><text display-inline=\"yes-display-inline\">Of the unobligated balances under the heading <quote>Bilateral Economic Assistance—Funds Appropriated to the President—Transition Initiatives</quote> made available by the Full-Year Continuing Appropriations Act, 2025 (division A of <external-xref legal-doc=\"public-law\" parsable-cite=\"pl/119/4\">Public Law 119–4</external-xref>), $57,000,000 are rescinded.</text></paragraph><paragraph id=\"H3A7E718A682249E9ABDB7F1621DFAE98\"><enum>(17)</enum><text display-inline=\"yes-display-inline\">Of the unobligated balances under the heading <quote>Bilateral Economic Assistance—Independent Agencies—Inter-American Foundation</quote> made available by the Full-Year Continuing Appropriations Act, 2025 (division A of <external-xref legal-doc=\"public-law\" parsable-cite=\"pl/119/4\">Public Law 119–4</external-xref>), $27,000,000 are rescinded.</text></paragraph><paragraph id=\"H94AD7C913C57441ABD8CC2DC7D66AD88\" commented=\"no\" display-inline=\"no-display-inline\"><enum>(18)</enum><text display-inline=\"yes-display-inline\">Of the unobligated balances under the heading <quote>Bilateral Economic Assistance—Independent Agencies—United States African Development Foundation</quote> made available by the Full-Year Continuing Appropriations Act, 2025 (division A of <external-xref legal-doc=\"public-law\" parsable-cite=\"pl/119/4\">Public Law 119–4</external-xref>), $22,000,000 are rescinded.</text></paragraph><paragraph id=\"HF3A50EC4D23F4BCEA853DC1FFFA26D03\"><enum>(19)</enum><text display-inline=\"yes-display-inline\">Of the unobligated balances under the heading <quote>Related Programs—United States Institute of Peace</quote> made available by the Full-Year Continuing Appropriations Act, 2025 (division A of <external-xref legal-doc=\"public-law\" parsable-cite=\"pl/119/4\">Public Law 119–4</external-xref>), $15,000,000 are rescinded.</text></paragraph><paragraph id=\"H5B0D8F26EDCA49D7BA38E047B9FC9EF2\"><enum>(20)</enum><subparagraph commented=\"no\" display-inline=\"yes-display-inline\" id=\"H0F1C287F80D0481D8D3852912C6D6CA5\"><enum>(A)</enum><text>Amounts made available for <quote>Corporation for Public Broadcasting</quote> for fiscal year 2026 by <external-xref legal-doc=\"public-law\" parsable-cite=\"pl/118/47\">Public Law 118–47</external-xref> are rescinded.</text></subparagraph><subparagraph id=\"HFE9F6B76AC98440D8409E615569AC1E7\" indent=\"up1\" commented=\"no\" display-inline=\"no-display-inline\"><enum>(B)</enum><text>Amounts made available for <quote>Corporation for Public Broadcasting</quote> for fiscal year 2027 by <external-xref legal-doc=\"public-law\" parsable-cite=\"pl/119/4\">Public Law 119–4</external-xref> are rescinded.</text></subparagraph></paragraph></subsection></section></amendment-block></amendment></engrossed-amendment-body><attestation><attestation-group><attestor></attestor><role>Secretary</role></attestation-group></attestation><endorsement></endorsement></amendment-doc> \n\n"
+ },
+ "existing_law_context": [
+  {
+   "type": "us_code",
+   "identifier": "/us/usc/t2/s682",
+   "heading": "Definitions",
+   "as_of": {
+    "release_point": "119-18",
+    "date": "2025-06-12",
+    "rule": "latest OLRC release point on or before the vote with a published archive; intervening laws checked against the classification table"
+   },
+   "sha256": "0b779e5fc0a7b98e551debbf1484ec7fb1cca2f11fc2f6e2b1c54e4303cb1f3a",
+   "relationship": "cited_as_authority",
+   "content": "<section style=\"-uslm-lc:I80\" id=\"id1cf6bda0-3732-11f0-8c26-abc42868c5ad\" identifier=\"/us/usc/t2/s682\"><num value=\"682\">§ 682.</num><heading> Definitions</heading>\n<chapeau style=\"-uslm-lc:I11\" class=\"indent0\">For purposes of sections 682 to 688 of this title—</chapeau><paragraph style=\"-uslm-lc:I12\" class=\"indent1\" id=\"id1cf6bda1-3732-11f0-8c26-abc42868c5ad\" identifier=\"/us/usc/t2/s682/1\"><num value=\"1\">(1)</num><chapeau> “deferral of budget authority” includes—</chapeau><subparagraph style=\"-uslm-lc:I13\" class=\"indent2\" id=\"id1cf6bda2-3732-11f0-8c26-abc42868c5ad\" identifier=\"/us/usc/t2/s682/1/A\"><num value=\"A\">(A)</num><content> withholding or delaying the obligation or expenditure of budget authority (whether by establishing reserves or otherwise) provided for projects or activities; or</content>\n</subparagraph>\n<subparagraph style=\"-uslm-lc:I13\" class=\"indent2\" id=\"id1cf6bda3-3732-11f0-8c26-abc42868c5ad\" identifier=\"/us/usc/t2/s682/1/B\"><num value=\"B\">(B)</num><content> any other type of Executive action or inaction which effectively precludes the obligation or expenditure of budget authority, including authority to obligate by contract in advance of appropriations as specifically authorized by law;</content>\n</subparagraph>\n</paragraph>\n<paragraph style=\"-uslm-lc:I12\" class=\"indent1\" id=\"id1cf6bda4-3732-11f0-8c26-abc42868c5ad\" identifier=\"/us/usc/t2/s682/2\"><num value=\"2\">(2)</num><content> “Comptroller General” means the Comptroller General of the United States;</content>\n</paragraph>\n<paragraph style=\"-uslm-lc:I12\" class=\"indent1\" id=\"id1cf6bda5-3732-11f0-8c26-abc42868c5ad\" identifier=\"/us/usc/t2/s682/3\"><num value=\"3\">(3)</num><content> “rescission bill” means a bill or joint resolution which only rescinds, in whole or in part, budget authority proposed to be rescinded in a special message transmitted by the President under <ref href=\"/us/usc/t2/s683\">section 683 of this title</ref>, and upon which the Congress completes action before the end of the first period of 45 calendar days of continuous session of the Congress after the date on which the President’s message is received by the Congress;</content>\n</paragraph>\n<paragraph style=\"-uslm-lc:I12\" class=\"indent1\" id=\"id1cf6bda6-3732-11f0-8c26-abc42868c5ad\" identifier=\"/us/usc/t2/s682/4\"><num value=\"4\">(4)</num><content> “impoundment resolution” means a resolution of the House of Representatives or the Senate which only expresses its disapproval of a proposed deferral of budget authority set forth in a special message transmitted by the President under <ref href=\"/us/usc/t2/s684\">section 684 of this title</ref>; and</content>\n</paragraph>\n<paragraph style=\"-uslm-lc:I12\" class=\"indent1\" id=\"id1cf6bda7-3732-11f0-8c26-abc42868c5ad\" identifier=\"/us/usc/t2/s682/5\"><num value=\"5\">(5)</num><content> continuity of a session of the Congress shall be considered as broken only by an adjournment of the Congress sine die, and the days on which either House is not in session because of an adjournment of more than 3 days to a day certain shall be excluded in the computation of the 45-day period referred to in paragraph (3) of this section and in <ref href=\"/us/usc/t2/s683\">section 683 of this title</ref>, and the 25-day periods referred to in sections 687 and 688(b)(1) of this title. If a special message is transmitted under <ref href=\"/us/usc/t2/s683\">section 683 of this title</ref> during any Congress and the last session of such Congress adjourns sine die before the expiration of 45 calendar days of continuous session (or a special message is so transmitted after the last session of the Congress adjourns sine die), the message shall be deemed to have been retransmitted on the first day of the succeeding Congress and the 45-day period referred to in paragraph (3) of this section and in <ref href=\"/us/usc/t2/s683\">section 683 of this title</ref> (with respect to such message) shall commence on the day after such first day.</content>\n</paragraph>\n<sourceCredit id=\"id1cf6bda8-3732-11f0-8c26-abc42868c5ad\">(<ref href=\"/us/pl/93/344/tX/s1011\">Pub. L. 93–344, title X, § 1011</ref>, <date date=\"1974-07-12\">July 12, 1974</date>, <ref href=\"/us/stat/88/333\">88 Stat. 333</ref>.)</sourceCredit>\n<notes type=\"uscNote\" id=\"id1cf6bda9-3732-11f0-8c26-abc42868c5ad\">\n<note style=\"-uslm-lc:I74\" role=\"crossHeading\" topic=\"editorialNotes\" id=\"id1cf6bdaa-3732-11f0-8c26-abc42868c5ad\"><heading class=\"centered\"><b>Editorial Notes</b></heading></note>\n<note style=\"-uslm-lc:I76\" topic=\"codification\" id=\"id1cf6bdab-3732-11f0-8c26-abc42868c5ad\"><heading class=\"centered smallCaps\">Codification</heading>\n<p style=\"-uslm-lc:I21\" class=\"indent0\">Section was formerly classified to <ref href=\"/us/usc/t31/s1401\">section 1401 of Title 31</ref> prior to the general revision and enactment of Title 31, Money and Finance, by <ref href=\"/us/pl/97/258/s1\">Pub. L. 97–258, § 1</ref>, <date date=\"1982-09-13\">Sept. 13, 1982</date>, <ref href=\"/us/stat/96/877\">96 Stat. 877</ref>.</p>\n</note>\n</notes>\n</section>"
+  }
+ ],
+ "cited_public_laws_not_included": [
+  {
+   "type": "public_law",
+   "identifier": "pl/118/47",
+   "sha256": "c1881917117e38de52ebd13aef206516376a3f53d07a69e1a84b10dd7822907b",
+   "divisions": [
+    "division F"
+   ],
+   "content_included": false,
+   "note": "identified and hashed only; not to be described"
+  },
+  {
+   "type": "public_law",
+   "identifier": "pl/119/4",
+   "sha256": "1806832d2d7c6563ae0cc8beb69b8b5536e89f0408682c3a250b0e452e44885e",
+   "divisions": [
+    "division A"
+   ],
+   "content_included": false,
+   "note": "identified and hashed only; not to be described"
+  }
+ ],
+ "official_summary": {
+  "status": "available",
+  "version_relationship": "PRE_AMENDMENT",
+  "usable": false,
+  "version_code": "53",
+  "action_desc": "Passed House",
+  "action_date": "2025-06-12",
+  "sha256": "bfa1c1550be5a04f7a671f10aba4216170f46b370e49376abb12a80d4f57df57",
+  "warning": "describes an earlier version of the text; excluded from generation"
+ },
+ "cra_context": {
+  "mode": "not_cra"
+ },
+ "completeness": {
+  "status": "COMPLETE",
+  "missing": [],
+  "notes": [
+   "pl/118/47 cited as a whole law (division F): identified and hashed, no section extracted; the Maker may not describe its contents",
+   "pl/119/4 cited as a whole law (division A): identified and hashed, no section extracted; the Maker may not describe its contents"
+  ]
+ },
+ "generation": {
+  "status": "READY_FOR_GENERATION"
+ },
+ "maker_rules": [
+  "factual claims only from the content fields of this packet",
+  "no browsing, no retrieval, no model memory for facts",
+  "derived metadata (headings, relationships, statuses) is not source text"
+ ],
+ "history": [],
+ "recorded_utc": "2026-09-24T03:31:20Z"
+}

@@ -1,0 +1,112 @@
+{
+ "packet_schema": "civicalign.packet/1.0",
+ "vote": {
+  "congress": 119,
+  "session": 1,
+  "clerk_number": 95,
+  "voteview_id": 95,
+  "date": "2025-02-26",
+  "question": "On the Joint Resolution",
+  "result": "Joint Resolution Defeated",
+  "required": "1/2",
+  "yeas": 47,
+  "nays": 52,
+  "measure": "SJRES10",
+  "senate_url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1191/vote_119_1_00095.xml",
+  "senate_sha256": "9ef1c2411b12bc98cc07ff88dba59c7e04f886b6286d0b3047298652e023b246",
+  "senate_title": "S. J. Res. 10",
+  "senate_document_text": "A joint resolution terminating the national emergency declared with respect to energy.",
+  "amendment_number": null,
+  "voteview_url": "https://voteview.com/rollcall/RS1190095",
+  "senator_votes_source": "block F / S119_votes.csv (not included here)"
+ },
+ "legislative_object": {
+  "type": "joint_resolution",
+  "id": "SJRES10",
+  "title": "A joint resolution terminating the national emergency declared with respect to energy.",
+  "short_title": "",
+  "origin_chamber": "Senate"
+ },
+ "classification": {
+  "kind": "JOINT_RESOLUTION_PASSAGE"
+ },
+ "receipt_scaffold": {
+  "deciding": "On the Joint Resolution S.J.Res. 10",
+  "heading_success": "If the resolution passes",
+  "heading_failure": "If the resolution does not pass",
+  "yea_means": "A Yea vote is a vote to pass the joint resolution in the Senate.",
+  "nay_means": "A Nay vote is a vote against passing the joint resolution.",
+  "next_step": "A joint resolution has the force of a bill: after both chambers pass it, it goes to the President.",
+  "sources": [
+   {
+    "what": "Senate roll-call record",
+    "url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1191/vote_119_1_00095.xml"
+   },
+   {
+    "what": "Bill status (GovInfo)",
+    "url": "https://www.govinfo.gov/bulkdata/BILLSTATUS/119/sjres/BILLSTATUS-119sjres10.xml"
+   },
+   {
+    "what": "Text as voted on (Introduced in Senate)",
+    "url": "https://www.govinfo.gov/content/pkg/BILLS-119sjres10is/xml/BILLS-119sjres10is.xml"
+   },
+   {
+    "what": "Roll call at Voteview",
+    "url": "https://voteview.com/rollcall/RS1190095"
+   }
+  ]
+ },
+ "voted_text": {
+  "version_code": "is",
+  "version_name": "Introduced in Senate",
+  "date": "2025-02-03",
+  "url": "https://www.govinfo.gov/content/pkg/BILLS-119sjres10is/xml/BILLS-119sjres10is.xml",
+  "sha256": "d931fda89994ef7ed740f4bd6d8614baff61477805753a0f42680c5c2ccccf7e",
+  "format": "govinfo-bill-xml",
+  "content": "<?xml version=\"1.0\"?>\n<?xml-stylesheet type=\"text/xsl\" href=\"billres.xsl\"?>\n<!DOCTYPE resolution PUBLIC \"-//US Congress//DTDs/res.dtd//EN\" \"res.dtd\">\n<resolution public-private=\"public\" resolution-stage=\"Introduced-in-Senate\" resolution-type=\"senate-joint\" star-print=\"no-star-print\" slc-id=\"S1-ROS25148-8GV-JP-8XT\"><metadata xmlns:dc=\"http://purl.org/dc/elements/1.1/\">\n<dublinCore>\n<dc:title>119 SJ 10 IS: Terminating the national emergency declared with respect to energy.</dc:title>\n<dc:publisher>U.S. Senate</dc:publisher>\n<dc:date>2025-02-03</dc:date>\n<dc:format>text/xml</dc:format>\n<dc:language>EN</dc:language>\n<dc:rights>Pursuant to Title 17 Section 105 of the United States Code, this file is not subject to copyright protection and is in the public domain.</dc:rights>\n</dublinCore>\n</metadata>\n<form>\n<distribution-code display=\"yes\">IIA</distribution-code><congress display=\"yes\">119th CONGRESS</congress><session display=\"yes\">1st Session</session><legis-num>S. J. RES. 10</legis-num><current-chamber>IN THE SENATE OF THE UNITED STATES</current-chamber><action display=\"yes\"><action-date date=\"20250203\">February 3, 2025</action-date><action-desc><sponsor name-id=\"S362\">Mr. Kaine</sponsor> (for himself and <cosponsor name-id=\"S359\">Mr. Heinrich</cosponsor>) introduced the following joint resolution; which was read twice and referred to the <committee-name committee-id=\"SSEG00\">Committee on Energy and Natural Resources</committee-name></action-desc></action><legis-type>JOINT RESOLUTION</legis-type><official-title display=\"yes\">Terminating the national emergency declared with respect to energy.</official-title></form><resolution-body><section id=\"S1\" display-inline=\"yes-display-inline\" section-type=\"undesignated-section\"><text>That the national emergency relating to energy declared on January 20, 2025, by the President in Executive Order 14156 (90 Fed. Reg. 8433) and pursuant to the National Emergencies Act (<external-xref legal-doc=\"usc\" parsable-cite=\"usc/50/1601\">50 U.S.C. 1601 et seq.</external-xref>), is terminated.</text></section></resolution-body></resolution> \n\n"
+ },
+ "existing_law_context": [
+  {
+   "type": "us_code",
+   "identifier": "/us/usc/t50/s1601",
+   "heading": "Termination of existing declared emergencies",
+   "as_of": {
+    "release_point": "119-1",
+    "date": "2025-01-29",
+    "rule": "latest OLRC release point on or before the vote with a published archive; intervening laws checked against the classification table"
+   },
+   "sha256": "a97f9a65dff196865f88583f08ca14a610de4a9782388693b2c0d6c225078896",
+   "relationship": "cited_as_authority",
+   "content": "<section style=\"-uslm-lc:I80\" id=\"idaf363dcc-f87e-11ef-8117-b38b1a4c82d2\" identifier=\"/us/usc/t50/s1601\"><num value=\"1601\">§ 1601.</num><heading> Termination of existing declared emergencies</heading><subsection style=\"-uslm-lc:I11\" class=\"indent0\" id=\"idaf363dcd-f87e-11ef-8117-b38b1a4c82d2\" identifier=\"/us/usc/t50/s1601/a\"><num value=\"a\">(a)</num><chapeau> All powers and authorities possessed by the President, any other officer or employee of the Federal Government, or any executive agency, as defined in <ref href=\"/us/usc/t5/s105\">section 105 of title 5</ref>, as a result of the existence of any declaration of national emergency in effect on <date date=\"1976-09-14\">September 14, 1976</date>, are terminated two years from <date date=\"1976-09-14\">September 14, 1976</date>. Such termination shall not affect—</chapeau><paragraph style=\"-uslm-lc:I12\" class=\"indent1\" id=\"idaf363dce-f87e-11ef-8117-b38b1a4c82d2\" identifier=\"/us/usc/t50/s1601/a/1\"><num value=\"1\">(1)</num><content> any action taken or proceeding pending not finally concluded or determined on such date;</content>\n</paragraph>\n<paragraph style=\"-uslm-lc:I12\" class=\"indent1\" id=\"idaf363dcf-f87e-11ef-8117-b38b1a4c82d2\" identifier=\"/us/usc/t50/s1601/a/2\"><num value=\"2\">(2)</num><content> any action or proceeding based on any act committed prior to such date; or</content>\n</paragraph>\n<paragraph style=\"-uslm-lc:I12\" class=\"indent1\" id=\"idaf363dd0-f87e-11ef-8117-b38b1a4c82d2\" identifier=\"/us/usc/t50/s1601/a/3\"><num value=\"3\">(3)</num><content> any rights or duties that matured or penalties that were incurred prior to such date.</content>\n</paragraph>\n</subsection>\n<subsection style=\"-uslm-lc:I11\" class=\"indent0\" id=\"idaf363dd1-f87e-11ef-8117-b38b1a4c82d2\" identifier=\"/us/usc/t50/s1601/b\"><num value=\"b\">(b)</num><content> For the purpose of this section, the words “any national emergency in effect” means a general declaration of emergency made by the President.</content>\n</subsection>\n<sourceCredit id=\"idaf363dd2-f87e-11ef-8117-b38b1a4c82d2\">(<ref href=\"/us/pl/94/412/tI/s101\">Pub. L. 94–412, title I, § 101</ref>, <date date=\"1976-09-14\">Sept. 14, 1976</date>, <ref href=\"/us/stat/90/1255\">90 Stat. 1255</ref>.)</sourceCredit>\n<notes type=\"uscNote\" id=\"idaf363dd3-f87e-11ef-8117-b38b1a4c82d2\">\n<note style=\"-uslm-lc:I74\" role=\"crossHeading\" topic=\"statutoryNotes\" id=\"idaf363dd4-f87e-11ef-8117-b38b1a4c82d2\"><heading class=\"centered\"><b>Statutory Notes and Related Subsidiaries</b></heading></note>\n<note style=\"-uslm-lc:I74\" topic=\"shortTitle\" id=\"idaf363dd5-f87e-11ef-8117-b38b1a4c82d2\"><heading class=\"centered smallCaps\">Short Title</heading><p><ref href=\"/us/pl/94/412/s1\">Pub. L. 94–412, § 1</ref>, <date date=\"1976-09-14\">Sept. 14, 1976</date>, <ref href=\"/us/stat/90/1255\">90 Stat. 1255</ref>, provided: <quotedContent origin=\"/us/pl/94/412/s1\">“That this Act [enacting this chapter, amending <ref href=\"/us/usc/t8/s1481\">section 1481 of Title 8</ref>, Aliens and Nationality, and <ref href=\"/us/usc/t10/s2667\">section 2667 of Title 10</ref>, Armed Forces, repealing <ref href=\"/us/usc/t12/s249\">section 249 of Title 12</ref>, Banks and Banking, <ref href=\"/us/usc/t16/s831d\">section 831d of Title 16</ref>, Conservation, <ref href=\"/us/usc/t18/s1383\">section 1383 of Title 18</ref>, Crimes and Criminal Procedure, <ref href=\"/us/usc/t42/s211b\">section 211b of Title 42</ref>, The Public Health and Welfare, and section 1742 of the former Appendix to this title, and enacting provisions set out below] may be cited as the ‘National Emergencies Act’.”</quotedContent>\n</p>\n</note>\n<note style=\"-uslm-lc:I74\" topic=\"savings\" id=\"idaf363dd6-f87e-11ef-8117-b38b1a4c82d2\"><heading class=\"centered smallCaps\">Savings Provision</heading><p><ref href=\"/us/pl/94/412/tV/s501/h\">Pub. L. 94–412, title V, § 501(h)</ref>, <date date=\"1976-09-14\">Sept. 14, 1976</date>, <ref href=\"/us/stat/90/1258\">90 Stat. 1258</ref>, provided that: <quotedContent origin=\"/us/pl/94/412/tV/s501/h\">\n<inline>“This section [amending <ref href=\"/us/usc/t8/s1481\">section 1481 of Title 8</ref>, Aliens and Nationality and <ref href=\"/us/usc/t10/s2667\">section 2667 of Title 10</ref>, Armed Forces, and repealing <ref href=\"/us/usc/t12/s249\">section 249 of Title 12</ref>, Banks and Banking, <ref href=\"/us/usc/t16/s831d\">section 831d of Title 16</ref>, Conservation, <ref href=\"/us/usc/t18/s1383\">section 1383 of Title 18</ref>, Crimes and Criminal Procedure, and <ref href=\"/us/usc/t42/s211b\">section 211b of Title 42</ref>, The Public Health and Welfare] shall not affect—</inline>\n<paragraph style=\"-uslm-lc:I22\" class=\"indent1\"><num value=\"1\">“(1)</num><content> any action taken or proceeding pending not finally concluded or determined at the time of repeal;</content>\n</paragraph>\n<paragraph style=\"-uslm-lc:I22\" class=\"indent1\"><num value=\"2\">“(2)</num><content> any action or proceeding based on any act committed prior to repeal; or</content>\n</paragraph>\n<paragraph style=\"-uslm-lc:I22\" class=\"indent1\"><num value=\"3\">“(3)</num><content> any rights or duties that matured or penalties that were incurred prior to repeal.”</content>\n</paragraph>\n</quotedContent>\n</p>\n</note>\n</notes>\n</section>"
+  }
+ ],
+ "cited_public_laws_not_included": [],
+ "official_summary": {
+  "status": "available",
+  "version_relationship": "EARLIER_SAME_TEXT",
+  "usable": true,
+  "version_code": "00",
+  "action_desc": "Introduced in Senate",
+  "action_date": "2025-02-03",
+  "sha256": "371ef20495816786017a549d98c17e123444dc2ebd2cd2ab35f32b02a0416ca1",
+  "content": "<p>This joint resolution terminates the national emergency relating to energy declared by the President on January 20, 2025, in Executive Order 14156. </p><p>The executive order states that the supply of&nbsp;and infrastructure&nbsp;for energy in the United States is insufficient to meet the country's needs. It defines&nbsp;<em>energy </em>as&nbsp;crude oil, natural gas, lease condensates,&nbsp;natural gas liquids, refined petroleum products, uranium, coal, biofuels, geothermal heat, the&nbsp;kinetic movement of flowing water, and critical minerals.&nbsp; </p><p>The executive&nbsp;order directs the heads of executive departments and agencies to use available emergency and other authorities to take certain actions to address this topic, including approving development of domestic energy resources, expediting the completion of authorized energy infrastructure (particularly in the Northeast, West Coast, and Alaska), and pursuing the use of emergency permitting provisions under&nbsp;certain environmental regulations.</p><p>The executive order also directs the Department of Defense to conduct an assessment of its ability to acquire and transport energy resources (particularly in the Northeast and West Coast), and invokes emergency military construction authority to address any vulnerabilities identified in the assessment.</p>"
+ },
+ "cra_context": {
+  "mode": "not_cra"
+ },
+ "completeness": {
+  "status": "COMPLETE",
+  "missing": [],
+  "notes": []
+ },
+ "generation": {
+  "status": "READY_FOR_GENERATION"
+ },
+ "maker_rules": [
+  "factual claims only from the content fields of this packet",
+  "no browsing, no retrieval, no model memory for facts",
+  "derived metadata (headings, relationships, statuses) is not source text"
+ ],
+ "history": [],
+ "recorded_utc": "2026-09-24T03:29:14Z"
+}

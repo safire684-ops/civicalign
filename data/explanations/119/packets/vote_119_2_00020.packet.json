@@ -1,0 +1,111 @@
+{
+ "packet_schema": "civicalign.packet/1.0",
+ "vote": {
+  "congress": 119,
+  "session": 2,
+  "clerk_number": 20,
+  "voteview_id": 679,
+  "date": "2026-01-30",
+  "question": "On Passage of the Bill",
+  "result": "Bill Passed",
+  "required": "3/5",
+  "yeas": 71,
+  "nays": 29,
+  "measure": "HR7148",
+  "senate_url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1192/vote_119_2_00020.xml",
+  "senate_sha256": "46610848870b2036c5a52225a8faef45b5d45c71afdd5973fe44d0b0f16a5a04",
+  "senate_title": "H.R. 7148, as Amended",
+  "senate_document_text": "A bill making further consolidated appropriations for the fiscal year ending September 30, 2026, and for other purposes.",
+  "amendment_number": null,
+  "voteview_url": "https://voteview.com/rollcall/RS1190679",
+  "senator_votes_source": "block F / S119_votes.csv (not included here)"
+ },
+ "legislative_object": {
+  "type": "bill",
+  "id": "HR7148",
+  "title": "Consolidated Appropriations Act, 2026",
+  "short_title": "Transportation, Housing and Urban Development, and Related Agencies Appropriations Act, 2026",
+  "origin_chamber": "House"
+ },
+ "classification": {
+  "kind": "PASSAGE_AS_AMENDED"
+ },
+ "receipt_scaffold": {
+  "deciding": "On Passage of the Bill H.R. 7148",
+  "heading_success": "If the bill, as amended, passes",
+  "heading_failure": "If the bill does not pass",
+  "yea_means": "A Yea vote is a vote to pass the bill as the Senate amended it.",
+  "nay_means": "A Nay vote is a vote against passing the amended bill.",
+  "next_step": "Because the Senate changed the text, the amended bill goes back to the House, which must agree to the Senate's version before it can become law.",
+  "sources": [
+   {
+    "what": "Senate roll-call record",
+    "url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1192/vote_119_2_00020.xml"
+   },
+   {
+    "what": "Bill status (GovInfo)",
+    "url": "https://www.govinfo.gov/bulkdata/BILLSTATUS/119/hr/BILLSTATUS-119hr7148.xml"
+   },
+   {
+    "what": "Text as voted on (Engrossed Amendment Senate)",
+    "url": "https://www.govinfo.gov/content/pkg/BILLS-119hr7148eas/xml/BILLS-119hr7148eas.xml"
+   },
+   {
+    "what": "Roll call at Voteview",
+    "url": "https://voteview.com/rollcall/RS1190679"
+   }
+  ]
+ },
+ "voted_text": {
+  "version_code": "eas",
+  "version_name": "Engrossed Amendment Senate",
+  "date": "2026-01-30",
+  "url": "https://www.govinfo.gov/content/pkg/BILLS-119hr7148eas/xml/BILLS-119hr7148eas.xml",
+  "sha256": "d4d149518143680839e0e59a3867fba4219bdbb62fea4c77cb96939894e62ecb",
+  "format": "govinfo-bill-xml",
+  "content": "<?xml version=\"1.0\"?>\n<?xml-stylesheet type=\"text/xsl\" href=\"billres.xsl\"?>\n<!DOCTYPE amendment-doc PUBLIC \"-//US Congress//DTDs/amend.dtd//EN\" \"amend.dtd\">\n<amendment-doc amend-type=\"engrossed-amendment\" star-print=\"first-star-print\"><metadata xmlns:dc=\"http://purl.org/dc/elements/1.1/\">\n<dublinCore>\n<dc:title>119 HR 7148 EAS: </dc:title>\n<dc:publisher>U.S. House of Representatives</dc:publisher>\n<dc:date>2026-01-30</dc:date>\n<dc:format>text/xml</dc:format>\n<dc:language>EN</dc:language>\n<dc:rights>Pursuant to Title 17 Section 105 of the United States Code, this file is not subject to copyright protection and is in the public domain.</dc:rights>\n</dublinCore>\n</metadata>\n<engrossed-amendment-form>\n<congress display=\"no\">119th CONGRESS</congress><session display=\"no\">2d Session</session><legis-num display=\"no\">H.R. 7148</legis-num><current-chamber display=\"yes\">In the Senate of the United States,</current-chamber><action><action-date date=\"20260130\">January 30, 2026.</action-date></action><legis-type display=\"yes\">Amendments:</legis-type></engrossed-amendment-form><engrossed-amendment-body><section id=\"idbecaf8a54bdc4e48b3d68a2d00531715\" section-type=\"resolved\"><text>That the bill from the House of Representatives (H.R. 7148) entitled <quote>An Act making further consolidated appropriations for the fiscal year ending September 30, 2026, and for other purposes.</quote>, do pass with the following</text></section><amendment><amendment-instruction blank-lines-after=\"1\"><enum>(1)</enum><text>In section 2 in the matter preceding division A, strike the matter relating to division H and insert:</text></amendment-instruction><amendment-instruction blank-lines-after=\"1\" line-numbers=\"on\"><text display-inline=\"yes-display-inline\"><added-phrase reported-display-style=\"italic\">Division H—Further Continuing Appropriations Act, 2026</added-phrase></text></amendment-instruction><amendment-instruction blank-lines-after=\"1\"><enum>(2)</enum><text>On page 4, strike lines 15 through 22.</text></amendment-instruction><amendment-instruction blank-lines-after=\"0\"><enum>(3)</enum><text>Beginning on page 1132, strike line 9 and all that follows through <quote>Sec. 554.</quote> on page 1235, line 16, and insert:</text></amendment-instruction><amendment-block blank-lines-after=\"1\"><division id=\"id0722961E059B44F39D6E35A39B2664FC\" style=\"appropriations\" changed=\"added\" reported-display-style=\"italic\"><enum>H</enum><header>FURTHER CONTINUING APPROPRIATIONS ACT, 2026</header><section id=\"id53abd3ecbc154f08b9bd3ed949120e7b\"><enum>101.</enum><text display-inline=\"yes-display-inline\">The Continuing Appropriations Act, 2026 (division A of <external-xref legal-doc=\"public-law\" parsable-cite=\"pl/119/37\">Public Law 119–37</external-xref>) is amended by striking the date specified in section 106(3) and inserting <quote>February 13, 2026</quote>. </text></section><section commented=\"no\" display-inline=\"no-display-inline\" section-type=\"subsequent-section\" id=\"ide10262196f38499ebaa9c942fdef389b\"><enum>102.</enum><text display-inline=\"yes-display-inline\">For the purposes of the Continuing Appropriations Act, 2026 (division A of <external-xref legal-doc=\"public-law\" parsable-cite=\"pl/119/37\">Public Law 119–37</external-xref>), the time covered by such division shall be considered to include the period which began on or about January 31, 2026, during which there occurred a lapse in appropriations. </text></section><section commented=\"no\" display-inline=\"no-display-inline\" section-type=\"subsequent-section\" id=\"id9d9f4a31546f4557b60352c900a70365\"><enum>103.</enum><text display-inline=\"yes-display-inline\">Amounts made available in the Continuing Appropriations Act, 2026 (division A of <external-xref legal-doc=\"public-law\" parsable-cite=\"pl/119/37\">Public Law 119–37</external-xref>) and the Consolidated Appropriations Act, 2026 for personnel pay, allowances, and benefits in each department and agency shall be available for payments pursuant to subsection (c) of section 1341 of title 31, United States Code and such payments shall be made. </text></section><section commented=\"no\" display-inline=\"no-display-inline\" section-type=\"subsequent-section\" id=\"id5ed0b2dd8ea54c90865d368aa63c5aa8\"><enum>104.</enum><text display-inline=\"yes-display-inline\">All obligations incurred and in anticipation of the appropriations made and authority granted by the Continuing Appropriations Act, 2026 (division A of <external-xref legal-doc=\"public-law\" parsable-cite=\"pl/119/37\">Public Law 119–37</external-xref>) and by the Consolidated Appropriations Act, 2026 for the purposes of maintaining the essential level of activity to protect life and property and bringing about orderly termination of Government function, and for purposes as otherwise authorized by law, are hereby ratified and approved if otherwise in accord with the provisions of such Act. </text></section><section commented=\"no\" display-inline=\"no-display-inline\" section-type=\"subsequent-section\" id=\"id5cf8eddacb0d44f88a43b990b7bd5b96\"><enum>105.</enum><text display-inline=\"yes-display-inline\"><?xm-replace_text text?></text></section></division></amendment-block></amendment><amendment><amendment-instruction blank-lines-after=\"1\"><enum>(4)</enum><text>On page 1235, strike lines 22 and 23 and insert: <added-phrase reported-display-style=\"italic\">This division may be cited as the <quote>Further Continuing Appropriations Act, 2026</quote>.</added-phrase></text></amendment-instruction></amendment></engrossed-amendment-body><attestation><attestation-group><attestor></attestor><role>Secretary</role></attestation-group></attestation><endorsement></endorsement></amendment-doc> \n\n"
+ },
+ "existing_law_context": [],
+ "cited_public_laws_not_included": [
+  {
+   "type": "public_law",
+   "identifier": "pl/119/37",
+   "sha256": "06529f779fb356cb83f7a65bb9acc70c0fecf7dee8411aab8bdd799e129678f1",
+   "divisions": [
+    "division A"
+   ],
+   "content_included": false,
+   "note": "identified and hashed only; not to be described"
+  }
+ ],
+ "official_summary": {
+  "status": "available",
+  "version_relationship": "PRE_AMENDMENT",
+  "usable": false,
+  "version_code": "00",
+  "action_desc": "Introduced in House",
+  "action_date": "2026-01-20",
+  "sha256": "a6a23ecb1ec907047e6efce93379f7036c372d16d95d8ca564e86c568a62cb3c",
+  "warning": "describes an earlier version of the text; excluded from generation"
+ },
+ "cra_context": {
+  "mode": "not_cra"
+ },
+ "completeness": {
+  "status": "COMPLETE",
+  "missing": [],
+  "notes": [
+   "pl/119/37 cited as a whole law (division A): identified and hashed, no section extracted; the Maker may not describe its contents"
+  ]
+ },
+ "generation": {
+  "status": "READY_FOR_GENERATION"
+ },
+ "maker_rules": [
+  "factual claims only from the content fields of this packet",
+  "no browsing, no retrieval, no model memory for facts",
+  "derived metadata (headings, relationships, statuses) is not source text"
+ ],
+ "history": [],
+ "recorded_utc": "2026-09-24T03:35:33Z"
+}
