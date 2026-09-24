@@ -202,9 +202,9 @@ table.calc tr.total td{border-bottom:none;border-top:2px solid var(--ink);
     are listed by state, never ordered by position.</p>
   <p><b>Worked example: Georgia.</b> Georgia's two-party vote ran 2016: 52.7%, 2020: 49.9%, 2024: 51.1%,
     average 51.2% Republican. Jon Ossoff's peers are the 12 senators
-    in the Democratic caucus from Arizona, Michigan, Minnesota, New Hampshire, Nevada, Pennsylvania, Wisconsin. Their records run from <b>27.1</b> to
+    in the Democratic caucus from Arizona, Michigan, Minnesota, New Hampshire, Nevada, Pennsylvania, Wisconsin. Their records run from <b>27.2</b> to
     <b>41.9</b> on the display line, middle 35.4; Ossoff's is
-    22.9. The tool says: "Ossoff’s voting record falls outside that peer range on the more liberal side." Across the windows the conclusion is
+    23.1. The tool says: "Ossoff’s voting record falls outside that peer range on the more liberal side." Across the windows the conclusion is
     &plusmn;2: outside liberal; &plusmn;3: outside liberal; &plusmn;4: outside liberal; &plusmn;5: outside liberal. For Raphael Warnock, with the same peer pool, it says: "Warnock’s voting record falls outside that peer range on the more liberal side."</p>
   <p><b>What this does and does not answer.</b> It answers: compared with senators in
     the same caucus group representing states with a similar recent presidential vote, where does
@@ -221,7 +221,7 @@ table.calc tr.total td{border-bottom:none;border-top:2px solid var(--ink);
     split by party (Democrats &minus;7.1, Republicans +6.3
     display-scale units on average), and within a party the state's vote explains
     little: the within-party slope is 1.31 for Democrats (correlation
-    0.54) and 0.18 for Republicans (correlation 0.06).
+    0.54) and 0.17 for Republicans (correlation 0.06).
     Worse, for an evenly divided state the line predicts 51.0 with a one-error
     band of &plusmn;14 units, and only 12 of 100 senators sit inside
     that band: the "typical position" fell in a gap between the two parties where
@@ -243,9 +243,9 @@ table.calc tr.total td{border-bottom:none;border-top:2px solid var(--ink);
     the Senate middle, shown under "Where they sit in the Senate". Both figures are
     Voteview scores, so the subtraction is valid:</p>
   <div class="tw"><table class="calc">
-    <tr><td>Ossoff's voting pattern<br><span class="sm">raw score &minus;0.541, shown as score &times; 50 + 50</span></td><td class="n">22.9</td></tr>
+    <tr><td>Ossoff's voting pattern<br><span class="sm">raw score &minus;0.537, shown as score &times; 50 + 50</span></td><td class="n">23.1</td></tr>
     <tr><td>Senate middle<br><span class="sm">median of the 100 scores</span></td><td class="n">65.5</td></tr>
-    <tr class="total"><td>Difference, display-scale units</td><td class="n">&minus;42.5</td></tr>
+    <tr class="total"><td>Difference, display-scale units</td><td class="n">&minus;42.4</td></tr>
   </table></div>
   <p>The tool says: "Ossoff's voting record is on the more liberal side of the Senate middle".</p>
   <p><b>The state, on the voters' scale.</b> Georgia's voter estimate against the
@@ -306,7 +306,7 @@ table.calc tr.total td{border-bottom:none;border-top:2px solid var(--ink);
   <p>The tool marks no bills on the scale. A floor vote's dividing line says where a
     coalition split, not what a state's voters wanted, so it cannot stand in for
     either. The senator's number comes from every roll-call vote they have cast this
-    Congress (Ossoff: 844), compared vote by vote with every other senator;
+    Congress (Ossoff: 845), compared vote by vote with every other senator;
     the state's number comes from large surveys asking residents where they stand on
     many policy questions. Neither number says which issues make up any difference.</p>
 
@@ -352,7 +352,7 @@ table.calc tr.total td{border-bottom:none;border-top:2px solid var(--ink);
     <tr><td>Foreign Relations</td><td class="n">76.8</td><td class="n">+11.2</td><td class="n">3.0</td></tr>
     <tr><td>Homeland/Govt Affairs</td><td class="n">76.0</td><td class="n">+10.5</td><td class="n">17.1</td></tr>
     <tr><td>Small Business</td><td class="n">76.0</td><td class="n">+10.5</td><td class="n">17.1</td></tr>
-    <tr><td>Budget</td><td class="n">56.4</td><td class="n">&minus;9.1</td><td class="n">16.6</td></tr>
+    <tr><td>Budget</td><td class="n">56.4</td><td class="n">&minus;9.2</td><td class="n">16.7</td></tr>
   </table></div>
   <p><b>Where the Senate split on its bills.</b> Take the bills a committee sent to
     the floor, and the dividing line of every floor vote on them: the point on the
@@ -380,7 +380,7 @@ table.calc tr.total td{border-bottom:none;border-top:2px solid var(--ink);
     voting record. A bill by a senator with a liberal record counts as liberal. Then,
     for every committee, we compare how often each side's bills got through.</p>
   <p>The rates are stark on their own. Of <b>5,347</b> distinct bills sent to
-    a committee this Congress, <b>425</b> have been sent on so far &mdash; about 8%.
+    a committee this Congress, <b>428</b> have been sent on so far &mdash; about 8%.
     (Some bills go to more than one committee, so the committee-by-committee counts add
     up to 5,376 referrals.) The Finance Committee has sent on
     <b>1 of 876</b>.</p>
@@ -404,8 +404,8 @@ table.calc tr.total td{border-bottom:none;border-top:2px solid var(--ink);
   <div class="tw"><table>
     <tr><th>Committee</th><th class="n">Liberal-record sponsors: sent forward</th><th class="n">Conservative-record sponsors: sent forward</th><th class="n">Beyond baseline</th></tr>
     <tr><td>Small Business</td><td class="n">4 of 37 (10.8%)</td><td class="n">7 of 35 (20.0%)</td><td class="n">+6.8 conservative</td></tr>
-    <tr><td>Foreign Relations</td><td class="n">31 of 123 (25.2%)</td><td class="n">31 of 147 (21.1%)</td><td class="n">&minus;6.6 liberal</td></tr>
-    <tr><td>HELP</td><td class="n">13 of 426 (3.1%)</td><td class="n">28 of 297 (9.4%)</td><td class="n">+3.9 conservative</td></tr>
+    <tr><td>Foreign Relations</td><td class="n">31 of 123 (25.2%)</td><td class="n">31 of 147 (21.1%)</td><td class="n">&minus;6.5 liberal</td></tr>
+    <tr><td>HELP</td><td class="n">13 of 426 (3.1%)</td><td class="n">28 of 297 (9.4%)</td><td class="n">+4.0 conservative</td></tr>
     <tr><td>Commerce</td><td class="n">34 of 227 (15.0%)</td><td class="n">50 of 250 (20.0%)</td><td class="n">+2.6 conservative</td></tr>
   </table></div>
   <p>Every committee's counts are shown on the tool, but the two sides are only
