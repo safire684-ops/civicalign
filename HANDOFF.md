@@ -1,560 +1,442 @@
-# Project handoff — CivicAlign, Pillars 4–6 and Pillar 1 (Stages 2–2.5)
+# Project handoff — CivicAlign
 
-Updated 24 September 2026, after the pre-Stage-3 correction pass. Scope:
-**Pillars 4, 5 and 6** (the live page) and the deterministic foundation of
-**Pillar 1** (vote bindings and source packets; no generated text). Pillars 2, 3 and 7 belong to someone else. The repository, the
-live site and the claude.ai copy are in step.
+Rewritten 25 September 2026 for a brand-new chat. Read all of it before doing
+anything. The repository and this file are the source of truth; older design
+documents, the whitepaper and chat history are not.
 
-## Where things are
+---
 
-- Live site: https://safire684-ops.github.io/civicalign/ (senator page:
-  `/senator-check.html`, methodology report: `/methodology.html`)
-- Repo: https://github.com/safire684-ops/civicalign (branch `main`; the weekly
-  job commits as `civicalign-bot`)
-- Claude.ai copy (manual republish, stylesheet inlined, does not update itself):
-  https://claude.ai/artifact/Ft6hU6XZUnWHPhZwzwmzaj (version 32)
-- Shared doc (hand-mirrored, methodology only):
+## 0. Safety rule (read first)
+
+Do NOT restart the project, redesign Steps 1–3, switch away from DW-NOMINATE
+(`nominate_dim1`), revive the retired 0–100 display, or bring back any retired
+method (section 5) unless the user explicitly asks. Do not touch Engine A while
+working on Engine B. Do not push, merge or deploy without the user's approval.
+Work one step at a time and stop for review after each step.
+
+---
+
+## 1. Current branch and repository state
+
+- Repo: `/Users/sarthakkesavarapu/Desktop/CivicAlign`, remote
+  https://github.com/safire684-ops/civicalign
+- **Working branch: `pillars-4-6-rebuild` — local only, NOT pushed.** It was
+  created from local `main` so the live version stays intact during the rebuild.
+- Local `main` is 1 commit ahead of `origin/main` (the Stage 3 harness commit
+  `c2a596a`, also never pushed). `origin/main` is what the live site runs.
+- The live site (https://safire684-ops.github.io/civicalign/, page
+  `/senator-check.html`, report `/methodology.html`) still runs the OLD Pillars
+  4–6 product from `origin/main`. The GitHub workflow (`.github/workflows/update.yml`)
+  still runs weekly (Mondays 11:00 UTC) on `origin/main` and commits as
+  `civicalign-bot`; its commits will need a rebase of this branch before any
+  publish (the generated pages will conflict and must simply be regenerated).
+
+Commits on `pillars-4-6-rebuild` that are not on `origin/main` (oldest first):
+
+| Commit | What it did |
+|---|---|
+| `c2a596a` | Pillar 1 (Engine A) Stage 3 Maker/Checker evaluation harness. No generation results committed. |
+| `bb1d716` | Source snapshot refresh from a local fetch on 2026-09-25 (`data/raw/SNAPSHOT.json`, `PROVENANCE.tsv`). Engine B inputs unchanged from the previous snapshot; the four bill-status archives (Engine A inputs) updated. This is the snapshot the Step 1 ingest read. |
+| `83f685b` | **Step 1**: versioned input records, append-only store, ingest. |
+| `5563810` | **Step 2**: state population table, bridge (NONE), national estimate (unresolved), Pillars 4, 5, 6 calculations. |
+| `51deb13` | Added `population_weighted_mean_v1` beside the weighted median. |
+| `4f99c6b` | Made the weighted mean the PRIMARY Pillar 5 method, weighted median SECONDARY; medians moved to `details`; fixed: an unscored seated senator's share of state weight is left out with them (no current number changed). |
+| `183d684` | **Step 3**: versioned result records and incremental recomputation. |
+
+Uncommitted in the working tree (leave them; they belong to the paused Engine A
+Stage 3 work): `.gitignore` (ignores `evaluation/stage3/*.log`) and
+`src/civicalign/evaluation/report.py` (review report counts cached input
+tokens). Local-only, gitignored: `evaluation/stage3/runs/smoke-1` and
+`evaluation/stage3/runs/dev-2026-09-24-r1` (a stopped Stage 3 run).
+
+The local raw files in `data/raw/` (gitignored) match the committed
+`SNAPSHOT.json`. The Engine B ingest refuses to run if they do not.
+
+---
+
+## 2. What we are building (plain language)
+
+CivicAlign is a Senate accountability tool made of two separate engines.
+
+- **Engine A — Legislative accountability (Pillar 1).** "What did this senator
+  actually vote for, and what did the vote mean?" It binds each Senate vote to
+  the official record and the exact text voted on, and (in evaluation) tests
+  whether a Maker/Checker model pair can write plain-English receipts from
+  official sources only. Code: `src/civicalign/explain/`,
+  `src/civicalign/evaluation/`, `receipts.py`, `sources/billflow.py`,
+  `sources/billstatus.py`, `sources/senate_votes.py`. **Not part of the current
+  work. Do not modify it.**
+
+- **Engine B — Institutional and ideological context (Pillars 4–6).** Code:
+  `src/civicalign/ideology/`. Nothing in it imports Engine A (a test enforces this).
+  - **Pillar 4 — senator vs. state.** Where a senator's voting record sits
+    (Voteview DW-NOMINATE) compared with the estimated ideological centre of
+    their state's public (American Ideology Project). The two are different
+    measurement systems, so the senator-to-state distance needs a "bridge"
+    between the scales; until one exists, the two are shown separately and the
+    distance is not calculated.
+  - **Pillar 5 — Senate vs. population and nation.** Where the Senate's centre
+    sits; how that centre would move if each senator were weighted by the
+    population they represent (the equal-state representation effect); and,
+    once a national public estimate and a bridge exist, how the Senate compares
+    with the national public.
+  - **Pillar 6 — committees vs. Senate and public.** Where each standing
+    committee's membership sits compared with the Senate (and, later, the
+    public). Descriptive only: it never claims a committee blocked, obstructed
+    or decided anything.
+
+Pillars 2, 3 and 7 belong to someone else and are out of scope.
+
+---
+
+## 3. Completed work (Engine B, Steps 1–3)
+
+### Step 1 — versioned inputs (`records.py`, `store.py`, `ingest.py`)
+
+`python -m civicalign.ideology.ingest [--dry-run]` reads only files the source
+snapshot accepted and whose bytes still match its SHA-256 (else "INGEST
+REFUSED"). Each record carries `source`, `source_url`, `source_version` (the
+snapshot content key), `source_sha256`, `retrieved_at` (when CivicAlign first
+retrieved that content) and `fixture` (true only for test fixtures).
+
+Tables in `data/ideology/` (JSON Lines, tracked in git):
+
+| Table | Key | Content |
+|---|---|---|
+| `senator_ideology.jsonl` | bioguide_id, congress | Every Senate row of the 119th Congress in Voteview `HSall_members.csv`, with **both `nominate_dim1` (the default) and `nokken_poole_dim1` (extra data only)**, vote count, Voteview party code, `seated` (from the congress-legislators roster), roster version and date. A seated senator Voteview has not scored is recorded with null scores, never a predecessor's. Guards: one Voteview row per senator; roster and Voteview agree on state; ≤2 seated per state; ≤100 seated. Today: 104 rows, 100 seated, 4 departed (FL, OH, OK, SC) kept but not seated. |
+| `constituency_ideology.jsonl` | geography_type, geography_id, methodology_version | American Ideology Project v2022a `mrp_ideology`, **estimate and standard error in AIP's own units**, survey period, wave, sample size, and a scale note stating it has no common metric with Voteview. All waves (2008, 2016, 2020) × 51 (50 states + DC) = 153. Source DOI https://doi.org/10.7910/DVN/BQKU4M. No national row. |
+| `state_population.jsonl` | geography_type, geography_id, measurement_year, vintage | Census Vintage 2024 July 1 estimates, 2020–2024, 50 states + DC (Puerto Rico is in the file but elects no senators, so it is left out) = 255. The vintage is in the key because later vintages revise earlier years. |
+| `committee_membership_events.jsonl` | congress, committee_id, bioguide_id | Standing committees only (`SS*`, four characters; no subcommittees, select or joint). Events `observed_joined` / `observed_left` / `observed_role_changed` with rank, title, majority/minority side. **Every date is OBSERVED**: the day CivicAlign first retrieved content showing the change, never an official appointment date (the `date_basis` field says so and the validator enforces it). The first observation of a committee is flagged `baseline` with a note that membership may have begun earlier. `records.membership_intervals()` derives `observed_start_date` / `observed_end_date`. Today: 351 baseline events, 16 committees, observed 2026-09-23. |
+| `ideology_bridge.jsonl` | bridge_version | See Step 2. |
+
+Store (`store.py`): append-only; a new version is written only when content
+differs from the key's current version; each key's versions are hash-chained
+(`record_id = sha256(prev_record_id | content_sha256)`); `verify()` re-hashes,
+re-walks the chains and re-validates; lines are never rewritten.
+
+### Step 2 — bridge, national estimate, calculations
+
+- `result.py`: every quantity is `{value, status (AVAILABLE | PROVISIONAL |
+  NOT_AVAILABLE), units, reason, ...}`. Units always travel with the number.
+- `bridge.py`: bridge records with status NONE / PROVISIONAL / VALIDATED and
+  the fields each status requires. **The only bridge is `none-v0`, status NONE,
+  and it is the active one** (`config.active_bridge_version`). `METHODS` is
+  empty: no conversion exists. Anything needing the bridge returns
+  NOT_AVAILABLE with the reason; a bridge naming an unimplemented method also
+  returns NOT_AVAILABLE, never a guess. `python -m civicalign.ideology.bridge`
+  records the default.
+- `national.py`: the national public estimate is **UNRESOLVED**. Candidate
+  definitions are listed (population-weighted mean of state estimates;
+  population-weighted median; an individual-level national survey estimate; any
+  of these by adults/citizens/voters). None is chosen; a population-weighted
+  average of states is NOT treated as the national median. Always NOT_AVAILABLE.
+- `pillars.py` (pure functions):
+  - **Pillar 4**, per seated senator: `senator_score` (nominate_dim1, Voteview
+    units), `state_public_estimate` (AIP estimate + standard error + survey
+    period, AIP units), `state_on_senator_scale` NOT_AVAILABLE, `distance`
+    NOT_AVAILABLE.
+  - **Pillar 5**: "active senators" = seated and scored. Weights: each
+    senator gets their state's population ÷ the number of senators the state has
+    seated (a vacancy gives the sitting senator the whole state; an unscored
+    senator's share is left out with them). Methods in `WEIGHTING_METHODS`, each
+    labelled `CANDIDATE_METHOD_NOT_FINAL` with a definition and open questions:
+    - `population_weighted_mean_v1` — **role PRIMARY** (the configured method):
+      Σ score × weight ÷ Σ weight, compared with the plain Senate mean.
+    - `population_weighted_median_v1` — **role SECONDARY_COMPARISON**: the first
+      score where cumulative weight reaches half the total (exactly half averages
+      with the next score), compared with the plain Senate median.
+    Output: `plain_center`, `population_weighted_center`,
+    `population_weighting_difference` (= plain − weighted, sign kept) for the
+    configured method; `details` holds `chamber_median`, `chamber_mean` and every
+    method's three numbers; `national_public` and `chamber_public_gap` NOT_AVAILABLE.
+  - **Pillar 6**, per standing committee: members listed/scored/left out,
+    `committee_median` (median of current members' nominate_dim1),
+    `committee_senate_drift` = committee median − **Senate median** (sign kept),
+    `committee_public_drift` NOT_AVAILABLE.
+- `inputs.py`: `load()` assembles current inputs; `calculate()` runs all three
+  pillars (not stored); `python -m civicalign.ideology.inputs` prints them.
+- Config (`src/civicalign/config.py`, Engine B section): `pillars_score_column
+  = "nominate_dim1"`, `standing_committee_prefix = "SS"`, `ideology_dir =
+  data/ideology`, `pillars_aip_wave = 2020`, `active_bridge_version =
+  "none-v0"`, `pillar5_weighting_method = "population_weighted_mean_v1"`,
+  `pillar5_population_year = 2024`, `pillar5_population_vintage = "Vintage 2024"`.
+
+### Step 3 — versioned results and incremental recomputation (`compute.py`)
+
+`python -m civicalign.ideology.compute` (`--verify`, `--full`).
+
+- Result key = hash of every input record_id used (senators, AIP rows,
+  population rows, committee events per committee, bridge) + every
+  number-changing setting (Congress, score column, AIP wave, weighting method,
+  population year and vintage, bridge version, committee prefix).
+- `data/ideology/metrics/<input_key>.json`: one record, **write-once**
+  (exclusive create; refuses to overwrite even an unindexed file). Contains
+  settings, versions (Congress; measurement date = newest input retrieval date;
+  legislator model, roster, public model, population, committee membership and
+  bridge versions with source hashes and retrieval dates; weighting methods;
+  national UNRESOLVED), fingerprints, `computed_in` (which record computed each
+  result), and the results.
+- `data/ideology/metrics_index.jsonl`: append-only; each line chains to the
+  previous key and carries the file's content hash and `computed_at`.
+- Modes: **unchanged** (key exists → nothing written); **committees_only**
+  (only membership changed → only those committees recomputed, everything else
+  carried and credited to the record that computed it; removed committees
+  dropped); **full** (any other change: senator scores or seats, public
+  estimates, populations, bridge, settings). A carried result always equals a
+  full recompute (tested).
+- `verify()`: every indexed file exists, matches its hash and its key; the index
+  chains; no unindexed files; the latest result was computed from the current
+  inputs (else "no longer current: run compute"); and it equals a full recompute.
+- Committed: one real record, key `5f42ca01…4cc5`, mode full, measurement date
+  2026-09-24. A second run writes nothing; verify passes.
+
+---
+
+## 4. Current real numbers (record `5f42ca01…`, nominate_dim1, 100 active senators)
+
+**Pillar 5 — main comparison (PRIMARY method `population_weighted_mean_v1`)**
+
+| Quantity | Value |
+|---|---|
+| Plain Senate mean | 0.11971 |
+| Population-weighted Senate mean | 0.08296 |
+| Population weighting difference (plain − weighted) | +0.03675 |
+
+**Pillar 5 — details only (SECONDARY method `population_weighted_median_v1`)**
+
+| Quantity | Value |
+|---|---|
+| Plain Senate median | 0.3195 |
+| Population-weighted Senate median | −0.2160 |
+| Median difference (plain − weighted) | +0.5355 |
+
+Why the median is only secondary: senators with negative scores are 47 of 100
+but represent 53.5% of the population, so the weighted median jumps across the
+empty stretch between the two parties (largest gap between neighbouring
+senators: −0.170 to +0.124) and lands on Shaheen/Warner at −0.216. The mean
+moves smoothly. National public and chamber–public gap: NOT_AVAILABLE.
+
+**Pillar 6** (committee median; minus Senate median 0.3195; public drift NOT_AVAILABLE)
+
+| Committee | Members | Median | Drift |
+|---|---|---|---|
+| SSGA | 15 | 0.536 | +0.2165 |
+| SSFR | 22 | 0.4495 | +0.130 |
+| SSSB | 19 | 0.444 | +0.1245 |
+| SSVA | 19 | 0.387 | +0.0675 |
+| SSBK | 24 | 0.3705 | +0.051 |
+| SSAF, SSFI, SSJU | 23, 27, 21 | 0.362 | +0.0425 |
+| SSAS | 27 | 0.354 | +0.0345 |
+| SSCM | 28 | 0.3315 | +0.012 |
+| SSEG | 20 | 0.3035 | −0.016 |
+| SSRA | 17 | 0.285 | −0.0345 |
+| SSHR | 23 | 0.124 | −0.1955 |
+| SSBU | 20 | 0.073 | −0.2465 |
+| SSEV | 18 | 0.0065 | −0.313 |
+| SSAP | 28 | −0.046 | −0.3655 |
+
+Known and accepted: SSAP, SSBU and SSEV have even memberships whose two middle
+members sit on opposite sides of the party gap, so their medians fall where no
+member sits. The user reviewed this and said the committee median behaviour
+should not change.
+
+**Pillar 4**: 100 senators, each with nominate_dim1 and their state's AIP 2020
+estimate and standard error (example: Murkowski 0.204 Voteview; Alaska 0.176
+AIP units). Distance NOT_AVAILABLE for all.
+
+---
+
+## 5. Methodology decisions (binding)
+
+1. Never independently rescale public-ideology estimates and Voteview scores and
+   present them as one scale. They are never compared directly.
+2. No senator-to-state distance until a valid bridge exists (active bridge is
+   `none-v0`, status NONE).
+3. No national-public gap (Pillar 5) or committee-to-public drift (Pillar 6)
+   until a national public estimate is defined AND a bridge exists.
+4. `population_weighted_mean_v1` is the primary Pillar 5 method. The weighted
+   median is retained only as a secondary comparison, shown only in
+   methodology/details. Both stay labelled candidate, not final.
+5. Committee drift is committee median − Senate median. Do not change it.
+6. `nominate_dim1` is the default score; `nokken_poole_dim1` is stored only.
+7. No arbitrary 0–100 representation score and no 0–100 display of any score.
+8. No politically evaluative labels (good/bad, aligned/misaligned as a grade,
+   extreme, moderate, biased, fringe, representative score), no rankings of
+   politicians, and no causal claims (gatekeeping, obstruction, why a bill failed).
+9. Historical records must remain reproducible: inputs and results are
+   append-only and versioned; nothing old is overwritten or deleted.
+10. Committee membership dates are observed dates, labelled as such.
+11. Fixtures live only in `tests/fixtures/ideology/` (FIXTURE names, fake ids,
+    non-existent states ZZ/ZY; README there) and never reach `data/ideology/`.
+
+Retired and not to be revived (they are still in the old code path until Step 5
+removes them): the caucus-group peer comparison (`peers.py`), seats vs. nation
+(`representation.py`, including the retired regression used for diagnostics
+only), committee bill flow and Yes/No-split analysis (`gatekeeping.py`,
+`output_ideology.py`), `landmarks.py`, and the shared 0–100 display. Also
+retired long ago and never to return: senator-minus-voter subtraction,
+alignment scores, defiance/betrayal language, politician rankings.
+
+---
+
+## 6. Test status
+
+Run: `./.venv/bin/python -m pytest -q` (Python 3.14 venv; CI uses 3.12).
+
+Engine B (all passing, 51 total):
+- `tests/test_ideology_records.py` — 17 (validators, store, ingest from fixtures
+  and from the real snapshot, population table, committee events, committed
+  tables verify, no Engine A imports).
+- `tests/test_ideology_pillars.py` — 20 (bridge NONE; national unresolved;
+  weights incl. vacancy; weighted median and weighted mean by hand; Pillar 5
+  primary mean and details; Pillars 4 and 6 by hand; config defaults; no 0–100
+  anywhere; real values recomputed from the raw files with separate code).
+- `tests/test_ideology_incremental.py` — 14 (unchanged / committees_only / full,
+  carried = full recompute, write-once, tamper and stale detection).
+
+Full suite: **375 passed, 9 failed.** The 9 failures are EXPECTED:
+
+```
+tests/test_perspective.py::test_18_safeguards_remain
+tests/test_published_pages.py::test_demo_bill_survival_is_current
+tests/test_published_pages.py::test_report_quotes_the_current_bill_figures
+tests/test_published_pages.py::test_senate_wide_totals_count_distinct_bills
+tests/test_supervisor.py::test_supervisor_confirms_every_figure
+tests/test_whitepaper.py::test_party_landmarks_are_current
+tests/test_whitepaper.py::test_committee_tables_are_current
+tests/test_whitepaper.py::test_chair_gaps_are_current
+tests/test_whitepaper.py::test_distinct_bill_counts_are_current
+```
+
+They compare the OLD committed page, report and whitepaper (built from the
+previous bill-status archives) with the newer archives fetched on 2026-09-25
+(e.g. page 5,347 distinct bills vs 5,456 in the fresh data). They belong to the
+old bill-flow / whitepaper path that Step 5 removes. They fail identically
+without any Engine B change. **Do not fix them before the planned removal**; do
+not rebuild the old page to silence them.
+
+---
+
+## 7. Not built yet
+
+- UI rewrite (the three views) and the page builder
+- Methodology registry and methodology UI
+- Famous-person reference anchors for Pillar 4
+- A valid public-to-legislator bridge
+- A national public ideology measure (definition and bridge)
+- An understandable real-world explanation of the Pillar 5 numbers
+- Deterministic bill ideology / legislative outcome classification
+- Final GitHub workflow changes (daily schedule, ingest/compute steps)
+- Final removal of the old Pillars 4–6 path, supervisor rewrite, docs rewrite
+- Committee names from an official source (currently only codes; the plan adds
+  the congress-legislators `committees-current` feed)
+- Deployment (nothing is published; the live site still runs the old product)
+
+---
+
+## 8. User feedback and UX direction (the next major phase)
+
+- **Pillar 4** must be understandable to ordinary users by showing 2–3
+  recognisable political figures as reference points on the same scale. Use
+  only figures with defensible, comparable congressional voting data (e.g.
+  Voteview scores); never invent proxy scores for anyone.
+- **Pillar 5** must explain in plain language what the Senate numbers mean in
+  the real world, not just show abstract coordinates.
+- **Pillar 6**: the user likes the existing committee UI; largely preserve its
+  design while switching it to the new metrics (drop the bill-flow and
+  Yes/No-split parts, which are retired).
+- **Future bill ideology classification** must be deterministic and must not
+  rely on an LLM guessing. A sponsor's ideology alone must not be treated as
+  the bill's ideology without a clear, documented methodology.
+- Every displayed number needs a methodology path: raw source, transformation,
+  formula, version, limitations. Label provisional things provisional; say why
+  anything is NOT_AVAILABLE.
+
+---
+
+## 9. Next step: Step 4 only
+
+First read this file and inspect the branch (`git log`, `src/civicalign/ideology/`,
+`data/ideology/`, the tests). Then, and only then, build Step 4:
+
+1. `src/civicalign/ideology/methodology.py` — a registry with one entry per
+   displayed quantity: raw source, transformation, formula, versions,
+   limitations. Page and tests read it; no number may appear without an entry.
+2. Page builder — rewrite `src/civicalign/build_demo.py` to read the latest
+   result record (`compute.load_record` / `index`) plus the registry and write
+   `demo/senator-check.html` (from a new `demo/senator-check.template.html`) and
+   `demo/methodology.html` (from a rewritten `demo/methodology.template.html`).
+3. Frontend structure — exactly three views: Senator / State (Pillar 4),
+   Senate / Nation (Pillar 5: plain mean vs population-weighted mean and the
+   difference as the main comparison; medians only in details), Committee /
+   Senate / Nation (Pillar 6: selected committee, committee median, Senate
+   median, national centre (not available), both drifts, member count). A
+   methodology panel for every number. Numbers in native units, honestly
+   rounded; each NOT_AVAILABLE item shows its reason. No 0–100, no evaluative
+   labels, no Engine A "recent votes" block.
+
+Ask the user before building the famous-person anchors or the Pillar 5
+real-world explanation text (section 8): they are the next phase and need their
+input. Review is local only (open `demo/senator-check.html`); do not push.
+
+Remaining approved plan after Step 4:
+- **Step 5**: remove the old path (`peers.py`, `representation.py`,
+  `gatekeeping.py`, `output_ideology.py`, `landmarks.py`, `uncertainty.py`,
+  `alignment.py`, `chamber.py`, `committees.py`, `space.py`, `export.py`,
+  `whitepaper.py`, `sources/state_prefs.py` — whose AIP class wrongly claims
+  `is_bridged = True`); reduce `pipeline.py` to what Engine A's `receipts.py`
+  needs; rewrite `cli.py`; rewrite the Engine B parts of
+  `agents/supervisor.py` (independent recount of every Engine B number, bridge
+  and national gating, methodology coverage, store integrity; keep all Pillar 1
+  checks); add the `committees-current` source; update
+  `update.yml`/`scripts/update.sh` (daily; ingest → bridge → compute → rebuild →
+  tests → supervisor → commit incl. `data/ideology/`; keep rebuild-before-tests);
+  delete/replace the old tests (`test_peers`, `test_perspective`,
+  `test_published_pages`, `test_representation`, `test_uncertainty`,
+  `test_math`, `test_independent`, `test_whitepaper`; adjust `test_floor_votes`,
+  `test_regressions`, `test_supervisor`, `test_update_chain`, `test_readme`,
+  `test_docs`); rewrite README, METHODOLOGY.md, and add `docs/ENGINE_B_DATA_FLOW.md`.
+- **Step 6**: run the whole chain locally, commit locally, report. Publishing
+  needs the user's explicit approval (then rebase on `origin/main`, regenerate
+  pages, push, run the workflow, check live/repo parity).
+
+---
+
+## 10. Engine A status (for reference only; do not modify during Engine B work)
+
+- Pillar 1 Stage 2 (vote bindings) and Stage 2.5 (source packets) are complete
+  and run in the weekly workflow (`explain.bind`, `explain.context --check-fresh`).
+  54 bindings; 10 packets READY_FOR_GENERATION (the first cohort: S.J.Res.10,
+  37, 49, 71, 77, 81, 88, H.J.Res.142, S.2, H.R.4), 27 CRA READY_WITH_LIMITS,
+  15 pending, 2 ambiguous. S.2 is READY_FOR_GENERATION + REVIEW_REQUIRED
+  (178,614 source characters; decided to keep it in the cohort).
+- Stage 3 (Maker/Checker development evaluation) harness is built
+  (`src/civicalign/evaluation/`, prompts `evaluation/prompts/maker_v1.txt` and
+  `checker_v1.txt` with hashes in `PROMPTS.json`). It runs a sealed `claude`
+  CLI (2.1.281, `/opt/homebrew/bin/claude`, the user's own login; Maker
+  claude-opus-5, Checker claude-sonnet-5). A run was STOPPED by the user after
+  5 of 10 cases passed automated checks; results are local and gitignored. No
+  generated explanation is published or on the page.
+
+---
+
+## 11. Commands
+
+```
+PYTHONPATH=src ./.venv/bin/python -m civicalign.agents              # fetch the source snapshot (all or nothing)
+PYTHONPATH=src ./.venv/bin/python -m civicalign.agents.verify       # check the snapshot
+PYTHONPATH=src ./.venv/bin/python -m civicalign.ideology.ingest     # versioned inputs (--dry-run)
+PYTHONPATH=src ./.venv/bin/python -m civicalign.ideology.bridge     # record the none-v0 bridge
+PYTHONPATH=src ./.venv/bin/python -m civicalign.ideology.compute    # versioned results (--verify, --full)
+PYTHONPATH=src ./.venv/bin/python -m civicalign.ideology.inputs     # print current results (not stored)
+./.venv/bin/python -m pytest -q tests/test_ideology_records.py tests/test_ideology_pillars.py tests/test_ideology_incremental.py
+```
+
+## 12. Other links
+
+- Claude.ai copy of the OLD page (manual republish, does not update itself):
+  https://claude.ai/artifact/Ft6hU6XZUnWHPhZwzwmzaj
+- Shared methodology doc (hand-mirrored, OLD methodology):
   https://claude.ai/code/artifact/683a9e36-3046-4827-a7af-7442b49ef7e3
-- Stage reports (delivered in chat, not in the repo): the Pillar 4 model audit,
-  the Pillar 1 Stage 1 architecture, the Stage 2.5 source-context analysis and
-  its implementation report. Their conclusions are recorded below.
-
-## The contract, and what moves
-
-**The methodology contract is stable, but the data is dynamic. CivicAlign
-rebuilds from current source data every week. Numerical figures, rosters, bill
-counts, peer groups and valid same-scale conclusions are expected to change.**
-The project is not frozen.
-
-What never changes without a deliberate decision:
-
-1. **No comparison across the two scales.** A senator's score (Voteview,
-   Nokken-Poole) and a state's voter estimate (American Ideology Project) are
-   separate measurement systems with no validated bridge. Nothing public, and
-   nothing in `src/`, subtracts one from the other, compares them with `<`/`>`,
-   tests a senator against the state's uncertainty band, or ranks senators by any
-   senator-versus-state figure. Valid comparisons stay inside one system: senator
-   vs same-caucus peers (Voteview only), senator vs Senate middle, committee vs
-   Senate middle, 60-vote point vs Senate middle, state vs national voter
-   estimate, seats' vote share vs national vote share (election results only).
-2. **The primary senator result is a peer comparison** (`peers.py`): same
-   caucus group (Republican caucus; Democratic caucus = Democrats plus the
-   Independents whose roster `caucus` field says Democrat; any other party value
-   or a missing caucus → status `unsupported`, never a peer), other states only,
-   state two-party presidential share (2016/2020/2024 averaged equally, MIT
-   Election Lab) within ±4 points, minimum six peers, conclusion published only
-   if it agrees at ±2, ±3, ±4 and ±5. Statuses: within / outside_liberal /
-   outside_conservative / unstable / insufficient / unsupported. Nothing widens
-   the window; peers are listed by state, never ordered by position; no ranking;
-   "same party" is never said (Independents are shown as Independents). The page
-   only words the backend status (`peerWords` / `peer_words`). The regression
-   (`representation.py`) is kept for diagnostics and the methodology's audit
-   only: it mostly measured the party split and, in competitive states, its line
-   fell where no senator sits. The survey estimate never enters this comparison.
-3. **No bill ideology.** A roll-call dividing line says where senators split, not
-   what the bill was. A sponsor's record does not make a bill liberal or
-   conservative. The page says both.
-4. **No dead bills.** A bill not yet formally reported is "not yet sent forward",
-   never buried, killed or dead. The Congress is running.
-5. **Thresholds.** Two-side bill-flow comparison only with ≥ 25 bills per sponsor
-   group; floor-vote split only with ≥ 7 qualifying votes, tagged "Early signal"
-   below 15; a committee is flagged (under "More about this committee") as
-   sitting well to one side beyond 0.15 underlying units. The Senate-wide
-   bill-flow baseline is shown beside each committee's figure and described
-   without a cause.
-6. **Words follow one rule.** Every same-scale position is described by
-   `relWords` (page) / `rel_words` (`build_demo.py`): within 0.05 underlying
-   units "near the …", otherwise "on the more liberal/conservative side of
-   the …". No graded categories, no significance or "chance" wording, no "most
-   liberal", "extreme", "moderate", ranks, scores, grades or verdicts about
-   representation.
-7. **Meaning before numbers.** Cards lead with a ruler and a sentence.
-   Coordinates appear only under "See details" / "More about …", introduced by
-   the scale note and labelled "display-scale units"; bill-flow and vote-share
-   differences are "percentage points"; the two are never mixed. Default views
-   carry no academic terms (Voteview, Nokken-Poole, median, standard error,
-   cutpoint, cloture live in How it works, the disclosures and the report);
-   unfamiliar terms get a tap-to-open "i" hint (`help()` / `HELP`). The 30-vote
-   floor is described as a CivicAlign display rule, not a validity claim.
-8. **The four-view interface** and its accessibility (tabs with roving tabindex,
-   tracks hidden from screen readers with a spoken sentence, 44px targets).
-9. **Evidence without inference.** Each senator card lists their recorded Yea or
-   Nay on the most recent passage votes (block `F`, same votes for every senator,
-   newest first, Voteview links). No bill description is generated (`summary`
-   stays empty until a verified Pillar 1 explanation exists) and no claim is made
-   about what the state's voters wanted.
-10. **Pillar 1 facts come only from bound official artefacts.** A vote will be
-   explained only from its source packet: the Senate's own record, the exact
-   text as voted on, the Code in force at the vote, cited Public Laws, the
-   matching CRS summary, and for CRA resolutions the bound rule and 5 U.S.C.
-   801. No model memory, no browsing, no fallback to today's law, no summary of
-   a text the Senate later amended. CRA explanations are limited to the
-   resolution's own effect unless the rule is bound and separately validated;
-   Senate passage is never described as enactment. The vote's actual result
-   and the next legislative step are fixed deterministic text; a failed vote is
-   never described as advancing. A packet carries only the law the measure
-   needs, at the node cited; nothing is truncated. No model has been called
-   yet.
-
-All ten are enforced by tests that run in the weekly job.
-
-## What the page shows
-
-- **Header.** "Your senators, in the context of your state" / "See how each
-  senator's Senate voting record compares with senators in the same caucus group
-  representing states that voted similarly in recent presidential elections." /
-  "A separate survey estimate of your state's voters appears further down and is
-  not directly compared with the senators." / "Senate data updated: <date> ·
-  Voter estimate: 2020 wave".
-- **Your senators (Pillar 4).** Takeaway ("Both Ossoff's and Warnock's voting
-  records fall outside the observed range of comparable senators in the
-  Democratic caucus, on the more liberal side."), state picker, "YOUR SENATORS —
-  How do their voting records compare with senators in the same caucus group
-  from states that voted similarly?", "Georgia recent presidential vote used for
-  peer matching: 2016 · 2020 · 2024. Both senators are compared with the same
-  pool of other states." Then a card per senator: "Compared with 12 senators in
-  the Democratic caucus from 7 other states with similar recent presidential
-  voting (i)", SENATE VOTING SCALE with the observed peer range bar, the "Peer
-  middle" tick and the senator's dot, the decoder line, the one sentence from
-  the backend status, "This compares the senator with senators in the same
-  caucus group from states with similar recent presidential voting. It does not
-  measure whether the senator agrees with the state's voters.", the vote count,
-  then folds: "How were these peers chosen?" (the rule, the state's three shares
-  and the average, peer states with shares, peer senators by state, conclusion
-  at each window, the numbers), "Recent votes in this record", "Where they sit
-  in the Senate" (the demoted Senate-middle ruler). Below the cards: "A peer
-  comparison says where a voting record sits among comparable senators in the
-  same caucus group. It does not say whether a senator represents, agrees with,
-  or matches the state's voters." Then the collapsed "Additional voter context"
-  survey fold on the VOTER ESTIMATE SCALE. A senator with fewer than 30 roll
-  calls gets the "CivicAlign waits until a senator has at least 30 recorded
-  floor votes" card.
-- **The Senate (Pillar 5).** Leads with "How Senate seats represent the country's
-  vote": a vote-share ruler (Even split, National vote, Average across Senate
-  seats) and "The mix of states represented by Senate seats is N percentage
-  points more Republican than the national presidential vote", by election under
-  a fold. Then "How the Senate votes": Senate middle and 60-vote point ("Why 60?
-  Under Senate rules, ending debate on most legislation generally requires
-  three-fifths of senators…"; the fold adds that final passage usually requires a
-  simple majority and names cloture only afterwards), the state survey
-  estimates on their own scale, and the folded "Where familiar senators sit".
-- **Committees (Pillar 6).** "Senate committees review bills before many of them
-  can go to the full Senate", a four-step legislative flow, then one committee at
-  a time against the Senate overall: who sits on it (ruler vs Senate middle);
-  what it has sent to the full Senate (bills sent → formally sent forward (i) →
-  full Senate "which may vote on it", sponsor definition, "This describes the
-  sponsor, not the ideology of the bill", and "Compared with the Senate overall"
-  with the Senate-wide difference beside the committee's, in percentage points,
-  no cause stated); where the Yes/No split fell on its bills, with the count of
-  qualifying votes.
-- **How it works.** Plain questions and answers ("What is this site showing me?",
-  "How are senators measured?", "What is the voter estimate?", "Are the senator
-  and voter measures directly compared?", "Who are the comparable senators?",
-  "What is a caucus group?", "What does Senate middle mean?", "Why compare
-  Senate seats with the national vote?", "Why are 60 votes shown?", "What does a
-  Senate committee do?", "What does sent forward mean?", "Does this tell me
-  whether my senator represents me?", "Does this tell me whether a bill is
-  liberal or conservative?", "When was this data updated?", "What can't this
-  tell me?"), then "Show the technical methodology".
-- Footer: eight sources (including the MIT election file) with publisher, link,
-  vintage and retrieval date.
-
-## Pillar 1, the concrete receipt: what exists and what does not
-
-Target (from the original directive, still valid): turn "Recent votes in this
-record" into a verified receipt: what the Senate was deciding, the exact text
-before it, what a Yea and a Nay would do, how this senator voted, and the
-official sources behind each line. **Stages 2 and 2.5 are built and supervised.
-No summary is generated, no model is called, and the page reads none of it.**
-The original v5.0 directive is used only for product intent (cognitive
-ergonomics, the concrete receipt, accessibility, source transparency); its
-alignment scores, defiance language, rankings, "graveyard" framing and causal
-claims are not coming back.
-
-**Stage 2, binding** (`python -m civicalign.explain.bind`, `--offline`; runs in
-the weekly job after verify; writes `data/explanations/119/vote_119_S_NNNNN.json`
-and `index.json`, tracked, history kept on change).
-- Sources: the Senate's own roll-call XML (`sources/senate_votes.py`, senate.gov
-  LIS, keyless, keyed by congress / session / clerk vote number), the bill's
-  full BILLSTATUS record (`sources/billstatus.py`: text versions with GovInfo
-  URLs and dates, actions with recorded-vote links, CRS summaries), Voteview for
-  cross-checking. The joint-resolution archives (`sjres`, `hjres`) are
-  non-critical snapshot sources. The Congress.gov API is not used.
-- Rules (`explain/binding.py`): kind from the official question only
-  (`QUESTION_KINDS`; anything else OTHER); PASSAGE_AS_AMENDED only when the
-  Senate title says "As Amended" and/or the bill action says "with an amendment"
-  and they agree; supported kinds PASSAGE, PASSAGE_AS_AMENDED,
-  JOINT_RESOLUTION_PASSAGE. Text selection (`select_text`): the Senate
-  engrossment dated the vote (`es`/`cps`, or `eas` for a House bill passed with
-  a Senate amendment) is the measure as passed; otherwise the latest pre-vote
-  version by precedence (House bills `pcs > rs > rds > rfs > eh`; Senate bills
-  `pcs > rs > is`); enrolled and public-law texts never; an amended measure
-  without an engrossment is TEXT_PENDING for 45 days then TEXT_AMBIGUOUS; floor
-  amendments before a vote with no engrossment, or two engrossments, are
-  ambiguous; the GovInfo file's `bill-stage` must match. CRA metadata from the
-  two official title forms only. The receipt scaffold (headings, what Yea and
-  Nay mean) is fixed per kind.
-- Result and next step (`binding.next_step`, since 24 Sept): two separate
-  fields. `receipt.vote_result` = what this vote actually did (outcome PASSED
-  / REJECTED from the official result, cross-checked against the tally and
-  threshold; "The Senate passed the bill." / "The joint resolution did not pass
-  the Senate in this vote."). `receipt.next_step` = case, `actual`, and, for a
-  failed vote only, `hypothetical` ("If the Senate had passed it, …"). Cases
-  come from the measure number (bill / joint resolution; S. and S.J.Res. are
-  Senate origin, H.R. and H.J.Res. House origin, which must agree with bill
-  status), whether the Senate changed the text (kind, "As Amended", "with an
-  amendment", or an `eas` text), and House passage recorded on or before the
-  vote: SENATE_ORIGIN ("It next goes to the House."), HOUSE_ORIGIN_SAME_TEXT
-  ("…can proceed to presentment to the President."), HOUSE_ORIGIN_AMENDED
-  ("The House must agree to the Senate changes…"). Anything inconsistent or
-  missing is UNDETERMINED (no text); constitutional-amendment resolutions are
-  UNSUPPORTED. Nothing after the vote date is used. The old kind-only
-  sentence told S.2 (a Senate bill) that it "goes back to the House" and gave
-  failed resolutions an "after both chambers pass it" line; both are gone.
-  Today: 18 Senate-origin passed, 6 Senate-origin rejected, 20 House-origin
-  same-text passed, 2 House-origin same-text rejected, 8 House-origin amended
-  passed; none undetermined.
-- Verification: Senate record exists; congress/session/vote number, date,
-  question, tallies and threshold match Voteview; every member's vote matches
-  (LIS id → bioguide from the roster; former members by exact last name, first
-  name, state and party against Voteview's member file, failing closed);
-  measure id matches; the bill status links this vote. Statuses VERIFIED /
-  BOUND_AWAITING_BILLSTATUS / FAILED / UNAVAILABLE. Today: 899 roll calls
-  classified; 54 bound (19 bill passage, 35 joint resolution), all VERIFIED and
-  TEXT_BOUND; 27 are CRA.
-
-**Stage 2.5, source context and packets** (`python -m civicalign.explain.context`,
-`--offline`, `--only=S2,HR4`; an offline job, NOT in the weekly workflow because
-the title archives are slow; the workflow only re-verifies the tracked records).
-- References: structured `external-xref` citations from the voted XML (no prose
-  regex for the Code). Relevance (`explain/relevance.py`, since 24 Sept):
-  each citation's relationship is read from where it sits in the voted XML,
-  never a model. AMENDED_TARGET / REPLACED_TEXT (amendatory instruction outside
-  quoted text), DEFINITION_REQUIRED (inside one of the measure's definitions:
-  a header saying "defin…" or a `<term>`; or "as defined in"),
-  CROSS_REFERENCE_REQUIRED (applied as a test or acted under: "described in",
-  "pursuant to section …"; also the fail-closed default), CROSS_REFERENCE_ONLY
-  ("et seq." whole-Act cites, whole Public Laws or divisions, "the …
-  system/agreements/program under section …"), SUPPORTING_CONTEXT (5 U.S.C.
-  801 for CRA, added by rule). Those needing content are
-  CONTENT_INCLUDED_FOR_GENERATION; CROSS_REFERENCE_ONLY is REFERENCE_TRACKED
-  (in-force hash, no content; the Maker may name it, not describe it).
-- Selection policy (`select_sections`): required provisions at the node the
-  citation's own text names ("8 U.S.C. 1182(a)(2)" → `/us/usc/t8/s1182/a/2`,
-  cut byte-exact with the number/heading/chapeau lead-in of each provision
-  above it); a whole section only when the citation names only the section,
-  and never above 50,000 characters (`FULL_SECTION_MAX_CHARS`; above it the
-  record is `fragment_selection_required` and the context PENDING). Capped at
-  12 required provisions; voted texts over 30,000 words stay PENDING until a
-  large-measure policy exists. Citation gaps are detected (a pattern used only
-  to find gaps, never to source content): an untagged "N U.S.C. …", a tagged
-  cite whose list continues untagged ("8 U.S.C. 1226, 1231(a), or 1357"), or
-  cite text that does not match its structured cite. Gaps are counted per
-  citation group; each gap lists the provisions it names and which of them are
-  untagged. A narrow fallback grammar (`relevance.FALLBACK_R1/R2`) recovers
-  exactly two forms, and only when the whole parenthetical matches: R1 "(8
-  U.S.C. 1325 or 1326)", one title and a list of sections; R2 "(<tagged 8
-  U.S.C. 1226>, 1231(a), or 1357)", a tagged citation whose list continues,
-  title inherited from its structured cite. Section numbers are digits plus at
-  most three lower-case letters (no dashes, so no ranges), pinpoints explicit;
-  "et seq.", "note", "App.", chapters, ranges, mixed titles and vague phrases
-  ("that section", "this chapter") are never resolved. Each recovered citation
-  records source `fallback_explicit_usc` (structured ones `structured_xref`),
-  the rule, the exact parenthetical, the voted text's SHA-256, its container
-  element id, the text part and character offsets; it is then classified and
-  bound to the Code in force exactly like a tagged citation. A gap left
-  unresolved where content is needed → `unresolved_citations` → PENDING. A Public Law cited only as a
-  whole where content is needed (an amendment to "division A of Public Law
-  119-37") is PENDING too.
-- Packet budget: `metrics` (voted_text_chars, context_chars,
-  official_summary_chars, total_source_chars, source_count,
-  included_context_fragment_count, hierarchy_fragment_count,
-  tracked_reference_count) and `budget` (REVIEW_REQUIRED above 150,000 source
-  characters, `PACKET_REVIEW_CHARS`; never truncated; a flagged packet needs a
-  recorded human review before any Maker reads it). Every current packet is
-  WITHIN_BUDGET except S.2's (178,614 characters: REVIEW_REQUIRED). A packet's history keeps a digest of each superseded packet
-  (hash, metrics, source hashes); the full old packet is in git.
-- The Code in force (`sources/uscode.py`): OLRC release points, one per enacted
-  Public Law. Rule: the latest release point on or before the vote **whose
-  archive for the title is published**; every release point between it and the
-  vote is checked against OLRC's classification table (`tbl119pl_1st/2nd.htm`),
-  and the context is ambiguous if any intervening law touched a cited section.
-  Never a later release point, never today's law. Sections are extracted
-  byte-exact by USLM identifier (OLRC uses an en-dash in hyphenated numbers;
-  both spellings match) and hashed. Release points 119-23 and 119-26 publish no
-  archives; neither does 118-274, the one in force for S.5.
-- Public Laws (`sources/publaw.py`, GovInfo USLM): a cited section is extracted;
-  a whole-law or division citation is identified and hashed only, "not to be
-  described". Laws before the USLM era (e.g. 91-672, 104-172) are not served
-  and stay pending.
-- CRS summary: version, date and relationship MATCHED / EARLIER_SAME_TEXT /
-  PRE_AMENDMENT / UNKNOWN; only the first two go into a packet.
-- CRA (`sources/federal_register.py`): the rule bound by citation through the FR
-  API (client User-Agent, `per_page=1000` with pagination, day query by start
-  page; GovInfo issue XML is the documented fallback). Document type recorded
-  (four bound documents are Notices deemed rules). GAO determinations
-  (`GAO_RULE_DETERMINATION`) identified from the resolution text: opinion date,
-  Congressional Record date and pages; not retrieved. 5 U.S.C. 801 sourced from
-  the Code in force. Modes `resolution_only` / `rule_bound`; rule content is
-  withheld from packets (`content_included: false`) until the CRA validation
-  cohort passes.
-- Output: one tracked context record per vote (`data/explanations/119/context/`,
-  plus `index.json`) and, for READY states, a packet (`packets/`) whose every
-  `content` field is a byte-exact copy of a hashed artefact. Volatile fetch
-  messages are kept out of tracked records, so an offline rerun writes nothing
-  when nothing changed. Completeness COMPLETE / LIMITED / PENDING / AMBIGUOUS →
-  generation READY_FOR_GENERATION / READY_WITH_LIMITS / SOURCE_CONTEXT_PENDING /
-  SOURCE_CONTEXT_AMBIGUOUS. Today: 10 ready (S.J.Res.10, 37, 49, 71, 77, 81, 88;
-  H.J.Res.142; S.2; H.R.4), 27 ready with limits (all CRA), 15 pending (large
-  texts or pre-USLM laws, plus since 24 Sept S.331 and H.R.7148), 2 ambiguous
-  (S.5 by the in-force rule itself; H.R.6938 by intervening laws). S.331 is
-  pending on 21 U.S.C. 802 and 823, amended but cited only as whole sections of
-  158 KB and 127 KB; H.R.7148 on an amended date in a Public Law division cited
-  only as a whole.
-- Raw cache: `data/raw/explanations/` (Senate XML, texts, title archives,
-  release-point pages, classification tables, law XML, FR queries and documents;
-  about 360 MB, ignored by git) with `MANIFEST.json`; immutable artefacts are
-  served from the cache once recorded.
-
-**Decisions on record.** First Maker/Checker cohort: the 8 self-contained
-resolutions (S.J.Res.10, 37, 49, 71, 77, 81, 88; H.J.Res.142) + S.2 + H.R.4.
-All ten are READY_FOR_GENERATION with COMPLETE packets. S.2 was pending
-after the first correction pass (its "covered unlawful alien" definition names
-five provisions in two citation groups, four of them untagged: 8 U.S.C.
-1231(a), 1357, 1325, 1326); the fallback grammar recovered them and each bound
-to release point 119-95, so S.2 is complete again. Its packet is over the
-review threshold and needs a recorded human review before Stage 3 reads it.
-Before the first pass S.2's packet was 974 KB because the whole
-of 8 U.S.C. 1182 (680 KB, more than half of it OLRC notes) was included for a
-citation of 1182(a)(2) inside a definition; that paragraph is 13.6 KB.
-S.J.Res.10 and 71 carried 50 U.S.C. 1601 (the first section of an "et seq."
-cite, about emergencies that existed in 1976); H.R.4 carried 2 U.S.C. 682 from
-an "et seq." cite. All three are now tracked, not included. S.5 stays ambiguous; do not solve it with current
-law. CRA explanations wait for a separate validation cohort (one rule-bound,
-one GAO-deemed) and are never published before it passes.
-
-**Not built.** Maker, Checker, the evaluation run, any UI change, citation
-forms beyond the two fallback rules, the large-measure section-selection policy, Statutes at Large for pre-USLM laws,
-retrieval of GAO opinions from the Congressional Record. When Stage 3 starts:
-the Maker runs sandboxed on the packet alone; the Checker uses a different
-prompt (ideally a different model) from the Maker; model provider, prompt
-versions and iteration counts go into the packet's provenance; only `verified`
-summaries may reach block `F`; the deterministic checks in the Stage 1 design
-(identity, hash, Yea/Nay semantics, every effect cited, no stale summary after
-a source change) gate publication. Provider size guard (required, not built):
-before any Maker call the provider adapter must know the model's actual input
-limit; if the full serialized packet plus the prompts does not fit, the case is
-PROVIDER_INPUT_TOO_LARGE. No truncation, no omitted source, no automatic
-substitution of another case or model.
-
-## How the weekly update works
-
-`.github/workflows/update.yml` (Mondays 11:00 UTC, or "Run workflow"), mirrored
-by `scripts/update.sh`. Every step is a gate; a failure fails the Action, commits
-nothing, and leaves the previously verified site live. **The order is the
-invariant: no test may compare current source data with a page generated from
-a different snapshot**, so the pages are rebuilt (in the runner's workspace
-only) before any test runs. Until 24 Sept the data tests ran before the rebuild;
-the first run whose snapshot moved senator scores (roster, scores, roll calls
-and votes all changed) failed on four tests that compared the old committed page
-with the new data (for example 0.671 on the page against 0.670 in the fresh
-file). `tests/test_update_chain.py` pins the order in both the workflow and
-`update.sh` and replays that failure with a fixture.
-
-1. **Fetch as one snapshot** (`python -m civicalign.agents`): all ten critical
-   sources (Voteview members, roll calls, votes; congress-legislators roster and
-   committee membership; American Ideology Project state estimates; Census
-   populations; Senate and House bill-status archives; MIT election results) are
-   downloaded and validated into staging; if any fails, nothing is installed and
-   the run stops. Two non-critical sources (the joint-resolution archives) keep
-   their previous file on failure. Change detection is by content (zip members,
-   not archive timestamps). `data/raw/SNAPSHOT.json` (tracked) records per
-   source: URL, file, bytes, SHA-256, content key, changed flag, content-changed
-   date, checked date, vintage. `PROVENANCE.tsv` logs content changes.
-2. **Verify** (`python -m civicalign.agents.verify`): 100 seats, ≤ 2 senators per
-   state, scored senators and committee members on the current roster, record
-   counts sane, no source shrank > 30 %.
-3. **Bind** (`python -m civicalign.explain.bind`): Pillar 1 Stage 2 from this
-   snapshot; a network failure leaves previous bindings in place.
-4. **Stage 2.5 freshness** (`python -m civicalign.explain.context
-   --check-fresh`): the context job needs the Code archives and runs offline,
-   so the workflow checks instead that every context record and packet was
-   built from the bindings just re-derived and from this snapshot's bill-status
-   CRS summaries (identity, kind, verification, text hash, summary
-   relationship, receipt, vote record, legislative object, packet present iff
-   ready). Anything stale fails the run: rerun the context job and commit. A
-   new vote with no context yet has no packet and is reported, not mixed in.
-5. **Rebuild** (`python -m civicalign.build_demo`): the page's data blocks and
-   `demo/methodology.html` from the template, in the workspace only.
-6. **Data tests** (`pytest`, excluding the page and whitepaper tests), which
-   compare the raw files with the pages rebuilt in step 5.
-7. **Page tests** (`tests/test_published_pages.py`): the public-claim contract.
-8. **Supervisor** (`python -m civicalign.agents.supervisor`): separate code
-   re-reads the raw files and reproduces 36 checks: scores, middle, 60th vote,
-   survey estimates, bill counts, every state's three-cycle two-party share and
-   the national shares, the seats-minus-nation figure, the retired line (own OLS
-   from sums; diagnostics only), every senator's peer group, range, status and
-   per-window sensitivity with its own loop, the caucus grouping from the roster,
-   every senator's vote on the published floor votes, every Pillar 1 binding
-   (identity, tallies, members, measure, recorded-vote link, hashes, text
-   version rule and stage), every context record and packet (references,
-   selection, in-force archive, fragment hashes, packet hashes, CRS relationship,
-   CRA mode, generation state, no generated field), and that the payload carries
-   no cross-scale, ranking or unverified-summary field.
-9. **Commit** only if every gate passed and the pages, provenance or bindings
-   changed (a check-stamp-only snapshot change is discarded). **Publish** (a
-   separate job) only if every step passed.
-
-Roster changes flow through the roster join; a senator with fewer than 30 roll
-calls gets the waiting card, never a predecessor's score. The seat
-de-duplication guard (104 Voteview rows for 100 seats) is in
-`sources/voteview.py`.
-
-## Routine tasks
-
-- Refresh the whitepaper's figures after data moves (the job only warns):
-  `PYTHONPATH=src python -m civicalign.whitepaper`, then commit `WHITEPAPER.md`.
-- Republish the claude.ai copy: inline `demo/civicalign.css` into
-  `demo/senator-check.html` in place of the `<link>` tag, point
-  `href="methodology.html"` at the live URL, and publish to the artifact URL above.
-- Rebuild Pillar 1 context offline after a new binding or a source change:
-  `PYTHONPATH=src python -m civicalign.explain.context` (the first run fetches
-  archives; later runs use the cache), then run the supervisor and commit
-  `data/explanations/`.
-- Run everything locally: `scripts/update.sh` (uses `.venv` if present).
-- Read the figures on the command line: `PYTHONPATH=src python -m civicalign`
-  (`--json` for the export; each section is labelled with its scale).
-- After any deploy, compare the live page with the repo byte for byte before
-  reporting it live.
-
-## Code map
-
-- `src/civicalign/pipeline.py` — `run()` builds the `Report`.
-- `peers.py` — the published Pillar 4 rule (`WINDOW`, `MIN_PEERS`, `WINDOWS`,
-  `caucus_group`, `peer_comparisons`, `status_from`). `representation.py` — the
-  retired regression (`Fit`, `Representation`), diagnostics only, plus the
-  Pillar 5 `ChamberLean`. `uncertainty.py` — analytic OLS errors, leverage,
-  prediction band. `receipts.py` — `FloorVote`, `recent_floor_votes` (fixed
-  neutral rule; `summary` is the Pillar 1 integration point and stays empty).
-- `alignment.py` — `Positions`, senator score and state estimate side by side,
-  nothing derived. `chamber.py`, `committees.py`, `output_ideology.py`,
-  `gatekeeping.py`, `landmarks.py`.
-- `build_demo.py` — data blocks `V M X P G` plus `R` (peers), `E` (seats vs
-  nation), `F` (recent passage votes with every senator's Yea/Nay); report
-  placeholders including `regression_audit`; the sources list; wording rules
-  (`rel_words`, `peer_words`).
-- `agents/` — `base.py` (snapshot, `sha256_bytes`), `sources.py` (agents with
-  validators and vintages), `verify.py`, `supervisor.py`. `whitepaper.py` —
-  figure refresher.
-- `explain/` — `binding.py` (rules, including `next_step`), `bind.py` (Stage 2
-  runner), `relevance.py` (citation relationships and gaps), `context.py`
-  (Stage 2.5 runner, selection policy, packet builder and metrics), `fetch.py` (cache with manifest,
-  retries, immutable entries). `sources/senate_votes.py`, `sources/billstatus.py`,
-  `sources/uscode.py` (sections; nodes via `extract_node`, `lead_in`),
-  `sources/publaw.py`, `sources/federal_register.py`.
-  `config.py` holds the archive and directory paths.
-- Tests: `test_published_pages.py` (the public contract: G1–G6, UX guarantees,
-  presentation guarantees, V1–V20), `test_perspective.py` (product hierarchy),
-  `test_peers.py` (the peer rule, caucus grouping, thresholds), `test_binding.py`
-  and `test_context.py` (Pillar 1, including every origin/result/change
-  combination of the next step and the relevance classes), `test_readme.py`
-  (the README describes the current product), `test_docs.py` (README, HANDOFF
-  and METHODOLOGY name retired methods only as retired), `test_update_chain.py`, `test_supervisor.py`,
-  `test_independent.py`, `test_floor_votes.py`, `test_math.py`,
-  `test_regressions.py`, `test_representation.py`, `test_uncertainty.py`,
-  `test_whitepaper.py`. 284 pass as of this handoff; supervisor 36/36; verify
-  12/12. The supervisor re-derives every binding's result and next step with
-  its own code, re-cuts every node and lead-in from the cached archive with
-  its own scanner, re-checks the relevance rules and gap scan against the
-  voted XML, and recomputes every packet's metrics and budget.
-
-## Open items
-
-- **S.2 packet size (decided 24 Sept).** S.2 stays in the first cohort as
-  READY_FOR_GENERATION + REVIEW_REQUIRED; Stage 3 is evaluation-only and
-  acknowledges the flag explicitly. The threshold is not raised, OLRC notes are
-  not removed, nothing is truncated and completeness is not downgraded.
-  178,614 source characters
-  (text 23,118; law 153,677; CRS summary 1,819), over the 150,000 threshold.
-  The largest parts are whole sections the definition cites without a pinpoint
-  (8 U.S.C. 1226, 36,859; 1357, 28,697; 1326, 18,648; 1325, 9,781). About
-  46,000 of those characters are OLRC notes appended to the sections; they
-  were kept because statutory notes can be law (for example, 1326's note on
-  what an order of removal includes) and dropping them would be a new policy.
-  A notes policy remains a possible later decision.
-- The peer rule leaves three senators without a comparison (both Wyoming
-  senators; Maine's Republican) and nine with window-dependent conclusions; the
-  page says so for each.
-- The 2024 survey wave does not exist; 2020 is the newest. The page says so.
-- Two audits disagree on committee median vs mean; the median is shown and the
-  mean is in fine print. Not resolved.
-- Voteview publishes no standard errors for senator scores, so only the survey
-  side has an uncertainty band.
-- The claude.ai copy and the shared doc do not update themselves.
-- Rotate the Congress.gov API key that was pasted into chat earlier; it is not
-  used anywhere and must never be committed.
-- federalregister.gov's HTML pages are bot-blocked from some networks; the API
-  works with a client User-Agent. uscode.house.gov serves archives slowly
-  (about 60 KB/s), which is why the context build is an offline job.
-- Enter/Space on tabs and circles could not be driven from the browser pane
-  (native links and buttons; worth a press on a real keyboard). Headless Chrome
-  enforces a 500px minimum viewport; phone screenshots use the DevTools-protocol
-  emulation script pattern.
-
-## Decision history, condensed
-
-- Sept 2026, early rounds: Pillars 4–6 built on real data; GitHub Actions and
-  Pages automation; four-view interface; navigation and phone fixes.
-- Vote examples: the "state side of a vote" inference removed, then the vote
-  example removed from the senator view; later restored as plain recorded votes
-  with no inference (block `F`).
-- Methodology cleanup: scales separate; splits are not bill ideology; pending not
-  dead; distinct bills vs referrals; the senator-vs-survey alignment band
-  softened, then removed altogether; obsolete cross-scale metrics (gap, score,
-  rank, crosses_over, apportionment_skew, cnd, vs_public) deleted from the
-  backend, not hidden.
-- 0-to-100 display scale (score × 50 + 50); numbers moved under details with the
-  scale note and "display-scale units"; one wording rule, words before numbers,
-  no ranking language; graded words dropped (direction only); average-voter
-  pass (tap-to-open hints, bill flow as steps, Yes/No-split ruler, FAQ);
-  comprehension pass (scale labels on every ruler, legislative flow,
-  three-fifths wording with cloture named afterwards, freshness line).
-- Weekly chain hardened: all-or-nothing snapshot, verify step, gated publish,
-  content-based change detection, provenance with vintage and retrieval dates.
-- 23 Sept: the product correction made a state-relative election regression the
-  primary Pillar 4 result, the Senate view lead with seats vs nation, and
-  committees read against the Senate-wide baseline (blocks R/E/F). The same
-  day's statistical audit found the regression measured the party split and
-  produced a phantom middle in competitive states, so it was retired from the
-  page in favour of the same-caucus peer comparison (window ±4, minimum six,
-  cross-window check), with the survey estimate as separate context; "same
-  party" was corrected to caucus groups with fail-closed grouping and the
-  30-vote wording became a display rule. Version 31 is the Pillar 4 baseline.
-- 24 Sept, workflow-only fix: the weekly job rebuilds the pages before any test
-  (the order invariant above), checks Stage 2.5 records against the fresh
-  snapshot, and replays the stale-page failure in a test. S.2 kept as ready
-  with its review flag; the provider size guard recorded for Stage 3.
-- 24 Sept, final pre-Stage-3 pass: narrow fallback grammar for untagged
-  U.S.C. citations with provenance; S.2 complete again (review flag); the
-  first cohort is all ten; METHODOLOGY.md corrected (peer comparison current,
-  regression and alignment score labelled retired, voter estimate as separate
-  context); cross-document test added.
-- 24 Sept, pre-Stage-3 correction pass: deterministic result and next-step
-  fields replace the kind-only sentence; citation relevance classes,
-  node-level law extraction, gap detection, the 50,000-character whole-section
-  rule and packet metrics replace "all cited sections"; S.2, S.331 and
-  H.R.7148 moved to pending; README rewritten for the current product. No page
-  change.
-- 23–24 Sept: Pillar 1 Stage 1 design; Stage 2 bindings (54 votes verified
-  against Senate.gov, GovInfo and Voteview; bind step added to the weekly job);
-  Stage 2.5 source context and packets (12 ready, 27 limited, 13 pending, 2
-  ambiguous); first cohort and CRA rules decided as above. No page change in
-  any Pillar 1 stage; the live page stayed byte-identical to the repo.
-
-Reference reports from earlier rounds (Gemini): Pillar 6 dual-metric framework
-https://gemini.google.com/share/b75123b297db?skid=4798bd3c-9d90-4f8a-a251-00429acbda75 ;
-system audit and execution directives
-https://gemini.google.com/share/82bd4fe17a76?skid=e8601a35-0fb0-4b8d-b6a8-f4b2775b7142 .
-Later reports asked for cross-scale claims, invented bill positions and
-AI-written bill impacts; those were declined and the reasons are in the commit
-messages.
+- Rotate the Congress.gov API key that was once pasted into an old chat; it is
+  used nowhere and must never be committed.
