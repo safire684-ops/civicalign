@@ -1,7 +1,8 @@
 # Project handoff — CivicAlign
 
 Rewritten 25 September 2026 for a brand-new chat; updated the same day after
-Step 4 part 1 (methodology registry and Pillar 4 reference anchors). Read all of it before doing
+Step 4 part 1 (methodology registry and Pillar 4 reference anchors) and again
+after Step 4 was completed (page builder and the three views in `demo/next/`). Read all of it before doing
 anything. The repository and this file are the source of truth; older design
 documents, the whitepaper and chat history are not.
 
@@ -9,7 +10,7 @@ documents, the whitepaper and chat history are not.
 
 ## 0. Safety rule (read first)
 
-Do NOT restart the project, redesign Steps 1–3 or Step 4 part 1, change the
+Do NOT restart the project, redesign Steps 1–4, change the
 three reference anchors, switch away from DW-NOMINATE
 (`nominate_dim1`), revive the retired 0–100 display, or bring back any retired
 method (section 5) unless the user explicitly asks. Do not touch Engine A while
@@ -46,6 +47,8 @@ Commits on `pillars-4-6-rebuild` that are not on `origin/main` (oldest first):
 | `183d684` | **Step 3**: versioned result records and incremental recomputation. |
 | `1bf60f6` | HANDOFF rewritten for a fresh chat. |
 | `1ac2156` | **Step 4 part 1**: methodology registry (`methodology.py`) and the three Pillar 4 reference anchors (`anchors.py`, `reference_anchors` table). |
+| `4b9616b` | HANDOFF update for Step 4 part 1. |
+| `d049b61` | **Step 4 complete**: page builder `build_pages.py`, templates in `demo/templates/`, built preview pages in `demo/next/`, `tests/test_pages.py`, one wording fix in `methodology.py`. See section 3. |
 | (next) | This HANDOFF update. |
 
 Uncommitted in the working tree (leave them; they belong to the paused Engine A
@@ -94,7 +97,7 @@ Pillars 2, 3 and 7 belong to someone else and are out of scope.
 
 ---
 
-## 3. Completed work (Engine B, Steps 1–3 and Step 4 part 1)
+## 3. Completed work (Engine B, Steps 1–4)
 
 ### Step 1 — versioned inputs (`records.py`, `store.py`, `ingest.py`)
 
@@ -252,6 +255,86 @@ appears among the 100 senators in his own right; his anchor is the same number
 
 ---
 
+### Step 4 parts 2–3 — page builder and the three views (`build_pages.py`, `demo/next/`) — STEP 4 IS COMPLETE
+
+**Where it is.** The new frontend is in `demo/next/` (`senator-check.html`,
+`methodology.html`) and is **not live**. The OLD `demo/senator-check.html`,
+`demo/methodology.html`, `demo/methodology.template.html` and the old builder
+`src/civicalign/build_demo.py` are **untouched** and stay that way until Step 5:
+the live weekly workflow uses them, and Engine A's checks (`test_binding`,
+`test_context`, `test_evaluation`, supervisor `checks(...)`) read the old page.
+
+**Builder** (`src/civicalign/build_pages.py`;
+`PYTHONPATH=src python -m civicalign.build_pages [--out DIR] [--check]`). Reads
+only the latest saved result record (checked against its index hash), the
+methodology registry, and the three saved anchors (`anchors.current()`); it
+never recalculates and imports no Engine A or old-path module. It refuses to
+build if `methodology.problems()`, `coverage(record)` or `anchor_problems` report
+anything, i.e. a number without a registry entry stops the build. Every number
+is embedded as `{value, display, status, reason, units, registry id, path}`;
+display = the registry's decimals, rounded half-up from the stored decimal text,
+true minus sign, `+` only on differences. Templates:
+`demo/templates/senator-check.template.html` (marker `<!--DATA-->`) and
+`demo/templates/methodology.template.html` (marker `<!--METHODOLOGY-->`). The
+pages link `../civicalign.css`, so preview them through a local server (e.g.
+`python -m http.server 8765 --directory demo`, then
+http://localhost:8765/next/senator-check.html), not straight from disk.
+
+**Every displayed number is connected to methodology.** In the page, numbers
+are rendered only through one JS function, `num()`, which throws if a number has
+no registry entry; each number is a button that opens a panel with its raw
+source, transformation, formula, versions from this build, limitations and a
+link to `methodology.html#<entry id>`. Every NOT_AVAILABLE value shows "Not
+available", a "Why?" button, and the registry's reason inline (the record's
+exact reason in the panel). `methodology.html` has one linkable section per
+registry entry (19), the anchor table, and the binding rules.
+
+**The three views**
+- **Senator / State (Pillar 4).** State picker; one card per senator with their
+  score and a −1 to +1 Voteview scale ("more liberal voting" / "more
+  conservative voting"). **Sanders, Biden and Vance are shown as visual
+  reference anchors only** (ticks above the line, labels staggered so they
+  never overlap; the senator's dot below). A separate card shows the state
+  public's AIP estimate with its standard error and survey period, labelled as
+  a different measurement system; "state public on the senator scale" and
+  "distance" show as not available with the reason. A fold-out lists the three
+  anchors with their labels (Biden and Vance: "Senate voting record … not his
+  presidency / vice presidency"; Sanders: House and Senate career) and their
+  limitations. Anchors never appear in Pillars 5 or 6 (tested).
+- **Senate / Nation (Pillar 5).** Main result: three tiles — **plain Senate
+  mean 0.120, population-weighted Senate mean 0.083, difference +0.037** —
+  labelled "candidate, not final", a scale with both averages (nearly
+  overlapping because the real gap is small; the full −1 to +1 scale is kept
+  rather than zoomed), and one descriptive sentence (the weighted average is
+  lower on the scale). National public centre and Senate–public gap: not
+  available, with reasons. Medians (0.320, −0.216, +0.536) only inside the
+  "Medians (secondary comparison)" fold-out (tested). No real-world
+  explanation text yet (section 8: needs the user's input).
+- **Committees (Pillar 6).** Preserves the old committee UI (picker, `.cm` card,
+  name header, member counts, scale with a "Senate median" mark and a "This
+  committee" dot, "More about this committee" fold-out) but shows **only the
+  committee ideology metrics**: committee median, Senate median, committee −
+  Senate median, national centre (not available), committee − public (not
+  available), members listed, members with a score. **Bill flow and the Yes/No
+  split are removed.** The committee dot is neutral grey, not red/blue.
+
+**What the page does not have (tested):** no 0–100 scale, no political judgment
+labels, no Engine A recent-vote content, no bill scorecard, and no bill
+classification yet.
+
+**Committee names** are temporarily from a fixed list of official names in
+`build_pages.COMMITTEE_NAMES`, shown beside the official code, and the page says
+they are not yet from a versioned source. **Step 5 must move them to the
+official congress-legislators `committees-current` feed.**
+
+Senator names are Voteview's names formatted for reading (e.g. "Mitch
+McConnell", "Bernard Sanders" style formal first names), except that an anchor's
+own senator uses the anchor's display name ("Bernie Sanders").
+
+**Checked in the browser pane at desktop and phone width (375 px)**: all three
+views and the methodology page render, no horizontal scroll, no console errors,
+and every number on screen (31 in the checked state) opens its methodology.
+
 ## 4. Current real numbers (record `5f42ca01…`, nominate_dim1, 100 active senators)
 
 **Pillar 5 — main comparison (PRIMARY method `population_weighted_mean_v1`)**
@@ -349,7 +432,7 @@ alignment scores, defiance/betrayal language, politician rankings.
 
 Run: `./.venv/bin/python -m pytest -q` (Python 3.14 venv; CI uses 3.12).
 
-Engine B (all passing, 69 total):
+Engine B + page (all passing, 101 total):
 - `tests/test_ideology_records.py` — 17 (validators, store, ingest from fixtures
   and from the real snapshot, population table, committee events, committed
   tables verify, no Engine A imports).
@@ -366,8 +449,17 @@ Engine B (all passing, 69 total):
   calculation imports anchors or the registry; result key and numbers ignore
   the anchors; committed anchors equal the raw Voteview values; Sanders's anchor
   equals his senator record).
+- `tests/test_pages.py` — 32 (display rounding and names; every embedded number
+  carries its registry entry and the right display text; every registry entry
+  reaches the page and the methodology page; numbers only via `num()`; build
+  refuses an unregistered number, a tampered record and missing anchors;
+  Pillar 4 anchors exactly three and labelled, only in Pillar 4; Pillar 5 means
+  main and medians details only; Pillar 6 only committee metrics; unavailable
+  values say why; no 0–100, no judgment labels, no Engine A or bill content;
+  builder reads only Engine B results; committed `demo/next/` pages are current;
+  deterministic build; old page untouched).
 
-Full suite: **393 passed, 9 failed.** The 9 failures are EXPECTED:
+Full suite: **425 passed, 9 failed.** The 9 failures are EXPECTED:
 
 ```
 tests/test_perspective.py::test_18_safeguards_remain
@@ -392,9 +484,7 @@ not rebuild the old page to silence them.
 
 ## 7. Not built yet
 
-- UI rewrite (the three views) and the page builder (Step 4 parts 2–3)
-- Methodology UI (the registry exists; nothing displays it yet)
-- Showing the reference anchors on the page (the data exists; nothing displays it yet)
+- Making `demo/next/` the live page (Step 5 switch-over; see section 9)
 - **Anchor refresh in automation**: `python -m civicalign.ideology.anchors` is
   not yet in `update.yml`/`scripts/update.sh`. Until Step 5 adds it, a newer
   Voteview snapshot leaves the anchors on the older file (run the command by
@@ -405,8 +495,8 @@ not rebuild the old page to silence them.
 - Deterministic bill ideology / legislative outcome classification
 - Final GitHub workflow changes (daily schedule, ingest/compute steps)
 - Final removal of the old Pillars 4–6 path, supervisor rewrite, docs rewrite
-- Committee names from an official source (currently only codes; the plan adds
-  the congress-legislators `committees-current` feed)
+- Committee names from an official source (currently a fixed official-name list
+  in `build_pages.py`; Step 5 adds the congress-legislators `committees-current` feed)
 - Deployment (nothing is published; the live site still runs the old product)
 
 ---
@@ -421,7 +511,7 @@ not rebuild the old page to silence them.
   the real world, not just show abstract coordinates.
 - **Pillar 6**: the user likes the existing committee UI; largely preserve its
   design while switching it to the new metrics (drop the bill-flow and
-  Yes/No-split parts, which are retired).
+  Yes/No-split parts, which are retired). DONE in `demo/next/` (Step 4).
 - **Future bill ideology classification** must be deterministic and must not
   rely on an LLM guessing. A sponsor's ideology alone must not be treated as
   the bill's ideology without a clear, documented methodology.
@@ -431,33 +521,24 @@ not rebuild the old page to silence them.
 
 ---
 
-## 9. Next step: Step 4 parts 2–3 only
+## 9. Next step: Step 5 only (do not start without the user's go-ahead)
 
-First read this file and inspect the branch (`git log`, `src/civicalign/ideology/`,
-`data/ideology/`, the tests). Then, and only then, continue Step 4:
+Step 4 is complete (`1ac2156` registry and anchors; the frontend commit listed
+in section 1). First read this file and inspect the branch. The exact next task
+is **Step 5: remove the old Pillars 4–6 path and switch the automation and the
+page over to the new one**, below. Two items are new since the plan was
+written and belong in Step 5:
+- **Page switch-over.** Make `build_pages` write the published pages
+  (`demo/senator-check.html`, `demo/methodology.html`; update the `../civicalign.css`
+  link accordingly), retire `build_demo.py`, `demo/methodology.template.html` and
+  `demo/next/`, and move Engine A's page checks (`test_binding`, `test_context`,
+  `test_evaluation`, supervisor `checks(...)`) off the old page's Engine B /
+  recent-votes content without changing any Engine A behaviour.
+- **Committee names** from the `committees-current` feed instead of
+  `build_pages.COMMITTEE_NAMES`.
 
-1. DONE (`1ac2156`): `src/civicalign/ideology/methodology.py` registry, and the
-   three Pillar 4 reference anchors.
-2. Page builder — rewrite `src/civicalign/build_demo.py` to read the latest
-   result record (`compute.load_record` / `index`) plus the registry and write
-   `demo/senator-check.html` (from a new `demo/senator-check.template.html`) and
-   `demo/methodology.html` (from a rewritten `demo/methodology.template.html`).
-   It must look up every number with `methodology.entry_for` (and refuse one
-   without an entry), check `methodology.coverage(record)` is empty, and read
-   the anchors with `anchors.current()`.
-3. Frontend structure — exactly three views: Senator / State (Pillar 4),
-   Senate / Nation (Pillar 5: plain mean vs population-weighted mean and the
-   difference as the main comparison; medians only in details), Committee /
-   Senate / Nation (Pillar 6: selected committee, committee median, Senate
-   median, national centre (not available), both drifts, member count). A
-   methodology panel for every number. Numbers in native units, honestly
-   rounded; each NOT_AVAILABLE item shows its reason. No 0–100, no evaluative
-   labels, no Engine A "recent votes" block.
-
-The Pillar 4 view shows the three anchors on the senator scale, each with its
-label (Biden and Vance: "Senate voting record"; Sanders: House and Senate
-career), never on the state (AIP) side. Ask the user before writing the
-Pillar 5 real-world explanation text (section 8): it needs their input. Review is local only (open `demo/senator-check.html`); do not push.
+Still ask the user before writing the Pillar 5 real-world explanation text
+(section 8). Review is local only; do not push.
 
 Remaining approved plan after Step 4:
 - **Step 5**: remove the old path (`peers.py`, `representation.py`,
@@ -512,7 +593,8 @@ PYTHONPATH=src ./.venv/bin/python -m civicalign.ideology.bridge     # record the
 PYTHONPATH=src ./.venv/bin/python -m civicalign.ideology.anchors    # record the 3 Pillar 4 reference anchors (--dry-run)
 PYTHONPATH=src ./.venv/bin/python -m civicalign.ideology.compute    # versioned results (--verify, --full)
 PYTHONPATH=src ./.venv/bin/python -m civicalign.ideology.inputs     # print current results (not stored)
-./.venv/bin/python -m pytest -q tests/test_ideology_records.py tests/test_ideology_pillars.py tests/test_ideology_incremental.py tests/test_ideology_methodology.py
+PYTHONPATH=src ./.venv/bin/python -m civicalign.build_pages        # build demo/next/ pages (--check: are they current?)
+./.venv/bin/python -m pytest -q tests/test_ideology_records.py tests/test_ideology_pillars.py tests/test_ideology_incremental.py tests/test_ideology_methodology.py tests/test_pages.py
 ```
 
 ## 12. Other links
