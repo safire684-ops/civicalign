@@ -99,9 +99,10 @@ class Config:
     # The bridge from public-opinion estimates to the legislator scale. "none-v0"
     # is status NONE: no senator-to-public comparison is computed.
     active_bridge_version: str = "none-v0"
-    # Pillar 5's population-weighted Senate centre. The CURRENT method, chosen
-    # to be changeable, not a settled scientific definition: see
-    # ideology/pillars.py WEIGHTING_METHODS for what each method computes.
+    # Pillar 5's population-weighted Senate centre: which CANDIDATE method is
+    # the configured one. Candidates (population_weighted_median_v1,
+    # population_weighted_mean_v1) are all computed and stored for comparison;
+    # none is a settled scientific definition. See ideology/pillars.py WEIGHTING_METHODS.
     pillar5_weighting_method: str = "population_weighted_median_v1"
     # Census measurement year and vintage for the weights.
     pillar5_population_year: int = 2024

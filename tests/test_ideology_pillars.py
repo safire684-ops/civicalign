@@ -87,11 +87,45 @@ def test_pillar5_by_hand():
     assert p["population_weighted_center"]["value"] == pytest.approx(-0.2)
     # 0.1 - (-0.2) = +0.3, sign kept: the actual Senate sits to the positive side of the weighted counterfactual
     assert p["equal_state_representation_difference"]["value"] == pytest.approx(0.3)
-    assert p["population_weighted_center"]["method_status"] == "CURRENT_METHOD_NOT_FINAL"
+    assert p["population_weighted_center"]["method_status"] == "CANDIDATE_METHOD_NOT_FINAL"
     assert p["national_public"]["status"] == "NOT_AVAILABLE" and p["chamber_public_gap"]["status"] == "NOT_AVAILABLE"
-    assert all(v["units"].startswith("Voteview") for k, v in p.items() if isinstance(v, dict) and k != "national_public")
+    quantities = [v for k, v in p.items() if isinstance(v, dict) and k not in ("national_public", "candidate_methods")]
+    quantities += [q for c in p["candidate_methods"].values() for q in c.values()]
+    assert quantities and all(v["units"].startswith("Voteview") for v in quantities)
     with pytest.raises(P.InputError, match="unknown weighting method"):
         P.pillar5(SENATE, POPS, NAT, COL, "population_weighted_mean")
+
+
+@pytest.mark.parametrize("points,expected", [
+    ([(1.0, 1), (0.0, 3)], 0.25),                                  # (1*1 + 0*3) / 4
+    ([(-0.4, 2), (0.6, 2)], 0.1),                                  # equal weights: the plain mean
+    ([(0.3, Fraction(1, 3)), (-0.3, Fraction(2, 3))], -0.1),       # (0.1 - 0.2) / 1
+])
+def test_weighted_mean_v1(points, expected):
+    assert P.weighted_mean_v1([(x, Fraction(w)) for x, w in points]) == pytest.approx(expected)
+    with pytest.raises(P.InputError):
+        P.weighted_mean_v1([])
+
+
+def test_pillar5_computes_both_candidate_methods_by_hand():
+    p = P.pillar5(SENATE, POPS, NAT, COL, "population_weighted_median_v1")
+    c = p["candidate_methods"]
+    assert set(c) == {"population_weighted_median_v1", "population_weighted_mean_v1"}
+    med, mean = c["population_weighted_median_v1"], c["population_weighted_mean_v1"]
+    # median candidate: actual = plain median 0.1, weighted median -0.2, difference +0.3 (as before)
+    assert (med["actual_center"]["value"], med["population_weighted_center"]["value"], med["equal_state_representation_difference"]["value"]) \
+        == pytest.approx((0.1, -0.2, 0.3))
+    assert med["actual_center"]["statistic"] == "chamber_median"
+    # mean candidate: plain mean (-0.4 - 0.2 + 0.1 + 0.5 + 0.7) / 5 = 0.14;
+    # weighted (-0.4*500 - 0.2*500 + 0.1*300 + 0.5*50 + 0.7*50) / 1400 = -210 / 1400 = -0.15; difference 0.14 - (-0.15) = +0.29
+    assert (mean["actual_center"]["value"], mean["population_weighted_center"]["value"], mean["equal_state_representation_difference"]["value"]) \
+        == pytest.approx((0.14, -0.15, 0.29))
+    assert mean["actual_center"]["statistic"] == "chamber_mean" and p["chamber_mean"]["value"] == pytest.approx(0.14)
+    assert all(v["population_weighted_center"]["method_status"] == "CANDIDATE_METHOD_NOT_FINAL" for v in c.values())
+    # the configured method's headline quantities are that candidate's, whichever is configured
+    q = P.pillar5(SENATE, POPS, NAT, COL, "population_weighted_mean_v1")
+    assert q["population_weighted_center"]["value"] == pytest.approx(-0.15) and q["equal_state_representation_difference"]["value"] == pytest.approx(0.29)
+    assert q["candidate_methods"] == p["candidate_methods"], "every candidate is computed whichever is configured"
 
 
 def test_pillar5_leaves_out_unscored_senators_and_can_use_the_other_column():
@@ -140,7 +174,9 @@ def test_config_defaults_are_the_decided_ones():
     assert DEFAULT.pillars_score_column == "nominate_dim1"
     assert DEFAULT.active_bridge_version == "none-v0"
     assert DEFAULT.pillar5_weighting_method in P.WEIGHTING_METHODS
-    assert P.WEIGHTING_METHODS[DEFAULT.pillar5_weighting_method]["status"] == "CURRENT_METHOD_NOT_FINAL"
+    assert DEFAULT.pillar5_weighting_method == "population_weighted_median_v1", "the weighted median stays the configured method"
+    assert set(P.WEIGHTING_METHODS) == {"population_weighted_median_v1", "population_weighted_mean_v1"}
+    assert all(m["status"] == "CANDIDATE_METHOD_NOT_FINAL" for m in P.WEIGHTING_METHODS.values())
 
 
 def test_nothing_is_rescaled_to_0_100():
@@ -193,6 +229,11 @@ def test_real_pillar5_recomputes_from_raw_files(real):
             centre = x; break
     p5 = real["pillar5"]
     assert p5["population_weighted_center"]["value"] == pytest.approx(centre)
+    wmean = sum(x * w for x, w in pts) / tot
+    mean_c = p5["candidate_methods"]["population_weighted_mean_v1"]
+    assert mean_c["population_weighted_center"]["value"] == pytest.approx(wmean)
+    assert mean_c["actual_center"]["value"] == pytest.approx(statistics.fmean(scores.values()))
+    assert mean_c["equal_state_representation_difference"]["value"] == pytest.approx(statistics.fmean(scores.values()) - wmean)
     assert p5["equal_state_representation_difference"]["value"] == pytest.approx(statistics.median(scores.values()) - centre)
     assert p5["chamber_public_gap"]["value"] is None and real["versions"]["bridge_status"] == "NONE"
 

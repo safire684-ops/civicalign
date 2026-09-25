@@ -13,10 +13,13 @@ Pillar 4, per seated senator
   distance               |senator_score - state_on_senator_scale|; NOT_AVAILABLE without it
 
 Pillar 5
-  chamber_median                  median of active senators' nominate_dim1
-  population_weighted_center      the configured weighting method (below)
-  equal_state_representation_difference
-                                  chamber_median - population_weighted_center, sign kept
+  chamber_median, chamber_mean    median and mean of active senators' nominate_dim1
+  candidate_methods               every candidate weighting method (below), each with
+                                  its population-weighted centre, the matching unweighted
+                                  centre (median with median, mean with mean) and
+                                  equal_state_representation_difference = unweighted - weighted
+  population_weighted_center, equal_state_representation_difference
+                                  the same two quantities for the configured method
   national_public, chamber_public_gap
                                   NOT_AVAILABLE (national definition unresolved, no bridge)
 
@@ -84,15 +87,42 @@ def weighted_median_v1(points: list[tuple[float, Fraction]]) -> float:
     raise InputError("weights did not reach half their total")   # pragma: no cover
 
 
+def weighted_mean_v1(points: list[tuple[float, Fraction]]) -> float:
+    """population_weighted_mean_v1: the sum of each score times its weight,
+    divided by the total weight. Weights are the same as the weighted median's."""
+    if not points:
+        raise InputError("no weighted points")
+    total = sum(w for _, w in points)
+    return float(sum(Fraction(x) * w for x, w in points) / total)
+
+
+OPEN_QUESTIONS = ("median or mean; residents or adults, citizens or voters; how to treat unscored senators, "
+                  "whose share of their state's weight is currently left out with them")
+
+# Candidate definitions of the population-weighted Senate centre. Neither is a
+# settled scientific definition; both are computed so they can be compared
+# before one is chosen. Each pairs with the matching unweighted statistic, so
+# the equal-state representation difference compares like with like.
 WEIGHTING_METHODS = {
     "population_weighted_median_v1": {
         "function": weighted_median_v1,
-        "status": "CURRENT_METHOD_NOT_FINAL",
+        "actual_center": statistics.median,
+        "actual_center_name": "chamber_median",
+        "status": "CANDIDATE_METHOD_NOT_FINAL",
         "definition": ("weighted median of active senators' scores; each senator weighted by their state's population "
                        "divided by the number of senators the state has seated; a cumulative weight exactly at half "
                        "the total averages that score with the next"),
-        "open_questions": ("median or mean; residents or adults, citizens or voters; how to treat unscored senators, "
-                           "whose share of their state's weight is currently left out with them"),
+        "open_questions": OPEN_QUESTIONS,
+    },
+    "population_weighted_mean_v1": {
+        "function": weighted_mean_v1,
+        "actual_center": statistics.fmean,
+        "actual_center_name": "chamber_mean",
+        "status": "CANDIDATE_METHOD_NOT_FINAL",
+        "definition": ("weighted mean of active senators' scores: the sum of each score times its weight, divided by the "
+                       "total weight; each senator weighted by their state's population divided by the number of senators "
+                       "the state has seated"),
+        "open_questions": OPEN_QUESTIONS,
     },
 }
 
@@ -128,19 +158,30 @@ def pillar5(senators: list[dict], populations: dict[str, int], national: dict, c
     if not active:
         raise InputError("no active senators with a score")
     units = LEGISLATOR_UNITS.format(column=column)
-    median = statistics.median(s[column] for s in active)
+    scores = [s[column] for s in active]
     weights = senator_weights(active, populations)
-    m = WEIGHTING_METHODS[method]
-    center = m["function"]([(s[column], weights[s["bioguide_id"]]) for s in active])
+    points = [(s[column], weights[s["bioguide_id"]]) for s in active]
+    candidates = {}
+    for name, m in WEIGHTING_METHODS.items():
+        actual, center = m["actual_center"](scores), m["function"](points)
+        label = dict(method=name, method_status=m["status"], definition=m["definition"], open_questions=m["open_questions"])
+        candidates[name] = {
+            "actual_center": available(actual, units, statistic=m["actual_center_name"], n=len(active)),
+            "population_weighted_center": available(center, units, **label),
+            "equal_state_representation_difference": available(actual - center, units,
+                                                               formula=f"{m['actual_center_name']} - population_weighted_center", method=name),
+        }
+    chosen = candidates[method]
     gap_reason = "needs the national public estimate on the senator scale: " + national["reason"]
     return {
         "active_senators": len(active),
         "unscored_seated_senators": [s["bioguide_id"] for s in unscored],
-        "chamber_median": available(median, units, n=len(active)),
-        "population_weighted_center": available(center, units, method=method, method_status=m["status"],
-                                                definition=m["definition"], open_questions=m["open_questions"]),
-        "equal_state_representation_difference": available(median - center, units,
-                                                           formula="chamber_median - population_weighted_center"),
+        "chamber_median": available(statistics.median(scores), units, n=len(active)),
+        "chamber_mean": available(statistics.fmean(scores), units, n=len(active)),
+        "configured_method": method,
+        "population_weighted_center": chosen["population_weighted_center"],
+        "equal_state_representation_difference": chosen["equal_state_representation_difference"],
+        "candidate_methods": candidates,
         "national_public": national,
         "chamber_public_gap": not_available(gap_reason, units),
     }
