@@ -1,6 +1,7 @@
 # Project handoff — CivicAlign
 
-Rewritten 25 September 2026 for a brand-new chat. Read all of it before doing
+Rewritten 25 September 2026 for a brand-new chat; updated the same day after
+Step 4 part 1 (methodology registry and Pillar 4 reference anchors). Read all of it before doing
 anything. The repository and this file are the source of truth; older design
 documents, the whitepaper and chat history are not.
 
@@ -8,7 +9,8 @@ documents, the whitepaper and chat history are not.
 
 ## 0. Safety rule (read first)
 
-Do NOT restart the project, redesign Steps 1–3, switch away from DW-NOMINATE
+Do NOT restart the project, redesign Steps 1–3 or Step 4 part 1, change the
+three reference anchors, switch away from DW-NOMINATE
 (`nominate_dim1`), revive the retired 0–100 display, or bring back any retired
 method (section 5) unless the user explicitly asks. Do not touch Engine A while
 working on Engine B. Do not push, merge or deploy without the user's approval.
@@ -42,6 +44,9 @@ Commits on `pillars-4-6-rebuild` that are not on `origin/main` (oldest first):
 | `51deb13` | Added `population_weighted_mean_v1` beside the weighted median. |
 | `4f99c6b` | Made the weighted mean the PRIMARY Pillar 5 method, weighted median SECONDARY; medians moved to `details`; fixed: an unscored seated senator's share of state weight is left out with them (no current number changed). |
 | `183d684` | **Step 3**: versioned result records and incremental recomputation. |
+| `1bf60f6` | HANDOFF rewritten for a fresh chat. |
+| `1ac2156` | **Step 4 part 1**: methodology registry (`methodology.py`) and the three Pillar 4 reference anchors (`anchors.py`, `reference_anchors` table). |
+| (next) | This HANDOFF update. |
 
 Uncommitted in the working tree (leave them; they belong to the paused Engine A
 Stage 3 work): `.gitignore` (ignores `evaluation/stage3/*.log`) and
@@ -89,7 +94,7 @@ Pillars 2, 3 and 7 belong to someone else and are out of scope.
 
 ---
 
-## 3. Completed work (Engine B, Steps 1–3)
+## 3. Completed work (Engine B, Steps 1–3 and Step 4 part 1)
 
 ### Step 1 — versioned inputs (`records.py`, `store.py`, `ingest.py`)
 
@@ -108,6 +113,7 @@ Tables in `data/ideology/` (JSON Lines, tracked in git):
 | `state_population.jsonl` | geography_type, geography_id, measurement_year, vintage | Census Vintage 2024 July 1 estimates, 2020–2024, 50 states + DC (Puerto Rico is in the file but elects no senators, so it is left out) = 255. The vintage is in the key because later vintages revise earlier years. |
 | `committee_membership_events.jsonl` | congress, committee_id, bioguide_id | Standing committees only (`SS*`, four characters; no subcommittees, select or joint). Events `observed_joined` / `observed_left` / `observed_role_changed` with rank, title, majority/minority side. **Every date is OBSERVED**: the day CivicAlign first retrieved content showing the change, never an official appointment date (the `date_basis` field says so and the validator enforces it). The first observation of a committee is flagged `baseline` with a note that membership may have begun earlier. `records.membership_intervals()` derives `observed_start_date` / `observed_end_date`. Today: 351 baseline events, 16 committees, observed 2026-09-23. |
 | `ideology_bridge.jsonl` | bridge_version | See Step 2. |
+| `reference_anchors.jsonl` | anchor_id | The three Pillar 4 reference anchors; see Step 4 part 1. Visual only. |
 
 Store (`store.py`): append-only; a new version is written only when content
 differs from the key's current version; each key's versions are hash-chained
@@ -190,6 +196,60 @@ re-walks the chains and re-validates; lines are never rewritten.
 - Committed: one real record, key `5f42ca01…4cc5`, mode full, measurement date
   2026-09-24. A second run writes nothing; verify passes.
 
+### Step 4 part 1 — methodology registry and reference anchors (`methodology.py`, `anchors.py`)
+
+**Methodology registry** (`src/civicalign/ideology/methodology.py`). It now
+exists and covers every displayed metric: 19 entries, one per displayed number
+(Pillar 4: senator score, state public estimate, state on senator scale,
+distance, reference anchors; Pillar 5: senators included, plain mean, weighted
+mean, weighting difference, and in details the plain median, weighted median
+and median difference, plus national public and chamber–public gap; Pillar 6:
+members listed, members scored, committee median, committee–Senate drift,
+committee–public drift). Each entry has: label, pillar, views
+(`senator_state`, `senate_nation`, `committee_senate_nation`), placement
+(`main` or `details`), kind (`quantity`, `count`, `reference`), the result-record
+paths it covers (`*` = any senator or committee), units, display decimals
+(3 for the Voteview scale, 2 for AIP estimates), sources, transformation,
+formula, the record `versions` keys that trace it, limitations, and why it is
+NOT_AVAILABLE when it is. Functions: `entry_for(path)` (KeyError = the number
+may not be displayed), `coverage(record)` (every quantity and count in a result
+record has an entry, every entry has its number, every cited version exists,
+and the record's configured Pillar 5 method is `population_weighted_mean_v1`,
+the method the registry describes), `problems()` (the registry's own
+consistency), `anchor_problems(rows)`. `coverage` of the committed record is
+empty. Pillar 5 means are `main`; medians are `details` (tested).
+
+**Pillar 4 reference anchors** (`src/civicalign/ideology/anchors.py`, table
+`data/ideology/reference_anchors.jsonl`, key `anchor_id`). Chosen by the user on
+2026-09-25. Exactly three (the code refuses two, four or a duplicate):
+
+| Anchor | nominate_dim1 | Voteview id | Record used | Votes scored |
+|---|---|---|---|---|
+| Bernie Sanders (`S000033`) | −0.546 | ICPSR 29147 | His Voteview `nominate_dim1`, which reflects his whole congressional voting history: House (Congresses 102–109, 1991–2007) and Senate (110–119, since 2007). Voteview estimates one score for the career. **This must be disclosed in the methodology** (it is, in the registry entry `p4.reference_anchor`). | House 6,910; Senate 5,432 |
+| Joe Biden (`B000444`) | −0.314 | ICPSR 14101 | His **Senate voting record** only (Delaware, Congresses 93–111, 1973–2009). **Not his presidency**: Voteview's separate "President" rows (ICPSR 99913, −0.32, estimated from positions a president announced, not votes cast) are excluded. | Senate 10,910 |
+| JD Vance (`V000137`) | +0.850 | ICPSR 42304 | His **Senate voting record** (Ohio, Congresses 118–119, 2023–2025); not his vice presidency. A short record, disclosed as less certain. | Senate 512 |
+
+Exact source: Voteview `HSall_members.csv`
+(https://voteview.com/static/data/out/members/HSall_members.csv), snapshot
+content key / SHA-256 `2c2ac0de7ac8fefb885e047199a5d492e1c23a872f43fdb895f122b116244eab`,
+retrieved 2026-09-24T13:40:44Z — the same file and version as the senator
+scores. `python -m civicalign.ideology.anchors` reads it only if its bytes match
+`data/raw/SNAPSHOT.json` (else "ANCHORS REFUSED"). The anchor is the Voteview id
+on the person's Senate rows; its value is `nominate_dim1` and must be identical
+on every House and Senate row of that id, else the anchor is refused (never
+averaged). President rows are never read. Each record stores the display name,
+the label (`record_basis`), Voteview id and name, score column, value, Congress
+ranges and votes per chamber, `use`, and the usual source fields.
+
+**The anchors are visual references only and never affect calculations.** No
+calculation module (`pillars`, `compute`, `inputs`, `national`, `bridge`,
+`store`, `records`, `ingest`, `result`) imports `anchors` or `methodology`;
+`compute` never reads `reference_anchors`; the result key is unchanged
+(`5f42ca01…`) with or without the anchors, and changing an anchor's value leaves
+every result identical (all tested). Sanders is also a seated senator and so
+appears among the 100 senators in his own right; his anchor is the same number
+(tested).
+
 ---
 
 ## 4. Current real numbers (record `5f42ca01…`, nominate_dim1, 100 active senators)
@@ -268,6 +328,12 @@ AIP units). Distance NOT_AVAILABLE for all.
 10. Committee membership dates are observed dates, labelled as such.
 11. Fixtures live only in `tests/fixtures/ideology/` (FIXTURE names, fake ids,
     non-existent states ZZ/ZY; README there) and never reach `data/ideology/`.
+12. Pillar 4 has exactly three reference anchors — Sanders, Biden (Senate
+    record), Vance (Senate record) — with their real Voteview `nominate_dim1`.
+    They are visual references only and never enter any calculation. Biden and
+    Vance are labelled as their Senate voting records; Sanders's score covers
+    his House and Senate service, and the methodology must say so.
+13. No number is displayed without a methodology registry entry.
 
 Retired and not to be revived (they are still in the old code path until Step 5
 removes them): the caucus-group peer comparison (`peers.py`), seats vs. nation
@@ -283,7 +349,7 @@ alignment scores, defiance/betrayal language, politician rankings.
 
 Run: `./.venv/bin/python -m pytest -q` (Python 3.14 venv; CI uses 3.12).
 
-Engine B (all passing, 51 total):
+Engine B (all passing, 69 total):
 - `tests/test_ideology_records.py` — 17 (validators, store, ingest from fixtures
   and from the real snapshot, population table, committee events, committed
   tables verify, no Engine A imports).
@@ -293,8 +359,15 @@ Engine B (all passing, 51 total):
   anywhere; real values recomputed from the raw files with separate code).
 - `tests/test_ideology_incremental.py` — 14 (unchanged / committees_only / full,
   carried = full recompute, write-once, tamper and stale detection).
+- `tests/test_ideology_methodology.py` — 18 (registry consistent; committed
+  record fully covered; unregistered or missing numbers caught; means main,
+  medians details; no evaluative wording; exactly three labelled anchors;
+  President rows excluded; ambiguous anchors refused; fixture anchors; no
+  calculation imports anchors or the registry; result key and numbers ignore
+  the anchors; committed anchors equal the raw Voteview values; Sanders's anchor
+  equals his senator record).
 
-Full suite: **375 passed, 9 failed.** The 9 failures are EXPECTED:
+Full suite: **393 passed, 9 failed.** The 9 failures are EXPECTED:
 
 ```
 tests/test_perspective.py::test_18_safeguards_remain
@@ -319,9 +392,13 @@ not rebuild the old page to silence them.
 
 ## 7. Not built yet
 
-- UI rewrite (the three views) and the page builder
-- Methodology registry and methodology UI
-- Famous-person reference anchors for Pillar 4
+- UI rewrite (the three views) and the page builder (Step 4 parts 2–3)
+- Methodology UI (the registry exists; nothing displays it yet)
+- Showing the reference anchors on the page (the data exists; nothing displays it yet)
+- **Anchor refresh in automation**: `python -m civicalign.ideology.anchors` is
+  not yet in `update.yml`/`scripts/update.sh`. Until Step 5 adds it, a newer
+  Voteview snapshot leaves the anchors on the older file (run the command by
+  hand; the raw-value test skips while they differ).
 - A valid public-to-legislator bridge
 - A national public ideology measure (definition and bridge)
 - An understandable real-world explanation of the Pillar 5 numbers
@@ -336,10 +413,10 @@ not rebuild the old page to silence them.
 
 ## 8. User feedback and UX direction (the next major phase)
 
-- **Pillar 4** must be understandable to ordinary users by showing 2–3
-  recognisable political figures as reference points on the same scale. Use
-  only figures with defensible, comparable congressional voting data (e.g.
-  Voteview scores); never invent proxy scores for anyone.
+- **Pillar 4** must be understandable to ordinary users by showing
+  recognisable political figures as reference points on the same scale.
+  DONE (data): the user chose Sanders, Biden (Senate record), Vance (Senate
+  record); see Step 4 part 1. Never invent proxy scores for anyone.
 - **Pillar 5** must explain in plain language what the Senate numbers mean in
   the real world, not just show abstract coordinates.
 - **Pillar 6**: the user likes the existing committee UI; largely preserve its
@@ -354,18 +431,20 @@ not rebuild the old page to silence them.
 
 ---
 
-## 9. Next step: Step 4 only
+## 9. Next step: Step 4 parts 2–3 only
 
 First read this file and inspect the branch (`git log`, `src/civicalign/ideology/`,
-`data/ideology/`, the tests). Then, and only then, build Step 4:
+`data/ideology/`, the tests). Then, and only then, continue Step 4:
 
-1. `src/civicalign/ideology/methodology.py` — a registry with one entry per
-   displayed quantity: raw source, transformation, formula, versions,
-   limitations. Page and tests read it; no number may appear without an entry.
+1. DONE (`1ac2156`): `src/civicalign/ideology/methodology.py` registry, and the
+   three Pillar 4 reference anchors.
 2. Page builder — rewrite `src/civicalign/build_demo.py` to read the latest
    result record (`compute.load_record` / `index`) plus the registry and write
    `demo/senator-check.html` (from a new `demo/senator-check.template.html`) and
    `demo/methodology.html` (from a rewritten `demo/methodology.template.html`).
+   It must look up every number with `methodology.entry_for` (and refuse one
+   without an entry), check `methodology.coverage(record)` is empty, and read
+   the anchors with `anchors.current()`.
 3. Frontend structure — exactly three views: Senator / State (Pillar 4),
    Senate / Nation (Pillar 5: plain mean vs population-weighted mean and the
    difference as the main comparison; medians only in details), Committee /
@@ -375,9 +454,10 @@ First read this file and inspect the branch (`git log`, `src/civicalign/ideology
    rounded; each NOT_AVAILABLE item shows its reason. No 0–100, no evaluative
    labels, no Engine A "recent votes" block.
 
-Ask the user before building the famous-person anchors or the Pillar 5
-real-world explanation text (section 8): they are the next phase and need their
-input. Review is local only (open `demo/senator-check.html`); do not push.
+The Pillar 4 view shows the three anchors on the senator scale, each with its
+label (Biden and Vance: "Senate voting record"; Sanders: House and Senate
+career), never on the state (AIP) side. Ask the user before writing the
+Pillar 5 real-world explanation text (section 8): it needs their input. Review is local only (open `demo/senator-check.html`); do not push.
 
 Remaining approved plan after Step 4:
 - **Step 5**: remove the old path (`peers.py`, `representation.py`,
@@ -389,8 +469,10 @@ Remaining approved plan after Step 4:
   `agents/supervisor.py` (independent recount of every Engine B number, bridge
   and national gating, methodology coverage, store integrity; keep all Pillar 1
   checks); add the `committees-current` source; update
-  `update.yml`/`scripts/update.sh` (daily; ingest → bridge → compute → rebuild →
-  tests → supervisor → commit incl. `data/ideology/`; keep rebuild-before-tests);
+  `update.yml`/`scripts/update.sh` (daily; ingest → bridge → **anchors** → compute →
+  rebuild → tests → supervisor → commit incl. `data/ideology/`; keep
+  rebuild-before-tests; the supervisor should also check the anchors match the
+  snapshot's Voteview file);
   delete/replace the old tests (`test_peers`, `test_perspective`,
   `test_published_pages`, `test_representation`, `test_uncertainty`,
   `test_math`, `test_independent`, `test_whitepaper`; adjust `test_floor_votes`,
@@ -427,9 +509,10 @@ PYTHONPATH=src ./.venv/bin/python -m civicalign.agents              # fetch the 
 PYTHONPATH=src ./.venv/bin/python -m civicalign.agents.verify       # check the snapshot
 PYTHONPATH=src ./.venv/bin/python -m civicalign.ideology.ingest     # versioned inputs (--dry-run)
 PYTHONPATH=src ./.venv/bin/python -m civicalign.ideology.bridge     # record the none-v0 bridge
+PYTHONPATH=src ./.venv/bin/python -m civicalign.ideology.anchors    # record the 3 Pillar 4 reference anchors (--dry-run)
 PYTHONPATH=src ./.venv/bin/python -m civicalign.ideology.compute    # versioned results (--verify, --full)
 PYTHONPATH=src ./.venv/bin/python -m civicalign.ideology.inputs     # print current results (not stored)
-./.venv/bin/python -m pytest -q tests/test_ideology_records.py tests/test_ideology_pillars.py tests/test_ideology_incremental.py
+./.venv/bin/python -m pytest -q tests/test_ideology_records.py tests/test_ideology_pillars.py tests/test_ideology_incremental.py tests/test_ideology_methodology.py
 ```
 
 ## 12. Other links
