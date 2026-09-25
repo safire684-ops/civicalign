@@ -94,6 +94,18 @@ class Config:
     standing_committee_prefix: str = "SS"
     # The versioned, append-only input and result tables.
     ideology_dir: Path = field(default=ROOT / "data" / "ideology")
+    # Which American Ideology Project wave is shown for each state (all waves are stored).
+    pillars_aip_wave: int = 2020
+    # The bridge from public-opinion estimates to the legislator scale. "none-v0"
+    # is status NONE: no senator-to-public comparison is computed.
+    active_bridge_version: str = "none-v0"
+    # Pillar 5's population-weighted Senate centre. The CURRENT method, chosen
+    # to be changeable, not a settled scientific definition: see
+    # ideology/pillars.py WEIGHTING_METHODS for what each method computes.
+    pillar5_weighting_method: str = "population_weighted_median_v1"
+    # Census measurement year and vintage for the weights.
+    pillar5_population_year: int = 2024
+    pillar5_population_vintage: str = "Vintage 2024"
 
     @property
     def billflow_zip(self) -> Path:

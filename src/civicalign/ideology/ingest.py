@@ -10,6 +10,7 @@ unchanged snapshot writes nothing.
     senator_ideology            Voteview HSall_members.csv, every Senate row of the
                                 Congress, joined to the congress-legislators roster
     constituency_ideology       American Ideology Project state estimates, every wave
+    state_population            Census state population estimates, every year of the vintage
     committee_membership_events congress-legislators committee-membership-current.json,
                                 standing committees only, as observed changes
 
@@ -19,10 +20,12 @@ import argparse
 import csv
 import hashlib
 import json
+import re
 import sys
 from pathlib import Path
 
 from ..config import DEFAULT, Config
+from ..sources.population import USPS
 from . import records as R
 from .store import Table
 
@@ -160,6 +163,37 @@ def constituency_records(cfg: Config, snap: dict) -> list[dict]:
     return sorted(out, key=lambda r: (r["wave"], r["geography_id"]))
 
 
+# ---- state populations -------------------------------------------------------------------
+
+CENSUS = "U.S. Census Bureau, Vintage 2024 national and state population estimates (NST-EST2024-ALLDATA.csv)"
+
+
+def population_records(cfg: Config, snap: dict) -> list[dict]:
+    """Every POPESTIMATE<year> column for the 50 states and DC (SUMLEV 040).
+    The vintage is read from the file name (NST-EST<vintage>); each year is a
+    July 1 estimate from that vintage."""
+    prov = provenance(source_entry(cfg, snap, cfg.population_csv.name), CENSUS)
+    m = re.search(r"NST-EST(\d{4})", cfg.population_csv.name)
+    if not m:
+        raise SnapshotMismatch(f"cannot read the Census vintage from {cfg.population_csv.name}")
+    vintage = f"Vintage {m.group(1)}"
+    out = []
+    with cfg.population_csv.open() as fh:
+        for row in csv.DictReader(fh):
+            if row.get("SUMLEV") != "040" or row["NAME"] not in USPS:
+                continue
+            for col, val in row.items():
+                ym = re.fullmatch(r"POPESTIMATE(\d{4})", col or "")
+                if ym and val:
+                    out.append({"geography_type": "state", "geography_id": USPS[row["NAME"]], "geography_name": row["NAME"],
+                                "population": int(val), "measurement_year": int(ym.group(1)), "vintage": vintage,
+                                "estimate_type": "resident population estimate, July 1 of the measurement year", **prov})
+    states = {r["geography_id"] for r in out}
+    if len(states) != 51:
+        raise SnapshotMismatch(f"expected 50 states and DC in the Census file, found {len(states)}")
+    return sorted(out, key=lambda r: (r["measurement_year"], r["geography_id"]))
+
+
 # ---- committee membership --------------------------------------------------------------
 
 def committee_event_records(cfg: Config, snap: dict, current: dict[tuple, dict]) -> list[dict]:
@@ -211,10 +245,12 @@ def committee_event_records(cfg: Config, snap: dict, current: dict[tuple, dict])
 
 def run(cfg: Config = DEFAULT, dry_run: bool = False) -> dict:
     snap = snapshot(cfg)
-    tables = {t: Table(cfg.ideology_dir, t) for t in ("senator_ideology", "constituency_ideology", "committee_membership_events")}
+    tables = {t: Table(cfg.ideology_dir, t) for t in ("senator_ideology", "constituency_ideology", "state_population",
+                                                       "committee_membership_events")}
     batches = {
         "senator_ideology": senator_records(cfg, snap),
         "constituency_ideology": constituency_records(cfg, snap),
+        "state_population": population_records(cfg, snap),
         "committee_membership_events": committee_event_records(
             cfg, snap, {k: line["content"] for k, line in tables["committee_membership_events"].latest().items()}),
     }

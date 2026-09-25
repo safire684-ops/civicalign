@@ -8,3 +8,9 @@ The tests copy these files into a temporary folder under the real file names,
 write a snapshot record whose entries carry `"fixture": true`, and check that
 every ingested record carries `fixture: true`. Nothing here is ever written to
 `data/ideology/`.
+
+`FIXTURE_NST-EST2024-ALLDATA.csv` needs the real state names (the ingest maps
+Census names to postal codes and requires all 50 states and DC), but every
+population in it is invented: 11111 × the row number (2023) and that plus one
+(2024). They are not Census figures. The Puerto Rico row checks that it is
+left out.

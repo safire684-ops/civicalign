@@ -23,7 +23,7 @@ ROOT = Path(__file__).resolve().parents[1]
 FIX = ROOT / "tests" / "fixtures" / "ideology"
 FILES = {"HSall_members.csv": "FIXTURE_HSall_members.csv", "legislators-current.json": "FIXTURE_legislators-current.json",
          "committee-membership-current.json": "FIXTURE_committee-membership-current.v1.json",
-         "aip_states_ideology_v2022a.tab": "FIXTURE_aip.tab"}
+         "aip_states_ideology_v2022a.tab": "FIXTURE_aip.tab", "NST-EST2024-ALLDATA.csv": "FIXTURE_NST-EST2024-ALLDATA.csv"}
 
 
 def _entry(raw: Path, name: str, changed: str) -> dict:
@@ -228,7 +228,7 @@ def test_committee_ingest_records_observed_changes(tmp_path):
     evs = t.current()
     assert {e["committee_id"] for e in evs} == {"SSZZ"}, "standing committees only: no subcommittee, select or House committee"
     assert all(e["event"] == "observed_joined" and e["baseline"] and e["observed_date"] == "2026-01-05" for e in evs)
-    assert I.run(cfg)["new_versions_written"] == {"senator_ideology": 0, "constituency_ideology": 0, "committee_membership_events": 0}, \
+    assert I.run(cfg)["new_versions_written"] == {"senator_ideology": 0, "constituency_ideology": 0, "state_population": 0, "committee_membership_events": 0}, \
         "re-ingesting an unchanged snapshot writes nothing"
     # a later snapshot with a changed roster
     cfg = fixture_raw(tmp_path, committees="FIXTURE_committee-membership-current.v2.json", when="2026-02-10T11:00:00Z")
@@ -245,9 +245,25 @@ def test_committee_ingest_records_observed_changes(tmp_path):
     assert ivs[("SSZZ", "FX00003")]["observed_end_date"] is None and ivs[("SSZZ", "FX00003")]["title"] == "Chairman"
     assert ivs[("SSZZ", "FX00006")]["start_is_first_observation"] is False
     assert all("not an official appointment" in i["date_basis"] for i in ivs.values())
-    for table in ("senator_ideology", "constituency_ideology", "committee_membership_events"):
+    for table in ("senator_ideology", "constituency_ideology", "state_population", "committee_membership_events"):
         tb = Table(cfg.ideology_dir, table)
         assert tb.verify() == [] and all(l["content"]["fixture"] is True for l in tb.lines())
+
+
+def test_population_ingest_is_versioned_by_year_and_vintage(tmp_path):
+    cfg = fixture_raw(tmp_path)
+    rows = I.population_records(cfg, I.snapshot(cfg))
+    assert len(rows) == 102 and {r["measurement_year"] for r in rows} == {2023, 2024}, "51 areas x 2 years; Puerto Rico left out"
+    ca = next(r for r in rows if r["geography_id"] == "CA" and r["measurement_year"] == 2024)
+    assert ca["vintage"] == "Vintage 2024" and ca["population"] > 0 and ca["fixture"] is True
+    assert all(R.validate("state_population", r) == [] for r in rows)
+    assert R.validate("state_population", {**ca, "population": 0})
+    t = Table(cfg.ideology_dir, "state_population")
+    assert t.append(rows, "FIXTURE") == 102 and t.append(rows, "FIXTURE") == 0
+    revised = [{**r, "population": r["population"] + 5} if r["geography_id"] == "CA" and r["measurement_year"] == 2023 else r for r in rows]
+    assert t.append(revised, "FIXTURE") == 1, "a revised figure is a new version; the old one stays in the history"
+    ca23 = next(r["population"] for r in rows if r["geography_id"] == "CA" and r["measurement_year"] == 2023)
+    assert [h["content"]["population"] for h in t.history(("state", "CA", 2023, "Vintage 2024"))] == [ca23, ca23 + 5]
 
 
 def test_engine_b_does_not_import_engine_a():
@@ -301,13 +317,13 @@ def test_real_ingest_public_estimates_and_committees(real):
     evs = Table(cfg.ideology_dir, "committee_membership_events").current()
     assert {e["committee_id"] for e in evs} and all(e["committee_id"].startswith("SS") and len(e["committee_id"]) == 4 for e in evs)
     assert all(e["baseline"] and e["event"] == "observed_joined" for e in evs), "a fresh store sees every membership for the first time"
-    assert I.run(cfg)["new_versions_written"] == {"senator_ideology": 0, "constituency_ideology": 0, "committee_membership_events": 0}
+    assert I.run(cfg)["new_versions_written"] == {"senator_ideology": 0, "constituency_ideology": 0, "state_population": 0, "committee_membership_events": 0}
 
 
 def test_committed_tables_verify():
-    for table in ("senator_ideology", "constituency_ideology", "committee_membership_events"):
+    for table in ("senator_ideology", "constituency_ideology", "state_population", "committee_membership_events", "ideology_bridge"):
         t = Table(DEFAULT.ideology_dir, table)
         if not t.path.exists():
             pytest.skip("no committed Pillars 4-6 tables yet")
         assert t.verify() == [], table
-        assert all(l["content"]["fixture"] is False for l in t.lines()), "fixtures never reach data/ideology"
+        assert all(l["content"].get("fixture", False) is False for l in t.lines()), "fixtures never reach data/ideology"

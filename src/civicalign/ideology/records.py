@@ -26,6 +26,13 @@ ideology_bridge        a mapping from a public-opinion model into the legislator
                        Step 1; no bridge record is written until Step 2.)
                        Key: bridge_version.
 
+state_population       one row per state (and DC) per measurement year per Census
+                       vintage: the July 1 resident population estimate. A later
+                       vintage revises earlier years, so the vintage is part of
+                       the key. Puerto Rico is in the Census file but elects no
+                       senators and is not stored. Key: geography_type,
+                       geography_id, measurement_year, vintage.
+
 committee_membership_events
                        what CivicAlign observed about a standing committee's
                        membership, one event per change: observed_joined,
@@ -65,6 +72,11 @@ TABLES = {
         "fields": {"geography_type": str, "geography_id": str, "geography_name": str, "estimate": float,
                    "standard_error": float, "survey_period": str, "wave": int, "sample_size": (int, type(None)),
                    "methodology_version": str, "scale": str, **SOURCE_FIELDS},
+    },
+    "state_population": {
+        "key": ("geography_type", "geography_id", "measurement_year", "vintage"),
+        "fields": {"geography_type": str, "geography_id": str, "geography_name": str, "population": int,
+                   "measurement_year": int, "vintage": str, "estimate_type": str, **SOURCE_FIELDS},
     },
     "ideology_bridge": {
         "key": ("bridge_version",),
@@ -127,6 +139,11 @@ def validate(table: str, rec: dict) -> list[str]:
             errs.append("standard_error cannot be negative")
         if rec["geography_type"] not in ("state", "nation"):
             errs.append("geography_type must be state or nation")
+    elif table == "state_population":
+        if rec["population"] <= 0:
+            errs.append("population must be positive")
+        if rec["geography_type"] != "state" or not re.fullmatch(r"[A-Z]{2}", rec["geography_id"]):
+            errs.append("geography must be a state (or DC) two-letter code")
     elif table == "ideology_bridge":
         st = rec["status"]
         if st not in STATUSES:
