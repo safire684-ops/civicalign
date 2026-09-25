@@ -59,7 +59,7 @@ def calculate(cfg: Config = DEFAULT) -> dict:
         "versions": x["versions"],
         "pillar4": P.pillar4(x["senators"], x["publics"], x["bridge"], col, cfg.pillars_aip_wave),
         "pillar5": p5,
-        "pillar6": P.pillar6(x["committees"], x["senators"], p5["chamber_median"]["value"], nat, col),
+        "pillar6": P.pillar6(x["committees"], x["senators"], p5["details"]["chamber_median"]["value"], nat, col),
     }
 
 

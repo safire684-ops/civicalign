@@ -79,21 +79,42 @@ def test_weighted_median_v1(points, expected):
     assert P.weighted_median_v1([(x, Fraction(w)) for x, w in points]) == pytest.approx(expected)
 
 
-def test_pillar5_by_hand():
-    p = P.pillar5(SENATE, POPS, NAT, COL, "population_weighted_median_v1")
-    # active scores -0.4, -0.2, 0.1, 0.5, 0.7 -> median 0.1
-    assert p["active_senators"] == 5 and p["chamber_median"]["value"] == pytest.approx(0.1)
-    # weights 500, 500, 300, 50, 50 (total 1400, half 700): cumulative 500 at -0.4, 1000 at -0.2 -> centre -0.2
-    assert p["population_weighted_center"]["value"] == pytest.approx(-0.2)
-    # 0.1 - (-0.2) = +0.3, sign kept: the actual Senate sits to the positive side of the weighted counterfactual
-    assert p["equal_state_representation_difference"]["value"] == pytest.approx(0.3)
+def test_pillar5_main_comparison_is_the_mean_by_hand():
+    p = P.pillar5(SENATE, POPS, NAT, COL, "population_weighted_mean_v1")
+    assert p["active_senators"] == 5 and p["configured_method"] == "population_weighted_mean_v1"
+    # plain mean (-0.4 - 0.2 + 0.1 + 0.5 + 0.7) / 5 = 0.14
+    assert p["plain_center"]["value"] == pytest.approx(0.14) and p["plain_center"]["statistic"] == "chamber_mean"
+    # weights 500, 500, 300, 50, 50: (-200 - 100 + 30 + 25 + 35) / 1400 = -0.15
+    assert p["population_weighted_center"]["value"] == pytest.approx(-0.15)
+    # population weighting difference = plain mean - weighted mean = 0.14 - (-0.15) = +0.29, sign kept
+    assert p["population_weighting_difference"]["value"] == pytest.approx(0.29)
+    assert p["population_weighted_center"]["role"] == "PRIMARY"
     assert p["population_weighted_center"]["method_status"] == "CANDIDATE_METHOD_NOT_FINAL"
     assert p["national_public"]["status"] == "NOT_AVAILABLE" and p["chamber_public_gap"]["status"] == "NOT_AVAILABLE"
-    quantities = [v for k, v in p.items() if isinstance(v, dict) and k not in ("national_public", "candidate_methods")]
-    quantities += [q for c in p["candidate_methods"].values() for q in c.values()]
+    quantities = [v for k, v in p.items() if isinstance(v, dict) and k not in ("national_public", "details")]
+    quantities += [p["details"]["chamber_median"], p["details"]["chamber_mean"]]
+    quantities += [q for c in p["details"]["methods"].values() for q in c.values()]
     assert quantities and all(v["units"].startswith("Voteview") for v in quantities)
     with pytest.raises(P.InputError, match="unknown weighting method"):
-        P.pillar5(SENATE, POPS, NAT, COL, "population_weighted_mean")
+        P.pillar5(SENATE, POPS, NAT, COL, "population_weighted_mode")
+
+
+def test_pillar5_median_is_kept_in_details_by_hand():
+    p = P.pillar5(SENATE, POPS, NAT, COL, "population_weighted_mean_v1")
+    d = p["details"]
+    assert "chamber_median" not in p and "chamber_mean" not in p, "medians and means sit under details; the headline is the primary method"
+    # active scores -0.4, -0.2, 0.1, 0.5, 0.7 -> median 0.1
+    assert d["chamber_median"]["value"] == pytest.approx(0.1) and d["chamber_mean"]["value"] == pytest.approx(0.14)
+    med = d["methods"]["population_weighted_median_v1"]
+    # weights 500, 500, 300, 50, 50 (total 1400, half 700): cumulative 500 at -0.4, 1000 at -0.2 -> centre -0.2
+    # difference = plain median - weighted median = 0.1 - (-0.2) = +0.3
+    assert (med["plain_center"]["value"], med["population_weighted_center"]["value"], med["population_weighting_difference"]["value"]) \
+        == pytest.approx((0.1, -0.2, 0.3))
+    assert med["plain_center"]["statistic"] == "chamber_median" and med["population_weighted_center"]["role"] == "SECONDARY_COMPARISON"
+    assert d["methods"]["population_weighted_mean_v1"]["population_weighting_difference"] == p["population_weighting_difference"]
+    q = P.pillar5(SENATE, POPS, NAT, COL, "population_weighted_median_v1")
+    assert q["details"]["methods"] == d["methods"], "both methods are computed whichever is configured"
+    assert q["population_weighted_center"]["value"] == pytest.approx(-0.2) and q["population_weighting_difference"]["value"] == pytest.approx(0.3)
 
 
 @pytest.mark.parametrize("points,expected", [
@@ -107,37 +128,18 @@ def test_weighted_mean_v1(points, expected):
         P.weighted_mean_v1([])
 
 
-def test_pillar5_computes_both_candidate_methods_by_hand():
-    p = P.pillar5(SENATE, POPS, NAT, COL, "population_weighted_median_v1")
-    c = p["candidate_methods"]
-    assert set(c) == {"population_weighted_median_v1", "population_weighted_mean_v1"}
-    med, mean = c["population_weighted_median_v1"], c["population_weighted_mean_v1"]
-    # median candidate: actual = plain median 0.1, weighted median -0.2, difference +0.3 (as before)
-    assert (med["actual_center"]["value"], med["population_weighted_center"]["value"], med["equal_state_representation_difference"]["value"]) \
-        == pytest.approx((0.1, -0.2, 0.3))
-    assert med["actual_center"]["statistic"] == "chamber_median"
-    # mean candidate: plain mean (-0.4 - 0.2 + 0.1 + 0.5 + 0.7) / 5 = 0.14;
-    # weighted (-0.4*500 - 0.2*500 + 0.1*300 + 0.5*50 + 0.7*50) / 1400 = -210 / 1400 = -0.15; difference 0.14 - (-0.15) = +0.29
-    assert (mean["actual_center"]["value"], mean["population_weighted_center"]["value"], mean["equal_state_representation_difference"]["value"]) \
-        == pytest.approx((0.14, -0.15, 0.29))
-    assert mean["actual_center"]["statistic"] == "chamber_mean" and p["chamber_mean"]["value"] == pytest.approx(0.14)
-    assert all(v["population_weighted_center"]["method_status"] == "CANDIDATE_METHOD_NOT_FINAL" for v in c.values())
-    # the configured method's headline quantities are that candidate's, whichever is configured
-    q = P.pillar5(SENATE, POPS, NAT, COL, "population_weighted_mean_v1")
-    assert q["population_weighted_center"]["value"] == pytest.approx(-0.15) and q["equal_state_representation_difference"]["value"] == pytest.approx(0.29)
-    assert q["candidate_methods"] == p["candidate_methods"], "every candidate is computed whichever is configured"
-
-
 def test_pillar5_leaves_out_unscored_senators_and_can_use_the_other_column():
     s = SENATE + [sen("FXD1", "ZC", None)]
     s[-1]["nokken_poole_dim1"] = None
-    p = P.pillar5(s, POPS, NAT, COL, "population_weighted_median_v1")
+    p = P.pillar5(s, POPS, NAT, COL, "population_weighted_mean_v1")
     assert p["unscored_seated_senators"] == ["FXD1"] and p["active_senators"] == 5
-    # with ZC now holding two seated senators, FXC1 carries 150: weights 500,500,150,50,50 (total 1250, half 625) -> -0.2 still
-    assert p["population_weighted_center"]["value"] == pytest.approx(-0.2)
+    # with ZC now holding two seated senators, FXC1 carries 150: weights 500,500,150,50,50 (total 1250)
+    # weighted mean (-200 - 100 + 15 + 25 + 35) / 1250 = -0.18; weighted median: half 625, cumulative 1000 at -0.2 -> -0.2
+    assert p["population_weighted_center"]["value"] == pytest.approx(-0.18)
+    assert p["details"]["methods"]["population_weighted_median_v1"]["population_weighted_center"]["value"] == pytest.approx(-0.2)
     alt = [dict(x, nokken_poole_dim1=x["nominate_dim1"] + 0.1) for x in SENATE]
-    q = P.pillar5(alt, POPS, NAT, "nokken_poole_dim1", "population_weighted_median_v1")
-    assert q["chamber_median"]["value"] == pytest.approx(0.2) and "nokken_poole_dim1" in q["chamber_median"]["units"]
+    q = P.pillar5(alt, POPS, NAT, "nokken_poole_dim1", "population_weighted_mean_v1")
+    assert q["plain_center"]["value"] == pytest.approx(0.24) and "nokken_poole_dim1" in q["plain_center"]["units"]
 
 
 # ---- Pillar 4 -----------------------------------------------------------------------------------
@@ -174,7 +176,9 @@ def test_config_defaults_are_the_decided_ones():
     assert DEFAULT.pillars_score_column == "nominate_dim1"
     assert DEFAULT.active_bridge_version == "none-v0"
     assert DEFAULT.pillar5_weighting_method in P.WEIGHTING_METHODS
-    assert DEFAULT.pillar5_weighting_method == "population_weighted_median_v1", "the weighted median stays the configured method"
+    assert DEFAULT.pillar5_weighting_method == "population_weighted_mean_v1", "the weighted mean is the primary method"
+    assert P.WEIGHTING_METHODS["population_weighted_mean_v1"]["role"] == "PRIMARY"
+    assert P.WEIGHTING_METHODS["population_weighted_median_v1"]["role"] == "SECONDARY_COMPARISON"
     assert set(P.WEIGHTING_METHODS) == {"population_weighted_median_v1", "population_weighted_mean_v1"}
     assert all(m["status"] == "CANDIDATE_METHOD_NOT_FINAL" for m in P.WEIGHTING_METHODS.values())
 
@@ -206,7 +210,9 @@ def _seated_scores_from_raw():
 
 def test_real_pillar5_recomputes_from_raw_files(real):
     seated, scores = _seated_scores_from_raw()
-    assert real["pillar5"]["chamber_median"]["value"] == pytest.approx(statistics.median(scores.values()))
+    p5 = real["pillar5"]
+    assert p5["details"]["chamber_median"]["value"] == pytest.approx(statistics.median(scores.values()))
+    assert p5["plain_center"]["value"] == pytest.approx(statistics.fmean(scores.values()))
     pops = {}
     with DEFAULT.population_csv.open() as fh:
         for row in csv.DictReader(fh):
@@ -217,9 +223,12 @@ def test_real_pillar5_recomputes_from_raw_files(real):
     count = {}
     for b in scores:
         count[seated[b]] = count.get(seated[b], 0) + 1
-    # independent weighted median: integer weights (pop * 2 / seats), walk to half
+    # independent: integer weights (pop * 2 / seats), a weighted mean, and a walk to half for the weighted median
     pts = sorted((scores[b], pop[seated[b]] * 2 // count[seated[b]]) for b in scores)
     tot = sum(w for _, w in pts)
+    wmean = sum(x * w for x, w in pts) / tot
+    assert p5["population_weighted_center"]["value"] == pytest.approx(wmean)
+    assert p5["population_weighting_difference"]["value"] == pytest.approx(statistics.fmean(scores.values()) - wmean)
     acc, centre = 0, None
     for i, (x, w) in enumerate(pts):
         acc += w
@@ -227,14 +236,9 @@ def test_real_pillar5_recomputes_from_raw_files(real):
             centre = (x + pts[i + 1][0]) / 2; break
         if 2 * acc > tot:
             centre = x; break
-    p5 = real["pillar5"]
-    assert p5["population_weighted_center"]["value"] == pytest.approx(centre)
-    wmean = sum(x * w for x, w in pts) / tot
-    mean_c = p5["candidate_methods"]["population_weighted_mean_v1"]
-    assert mean_c["population_weighted_center"]["value"] == pytest.approx(wmean)
-    assert mean_c["actual_center"]["value"] == pytest.approx(statistics.fmean(scores.values()))
-    assert mean_c["equal_state_representation_difference"]["value"] == pytest.approx(statistics.fmean(scores.values()) - wmean)
-    assert p5["equal_state_representation_difference"]["value"] == pytest.approx(statistics.median(scores.values()) - centre)
+    med = p5["details"]["methods"]["population_weighted_median_v1"]
+    assert med["population_weighted_center"]["value"] == pytest.approx(centre)
+    assert med["population_weighting_difference"]["value"] == pytest.approx(statistics.median(scores.values()) - centre)
     assert p5["chamber_public_gap"]["value"] is None and real["versions"]["bridge_status"] == "NONE"
 
 

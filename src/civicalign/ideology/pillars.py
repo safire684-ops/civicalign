@@ -13,19 +13,19 @@ Pillar 4, per seated senator
   distance               |senator_score - state_on_senator_scale|; NOT_AVAILABLE without it
 
 Pillar 5
-  chamber_median, chamber_mean    median and mean of active senators' nominate_dim1
-  candidate_methods               every candidate weighting method (below), each with
-                                  its population-weighted centre, the matching unweighted
-                                  centre (median with median, mean with mean) and
-                                  equal_state_representation_difference = unweighted - weighted
-  population_weighted_center, equal_state_representation_difference
-                                  the same two quantities for the configured method
+  plain_center, population_weighted_center, population_weighting_difference
+                                  the main comparison, by the configured method (primary:
+                                  population_weighted_mean_v1): plain Senate mean vs the
+                                  population-weighted Senate mean, and plain - weighted
+  details                         chamber median and mean, and every method (the weighted
+                                  median is a secondary comparison) with its plain centre,
+                                  weighted centre and difference: methodology/details only
   national_public, chamber_public_gap
                                   NOT_AVAILABLE (national definition unresolved, no bridge)
 
 Pillar 6, per standing committee
   committee_median                median of current members' nominate_dim1
-  committee_senate_drift          committee_median - chamber_median, sign kept
+  committee_senate_drift          committee_median - chamber_median (Senate median), sign kept
   committee_public_drift          NOT_AVAILABLE (no national estimate, no bridge)
 
 "Active senators" are the senators the roster lists as seated who have a
@@ -99,16 +99,19 @@ def weighted_mean_v1(points: list[tuple[float, Fraction]]) -> float:
 OPEN_QUESTIONS = ("median or mean; residents or adults, citizens or voters; how to treat unscored senators, "
                   "whose share of their state's weight is currently left out with them")
 
-# Candidate definitions of the population-weighted Senate centre. Neither is a
-# settled scientific definition; both are computed so they can be compared
-# before one is chosen. Each pairs with the matching unweighted statistic, so
-# the equal-state representation difference compares like with like.
+# Definitions of the population-weighted Senate centre. Neither is a settled
+# scientific definition. The weighted mean is the PRIMARY method (the main
+# Pillar 5 comparison); the weighted median is kept as a SECONDARY comparison,
+# computed and stored every time but shown only in methodology/details. Each
+# pairs with the matching unweighted statistic (mean with mean, median with
+# median), so the population weighting difference compares like with like.
 WEIGHTING_METHODS = {
     "population_weighted_median_v1": {
         "function": weighted_median_v1,
         "actual_center": statistics.median,
         "actual_center_name": "chamber_median",
         "status": "CANDIDATE_METHOD_NOT_FINAL",
+        "role": "SECONDARY_COMPARISON",
         "definition": ("weighted median of active senators' scores; each senator weighted by their state's population "
                        "divided by the number of senators the state has seated; a cumulative weight exactly at half "
                        "the total averages that score with the next"),
@@ -119,6 +122,7 @@ WEIGHTING_METHODS = {
         "actual_center": statistics.fmean,
         "actual_center_name": "chamber_mean",
         "status": "CANDIDATE_METHOD_NOT_FINAL",
+        "role": "PRIMARY",
         "definition": ("weighted mean of active senators' scores: the sum of each score times its weight, divided by the "
                        "total weight; each senator weighted by their state's population divided by the number of senators "
                        "the state has seated"),
@@ -159,29 +163,37 @@ def pillar5(senators: list[dict], populations: dict[str, int], national: dict, c
         raise InputError("no active senators with a score")
     units = LEGISLATOR_UNITS.format(column=column)
     scores = [s[column] for s in active]
-    weights = senator_weights(active, populations)
+    # weights are shares of the state among ALL seated senators; an unscored
+    # senator's share is left out with them, not handed to their colleague
+    weights = senator_weights(active + unscored, populations)
     points = [(s[column], weights[s["bioguide_id"]]) for s in active]
     candidates = {}
     for name, m in WEIGHTING_METHODS.items():
         actual, center = m["actual_center"](scores), m["function"](points)
-        label = dict(method=name, method_status=m["status"], definition=m["definition"], open_questions=m["open_questions"])
+        label = dict(method=name, method_status=m["status"], role=m["role"], definition=m["definition"],
+                     open_questions=m["open_questions"])
         candidates[name] = {
-            "actual_center": available(actual, units, statistic=m["actual_center_name"], n=len(active)),
+            "plain_center": available(actual, units, statistic=m["actual_center_name"], n=len(active)),
             "population_weighted_center": available(center, units, **label),
-            "equal_state_representation_difference": available(actual - center, units,
-                                                               formula=f"{m['actual_center_name']} - population_weighted_center", method=name),
+            "population_weighting_difference": available(actual - center, units, method=name,
+                                                         formula=f"{m['actual_center_name']} - population_weighted_center"),
         }
     chosen = candidates[method]
     gap_reason = "needs the national public estimate on the senator scale: " + national["reason"]
     return {
         "active_senators": len(active),
         "unscored_seated_senators": [s["bioguide_id"] for s in unscored],
-        "chamber_median": available(statistics.median(scores), units, n=len(active)),
-        "chamber_mean": available(statistics.fmean(scores), units, n=len(active)),
         "configured_method": method,
+        # the main comparison: the configured (primary) method's plain and weighted centres and their difference
+        "plain_center": chosen["plain_center"],
         "population_weighted_center": chosen["population_weighted_center"],
-        "equal_state_representation_difference": chosen["equal_state_representation_difference"],
-        "candidate_methods": candidates,
+        "population_weighting_difference": chosen["population_weighting_difference"],
+        # methodology/details only: both centres of both kinds and every method
+        "details": {
+            "chamber_median": available(statistics.median(scores), units, n=len(active)),
+            "chamber_mean": available(statistics.fmean(scores), units, n=len(active)),
+            "methods": candidates,
+        },
         "national_public": national,
         "chamber_public_gap": not_available(gap_reason, units),
     }
