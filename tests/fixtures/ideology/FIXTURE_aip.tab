@@ -1,0 +1,5 @@
+state	presidential_year	abb	population_2020	fips	mrp_ideology_se	mrp_ideology	irt_ideology_unweighted	self_ideology	self_ideology_se	irt_ideology_unweighted_sd	irt_ideology_unweighted_se	sample_size	survey_period	demshare_pres
+"FIXTURE State Z"	2016	"ZZ"	1000	90	0.05	0.12	0.1	3.1	0.02	0.9	0.01	500	"2012-2016"	0.5
+"FIXTURE State Y"	2016	"ZY"	2000	91	0.04	-0.08	-0.1	2.9	0.02	0.9	0.01	800	"2012-2016"	0.6
+"FIXTURE State Z"	2020	"ZZ"	1000	90	0.06	0.15	0.1	3.2	0.02	0.9	0.01	450	"2017-2020"	0.48
+"FIXTURE State Y"	2020	"ZY"	2000	91	0.05	-0.05	-0.1	2.9	0.02	0.9	0.01	700	"2017-2020"	0.61

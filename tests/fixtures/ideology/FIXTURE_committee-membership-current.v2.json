@@ -1,0 +1,7 @@
+{
+ "SSZZ": [{"name": "FIXTURE Senator Charlie", "party": "majority", "rank": 1, "title": "Chairman", "bioguide": "FX00003"},
+          {"name": "FIXTURE Senator Alpha", "party": "minority", "rank": 1, "title": "Ranking Member", "bioguide": "FX00001"},
+          {"name": "FIXTURE Senator Foxtrot", "party": "minority", "rank": 2, "bioguide": "FX00006"}],
+ "SSZY": [{"name": "FIXTURE Senator Bravo", "party": "majority", "rank": 1, "title": "Chairman", "bioguide": "FX00002"}],
+ "SLZZ": [{"name": "FIXTURE Senator Alpha", "party": "minority", "rank": 1, "bioguide": "FX00001"}]
+}

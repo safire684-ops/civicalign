@@ -1,0 +1,7 @@
+[
+ {"id": {"bioguide": "FX00001"}, "name": {"official_full": "FIXTURE Senator Alpha", "last": "Alpha"}, "terms": [{"type": "sen", "state": "ZZ", "party": "Democrat"}]},
+ {"id": {"bioguide": "FX00002"}, "name": {"official_full": "FIXTURE Senator Bravo", "last": "Bravo"}, "terms": [{"type": "sen", "state": "ZZ", "party": "Republican"}]},
+ {"id": {"bioguide": "FX00003"}, "name": {"official_full": "FIXTURE Senator Charlie", "last": "Charlie"}, "terms": [{"type": "sen", "state": "ZY", "party": "Republican"}]},
+ {"id": {"bioguide": "FX00006"}, "name": {"official_full": "FIXTURE Senator Foxtrot", "last": "Foxtrot"}, "terms": [{"type": "sen", "state": "ZY", "party": "Democrat"}]},
+ {"id": {"bioguide": "FX00005"}, "name": {"official_full": "FIXTURE Representative Echo", "last": "Echo"}, "terms": [{"type": "rep", "state": "ZY", "party": "Democrat"}]}
+]

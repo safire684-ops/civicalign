@@ -1,0 +1,7 @@
+congress,chamber,icpsr,state_icpsr,district_code,state_abbrev,party_code,occupancy,last_means,bioname,bioguide_id,born,died,nominate_dim1,nominate_dim2,nominate_log_likelihood,nominate_geo_mean_probability,nominate_number_of_votes,nominate_number_of_errors,conditional,nokken_poole_dim1,nokken_poole_dim2
+119,Senate,900001,99,0,ZZ,100,,,"FIXTURE Senator, Alpha",FX00001,1960,,-0.4,0.1,,,500,,,-0.35,0.0
+119,Senate,900002,99,0,ZZ,200,,,"FIXTURE Senator, Bravo",FX00002,1961,,0.5,0.2,,,480,,,0.55,0.0
+119,Senate,900003,98,0,ZY,200,,,"FIXTURE Senator, Charlie",FX00003,1962,,0.3,-0.1,,,450,,,0.25,0.0
+119,Senate,900004,98,0,ZY,100,,,"FIXTURE Former Senator, Delta",FX00004,1950,,-0.2,0.0,,,40,,,-0.25,0.0
+119,House,900005,98,1,ZY,100,,,"FIXTURE Representative, Echo",FX00005,1970,,-0.1,0.0,,,300,,,-0.1,0.0
+118,Senate,900001,99,0,ZZ,100,,,"FIXTURE Senator, Alpha",FX00001,1960,,-0.4,0.1,,,500,,,-0.30,0.0

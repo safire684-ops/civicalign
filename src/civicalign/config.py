@@ -85,6 +85,16 @@ class Config:
     raw_dir: Path = field(default=RAW)
     processed_dir: Path = field(default=PROCESSED)
 
+    # ---- Engine B (Pillars 4-6) -------------------------------------------------
+    # The legislator score Pillars 4-6 use. nominate_dim1 is the default by
+    # decision; nokken_poole_dim1 is stored beside it as extra data only.
+    pillars_score_column: str = "nominate_dim1"
+    # Standing committees only: four-character codes with this prefix (SS*).
+    # Select (SL*) and joint committees and subcommittees are not included.
+    standing_committee_prefix: str = "SS"
+    # The versioned, append-only input and result tables.
+    ideology_dir: Path = field(default=ROOT / "data" / "ideology")
+
     @property
     def billflow_zip(self) -> Path:
         return self.raw_dir / f"BILLSTATUS-{self.congress}-s.zip"
