@@ -42,6 +42,12 @@ committee_membership_events
                        date. Start and end dates for a membership are derived
                        from these events (see membership_intervals).
                        Key: congress, committee_id, bioguide_id.
+
+reference_anchors      exactly three recognisable figures shown beside senator
+                       scores on the Pillar 4 scale, with the nominate_dim1
+                       Voteview publishes for their congressional voting record
+                       (see anchors.py). A visual reference only: no calculation
+                       reads this table. Key: anchor_id.
 """
 import re
 
@@ -54,6 +60,8 @@ OBSERVED_DATE_BASIS = ("observed in a CivicAlign snapshot of unitedstates/congre
 BASELINE_NOTE = "first CivicAlign observation of this committee: the membership may have begun earlier"
 SCALE_NOTE_AIP = ("American Ideology Project survey ideal-point scale (standardised within the survey; "
                   "no common metric with Voteview legislator scores)")
+ANCHOR_USE = ("visual reference point only: shown beside senator scores on the Pillar 4 scale; "
+              "never an input to any calculation")
 
 SOURCE_FIELDS = {"source": str, "source_url": str, "source_version": str, "source_sha256": str,
                  "retrieved_at": str, "fixture": bool}
@@ -91,6 +99,12 @@ TABLES = {
                    "observed_date": str, "date_basis": str, "baseline": bool, "baseline_note": (str, type(None)),
                    "rank": (int, type(None)), "title": (str, type(None)), "side": (str, type(None)),
                    "in_current_roster": bool, **SOURCE_FIELDS},
+    },
+    "reference_anchors": {
+        "key": ("anchor_id",),
+        "fields": {"anchor_id": str, "bioguide_id": str, "display_name": str, "record_basis": str, "voteview_icpsr": str,
+                   "voteview_name": str, "score_column": str, "nominate_dim1": float, "congresses": dict,
+                   "number_of_votes": dict, "use": str, **SOURCE_FIELDS},
     },
 }
 
@@ -166,6 +180,15 @@ def validate(table: str, rec: dict) -> list[str]:
             errs.append("a baseline event carries the baseline note, and only a baseline event")
         if rec["event"] == "observed_left" and any(rec[k] is not None for k in ("rank", "title", "side")):
             errs.append("an observed_left event carries no rank, title or side")
+    elif table == "reference_anchors":
+        if rec["score_column"] != "nominate_dim1":
+            errs.append("an anchor carries nominate_dim1, the score the senators are shown on")
+        if not -1.0 <= rec["nominate_dim1"] <= 1.0:
+            errs.append(f"nominate_dim1 {rec['nominate_dim1']} outside Voteview's [-1, 1]")
+        if rec["use"] != ANCHOR_USE:
+            errs.append("use must state that an anchor is a visual reference only")
+        if "Senate" not in rec["congresses"] or set(rec["congresses"]) - {"House", "Senate"}:
+            errs.append("an anchor's record is congressional votes: a Senate record, and a House record at most besides")
     return errs
 
 
