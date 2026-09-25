@@ -74,7 +74,7 @@ MEDIAN_LIMITS = (
 )
 NO_BRIDGE = ("needs a bridge placing public estimates on the senator scale; the active bridge none-v0 has status NONE, "
              "so no such conversion exists")
-NO_NATIONAL = ("needs a national public estimate, whose definition is unresolved (national.py lists the candidates), "
+NO_NATIONAL = ("needs a national public estimate, whose definition is unresolved (the candidate definitions are in the methodology), "
                "and a bridge placing it on the senator scale")
 COMMITTEE_LIMITS = (
     "Descriptive only: where a committee's current members sit compared with the Senate. It says nothing about what "

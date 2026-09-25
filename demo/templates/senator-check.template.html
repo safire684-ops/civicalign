@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Senate Context Check</title>
+<meta name="description" content="Where senators, the Senate and its committees sit on Voteview's voting-record scale, with the methodology behind every number.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Public+Sans:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="../civicalign.css">
+<style>
+/* Pillars 4-6 additions on top of civicalign.css: numbers that open their methodology,
+   reference ticks, stat tiles, not-available rows, the methodology panel. */
+.num{font:inherit;font-weight:700;font-variant-numeric:tabular-nums;color:inherit;background:none;border:0;
+  padding:0 1px;margin:0;cursor:pointer;text-decoration:underline dotted 1.5px;text-underline-offset:3px}
+.num:hover{text-decoration-style:solid}
+.num:focus-visible{outline:3px solid var(--alert);outline-offset:2px;border-radius:2px}
+.na{font-weight:700;color:var(--alert)}
+.why{margin-top:4px;font-size:13.5px;color:var(--muted);max-width:60ch}
+.why .num,.why button{font-size:13px}
+.info{font:inherit;font-size:12px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);
+  background:none;border:1px solid var(--rule);border-radius:3px;padding:2px 8px;cursor:pointer;margin-left:6px;vertical-align:1px}
+.info:hover{color:var(--ink);border-color:var(--muted)}
+.rows{margin-top:14px;border-top:1px solid var(--rule-soft)}
+.rows>div{display:grid;grid-template-columns:1fr auto;gap:4px 16px;padding:10px 0;border-bottom:1px solid var(--rule-soft);font-size:15px}
+.rows .k{color:var(--muted)}
+.rows .v{text-align:right;white-space:nowrap}
+.rows .why{grid-column:1 / -1;margin-top:0}
+.cm .gh .who{font-size:13px;color:var(--muted)}
+.bignum{margin-top:10px;font-size:15px;color:var(--muted)}
+.bignum .num{font-family:var(--serif);font-size:30px;color:var(--ink);letter-spacing:-.01em}
+.ctrack.p4{margin:calc(30px + var(--toprows,1) * 17px) 0 60px}
+.ctrack .tick{position:absolute;left:var(--x);top:50%;transform:translate(-50%,-50%);width:2px;height:22px;background:var(--muted);border-radius:1px;opacity:.85}
+.ctrack .tl{position:absolute;left:var(--x);transform:translateX(-50%);top:calc(-24px - var(--row,0) * 17px);
+  white-space:nowrap;font-size:12px;font-weight:600;color:var(--muted)}
+.ctrack .cmk.mem{--dot:var(--ink)}
+.ctrack .ct.b{--dot:var(--ink)}
+.ctrack .ct.w{top:26px;color:var(--ink);font-weight:700}
+.ctrack .conn,.ctrack .conn.left{background:var(--muted);opacity:.35}
+.cm .ends{gap:12px}.cm .ends span:last-child{text-align:right}
+.cm .scalename{margin-top:16px;font-size:11.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.anchorkey{margin-top:14px;display:grid;gap:8px}
+.anchorkey div{font-size:14px;display:grid;grid-template-columns:1fr auto;gap:2px 12px;align-items:baseline;
+  padding-bottom:8px;border-bottom:1px solid var(--rule-soft)}
+.anchorkey b{font-weight:700}
+.anchorkey span{grid-column:1 / -1;color:var(--muted);font-size:13px}
+.statcard{border-left:4px solid var(--muted)}
+.statcard .note{margin-top:10px;font-size:13.5px;color:var(--muted);max-width:60ch}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule);margin-top:14px}
+.tiles div{background:var(--surface);padding:12px 14px}
+.tiles .k{display:block;font-size:12.5px;color:var(--muted)}
+.tiles .v{display:block;margin-top:4px}
+.tiles .v .num{font-family:var(--serif);font-size:26px}
+.tiles .s{display:block;font-size:12.5px;color:var(--muted);margin-top:2px}
+.status{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;
+  padding:2px 7px;border-radius:3px;border:1px solid var(--rule);color:var(--muted);vertical-align:1px}
+.preview{margin-top:14px;font-size:13px;color:var(--alert);background:var(--alert-soft);border:1px solid var(--alert);padding:8px 12px;border-radius:4px}
+dialog.method{max-width:640px;width:calc(100% - 32px);max-height:calc(100vh - 48px);border:1px solid var(--rule);border-radius:8px;
+  background:var(--surface);color:var(--ink);padding:0;overflow:auto}
+dialog.method::backdrop{background:rgba(10,12,16,.55)}
+dialog.method .mh{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:18px 20px 0}
+dialog.method h2{font-size:20px}
+dialog.method .close{font:inherit;font-size:14px;font-weight:600;background:none;border:1px solid var(--rule);color:var(--ink);border-radius:4px;padding:6px 12px;cursor:pointer}
+dialog.method .mb{padding:6px 20px 20px}
+dialog.method dl{margin:10px 0 0;display:grid;gap:10px}
+dialog.method dt{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+dialog.method dd{margin:2px 0 0;font-size:14.5px}
+dialog.method ul{margin:4px 0 0;padding-left:18px;display:grid;gap:4px}
+dialog.method .formula{font-family:var(--mono);font-size:13px;background:var(--rule-soft);padding:8px 10px;border-radius:3px;overflow-x:auto}
+dialog.method .val{font-family:var(--serif);font-size:24px;font-weight:700}
+dialog.method a{color:var(--alert);font-weight:600}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <p class="eyebrow">CivicAlign &middot; <span id="congress"></span> Congress</p>
+  <h1>Senators, the Senate and its committees, in context</h1>
+  <p class="sub">Where voting records sit on Voteview’s scale compared with a state, the Senate as a
+    whole, and each standing committee. Select any underlined number to see where it comes from.</p>
+  <p class="separate">State public-opinion estimates use a different measurement system and are
+    shown separately, never on the senator scale.</p>
+  <p class="updated" id="updated"></p>
+  <p class="preview">Local preview build of the rebuilt Pillars 4–6. Not published.</p>
+</header>
+
+<nav class="nav" role="tablist" aria-label="Views">
+  <a href="#senator-state" role="tab" id="tab-senator-state" aria-controls="senator-state" aria-selected="true">Senator / State</a>
+  <a href="#senate-nation" role="tab" id="tab-senate-nation" aria-controls="senate-nation" aria-selected="false" tabindex="-1">Senate / Nation</a>
+  <a href="#committees" role="tab" id="tab-committees" aria-controls="committees" aria-selected="false" tabindex="-1">Committees</a>
+  <a href="methodology.html">Methodology</a>
+</nav>
+
+<!-- ============ Pillar 4: senator / state ============ -->
+<section id="senator-state" class="view" role="tabpanel" aria-labelledby="tab-senator-state" tabindex="-1">
+  <p class="takeaway" id="take-p4"></p>
+  <div class="picker">
+    <label for="state">State</label>
+    <select id="state"></select>
+  </div>
+  <div id="p4-cards"></div>
+  <div class="cm statcard" id="p4-public"></div>
+  <p class="limit">A senator’s score comes from their recorded Senate votes. The state estimate comes
+    from surveys of the state’s public. They are different measurement systems, so no distance between
+    them is calculated until a validated bridge between the two scales exists.</p>
+  <details class="more">
+    <summary><span>About the three reference figures</span></summary>
+    <div class="anchorkey" id="anchorkey"></div>
+    <ul class="limits-list" id="anchorlimits"></ul>
+  </details>
+</section>
+
+<!-- ============ Pillar 5: Senate / nation ============ -->
+<section id="senate-nation" class="view" role="tabpanel" aria-labelledby="tab-senate-nation" tabindex="-1" hidden>
+  <p class="takeaway" id="take-p5"></p>
+  <div class="cm" id="p5-main"></div>
+  <div class="cm statcard" id="p5-nation"></div>
+  <p class="limit">Every state has two senators whatever its population. Weighting each senator by the
+    number of people they represent shows how that equal representation of states moves the Senate’s
+    average. It describes seats and populations, not any senator.</p>
+  <details class="more">
+    <summary><span>Medians (secondary comparison)</span></summary>
+    <div id="p5-medians"></div>
+  </details>
+</section>
+
+<!-- ============ Pillar 6: committee / Senate / nation ============ -->
+<section id="committees" class="view" role="tabpanel" aria-labelledby="tab-committees" tabindex="-1" hidden>
+  <p class="takeaway" id="take-p6"></p>
+  <p class="why">Senate standing committees review bills in their subject area. This view describes
+    where each committee’s current members sit compared with the Senate as a whole.</p>
+  <div class="picker">
+    <label for="committee">Committee</label>
+    <select id="committee"></select>
+  </div>
+  <div id="committee-cards"></div>
+  <p class="limit">Descriptive only: where a committee’s members sit says nothing on its own about what
+    the committee did or decided.</p>
+</section>
+
+<footer>
+  <h3>Sources</h3>
+  <ul>
+    <li>Senator scores and reference figures: Voteview (UCLA), member file <code>HSall_members.csv</code>, <code>nominate_dim1</code>.</li>
+    <li>State public estimates: American Ideology Project (Tausanovitch &amp; Warshaw), v2022a, <a href="https://doi.org/10.7910/DVN/BQKU4M">doi:10.7910/DVN/BQKU4M</a>.</li>
+    <li>State populations: U.S. Census Bureau, Vintage 2024 estimates.</li>
+    <li>Committee membership and Senate roster: unitedstates/congress-legislators.</li>
+  </ul>
+  <p><a href="methodology.html">Full methodology for every number</a></p>
+  <p class="asof" id="asof"></p>
+</footer>
+</div>
+
+<dialog class="method" id="method" aria-labelledby="method-title">
+  <div class="mh"><h2 id="method-title"></h2><button type="button" class="close" id="method-close">Close</button></div>
+  <div class="mb" id="method-body"></div>
+</dialog>
+
+<!--DATA-->
+<script>
+(function(){
+  'use strict';
+  var D=JSON.parse(document.getElementById('data').textContent);
+  var M=D.methods;
+  function $(id){return document.getElementById(id)}
+  function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+  function pos(x){return Math.max(0,Math.min(100,(x+1)*50))}
+
+  // ---- every number goes through num(): it shows the value and opens its methodology ----
+  var NUMS=[];
+  function reg(n){if(!n||!M[n.m]) throw new Error('number without a methodology entry: '+(n&&n.p)); NUMS.push(n); return NUMS.length-1}
+  function num(n){
+    var i=reg(n);
+    if(n.s==='NOT_AVAILABLE') return '<span class="na">Not available</span><button type="button" class="info" data-i="'+i+'" aria-label="Why is '+esc(M[n.m].label)+' not available?">Why?</button>';
+    var extra=n.s==='PROVISIONAL'?' <span class="status">Provisional</span>':'';
+    return '<button type="button" class="num" data-i="'+i+'" aria-label="'+esc(n.d)+': '+esc(M[n.m].label)+', show methodology">'+esc(n.d)+'</button>'+extra;
+  }
+  function why(n){return n.s==='NOT_AVAILABLE'?'<p class="why">Why: '+esc(M[n.m].not_available||n.r)+'.</p>':''}
+  function row(label,n,note){
+    return '<div><span class="k">'+esc(label)+'</span><span class="v">'+num(n)+(n.se?' <span class="k">± '+num({m:n.m,p:n.p+'.standard_error',s:'AVAILABLE',d:n.se,u:n.u})+' s.e.</span>':'')+'</span>'+why(n)+(note?'<p class="why">'+note+'</p>':'')+'</div>';
+  }
+  function openMethod(i){
+    var n=NUMS[i], m=M[n.m];
+    $('method-title').textContent=m.label;
+    var list=function(a){return '<ul>'+a.map(function(x){return '<li>'+esc(x)+'</li>'}).join('')+'</ul>'};
+    var value=n.s==='NOT_AVAILABLE'
+      ?'<dt>Status</dt><dd><span class="na">Not available</span></dd><dt>Why</dt><dd>'+esc(n.r||m.not_available)+'</dd>'
+      :'<dt>Value</dt><dd><span class="val">'+esc(n.d)+'</span> <span class="k">'+esc(n.u)+'</span>'+(n.period?'<br><span class="k">Survey period '+esc(n.period)+'</span>':'')+'</dd>';
+    $('method-body').innerHTML='<dl>'+value+
+      '<dt>Raw source</dt><dd>'+list(m.sources)+'</dd>'+
+      '<dt>Transformation</dt><dd>'+esc(m.transformation)+'</dd>'+
+      '<dt>Formula</dt><dd class="formula">'+esc(m.formula)+'</dd>'+
+      '<dt>Versions</dt><dd>'+list(m.versions)+'</dd>'+
+      '<dt>Limitations</dt><dd>'+list(m.limitations)+'</dd>'+
+      '<dt>Methodology entry</dt><dd><a href="methodology.html#'+encodeURIComponent(n.m)+'">'+esc(n.m)+'</a> &middot; shown in '+esc(m.views.join(', '))+'</dd></dl>';
+    var dlg=$('method');
+    if(dlg.showModal) dlg.showModal(); else dlg.setAttribute('open','');
+  }
+  document.addEventListener('click',function(ev){
+    var b=ev.target.closest&&ev.target.closest('[data-i]'); if(b){openMethod(+b.getAttribute('data-i'))}
+  });
+  $('method-close').addEventListener('click',function(){$('method').close()});
+  $('method').addEventListener('click',function(ev){if(ev.target===$('method')) $('method').close()});
+
+  // ---- header ----
+  var meta=D.meta;
+  $('congress').textContent=meta.congress+'th';
+  $('updated').innerHTML='<span>Measurement date: '+esc(meta.measurement_date)+'</span><span>Committee membership observed: '+esc(meta.committee_observed)+'</span><span>Result record '+esc(meta.input_key_short)+'</span>';
+  $('asof').textContent='Built from result record '+meta.input_key+' ('+meta.score_column+', state survey wave '+meta.aip_wave+', population '+meta.population+', bridge '+meta.bridge+').';
+
+  // ---- labels on a track: stagger into rows so neighbours never overlap ----
+  function trackPx(){return Math.min(716,Math.max(280,window.innerWidth-84))}
+  function stagger(items){
+    var px=trackPx(), ends=[], rows=[];
+    items.forEach(function(it){
+      var w=it.label.length*7+8, l=(it.x+1)/2*px-w/2, r=0;
+      while(ends[r]!==undefined&&ends[r]>l) r++;
+      ends[r]=l+w; rows.push(r);
+    });
+    return rows;
+  }
+  var ENDS='<div class="ends"><span>← −1 · more liberal voting</span><span>more conservative voting · +1 →</span></div>';
+  var AXIS='';
+
+  // ================= Pillar 4 =================
+  var P4=D.p4, ssel=$('state');
+  ssel.innerHTML=P4.states.map(function(s){return '<option value="'+esc(s.code)+'">'+esc(s.name)+'</option>'}).join('');
+  var anchors=P4.anchors.slice().sort(function(a,b){return a.score.v-b.score.v});
+  function senatorCard(s,st){
+    var sc=s.senator_score, has=sc.s!=='NOT_AVAILABLE';
+    var ticks=anchors.map(function(a){return {x:a.score.v,label:a.short}});
+    var rows=stagger(ticks), top=Math.max.apply(null,rows.concat([0]))+1;
+    var track='<p class="scalename">Voteview voting-record scale, −1 to +1 (reference figures above, this senator below)</p>'+ENDS+
+      '<div class="ctrack p4" aria-hidden="true" style="--toprows:'+top+'">'+
+        anchors.map(function(a,i){return '<div class="tick" style="--x:'+pos(a.score.v)+'%"></div><div class="tl" style="--x:'+pos(a.score.v)+'%;--row:'+rows[i]+'">'+esc(a.short)+'</div>'}).join('')+
+        (has?'<div class="cmk mem" style="--x:'+pos(sc.v)+'%"></div><div class="ct b" style="--x:'+pos(sc.v)+'%">'+esc(s.short)+'</div>':'')+
+      '</div>'+AXIS;
+    var spoken=has?'Chart: '+s.name+' is at '+sc.d+'; reference figures: '+anchors.map(function(a){return a.name+' '+a.score.d}).join(', ')+'.':'';
+    var self=P4.anchors.filter(function(a){return a.bioguide===s.id})[0];
+    return '<div class="cm"><div class="gh"><b>'+esc(s.name)+'</b><span class="who">Senator for '+esc(st.name)+'</span></div>'+
+      '<p class="bignum">Voting-record score '+num(sc)+'</p>'+why(sc)+
+      (has?track+'<p class="sr-only">'+esc(spoken)+'</p>':'')+
+      (self?'<p class="why">'+esc(s.name)+' is also one of the three reference figures; the reference point is the same number.</p>':'')+
+      '<div class="rows">'+row('Distance between this senator and the state public',s.distance)+'</div></div>';
+  }
+  function renderState(code){
+    var st=P4.states.filter(function(s){return s.code===code})[0]; if(!st) return;
+    var pub=st.senators[0].state_public_estimate, onscale=st.senators[0].state_on_senator_scale;
+    $('p4-cards').innerHTML=st.senators.map(function(s){return senatorCard(s,st)}).join('');
+    $('p4-public').innerHTML='<div class="gh"><b>'+esc(st.name)+'’s public</b><span class="who">survey estimate, a separate measurement system</span></div>'+
+      '<div class="rows">'+row('Estimated ideology of the state’s public (survey scale)',pub,pub.period?'Survey period '+esc(pub.period)+'. On the survey’s own scale, which has no common metric with senator scores.':null)+
+      row('State public on the senator scale',onscale)+'</div>';
+    var names=st.senators.map(function(s){return s.name});
+    $('take-p4').innerHTML=st.senators.map(function(s){
+      return s.senator_score.s==='NOT_AVAILABLE'?esc(s.name)+' has no Voteview score yet.':esc(s.name)+'’s voting-record score is '+num(s.senator_score)+'.'}).join(' ')+
+      ' Negative scores are on the liberal side of Voteview’s scale and positive scores on the conservative side.';
+  }
+  ssel.addEventListener('change',function(){renderState(ssel.value)});
+  $('anchorkey').innerHTML=P4.anchors.map(function(a){return '<div><b>'+esc(a.name)+'</b>'+num(a.score)+'<span>'+esc(a.basis)+'</span></div>'}).join('');
+  $('anchorlimits').innerHTML=M['p4.reference_anchor'].limitations.slice(0,6).map(function(x){return '<li>'+esc(x)+'</li>'}).join('');
+  renderState(ssel.value);
+
+  // ================= Pillar 5 =================
+  var P5=D.p5;
+  (function(){
+    var pl=P5.plain, w=P5.weighted, d=P5.diff;
+    var dir=d.v>0?'lower on Voteview’s scale than the plain average, toward its liberal end':d.v<0?'higher on Voteview’s scale than the plain average, toward its conservative end':'the same as the plain average';
+    $('take-p5').innerHTML='Counting each of the '+num(P5.active)+' senators once, the Senate’s average score is '+num(pl)+
+      '. Weighting each senator by the population they represent, it is '+num(w)+': a difference of '+num(d)+'.';
+    var l=Math.min(pos(pl.v),pos(w.v)), wd=Math.abs(pos(pl.v)-pos(w.v));
+    $('p5-main').innerHTML='<div class="gh"><b>The Senate’s average, two ways</b><span class="who">method '+esc(meta.primary_method)+' <span class="status">candidate, not final</span></span></div>'+
+      '<div class="tiles">'+
+        '<div><span class="k">Each senator counted once</span><span class="v">'+num(pl)+'</span><span class="s">plain Senate mean</span></div>'+
+        '<div><span class="k">Weighted by population represented</span><span class="v">'+num(w)+'</span><span class="s">population-weighted Senate mean</span></div>'+
+        '<div><span class="k">Difference (plain − weighted)</span><span class="v">'+num(d)+'</span><span class="s">difference made by population weighting</span></div>'+
+      '</div>'+
+      '<p class="scalename" style="margin-top:18px">Voteview voting-record scale, −1 to +1</p>'+ENDS+
+      '<div class="ctrack" aria-hidden="true">'+
+        '<div class="conn" style="--l:'+l+'%;--w:'+wd+'%"></div>'+
+        '<div class="cmk sen" style="--x:'+pos(pl.v)+'%"></div><div class="ct a" style="--x:'+pos(pl.v)+'%">Each senator once</div>'+
+        '<div class="cmk mem" style="--x:'+pos(w.v)+'%"></div><div class="ct w" style="--x:'+pos(w.v)+'%">Weighted by population</div>'+
+      '</div>'+AXIS+
+      '<p class="sr-only">Chart: the plain Senate mean is '+esc(pl.d)+' and the population-weighted mean is '+esc(w.d)+'.</p>'+
+      '<p class="say">The population-weighted average is '+esc(dir)+'.</p>'+
+      '<p class="why">Each senator is weighted by their state’s population divided by the number of senators the state has seated. A candidate method, not a settled definition: select any number for its open questions.</p>'+
+      (P5.unscored.length?'<p class="why">Seated senators without a Voteview score, left out: '+esc(P5.unscored.join(', '))+'.</p>':'');
+    $('p5-nation').innerHTML='<div class="gh"><b>The Senate and the national public</b></div>'+
+      '<div class="rows">'+row('National public centre',P5.national)+row('Gap between the Senate and the national public',P5.gap)+'</div>';
+    $('p5-medians').innerHTML='<div class="rows">'+row('Senate median (each senator counted once)',P5.median)+
+      row('Population-weighted Senate median',P5.wmedian)+row('Difference (median − weighted median)',P5.mdiff)+'</div>'+
+      '<p class="why">'+esc(M['p5.weighted_median'].limitations[0])+'</p>';
+  })();
+
+  // ================= Pillar 6 =================
+  var P6=D.p6, csel=$('committee');
+  csel.innerHTML=P6.committees.map(function(c){return '<option value="'+esc(c.code)+'">'+esc(c.name)+'</option>'}).join('');
+  function committeeCard(c){
+    var md=c.committee_median, dr=c.committee_senate_drift, sm=P6.senate_median, has=md.s!=='NOT_AVAILABLE';
+    var l=has?Math.min(pos(md.v),pos(sm.v)):0, w=has?Math.abs(pos(md.v)-pos(sm.v)):0;
+    var dir=!has?'':dr.v>0?'the committee median is higher on the scale than the Senate median, toward its conservative end':dr.v<0?'the committee median is lower on the scale than the Senate median, toward its liberal end':'the two medians are equal';
+    return '<div class="cm"><div class="gh"><b>'+esc(c.name)+'</b><span>'+num(c.listed)+' members · '+num(c.scored)+' with a Voteview score · code '+esc(c.code)+'</span></div>'+
+      '<p class="scalename">Senate voting scale (Voteview, −1 to +1)</p>'+ENDS+
+      '<div class="ctrack" aria-hidden="true">'+
+        (has?'<div class="conn" style="--l:'+l+'%;--w:'+w+'%"></div>':'')+
+        '<div class="cmk sen" style="--x:'+pos(sm.v)+'%"></div><div class="ct a" style="--x:'+pos(sm.v)+'%">Senate median</div>'+
+        (has?'<div class="cmk mem" style="--x:'+pos(md.v)+'%"></div><div class="ct b" style="--x:'+pos(md.v)+'%">This committee</div>':'')+
+      '</div>'+AXIS+
+      (has?'<p class="sr-only">Chart: the committee median is '+esc(md.d)+' and the Senate median '+esc(sm.d)+'.</p>':'')+
+      '<p class="say">'+(has?'This committee’s median is '+num(md)+'. Minus the Senate median, that is '+num(dr)+': '+esc(dir)+'.':'This committee has no scored current members.')+'</p>'+
+      '<div class="rows">'+row('Committee median',md)+row('Senate median',sm)+row('Committee median − Senate median',dr)+
+        row('National public centre',P6.national)+row('Committee median − national public centre',c.committee_public_drift)+
+        row('Members listed',c.listed)+row('Members with a Voteview score',c.scored,c.left_out.length?'Left out (no score): '+esc(c.left_out.join(', ')):null)+'</div>'+
+      '<details class="more"><summary><span>More about this committee</span></summary><ul class="limits-list">'+
+        M['p6.committee_median'].limitations.filter(function(x){return x.indexOf('recorded roll-call')<0}).map(function(x){return '<li>'+esc(x)+'</li>'}).join('')+
+        '<li>Committee names are shown beside the official committee code; the names are not yet read from a versioned source.</li></ul></details></div>';
+  }
+  function renderCommittee(code){
+    var c=P6.committees.filter(function(x){return x.code===code})[0]; if(!c) return;
+    $('committee-cards').innerHTML=committeeCard(c);
+    var dr=c.committee_senate_drift;
+    $('take-p6').innerHTML=c.committee_median.s==='NOT_AVAILABLE'?'The '+esc(c.name)+' Committee has no scored current members.':
+      'The '+esc(c.name)+' Committee’s median is '+num(c.committee_median)+', compared with a Senate median of '+num(P6.senate_median)+': a difference of '+num(dr)+'.';
+  }
+  csel.addEventListener('change',function(){renderCommittee(csel.value)});
+  renderCommittee(csel.value);
+
+  // ---- tabs ----
+  var tabs=[].slice.call(document.querySelectorAll('.nav [role=tab]'));
+  function show(id){
+    tabs.forEach(function(t){var on=t.getAttribute('aria-controls')===id; t.setAttribute('aria-selected',on); t.tabIndex=on?0:-1; $(t.getAttribute('aria-controls')).hidden=!on});
+  }
+  tabs.forEach(function(t){t.addEventListener('click',function(ev){ev.preventDefault(); show(t.getAttribute('aria-controls')); history.replaceState(null,'','#'+t.getAttribute('aria-controls'))})});
+  var start=location.hash.slice(1); if(tabs.some(function(t){return t.getAttribute('aria-controls')===start})) show(start);
+})();
+</script>
+</body>
+</html>
