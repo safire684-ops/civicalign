@@ -1,3 +1,9 @@
+> **ARCHIVED — historical only.** This document describes the retired Pillars 4–6
+> implementation (removed in Step 5B, September 2026). Its methods, figures and file
+> names are not current, and some of its claims were later found not to hold.
+> The current system is described in `README.md`, `METHODOLOGY.md` and
+> `docs/ENGINE_B_DATA_FLOW.md`.
+
 # Methodology — math spec sections 2–5
 
 Every figure the pipeline publishes, with its formula, its input, and how to

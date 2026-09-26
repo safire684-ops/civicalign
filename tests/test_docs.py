@@ -3,7 +3,8 @@
 A retired method may be named only in a passage that says it is retired, removed,
 diagnostic-only or not used (HANDOFF and METHODOLOGY explain why it went). A few
 phrases are banned outright. Each document must also state the current Pillar 4
-method and that the voter estimate is never compared directly with a senator."""
+method (nominate_dim1, bridge none-v0, population weighting, unresolved national
+estimate) and that the voter estimate is never compared directly with a senator."""
 import re
 from pathlib import Path
 
@@ -45,7 +46,8 @@ def test_retired_methods_appear_only_as_retired(doc):
 @pytest.mark.parametrize("doc", DOCS)
 def test_each_document_states_the_current_method(doc):
     flat = " ".join((ROOT / doc).read_text().split()).lower()
-    assert "caucus" in flat and "peer" in flat, "Pillar 4 is the caucus-group peer comparison"
+    assert "nominate_dim1" in flat and "none-v0" in flat, "Pillars 4-6 use nominate_dim1; the active bridge is none-v0 (NONE)"
+    assert "population-weighted" in flat and "unresolved" in flat, "Pillar 5's weighting and the unresolved national estimate"
     assert re.search(r"never subtracted|no comparison across the two scales|never compared directly|not directly compared", flat), \
         "the voter estimate is never compared directly with a senator"
 

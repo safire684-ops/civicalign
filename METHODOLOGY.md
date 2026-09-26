@@ -1,221 +1,228 @@
-# Methodology and known limits
+# Methodology and known limits — Pillars 4–6 (Engine B)
 
-Drafted to be published, not hidden. Every item here is something an expert
-reader would otherwise find first. Figures quoted below are illustrations from
-the time of writing; the site rebuilds weekly, and the published methodology
-report carries the current figures.
+Written to be published, not hidden. It describes the system that exists now.
+Every displayed number also has its own entry in the methodology registry
+(`src/civicalign/ideology/methodology.py`), shown on the published
+`methodology.html` with the versions it was built from. Figures quoted below are
+illustrations from result record `5f42ca01…` (measured 2026-09-24); the site
+rebuilds daily and the page carries the current figures.
+
+Engine A (Pillar 1: vote bindings and source packets) is documented in
+`README.md` and `HANDOFF.md`; nothing here applies to it.
+
+## Rules that apply to every number
+
+1. Senator scores and state public estimates come from different measurement
+   systems. They are never rescaled onto one scale and never compared directly.
+2. No senator-to-state distance until a validated bridge exists (the active
+   bridge is `none-v0`, status NONE).
+3. No Senate-to-public gap and no committee-to-public drift until a national
+   public estimate is defined and a bridge exists.
+4. The population-weighted mean is the primary Pillar 5 method; the weighted
+   median is a secondary comparison shown in details only. Both are candidate
+   methods, not final.
+5. Committee drift is committee median − Senate median.
+6. `nominate_dim1` is the score; `nokken_poole_dim1` is stored only.
+7. No 0–100 score and no 0–100 display of any score.
+8. No evaluative labels, no ordering of politicians by score, and no causal
+   claims about what a committee or the Senate did.
+9. Inputs and results are versioned and append-only; nothing old is
+   overwritten or deleted.
+10. Committee membership dates are observed dates, labelled as such.
 
 ## The one-dimension assumption
 
-Every metric in Sections 2–5 assumes politics fits on a single line from
-progressive (−1.0) to conservative (+1.0). That holds up well for congressional
-roll-call voting, where one dimension explains most of the variance. It holds up
-considerably worse for voters, whose economic and social views do not line up as
-neatly.
+Every Engine B number places voting records on a single line, Voteview's first
+DW-NOMINATE dimension, from −1 (the liberal end of roll-call voting) to +1 (the
+conservative end). One dimension explains most of the variation in modern
+congressional roll-call voting, so a senator's score is a real measurement of
+one summary of their voting. It is not a measurement of everything they stand
+for, it is relative to other members of Congress, and its zero is not "the
+centre of the public".
 
-So a senator's position on the Senate voting scale is a real measurement of one
-particular summary of roll-call voting. It is not a measurement of politics, and
-it is not on the same scale as any measure of voters.
+## Senator scores
 
-## Senator coordinates
+Source: Voteview (UCLA), member file `HSall_members.csv`, column
+`nominate_dim1`, every Senate row of the 119th Congress, joined to the
+congress-legislators roster (which decides who is seated).
 
-Source: Voteview (voteview.com, UCLA), `HSall_members.csv`, column
-`nokken_poole_dim1` — re-estimated within each Congress, so it moves over a
-career.
+- `nominate_dim1` is one score per legislator for a whole congressional career,
+  on one scale across Congresses and chambers. It cannot show change within a
+  career. `nokken_poole_dim1` (re-estimated per Congress) is stored beside it as
+  extra data only.
+- Voteview re-estimates scores as new votes are recorded, so a score can shift
+  between snapshots. Every stored score names the snapshot version, SHA-256 and
+  retrieval date of the file it came from.
+- A seated senator Voteview has not scored yet is recorded with no score, never
+  a predecessor's, and is left out of every centre and median.
+- Voteview does not publish per-member standard errors in the member file, so
+  score uncertainty is not propagated into any figure. Senators with few
+  recorded votes have less certain scores.
 
-Two limits:
+## Pillar 4 — senator and state
 
-- Nokken-Poole is estimated per-Congress, so it is **not strictly a common space
-  across Congresses**. Comparisons between Congresses carry that caveat.
-- Voteview **revises past scores** on re-estimation. Every download is stamped in
-  `data/raw/PROVENANCE.tsv`; a published figure should cite its stamp.
+Shown for every seated senator: their score, and separately their state
+public's estimated ideology from the American Ideology Project (Tausanovitch &
+Warshaw, v2022a, `mrp_ideology`, doi:10.7910/DVN/BQKU4M), 2020 wave (surveys
+2017–2021), with its standard error, in the survey's own units.
 
-The alternative, `nominate_dim1`, is a career-long constant and cannot support
-any claim about change over time. See `config.py`.
+**Why the senator-to-state distance is not available.** Voteview places senators
+by how they vote on bills; the survey places the public by what respondents tell
+a pollster. Two rulers with different units and different zero points.
+Subtracting one from the other returns a number that means nothing. A distance
+needs a bridge: a stated, validated method (for example published estimates
+built to be comparable with legislator scores, or survey items on the bills
+Congress voted on, modelled together with the roll calls) that places the
+public estimate on the legislator scale. The bridge registry
+(`ideology/bridge.py`) records the active bridge; today it is `none-v0`, status
+NONE, and no conversion method exists, so "state public on the senator scale"
+and "distance" are NOT_AVAILABLE for every senator, with that reason. A bridge
+could later be recorded as PROVISIONAL (shown labelled provisional) or
+VALIDATED (with its validation results); a bridge naming a method that is not
+implemented still yields NOT_AVAILABLE, never a guess.
 
-## Pillar 4: comparison with comparable senators
+**Reference figures (visual only).** Three recognisable figures are drawn on
+the senator scale so a reader can place a score: Bernie Sanders (his Voteview
+score, which covers his House service 1991–2007 and his Senate service since
+2007 together), Joe Biden (his Senate voting record, Delaware 1973–2009 — not
+his presidency; Voteview's separate President estimate, built from positions a
+president announced rather than votes cast, is excluded) and JD Vance (his
+Senate voting record, Ohio 2023–2025 — not his vice presidency). Each value is
+read from the same verified Voteview file and must be identical on every House
+and Senate row of the person's Voteview id, or the anchor is refused rather than
+averaged. They are never an input to any calculation, weight, centre, median or
+drift, and are not part of the result key. Limits: Vance's record is short, so
+his score is less certain; comparing records from different decades relies on
+DW-NOMINATE's assumptions about how the scale holds over time; the choice of
+figures is editorial and says nothing about any senator being like or unlike
+them. Sanders is also a seated senator and so also appears in his own right,
+with the same number.
 
-Voteview publishes four datasets -- Member Ideology, Congressional Votes,
-Members' Votes, Congressional Parties -- and all four are roll calls and the
-people who cast them. None contains a position for the public, so no comparison
-of a senator with the public can be made inside that data, and CivicAlign does
-not make one.
+## Pillar 5 — the Senate, counted two ways
 
-What the site shows instead stays on one scale. Each senator is compared with
-senators **in the same caucus group** who represent **other states with similar
-recent presidential voting** (`peers.py`):
+Active senators are the seated senators with a score (100 today).
 
-- Caucus groups: the Republican caucus; the Democratic caucus, meaning Democrats
-  plus the Independents whose Senate roster entry records that they caucus with
-  them. An unrecognised or missing party or caucus value gets no comparison.
-- Similar states: the two-party presidential share (2016, 2020 and 2024 averaged
-  equally) within ±4 percentage points of the senator's state.
-- At least six peers; the conclusion is published only if it is the same at
-  ±2, ±3, ±4 and ±5 points. Otherwise the page says the result depends on the
-  window, or that there are too few comparable senators.
-- The result says whether the senator's record is within the observed range of
-  the peers' records, or outside it on the more liberal or more conservative
-  side. Peers are listed by state, never ordered, and nothing is ranked.
+**Weights.** Each active senator is weighted by their state's resident
+population (Census Vintage 2024, July 1 2024 estimate) divided by the number of
+senators the state has seated. A state with a vacancy gives its whole weight to
+the sitting senator; an unscored seated senator's share is left out with them.
 
-This describes where a voting record sits among comparable senators. It does
-not measure whether a senator represents, agrees with or matches the state's
-voters.
+**Primary method — `population_weighted_mean_v1`.** The main comparison is the
+plain Senate mean (each senator counted equally, 0.120) against the
+population-weighted mean (the sum of each score times its weight, divided by the
+total weight, 0.083), and their difference, plain − weighted, sign kept
+(+0.037). A positive difference means the weighted average sits lower on the
+scale, toward its liberal end. The published page explains this in plain words
+and says that it describes Senate voting records and state populations only,
+not which laws passed, what voters believe, or why Congress made a decision.
 
-**Retired: the state-vote regression.** An earlier version fitted
-`senator score = a + b x (state presidential vote share)` across all senators
-and read each senator's residual. It is kept in `representation.py` for
-diagnostics only and produces no published classification. It was retired
-because the fitted line mostly measured the party split (senators cluster in two
-groups, and the line runs between them), so in competitive states the "expected"
-position fell in a gap where no senator of either party sits, and residuals
-there described party membership rather than anything about the senator.
+**Secondary comparison — `population_weighted_median_v1`, details only.** The
+first score at which the running total of weight reaches half the total weight
+(exactly half averages that score with the next), compared with the plain
+Senate median (0.3195). Why it is only secondary: the Senate is split by an
+empty stretch between the two parties. Senators with negative scores are 47 of
+100 but represent 53.5% of the population, so the weighted median jumps across
+the gap and lands at −0.216; a median can move a long way when a few senators
+change. The mean moves smoothly.
 
-## Pillar 5: Senate seats and the national vote
+Both methods are labelled CANDIDATE_METHOD_NOT_FINAL. Open questions: median or
+mean; residents or adults, citizens or voters; how to treat unscored senators.
 
-**Election results on both sides.** Apportionment skew becomes the average
-state vote share per Senate seat minus the national vote share: **+3.37 points**
-averaged over 2016/2020/2024. Each state gets two senators regardless of population, so small states
-are over-weighted, and this measures exactly that. Vote share against vote share,
-identical units, no assumption whatsoever. It is a structural claim about seats,
-not a claim about senators' opinions.
+**National public estimate — unresolved.** The survey publishes state
+estimates. A national centre could be the population-weighted mean of the
+state estimates, a population-weighted median of them, an individual-level
+national estimate from the underlying survey (not in the state file), or any of
+these weighted by adults, citizens, registered voters or voters. None has been
+chosen, a population-weighted average of states is not treated as the national
+median, and even a defined national estimate would need a bridge. So the
+national public centre and the Senate-to-public gap are NOT_AVAILABLE.
 
-The same method gives committees against the country. Report it **against the Senate's own
-average**, not just the nation: the gap against the nation mostly reflects the
-+2.66pt structural skew plus the fact that the majority party holds most seats on
-every committee, neither of which is about the committee. Against the Senate, the
-picture inverts for some -- Judiciary is +0.23 vs the nation but **-3.14 vs the
-Senate**.
+## Pillar 6 — committees and the Senate
 
-State lean is the average two-party presidential share over 2016, 2020 and 2024,
-each election weighted equally, as partisan-lean indices such as Cook PVI do. It
-is used to pick comparable states for Pillar 4 and for the seats-vs-nation
-figure. Three cycles is steadier than one but slower to reflect a state that is
-genuinely moving, so `StateLean.swing` reports the spread between a state's most
-and least Republican year -- Florida moved 6.0 points across the three,
-California 5.7.
+For each of the 16 Senate standing committees (codes `SS` + two letters;
+subcommittees, select and joint committees are not included):
 
-Source: MIT Election Data and Science Lab, U.S. President 1976-2024, Harvard
-Dataverse doi:10.7910/DVN/42MVDX. Chosen after rejecting a county-level
-alternative whose 2016 file understated California's Democratic vote by 1.4
-million. Votes are summed per candidate across every party line, because fusion
-voting puts one candidate on several lines and summing by party instead loses
-~292k Trump votes in 2016.
+- **Committee median**: the median score of its current members who are seated
+  and scored.
+- **Committee median − Senate median**, sign kept, against the plain Senate
+  median. Positive means the committee median sits higher on the scale.
+- **Committee − national public drift**: NOT_AVAILABLE (no national estimate,
+  no bridge).
 
-Remaining limits of vote share as the state measure: it is partisan choice rather
-than policy preference, and a two-party share discards third-party votes. It
-measures what voters *did*, not what they *think*.
+Committee names come from the official congress-legislators committee list
+(`committees-current.json`); the short name shown is the official name without
+its "Senate Committee on (the)" prefix, and a name of any other form stops the
+ingest rather than being guessed. Membership comes from congress-legislators
+`committee-membership-current.json`. Its changes are stored as observed events
+(joined, left, role changed) dated when CivicAlign first retrieved content
+showing them — observed dates, never official appointment dates; the first
+observation of a committee is marked as a baseline, since membership may have
+begun earlier.
 
-## The voter estimate: separate context, never compared directly
+Limits: descriptive only — it says nothing about what a committee did, why a
+bill passed or failed, or who controls it. With an even number of members whose
+two middle members sit on opposite sides of the party gap (Appropriations,
+Budget and Environment and Public Works today), the median falls where no
+member sits. A small committee's median can move a long way when one member
+changes. Every member the source lists is counted; no title (chair, ranking
+member or any other) is treated differently.
 
-The site shows each state's voter estimate from the American Ideology Project
-(Tausanovitch & Warshaw, newest wave 2020) as supporting context, on its own
-voter-estimate scale. It is never subtracted from a senator's voting score,
-never tested against the senator's score, and never used to rank senators.
+## Storage and versions
 
-The reason: DW-NOMINATE and Nokken-Poole place senators using how they vote on
-bills; surveys place voters using what they tell a pollster. Two rulers, two
-zero points. Subtracting one from the other is subtracting Celsius from
-Fahrenheit: it returns a number, and the number means nothing.
+All Engine B inputs and results are stored in `data/ideology/` as JSON Lines,
+append-only and hash-chained (`record_id = sha256(prev_record_id |
+content_sha256)`); a new version is written only when content changes, and old
+lines are never rewritten. Each input record carries its source, source URL,
+snapshot version, SHA-256, retrieval date and a fixture flag (fixtures live only
+under `tests/fixtures/`). Result records are keyed by the record ids of every
+input they used plus every setting that changes a number, are written once, and
+are indexed in order; only committees whose membership changed are recomputed,
+and a carried result always equals a full recompute. The details are in
+`docs/ENGINE_B_DATA_FLOW.md`.
 
-A direct comparison would need a validated bridge -- something present in both
-datasets, such as published bridged estimates built to be comparable with
-legislator scores, or survey items on the actual bills Congress voted on,
-modelled together with the roll calls. CivicAlign has no such bridge, and none
-is configured (`sources/state_prefs.py`). Stretching a state index onto the
-senators' scale is not a bridge and is not used. Until a bridge exists and has
-been reviewed, no senator-to-voter comparison is published.
+## Verification
 
-## Definitional choices that move the headline
+- The source snapshot is all or nothing, and the ingest refuses any raw file
+  whose bytes do not match the snapshot's SHA-256.
+- The page builder refuses to build if any number lacks a methodology entry,
+  if the saved result does not match its recorded hash, unless exactly the three
+  configured reference figures are stored, or if a committee has no official
+  name. Displayed values are the saved values rounded half-up to the registry's
+  decimals (three on the Voteview scale, two for survey estimates).
+- The supervisor re-reads the raw files with separate code and reproduces every
+  senator score and state estimate, the Pillar 5 means and medians and their
+  differences, every committee median and drift, the reference figures and the
+  committee names; it confirms that nothing needing the bridge or a national
+  estimate carries a value, that every displayed number equals the saved record
+  with its registry rounding, that every stored record is valid, hash-chained
+  and append-only against the last commit, and that the published pages are the
+  builder's output. Any disagreement fails the daily update, and nothing is
+  published.
 
-- **Mean vs. median.** The spec says *median* voter, but MRP naturally yields a
-  mean or a distribution. These differ whenever a state's opinion is lopsided.
-  This matters only for the voter-estimate context and any future bridge; no
-  published figure compares a state's voters with a senator or the chamber.
-- **Who is "the electorate."** Adults, citizens, registered voters, or actual
-  voters. Turnout weighting moves any national voter coordinate. Set in
-  `config.electorate` and stated publicly.
-- **National median, two definitions.** The population-weighted median of
-  individuals is *not* the median of the 50 state medians. The spec means the
-  former.
+## Known scientific limits
 
-## Departures from the spec
+- One dimension summarises roll-call voting, not every issue.
+- Scores are estimated from recorded roll calls only: missed votes, and bills
+  that never reached a vote, are not included. Score uncertainty is not
+  propagated (no per-member standard errors are published).
+- The survey estimate is a model estimate with a standard error, pooled over
+  its survey period; which population it describes (adults, citizens, voters)
+  is defined by the American Ideology Project, not by CivicAlign.
+- There is no bridge between the two scales, so the central Pillar 4 and
+  Pillar 5 comparisons with the public cannot be made yet.
+- The Pillar 5 weighting counts residents, not voters, and both methods are
+  candidates; the median is sensitive to the gap between the parties.
+- Committee medians are sensitive to small and evenly split memberships.
+- Census vintages revise earlier years; the vintage is part of every population
+  record's key.
 
-**Retired: the alignment score.** The original spec scored each senator
-against an estimate of the state's voters with `(1 − gap/2) × 100`. It required
-subtracting a voter estimate from a senator score, which the scales do not
-support (see above), and it invited ranking senators against one another. It
-was removed from the code and the site, along with the signed gap and the
-ranking built on it. Nothing replaces it; Pillar 4 uses the peer comparison.
+## Retired methods
 
-**The median senator is not the pivot.** Legislation needs 60 votes for cloture,
-so the 60th senator from the left decides whether a bill advances — in the 119th
-they sit 0.130 *right* of the median. Nominations need only a simple majority
-since the 2013 and 2017 rules changes. Agenda control sits with the majority
-party's median. All three are reported.
-
-## Committee drift: read with care
-
-**CCD is mostly noise.** Observed CCDs run 0.01–0.31 while internal committee
-spreads run 1.07–1.68. The drift is a small fraction of the dispersion it is
-summarising. Worse, with ~20 members the median lands exactly on one senator's
-score, so the metric is quantized and identical CCDs recur across unrelated
-committees as an artifact — Small Business and Homeland both read +0.211; Rules
-and Agriculture both +0.018. **9 of 19 committees fall below the 0.10 noise
-floor** and are flagged rather than published.
-
-**Chairs sit away from their committees.** Pillar 6 is descriptive: it shows
-how each committee compares with the Senate, without claiming why a bill moved or
-did not. One pattern worth knowing is that nearly every chair sits far
-right of their own committee's median — Budget's chair is +0.897 against a median
-of +0.128, Commerce's +0.865 against +0.326. Gaps of 0.5–0.8, two to three times
-any CCD. Caveat: chairs come from the majority party, so part of this is plain
-majority control; `majority_median` is reported alongside to separate the two.
-
-**The whitepaper's Judiciary example does not hold.** Part 7 claims the Judiciary
-Committee is "significantly more partisan than the Senate as a whole." Its CCD is
-**+0.051**, below the noise floor, and its members' states lean **3.14 points
-less** Republican than the average Senate seat -- the opposite direction from the
-claim. See `WHITEPAPER_CORRECTIONS.md` for replacement text, along with three
-other claims the data contradicts.
-
-## Uncertainty
-
-Not everything here deserves an error bar, and bootstrapping indiscriminately
-would imply a kind of uncertainty these numbers do not have. All 100 senators are
-observed: the Senate is a census, not a sample. So each figure gets the treatment
-that fits it.
-
-**Chamber median — exact, and stable.** Given the scores there is no sampling
-error. What is worth reporting is how tightly it is pinned: the gap between the
-50th and 51st senators is 0.036, and no single departure moves it more than 0.018.
-Publishable.
-
-**Committee medians — not publishable.** A jackknife (drop one member, recompute)
-answers the question that matters: would this survive one retirement? For 17 of 19
-committees, no. Most medians move 0.2-0.34, larger than the CCD values themselves.
-The remaining two are stable but below the noise floor. A bootstrap was not used
-because it would imply members were sampled from a population; they were
-appointed.
-
-**The retired regression.** Its analytic standard errors, leverage and
-prediction band are still computed (`uncertainty.py`) so the methodology report
-can show why it was retired. They do not support any statement about an
-individual senator, and none is published.
-
-**Apportionment skew — a census of ballots, so almost no statistical error.** Its
-real sensitivity is which elections were included, reported as the spread across
-cycles: 2016 +4.08, 2020 +3.37, 2024 +2.66. The sign never reverses, so the
-finding holds. The monotonic decline is itself worth noting.
-
-**Not covered: score measurement error.** DW-NOMINATE and Nokken-Poole are
-estimates with their own standard errors, but Voteview does not publish per-member
-SEs in the member file, so this cannot be propagated. Stated rather than papered
-over. It is the one remaining gap in the uncertainty treatment.
-
-## Not yet implemented
-- **Roster edge cases.** Ex officio members are currently counted like any other;
-  subcommittees are excluded by the four-character code filter. Both rules should
-  be deliberate and documented rather than incidental.
-- **Float comparison.** Coordinates are binary floats: `0.7 − 0.2` is
-  `0.49999999999999994`. Anywhere they are compared for equality — ties at a range
-  boundary, deduplicating medians — needs a tolerance.
+Removed from the code and the site, and not coming back: the alignment score
+(a voter estimate subtracted from a senator score and scaled to 0–100, with the
+signed gap and the ordering built on it); the caucus-group peer comparison; the
+seats-versus-nation election figure and the state-vote fit that was kept for
+diagnostics only; the committee bill-flow and Yes/No-split analysis; landmark
+bills; and every 0–100 display. None of them is replaced by a hidden
+equivalent. The documents that described them are kept, marked as archived,
+under `docs/archive/`.

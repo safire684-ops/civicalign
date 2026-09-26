@@ -1,3 +1,9 @@
+> **ARCHIVED — historical only.** This document describes the retired Pillars 4–6
+> implementation (removed in Step 5B, September 2026). Its methods, figures and file
+> names are not current, and some of its claims were later found not to hold.
+> The current system is described in `README.md`, `METHODOLOGY.md` and
+> `docs/ENGINE_B_DATA_FLOW.md`.
+
 # What "done" means
 
 **Scope: sections 2-5 of the math spec only** — Pillars 4, 5 and 6. Pillars 1-3
