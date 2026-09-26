@@ -29,8 +29,9 @@ UPDATE_SH = ROOT / "scripts" / "update.sh"
 REBUILD = __import__("re").compile(r"civicalign\.build_pages")                # the page build step
 # the Engine B steps, in the order both the workflow and update.sh must run them
 ENGINE_B_ORDER = ["-m civicalign.agents", "civicalign.agents.verify", "civicalign.ideology.ingest",
-                  "civicalign.ideology.bridge", "civicalign.ideology.anchors", "civicalign.ideology.compute",
-                  "civicalign.build_pages", "-m pytest -q", "civicalign.agents.supervisor"]
+                  "civicalign.ideology.bridge", "civicalign.ideology.anchors", "-m civicalign.ideology.bills",
+                  "-m civicalign.ideology.bill_outcomes", "bill_outcomes --verify",
+                  "civicalign.ideology.compute", "civicalign.build_pages", "-m pytest -q", "civicalign.agents.supervisor"]
 
 
 def _agent(name, src: Path, raw: Path, ok=True, critical=True, key=None):
@@ -134,10 +135,10 @@ def test_workflow_gates_publication_on_every_check():
     y = WORKFLOW.read_text()
     assert "|| echo" not in y and "FETCH_FAILED" not in y, "a fetch failure must fail the job"
     body = _steps(y)
-    order = ENGINE_B_ORDER + ["git add demo/senator-check.html demo/methodology.html data/ideology data/raw/PROVENANCE.tsv",
+    order = ENGINE_B_ORDER + ["git add demo/senator-check.html demo/methodology.html data/ideology",
                               "upload-pages-artifact"]
     assert _order_is_kept(body, order), \
-        "fetch -> verify -> ingest -> bridge -> anchors -> compute -> build -> tests -> supervisor -> commit -> upload"
+        "fetch -> verify -> ingest -> bridge -> anchors -> bills -> outcomes -> check -> compute -> build -> tests -> supervisor -> commit -> upload"
     assert "needs: update" in y and "needs.update.result == 'success'" in y
     assert "continue-on-error" not in y
 
@@ -167,7 +168,8 @@ def test_no_test_runs_before_the_pages_are_rebuilt(path):
         first = min(m.start() for m in re.finditer(re.escape(probe), body))
         assert first > build, f"{probe} runs before the build in {path.name}"
     for before in ("civicalign.explain.bind", "--check-fresh", "civicalign.ideology.ingest", "civicalign.ideology.bridge",
-                   "civicalign.ideology.anchors", "civicalign.ideology.compute"):
+                   "civicalign.ideology.anchors", "civicalign.ideology.bills", "civicalign.ideology.bill_outcomes",
+                   "bill_outcomes --verify", "civicalign.ideology.compute"):
         assert body.index(before) < build, before
     if path == WORKFLOW:
         assert body.index("git commit") > body.index("civicalign.agents.supervisor"), "commit only after every gate"
@@ -197,7 +199,8 @@ def test_the_anchor_refresh_is_visual_only():
 def test_the_commit_keeps_the_versioned_records():
     y = WORKFLOW.read_text()
     add = next(l for l in y.splitlines() if "git add demo/" in l)
-    for f in ("demo/senator-check.html", "demo/methodology.html", "data/ideology", "data/raw/PROVENANCE.tsv", "data/explanations"):
+    for f in ("demo/senator-check.html", "demo/methodology.html", "data/ideology", "data/ideology/bill_sponsor_classifications.jsonl",
+              "data/ideology/senate_bill_outcomes.jsonl", "data/raw/PROVENANCE.tsv", "data/explanations"):
         assert f in add, f
 
 
@@ -303,3 +306,30 @@ def test_the_election_results_source_is_removed():
 def test_fetch_data_goes_through_the_verified_snapshot():
     text = _steps((ROOT / "scripts" / "fetch_data.sh").read_text())
     assert "-m civicalign.agents" in text and "curl" not in text
+
+
+# ---- the two bill tables in the daily update ---------------------------------------------------------------
+
+@pytest.mark.parametrize("path", [WORKFLOW, UPDATE_SH], ids=["workflow", "update.sh"])
+def test_both_bill_table_refresh_steps_run_after_ingest_and_before_compute(path):
+    body = _steps(path.read_text())
+    ingest, anchors = body.index("civicalign.ideology.ingest"), body.index("civicalign.ideology.anchors")
+    bills, outcomes = body.index("-m civicalign.ideology.bills"), body.index("-m civicalign.ideology.bill_outcomes")
+    check, compute = body.index("bill_outcomes --verify"), body.index("civicalign.ideology.compute")
+    build = REBUILD.search(body).start()
+    assert ingest < anchors < bills < outcomes < check < compute < build, path.name
+    assert body.count("-m civicalign.ideology.bills") == 1 and body.count("-m civicalign.ideology.bill_outcomes") == 2  # refresh, verify
+
+
+def test_the_bill_steps_read_the_verified_snapshot_only():
+    """No API call, network fetch or model in the bill steps: they are the two ideology modules
+    (whose sources are checked for imports in tests/test_bills.py and test_bill_outcomes.py)."""
+    import re
+    for path in (WORKFLOW, UPDATE_SH):
+        body = _steps(path.read_text())
+        seg = body[body.index("-m civicalign.ideology.bills"):body.index("civicalign.ideology.compute")]
+        assert set(re.findall(r"-m (civicalign[\w.]*)", seg)) == {"civicalign.ideology.bills", "civicalign.ideology.bill_outcomes"}
+        assert not re.search(r"curl|wget|api\.|https?://|openai|anthropic|claude|gpt|llm", seg, re.I), path.name
+    for f in ("bills.py", "bill_outcomes.py"):
+        src = (ROOT / "src" / "civicalign" / "ideology" / f).read_text()
+        assert "source_entry(cfg, snap, cfg.billflow_zip.name)" in src, "reads the archive only through the verified snapshot"

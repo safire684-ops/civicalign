@@ -280,3 +280,9 @@ def test_a_wrong_outcome_count_on_the_page_is_caught(raw, page_data):
     p = copy.deepcopy(page_data)
     p["p5"]["outcomes"]["enacted"]["public_law_number_pending"]["ids"] = []
     assert failed(S.eb_outcome_checks(DEFAULT, raw, p), "Engine B: Pillar 5 outcome counts")
+
+
+def test_a_scorecard_built_from_old_bill_tables_is_caught(raw, page_data):
+    p = copy.deepcopy(page_data)
+    p["p5"]["outcomes"]["meta"]["table_fingerprints"]["senate_bill_outcomes"] = "0" * 64
+    assert failed(S.eb_outcome_checks(DEFAULT, raw, p), "Engine B: scorecard uses the current, verified bill-table versions")

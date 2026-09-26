@@ -550,3 +550,8 @@ def test_bill_lists_are_behind_see_bills_not_on_the_main_screen():
     s = _outcome_script()
     assert "<details class=\"more seebills\"><summary><span>'+esc(g.see)+'</span></summary>'+list(n.ids,enacted)+'</details>" in s
     assert s.count("list(") == 2, "the bill list is built only inside the See bills sections"
+
+
+def test_the_page_uses_the_latest_bill_table_versions(data):
+    assert data["p5"]["outcomes"]["meta"]["table_fingerprints"] == BO.table_fingerprints(DEFAULT)
+    assert BO.verify(DEFAULT) == [], "the tables the page was built from are current with the verified snapshot"

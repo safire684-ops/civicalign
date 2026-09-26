@@ -22,7 +22,8 @@ Engine B (Pillars 4-6), from the raw snapshot files and the stored records:
   * the committee names against the official congress-legislators list
   * the Pillar 5 legislative-outcome counts (passed the Senate, enacted, by
     sponsor class, public-law number recorded or pending), recounted bill by
-    bill from each bill's own XML actions and the Voteview file
+    bill from each bill's own XML actions and the Voteview file, and the
+    scorecard built from the current, verified versions of both bill tables
   * gating: no senator-to-state distance while the bridge is NONE; no
     Senate-to-public gap and no committee-to-public drift while the national
     estimate is unresolved -- in the record and on the page
@@ -455,8 +456,15 @@ def eb_outcome_checks(cfg: Config, raw: dict, page_data: dict | None) -> list[Ch
     missing = [b for b in passed if b not in O.get("bills", {})]
     if missing:
         bad.append(f"bills behind the counts not listed: {missing[:5]}")
-    return [Check("Engine B: Pillar 5 outcome counts recounted from the bill-status archive", not bad,
-                  f"passed Senate {len(passed)}, enacted {len(enacted)}" + (f"; mismatches {bad}" if bad else ""))]
+    out = [Check("Engine B: Pillar 5 outcome counts recounted from the bill-status archive", not bad,
+                 f"passed Senate {len(passed)}, enacted {len(enacted)}" + (f"; mismatches {bad}" if bad else ""))]
+    from ..ideology import bill_outcomes as BO
+    shown = O.get("meta", {}).get("table_fingerprints")
+    tables = BO.verify(cfg)
+    current = shown == BO.table_fingerprints(cfg)
+    out.append(Check("Engine B: scorecard uses the current, verified bill-table versions", current and not tables,
+                     ("page built from other table versions; " if not current else "") + "; ".join(tables[:3])))
+    return out
 
 
 def _eb_git_head(path: Path) -> str | None:

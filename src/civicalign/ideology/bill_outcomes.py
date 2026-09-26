@@ -1,6 +1,6 @@
 """Which Senate bills passed the Senate, and which of those were enacted — from the official record.
 
-    PYTHONPATH=src python -m civicalign.ideology.bill_outcomes [--dry-run] [--audit]
+    PYTHONPATH=src python -m civicalign.ideology.bill_outcomes [--dry-run] [--audit] [--verify]
 
 Source: the same verified GovInfo bill-status archive as bills.py (read only if
 its bytes match the source snapshot). For every Senate bill of the Congress it
@@ -43,7 +43,7 @@ from ..config import DEFAULT, Config
 from . import bills as BL
 from . import ingest as I
 from . import records as R
-from .store import Table
+from .store import StoreError, Table
 
 TABLE = "senate_bill_outcomes"
 PASSAGE_CODE = "17000"
@@ -138,11 +138,54 @@ def current(cfg: Config = DEFAULT, congress: int | None = None) -> list[dict]:
     return [r for r in Table(cfg.ideology_dir, TABLE).current() if r["congress"] == congress]
 
 
+def table_fingerprints(cfg: Config = DEFAULT, congress: int | None = None) -> dict[str, str]:
+    """The exact versions of both bill tables for the Congress: SHA-256 of the sorted
+    record ids of each table's current records. The page embeds these, and the
+    supervisor checks they are the stored tables' newest versions."""
+    congress = congress or cfg.congress
+    out = {}
+    for table in (BL.TABLE, TABLE):
+        ids = sorted(l["record_id"] for l in Table(cfg.ideology_dir, table).latest().values() if l["content"]["congress"] == congress)
+        out[table] = hashlib.sha256("|".join(ids).encode()).hexdigest()
+    return out
+
+
+def verify(cfg: Config = DEFAULT) -> list[str]:
+    """Both bill tables are valid, agree with each other, and are current with the
+    verified snapshot (refreshing them now would write nothing)."""
+    from .bill_tallies import passed_senate_tally, trace_problems
+    problems = []
+    for table in (BL.TABLE, TABLE):
+        problems += [f"{table}: {p}" for p in Table(cfg.ideology_dir, table).verify()[:3]]
+    cls, outs = BL.current(cfg), current(cfg)
+    if not cls or not outs:
+        return problems + ["no bill classifications or outcomes for this Congress: run bills and bill_outcomes"]
+    try:
+        t = passed_senate_tally(cls, outs)
+        for part in ("passed_senate", "enacted"):
+            problems += [f"{part}: {p}" for p in trace_problems(t[part])]
+    except ValueError as e:
+        problems.append(str(e))
+    problems += [f"passage evidence: {p}" for p in evidence_disagreements(outs)[:3]]
+    try:
+        stale = {BL.TABLE: BL.run(cfg, dry_run=True)["new_versions_that_would_be_written"],
+                 TABLE: run(cfg, dry_run=True)["new_versions_that_would_be_written"]}
+    except (I.SnapshotMismatch, StoreError) as e:
+        return problems + [f"cannot check against the snapshot: {e}"]
+    problems += [f"{k}: {n} record(s) are not current with the verified snapshot: run bills and bill_outcomes"
+                 for k, n in stale.items() if n]
+    return problems
+
+
 def evidence_disagreements(outcomes: list[dict]) -> list[str]:
     """Bills where the three independent passage signals do not agree (code 17000,
-    the Senate floor action, the engrossed text). Empty on the current archive."""
+    the Senate floor action, the engrossed text). A bill whose passage was vitiated
+    is left out: its passage actions stand in the record but no engrossed text
+    follows. Empty on the current archive."""
     out = []
     for o in outcomes:
+        if o["passage_vitiated"]:
+            continue
         signals = (bool(o["loc_passage_actions"]), bool(o["senate_floor_passage_actions"]), o["engrossed_in_senate"])
         if len(set(signals)) != 1:
             out.append(f"{o['bill_id']}: code 17000 {signals[0]}, floor action {signals[1]}, engrossed text {signals[2]}")
@@ -153,7 +196,13 @@ def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--audit", action="store_true", help="print the passed-Senate and enacted sponsor counts")
+    ap.add_argument("--verify", action="store_true",
+                    help="check both bill tables (valid, consistent, current with the snapshot); writes nothing")
     a = ap.parse_args()
+    if a.verify:
+        probs = verify(DEFAULT)
+        print("\n".join(probs) if probs else "Bill tables verify: valid, consistent and current with the verified snapshot.")
+        return 1 if probs else 0
     try:
         print(json.dumps(run(DEFAULT, a.dry_run), indent=1))
     except I.SnapshotMismatch as e:

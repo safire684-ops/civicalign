@@ -219,7 +219,8 @@ def outcomes_payload(cfg: Config) -> tuple[dict, dict]:
         "classification_rule": sorted({by_c[b]["classification_rule"] for b in t["passed_senate"]["bill_ids"]}),
         "sponsor_score_versions": sorted({by_c[b]["sponsor_score_source_version"] or "none" for b in t["passed_senate"]["bill_ids"]}),
     }
-    data["meta"] = {"outcome_rule": t["outcome_rule"], "enactment_rule": t["enactment_rule"],
+    data["meta"] = {"table_fingerprints": BO.table_fingerprints(cfg),
+                    "outcome_rule": t["outcome_rule"], "enactment_rule": t["enactment_rule"],
                     "classification_rule": versions["classification_rule"],
                     "latest_archive_retrieved": archive[-1][1][:10] if archive else None}
     return data, versions

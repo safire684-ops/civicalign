@@ -15,19 +15,27 @@
 #    4 bridge     record the active public-to-legislator bridge (none-v0, NONE)
 #    5 anchors    refresh the three Pillar 4 reference figures from the verified
 #                 Voteview file -- visual references only: no calculation reads them
-#    6 compute    versioned Pillars 4-6 results, recomputed only where inputs changed
-#    7 build      both published pages from the saved results -- IN THE WORKSPACE ONLY
-#    8 tests      every test, against the pages just built
-#    9 supervisor separate code re-reads the raw files and reproduces every number
-#   10 commit     only if every step above passed, and only if something changed
-#   11 publish    only if every step above passed
+#    6 bills      refresh bill_sponsor_classifications from the verified bill-status
+#                 archive (sponsor Bioguide id -> nominate_dim1 sign; fixed rules)
+#    7 outcomes   refresh senate_bill_outcomes (passed the Senate, enacted) from the
+#                 same archive; unchanged bills write nothing, changed bills append
+#    8 check      both bill tables valid, consistent and current with the snapshot
+#    9 compute    versioned Pillars 4-6 results, recomputed only where inputs changed
+#   10 build      both published pages from the saved results and the newest verified
+#                 bill tables -- IN THE WORKSPACE ONLY
+#   11 tests      every test, against the pages just built
+#   12 supervisor separate code re-reads the raw files and reproduces every number
+#   13 commit     only if every step above passed, and only if something changed
+#   14 publish    only if every step above passed
 #
 # THE ORDER IS THE INVARIANT: no test may compare current source data with a page
 # generated from a different snapshot, so the build comes before every test, and
 # nothing that reads a page runs until the page has been built from the snapshot
 # fetched in step 1 (tests/test_update_chain.py pins this).
 #
-# Building early is not publishing early. Steps 3-7 only change files in this
+# The bill steps (6-8) read only the verified snapshot: no API call, no model.
+#
+# Building early is not publishing early. Steps 3-10 only change files in this
 # runner's checkout. If any later test or supervisor check fails, the job fails:
 # nothing is committed, the publish job does not run, and GitHub Pages keeps
 # serving the last verified site.
@@ -62,12 +70,12 @@ jobs:
       - name: Install test runner
         run: pip install pytest
 
-      - name: 1/10 Fetch every source as one snapshot (all or nothing)
+      - name: 1/13 Fetch every source as one snapshot (all or nothing)
         # A failed critical source means NO file is replaced and the job stops
         # here. The previous verified snapshot, and the live site, are untouched.
         run: PYTHONPATH=src python -m civicalign.agents
 
-      - name: 2/10 Verify the snapshot (roster, join keys, record counts)
+      - name: 2/13 Verify the snapshot (roster, join keys, record counts)
         run: PYTHONPATH=src python -m civicalign.agents.verify
 
       - name: Pillar 1 -- bind Senate passage votes to their official records (deterministic)
@@ -86,37 +94,46 @@ jobs:
         # packet and is only reported.
         run: PYTHONPATH=src python -m civicalign.explain.context --check-fresh
 
-      - name: 3/10 Ingest the versioned Pillars 4-6 inputs from the verified snapshot
+      - name: 3/13 Ingest the versioned Pillars 4-6 inputs from the verified snapshot
         run: PYTHONPATH=src python -m civicalign.ideology.ingest
 
-      - name: 4/10 Record the active bridge (none-v0, status NONE)
+      - name: 4/13 Record the active bridge (none-v0, status NONE)
         run: PYTHONPATH=src python -m civicalign.ideology.bridge
 
-      - name: 5/10 Refresh the three reference anchors from the verified Voteview file (visual only)
+      - name: 5/13 Refresh the three reference anchors from the verified Voteview file (visual only)
         # The anchors are never an input to any calculation: compute does not
         # read them and they are not part of the result key.
         run: PYTHONPATH=src python -m civicalign.ideology.anchors
 
-      - name: 6/10 Compute the versioned Pillars 4-6 results (only where inputs changed)
+      - name: 6/13 Refresh the bill/sponsor classifications from the verified bill-status archive (no API, no model)
+        run: PYTHONPATH=src python -m civicalign.ideology.bills
+
+      - name: 7/13 Refresh the passed-Senate and enacted outcomes from the same archive
+        run: PYTHONPATH=src python -m civicalign.ideology.bill_outcomes
+
+      - name: 8/13 Verify both bill tables (valid, consistent, current with the snapshot)
+        run: PYTHONPATH=src python -m civicalign.ideology.bill_outcomes --verify
+
+      - name: 9/13 Compute the versioned Pillars 4-6 results (only where inputs changed)
         run: PYTHONPATH=src python -m civicalign.ideology.compute
 
-      - name: 7/10 Build both published pages from the saved results (workspace only; nothing is published here)
+      - name: 10/13 Build both published pages from the saved results and bill tables (workspace only; nothing is published here)
         run: PYTHONPATH=src python -m civicalign.build_pages
 
-      - name: 8/10 Run every test against the pages just built
+      - name: 11/13 Run every test against the pages just built
         run: python -m pytest -q
 
-      - name: 9/10 Supervisor -- independent recount of every published number
+      - name: 12/13 Supervisor -- independent recount of every published number
         run: PYTHONPATH=src python -m civicalign.agents.supervisor
 
-      - name: 10/10 Commit the pages, versioned records, provenance and bindings (only reached if every gate passed)
+      - name: 13/13 Commit the pages, versioned records, provenance and bindings (only reached if every gate passed)
         # A day where no source's CONTENT changed produces identical pages and
         # records and an unchanged provenance log; only the snapshot's "last
         # checked" stamp moves, and a timestamp alone is not worth a commit.
         run: |
           git config user.name  "civicalign-bot"
           git config user.email "civicalign-bot@users.noreply.github.com"
-          git add demo/senator-check.html demo/methodology.html data/ideology data/raw/PROVENANCE.tsv data/explanations
+          git add demo/senator-check.html demo/methodology.html data/ideology data/ideology/bill_sponsor_classifications.jsonl data/ideology/senate_bill_outcomes.jsonl data/raw/PROVENANCE.tsv data/explanations
           if git diff --cached --quiet; then
             echo "Nothing moved today; the snapshot's check stamp alone is not committed."
             git checkout -- data/raw/SNAPSHOT.json

@@ -290,3 +290,32 @@ def test_nothing_calls_a_signed_bill_not_yet_law():
         src = (ROOT / "src" / "civicalign" / "ideology" / f).read_text().lower()
         for phrase in ("not yet law", "not counted as law", "not law yet", "became_law"):
             assert phrase not in src, (f, phrase)
+
+
+# ---- the daily refresh: verify, and the table versions the page is built from --------------------------------
+
+def test_verify_passes_when_current_and_reports_a_stale_table(cfg):
+    assert BO.verify(cfg) == []
+    before = BO.table_fingerprints(cfg)
+    changed = {**BILLS, "BILLSTATUS-119s3.xml": bill(3, "FX00001", act("2025-02-01", "Introduced in Senate", "10000", "Library of Congress")
+                                                   + act("2025-09-01", PASS_FLOOR) + act("2025-09-01", PASS_LOC, "17000", "Library of Congress"),
+                                                   engrossed=True)}
+    write_archive(cfg, changed, when="2026-02-01T11:00:00Z")        # a newer verified snapshot, tables not yet refreshed
+    probs = BO.verify(cfg)
+    assert any("bill_sponsor_classifications" in p and "not current" in p for p in probs)
+    assert any("senate_bill_outcomes" in p and "not current" in p for p in probs)
+    assert (BL.run(cfg)["new_versions_written"], BO.run(cfg)["new_versions_written"]) == (1, 1), "only the changed bill is appended"
+    assert BO.verify(cfg) == []
+    after = BO.table_fingerprints(cfg)
+    assert set(after) == {"bill_sponsor_classifications", "senate_bill_outcomes"} and all(after[k] != before[k] for k in after)
+    assert (BL.run(cfg)["new_versions_written"], BO.run(cfg)["new_versions_written"]) == (0, 0), "an unchanged rerun writes nothing"
+    assert outcomes(cfg)["S3"]["passed_senate"]
+
+
+def test_verify_reports_a_broken_table(cfg):
+    f = cfg.ideology_dir / "senate_bill_outcomes.jsonl"
+    lines = f.read_text().splitlines()
+    i = next(n for n, l in enumerate(lines) if '"signed_date":null' in l)
+    lines[i] = lines[i].replace('"signed_date":null', '"signed_date":"2025-01-01"', 1)   # still a valid record, but edited
+    f.write_text("\n".join(lines) + "\n")
+    assert any(p.startswith("senate_bill_outcomes:") for p in BO.verify(cfg))
