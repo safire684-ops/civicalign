@@ -8,7 +8,8 @@ and after the approved Pillar 5 plain-language card was added, and after Step 5A
 old page), and after Step 5B (old Pillars 4–6 code and tests removed, new
 independent supervisor), after Step 5C (daily automation on the new
 pipeline), after the docs rewrite, and after the pre-publish validation (Stage 3 separated
-from the release, banner removed, Python 3.12 run, fresh update). Read all of it before doing
+from the release, banner removed, Python 3.12 run, fresh update), and after
+publishing (26 September 2026: `e6f6428` live on GitHub `main`). Read all of it before doing
 anything. The repository and this file are the source of truth; older design
 documents, the whitepaper and chat history are not.
 
@@ -29,8 +30,18 @@ Work one step at a time and stop for review after each step.
 
 - Repo: `/Users/sarthakkesavarapu/Desktop/CivicAlign`, remote
   https://github.com/safire684-ops/civicalign
-- **Release branch: `pillars-4-6-rebuild` — local only, NOT pushed.** It sits
-  directly on `origin/main` (`d4a942a`) and **does not contain Pillar 1 Stage 3**:
+- **PUBLISHED: `e6f6428` is live on GitHub `main`** (26 September 2026). The
+  release branch `pillars-4-6-rebuild` was pushed to GitHub and `main` was
+  fast-forwarded to it from `d4a942a` (no merge, no force, local `main` not
+  used). Workflow run 36209333754 (by hand, on `main`) passed: 253 tests, all 31
+  supervisor checks, pages built by `build_pages`, fetch found no changed
+  source, compute "unchanged" (`5f42ca01…`), nothing new to commit, Pages
+  deployed. The deployed pages (`senator-check.html`, `methodology.html`,
+  `civicalign.css`, `index.html`) are byte-identical to the approved release,
+  GitHub `main` has exactly the release's 248 files (no Stage 3 files), and the
+  live Pillar 5 values are 0.120 / 0.083 / +0.037. See "Published" in section 3.
+- **Release branch: `pillars-4-6-rebuild`** (on GitHub; `main` points at the
+  same release). It was based directly on `origin/main` (`d4a942a`) and **does not contain Pillar 1 Stage 3**:
   on 2026-09-26 the branch was replayed without the Stage 3 harness commit
   `c2a596a`, so every commit hash changed (the hashes in this file are the new
   ones; the old ones are on the backup branch).
@@ -41,20 +52,19 @@ Work one step at a time and stop for review after each step.
   Its 43 Stage 3 tests pass. The same two edits are also in `stash@{0}`.
 - **`backup/pillars-4-6-rebuild-before-release-cleanup`** (`dd7c5df`) is the
   branch exactly as it was before the replay.
-- Local `main` still contains `c2a596a` (1 commit ahead of `origin/main`).
-  **Publish from `origin/main`, not local `main`**, or Stage 3 comes back in.
+- Local `main` was reset to GitHub `main` after publishing (it used to hold
+  `c2a596a`, which is preserved on `pillar1-stage3` and the backup branch).
 - Local Stage 3 run outputs (`evaluation/stage3/`) stay on disk, ignored through
   this machine's `.git/info/exclude` (the release's `.gitignore` no longer
   lists them).
 - The live site (https://safire684-ops.github.io/civicalign/, page
-  `/senator-check.html`, report `/methodology.html`) still runs the OLD Pillars
-  4–6 product from `origin/main`. The GitHub workflow (`.github/workflows/update.yml`)
-  on `origin/main` is still the old weekly one (Mondays 11:00 UTC, commits as
-  `civicalign-bot`); if it has added commits by publishing time, rebase this
-  branch onto them (generated pages conflict: regenerate with `build_pages`,
-  never edit by hand).
+  `/senator-check.html`, methodology `/methodology.html`) runs the rebuilt
+  Pillars 4–6. The GitHub workflow (`.github/workflows/update.yml`, "Daily
+  update") now runs daily at 11:00 UTC on `main` and commits as
+  `civicalign-bot` when something changes; pull before new local work, and
+  resolve generated pages by regenerating (`build_pages`), never by hand.
 
-Commits on `pillars-4-6-rebuild` that are not on `origin/main` (oldest first):
+Commits in the Pillars 4–6 release (all on GitHub `main` since publishing; oldest first):
 
 | Commit | What it did |
 |---|---|
@@ -291,8 +301,8 @@ appears among the 100 senators in his own right; his anchor is the same number
 
 **Where it is (updated by Step 5A).** Step 4 built the frontend in `demo/next/`;
 Step 5A moved it to the published files `demo/senator-check.html` and
-`demo/methodology.html` (see "Step 5A" below). It is still **not live**: the
-branch is not pushed.
+`demo/methodology.html` (see "Step 5A" below). At that point it was not yet
+live; it was published on 26 September 2026 (see "Published").
 
 **Builder** (`src/civicalign/build_pages.py`;
 `PYTHONPATH=src python -m civicalign.build_pages [--out DIR] [--check]`). Reads
@@ -531,8 +541,8 @@ and every number on screen (31 in the checked state) opens its methodology.
   (`test_readme.py::test_every_code_file_the_docs_name_exists`), because
   README.md and METHODOLOGY.md still describe the retired implementation.
 - **The current saved Pillars 4–6 result remains unchanged** (`5f42ca01…`).
-- **The branch is still local only and not live.** The GitHub workflow on
-  `origin/main` still runs the old product until publishing (Step 6). The
+- At that point the branch was still local and not yet live (it was published
+  on 26 September 2026; see "Published"). The
   committed `data/raw/SNAPSHOT.json` still lists the election file from the last
   fetch; the next full fetch drops it.
 
@@ -563,7 +573,8 @@ and every number on screen (31 in the checked state) opens its methodology.
 - `test_readme.py` and `test_docs.py` now check the current system. **No
   expected-fail markers remain.**
 - **Current test status: 295 passed, 0 failed.**
-- **The branch remains local only and not published.**
+- At that point the branch was still local; it was published on 26 September
+  2026 (see "Published").
 
 ### Pre-publish validation — COMPLETE (2026-09-26)
 
@@ -600,6 +611,34 @@ and every number on screen (31 in the checked state) opens its methodology.
 - **Final test counts**: 253 passed, 0 failed, under both 3.12 and 3.14 (the
   earlier 295 minus the 43 Stage 3 tests now on `pillar1-stage3`, plus the moved
   floor-vote guard); supervisor 31 of 31.
+
+### Published — LIVE (26 September 2026)
+
+- **`e6f6428` is live on GitHub `main`.** Pushed `pillars-4-6-rebuild`
+  (`e6f6428`), then fast-forwarded GitHub `main` from `d4a942a` to `e6f6428`
+  (plain push; no merge, no force; local `main`, `pillar1-stage3`, the backup
+  branch and the stash were not pushed).
+- **Workflow run 36209333754 passed** (manual dispatch on `main`): every step
+  succeeded — fetch (0 sources changed), verify, Pillar 1 bind and context,
+  ingest (no new versions), bridge, anchors (0 new), compute ("unchanged",
+  `5f42ca01…`), `build_pages`, **253 tests passed** (Python 3.12 on GitHub),
+  **all 31 supervisor checks passed**, commit step ("Nothing moved today"; no
+  bot commit), upload, and the Pages deploy job.
+- **The deployed pages matched the approved release exactly**: the live
+  `senator-check.html`, `methodology.html`, `civicalign.css` and `index.html`
+  are byte-identical to the release files; the old `next/` preview and old
+  template addresses return 404; GitHub `main` has exactly the release's 248
+  files, with no Stage 3 files.
+- Live checks: three views plus methodology; Sanders, Biden and Vance anchors
+  with their Senate-record labels; the approved Pillar 5 card and "What does this
+  mean?" text; the committee card; every number opens its methodology panel;
+  the methodology page has 19 entries and working links; no preview banner, no
+  0–100, no retired Pillars 4–6 content, no console errors. Live Pillar 5:
+  0.120, 0.083, +0.037.
+- Post-publish cleanup (the commit after `e6f6428` on `pillars-4-6-rebuild`): README says the implementation is live; this file
+  records the publication; local `main` reset to GitHub `main`. **That cleanup
+  commit is local until pushed**; if the daily bot has committed to `main` in
+  the meantime, rebase it first.
 
 ## 4. Current real numbers (record `5f42ca01…`, nominate_dim1, 100 active senators)
 
@@ -733,11 +772,9 @@ report and whitepaper against newer bill archives); after Step 5A, 321 passed,
 
 ## 7. Not built yet
 
-- Publishing the new page live (Step 6; the files in `demo/` are switched but not pushed)
 - A valid public-to-legislator bridge
 - A national public ideology measure (definition and bridge)
 - Deterministic bill ideology / legislative outcome classification
-- Deployment (nothing is published; the live site still runs the old product)
 
 ---
 
@@ -752,7 +789,7 @@ report and whitepaper against newer bill archives); after Step 5A, 321 passed,
   (`88b0c05`); see section 3. No legislative-outcome claims until the user asks.
 - **Pillar 6**: the user likes the existing committee UI; largely preserve its
   design while switching it to the new metrics (drop the bill-flow and
-  Yes/No-split parts, which are retired). DONE in `demo/next/` (Step 4).
+  Yes/No-split parts, which are retired). DONE (Step 4; live since 26 September 2026).
 - **Future bill ideology classification** must be deterministic and must not
   rely on an LLM guessing. A sponsor's ideology alone must not be treated as
   the bill's ideology without a clear, documented methodology.
@@ -762,26 +799,19 @@ report and whitepaper against newer bill archives); after Step 5A, 321 passed,
 
 ---
 
-## 9. Next step: publishing — only with the user's explicit approval
+## 9. Next step
 
-Pre-publish validation is complete (section 3): Stage 3 is out of the release
-and preserved, the banner is removed, the suite passes under Python 3.12, and a
-fresh production update passed end to end. Remaining, only after the user
-approves publishing:
+Publishing is done (section 3, "Published"). No next feature has been started.
+Open items, each only when the user asks:
 
-1. `git fetch origin`; if `origin/main` has moved (old weekly bot commits),
-   rebase `pillars-4-6-rebuild` onto it and resolve generated pages by
-   regenerating (`build_pages`), never by hand; re-run the tests and the
-   supervisor.
-2. Publish from `origin/main` plus this branch (not local `main`, which still
-   holds `c2a596a`): push, fast-forward `main` on GitHub, run the workflow once
-   by hand, and check the live site matches the repository (pages and
-   `data/ideology/`).
-3. Optional afterwards: republish the claude.ai copies of the page and the
-   methodology (section 12), which still show the old product.
+1. Push the local post-publish documentation commit (README and this file).
+2. Optional: republish the claude.ai copies of the page and the methodology
+   (section 12), which still show the old product.
+3. Future work listed in section 7 and section 8 (bridge, national estimate,
+   deterministic bill classification) needs the user's direction first.
 
 The Pillar 5 plain-language card is done; do not change its wording without the
-user. Review is local only; do not push.
+user. Do not push, merge or deploy without the user's approval.
 
 Remaining approved plan after Step 4:
 - **Step 5**: remove the old path (`peers.py`, `representation.py`,

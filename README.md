@@ -14,9 +14,8 @@ It is not an ideology lookup, it does not rank politicians, and it does not
 claim to measure whether a senator represents their voters.
 
 - Live site: https://safire684-ops.github.io/civicalign/ (`/senator-check.html`,
-  methodology `/methodology.html`). The rebuilt Engine B pages described here
-  are on the `pillars-4-6-rebuild` branch and are not published yet; the live
-  site still runs the previous version until they are.
+  methodology `/methodology.html`). The current Pillars 4–6 implementation
+  described here is live: published on 26 September 2026 from GitHub `main`.
 - The site rebuilds daily from a verified source snapshot. Figures, rosters and
   committee memberships are expected to change; the methods below are not.
 
