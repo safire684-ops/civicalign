@@ -2,7 +2,8 @@
 
 Rewritten 25 September 2026 for a brand-new chat; updated the same day after
 Step 4 part 1 (methodology registry and Pillar 4 reference anchors) and again
-after Step 4 was completed (page builder and the three views in `demo/next/`). Read all of it before doing
+after Step 4 was completed (page builder and the three views in `demo/next/`)
+and after the approved Pillar 5 plain-language card was added. Read all of it before doing
 anything. The repository and this file are the source of truth; older design
 documents, the whitepaper and chat history are not.
 
@@ -49,6 +50,8 @@ Commits on `pillars-4-6-rebuild` that are not on `origin/main` (oldest first):
 | `1ac2156` | **Step 4 part 1**: methodology registry (`methodology.py`) and the three Pillar 4 reference anchors (`anchors.py`, `reference_anchors` table). |
 | `4b9616b` | HANDOFF update for Step 4 part 1. |
 | `d049b61` | **Step 4 complete**: page builder `build_pages.py`, templates in `demo/templates/`, built preview pages in `demo/next/`, `tests/test_pages.py`, one wording fix in `methodology.py`. See section 3. |
+| `7ea7424` | HANDOFF update for Step 4 complete. |
+| `6eb2969` | **Pillar 5 plain-language card** (approved wording) on the Step 4 preview page; one new page test. |
 | (next) | This HANDOFF update. |
 
 Uncommitted in the working tree (leave them; they belong to the paused Engine A
@@ -301,15 +304,39 @@ registry entry (19), the anchor table, and the binding rules.
   anchors with their labels (Biden and Vance: "Senate voting record … not his
   presidency / vice presidency"; Sanders: House and Senate career) and their
   limitations. Anchors never appear in Pillars 5 or 6 (tested).
-- **Senate / Nation (Pillar 5).** Main result: three tiles — **plain Senate
-  mean 0.120, population-weighted Senate mean 0.083, difference +0.037** —
-  labelled "candidate, not final", a scale with both averages (nearly
-  overlapping because the real gap is small; the full −1 to +1 scale is kept
-  rather than zoomed), and one descriptive sentence (the weighted average is
-  lower on the scale). National public centre and Senate–public gap: not
-  available, with reasons. Medians (0.320, −0.216, +0.536) only inside the
-  "Medians (secondary comparison)" fold-out (tested). No real-world
-  explanation text yet (section 8: needs the user's input).
+- **Senate / Nation (Pillar 5).** Pillar 5 now includes the **approved
+  plain-language card** (wording approved by the user on 2026-09-25, commit
+  `6eb2969`), titled "Counting states vs. weighting by population", marked
+  "candidate method, not final". Under "Senate average" it shows the main
+  numbers as three tiles:
+  - Each senator counted equally: **0.120**
+  - Population-weighted: **0.083**
+  - Difference: **+0.037**
+
+  Then the approved explanation: every state gets two senators regardless of
+  population; normally each senator counts equally; weighted by population the
+  average changes from 0.120 to 0.083; that is a difference of +0.037, and "in
+  plain terms, population weighting moves the Senate average slightly toward
+  the liberal side of Voteview's −1 to +1 voting scale" — true for the current
+  data. **The direction word changes automatically if the sign changes**
+  (`side = difference > 0 ? 'liberal' : 'conservative'`; a zero difference says
+  the average does not move). The word "slightly" is fixed text chosen for the
+  current +0.037; revisit it if a future difference is much larger. A "What
+  does this mean?" fold-out explains that population weighting gives senators
+  from larger states more weight and senators from smaller states less (the two
+  senators from a state split its weight evenly), and says clearly that this
+  describes Senate voting records and state populations only and **does not
+  tell us which laws passed, what voters believe, or why Congress made a
+  decision**; the method **is still a CivicAlign candidate method, not a final
+  scientific standard**. All numbers in the card are `num()` buttons that open
+  their methodology. Below it, the existing scale chart (labels "Counted
+  equally" / "Population-weighted"; the markers nearly overlap because the gap
+  is small, and the full −1 to +1 scale is kept rather than zoomed). The old
+  takeaway sentence and side note were removed as duplicates. National public
+  centre and Senate–public gap: not available, with reasons. Medians (0.320,
+  −0.216, +0.536) only inside the "Medians (secondary comparison)" fold-out
+  (tested). **No calculations changed and no bill classifications were
+  added.** The wording is locked by `test_pillar5_plain_language_card`.
 - **Committees (Pillar 6).** Preserves the old committee UI (picker, `.cm` card,
   name header, member counts, scale with a "Senate median" mark and a "This
   committee" dot, "More about this committee" fold-out) but shows **only the
@@ -432,7 +459,7 @@ alignment scores, defiance/betrayal language, politician rankings.
 
 Run: `./.venv/bin/python -m pytest -q` (Python 3.14 venv; CI uses 3.12).
 
-Engine B + page (all passing, 101 total):
+Engine B + page (all passing, 102 total):
 - `tests/test_ideology_records.py` — 17 (validators, store, ingest from fixtures
   and from the real snapshot, population table, committee events, committed
   tables verify, no Engine A imports).
@@ -449,7 +476,8 @@ Engine B + page (all passing, 101 total):
   calculation imports anchors or the registry; result key and numbers ignore
   the anchors; committed anchors equal the raw Voteview values; Sanders's anchor
   equals his senator record).
-- `tests/test_pages.py` — 32 (display rounding and names; every embedded number
+- `tests/test_pages.py` — 33 (the approved Pillar 5 card wording and sign-driven
+  direction word; display rounding and names; every embedded number
   carries its registry entry and the right display text; every registry entry
   reaches the page and the methodology page; numbers only via `num()`; build
   refuses an unregistered number, a tampered record and missing anchors;
@@ -459,7 +487,8 @@ Engine B + page (all passing, 101 total):
   builder reads only Engine B results; committed `demo/next/` pages are current;
   deterministic build; old page untouched).
 
-Full suite: **425 passed, 9 failed.** The 9 failures are EXPECTED:
+Full suite (last full run at `d049b61`, before the one Pillar 5 page test was
+added): **425 passed, 9 failed.** The 9 failures are EXPECTED:
 
 ```
 tests/test_perspective.py::test_18_safeguards_remain
@@ -491,7 +520,6 @@ not rebuild the old page to silence them.
   hand; the raw-value test skips while they differ).
 - A valid public-to-legislator bridge
 - A national public ideology measure (definition and bridge)
-- An understandable real-world explanation of the Pillar 5 numbers
 - Deterministic bill ideology / legislative outcome classification
 - Final GitHub workflow changes (daily schedule, ingest/compute steps)
 - Final removal of the old Pillars 4–6 path, supervisor rewrite, docs rewrite
@@ -508,7 +536,8 @@ not rebuild the old page to silence them.
   DONE (data): the user chose Sanders, Biden (Senate record), Vance (Senate
   record); see Step 4 part 1. Never invent proxy scores for anyone.
 - **Pillar 5** must explain in plain language what the Senate numbers mean in
-  the real world, not just show abstract coordinates.
+  the real world, not just show abstract coordinates. DONE: approved card
+  (`6eb2969`); see section 3. No legislative-outcome claims until the user asks.
 - **Pillar 6**: the user likes the existing committee UI; largely preserve its
   design while switching it to the new metrics (drop the bill-flow and
   Yes/No-split parts, which are retired). DONE in `demo/next/` (Step 4).
@@ -537,8 +566,8 @@ written and belong in Step 5:
 - **Committee names** from the `committees-current` feed instead of
   `build_pages.COMMITTEE_NAMES`.
 
-Still ask the user before writing the Pillar 5 real-world explanation text
-(section 8). Review is local only; do not push.
+The Pillar 5 plain-language card is done; do not change its wording without the
+user. Review is local only; do not push.
 
 Remaining approved plan after Step 4:
 - **Step 5**: remove the old path (`peers.py`, `representation.py`,
