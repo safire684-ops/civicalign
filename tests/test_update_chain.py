@@ -1,9 +1,15 @@
-"""The weekly update is one verified snapshot or nothing.
+"""The update is one verified snapshot or nothing.
 
 These tests pin the architecture: a critical source that fails to refresh leaves
-every file untouched; change detection looks at content, not timestamps; the
-workflow gates publication on every check; the snapshot records what a reader
-needs to know about each source; and the guardrail tests stay in the weekly run.
+every file untouched; change detection looks at content, not timestamps; a new
+source can be added to the accepted snapshot without refreshing the others; the
+workflow gates publication on every check; and the snapshot records what a
+reader needs to know about each source.
+
+Step 5B removed the old page builder (build_demo) and the old page tests; the
+GitHub workflow and scripts/update.sh are updated in Step 5C. Until then they
+still name removed modules, which test_every_module_the_update_runs_exists
+records as an expected failure.
 """
 import json
 import zipfile
@@ -13,12 +19,13 @@ from pathlib import Path
 import pytest
 
 from civicalign.agents import sources
-from civicalign.agents.base import Agent, run_snapshot, zip_content_key, load_snapshot
+from civicalign.agents.base import Agent, add_source, run_snapshot, zip_content_key, load_snapshot
 from civicalign.agents.verify import checks as verify_checks
 from civicalign.config import DEFAULT
 
 ROOT = Path(__file__).resolve().parents[1]
 WORKFLOW = ROOT / ".github" / "workflows" / "update.yml"
+REBUILD = __import__("re").compile(r"civicalign\.build_(?:pages|demo)")    # the page rebuild step, old or new name
 
 
 def _agent(name, src: Path, raw: Path, ok=True, critical=True, key=None):
@@ -94,7 +101,7 @@ def test_zip_change_detection_ignores_archive_timestamps(tmp_path):
 
 def test_every_headline_source_is_critical_and_labelled_with_its_vintage():
     agents = {a.name: a for a in sources.all_agents()}
-    for name in ("senator scores", "seated senators", "committee rosters", "state ideology",
+    for name in ("senator scores", "seated senators", "committee rosters", "committee names", "state ideology",
                  "state populations", "bill flow", "bill flow (House bills)", "floor roll calls", "senator votes"):
         assert agents[name].critical, name
         assert agents[name].vintage, name
@@ -117,11 +124,10 @@ def test_workflow_gates_publication_on_every_check():
     y = WORKFLOW.read_text()
     assert "|| echo" not in y and "FETCH_FAILED" not in y, "a fetch failure must fail the job"
     order = ["python -m civicalign.agents\n", "civicalign.agents.verify", "civicalign.explain.bind", "civicalign.explain.context --check-fresh",
-             "civicalign.build_demo", "--ignore=tests/test_published_pages.py", "pytest -q tests/test_published_pages.py",
-             "civicalign.agents.supervisor", "git add demo/senator-check.html demo/methodology.html data/raw/PROVENANCE.tsv",
-             "upload-pages-artifact"]
+             REBUILD.search(y).group(0), "python -m pytest", "civicalign.agents.supervisor",
+             "git add demo/senator-check.html demo/methodology.html data/raw/PROVENANCE.tsv", "upload-pages-artifact"]
     assert _order_is_kept(y, order), \
-        "fetch -> verify -> bind -> Stage 2.5 check -> rebuild -> data tests -> page tests -> supervisor -> commit -> upload"
+        "fetch -> verify -> bind -> Stage 2.5 check -> rebuild -> tests -> supervisor -> commit -> upload"
     assert "needs: update" in y and "needs.update.result == 'success'" in y
     assert 'cron: "0 11 * * 1"' in y, "the weekly schedule stays"
     assert "continue-on-error" not in y
@@ -135,95 +141,13 @@ def test_no_test_runs_before_the_pages_are_rebuilt(path):
     after the bindings and the Stage 2.5 check for that snapshot."""
     text = path.read_text()
     body = text[text.index("civicalign.agents") :]            # skip the header comment
-    rebuild = body.index("civicalign.build_demo")
+    rebuild = REBUILD.search(body).start()
     for probe in ("pytest", "civicalign.agents.supervisor"):
         first = min(i for i in (m.start() for m in __import__("re").finditer(__import__("re").escape(probe), body)))
         assert first > rebuild, f"{probe} runs before the rebuild in {path.name}"
     assert body.index("civicalign.explain.bind") < rebuild and body.index("--check-fresh") < rebuild
     if path == WORKFLOW:
         assert body.index("git commit") > body.index("civicalign.agents.supervisor"), "commit only after every gate"
-
-
-def test_a_stale_page_fails_and_the_rebuilt_page_passes(tmp_path, monkeypatch):
-    """Regression fixture for the 24 Sept CI failure. A senator's score moves from
-    0.670 to 0.671 in a fresh snapshot while the committed page still says 0.670.
-    Checked BEFORE the rebuild, the page is stale and the checks fail; rebuilt from
-    the fresh snapshot, it carries 0.671 and the same checks pass, at the same
-    tolerance. This is why the workflow rebuilds before it tests."""
-    import csv
-    import dataclasses
-    import re
-    import shutil
-    from civicalign import build_demo
-    from civicalign.agents import supervisor
-    from civicalign.pipeline import run
-
-    raw = tmp_path / "raw"; raw.mkdir()
-    for entry in DEFAULT.raw_dir.iterdir():
-        if entry.name != "HSall_members.csv":
-            (raw / entry.name).symlink_to(entry)
-    who = "B001319"                                    # Katie Boyd Britt, a seated senator
-
-    def snapshot(score: str):
-        with DEFAULT.members_csv.open() as fh:
-            rows = list(csv.reader(fh))
-        head = rows[0]; col, bio, cong, ch = (head.index(k) for k in ("nokken_poole_dim1", "bioguide_id", "congress", "chamber"))
-        hits = 0
-        for r in rows[1:]:
-            if r[bio] == who and r[cong] == str(DEFAULT.congress) and r[ch] == "Senate":
-                r[col] = score; hits += 1
-        assert hits == 1
-        with (raw / "HSall_members.csv").open("w", newline="") as fh:
-            csv.writer(fh).writerows(rows)
-        return dataclasses.replace(DEFAULT, raw_dir=raw)
-
-    def page_score(page: Path) -> float:
-        R = __import__("json").loads(re.search(r"const R=(\{.*?\});", page.read_text(), re.S).group(1))
-        return R["senators"][who]["actual"]
-
-    # the Pillar 1 checks do not read the page; skip them here for speed
-    monkeypatch.setattr(supervisor, "_binding_checks", lambda *a, **k: [])
-    monkeypatch.setattr(supervisor, "_context_checks", lambda *a, **k: [])
-    monkeypatch.setattr(build_demo, "REPORT", tmp_path / "methodology.html")
-
-    def page_checks(cfg, page):
-        return {c.name: c for c in supervisor.checks(run(cfg), cfg, page) if c.name.startswith("page:")}
-
-    old_cfg = snapshot("0.670")
-    committed = tmp_path / "committed.html"
-    shutil.copy(ROOT / "demo" / "senator-check.html", committed)
-    build_demo.build(old_cfg, committed)
-    assert page_score(committed) == 0.67
-    assert all(c.ok for c in page_checks(old_cfg, committed).values()), "the committed page matched its own snapshot"
-
-    new_cfg = snapshot("0.671")                        # the fresh fetch
-    before = page_checks(new_cfg, committed)
-    assert not before["page: every senator's position"].ok, "BEFORE rebuild: the committed page is stale"
-    assert not before["page: every senator's peer comparison rebuilt from raw files"].ok
-
-    rebuilt = tmp_path / "rebuilt.html"
-    shutil.copy(committed, rebuilt)
-    build_demo.build(new_cfg, rebuilt)
-    assert page_score(rebuilt) == 0.671, "AFTER rebuild: the page carries the fresh value"
-    after = page_checks(new_cfg, rebuilt)
-    assert all(c.ok for c in after.values()), [c.line() for c in after.values() if not c.ok]
-
-
-def test_data_updated_line_distinguishes_retrieval_from_vintage():
-    page = (ROOT / "demo" / "senator-check.html").read_text()
-    assert "Senate data updated: '+esc(M.dataUpdated)" in page and "Voter estimate: '+M.ideologyYear+' wave" in page
-    assert "the survey itself is not newer than that" in page
-    assert "retrieved '+esc(t.asof)" in page and "data: '+esc(t.vintage)" in page
-
-
-def test_guardrail_tests_are_permanent_and_run_every_week():
-    y = WORKFLOW.read_text()
-    assert "pytest -q tests/test_published_pages.py" in y
-    t = (ROOT / "tests" / "test_published_pages.py").read_text()
-    for name in ("test_no_user_facing_arithmetic_across_the_two_scales", "test_g1_", "test_g2_", "test_g3_",
-                 "test_g4_", "test_g5_", "test_g6_", "test_2_never_calls_a_cutpoint_bill_ideology",
-                 "test_5_sponsor_ideology_is_not_bill_ideology", "test_4_pending_bills_are_not_called_dead"):
-        assert name in t, name
 
 
 def test_fresh_checkout_compares_with_the_committed_snapshot_not_the_missing_file(tmp_path):
@@ -246,3 +170,61 @@ def test_a_no_change_week_commits_nothing():
     y = WORKFLOW.read_text()
     assert 'git checkout -- data/raw/SNAPSHOT.json' in y, "a check-stamp-only change is discarded, not committed"
     assert y.index("git diff --cached --quiet") < y.index("git add data/raw/SNAPSHOT.json")
+
+
+@pytest.mark.xfail(strict=True, reason="Step 5C: the workflow and update.sh still run the removed build_demo and "
+                   "tests/test_published_pages.py. Remove this marker when they are updated.")
+@pytest.mark.parametrize("path", [WORKFLOW, ROOT / "scripts" / "update.sh", ROOT / "scripts" / "build_demo.sh"],
+                         ids=["workflow", "update.sh", "build_demo.sh"])
+def test_every_module_the_update_runs_exists(path):
+    import re
+    text = path.read_text()
+    mods = set(re.findall(r"-m (civicalign(?:\.[a-z_]+)*)", text))
+    missing = [m for m in mods if not ((ROOT / "src" / Path(*m.split("."))).with_suffix(".py").exists()
+                                       or (ROOT / "src" / Path(*m.split(".")) / "__main__.py").exists())]
+    missing += [f for f in re.findall(r"tests/\w+\.py", text) if not (ROOT / f).exists()]
+    assert not missing, missing
+
+
+# ---- adding one new source to the accepted snapshot (Step 5A) ------------------------------------------
+
+def _snapshot_with_one_source(tmp_path):
+    src, raw = tmp_path / "src", tmp_path / "raw"
+    src.mkdir(); raw.mkdir()
+    (src / "a.txt").write_text("v1")
+    run_snapshot([_agent("a", src / "a.txt", raw)], raw, now=datetime(2026, 9, 21, tzinfo=timezone.utc))
+    return src, raw
+
+
+def test_add_source_adds_one_new_file_and_touches_nothing_else(tmp_path):
+    src, raw = _snapshot_with_one_source(tmp_path)
+    before = load_snapshot(raw)
+    (src / "a.txt").write_text("v2")                      # upstream changed, but add_source must not refresh it
+    (src / "b.txt").write_text("new")
+    r = add_source(_agent("b", src / "b.txt", raw), raw, now=datetime(2026, 9, 26, tzinfo=timezone.utc))
+    after = load_snapshot(raw)
+    assert r.ok and r.changed
+    assert after["run_utc"] == before["run_utc"] and after["sources"][0] == before["sources"][0]
+    assert (raw / "a.txt").read_text() == "v1", "the other source keeps its accepted content"
+    b = after["sources"][1]
+    assert b["file"] == "b.txt" and b["content_changed_utc"].startswith("2026-09-26") and "without refreshing" in b["note"]
+    assert [l.split("\t")[1] for l in (raw / "PROVENANCE.tsv").read_text().splitlines()[1:]] == ["a.txt", "b.txt"]
+
+
+def test_add_source_refuses_a_refresh_or_an_unaccepted_snapshot(tmp_path):
+    src, raw = _snapshot_with_one_source(tmp_path)
+    with pytest.raises(ValueError, match="already has"):
+        add_source(_agent("a", src / "a.txt", raw), raw)
+    snap = load_snapshot(raw); snap["accepted"] = False
+    (raw / "SNAPSHOT.json").write_text(json.dumps(snap))
+    (src / "c.txt").write_text("c")
+    with pytest.raises(ValueError, match="no accepted snapshot"):
+        add_source(_agent("c", src / "c.txt", raw), raw)
+
+
+def test_add_source_that_fails_changes_nothing(tmp_path):
+    src, raw = _snapshot_with_one_source(tmp_path)
+    before = (raw / "SNAPSHOT.json").read_text()
+    (src / "d.txt").write_text("d")
+    r = add_source(_agent("d", src / "d.txt", raw, ok=False), raw)
+    assert not r.ok and (raw / "SNAPSHOT.json").read_text() == before and not (raw / "d.txt").exists()

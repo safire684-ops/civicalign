@@ -311,6 +311,89 @@ def test_engine_b_calculations_are_unchanged():
     assert C.verify(DEFAULT) == []
 
 
-def test_the_old_code_is_not_deleted_yet():
-    """Step 5A switches the page only; the old Pillars 4-6 code goes in Step 5B."""
-    assert (ROOT / "src" / "civicalign" / "build_demo.py").exists() and (ROOT / "src" / "civicalign" / "peers.py").exists()
+RETIRED_MODULES = ("alignment", "chamber", "committees", "space", "uncertainty", "peers", "representation", "gatekeeping",
+                   "output_ideology", "landmarks", "export", "whitepaper", "build_demo", "sources/state_prefs", "sources/elections")
+
+
+def test_the_retired_pillars_4_6_code_is_gone():
+    """Step 5B removed the old Pillars 4-6 path; nothing may import it again."""
+    for m in RETIRED_MODULES:
+        assert not (ROOT / "src" / "civicalign" / f"{m}.py").exists(), m
+    assert not (ROOT / "demo" / "methodology.template.html").exists()
+    names = {m.split("/")[-1] for m in RETIRED_MODULES}
+    for f in (ROOT / "src" / "civicalign").rglob("*.py"):
+        for node in ast.walk(ast.parse(f.read_text())):
+            if isinstance(node, ast.ImportFrom):
+                mods = [(node.module or "").split(".")[-1]] + [a.name for a in node.names]
+                assert not (set(mods) & names), (f.name, set(mods) & names)
+
+
+# ---- page guardrails carried over from the retired test_published_pages / test_perspective (Step 5B) --------
+
+def _script():
+    return TEMPLATE[TEMPLATE.index("<script>"):]
+
+
+def test_every_drawn_track_is_hidden_from_screen_readers_and_described_in_text():
+    s = _script()
+    tracks = [m.start() for m in re.finditer(r"class=\"ctrack", s)]
+    assert len(tracks) == 3, "one track per view"
+    for i in tracks:
+        assert s[i:i + 60].count('aria-hidden="true"') == 1, s[i:i + 60]
+    assert s.count('class="sr-only"') >= 3, "each track has a text description"
+
+
+def test_data_strings_are_escaped_before_html_insertion():
+    s = _script()
+    # the screen-reader sentences are built as plain text and escaped as a whole where they are inserted
+    for var in re.findall(r"var (spoken)=", s):
+        assert f"esc({var})" in s and f"+{var}+" not in s, "inserted only through esc()"
+        s = re.sub(rf"var {var}=[^;]*;", "", s)
+    raw = re.findall(r"'\+\s*([a-z]\w*(?:\.\w+)*\.(?:name|official_name|name_source|basis|code|period|short|r|reason))\s*\+'", s)
+    assert not raw, f"inserted without esc(): {raw}"
+    assert "function esc(s)" in s and ".replace(/[&<>\"']/g" in s
+
+
+def test_three_views_with_only_the_first_shown_at_load():
+    tabs = re.findall(r'<a href="#([\w-]+)" role="tab"', TEMPLATE)
+    assert tabs == ["senator-state", "senate-nation", "committees"]
+    assert '<a href="methodology.html">Methodology</a>' in TEMPLATE
+    sections = re.findall(r'<section id="([\w-]+)" class="view"[^>]*?( hidden)?>', TEMPLATE)
+    assert sections == [("senator-state", ""), ("senate-nation", " hidden"), ("committees", " hidden")]
+
+
+def test_sources_are_named_with_full_links(pages):
+    page, meth = pages["senator-check.html"], pages["methodology.html"]
+    assert 'href="https://doi.org/10.7910/DVN/BQKU4M"' in page
+    for s in ("Voteview", "American Ideology Project", "Census", "congress-legislators"):
+        assert s in page and s in meth, s
+    assert "committees-current.json" in meth or "committees-current.json" in page
+
+
+def test_survey_period_measurement_date_and_observed_dates_are_shown(data):
+    assert "'Survey period '+esc(pub.period)" in TEMPLATE and "Survey period '+esc(n.period)" in TEMPLATE
+    assert "Measurement date: '+esc(meta.measurement_date)" in TEMPLATE
+    assert "Committee membership observed: '+esc(meta.committee_observed)" in TEMPLATE
+    assert data["meta"]["measurement_date"] and data["meta"]["committee_observed"]
+    assert all(s["senators"][0]["state_public_estimate"]["period"] for s in data["p4"]["states"])
+
+
+def test_the_two_measurement_systems_are_described_as_separate(pages):
+    text = visible_text(pages["senator-check.html"])
+    assert "different measurement system" in text and "never on the senator scale" in text
+    assert "no distance between" in text
+
+
+def test_nothing_is_ordered_by_score(data):
+    """States and committees are listed by name; senators within a state by the result record's order, never by score."""
+    names = [s["name"] for s in data["p4"]["states"]]
+    assert names == sorted(names)
+    cnames = [c["name"] for c in data["p6"]["committees"]]
+    assert cnames == sorted(cnames)
+    assert "sort(function(a,b){return a.score.v-b.score.v})" in _script(), "only the three anchor ticks are placed by score"
+    assert _script().count(".sort(") == 1
+
+
+def test_both_colour_themes_are_defined():
+    css = (ROOT / "demo" / "civicalign.css").read_text()
+    assert "prefers-color-scheme:dark" in css and ':root[data-theme="dark"]' in css

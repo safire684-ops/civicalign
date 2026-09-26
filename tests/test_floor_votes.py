@@ -1,7 +1,9 @@
-"""Landmark bills, receipts and committee output ideology, all from floor votes.
+"""Pillar 1 floor-vote evidence: receipts, bill titles and the Yea side of each vote.
 
-These three rest on the same join: a roll call's cutpoint, its bill number, and
-who voted which way. The tests pin the properties that make each one honest.
+These rest on one join: a roll call, its bill number, and who voted which way.
+The tests pin the properties that make each one honest. (Landmark bills and
+committee "output ideology" -- where a committee's reported bills divided the
+Senate -- are retired with the old Pillars 4-6 path, and their tests with them.)
 """
 import pytest
 
@@ -13,7 +15,7 @@ from civicalign.sources import billflow, rollcalls
 @pytest.fixture(scope="module")
 def report():
     r = run(DEFAULT)
-    if not r.landmarks:
+    if not r.receipts:
         pytest.skip("floor vote files not downloaded")
     return r
 
@@ -31,15 +33,6 @@ def test_short_titles_are_whole_bill_titles_not_section_titles(bills):
     assert hr1.short, "HR 1 must carry a whole-bill short title"
     assert "FEHB" not in hr1.short
     assert hr1.short == "One Big Beautiful Bill Act"
-
-
-def test_landmarks_are_placed_inside_the_scale_and_sorted_by_prominence(report):
-    xs = [l.cutpoint for l in report.landmarks]
-    assert all(-1 <= x <= 1 for x in xs)
-    votes = [l.votes for l in report.landmarks]
-    assert votes == sorted(votes, reverse=True)
-    assert all(l.label for l in report.landmarks), "every landmark needs a name"
-    assert report.landmarks[0].key == "HR1"
 
 
 def test_yea_side_is_found_from_the_votes_not_assumed(report):
@@ -125,13 +118,3 @@ def test_receipt_selection_never_reads_state_positions_or_dividing_lines():
             names.add(node.arg)
     banned = {"state_pos", "state_implied", "cutpoint", "yea_is_right", "state"}
     assert not (names & banned), names & banned
-
-
-def test_output_ideology_only_reports_committees_with_enough_votes(report):
-    reportable = [o for o in report.output_ideology if o.is_reportable]
-    assert reportable, "expected at least one committee"
-    assert all(o.n_votes >= 7 for o in reportable)
-    for o in report.output_ideology:
-        assert o.vs_senate == pytest.approx(o.coi - report.chamber.median)
-
-

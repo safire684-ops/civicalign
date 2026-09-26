@@ -8,6 +8,8 @@ explanations exist."""
 import re
 from pathlib import Path
 
+import pytest
+
 ROOT = Path(__file__).resolve().parents[1]
 README = (ROOT / "README.md").read_text()
 LOW = " ".join(README.lower().split())
@@ -42,7 +44,19 @@ def test_describes_the_current_product():
 
 
 def test_named_code_exists():
-    for rel in ("src/civicalign/peers.py", "src/civicalign/representation.py", "src/civicalign/explain/relevance.py",
+    for rel in ("src/civicalign/ideology/pillars.py", "src/civicalign/build_pages.py", "src/civicalign/explain/relevance.py",
                 "src/civicalign/explain/context.py", "src/civicalign/explain/bind.py", "scripts/fetch_data.sh",
                 "scripts/report.sh", "scripts/update.sh", "HANDOFF.md", "METHODOLOGY.md"):
         assert (ROOT / rel).exists(), rel
+
+
+@pytest.mark.xfail(strict=True, reason="README and METHODOLOGY still describe the retired Pillars 4-6 code; "
+                   "their rewrite is the pending docs task (approved Step 5 plan). Remove this marker when done.")
+def test_every_code_file_the_docs_name_exists():
+    missing = []
+    for doc in ("README.md", "METHODOLOGY.md"):
+        for rel in set(re.findall(r"[\w/]+\.py", (ROOT / doc).read_text())):
+            name = rel.split("/")[-1]
+            if not list((ROOT / "src" / "civicalign").rglob(name)):
+                missing.append(f"{doc}: {rel}")
+    assert not missing, missing

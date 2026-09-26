@@ -16,50 +16,20 @@ class Config:
     # Which Congress to score. 119 = 2025-2027.
     congress: int = 119
 
-    # Which Voteview column supplies a senator's coordinate.
-    #
-    # "nokken_poole_dim1" is re-estimated within each Congress, so it MOVES over
-    # a career -- required for any time series or drift claim.
-    #
-    # "nominate_dim1" is a single career-long constant per member. Murkowski is
-    # 0.204 in all ten of her Congresses. Using it freezes every alignment gap
-    # for life and makes year-over-year charts flat lines.
-    #
-    # Trade-off: Nokken-Poole is noisier and is estimated per-Congress, so it is
-    # not strictly a common space ACROSS Congresses. Cross-Congress comparisons
-    # must carry that caveat.
+    # Pillar 1 floor-vote evidence (pipeline.py): the Voteview column that orients
+    # each roll call's Yea side. "nokken_poole_dim1" is re-estimated within each
+    # Congress. (Pillars 4-6 use pillars_score_column, nominate_dim1, below.)
     score_column: str = "nokken_poole_dim1"
 
-    # Cloture on legislation needs 60 votes, so the 60th senator from the left
-    # is the real pivot for most bills. Nominations need only a simple majority
-    # (rules changed 2013 and 2017), so set this to 51 for nomination analysis.
-    cloture_threshold: int = 60
-
-    # Who counts as "the electorate" for the national coordinate. Turnout
-    # weighting moves this number, and every Pillar 5 headline depends on it.
-    # Options: "adult_citizens" | "registered_voters" | "actual_voters"
-    electorate: str = "adult_citizens"
-
-    # State partisan lean from real election results. This is what makes Pillar 4
-    # work WITHOUT bridged survey data: see representation.py. Election results are
-    # public behaviour measured directly, so no scaling assumption is needed.
-    # Averaged over three presidential cycles, each weighted equally. One
-    # election is noisier and over-reacts to a single candidate; three is steadier
-    # but slower to reflect a state that is genuinely shifting. StateLean.swing
-    # exposes how much movement the average is hiding for each state.
+    # Presidential elections the snapshot's election-results file must contain
+    # (agents/sources.py). No published figure uses them since the old Pillar 4
+    # peer comparison was retired; the file is still fetched until the update
+    # automation is revised.
     election_years: tuple[int, ...] = (2016, 2020, 2024)
 
-    # Where state median-voter coordinates come from. See sources/state_prefs.py.
-    #   "american_ideology_project" -> the bridged joint-scaling estimates the
-    #       specification requires: state publics on the SAME ideological scale as
-    #       roll-call scores, so the absolute distance in Pillar 4 is a legal
-    #       subtraction. Tausanovitch & Warshaw, doi:10.7910/DVN/BQKU4M.
-    #   "unavailable" -> Pillar 4 refuses to compute.
-    state_source: str = "american_ideology_project"
-
-    # Which wave of the bridged estimates. 2020 is the most recent PUBLISHED
-    # wave: v2022 is the newest release of the dataset and its 2020 wave is built
-    # from surveys fielded 2017-2021. No 2024 wave exists to ingest.
+    # The American Ideology Project wave the snapshot checks must find (2020 is the
+    # most recent published wave; surveys fielded 2017-2021). Pillars 4-6 choose
+    # their wave with pillars_aip_wave below.
     ideology_year: int = 2020
 
     # A senator needs at least this many recorded votes before their position is
@@ -71,16 +41,9 @@ class Config:
     # opening months of a new Congress, when it changes everything.
     min_roll_calls: int = 30
 
-    # Census vintage for population weighting of US_m. Re-weighting each year keeps
-    # the national centre current as people move between states, instead of freezing
-    # it at one decennial count.
+    # The Census estimate year the snapshot's population file must contain
+    # (agents/sources.py). Pillar 5 chooses its weights with pillar5_population_year.
     population_year: int = 2024
-
-    # A committee CCD smaller than this is not a finding. Observed CCDs run
-    # 0.01-0.31 while internal committee spreads run 1.07-1.68, and with ~20
-    # members the median lands exactly on one senator's score, so the metric is
-    # quantized. Anything under this threshold gets flagged, not published.
-    ccd_noise_floor: float = 0.10
 
     raw_dir: Path = field(default=RAW)
     processed_dir: Path = field(default=PROCESSED)
@@ -150,10 +113,6 @@ class Config:
     @property
     def ideology_tab(self) -> Path:
         return self.raw_dir / "aip_states_ideology_v2022a.tab"
-
-    @property
-    def elections_csv(self) -> Path:
-        return self.raw_dir / "mit_president_1976_2024.csv"
 
     @property
     def members_csv(self) -> Path:

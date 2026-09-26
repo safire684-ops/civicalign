@@ -62,17 +62,3 @@ def load_senate_committees(path: Path) -> dict[str, list[CommitteeMember]]:
             if m.get("bioguide")
         ]
     return out
-
-
-def majority_party(senators: dict[str, Senator]) -> str:
-    counts: dict[str, int] = {}
-    for s in senators.values():
-        counts[s.party] = counts.get(s.party, 0) + 1
-    return max(counts, key=counts.get)
-
-
-CHAIR_TITLES = {"Chairman", "Chair", "Chairwoman"}
-
-
-def find_chair(members: list[CommitteeMember]) -> CommitteeMember | None:
-    return next((m for m in members if m.title in CHAIR_TITLES), None)

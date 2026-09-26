@@ -82,18 +82,3 @@ def unscored(roster: dict[str, Senator], scores: dict[str, float]) -> list[Senat
     rather than drawing a number.
     """
     return [s for b, s in roster.items() if b not in scores]
-
-
-def roll_calls_cast(members_csv: Path, congress: int,
-                    roster: dict[str, Senator]) -> dict[str, int]:
-    """Votes cast per seated senator, for reporting why someone is unscored."""
-    out: dict[str, int] = {}
-    with members_csv.open() as fh:
-        for row in csv.DictReader(fh):
-            if (row["chamber"] == "Senate" and row["congress"] == str(congress)
-                    and row["bioguide_id"] in roster):
-                try:
-                    out[row["bioguide_id"]] = int(row.get("nominate_number_of_votes") or 0)
-                except ValueError:
-                    out[row["bioguide_id"]] = 0
-    return out

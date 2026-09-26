@@ -1,4 +1,9 @@
-"""Regression tests for the two bugs that silently corrupt published numbers.
+"""Regression tests for the bugs that silently corrupt numbers read from Voteview and the roster.
+
+(The committee phantom-median and gatekeeping regressions went with the retired
+Pillars 4-6 path. The Engine B committee median is checked by the supervisor and
+tests/test_ideology_pillars.py; its known even-membership behaviour is documented
+in the methodology registry.)
 
 Both were found in real 119th Congress data. Neither raises an error on its own;
 both just produce confident wrong numbers. Hence tests.
@@ -8,7 +13,7 @@ import pytest
 
 from civicalign.config import DEFAULT
 from civicalign.sources import rosters, voteview
-from civicalign.space import median
+from statistics import median
 
 
 def test_roster_is_exactly_100():
@@ -45,13 +50,17 @@ def test_seat_dedupe_drops_departed_members():
     )
 
 
-def test_score_column_is_not_the_frozen_one():
-    """BUG 2: nominate_dim1 never changes over a career.
+def test_each_engine_uses_its_chosen_score_column():
+    """nominate_dim1 is one career-long score; nokken_poole_dim1 moves each Congress.
 
-    Murkowski is 0.204 in all ten of her Congresses. Building Pillar 4 on it
-    freezes every alignment gap for life and flattens every time series.
-    nokken_poole_dim1 is the per-Congress column that actually moves.
+    Murkowski is 0.204 in all ten of her Congresses on nominate_dim1. Pillars 4-6
+    use nominate_dim1 by decision (a stable score on one scale for senators and the
+    reference anchors; nokken_poole_dim1 is stored beside it as extra data only).
+    The Pillar 1 floor-vote evidence (pipeline.py) keeps nokken_poole_dim1, which
+    only orients each roll call's Yea side. Both columns must keep the property
+    that motivates the choice.
     """
+    assert DEFAULT.pillars_score_column == "nominate_dim1"
     assert DEFAULT.score_column == "nokken_poole_dim1"
 
     dw, np_ = set(), set()
@@ -87,34 +96,6 @@ def test_seat_guard_rejects_a_crowded_state():
         voteview._validate({k: 0.1 for k in fake}, fake)
 
 
-def test_phantom_medians_are_suppressed():
-    """BUG 3: on an evenly split committee the median describes no member.
-
-    Budget is 10-10 and its median sits 0.333 from the nearest real senator --
-    a third of the way across the usable scale. Evenly split committees also
-    produce the LARGEST apparent drift, so without this check the least
-    meaningful findings would rank highest.
-    """
-    from civicalign.pipeline import run
-
-    r = run(DEFAULT)
-    phantoms = [c for c in r.committees if c.median_is_phantom]
-    assert phantoms, "expected at least one evenly split committee"
-
-    # phantom medians are why Pillar 6 uses the mean instead
-    assert all(c.median_is_phantom for c in phantoms)
-
-    # and the effect must be real: phantoms are the evenly split ones
-    for c in phantoms:
-        assert c.is_evenly_split or c.median_gap_to_nearest_member > 0.05
-
-    budget = next(c for c in r.committees if c.code == "SSBU")
-    assert budget.n_majority == budget.n_minority
-    assert budget.median_gap_to_nearest_member > 0.2
-    # the mean does not have this problem: it sits among real members
-    assert budget.mean_jackknife < 0.1
-
-
 def test_icpsr_is_not_a_usable_join_key():
     """BUG 4: joining Voteview to the roster on ICPSR silently drops senators.
 
@@ -145,58 +126,3 @@ def test_voteview_already_carries_bioguide_so_no_crosswalk_is_needed():
     with DEFAULT.members_csv.open() as fh:
         header = next(csv.reader(fh))
     assert "bioguide_id" in header
-
-
-def test_gatekeeping_baseline_is_removed_not_ignored():
-    """BUG 5: a raw survival-rate gap mostly measures who holds the majority.
-
-    Chamber-wide, conservative-sponsored bills are reported out more often than
-    liberal-sponsored ones, in almost every committee. That baseline is majority
-    control, not committee behaviour, so reporting the raw index would rank nearly
-    every committee as biased in the same direction.
-    """
-    from civicalign.pipeline import run
-
-    r = run(DEFAULT)
-    if not r.gatekeeping:
-        pytest.skip("bill flow archive not downloaded")
-
-    assert r.gatekeeping_baseline > 0, "expected a majority-control baseline"
-    for g in r.gatekeeping:
-        assert g.gbi_vs_baseline == pytest.approx(g.gbi - r.gatekeeping_baseline)
-
-    # the adjustment must actually separate committees, not shift them together
-    adjusted = [g.gbi_vs_baseline for g in r.gatekeeping if g.is_reportable]
-    assert min(adjusted) < 0 < max(adjusted), (
-        "after removing the baseline some committees must fall on each side"
-    )
-
-
-def test_gatekeeping_rates_are_arithmetically_sound():
-    from civicalign.pipeline import run
-
-    r = run(DEFAULT)
-    if not r.gatekeeping:
-        pytest.skip("bill flow archive not downloaded")
-
-    for g in r.gatekeeping:
-        assert g.lib_reported <= g.lib_referred
-        assert g.con_reported <= g.con_referred
-        assert 0 <= g.survival_liberal <= 100
-        assert 0 <= g.survival_conservative <= 100
-        assert g.referred == g.lib_referred + g.con_referred
-
-
-def test_every_bill_sponsor_is_a_scored_senator():
-    """Referrals whose sponsor we cannot score are dropped, not guessed at."""
-    from civicalign.sources.billflow import load_referrals
-    from civicalign.pipeline import run
-
-    if not DEFAULT.billflow_zip.exists():
-        pytest.skip("bill flow archive not downloaded")
-
-    r = run(DEFAULT)
-    refs = load_referrals(DEFAULT.billflow_zip)
-    assert len(refs) > 4000, f"only {len(refs)} referrals parsed"
-    counted = sum(1 for x in refs if x.sponsor in r.scores)
-    assert counted / len(refs) > 0.95, "most sponsors should be sitting senators"
