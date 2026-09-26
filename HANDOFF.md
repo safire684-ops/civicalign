@@ -6,8 +6,8 @@ after Step 4 was completed (page builder and the three views in `demo/next/`)
 and after the approved Pillar 5 plain-language card was added, and after Step 5A
 (new pages published in `demo/`, official committee names, Pillar 1 tests off the
 old page), and after Step 5B (old Pillars 4–6 code and tests removed, new
-independent supervisor), and after Step 5C (daily automation on the new
-pipeline). Read all of it before doing
+independent supervisor), after Step 5C (daily automation on the new
+pipeline), and after the docs rewrite. Read all of it before doing
 anything. The repository and this file are the source of truth; older design
 documents, the whitepaper and chat history are not.
 
@@ -62,6 +62,8 @@ Commits on `pillars-4-6-rebuild` that are not on `origin/main` (oldest first):
 | `a229172` | **Step 5B**: old Pillars 4–6 modules and tests removed; new independent Engine B supervisor; `pipeline.py` reduced to Pillar 1. See section 3. |
 | `c877e5c` | HANDOFF update for Step 5B. |
 | `a54cc21` | **Step 5C**: daily automation on the Engine B pipeline; old builder, page tests, whitepaper step, weekly schedule and election source removed. See section 3. |
+| `41216de` | HANDOFF update for Step 5C. |
+| `741574f` | **Docs rewrite**: README.md and METHODOLOGY.md describe the current system; `docs/ENGINE_B_DATA_FLOW.md` added; old implementation docs moved to `docs/archive/`. See section 3. |
 | (next) | This HANDOFF update. |
 
 Uncommitted in the working tree (leave them; they belong to the paused Engine A
@@ -110,7 +112,7 @@ Pillars 2, 3 and 7 belong to someone else and are out of scope.
 
 ---
 
-## 3. Completed work (Engine B, Steps 1–4 and 5A–5C)
+## 3. Completed work (Engine B, Steps 1–4, 5A–5C and the docs rewrite)
 
 ### Step 1 — versioned inputs (`records.py`, `store.py`, `ingest.py`)
 
@@ -517,6 +519,35 @@ and every number on screen (31 in the checked state) opens its methodology.
   committed `data/raw/SNAPSHOT.json` still lists the election file from the last
   fetch; the next full fetch drops it.
 
+### Docs rewrite — COMPLETE (`741574f`)
+
+- **README.md and METHODOLOGY.md now describe the current system**: the two
+  engines; Pillar 4 (no senator-to-state distance while the bridge is NONE, and
+  why); Pillar 5 (mean-based population weighting as the primary method, the
+  medians as a secondary comparison, the national estimate unresolved); Pillar 6
+  (committee median and committee − Senate drift, official committee names,
+  observed dates); the visual-only reference anchors; versioned append-only
+  storage; the daily update; the methodology and verification rules; known
+  scientific limits; retired methods named only as retired. No deleted module
+  is named as current.
+- The README's Pillar 1 section is unchanged except two facts: the binding step
+  runs in the daily automated update, and Stage 3 is set up in
+  `src/civicalign/evaluation/` with one development run stopped and nothing
+  published.
+- **`docs/ENGINE_B_DATA_FLOW.md` added**: the Engine B data flow file by file,
+  every table and key, the commands, and how to add a displayed number.
+- **Old implementation docs moved to `docs/archive/`** (`DONE.md`,
+  `WHITEPAPER.md`, `WHITEPAPER_CORRECTIONS.md`, `METHODOLOGY_SECTIONS_2_5.md`,
+  `PILLAR6_BILLFLOW_FEASIBILITY.md`), each with an "ARCHIVED — historical only"
+  banner, plus an index (`docs/archive/README.md`). Content otherwise untouched.
+- `src/civicalign/ideology/__init__.py`: the stale "Step 1 (this commit) … No
+  metric is computed yet" docstring replaced with a current description (no
+  code change).
+- `test_readme.py` and `test_docs.py` now check the current system. **No
+  expected-fail markers remain.**
+- **Current test status: 295 passed, 0 failed.**
+- **The branch remains local only and not published.**
+
 ## 4. Current real numbers (record `5f42ca01…`, nominate_dim1, 100 active senators)
 
 **Pillar 5 — main comparison (PRIMARY method `population_weighted_mean_v1`)**
@@ -613,6 +644,10 @@ alignment scores, defiance/betrayal language, politician rankings.
 
 Run: `./.venv/bin/python -m pytest -q` (Python 3.14 venv; CI uses 3.12).
 
+**After the docs rewrite: 295 passed, 0 failed, no expected-fail markers.**
+Docs/README 14, Engine B 71, Pillar 1 103, page 47, supervisor 21,
+automation/update chain 32 (plus regressions and the rest).
+
 **After Step 5C: 292 passed, 0 failed, 1 expected-fail marker** (the docs test).
 Automation/update chain 32, Engine B 71, Pillar 1 103, page 47, supervisor 21.
 
@@ -631,8 +666,8 @@ Automation/update chain 32, Engine B 71, Pillar 1 103, page 47, supervisor 21.
 - Snapshot, regressions and docs (33 + 4 xfail): `test_update_chain.py`,
   `test_regressions.py`, `test_readme.py`, `test_docs.py`.
 
-Expected-fail marker (strict): `test_readme.py::test_every_code_file_the_docs_name_exists`
-(docs step). The three automation markers became passing tests in Step 5C.
+No expected-fail markers remain: the three automation markers became passing
+tests in Step 5C and the docs marker in the docs rewrite.
 
 History: before Step 5A the full suite was 425 passed, 9 failed (old page,
 report and whitepaper against newer bill archives); after Step 5A, 321 passed,
@@ -646,7 +681,6 @@ report and whitepaper against newer bill archives); after Step 5A, 321 passed,
 - A valid public-to-legislator bridge
 - A national public ideology measure (definition and bridge)
 - Deterministic bill ideology / legislative outcome classification
-- README / METHODOLOGY rewrite and `docs/ENGINE_B_DATA_FLOW.md` (docs step)
 - Deployment (nothing is published; the live site still runs the old product)
 
 ---
@@ -672,16 +706,30 @@ report and whitepaper against newer bill archives); after Step 5A, 321 passed,
 
 ---
 
-## 9. Next step: the docs rewrite only
+## 9. Next step: Step 6 (local end-to-end run), then publishing only with approval
 
-Step 5C is complete (`a54cc21`; section 3). The next task is **the docs rewrite**:
-README.md, METHODOLOGY.md and a new `docs/ENGINE_B_DATA_FLOW.md` describe the
-system that exists now (Pillars 4–6 as built, bridge NONE, national estimate
-unresolved, anchors visual only, official committee names, versioned storage,
-the daily pipeline, methodology and verification rules, scientific limits),
-with no deleted modules or retired methods presented as current, and Engine A
-documentation intact. Then Step 6 (local end-to-end run; publishing only with
-the user's explicit approval).
+Steps 1–5C and the docs rewrite are complete. Remaining work before publishing:
+
+1. **Remove the preview banner** ("Local preview build of the rebuilt Pillars
+   4–6. Not published.") from `src/civicalign/templates/senator-check.template.html`
+   and rebuild the pages; it would be false once live.
+2. **Run the whole chain locally with a fresh fetch** (`scripts/update.sh`): a
+   new snapshot will write new input versions and a new result record; confirm
+   ingest, anchors, compute, build, every test and the supervisor pass, then
+   commit the new data locally.
+3. **Check CI's Python**: the workflow uses Python 3.12; the local venv is 3.14.
+   Run the suite under 3.12 if possible before relying on CI.
+4. **Decide the leftovers**: the two uncommitted Pillar 1 edits (`.gitignore`,
+   `src/civicalign/evaluation/report.py`), and local `main`'s unpushed Stage 3
+   harness commit `c2a596a` (it is also on this branch, so publishing the branch
+   publishes it).
+5. **Publishing — only with the user's explicit approval**: fetch `origin`,
+   rebase onto `origin/main` (the old weekly bot commits touch the generated
+   pages; resolve by regenerating with `build_pages`, never by hand), re-run the
+   tests and the supervisor, merge to `main`, push, run the workflow once by
+   hand, and check the live site matches the repository (pages, `data/ideology/`).
+6. Afterwards (optional): republish the claude.ai copies of the page and the
+   methodology (section 12), which still show the old product.
 
 The Pillar 5 plain-language card is done; do not change its wording without the
 user. Review is local only; do not push.
@@ -714,7 +762,7 @@ Remaining approved plan after Step 4:
 ## 10. Engine A status (for reference only; do not modify during Engine B work)
 
 - Pillar 1 Stage 2 (vote bindings) and Stage 2.5 (source packets) are complete
-  and run in the weekly workflow (`explain.bind`, `explain.context --check-fresh`).
+  and run in the daily update (`explain.bind`, `explain.context --check-fresh`).
   54 bindings; 10 packets READY_FOR_GENERATION (the first cohort: S.J.Res.10,
   37, 49, 71, 77, 81, 88, H.J.Res.142, S.2, H.R.4), 27 CRA READY_WITH_LIMITS,
   15 pending, 2 ambiguous. S.2 is READY_FOR_GENERATION + REVIEW_REQUIRED
