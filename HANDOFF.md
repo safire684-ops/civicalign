@@ -11,7 +11,7 @@ pipeline), after the docs rewrite, and after the pre-publish validation (Stage 3
 from the release, banner removed, Python 3.12 run, fresh update), and after
 publishing (26 September 2026: `e6f6428` live on GitHub `main`), and after the
 deterministic bill/sponsor data layer (`c0b592a`, local) and the Pillar 5 outcome
-layer (`5a5dd93`, local). Read all of it before doing
+layer (`5a5dd93`, local) and the local Pillar 5 scorecard (`3f54d83`). Read all of it before doing
 anything. The repository and this file are the source of truth; older design
 documents, the whitepaper and chat history are not.
 
@@ -98,6 +98,8 @@ Commits in the Pillars 4–6 release (all on GitHub `main` since publishing; old
 | `c0b592a` | **Bill/sponsor data layer** (local, not pushed): `ideology/bills.py`, `ideology/bill_tallies.py`, table `bill_sponsor_classifications`, `tests/test_bills.py`. See section 3. |
 | `89cc85a` | HANDOFF update for the bill/sponsor data layer. |
 | `5a5dd93` | **Pillar 5 outcome layer** (local, not pushed): `ideology/bill_outcomes.py`, table `senate_bill_outcomes`, `passed_senate_tally()`, `tests/test_bill_outcomes.py`. See section 3. |
+| `8daec7d` | HANDOFF update for the Pillar 5 outcome layer. |
+| `3f54d83` | **Pillar 5 scorecard** "What the Senate actually passed" (local, not pushed, not live). See section 3. |
 | (next) | This HANDOFF update. |
 
 The working tree of the release branch is clean. The two Stage 3 edits that
@@ -787,6 +789,47 @@ voting position"**. **No UI has been changed yet**; no scorecard or chart exists
   calculations and the result record `5f42ca01…` are unchanged. Not yet in the
   daily automation, the supervisor recount or the frontend.
 
+### Pillar 5 scorecard — BUILT LOCALLY, NOT LIVE (`3f54d83`)
+
+**Pillar 5 now has a local "What the Senate actually passed" scorecard**: a new
+card in the Senate / Nation view, below the approved averages card and the
+national-public card (both unchanged).
+
+- Current deterministic values:
+  - **192 Senate bills passed** the Senate — **72 `LIBERAL_SPONSOR`**,
+    **120 `CONSERVATIVE_SPONSOR`** (0 zero, 0 unknown)
+  - **41 enacted** — **5 `LIBERAL_SPONSOR`**, **36 `CONSERVATIVE_SPONSOR`**
+  - **37 currently have public-law numbers**; **4 are signed/enacted with
+    public-law numbers pending**
+- **These are sponsor-position classifications, NOT classifications of the
+  bills themselves.** Public labels: "Sponsored by senators on the liberal / the
+  conservative side of the Voteview scale"; "liberal bills" / "conservative
+  bills" never appear (tested).
+- **No LLM is used** (tested).
+- **Every count traces to exact bill ids and official actions**: each count on
+  the page carries its bill ids; "See bills" fold-outs list them (number linked
+  to Congress.gov, title, sponsor, passage date, public-law number or "enacted:
+  signed by the President …, public-law number pending"); each count's
+  methodology entry (kind `outcome`, 6 entries) shows the bill-archive version,
+  the passage, enactment and sponsor-classification rules and the sponsor-score
+  version.
+- **The scorecard reads its values from the saved deterministic tables**
+  (`bill_sponsor_classifications`, `senate_bill_outcomes`, via
+  `bill_tallies.passed_senate_tally`) **and does not hardcode them** (tested: no
+  count literal in the card's code).
+- Wording: title, intro, "Passed the Senate" / "Enacted into law", the
+  "What does this mean?" text and "These counts do not prove that the Senate's
+  ideological average caused these bills to pass." as approved.
+- The supervisor recounts every outcome count bill by bill from the raw
+  bill-status archive and Voteview (`eb_outcome_checks`).
+- **Pillars 4 and 6 are unchanged** (their page data, the existing Pillar 5 data
+  and all earlier methodology entries are byte-identical to before).
+- **Current tests: 305 passed, 0 failed** (Python 3.14 and 3.12). **Checker: 32/32.**
+- **The scorecard is NOT live yet, because the bill tables are not yet refreshed
+  by the daily automation.** Next: wire `ideology.bills` and
+  `ideology.bill_outcomes` into `update.yml` and `scripts/update.sh` before the
+  page build, then publish only with the user's approval.
+
 ## 4. Current real numbers (record `5f42ca01…`, nominate_dim1, 100 active senators)
 
 **Pillar 5 — main comparison (PRIMARY method `population_weighted_mean_v1`)**
@@ -883,6 +926,8 @@ alignment scores, defiance/betrayal language, politician rankings.
 
 Run: `./.venv/bin/python -m pytest -q` (Python 3.14 venv; CI uses 3.12).
 
+**After the Pillar 5 scorecard: 305 passed, 0 failed** (3.14 and 3.12); supervisor 32/32.
+
 **After the Pillar 5 outcome layer: 294 passed, 0 failed** (adds `tests/test_bill_outcomes.py`, 17).
 
 **After the bill/sponsor data layer: 277 passed, 0 failed** (adds `tests/test_bills.py`, 24).
@@ -955,10 +1000,8 @@ report and whitepaper against newer bill archives); after Step 5A, 321 passed,
 Publishing is done, and the bill/sponsor data layer is built (section 3). No
 scorecard or UI work has started. Open items, each only when the user asks:
 
-1. **Pillar 5 outcome set: decided and built** (passed Senate = main, enacted =
-   secondary; section 3). Next, only when the user asks: the Pillar 5 scorecard
-   UI ("Passed Senate bills by sponsor voting position"), with methodology
-   entries for its numbers and sponsor-only wording.
+1. **Pillar 5 scorecard: built locally** (section 3). Next: wire the two bill
+   tables into the daily automation; publish only with the user's approval.
 2. Wire the bill layer into the daily update and add an independent supervisor
    recount of the classifications and tallies before anything is displayed.
 3. Pillar 6 bill-flow UI, only when the user asks (the committee tallies exist).
