@@ -11,7 +11,8 @@ pipeline), after the docs rewrite, and after the pre-publish validation (Stage 3
 from the release, banner removed, Python 3.12 run, fresh update), and after
 publishing (26 September 2026: `e6f6428` live on GitHub `main`), and after the
 deterministic bill/sponsor data layer (`c0b592a`, local) and the Pillar 5 outcome
-layer (`5a5dd93`, local) and the local Pillar 5 scorecard (`3f54d83`). Read all of it before doing
+layer (`5a5dd93`, local), the local Pillar 5 scorecard (`3f54d83`) and the bill
+tables in the daily update (`710a4fc`, local). Read all of it before doing
 anything. The repository and this file are the source of truth; older design
 documents, the whitepaper and chat history are not.
 
@@ -100,6 +101,8 @@ Commits in the Pillars 4–6 release (all on GitHub `main` since publishing; old
 | `5a5dd93` | **Pillar 5 outcome layer** (local, not pushed): `ideology/bill_outcomes.py`, table `senate_bill_outcomes`, `passed_senate_tally()`, `tests/test_bill_outcomes.py`. See section 3. |
 | `8daec7d` | HANDOFF update for the Pillar 5 outcome layer. |
 | `3f54d83` | **Pillar 5 scorecard** "What the Senate actually passed" (local, not pushed, not live). See section 3. |
+| `db0f16b` | HANDOFF update for the Pillar 5 scorecard. |
+| `710a4fc` | **Daily update refreshes the bill tables** before the pages are built (local, not pushed). See section 3. |
 | (next) | This HANDOFF update. |
 
 The working tree of the release branch is clean. The two Stage 3 edits that
@@ -830,6 +833,47 @@ national-public card (both unchanged).
   `ideology.bill_outcomes` into `update.yml` and `scripts/update.sh` before the
   page build, then publish only with the user's approval.
 
+### Bill tables in the daily update — COMPLETE (`710a4fc`, local, not pushed)
+
+**The Pillar 5 scorecard is complete locally**, including its automation.
+
+- **The daily update** (`.github/workflows/update.yml` and `scripts/update.sh`,
+  the same chain; a test compares them) now runs, after fetch, verify, the
+  unchanged Pillar 1 bind and context checks, ingest, bridge and anchors:
+  1. **bill/sponsor classifications** (`python -m civicalign.ideology.bills`)
+  2. **Senate passage/enactment outcomes** (`python -m civicalign.ideology.bill_outcomes`)
+  3. **verifies both bill tables** (`python -m civicalign.ideology.bill_outcomes --verify`:
+     valid and hash-chained, consistent with each other, and current with the
+     verified snapshot — a dry refresh would write nothing)
+  4. **computes Pillars 4–6** (`ideology.compute`)
+  5. **builds the pages** (`build_pages`)
+  6. **runs the tests** (`python -m pytest -q`)
+  7. **runs the checker** (`agents.supervisor`)
+
+  then commits (the commit step names `data/ideology/bill_sponsor_classifications.jsonl`
+  and `data/ideology/senate_bill_outcomes.jsonl` explicitly, besides `data/ideology`)
+  and publishes, only if every step passed and something changed.
+- **No LLM or external API is used for bill classification**: the bill steps read
+  only the verified GovInfo bill-status archive in the source snapshot (tested:
+  no network, API or model in those steps or modules).
+- **The page now records which bill-table versions it was built from**
+  (`p5.outcomes.meta.table_fingerprints`: SHA-256 of the current record ids of
+  each table, from `bill_outcomes.table_fingerprints()`).
+- **The checker verifies the scorecard uses the current verified bill tables**
+  (new supervisor check "scorecard uses the current, verified bill-table
+  versions", beside the bill-by-bill recount of every outcome count).
+- **Unchanged bill data writes nothing; changed bill data adds new versions
+  rather than overwriting history** (tested with a changed bill-status record:
+  exactly one new version in each table, earlier lines untouched).
+- The passage cross-check now skips bills whose passage was vitiated (no
+  engrossed text follows a cancelled passage); `verify` reports store errors
+  instead of raising.
+- **Current test status: 312 passed, 0 failed** (Python 3.12 and 3.14);
+  **checker 33/33**.
+- **The scorecard is still not live** (branch local; GitHub `main` is `ce6794a`).
+- **Pillars 4 and 6 are unchanged** (their page data is byte-identical; the only
+  page change in this step is the embedded table versions).
+
 ## 4. Current real numbers (record `5f42ca01…`, nominate_dim1, 100 active senators)
 
 **Pillar 5 — main comparison (PRIMARY method `population_weighted_mean_v1`)**
@@ -926,6 +970,8 @@ alignment scores, defiance/betrayal language, politician rankings.
 
 Run: `./.venv/bin/python -m pytest -q` (Python 3.14 venv; CI uses 3.12).
 
+**After the bill tables were added to the daily update: 312 passed, 0 failed** (3.14 and 3.12); supervisor 33/33.
+
 **After the Pillar 5 scorecard: 305 passed, 0 failed** (3.14 and 3.12); supervisor 32/32.
 
 **After the Pillar 5 outcome layer: 294 passed, 0 failed** (adds `tests/test_bill_outcomes.py`, 17).
@@ -1000,8 +1046,10 @@ report and whitepaper against newer bill archives); after Step 5A, 321 passed,
 Publishing is done, and the bill/sponsor data layer is built (section 3). No
 scorecard or UI work has started. Open items, each only when the user asks:
 
-1. **Pillar 5 scorecard: built locally** (section 3). Next: wire the two bill
-   tables into the daily automation; publish only with the user's approval.
+1. **Pillar 5 scorecard: complete locally, automation wired** (section 3).
+   Next: publish only with the user's approval (push `pillars-4-6-rebuild`,
+   fast-forward GitHub `main` if it is still `ce6794a`, run the workflow once,
+   check the live scorecard against the local build).
 2. Wire the bill layer into the daily update and add an independent supervisor
    recount of the classifications and tallies before anything is displayed.
 3. Pillar 6 bill-flow UI, only when the user asks (the committee tallies exist).
