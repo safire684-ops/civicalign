@@ -5,7 +5,8 @@ Step 4 part 1 (methodology registry and Pillar 4 reference anchors) and again
 after Step 4 was completed (page builder and the three views in `demo/next/`)
 and after the approved Pillar 5 plain-language card was added, and after Step 5A
 (new pages published in `demo/`, official committee names, Pillar 1 tests off the
-old page). Read all of it before doing
+old page), and after Step 5B (old Pillars 4–6 code and tests removed, new
+independent supervisor). Read all of it before doing
 anything. The repository and this file are the source of truth; older design
 documents, the whitepaper and chat history are not.
 
@@ -56,6 +57,8 @@ Commits on `pillars-4-6-rebuild` that are not on `origin/main` (oldest first):
 | `6eb2969` | **Pillar 5 plain-language card** (approved wording) on the Step 4 preview page; one new page test. |
 | `807aed4` | HANDOFF update for the Pillar 5 card. |
 | `1901202` | **Step 5A**: new pages published in `demo/`, `demo/next/` retired, official committee names, Pillar 1 tests off the old page. See section 3. |
+| `ca35529` | HANDOFF update for Step 5A. |
+| `a229172` | **Step 5B**: old Pillars 4–6 modules and tests removed; new independent Engine B supervisor; `pipeline.py` reduced to Pillar 1. See section 3. |
 | (next) | This HANDOFF update. |
 
 Uncommitted in the working tree (leave them; they belong to the paused Engine A
@@ -104,7 +107,7 @@ Pillars 2, 3 and 7 belong to someone else and are out of scope.
 
 ---
 
-## 3. Completed work (Engine B, Steps 1–4 and Step 5A)
+## 3. Completed work (Engine B, Steps 1–4, 5A and 5B)
 
 ### Step 1 — versioned inputs (`records.py`, `store.py`, `ingest.py`)
 
@@ -413,6 +416,59 @@ and every number on screen (31 in the checked state) opens its methodology.
 - The page still carries "Local preview build of the rebuilt Pillars 4–6. Not
   published." — true until publishing; remove it in Step 6.
 
+### Step 5B — old Pillars 4–6 path removed, independent supervisor — STEP 5B IS COMPLETE (`a229172`)
+
+- **Old Pillars 4–6 modules and old tests were removed.** Modules:
+  `alignment`, `chamber`, `committees`, `space`, `uncertainty`, `peers`,
+  `representation`, `gatekeeping`, `output_ideology`, `landmarks`, `export`,
+  `whitepaper`, `build_demo`, `sources/state_prefs`, `sources/elections`, and
+  `demo/methodology.template.html`; plus five helpers only they used
+  (`population.load_populations`, `rosters.majority_party`/`find_chair`,
+  `voteview.roll_calls_cast`, `billflow.load_referrals`/`BillReferral`) and four
+  unused settings (`cloture_threshold`, `electorate`, `state_source`,
+  `ccd_noise_floor`, plus the `elections_csv` path). Tests: `test_published_pages`,
+  `test_perspective`, `test_peers`, `test_whitepaper`, `test_math`,
+  `test_uncertainty`, `test_representation`, `test_independent`. Nothing Pillar 1
+  needs was removed (checked with an import map).
+- **`pipeline.py`** now only builds Pillar 1's floor-vote evidence (receipts and
+  the recent floor votes). **Pillar 1 output is unchanged**: scores, receipts,
+  floor votes and both Pillar 1 check results fingerprinted identical before
+  and after. `cli.py` (`python -m civicalign`) prints the saved Pillars 4–6
+  record with the page's rounding (`--json` for the record).
+- **The new supervisor** (`agents/supervisor.py`; `python -m
+  civicalign.agents.supervisor`; `checks()` = `engine_b_checks()` +
+  `pillar1_checks()`) **independently verifies Pillars 4–6 from the raw source
+  files** with its own readers (it imports neither `ideology.pillars` nor
+  `ideology.inputs`): every stored senator `nominate_dim1` and every seated
+  senator's score; every state public estimate and SE; Pillar 5 Senate mean,
+  population-weighted mean and difference, and the median details; every
+  committee median and committee − Senate drift (and member counts); the three
+  anchors against Voteview (one Senate id, one career score) and only in Pillar 4
+  on the page; committee names against `committees-current.json`, stored and on
+  the page; no distance while the bridge is NONE, no Senate–public gap and no
+  committee–public drift while the national estimate is unresolved (record and
+  page); every displayed number has a registry entry and equals the record with
+  its rounding; every entry on the page and in the methodology page; every table
+  valid and hash-chained, the result index intact and current, stored records
+  append-only against the last commit (`git show HEAD:`), and the published
+  pages equal the builder's output. 31 checks (29 Engine B + 2 Pillar 1), all
+  confirmed. The Pillar 1 checks were copied verbatim.
+- Tests: new `test_supervisor.py` (every sabotage caught; Pillar 1 sabotage
+  tests unchanged); `test_update_chain.py` rewritten (snapshot, `add_source`,
+  workflow gates); `test_floor_votes.py` and `test_regressions.py` trimmed to
+  Pillar 1 and the Voteview/roster regressions; 9 page guardrails carried from
+  the deleted page tests into `test_pages.py`.
+- **Current test status: 275 passed, 0 failed, 4 expected-fail markers**
+  (strict xfail, so each turns into a failure once fixed and must be removed).
+  The 4 markers are only for: the GitHub workflow still using the deleted
+  builder/tests; `scripts/update.sh` still using them; `scripts/build_demo.sh`
+  still using them (Step 5C); README/METHODOLOGY still naming retired files
+  (docs step).
+- **Do not run the old automation** (`.github/workflows/update.yml`,
+  `scripts/update.sh`, `scripts/build_demo.sh`) **until Step 5C is complete.**
+- **The current Pillars 4–6 result values did not change** (record
+  `5f42ca01…`, `compute --verify` passes, pages current).
+
 ## 4. Current real numbers (record `5f42ca01…`, nominate_dim1, 100 active senators)
 
 **Pillar 5 — main comparison (PRIMARY method `population_weighted_mean_v1`)**
@@ -496,8 +552,7 @@ AIP units). Distance NOT_AVAILABLE for all.
     his House and Senate service, and the methodology must say so.
 13. No number is displayed without a methodology registry entry.
 
-Retired and not to be revived (they are still in the old code path until Step 5
-removes them): the caucus-group peer comparison (`peers.py`), seats vs. nation
+Retired and not to be revived (their code was removed in Step 5B): the caucus-group peer comparison (`peers.py`), seats vs. nation
 (`representation.py`, including the retired regression used for diagnostics
 only), committee bill flow and Yes/No-split analysis (`gatekeeping.py`,
 `output_ideology.py`), `landmarks.py`, and the shared 0–100 display. Also
@@ -510,72 +565,41 @@ alignment scores, defiance/betrayal language, politician rankings.
 
 Run: `./.venv/bin/python -m pytest -q` (Python 3.14 venv; CI uses 3.12).
 
-Engine B + page (all passing, 102 total):
-- `tests/test_ideology_records.py` — 17 (validators, store, ingest from fixtures
-  and from the real snapshot, population table, committee events, committed
-  tables verify, no Engine A imports).
-- `tests/test_ideology_pillars.py` — 20 (bridge NONE; national unresolved;
-  weights incl. vacancy; weighted median and weighted mean by hand; Pillar 5
-  primary mean and details; Pillars 4 and 6 by hand; config defaults; no 0–100
-  anywhere; real values recomputed from the raw files with separate code).
-- `tests/test_ideology_incremental.py` — 14 (unchanged / committees_only / full,
-  carried = full recompute, write-once, tamper and stale detection).
-- `tests/test_ideology_methodology.py` — 18 (registry consistent; committed
-  record fully covered; unregistered or missing numbers caught; means main,
-  medians details; no evaluative wording; exactly three labelled anchors;
-  President rows excluded; ambiguous anchors refused; fixture anchors; no
-  calculation imports anchors or the registry; result key and numbers ignore
-  the anchors; committed anchors equal the raw Voteview values; Sanders's anchor
-  equals his senator record).
-- `tests/test_pages.py` — 33 (the approved Pillar 5 card wording and sign-driven
-  direction word; display rounding and names; every embedded number
-  carries its registry entry and the right display text; every registry entry
-  reaches the page and the methodology page; numbers only via `num()`; build
-  refuses an unregistered number, a tampered record and missing anchors;
-  Pillar 4 anchors exactly three and labelled, only in Pillar 4; Pillar 5 means
-  main and medians details only; Pillar 6 only committee metrics; unavailable
-  values say why; no 0–100, no judgment labels, no Engine A or bill content;
-  builder reads only Engine B results; committed `demo/next/` pages are current;
-  deterministic build; old page untouched).
+**After Step 5B: 275 passed, 0 failed, 4 expected-fail markers.**
+- Engine B (71): `test_ideology_records.py` (incl. committee names),
+  `test_ideology_pillars.py`, `test_ideology_incremental.py`,
+  `test_ideology_methodology.py`.
+- Page (47): `test_pages.py` — every number has methodology and the right
+  display; approved Pillar 5 wording; published pages are the builder's output;
+  official committee names; no fixed name map; Pillar 1 tests independent of the
+  page; results unchanged; guardrails (accessibility, escaping, three views,
+  sources, dates, separate scales, no ordering by score, themes, retired code gone).
+- Supervisor (21): `test_supervisor.py`.
+- Pillar 1 (103): `test_binding.py`, `test_context.py`, `test_evaluation.py`,
+  `test_floor_votes.py`.
+- Snapshot, regressions and docs (33 + 4 xfail): `test_update_chain.py`,
+  `test_regressions.py`, `test_readme.py`, `test_docs.py`.
 
-**After Step 5A** (see section 3): page 39, Engine B 71, Pillar 1 97 — all pass;
-full suite 321 passed, 122 failed, all 122 in the six old Pillars 4–6 test
-files that Step 5B deletes or rewrites. Before Step 5A (at `d049b61`) the full
-suite was **425 passed, 9 failed**; those 9 EXPECTED failures were:
+Expected-fail markers (strict): `test_update_chain.py::test_every_module_the_update_runs_exists`
+for the workflow, `update.sh` and `build_demo.sh` (Step 5C), and
+`test_readme.py::test_every_code_file_the_docs_name_exists` (docs step).
 
-```
-tests/test_perspective.py::test_18_safeguards_remain
-tests/test_published_pages.py::test_demo_bill_survival_is_current
-tests/test_published_pages.py::test_report_quotes_the_current_bill_figures
-tests/test_published_pages.py::test_senate_wide_totals_count_distinct_bills
-tests/test_supervisor.py::test_supervisor_confirms_every_figure
-tests/test_whitepaper.py::test_party_landmarks_are_current
-tests/test_whitepaper.py::test_committee_tables_are_current
-tests/test_whitepaper.py::test_chair_gaps_are_current
-tests/test_whitepaper.py::test_distinct_bill_counts_are_current
-```
-
-They compare the OLD committed page, report and whitepaper (built from the
-previous bill-status archives) with the newer archives fetched on 2026-09-25
-(e.g. page 5,347 distinct bills vs 5,456 in the fresh data). They belong to the
-old bill-flow / whitepaper path that Step 5 removes. They fail identically
-without any Engine B change. **Do not fix them before the planned removal**; do
-not rebuild the old page to silence them.
+History: before Step 5A the full suite was 425 passed, 9 failed (old page,
+report and whitepaper against newer bill archives); after Step 5A, 321 passed,
+122 failed (all in the six old test files, removed in Step 5B).
 
 ---
 
 ## 7. Not built yet
 
 - Publishing the new page live (Step 6; the files in `demo/` are switched but not pushed)
-- **Anchor refresh in automation**: `python -m civicalign.ideology.anchors` is
-  not yet in `update.yml`/`scripts/update.sh`. Until Step 5 adds it, a newer
-  Voteview snapshot leaves the anchors on the older file (run the command by
-  hand; the raw-value test skips while they differ).
+- **Anchor refresh in automation** (Step 5C): `python -m civicalign.ideology.anchors`
+  is not yet in `update.yml`/`scripts/update.sh`.
 - A valid public-to-legislator bridge
 - A national public ideology measure (definition and bridge)
 - Deterministic bill ideology / legislative outcome classification
-- Final GitHub workflow changes (daily schedule, ingest/compute steps)
-- Final removal of the old Pillars 4–6 path, supervisor rewrite, docs rewrite (Step 5B)
+- GitHub workflow and scripts on the new pipeline (daily schedule, ingest/compute steps) (Step 5C)
+- README / METHODOLOGY rewrite and `docs/ENGINE_B_DATA_FLOW.md` (docs step)
 - Deployment (nothing is published; the live site still runs the old product)
 
 ---
@@ -601,19 +625,16 @@ not rebuild the old page to silence them.
 
 ---
 
-## 9. Next step: Step 5B only
+## 9. Next step: Step 5C only
 
-Step 5A is complete (`1901202`; section 3). The next task is **Step 5B: remove
-the retired Pillars 4–6 code and tests and replace them with checks for the new
-Engine B system** — delete the old modules not needed by Engine A; delete or
-rewrite `test_published_pages`, `test_perspective`, `test_peers`,
-`test_supervisor`, `test_update_chain`, `test_whitepaper` (replacing useful
-coverage, not just deleting it); rewrite the Engine B part of the supervisor
-(independent recount of every Engine B number, bridge and national gating,
-methodology coverage, anchors and committee names against their sources,
-store integrity); keep every Pillar 1 check unchanged. Not in 5B: the GitHub
-workflow, calculation changes, UI or Pillar 5 wording changes, bill
-classification.
+Step 5B is complete (`a229172`; section 3). The next task is **Step 5C: the
+automation and scripts on the new Engine B pipeline** — `update.yml` daily in the
+order fetch → verify → ingest → bridge → anchors → compute → build pages → tests
+→ supervisor → commit; `scripts/update.sh` the same; `scripts/build_demo.sh`
+calls the new builder or is removed; the unused election-results fetch removed
+if nothing depends on it; the three automation expected-fail markers become
+passing tests. Not in 5C: README/METHODOLOGY (docs step), UI or calculation
+changes.
 
 The Pillar 5 plain-language card is done; do not change its wording without the
 user. Review is local only; do not push.
@@ -671,7 +692,9 @@ PYTHONPATH=src ./.venv/bin/python -m civicalign.ideology.bridge     # record the
 PYTHONPATH=src ./.venv/bin/python -m civicalign.ideology.anchors    # record the 3 Pillar 4 reference anchors (--dry-run)
 PYTHONPATH=src ./.venv/bin/python -m civicalign.ideology.compute    # versioned results (--verify, --full)
 PYTHONPATH=src ./.venv/bin/python -m civicalign.ideology.inputs     # print current results (not stored)
-PYTHONPATH=src ./.venv/bin/python -m civicalign.build_pages        # build demo/next/ pages (--check: are they current?)
+PYTHONPATH=src ./.venv/bin/python -m civicalign.build_pages        # build demo/senator-check.html and demo/methodology.html (--check)
+PYTHONPATH=src ./.venv/bin/python -m civicalign.agents.supervisor   # independent recount of every published number
+PYTHONPATH=src ./.venv/bin/python -m civicalign                     # print the saved Pillars 4-6 record
 ./.venv/bin/python -m pytest -q tests/test_ideology_records.py tests/test_ideology_pillars.py tests/test_ideology_incremental.py tests/test_ideology_methodology.py tests/test_pages.py
 ```
 
