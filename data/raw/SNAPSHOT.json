@@ -1,5 +1,5 @@
 {
- "run_utc": "2026-09-25T16:29:58Z",
+ "run_utc": "2026-09-26T01:32:57Z",
  "accepted": true,
  "sources": [
   {
@@ -14,7 +14,7 @@
    "content_key": "2c2ac0de7ac8fefb885e047199a5d492e1c23a872f43fdb895f122b116244eab",
    "changed": false,
    "content_changed_utc": "2026-09-24T13:40:44Z",
-   "checked_utc": "2026-09-25T16:29:58Z"
+   "checked_utc": "2026-09-26T01:32:57Z"
   },
   {
    "name": "seated senators",
@@ -28,7 +28,7 @@
    "content_key": "ae8cb9477c48715df71a7d860854229d799dc90a254d61badc1efb770f892b2c",
    "changed": false,
    "content_changed_utc": "2026-09-24T13:40:44Z",
-   "checked_utc": "2026-09-25T16:29:58Z"
+   "checked_utc": "2026-09-26T01:32:57Z"
   },
   {
    "name": "committee rosters",
@@ -42,7 +42,21 @@
    "content_key": "b478738edf3b3b13bfa4057a1e04e8ea1f53d4e1f7adaf8f446db20102c22b2c",
    "changed": false,
    "content_changed_utc": "2026-09-23T13:05:55Z",
-   "checked_utc": "2026-09-25T16:29:58Z"
+   "checked_utc": "2026-09-26T01:32:57Z"
+  },
+  {
+   "name": "committee names",
+   "url": "https://unitedstates.github.io/congress-legislators/committees-current.json",
+   "file": "committees-current.json",
+   "critical": true,
+   "vintage": "current committees and their official names",
+   "bytes": 74732,
+   "previous_bytes": 74732,
+   "sha256": "640ab5c262dd47b462f3a781d07dc417db8606a324f3b0a5422e7629c38e34ec",
+   "content_key": "640ab5c262dd47b462f3a781d07dc417db8606a324f3b0a5422e7629c38e34ec",
+   "changed": false,
+   "content_changed_utc": "2026-09-26T00:30:06Z",
+   "checked_utc": "2026-09-26T01:32:57Z"
   },
   {
    "name": "bill flow",
@@ -50,13 +64,13 @@
    "file": "BILLSTATUS-119-s.zip",
    "critical": true,
    "vintage": "current Congress; GovInfo republishes daily",
-   "bytes": 13088882,
-   "previous_bytes": 12893410,
-   "sha256": "70deaa53d80f03bc8e638d2271edaab673d4c6cf7e0d356d865914e1a42c8d75",
-   "content_key": "6276103f28a2daf6a78f7b17bf4b6e9ef8aacab121fc01e0ae316be81cd5ec44",
+   "bytes": 13094113,
+   "previous_bytes": 13088882,
+   "sha256": "aa553048fb31aec5199ab5b478a30505dff923ce9a2d312503e8edfd3e5fe3e5",
+   "content_key": "067c79eeb5c453d1c77b36b38932b1c17036c891021166923fb6d4e95b679659",
    "changed": true,
-   "content_changed_utc": "2026-09-25T16:29:58Z",
-   "checked_utc": "2026-09-25T16:29:58Z"
+   "content_changed_utc": "2026-09-26T01:32:57Z",
+   "checked_utc": "2026-09-26T01:32:57Z"
   },
   {
    "name": "bill flow (House bills)",
@@ -64,13 +78,13 @@
    "file": "BILLSTATUS-119-hr.zip",
    "critical": true,
    "vintage": "current Congress; GovInfo republishes daily",
-   "bytes": 31963174,
-   "previous_bytes": 31776172,
-   "sha256": "8302da5994bd299e338675adf6ccb2998f5a42ca92fa39d069e4e70b88a77d7e",
-   "content_key": "7411ae7b3101b50d0bcf08b893069f227657584464f6f2cda2a116d12928895d",
+   "bytes": 31989455,
+   "previous_bytes": 31963174,
+   "sha256": "65cf6ca63f57a6404af41335439d1d7e27a4035081333c73f370ae5c037286a0",
+   "content_key": "e7a72c19f40c1e915aa054f3c36b1c0c211214c07cf99aa8fd67e58e4360f044",
    "changed": true,
-   "content_changed_utc": "2026-09-25T16:29:58Z",
-   "checked_utc": "2026-09-25T16:29:58Z"
+   "content_changed_utc": "2026-09-26T01:32:57Z",
+   "checked_utc": "2026-09-26T01:32:57Z"
   },
   {
    "name": "floor roll calls",
@@ -84,7 +98,7 @@
    "content_key": "faa9026e45e53dc225e91a7c915372701d877d1e5255723fbd515dd54ffc3ada",
    "changed": false,
    "content_changed_utc": "2026-09-24T13:40:44Z",
-   "checked_utc": "2026-09-25T16:29:58Z"
+   "checked_utc": "2026-09-26T01:32:57Z"
   },
   {
    "name": "senator votes",
@@ -98,7 +112,7 @@
    "content_key": "c1f91fd6022103b74a1471de67c6f213ca5c4e32b1bc1b5865c26f39e558fa87",
    "changed": false,
    "content_changed_utc": "2026-09-24T13:40:44Z",
-   "checked_utc": "2026-09-25T16:29:58Z"
+   "checked_utc": "2026-09-26T01:32:57Z"
   },
   {
    "name": "state ideology",
@@ -112,21 +126,7 @@
    "content_key": "3ba4d42dc321fb717f2f86e09074136858753a64a0a546e0c5a468f739cb87e6",
    "changed": false,
    "content_changed_utc": "2026-09-23T13:05:55Z",
-   "checked_utc": "2026-09-25T16:29:58Z"
-  },
-  {
-   "name": "election results",
-   "url": "https://dataverse.harvard.edu/api/access/datafile/13887042",
-   "file": "mit_president_1976_2024.csv",
-   "critical": true,
-   "vintage": "presidential elections 1976-2024",
-   "bytes": 514108,
-   "previous_bytes": 514108,
-   "sha256": "9936410a6dd4ecc8be7fe202c6dff5b5f8fee59d88f35ab542ed12879941dcb7",
-   "content_key": "9936410a6dd4ecc8be7fe202c6dff5b5f8fee59d88f35ab542ed12879941dcb7",
-   "changed": false,
-   "content_changed_utc": "2026-09-23T13:05:55Z",
-   "checked_utc": "2026-09-25T16:29:58Z"
+   "checked_utc": "2026-09-26T01:32:57Z"
   },
   {
    "name": "joint resolutions (Senate)",
@@ -134,13 +134,13 @@
    "file": "BILLSTATUS-119-sjres.zip",
    "critical": false,
    "vintage": "current Congress; GovInfo republishes daily",
-   "bytes": 531970,
-   "previous_bytes": 530058,
-   "sha256": "8fbaacd590b94bdf2e51ddef077fb44cd4b54c2e633fd8c9ec51177f27ac36c9",
-   "content_key": "5d396261afd155829fb55ced1b13c0f54f9e090cc583d3da6bc1591ac7fbfaa7",
+   "bytes": 532280,
+   "previous_bytes": 531970,
+   "sha256": "8d0b44b8986519d2f5473a9cc0d5b1d99fbb17da32ad9b0a689e06de577036dc",
+   "content_key": "3d18620d1c61fcec0010f0e3463ec988bfecd1abc0465a73b2fbd779d33d91d6",
    "changed": true,
-   "content_changed_utc": "2026-09-25T16:29:58Z",
-   "checked_utc": "2026-09-25T16:29:58Z"
+   "content_changed_utc": "2026-09-26T01:32:57Z",
+   "checked_utc": "2026-09-26T01:32:57Z"
   },
   {
    "name": "joint resolutions (House)",
@@ -148,13 +148,13 @@
    "file": "BILLSTATUS-119-hjres.zip",
    "critical": false,
    "vintage": "current Congress; GovInfo republishes daily",
-   "bytes": 670903,
-   "previous_bytes": 670531,
-   "sha256": "50787a00c2db7abbec328e50f9087311d0450d2ba6dd98ff106283f7c901f5ba",
-   "content_key": "495713adb3847509da75344bad235d5a3d65b8717f4fe264b782f2eb91578e3f",
+   "bytes": 671227,
+   "previous_bytes": 670903,
+   "sha256": "a23cdc5c06d3444dfbe4af11720b6e3071a33c280a3c3f97c1023c11e7d52691",
+   "content_key": "d79cfb2c580c77bfa7ecaa0915f776d3ad79fead5836dbd15488b87c1f6a06d6",
    "changed": true,
-   "content_changed_utc": "2026-09-25T16:29:58Z",
-   "checked_utc": "2026-09-25T16:29:58Z"
+   "content_changed_utc": "2026-09-26T01:32:57Z",
+   "checked_utc": "2026-09-26T01:32:57Z"
   },
   {
    "name": "state populations",
@@ -168,22 +168,7 @@
    "content_key": "b8b50bd345d8a5f33d5c8a28c95aeaa0a50971356f000d9b48276a65fd9022a7",
    "changed": false,
    "content_changed_utc": "2026-09-23T13:05:55Z",
-   "checked_utc": "2026-09-25T16:29:58Z"
-  },
-  {
-   "name": "committee names",
-   "url": "https://unitedstates.github.io/congress-legislators/committees-current.json",
-   "file": "committees-current.json",
-   "critical": true,
-   "vintage": "current committees and their official names",
-   "bytes": 74732,
-   "previous_bytes": 0,
-   "sha256": "640ab5c262dd47b462f3a781d07dc417db8606a324f3b0a5422e7629c38e34ec",
-   "content_key": "640ab5c262dd47b462f3a781d07dc417db8606a324f3b0a5422e7629c38e34ec",
-   "changed": true,
-   "content_changed_utc": "2026-09-26T00:30:06Z",
-   "checked_utc": "2026-09-26T00:30:06Z",
-   "note": "added to snapshot 2026-09-25T16:29:58Z on 2026-09-26T00:30:06Z without refreshing the other sources"
+   "checked_utc": "2026-09-26T01:32:57Z"
   }
  ]
 }
