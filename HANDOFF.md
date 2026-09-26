@@ -7,7 +7,8 @@ and after the approved Pillar 5 plain-language card was added, and after Step 5A
 (new pages published in `demo/`, official committee names, Pillar 1 tests off the
 old page), and after Step 5B (old Pillars 4–6 code and tests removed, new
 independent supervisor), after Step 5C (daily automation on the new
-pipeline), and after the docs rewrite. Read all of it before doing
+pipeline), after the docs rewrite, and after the pre-publish validation (Stage 3 separated
+from the release, banner removed, Python 3.12 run, fresh update). Read all of it before doing
 anything. The repository and this file are the source of truth; older design
 documents, the whitepaper and chat history are not.
 
@@ -28,48 +29,63 @@ Work one step at a time and stop for review after each step.
 
 - Repo: `/Users/sarthakkesavarapu/Desktop/CivicAlign`, remote
   https://github.com/safire684-ops/civicalign
-- **Working branch: `pillars-4-6-rebuild` — local only, NOT pushed.** It was
-  created from local `main` so the live version stays intact during the rebuild.
-- Local `main` is 1 commit ahead of `origin/main` (the Stage 3 harness commit
-  `c2a596a`, also never pushed). `origin/main` is what the live site runs.
+- **Release branch: `pillars-4-6-rebuild` — local only, NOT pushed.** It sits
+  directly on `origin/main` (`d4a942a`) and **does not contain Pillar 1 Stage 3**:
+  on 2026-09-26 the branch was replayed without the Stage 3 harness commit
+  `c2a596a`, so every commit hash changed (the hashes in this file are the new
+  ones; the old ones are on the backup branch).
+- **`pillar1-stage3`** preserves the Stage 3 work: the release plus the harness
+  from `c2a596a` (with `tests/test_evaluation.py` as updated in Steps 5A/5B) and a
+  second commit with the two formerly uncommitted Stage 3 edits (`.gitignore`
+  ignores `evaluation/stage3/*.log`; `evaluation/report.py` shows token counts).
+  Its 43 Stage 3 tests pass. The same two edits are also in `stash@{0}`.
+- **`backup/pillars-4-6-rebuild-before-release-cleanup`** (`dd7c5df`) is the
+  branch exactly as it was before the replay.
+- Local `main` still contains `c2a596a` (1 commit ahead of `origin/main`).
+  **Publish from `origin/main`, not local `main`**, or Stage 3 comes back in.
+- Local Stage 3 run outputs (`evaluation/stage3/`) stay on disk, ignored through
+  this machine's `.git/info/exclude` (the release's `.gitignore` no longer
+  lists them).
 - The live site (https://safire684-ops.github.io/civicalign/, page
   `/senator-check.html`, report `/methodology.html`) still runs the OLD Pillars
   4–6 product from `origin/main`. The GitHub workflow (`.github/workflows/update.yml`)
-  still runs weekly (Mondays 11:00 UTC) on `origin/main` and commits as
-  `civicalign-bot`; its commits will need a rebase of this branch before any
-  publish (the generated pages will conflict and must simply be regenerated).
+  on `origin/main` is still the old weekly one (Mondays 11:00 UTC, commits as
+  `civicalign-bot`); if it has added commits by publishing time, rebase this
+  branch onto them (generated pages conflict: regenerate with `build_pages`,
+  never edit by hand).
 
 Commits on `pillars-4-6-rebuild` that are not on `origin/main` (oldest first):
 
 | Commit | What it did |
 |---|---|
-| `c2a596a` | Pillar 1 (Engine A) Stage 3 Maker/Checker evaluation harness. No generation results committed. |
-| `bb1d716` | Source snapshot refresh from a local fetch on 2026-09-25 (`data/raw/SNAPSHOT.json`, `PROVENANCE.tsv`). Engine B inputs unchanged from the previous snapshot; the four bill-status archives (Engine A inputs) updated. This is the snapshot the Step 1 ingest read. |
-| `83f685b` | **Step 1**: versioned input records, append-only store, ingest. |
-| `5563810` | **Step 2**: state population table, bridge (NONE), national estimate (unresolved), Pillars 4, 5, 6 calculations. |
-| `51deb13` | Added `population_weighted_mean_v1` beside the weighted median. |
-| `4f99c6b` | Made the weighted mean the PRIMARY Pillar 5 method, weighted median SECONDARY; medians moved to `details`; fixed: an unscored seated senator's share of state weight is left out with them (no current number changed). |
-| `183d684` | **Step 3**: versioned result records and incremental recomputation. |
-| `1bf60f6` | HANDOFF rewritten for a fresh chat. |
-| `1ac2156` | **Step 4 part 1**: methodology registry (`methodology.py`) and the three Pillar 4 reference anchors (`anchors.py`, `reference_anchors` table). |
-| `4b9616b` | HANDOFF update for Step 4 part 1. |
-| `d049b61` | **Step 4 complete**: page builder `build_pages.py`, templates in `demo/templates/`, built preview pages in `demo/next/`, `tests/test_pages.py`, one wording fix in `methodology.py`. See section 3. |
-| `7ea7424` | HANDOFF update for Step 4 complete. |
-| `6eb2969` | **Pillar 5 plain-language card** (approved wording) on the Step 4 preview page; one new page test. |
-| `807aed4` | HANDOFF update for the Pillar 5 card. |
-| `1901202` | **Step 5A**: new pages published in `demo/`, `demo/next/` retired, official committee names, Pillar 1 tests off the old page. See section 3. |
-| `ca35529` | HANDOFF update for Step 5A. |
-| `a229172` | **Step 5B**: old Pillars 4–6 modules and tests removed; new independent Engine B supervisor; `pipeline.py` reduced to Pillar 1. See section 3. |
-| `c877e5c` | HANDOFF update for Step 5B. |
-| `a54cc21` | **Step 5C**: daily automation on the Engine B pipeline; old builder, page tests, whitepaper step, weekly schedule and election source removed. See section 3. |
-| `41216de` | HANDOFF update for Step 5C. |
-| `741574f` | **Docs rewrite**: README.md and METHODOLOGY.md describe the current system; `docs/ENGINE_B_DATA_FLOW.md` added; old implementation docs moved to `docs/archive/`. See section 3. |
+| `75917f5` | Source snapshot refresh from a local fetch on 2026-09-25 (`data/raw/SNAPSHOT.json`, `PROVENANCE.tsv`). Engine B inputs unchanged from the previous snapshot; the four bill-status archives (Engine A inputs) updated. This is the snapshot the Step 1 ingest read. |
+| `cddd86b` | **Step 1**: versioned input records, append-only store, ingest. |
+| `0245306` | **Step 2**: state population table, bridge (NONE), national estimate (unresolved), Pillars 4, 5, 6 calculations. |
+| `5d1857d` | Added `population_weighted_mean_v1` beside the weighted median. |
+| `e0de09d` | Made the weighted mean the PRIMARY Pillar 5 method, weighted median SECONDARY; medians moved to `details`; fixed: an unscored seated senator's share of state weight is left out with them (no current number changed). |
+| `50597cd` | **Step 3**: versioned result records and incremental recomputation. |
+| `a884f9a` | HANDOFF rewritten for a fresh chat. |
+| `c9cd96b` | **Step 4 part 1**: methodology registry (`methodology.py`) and the three Pillar 4 reference anchors (`anchors.py`, `reference_anchors` table). |
+| `66d7e12` | HANDOFF update for Step 4 part 1. |
+| `348c326` | **Step 4 complete**: page builder `build_pages.py`, templates in `demo/templates/`, built preview pages in `demo/next/`, `tests/test_pages.py`, one wording fix in `methodology.py`. See section 3. |
+| `30cc837` | HANDOFF update for Step 4 complete. |
+| `88b0c05` | **Pillar 5 plain-language card** (approved wording) on the Step 4 preview page; one new page test. |
+| `2e86d48` | HANDOFF update for the Pillar 5 card. |
+| `bda847e` | **Step 5A**: new pages published in `demo/`, `demo/next/` retired, official committee names, Pillar 1 tests off the old page. See section 3. |
+| `b521c9d` | HANDOFF update for Step 5A. |
+| `7213efb` | **Step 5B**: old Pillars 4–6 modules and tests removed; new independent Engine B supervisor; `pipeline.py` reduced to Pillar 1. See section 3. |
+| `5914bfa` | HANDOFF update for Step 5B. |
+| `36c50af` | **Step 5C**: daily automation on the Engine B pipeline; old builder, page tests, whitepaper step, weekly schedule and election source removed. See section 3. |
+| `0e197a9` | HANDOFF update for Step 5C. |
+| `70b1004` | **Docs rewrite**: README.md and METHODOLOGY.md describe the current system; `docs/ENGINE_B_DATA_FLOW.md` added; old implementation docs moved to `docs/archive/`. See section 3. |
+| `940747c` | HANDOFF update for the docs rewrite. |
+| `ec0c422` | **Release cleanup**: preview banner removed; Stage 3 kept out of the release (README, package docstring, the floor-vote summary guard moved into `test_floor_votes.py`). |
+| `16d7b31` | **Fresh verified snapshot** from a local `scripts/update.sh` run (2026-09-26T01:32:57Z). See section 3. |
 | (next) | This HANDOFF update. |
 
-Uncommitted in the working tree (leave them; they belong to the paused Engine A
-Stage 3 work): `.gitignore` (ignores `evaluation/stage3/*.log`) and
-`src/civicalign/evaluation/report.py` (review report counts cached input
-tokens). Local-only, gitignored: `evaluation/stage3/runs/smoke-1` and
+The working tree of the release branch is clean. The two Stage 3 edits that
+used to sit uncommitted here are preserved on `pillar1-stage3` (and in
+`stash@{0}`). Local-only, ignored: `evaluation/stage3/runs/smoke-1` and
 `evaluation/stage3/runs/dev-2026-09-24-r1` (a stopped Stage 3 run).
 
 The local raw files in `data/raw/` (gitignored) match the committed
@@ -83,10 +99,11 @@ CivicAlign is a Senate accountability tool made of two separate engines.
 
 - **Engine A — Legislative accountability (Pillar 1).** "What did this senator
   actually vote for, and what did the vote mean?" It binds each Senate vote to
-  the official record and the exact text voted on, and (in evaluation) tests
+  the official record and the exact text voted on, and (in a separate Stage 3
+  evaluation, on branch `pillar1-stage3`, not in this release) tests
   whether a Maker/Checker model pair can write plain-English receipts from
   official sources only. Code: `src/civicalign/explain/`,
-  `src/civicalign/evaluation/`, `receipts.py`, `sources/billflow.py`,
+  (`src/civicalign/evaluation/` on `pillar1-stage3` only), `receipts.py`, `sources/billflow.py`,
   `sources/billstatus.py`, `sources/senate_votes.py`. **Not part of the current
   work. Do not modify it.**
 
@@ -316,7 +333,7 @@ registry entry (19), the anchor table, and the binding rules.
   limitations. Anchors never appear in Pillars 5 or 6 (tested).
 - **Senate / Nation (Pillar 5).** Pillar 5 now includes the **approved
   plain-language card** (wording approved by the user on 2026-09-25, commit
-  `6eb2969`), titled "Counting states vs. weighting by population", marked
+  `88b0c05`), titled "Counting states vs. weighting by population", marked
   "candidate method, not final". Under "Senate average" it shows the main
   numbers as three tiles:
   - Each senator counted equally: **0.120**
@@ -372,7 +389,7 @@ own senator uses the anchor's display name ("Bernie Sanders").
 views and the methodology page render, no horizontal scroll, no console errors,
 and every number on screen (31 in the checked state) opens its methodology.
 
-### Step 5A — published pages, official committee names, Pillar 1 off the old page — STEP 5A IS COMPLETE (`1901202`)
+### Step 5A — published pages, official committee names, Pillar 1 off the old page — STEP 5A IS COMPLETE (`bda847e`)
 
 - **`demo/senator-check.html` and `demo/methodology.html` are now generated by
   the new builder** (`python -m civicalign.build_pages`; `--check` compares).
@@ -400,7 +417,7 @@ and every number on screen (31 in the checked state) opens its methodology.
 - **Pillar 1 tests no longer depend on the old senator-check page.**
   `test_binding` and `test_context` call the new `supervisor.pillar1_checks()`
   (the same `_binding_checks` and `_context_checks`, same inputs and condition,
-  no page, no pipeline report); `test_evaluation` checks Pillar 1's own
+  no page, no pipeline report); `test_evaluation` (now on `pillar1-stage3`) checks Pillar 1's own
   floor-vote output (`pipeline.run(...).floor_votes` carry no generated
   summary). No Pillar 1 logic changed; 97/97 Pillar 1 tests pass.
 - **The Pillars 4–6 result record did not change**: key `5f42ca01…`, compute
@@ -421,7 +438,7 @@ and every number on screen (31 in the checked state) opens its methodology.
 - The page still carries "Local preview build of the rebuilt Pillars 4–6. Not
   published." — true until publishing; remove it in Step 6.
 
-### Step 5B — old Pillars 4–6 path removed, independent supervisor — STEP 5B IS COMPLETE (`a229172`)
+### Step 5B — old Pillars 4–6 path removed, independent supervisor — STEP 5B IS COMPLETE (`7213efb`)
 
 - **Old Pillars 4–6 modules and old tests were removed.** Modules:
   `alignment`, `chamber`, `committees`, `space`, `uncertainty`, `peers`,
@@ -474,7 +491,7 @@ and every number on screen (31 in the checked state) opens its methodology.
 - **The current Pillars 4–6 result values did not change** (record
   `5f42ca01…`, `compute --verify` passes, pages current).
 
-### Step 5C — automation on the new pipeline — STEP 5C IS COMPLETE (`a54cc21`)
+### Step 5C — automation on the new pipeline — STEP 5C IS COMPLETE (`36c50af`)
 
 - **The GitHub workflow (`.github/workflows/update.yml`) and the local scripts
   now use the new Engine B pipeline. The update runs daily** (cron `0 11 * * *`,
@@ -519,7 +536,7 @@ and every number on screen (31 in the checked state) opens its methodology.
   committed `data/raw/SNAPSHOT.json` still lists the election file from the last
   fetch; the next full fetch drops it.
 
-### Docs rewrite — COMPLETE (`741574f`)
+### Docs rewrite — COMPLETE (`70b1004`)
 
 - **README.md and METHODOLOGY.md now describe the current system**: the two
   engines; Pillar 4 (no senator-to-state distance while the bridge is NONE, and
@@ -531,8 +548,8 @@ and every number on screen (31 in the checked state) opens its methodology.
   scientific limits; retired methods named only as retired. No deleted module
   is named as current.
 - The README's Pillar 1 section is unchanged except two facts: the binding step
-  runs in the daily automated update, and Stage 3 is set up in
-  `src/civicalign/evaluation/` with one development run stopped and nothing
+  runs in the daily automated update, and Stage 3 (in the release README:
+  developed separately, not part of this release) has one development run stopped and nothing
   published.
 - **`docs/ENGINE_B_DATA_FLOW.md` added**: the Engine B data flow file by file,
   every table and key, the commands, and how to add a displayed number.
@@ -547,6 +564,42 @@ and every number on screen (31 in the checked state) opens its methodology.
   expected-fail markers remain.**
 - **Current test status: 295 passed, 0 failed.**
 - **The branch remains local only and not published.**
+
+### Pre-publish validation — COMPLETE (2026-09-26)
+
+- **Stage 3 separated from the release**: `c2a596a` changes only
+  `src/civicalign/evaluation/` (7 files), `evaluation/prompts/` (3 files),
+  `tests/test_evaluation.py` and 3 `.gitignore` lines; no Pillars 4–6 code
+  depends on it. The release branch was replayed onto `origin/main` without it
+  (the only difference from the backup branch is exactly those files); the work
+  is preserved on `pillar1-stage3` (see section 1). The one Pillar 1 guard that
+  does not need Stage 3 ("floor votes carry no generated summary") moved into
+  `test_floor_votes.py`.
+- **The preview banner is removed** ("Local preview build of the rebuilt Pillars
+  4–6. Not published." and its style rule); the rebuilt page differs from before
+  by exactly those two lines. No other wording changed.
+- **Python 3.12 validation**: Python 3.12.14 (Homebrew `python@3.12`) in a
+  separate throwaway environment with only `pytest` (matching the workflow):
+  **253 passed, 0 failed**; `build_pages --check`, `compute --verify` and the
+  supervisor (31 checks) all pass under 3.12. The project's 3.14 `.venv` is
+  unchanged.
+- **Fresh update** (`scripts/update.sh`, the production path; snapshot run
+  2026-09-26T01:32:57Z): **exit 0**; every step passed (fetch, verify, Pillar 1
+  bind and context, ingest, bridge, anchors, compute, build, 253 tests,
+  supervisor 31 checks). Only the four bill-status archives changed upstream
+  (Pillar 1 inputs). **Every Pillars 4–6 source was unchanged**: no new input
+  version in any table (senators, state estimates, populations, committee
+  membership, committee names), anchors unchanged, compute "unchanged", result
+  still `5f42ca01…` (measurement date 2026-09-24), pages byte-identical. Pillar 5
+  (0.120 / 0.083 / +0.037; medians 0.3195 / −0.216 / +0.5355), all 16 committee
+  medians and drifts, all 100 senator scores, the three anchors (−0.546, −0.314,
+  0.850) and all state estimates are the same as before. One Pillar 1 binding
+  (vote 119-2-53, H.R. 6644) picked up the bill's newer status record (previous
+  version kept in its history). The retired election-results entry left the
+  snapshot. Committed as `16d7b31`.
+- **Final test counts**: 253 passed, 0 failed, under both 3.12 and 3.14 (the
+  earlier 295 minus the 43 Stage 3 tests now on `pillar1-stage3`, plus the moved
+  floor-vote guard); supervisor 31 of 31.
 
 ## 4. Current real numbers (record `5f42ca01…`, nominate_dim1, 100 active senators)
 
@@ -644,6 +697,9 @@ alignment scores, defiance/betrayal language, politician rankings.
 
 Run: `./.venv/bin/python -m pytest -q` (Python 3.14 venv; CI uses 3.12).
 
+**After the pre-publish validation: 253 passed, 0 failed** (Python 3.12 and 3.14), no
+expected-fail markers; supervisor 31 of 31. The 43 Stage 3 tests are on `pillar1-stage3`.
+
 **After the docs rewrite: 295 passed, 0 failed, no expected-fail markers.**
 Docs/README 14, Engine B 71, Pillar 1 103, page 47, supervisor 21,
 automation/update chain 32 (plus regressions and the rest).
@@ -661,7 +717,7 @@ Automation/update chain 32, Engine B 71, Pillar 1 103, page 47, supervisor 21.
   page; results unchanged; guardrails (accessibility, escaping, three views,
   sources, dates, separate scales, no ordering by score, themes, retired code gone).
 - Supervisor (21): `test_supervisor.py`.
-- Pillar 1 (103): `test_binding.py`, `test_context.py`, `test_evaluation.py`,
+- Pillar 1 (103 at the time; `test_evaluation.py`'s 43 are now on `pillar1-stage3`): `test_binding.py`, `test_context.py`, `test_evaluation.py`,
   `test_floor_votes.py`.
 - Snapshot, regressions and docs (33 + 4 xfail): `test_update_chain.py`,
   `test_regressions.py`, `test_readme.py`, `test_docs.py`.
@@ -693,7 +749,7 @@ report and whitepaper against newer bill archives); after Step 5A, 321 passed,
   record); see Step 4 part 1. Never invent proxy scores for anyone.
 - **Pillar 5** must explain in plain language what the Senate numbers mean in
   the real world, not just show abstract coordinates. DONE: approved card
-  (`6eb2969`); see section 3. No legislative-outcome claims until the user asks.
+  (`88b0c05`); see section 3. No legislative-outcome claims until the user asks.
 - **Pillar 6**: the user likes the existing committee UI; largely preserve its
   design while switching it to the new metrics (drop the bill-flow and
   Yes/No-split parts, which are retired). DONE in `demo/next/` (Step 4).
@@ -706,29 +762,22 @@ report and whitepaper against newer bill archives); after Step 5A, 321 passed,
 
 ---
 
-## 9. Next step: Step 6 (local end-to-end run), then publishing only with approval
+## 9. Next step: publishing — only with the user's explicit approval
 
-Steps 1–5C and the docs rewrite are complete. Remaining work before publishing:
+Pre-publish validation is complete (section 3): Stage 3 is out of the release
+and preserved, the banner is removed, the suite passes under Python 3.12, and a
+fresh production update passed end to end. Remaining, only after the user
+approves publishing:
 
-1. **Remove the preview banner** ("Local preview build of the rebuilt Pillars
-   4–6. Not published.") from `src/civicalign/templates/senator-check.template.html`
-   and rebuild the pages; it would be false once live.
-2. **Run the whole chain locally with a fresh fetch** (`scripts/update.sh`): a
-   new snapshot will write new input versions and a new result record; confirm
-   ingest, anchors, compute, build, every test and the supervisor pass, then
-   commit the new data locally.
-3. **Check CI's Python**: the workflow uses Python 3.12; the local venv is 3.14.
-   Run the suite under 3.12 if possible before relying on CI.
-4. **Decide the leftovers**: the two uncommitted Pillar 1 edits (`.gitignore`,
-   `src/civicalign/evaluation/report.py`), and local `main`'s unpushed Stage 3
-   harness commit `c2a596a` (it is also on this branch, so publishing the branch
-   publishes it).
-5. **Publishing — only with the user's explicit approval**: fetch `origin`,
-   rebase onto `origin/main` (the old weekly bot commits touch the generated
-   pages; resolve by regenerating with `build_pages`, never by hand), re-run the
-   tests and the supervisor, merge to `main`, push, run the workflow once by
-   hand, and check the live site matches the repository (pages, `data/ideology/`).
-6. Afterwards (optional): republish the claude.ai copies of the page and the
+1. `git fetch origin`; if `origin/main` has moved (old weekly bot commits),
+   rebase `pillars-4-6-rebuild` onto it and resolve generated pages by
+   regenerating (`build_pages`), never by hand; re-run the tests and the
+   supervisor.
+2. Publish from `origin/main` plus this branch (not local `main`, which still
+   holds `c2a596a`): push, fast-forward `main` on GitHub, run the workflow once
+   by hand, and check the live site matches the repository (pages and
+   `data/ideology/`).
+3. Optional afterwards: republish the claude.ai copies of the page and the
    methodology (section 12), which still show the old product.
 
 The Pillar 5 plain-language card is done; do not change its wording without the
@@ -767,7 +816,8 @@ Remaining approved plan after Step 4:
   37, 49, 71, 77, 81, 88, H.J.Res.142, S.2, H.R.4), 27 CRA READY_WITH_LIMITS,
   15 pending, 2 ambiguous. S.2 is READY_FOR_GENERATION + REVIEW_REQUIRED
   (178,614 source characters; decided to keep it in the cohort).
-- Stage 3 (Maker/Checker development evaluation) harness is built
+- Stage 3 (Maker/Checker development evaluation) harness is built — on branch
+  `pillar1-stage3` only, not in the Pillars 4–6 release
   (`src/civicalign/evaluation/`, prompts `evaluation/prompts/maker_v1.txt` and
   `checker_v1.txt` with hashes in `PROMPTS.json`). It runs a sealed `claude`
   CLI (2.1.281, `/opt/homebrew/bin/claude`, the user's own login; Maker
