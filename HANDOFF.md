@@ -10,7 +10,8 @@ independent supervisor), after Step 5C (daily automation on the new
 pipeline), after the docs rewrite, and after the pre-publish validation (Stage 3 separated
 from the release, banner removed, Python 3.12 run, fresh update), and after
 publishing (26 September 2026: `e6f6428` live on GitHub `main`), and after the
-deterministic bill/sponsor data layer (`c0b592a`, local). Read all of it before doing
+deterministic bill/sponsor data layer (`c0b592a`, local) and the Pillar 5 outcome
+layer (`5a5dd93`, local). Read all of it before doing
 anything. The repository and this file are the source of truth; older design
 documents, the whitepaper and chat history are not.
 
@@ -95,6 +96,8 @@ Commits in the Pillars 4–6 release (all on GitHub `main` since publishing; old
 | `e6f6428` | HANDOFF: pre-publish validation complete. **Published: live on GitHub `main`.** |
 | `ce6794a` | Post-publish docs: README says Pillars 4–6 is live; HANDOFF records the publication (pushed to GitHub `main`). |
 | `c0b592a` | **Bill/sponsor data layer** (local, not pushed): `ideology/bills.py`, `ideology/bill_tallies.py`, table `bill_sponsor_classifications`, `tests/test_bills.py`. See section 3. |
+| `89cc85a` | HANDOFF update for the bill/sponsor data layer. |
+| `5a5dd93` | **Pillar 5 outcome layer** (local, not pushed): `ideology/bill_outcomes.py`, table `senate_bill_outcomes`, `passed_senate_tally()`, `tests/test_bill_outcomes.py`. See section 3. |
 | (next) | This HANDOFF update. |
 
 The working tree of the release branch is clean. The two Stage 3 edits that
@@ -165,6 +168,7 @@ Tables in `data/ideology/` (JSON Lines, tracked in git):
 | `reference_anchors.jsonl` | anchor_id | The three Pillar 4 reference anchors; see Step 4 part 1. Visual only. |
 | `committee_names.jsonl` | committee_id | Official standing-committee names (Step 5A). |
 | `bill_sponsor_classifications.jsonl` | congress, bill_id | Every Senate bill classified by its primary sponsor's `nominate_dim1` sign; see "Bill/sponsor data layer" below. Not a calculation input. |
+| `senate_bill_outcomes.jsonl` | congress, bill_id | Every Senate bill's passed-Senate and enactment status with the official evidence; see "Pillar 5 outcome layer" below. Not a calculation input. |
 
 Store (`store.py`): append-only; a new version is written only when content
 differs from the key's current version; each key's versions are hash-chained
@@ -680,8 +684,9 @@ counts; nothing is displayed yet.
 - **These totals cover ALL Senate bills introduced in the 119th Congress (S
   bills in the archive). They must NOT be presented as bills passed.** No
   outcome set has been chosen; `sponsor_tally()` says so when called without one.
-- **37 of the Senate bills in the current data became law** (a public law is
-  listed in their bill-status record).
+- Enactment is now defined by the Pillar 5 outcome layer (below): **41 of the
+  Senate bills are enacted** — 37 with a public-law number in their record and 4
+  signed by the President with the number still pending.
 - **Committee referred/reported tallies are now available and traceable to
   exact bill ids**: `committee_tallies()` gives, for each of the 16 standing
   committees, bills referred ("Referred To"), bills reported ("Reported By" or
@@ -713,6 +718,74 @@ counts; nothing is displayed yet.
 - **This pipeline is not yet wired into the daily automation or the frontend**,
   and the supervisor checks the table's integrity but does not yet recount the
   classifications independently.
+
+### Pillar 5 outcome layer — COMPLETE (`5a5dd93`, local, not pushed)
+
+The data behind the future Pillar 5 concept **"Passed Senate bills by sponsor
+voting position"**. **No UI has been changed yet**; no scorecard or chart exists.
+
+- **These are SPONSOR classifications, NOT classifications of the bills
+  themselves.** Each bill carries its primary sponsor's class
+  (`LIBERAL_SPONSOR`, `CONSERVATIVE_SPONSOR`, `ZERO_SCORE_SPONSOR`, `UNKNOWN`)
+  from the bill/sponsor data layer; nothing is called a "liberal bill" or a
+  "conservative bill".
+- **No LLM is used**: fixed code and text matching on the official bill-status
+  record; no model, no network call, no external program (tested).
+- **Every count traces to exact bill ids and official actions**: every tally
+  returns the sorted bill ids beside each count, and every outcome record keeps
+  the official actions (dates and text) that decided it, the bill's GovInfo URL
+  and the SHA-256 of its XML. The classification and outcome records must come
+  from the same XML for every bill, or the tally is refused.
+- **Main outcome set — PASSED SENATE** (rule `senate_passage_loc17000_v1`): a
+  Senate bill (S.) of the 119th Congress whose bill-status record has a Library
+  of Congress action with code 17000, "Passed/agreed to in Senate", with no later
+  Senate action vitiating the passage. The record also keeps the Senate's own
+  floor action ("Passed Senate …", or "… read the third time, and passed") and
+  whether an "Engrossed in Senate" text exists; **the three signals agree on
+  every bill** (192 each). A bill with several passage actions is counted once
+  (earliest date). S2882 (the continuing-appropriations bill: third reading
+  vitiated, cloture failed) correctly never passed.
+- **Secondary set — ENACTED** (rule `enactment_signature_or_public_law_v1`,
+  future-safe): **a presidential signature counts as enactment, and a recorded
+  public law also confirms enactment; a public-law number is not required before
+  a bill is legally a law.** Fields kept separate: `enacted`, `enactment_basis`
+  (`SIGNED_BY_PRESIDENT_AND_PUBLIC_LAW_RECORDED`, `PUBLIC_LAW_RECORDED`,
+  `SIGNED_BY_PRESIDENT_PUBLIC_LAW_NUMBER_PENDING`), `public_law_number` (value or
+  null), `public_law_number_pending`, and the signature, public-law and
+  enactment dates. The public-law path also covers a law enacted without a
+  signature or over a veto (today S629, Public Law 119-102, has no signature
+  action). An enacted Senate bill without Senate passage stops the build.
+- **Current numbers** (`python -m civicalign.ideology.bill_outcomes --audit`):
+
+  | Set | Total | LIBERAL_SPONSOR | CONSERVATIVE_SPONSOR | ZERO_SCORE_SPONSOR | UNKNOWN |
+  |---|---|---|---|---|---|
+  | Passed Senate | **192** | **72** | **120** | 0 | 0 |
+  | Enacted | **41** | **5** | **36** | 0 | 0 |
+
+  Of the 41 enacted bills, **37 have a public-law number** in the record and
+  **4 were signed by the President on 2026-09-25 with the number pending**
+  (S550, S603, S759, S790). **They are law; do not describe them as "not yet
+  law".** (Enactment bases: 36 signed with a public law recorded, 1 public law
+  recorded without a signature action, 4 signed with the number pending.)
+- Functions: `bill_tallies.passed_senate_tally(classifications, outcomes)`
+  returns `passed_senate` and `enacted` (each split by sponsor class with bill
+  ids), `public_law_number_recorded` and `public_law_number_pending`.
+  `bill_outcomes.evidence_disagreements()` lists any bill where the three
+  passage signals disagree (none today).
+- Storage: table `senate_bill_outcomes` (key `congress, bill_id`), append-only
+  and hash-chained like the rest; about 7 MB; an unchanged archive writes
+  nothing. Command: `python -m civicalign.ideology.bill_outcomes [--dry-run] [--audit]`.
+- Tests: `tests/test_bill_outcomes.py` (17): passage is the code-17000 action;
+  counted once; vitiated passage and third reading; passed vs enacted; the
+  signed-but-number-pending case; a public law without a signature action; the
+  number read from a "Became Public Law" action; the sponsor breakdown;
+  enactment without passage refused; validator rules; mismatched records
+  refused; rerun writes nothing and a change only appends; no LLM or network;
+  nothing calls a signed bill "not yet law"; and a real-data recount of every
+  set from each bill's own XML actions with separate code.
+- **Current tests: 294 passed, 0 failed.** The live pages, the Pillars 4–6
+  calculations and the result record `5f42ca01…` are unchanged. Not yet in the
+  daily automation, the supervisor recount or the frontend.
 
 ## 4. Current real numbers (record `5f42ca01…`, nominate_dim1, 100 active senators)
 
@@ -810,6 +883,8 @@ alignment scores, defiance/betrayal language, politician rankings.
 
 Run: `./.venv/bin/python -m pytest -q` (Python 3.14 venv; CI uses 3.12).
 
+**After the Pillar 5 outcome layer: 294 passed, 0 failed** (adds `tests/test_bill_outcomes.py`, 17).
+
 **After the bill/sponsor data layer: 277 passed, 0 failed** (adds `tests/test_bills.py`, 24).
 
 **After the pre-publish validation: 253 passed, 0 failed** (Python 3.12 and 3.14), no
@@ -880,12 +955,10 @@ report and whitepaper against newer bill archives); after Step 5A, 321 passed,
 Publishing is done, and the bill/sponsor data layer is built (section 3). No
 scorecard or UI work has started. Open items, each only when the user asks:
 
-1. **Pillar 5 decision needed (the user's): which Senate bills make up the
-   public-facing outcome set.** `sponsor_tally(records, outcome_set, name)` takes
-   any named set of bill ids; nothing is shown until the user defines it (for
-   example: bills that became law, bills that passed the Senate, bills reported
-   by a committee, or a named list), including whether Senate joint resolutions
-   or House bills should be in scope. Do not invent a set.
+1. **Pillar 5 outcome set: decided and built** (passed Senate = main, enacted =
+   secondary; section 3). Next, only when the user asks: the Pillar 5 scorecard
+   UI ("Passed Senate bills by sponsor voting position"), with methodology
+   entries for its numbers and sponsor-only wording.
 2. Wire the bill layer into the daily update and add an independent supervisor
    recount of the classifications and tallies before anything is displayed.
 3. Pillar 6 bill-flow UI, only when the user asks (the committee tallies exist).
