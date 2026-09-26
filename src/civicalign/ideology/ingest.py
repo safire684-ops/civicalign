@@ -13,6 +13,8 @@ unchanged snapshot writes nothing.
     state_population            Census state population estimates, every year of the vintage
     committee_membership_events congress-legislators committee-membership-current.json,
                                 standing committees only, as observed changes
+    committee_names             congress-legislators committees-current.json: each Senate
+                                standing committee's official name
 
 No metric is computed here, and nothing is read from Engine A.
 """
@@ -35,6 +37,7 @@ AIP = ("American Ideology Project (Tausanovitch & Warshaw), subnational ideology
        "file aip_states_ideology_v2022a.tab, column mrp_ideology")
 AIP_URL = "https://doi.org/10.7910/DVN/BQKU4M"
 COMMITTEES = "unitedstates/congress-legislators: committee-membership-current.json"
+COMMITTEE_LIST = "unitedstates/congress-legislators: committees-current.json"
 VOTEVIEW_PARTY = {"100": "Democrat", "200": "Republican", "328": "Independent"}
 
 
@@ -241,18 +244,41 @@ def committee_event_records(cfg: Config, snap: dict, current: dict[tuple, dict])
     return sorted(out, key=lambda r: (r["committee_id"], r["event"], r["bioguide_id"]))
 
 
+# ---- committee names -----------------------------------------------------------------------
+
+def committee_name_records(cfg: Config, snap: dict) -> list[dict]:
+    """Every Senate standing committee's official name, with the short name the
+    page shows. A name that does not have the expected official form is refused,
+    never guessed at."""
+    prov = provenance(source_entry(cfg, snap, cfg.committee_list_json.name), COMMITTEE_LIST)
+    out = []
+    for c in json.loads(cfg.committee_list_json.read_text()):
+        code = c.get("thomas_id") or ""
+        if c.get("type") != "senate" or not (code.startswith(cfg.standing_committee_prefix) and len(code) == 4):
+            continue
+        name = (c.get("name") or "").strip()
+        m = R.COMMITTEE_NAME_PREFIX.match(name)
+        if not m:
+            raise SnapshotMismatch(f"{code}: official name {name!r} is not of the form 'Senate Committee on ...'")
+        out.append({"committee_id": code, "official_name": name, "display_name": m.group("short"), **prov})
+    if not out:
+        raise SnapshotMismatch("no Senate standing committees in the committee list")
+    return sorted(out, key=lambda r: r["committee_id"])
+
+
 # ---- runner -------------------------------------------------------------------------------
 
 def run(cfg: Config = DEFAULT, dry_run: bool = False) -> dict:
     snap = snapshot(cfg)
     tables = {t: Table(cfg.ideology_dir, t) for t in ("senator_ideology", "constituency_ideology", "state_population",
-                                                       "committee_membership_events")}
+                                                       "committee_membership_events", "committee_names")}
     batches = {
         "senator_ideology": senator_records(cfg, snap),
         "constituency_ideology": constituency_records(cfg, snap),
         "state_population": population_records(cfg, snap),
         "committee_membership_events": committee_event_records(
             cfg, snap, {k: line["content"] for k, line in tables["committee_membership_events"].latest().items()}),
+        "committee_names": committee_name_records(cfg, snap),
     }
     written = {}
     for name, rows in batches.items():

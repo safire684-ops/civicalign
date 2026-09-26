@@ -6,17 +6,18 @@ Reads only
     the latest saved result record     data/ideology/metrics/<key>.json (via compute.index / load_record)
     the methodology registry           ideology/methodology.py
     the three Pillar 4 anchors         data/ideology/reference_anchors.jsonl (via anchors.current)
-and writes
-    <out>/senator-check.html           the three views, data embedded (opens from a file)
-    <out>/methodology.html             every registry entry, with this build's versions
-from the templates in demo/templates/. Nothing is calculated here: every number
+    official committee names          data/ideology/committee_names.jsonl (congress-legislators committee list)
+and writes the published pages
+    demo/senator-check.html            the three views, data embedded
+    demo/methodology.html              every registry entry, with this build's versions
+from the templates in src/civicalign/templates/ (outside demo/, which is what the
+site publishes). Nothing is calculated here: every number
 is a value from the record (or an anchor record), rounded for display to the
 registry's decimals, and carries the id of its registry entry so the page can
 show its methodology. A number whose path has no registry entry stops the build.
 
-The default output is demo/next/, beside the old page: demo/senator-check.html
-and build_demo.py still serve the old product and Engine A's checks until the
-old path is removed (Step 5).
+A committee whose code has no official name in committee_names stops the
+build: a name is never guessed.
 
 No Engine A import, no Pillar 1 content, no 0-100 display.
 """
@@ -32,25 +33,15 @@ from .config import DEFAULT, Config
 from .ideology import anchors as A
 from .ideology import compute as C
 from .ideology import methodology as M
-from .ideology.store import sha
+from .ideology.store import Table, sha
 from .sources.population import USPS
 
 ROOT = Path(__file__).resolve().parents[2]
-TEMPLATES = ROOT / "demo" / "templates"
-OUT = ROOT / "demo" / "next"
+TEMPLATES = Path(__file__).resolve().parent / "templates"
+OUT = ROOT / "demo"
 PAGES = ("senator-check.html", "methodology.html")
 STATE_NAMES = {v: k for k, v in USPS.items()}
 
-# Committee names are not in a versioned source yet (Step 5 adds congress-legislators
-# committees-current). Until then the page shows these names beside the official code.
-COMMITTEE_NAMES = {
-    "SSAF": "Agriculture, Nutrition, and Forestry", "SSAP": "Appropriations", "SSAS": "Armed Services",
-    "SSBK": "Banking, Housing, and Urban Affairs", "SSBU": "Budget", "SSCM": "Commerce, Science, and Transportation",
-    "SSEG": "Energy and Natural Resources", "SSEV": "Environment and Public Works", "SSFI": "Finance",
-    "SSFR": "Foreign Relations", "SSGA": "Homeland Security and Governmental Affairs",
-    "SSHR": "Health, Education, Labor, and Pensions", "SSJU": "Judiciary", "SSRA": "Rules and Administration",
-    "SSSB": "Small Business and Entrepreneurship", "SSVA": "Veterans' Affairs",
-}
 # Differences keep their sign on display.
 SIGNED = {"p5.weighting_difference", "p5.median_difference", "p6.committee_senate_drift",
           "p4.distance", "p5.chamber_public_gap", "p6.committee_public_drift"}
@@ -140,6 +131,16 @@ def count(path: str, value: int) -> dict:
     return {"m": e["id"], "p": path, "s": "AVAILABLE", "u": e["units"], "r": None, "v": value, "d": fmt(value, None)}
 
 
+def committee_names(cfg: Config, codes) -> dict[str, dict]:
+    """code -> the stored official-name record; a code without one stops the build."""
+    names = {r["committee_id"]: r for r in Table(cfg.ideology_dir, "committee_names").current()}
+    missing = sorted(c for c in codes if c not in names)
+    if missing:
+        raise BuildError(f"no official committee name for {missing} in committee_names: run ingest "
+                         "(source: congress-legislators committees-current.json)")
+    return names
+
+
 def latest(cfg: Config) -> dict:
     idx = C.index(cfg)
     if not idx:
@@ -191,7 +192,9 @@ def payload(cfg: Config = DEFAULT) -> dict:
                                     "p4.reference_anchor")} for a in anchors]
     secondary = p5["details"]["methods"][M.SECONDARY_METHOD]
     primary_label = p5["population_weighted_center"]
-    committees = [{"code": c, "name": COMMITTEE_NAMES.get(c, c),
+    names = committee_names(cfg, p6)
+    committees = [{"code": c, "name": names[c]["display_name"], "official_name": names[c]["official_name"],
+                   "name_source": names[c]["source"], "name_retrieved": names[c]["retrieved_at"][:10],
                    "listed": count(f"pillar6.{c}.members_listed", v["members_listed"]),
                    "scored": count(f"pillar6.{c}.members_scored", v["members_scored"]), "left_out": v["members_left_out"],
                    **{k: number(f"pillar6.{c}.{k}", v[k]) for k in ("committee_median", "committee_senate_drift", "committee_public_drift")}}

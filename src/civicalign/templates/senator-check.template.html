@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Public+Sans:wght@400;500;600;700&display=swap">
-<link rel="stylesheet" href="../civicalign.css">
+<link rel="stylesheet" href="civicalign.css">
 <style>
 /* Pillars 4-6 additions on top of civicalign.css: numbers that open their methodology,
    reference ticks, stat tiles, not-available rows, the methodology panel. */
@@ -321,7 +321,7 @@ dialog.method a{color:var(--alert);font-weight:600}
         row('Members listed',c.listed)+row('Members with a Voteview score',c.scored,c.left_out.length?'Left out (no score): '+esc(c.left_out.join(', ')):null)+'</div>'+
       '<details class="more"><summary><span>More about this committee</span></summary><ul class="limits-list">'+
         M['p6.committee_median'].limitations.filter(function(x){return x.indexOf('recorded roll-call')<0}).map(function(x){return '<li>'+esc(x)+'</li>'}).join('')+
-        '<li>Committee names are shown beside the official committee code; the names are not yet read from a versioned source.</li></ul></details></div>';
+        '<li>Official name: '+esc(c.official_name)+' (code '+esc(c.code)+'), from '+esc(c.name_source)+', retrieved '+esc(c.name_retrieved)+'.</li></ul></details></div>';
   }
   function renderCommittee(code){
     var c=P6.committees.filter(function(x){return x.code===code})[0]; if(!c) return;

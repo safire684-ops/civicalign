@@ -167,5 +167,10 @@ class Config:
     def committees_json(self) -> Path:
         return self.raw_dir / "committee-membership-current.json"
 
+    # Official committee names and codes (Engine B: Pillar 6 committee names).
+    @property
+    def committee_list_json(self) -> Path:
+        return self.raw_dir / "committees-current.json"
+
 
 DEFAULT = Config()

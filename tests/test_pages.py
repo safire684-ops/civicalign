@@ -1,9 +1,9 @@
-"""Pillars 4-6, Step 4 parts 2-3: the page builder and the three views.
+"""Pillars 4-6: the page builder and the three views (Step 4), published to demo/ (Step 5A).
 
-The builder reads only the saved result record, the methodology registry and
-the saved anchors. These tests check the data it embeds, the committed preview
-pages in demo/next/, and what the pages must never contain. Nothing here
-writes to data/ideology/ or demo/."""
+The builder reads only the saved result record, the methodology registry, the
+saved anchors and the official committee names. These tests check the data it
+embeds, the committed published pages in demo/, and what the pages must never
+contain. Nothing here writes to data/ideology/ or demo/."""
 import ast
 import copy
 import dataclasses
@@ -17,10 +17,13 @@ import pytest
 from civicalign import build_pages as BP
 from civicalign.config import DEFAULT
 from civicalign.ideology import anchors as A
+from civicalign.ideology import compute as C
+from civicalign.ideology import ingest as I
 from civicalign.ideology import methodology as M
+from civicalign.ideology.store import Table
 
 ROOT = Path(__file__).resolve().parents[1]
-TEMPLATE = (ROOT / "demo" / "templates" / "senator-check.template.html").read_text()
+TEMPLATE = (ROOT / "src" / "civicalign" / "templates" / "senator-check.template.html").read_text()
 
 
 @pytest.fixture(scope="module")
@@ -193,7 +196,8 @@ def test_pillar6_uses_only_committee_median_and_senate_drift(data):
     cs = data["p6"]["committees"]
     assert len(cs) == 16
     for c in cs:
-        assert set(c) == {"code", "name", "listed", "scored", "left_out", "committee_median", "committee_senate_drift", "committee_public_drift"}
+        assert set(c) == {"code", "name", "official_name", "name_source", "name_retrieved", "listed", "scored", "left_out",
+                          "committee_median", "committee_senate_drift", "committee_public_drift"}
         assert c["committee_public_drift"]["s"] == "NOT_AVAILABLE"
     ssap = next(c for c in cs if c["code"] == "SSAP")
     assert (ssap["committee_median"]["d"], ssap["committee_senate_drift"]["d"]) == ("−0.046", "−0.366")
@@ -245,21 +249,68 @@ def test_the_builder_reads_only_engine_b_results():
     assert "C.compute(" not in src and "_calculate" not in src, "the builder never recalculates"
 
 
-# ---- the committed preview pages are what the builder produces -------------------------------------------
+# ---- Step 5A: the published pages, official committee names, Engine A separated -----------------------------
 
-def test_committed_preview_pages_are_current(pages):
+def test_published_pages_are_generated_by_the_new_builder(pages):
+    assert BP.OUT == ROOT / "demo"
     for name, text in pages.items():
-        f = ROOT / "demo" / "next" / name
-        if not f.exists():
-            pytest.skip("no built preview pages")
-        assert f.read_text() == text, f"demo/next/{name} is stale: run python -m civicalign.build_pages"
+        f = ROOT / "demo" / name
+        assert f.read_text() == text, f"demo/{name} is stale or not from build_pages: run python -m civicalign.build_pages"
+    assert 'href="civicalign.css"' in pages["senator-check.html"] and 'href="civicalign.css"' in pages["methodology.html"]
+
+
+def test_the_preview_folder_is_retired_and_templates_are_not_published():
+    assert not (ROOT / "demo" / "next").exists(), "demo/next/ is no longer an output"
+    assert "demo" + "/next" not in (ROOT / "src" / "civicalign" / "build_pages.py").read_text()
+    assert not (ROOT / "demo" / "templates").exists(), "templates live in src/civicalign/templates/, outside the published folder"
 
 
 def test_the_build_is_deterministic(pages):
     assert BP.build(DEFAULT) == pages
 
 
-def test_the_old_page_is_untouched():
-    """The old page and builder still serve the live product and Engine A's checks until Step 5."""
-    assert (ROOT / "demo" / "senator-check.html").exists() and (ROOT / "src" / "civicalign" / "build_demo.py").exists()
-    assert BP.OUT == ROOT / "demo" / "next"
+def test_committee_names_come_from_the_official_source(data):
+    stored = {r["committee_id"]: r for r in Table(DEFAULT.ideology_dir, "committee_names").current()}
+    for c in data["p6"]["committees"]:
+        r = stored[c["code"]]
+        assert (c["name"], c["official_name"]) == (r["display_name"], r["official_name"])
+        assert c["official_name"] == "Senate Committee on " + c["name"] or c["official_name"] == "Senate Committee on the " + c["name"]
+        assert c["name_source"] == I.COMMITTEE_LIST and r["source_url"].endswith("/committees-current.json") and not r["fixture"]
+
+
+def test_no_fixed_committee_name_mapping_remains_in_the_builder():
+    src = (ROOT / "src" / "civicalign" / "build_pages.py").read_text()
+    assert "COMMITTEE_NAMES" not in src
+    for node in ast.walk(ast.parse(src)):
+        if isinstance(node, ast.Dict):
+            keys = [k.value for k in node.keys if isinstance(k, ast.Constant) and isinstance(k.value, str)]
+            assert not [k for k in keys if re.fullmatch(r"S[SL][A-Z]{2}", k)], keys
+    assert not re.search(r"Agriculture|Appropriations|Judiciary|Armed Services", src)
+
+
+def test_a_committee_without_an_official_name_stops_the_build(tmp_path):
+    cfg = dataclasses.replace(DEFAULT, ideology_dir=tmp_path / "ideology")
+    shutil.copytree(DEFAULT.ideology_dir, cfg.ideology_dir, ignore=shutil.ignore_patterns("committee_names.jsonl"))
+    with pytest.raises(BP.BuildError, match="no official committee name"):
+        BP.payload(cfg)
+
+
+def test_engine_a_tests_no_longer_depend_on_the_pillars_4_6_page():
+    for f in ("test_binding.py", "test_context.py", "test_evaluation.py"):
+        text = (ROOT / "tests" / f).read_text()
+        assert "senator-check.html" not in text and "methodology.html" not in text and "checks(run(" not in text, f
+    assert "pillar1_checks" in (ROOT / "tests" / "test_binding.py").read_text()
+    assert "pillar1_checks" in (ROOT / "tests" / "test_context.py").read_text()
+
+
+def test_engine_b_calculations_are_unchanged():
+    """Names and the page switch are not calculation inputs: the saved result is still current and reproducible."""
+    src = (ROOT / "src" / "civicalign" / "ideology" / "compute.py").read_text()
+    assert "committee_names" not in src and "reference_anchors" not in src
+    assert C.plan(DEFAULT)["mode"] == "unchanged"
+    assert C.verify(DEFAULT) == []
+
+
+def test_the_old_code_is_not_deleted_yet():
+    """Step 5A switches the page only; the old Pillars 4-6 code goes in Step 5B."""
+    assert (ROOT / "src" / "civicalign" / "build_demo.py").exists() and (ROOT / "src" / "civicalign" / "peers.py").exists()

@@ -774,6 +774,18 @@ def _context_checks(cfg: Config) -> list[Check]:
 
 # ---- the comparison ------------------------------------------------------------
 
+def pillar1_checks(cfg: Config = DEFAULT) -> list[Check]:
+    """Only the Pillar 1 (Engine A) checks: the vote bindings, and the context and
+    packets, each re-derived from Pillar 1's own cached first-party files. They
+    need neither the pipeline report nor any page. The same functions, with the
+    same inputs and the same condition, that checks() runs."""
+    roster = _roster(cfg)
+    scores = _scores(cfg, roster)
+    if not (cfg.rollcalls_csv.exists() and scores):
+        return []
+    return _binding_checks(cfg, roster, scores) + _context_checks(cfg)
+
+
 def checks(report: Report, cfg: Config = DEFAULT, page: Path | None = None) -> list[Check]:
     out: list[Check] = []
     roster = _roster(cfg)

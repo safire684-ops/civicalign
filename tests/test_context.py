@@ -366,9 +366,8 @@ def test_first_cohort_readiness(records):
 
 
 def test_supervisor_reproduces_context(records):
-    from civicalign.agents.supervisor import checks
-    from civicalign.pipeline import run
-    results = checks(run(DEFAULT), DEFAULT, ROOT / "demo" / "senator-check.html")
+    from civicalign.agents.supervisor import pillar1_checks
+    results = pillar1_checks(DEFAULT)      # Pillar 1's own files only; no page, no Pillars 4-6 output
     c = next(x for x in results if x.name.startswith("Pillar 1 context"))
     assert c.ok, c.detail
 

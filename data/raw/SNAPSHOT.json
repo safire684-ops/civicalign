@@ -169,6 +169,21 @@
    "changed": false,
    "content_changed_utc": "2026-09-23T13:05:55Z",
    "checked_utc": "2026-09-25T16:29:58Z"
+  },
+  {
+   "name": "committee names",
+   "url": "https://unitedstates.github.io/congress-legislators/committees-current.json",
+   "file": "committees-current.json",
+   "critical": true,
+   "vintage": "current committees and their official names",
+   "bytes": 74732,
+   "previous_bytes": 0,
+   "sha256": "640ab5c262dd47b462f3a781d07dc417db8606a324f3b0a5422e7629c38e34ec",
+   "content_key": "640ab5c262dd47b462f3a781d07dc417db8606a324f3b0a5422e7629c38e34ec",
+   "changed": true,
+   "content_changed_utc": "2026-09-26T00:30:06Z",
+   "checked_utc": "2026-09-26T00:30:06Z",
+   "note": "added to snapshot 2026-09-25T16:29:58Z on 2026-09-26T00:30:06Z without refreshing the other sources"
   }
  ]
 }

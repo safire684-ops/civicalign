@@ -54,6 +54,19 @@ def _committees(path: Path) -> str | None:
     return None
 
 
+def _committee_list(path: Path) -> str | None:
+    """Official committee names: every Senate standing committee needs a code and a name."""
+    data = json.loads(path.read_text())
+    if not isinstance(data, list):
+        return "expected a list of committees"
+    standing = [c for c in data if c.get("type") == "senate" and str(c.get("thomas_id", "")).startswith("SS")]
+    if len(standing) < 15:
+        return f"only {len(standing)} Senate standing committees found"
+    if any(not c.get("name") for c in standing):
+        return "a Senate standing committee has no name"
+    return None
+
+
 def _bill_flow(path: Path) -> str | None:
     """The bulk zip: must open, and must hold a plausible number of bills."""
     try:
@@ -169,6 +182,14 @@ def all_agents() -> list[Agent]:
             target=RAW / "committee-membership-current.json",
             validate=_committees,
             min_bytes=50_000,
+        ),
+        Agent(
+            name="committee names",
+            vintage="current committees and their official names",
+            url="https://unitedstates.github.io/congress-legislators/committees-current.json",
+            target=RAW / "committees-current.json",
+            validate=_committee_list,
+            min_bytes=10_000,
         ),
         Agent(
             name="bill flow",

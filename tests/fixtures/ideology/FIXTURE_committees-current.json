@@ -1,0 +1,7 @@
+[
+ {"type": "senate", "name": "Senate Committee on FIXTURE Zulu Affairs", "thomas_id": "SSZZ", "senate_committee_id": "SSZZ",
+  "subcommittees": [{"name": "FIXTURE Zulu Subcommittee", "thomas_id": "01"}]},
+ {"type": "senate", "name": "Senate Committee on the FIXTURE Yankee", "thomas_id": "SSZY", "senate_committee_id": "SSZY"},
+ {"type": "senate", "name": "Senate Select Committee on FIXTURE Matters", "thomas_id": "SLZZ", "senate_committee_id": "SLZZ"},
+ {"type": "house", "name": "House Committee on FIXTURE Echo", "thomas_id": "HSZZ", "house_committee_id": "ZZ"}
+]

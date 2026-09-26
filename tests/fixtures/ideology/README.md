@@ -14,3 +14,7 @@ Census names to postal codes and requires all 50 states and DC), but every
 population in it is invented: 11111 × the row number (2023) and that plus one
 (2024). They are not Census figures. The Puerto Rico row checks that it is
 left out.
+
+`FIXTURE_committees-current.json` is an invented committee list in the shape of
+congress-legislators `committees-current.json`: two standing committees (SSZZ,
+SSZY), a select committee and a House committee that the ingest must leave out.

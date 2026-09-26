@@ -247,6 +247,46 @@ def run_snapshot(agents: list[Agent], raw_dir: Path, now: datetime | None = None
     return Snapshot(True, stamp, results, [], changed_names)
 
 
+def add_source(agent: Agent, raw_dir: Path, now: datetime | None = None) -> Result:
+    """Add ONE source that the accepted snapshot does not have yet, without
+    refreshing any other file. For introducing a new source between full runs:
+    the other files, their hashes and dates stay exactly as the snapshot
+    recorded them, so nothing already ingested changes. Refuses a source the
+    snapshot already has (that is a refresh, which is run_snapshot's job) and
+    refuses to extend a snapshot that was not accepted."""
+    now = now or datetime.now(timezone.utc)
+    stamp = now.strftime("%Y-%m-%dT%H:%M:%SZ")
+    snap = load_snapshot(raw_dir)
+    if not snap.get("accepted"):
+        raise ValueError("no accepted snapshot to add a source to: run the full snapshot first")
+    if any(s["name"] == agent.name or s["file"] == agent.target.name for s in snap["sources"]):
+        raise ValueError(f"the snapshot already has {agent.name!r}: refresh it with the full snapshot run instead")
+    staging = raw_dir / ".staging-add"
+    if staging.exists():
+        shutil.rmtree(staging)
+    f = agent.fetch(staging)
+    if not f.ok:
+        shutil.rmtree(staging, ignore_errors=True)
+        return Result(agent.name, False, f.message, seconds=f.seconds, critical=agent.critical)
+    agent.target.parent.mkdir(parents=True, exist_ok=True)
+    shutil.move(str(f.staged), str(agent.target))
+    shutil.rmtree(staging, ignore_errors=True)
+    snap["sources"].append({
+        "name": agent.name, "url": agent.url, "file": agent.target.name, "critical": agent.critical,
+        "vintage": agent.vintage, "bytes": f.bytes, "previous_bytes": 0, "sha256": f.sha256,
+        "content_key": f.content_key, "changed": True, "content_changed_utc": stamp, "checked_utc": stamp,
+        "note": f"added to snapshot {snap['run_utc']} on {stamp} without refreshing the other sources",
+    })
+    (raw_dir / SNAPSHOT_FILE).write_text(json.dumps(snap, indent=1) + "\n")
+    prov = raw_dir / PROVENANCE_FILE
+    if not prov.exists():
+        prov.write_text("fetched_utc\tfile\tsha256\turl\n")
+    with prov.open("a") as fh:
+        fh.write(f"{stamp}\t{agent.target.name}\t{f.sha256}\t{agent.url}\n")
+    return Result(agent.name, True, f.message, changed=True, bytes_fetched=f.bytes, sha256=f.sha256,
+                  seconds=f.seconds, critical=agent.critical)
+
+
 def run_all(agents: list[Agent]) -> list[Result]:
     """Run every agent independently (legacy). Prefer run_snapshot."""
     return [a.run() for a in agents]

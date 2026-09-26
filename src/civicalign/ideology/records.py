@@ -48,6 +48,12 @@ reference_anchors      exactly three recognisable figures shown beside senator
                        Voteview publishes for their congressional voting record
                        (see anchors.py). A visual reference only: no calculation
                        reads this table. Key: anchor_id.
+
+committee_names        each Senate standing committee's official name, as the
+                       congress-legislators committee list publishes it, and the
+                       short name the page shows (the official name without its
+                       "Senate Committee on (the)" prefix). Names only: nothing
+                       is calculated from them. Key: committee_id.
 """
 import re
 
@@ -60,6 +66,7 @@ OBSERVED_DATE_BASIS = ("observed in a CivicAlign snapshot of unitedstates/congre
 BASELINE_NOTE = "first CivicAlign observation of this committee: the membership may have begun earlier"
 SCALE_NOTE_AIP = ("American Ideology Project survey ideal-point scale (standardised within the survey; "
                   "no common metric with Voteview legislator scores)")
+COMMITTEE_NAME_PREFIX = re.compile(r"^Senate Committee on (?:the )?(?P<short>\S.*)$")
 ANCHOR_USE = ("visual reference point only: shown beside senator scores on the Pillar 4 scale; "
               "never an input to any calculation")
 
@@ -99,6 +106,10 @@ TABLES = {
                    "observed_date": str, "date_basis": str, "baseline": bool, "baseline_note": (str, type(None)),
                    "rank": (int, type(None)), "title": (str, type(None)), "side": (str, type(None)),
                    "in_current_roster": bool, **SOURCE_FIELDS},
+    },
+    "committee_names": {
+        "key": ("committee_id",),
+        "fields": {"committee_id": str, "official_name": str, "display_name": str, **SOURCE_FIELDS},
     },
     "reference_anchors": {
         "key": ("anchor_id",),
@@ -180,6 +191,12 @@ def validate(table: str, rec: dict) -> list[str]:
             errs.append("a baseline event carries the baseline note, and only a baseline event")
         if rec["event"] == "observed_left" and any(rec[k] is not None for k in ("rank", "title", "side")):
             errs.append("an observed_left event carries no rank, title or side")
+    elif table == "committee_names":
+        if not re.fullmatch(r"SS[A-Z]{2}", rec["committee_id"]):
+            errs.append("committee_id must be a Senate standing committee code (SS and two letters)")
+        m = COMMITTEE_NAME_PREFIX.match(rec["official_name"])
+        if not m or m.group("short") != rec["display_name"]:
+            errs.append("display_name must be the official name without its 'Senate Committee on (the)' prefix")
     elif table == "reference_anchors":
         if rec["score_column"] != "nominate_dim1":
             errs.append("an anchor carries nominate_dim1, the score the senators are shown on")

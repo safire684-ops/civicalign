@@ -286,9 +286,8 @@ def test_index_matches_files(bindings):
 
 
 def test_supervisor_reproduces_the_bindings(bindings):
-    from civicalign.agents.supervisor import checks
-    from civicalign.pipeline import run
-    results = checks(run(DEFAULT), DEFAULT, ROOT / "demo" / "senator-check.html")
+    from civicalign.agents.supervisor import pillar1_checks
+    results = pillar1_checks(DEFAULT)      # Pillar 1's own files only; no page, no Pillars 4-6 output
     c = next(x for x in results if x.name.startswith("Pillar 1 bindings"))
     assert c.ok, c.detail
 
