@@ -93,3 +93,46 @@ def trace_problems(tally: dict) -> list[str]:
     if sorted(union, key=_order) != ids:
         out.append("the class lists do not partition the total")
     return out
+
+
+PASSED_SENATE_SET = ("Passed Senate: Senate bills (S.) of the Congress whose official bill-status record shows "
+                     "Senate passage (Library of Congress action 17000, 'Passed/agreed to in Senate'; rule "
+                     + R.OUTCOME_RULE + ")")
+ENACTED_SET = ("Enacted: bills in the passed-Senate set that the official record shows became law (a presidential "
+               "signature, or a public law recorded; rule " + R.ENACTMENT_RULE + "). Secondary context: enactment also "
+               "depends on the House and the President")
+
+
+def passed_senate_tally(classifications: list[dict], outcomes: list[dict]) -> dict:
+    """Pillar 5 support — "Passed Senate bills by sponsor voting position".
+
+    passed_senate  the main outcome set, split by sponsor class, with bill ids
+    enacted        the subset the record shows became law (signature or public law),
+                   split the same way; a signed bill is enacted even before its
+                   public-law number appears
+    public_law_number_recorded / public_law_number_pending
+                   the enacted bills with and without a public-law number yet
+
+    Every bill is counted once. The classification and outcome records must come
+    from the same archive content for every bill (their fingerprints must match)."""
+    cls = {r["bill_id"]: r for r in classifications}
+    out = {r["bill_id"]: r for r in outcomes}
+    if len(cls) != len(classifications) or len(out) != len(outcomes):
+        raise ValueError("a bill appears twice")
+    if set(cls) != set(out):
+        raise ValueError(f"classification and outcome records cover different bills: "
+                         f"{sorted(set(cls) ^ set(out), key=_order)[:10]}")
+    stale = sorted((b for b in cls if cls[b]["bill_fingerprint"] != out[b]["bill_fingerprint"]), key=_order)
+    if stale:
+        raise ValueError(f"classification and outcome records come from different archive content: {stale[:10]}")
+    passed = {b for b, o in out.items() if o["passed_senate"]}
+    enacted = {b for b in passed if out[b]["enacted"]}
+    numbered = sorted((b for b in enacted if not out[b]["public_law_number_pending"]), key=_order)
+    pending = sorted((b for b in enacted if out[b]["public_law_number_pending"]), key=_order)
+    return {"outcome_rule": R.OUTCOME_RULE, "enactment_rule": R.ENACTMENT_RULE,
+            "passed_senate": sponsor_tally(classifications, passed, PASSED_SENATE_SET),
+            "enacted": sponsor_tally(classifications, enacted, ENACTED_SET),
+            "public_law_number_recorded": {"count": len(numbered), "bill_ids": numbered},
+            "public_law_number_pending": {"count": len(pending), "bill_ids": pending,
+                                          "note": "enacted (signed by the President); the public-law number has not yet "
+                                                  "appeared in the bill-status record"}}

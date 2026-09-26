@@ -67,6 +67,18 @@ bill_sponsor_classifications
                        source_version and retrieved_at name the archive version
                        in which this bill's current content was first seen.
                        Key: congress, bill_id.
+
+senate_bill_outcomes   one row per Senate bill of the Congress: whether the official
+                       bill-status record shows it PASSED THE SENATE (rule
+                       senate_passage_loc17000_v1: a Library of Congress action
+                       with code 17000, "Passed/agreed to in Senate"), with the
+                       evidence (those actions, the Senate's own floor action, the
+                       "Engrossed in Senate" text), and whether it was ENACTED
+                       (rule enactment_signature_or_public_law_v1: a presidential
+                       signature, or a public law recorded; a signed bill is law
+                       even before its public-law number appears), with the basis,
+                       the public-law number or null, and whether that number is
+                       still pending. Key: congress, bill_id.
 """
 import re
 
@@ -90,6 +102,10 @@ SPONSOR_LABELS = {
 SPONSOR_BASIS = ("SPONSOR_SCORE_ONLY: the class describes the primary sponsor's Voteview nominate_dim1 "
                  "(their voting record), not the content or ideology of the bill")
 SPONSOR_RULE = "sponsor_nominate_dim1_sign_v1"
+OUTCOME_RULE = "senate_passage_loc17000_v1"
+ENACTMENT_RULE = "enactment_signature_or_public_law_v1"
+ENACTMENT_BASES = ("SIGNED_BY_PRESIDENT_AND_PUBLIC_LAW_RECORDED", "PUBLIC_LAW_RECORDED",
+                   "SIGNED_BY_PRESIDENT_PUBLIC_LAW_NUMBER_PENDING")
 ANCHOR_USE = ("visual reference point only: shown beside senator scores on the Pillar 4 scale; "
               "never an input to any calculation")
 
@@ -145,6 +161,16 @@ TABLES = {
                    "sponsor_score_record_id": (str, type(None)), "sponsor_score_source_version": (str, type(None)),
                    "bill_source": str, "bill_source_url": str, "bill_fingerprint": str, "bill_update_date": (str, type(None)),
                    "bill_status": dict, "referred_committees": list, **SOURCE_FIELDS},
+    },
+    "senate_bill_outcomes": {
+        "key": ("congress", "bill_id"),
+        "fields": {"congress": int, "bill_id": str, "outcome_rule": str, "passed_senate": bool,
+                   "passed_senate_date": (str, type(None)), "loc_passage_actions": list, "senate_floor_passage_actions": list,
+                   "engrossed_in_senate": bool, "passage_vitiated": bool, "enactment_rule": str, "enacted": bool,
+                   "enactment_basis": (str, type(None)), "enacted_date": (str, type(None)), "signed_by_president": bool,
+                   "signed_date": (str, type(None)), "public_law_number": (str, type(None)),
+                   "public_law_number_pending": bool, "became_public_law_date": (str, type(None)),
+                   "bill_fingerprint": str, "bill_source_url": str, **SOURCE_FIELDS},
     },
     "reference_anchors": {
         "key": ("anchor_id",),
@@ -258,6 +284,28 @@ def validate(table: str, rec: dict) -> list[str]:
                 break
         if not {"latest_action_date", "latest_action_text", "laws"} <= set(rec["bill_status"]):
             errs.append("bill_status needs latest_action_date, latest_action_text and laws")
+    elif table == "senate_bill_outcomes":
+        if rec["outcome_rule"] != OUTCOME_RULE:
+            errs.append(f"outcome_rule must be {OUTCOME_RULE}")
+        if rec["passed_senate"] != (bool(rec["loc_passage_actions"]) and not rec["passage_vitiated"]):
+            errs.append("passed_senate is true exactly when a code-17000 passage action exists and passage was not vitiated")
+        if rec["passed_senate"] != (rec["passed_senate_date"] is not None):
+            errs.append("a passed bill has its passage date, and only a passed bill")
+        law = rec["public_law_number"] is not None
+        if rec["enactment_rule"] != ENACTMENT_RULE:
+            errs.append(f"enactment_rule must be {ENACTMENT_RULE}")
+        if rec["enacted"] != (rec["signed_by_president"] or law):
+            errs.append("enacted is true exactly when a presidential signature or a public law is recorded")
+        expected = (None if not rec["enacted"] else "SIGNED_BY_PRESIDENT_AND_PUBLIC_LAW_RECORDED" if rec["signed_by_president"] and law
+                    else "PUBLIC_LAW_RECORDED" if law else "SIGNED_BY_PRESIDENT_PUBLIC_LAW_NUMBER_PENDING")
+        if rec["enactment_basis"] != expected:
+            errs.append(f"enactment_basis must be {expected}")
+        if rec["public_law_number_pending"] != (rec["enacted"] and not law):
+            errs.append("public_law_number_pending is true exactly for an enacted bill with no public-law number yet")
+        if rec["enacted"] != (rec["enacted_date"] is not None):
+            errs.append("an enacted bill has its enactment date, and only an enacted bill")
+        if rec["enacted"] and not rec["passed_senate"]:
+            errs.append("a Senate bill cannot be enacted without passing the Senate")
     elif table == "reference_anchors":
         if rec["score_column"] != "nominate_dim1":
             errs.append("an anchor carries nominate_dim1, the score the senators are shown on")
