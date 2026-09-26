@@ -54,6 +54,19 @@ committee_names        each Senate standing committee's official name, as the
                        short name the page shows (the official name without its
                        "Senate Committee on (the)" prefix). Names only: nothing
                        is calculated from them. Key: committee_id.
+
+bill_sponsor_classifications
+                       one row per Senate bill of the Congress, from the GovInfo
+                       bill-status archive: the bill, its primary sponsor and
+                       Bioguide id, the sponsor's nominate_dim1 (from
+                       senator_ideology), the sponsor classification by the sign
+                       of that score, the bill's latest action and laws, and each
+                       Senate standing committee it was referred to or reported
+                       by. SPONSOR-BASED: the classification describes the
+                       sponsor's voting record, never the bill's content.
+                       source_version and retrieved_at name the archive version
+                       in which this bill's current content was first seen.
+                       Key: congress, bill_id.
 """
 import re
 
@@ -67,6 +80,16 @@ BASELINE_NOTE = "first CivicAlign observation of this committee: the membership 
 SCALE_NOTE_AIP = ("American Ideology Project survey ideal-point scale (standardised within the survey; "
                   "no common metric with Voteview legislator scores)")
 COMMITTEE_NAME_PREFIX = re.compile(r"^Senate Committee on (?:the )?(?P<short>\S.*)$")
+SPONSOR_CLASSES = ("LIBERAL_SPONSOR", "CONSERVATIVE_SPONSOR", "ZERO_SCORE_SPONSOR", "UNKNOWN")
+SPONSOR_LABELS = {
+    "LIBERAL_SPONSOR": "Bill sponsored by a senator with a negative DW-NOMINATE score",
+    "CONSERVATIVE_SPONSOR": "Bill sponsored by a senator with a positive DW-NOMINATE score",
+    "ZERO_SCORE_SPONSOR": "Bill sponsored by a senator with a DW-NOMINATE score of exactly zero",
+    "UNKNOWN": "Sponsor's DW-NOMINATE score not available",
+}
+SPONSOR_BASIS = ("SPONSOR_SCORE_ONLY: the class describes the primary sponsor's Voteview nominate_dim1 "
+                 "(their voting record), not the content or ideology of the bill")
+SPONSOR_RULE = "sponsor_nominate_dim1_sign_v1"
 ANCHOR_USE = ("visual reference point only: shown beside senator scores on the Pillar 4 scale; "
               "never an input to any calculation")
 
@@ -110,6 +133,18 @@ TABLES = {
     "committee_names": {
         "key": ("committee_id",),
         "fields": {"committee_id": str, "official_name": str, "display_name": str, **SOURCE_FIELDS},
+    },
+    "bill_sponsor_classifications": {
+        "key": ("congress", "bill_id"),
+        "fields": {"congress": int, "bill_type": str, "bill_number": int, "bill_id": str, "title": str,
+                   "introduced_date": (str, type(None)), "primary_sponsor_name": (str, type(None)),
+                   "sponsor_bioguide_id": (str, type(None)), "sponsor_by_request": bool,
+                   "sponsor_nominate_dim1": (float, type(None)), "sponsor_classification": str,
+                   "sponsor_classification_label": str, "classification_basis": str, "classification_rule": str,
+                   "unknown_reason": (str, type(None)), "sponsor_score_source": (str, type(None)),
+                   "sponsor_score_record_id": (str, type(None)), "sponsor_score_source_version": (str, type(None)),
+                   "bill_source": str, "bill_source_url": str, "bill_fingerprint": str, "bill_update_date": (str, type(None)),
+                   "bill_status": dict, "referred_committees": list, **SOURCE_FIELDS},
     },
     "reference_anchors": {
         "key": ("anchor_id",),
@@ -197,6 +232,32 @@ def validate(table: str, rec: dict) -> list[str]:
         m = COMMITTEE_NAME_PREFIX.match(rec["official_name"])
         if not m or m.group("short") != rec["display_name"]:
             errs.append("display_name must be the official name without its 'Senate Committee on (the)' prefix")
+    elif table == "bill_sponsor_classifications":
+        cls, score = rec["sponsor_classification"], rec["sponsor_nominate_dim1"]
+        if cls not in SPONSOR_CLASSES:
+            errs.append(f"sponsor_classification must be one of {SPONSOR_CLASSES}")
+        elif score is None:
+            if cls != "UNKNOWN" or not rec["unknown_reason"]:
+                errs.append("a bill with no sponsor score is UNKNOWN, with the reason")
+        elif cls != ("LIBERAL_SPONSOR" if score < 0 else "CONSERVATIVE_SPONSOR" if score > 0 else "ZERO_SCORE_SPONSOR") or rec["unknown_reason"]:
+            errs.append("sponsor_classification must follow the sign of sponsor_nominate_dim1")
+        if cls in SPONSOR_LABELS and rec["sponsor_classification_label"] != SPONSOR_LABELS[cls]:
+            errs.append("sponsor_classification_label must be the fixed wording for its class")
+        if rec["classification_basis"] != SPONSOR_BASIS or rec["classification_rule"] != SPONSOR_RULE:
+            errs.append("classification_basis and classification_rule must state the sponsor-only rule")
+        if rec["bill_id"] != f"{rec['bill_type']}{rec['bill_number']}" or rec["bill_type"] != "S":
+            errs.append("bill_id is the bill type and number of a Senate bill, e.g. S1000")
+        if score is not None and (rec["sponsor_score_record_id"] is None or rec["sponsor_bioguide_id"] is None):
+            errs.append("a sponsor score names the senator_ideology record it came from")
+        if score is not None and not -1.0 <= score <= 1.0:
+            errs.append("sponsor_nominate_dim1 outside Voteview's [-1, 1]")
+        for c in rec["referred_committees"]:
+            if not (isinstance(c, dict) and re.fullmatch(r"SS[A-Z]{2}", c.get("committee_id", ""))
+                    and {"referred", "reported", "discharged"} <= set(c)):
+                errs.append("referred_committees holds Senate standing committees with referred/reported/discharged")
+                break
+        if not {"latest_action_date", "latest_action_text", "laws"} <= set(rec["bill_status"]):
+            errs.append("bill_status needs latest_action_date, latest_action_text and laws")
     elif table == "reference_anchors":
         if rec["score_column"] != "nominate_dim1":
             errs.append("an anchor carries nominate_dim1, the score the senators are shown on")
