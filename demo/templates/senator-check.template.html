@@ -52,6 +52,10 @@
 .tiles .k{display:block;font-size:12.5px;color:var(--muted)}
 .tiles .v{display:block;margin-top:4px}
 .tiles .v .num{font-family:var(--serif);font-size:26px}
+.explain{margin-top:16px;display:grid;gap:10px;font-size:15.5px;max-width:60ch}
+#p5-meaning{margin-top:14px}
+#p5-meaning .fine{font-size:14.5px;color:var(--ink);max-width:60ch}
+#p5-meaning .fine+.fine{margin-top:10px}
 .tiles .s{display:block;font-size:12.5px;color:var(--muted);margin-top:2px}
 .status{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;
   padding:2px 7px;border-radius:3px;border:1px solid var(--rule);color:var(--muted);vertical-align:1px}
@@ -113,12 +117,8 @@ dialog.method a{color:var(--alert);font-weight:600}
 
 <!-- ============ Pillar 5: Senate / nation ============ -->
 <section id="senate-nation" class="view" role="tabpanel" aria-labelledby="tab-senate-nation" tabindex="-1" hidden>
-  <p class="takeaway" id="take-p5"></p>
   <div class="cm" id="p5-main"></div>
   <div class="cm statcard" id="p5-nation"></div>
-  <p class="limit">Every state has two senators whatever its population. Weighting each senator by the
-    number of people they represent shows how that equal representation of states moves the Senate’s
-    average. It describes seats and populations, not any senator.</p>
   <details class="more">
     <summary><span>Medians (secondary comparison)</span></summary>
     <div id="p5-medians"></div>
@@ -265,25 +265,33 @@ dialog.method a{color:var(--alert);font-weight:600}
   var P5=D.p5;
   (function(){
     var pl=P5.plain, w=P5.weighted, d=P5.diff;
-    var dir=d.v>0?'lower on Voteview’s scale than the plain average, toward its liberal end':d.v<0?'higher on Voteview’s scale than the plain average, toward its conservative end':'the same as the plain average';
-    $('take-p5').innerHTML='Counting each of the '+num(P5.active)+' senators once, the Senate’s average score is '+num(pl)+
-      '. Weighting each senator by the population they represent, it is '+num(w)+': a difference of '+num(d)+'.';
+    // the side of the scale the weighted average moves toward follows the sign of the difference (plain - weighted)
+    var side=d.v>0?'liberal':'conservative';
+    var moves=d.v===0?'In plain terms, population weighting does not move the Senate average on Voteview’s −1 to +1 voting scale.':
+      'In plain terms, population weighting moves the Senate average slightly toward the '+side+' side of Voteview’s −1 to +1 voting scale.';
     var l=Math.min(pos(pl.v),pos(w.v)), wd=Math.abs(pos(pl.v)-pos(w.v));
-    $('p5-main').innerHTML='<div class="gh"><b>The Senate’s average, two ways</b><span class="who">method '+esc(meta.primary_method)+' <span class="status">candidate, not final</span></span></div>'+
+    $('p5-main').innerHTML='<div class="gh"><b>Counting states vs. weighting by population</b><span class="who"><span class="status">candidate method, not final</span></span></div>'+
+      '<p class="kicker">Senate average</p>'+
       '<div class="tiles">'+
-        '<div><span class="k">Each senator counted once</span><span class="v">'+num(pl)+'</span><span class="s">plain Senate mean</span></div>'+
-        '<div><span class="k">Weighted by population represented</span><span class="v">'+num(w)+'</span><span class="s">population-weighted Senate mean</span></div>'+
-        '<div><span class="k">Difference (plain − weighted)</span><span class="v">'+num(d)+'</span><span class="s">difference made by population weighting</span></div>'+
+        '<div><span class="k">Each senator counted equally</span><span class="v">'+num(pl)+'</span></div>'+
+        '<div><span class="k">Population-weighted</span><span class="v">'+num(w)+'</span></div>'+
+        '<div><span class="k">Difference</span><span class="v">'+num(d)+'</span></div>'+
       '</div>'+
-      '<p class="scalename" style="margin-top:18px">Voteview voting-record scale, −1 to +1</p>'+ENDS+
+      '<div class="explain">'+
+        '<p>Every state gets two senators regardless of its population. Normally, each senator counts equally when calculating the Senate average. If instead senators are weighted by the number of people their state represents, the average changes from '+num(pl)+' to '+num(w)+'.</p>'+
+        '<p>That is a difference of '+num(d)+'. '+moves+'</p>'+
+      '</div>'+
+      '<details class="more" id="p5-meaning"><summary><span>What does this mean?</span></summary>'+
+        '<p class="fine">Population weighting gives senators from larger states more weight and senators from smaller states less weight. The two senators from the same state split that state’s population weight evenly.</p>'+
+        '<p class="fine">This describes Senate voting records and state populations only. It does not tell us which laws passed, what voters believe, or why Congress made a decision. This weighting method is still a CivicAlign candidate method, not a final scientific standard.</p>'+
+      '</details>'+
+      '<p class="scalename" style="margin-top:22px">Voteview voting-record scale, −1 to +1</p>'+ENDS+
       '<div class="ctrack" aria-hidden="true">'+
         '<div class="conn" style="--l:'+l+'%;--w:'+wd+'%"></div>'+
-        '<div class="cmk sen" style="--x:'+pos(pl.v)+'%"></div><div class="ct a" style="--x:'+pos(pl.v)+'%">Each senator once</div>'+
-        '<div class="cmk mem" style="--x:'+pos(w.v)+'%"></div><div class="ct w" style="--x:'+pos(w.v)+'%">Weighted by population</div>'+
+        '<div class="cmk sen" style="--x:'+pos(pl.v)+'%"></div><div class="ct a" style="--x:'+pos(pl.v)+'%">Counted equally</div>'+
+        '<div class="cmk mem" style="--x:'+pos(w.v)+'%"></div><div class="ct w" style="--x:'+pos(w.v)+'%">Population-weighted</div>'+
       '</div>'+AXIS+
-      '<p class="sr-only">Chart: the plain Senate mean is '+esc(pl.d)+' and the population-weighted mean is '+esc(w.d)+'.</p>'+
-      '<p class="say">The population-weighted average is '+esc(dir)+'.</p>'+
-      '<p class="why">Each senator is weighted by their state’s population divided by the number of senators the state has seated. A candidate method, not a settled definition: select any number for its open questions.</p>'+
+      '<p class="sr-only">Chart: the Senate average with each senator counted equally is '+esc(pl.d)+' and the population-weighted average is '+esc(w.d)+'.</p>'+
       (P5.unscored.length?'<p class="why">Seated senators without a Voteview score, left out: '+esc(P5.unscored.join(', '))+'.</p>':'');
     $('p5-nation').innerHTML='<div class="gh"><b>The Senate and the national public</b></div>'+
       '<div class="rows">'+row('National public centre',P5.national)+row('Gap between the Senate and the national public',P5.gap)+'</div>';

@@ -163,6 +163,32 @@ def test_pillar5_main_result_is_the_mean_and_medians_are_details_only(data):
     assert '<summary><span>Medians (secondary comparison)</span></summary>\n    <div id="p5-medians">' in TEMPLATE
 
 
+def test_pillar5_plain_language_card():
+    """The approved Pillar 5 wording (2026-09-25): title, three rows, explanation and "What does this mean?"."""
+    start = TEMPLATE.index("// ================= Pillar 5")
+    p5 = TEMPLATE[start:TEMPLATE.index("// ================= Pillar 6")]
+    for text in ("Counting states vs. weighting by population", "Senate average", "Each senator counted equally",
+                 "Population-weighted", "Difference",
+                 "Every state gets two senators regardless of its population. Normally, each senator counts equally when "
+                 "calculating the Senate average. If instead senators are weighted by the number of people their state "
+                 "represents, the average changes from '+num(pl)+' to '+num(w)+'.",
+                 "That is a difference of '+num(d)+'. ",
+                 "population weighting moves the Senate average slightly toward the '+side+' side of Voteview’s −1 to +1 voting scale.",
+                 "<summary><span>What does this mean?</span></summary>",
+                 "Population weighting gives senators from larger states more weight and senators from smaller states less "
+                 "weight. The two senators from the same state split that state’s population weight evenly.",
+                 "This describes Senate voting records and state populations only. It does not tell us which laws passed, what "
+                 "voters believe, or why Congress made a decision. This weighting method is still a CivicAlign candidate "
+                 "method, not a final scientific standard."):
+        assert text in p5, text
+    # the side follows the sign of plain - weighted, so the words cannot contradict the numbers
+    assert "var side=d.v>0?'liberal':'conservative';" in p5
+    # the numbers in the card are the saved Pillar 5 main result, shown through num()
+    assert "num(pl)" in p5 and "num(w)" in p5 and "num(d)" in p5
+    for claim in ("because", "caused", "led to", "resulted in", "bill", "biased", "extreme", "unfair", "fair"):
+        assert not re.search(rf"\b{claim}\b", p5, flags=re.I), claim
+
+
 def test_pillar6_uses_only_committee_median_and_senate_drift(data):
     cs = data["p6"]["committees"]
     assert len(cs) == 16
