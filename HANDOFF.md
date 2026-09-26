@@ -6,7 +6,8 @@ after Step 4 was completed (page builder and the three views in `demo/next/`)
 and after the approved Pillar 5 plain-language card was added, and after Step 5A
 (new pages published in `demo/`, official committee names, Pillar 1 tests off the
 old page), and after Step 5B (old Pillars 4–6 code and tests removed, new
-independent supervisor). Read all of it before doing
+independent supervisor), and after Step 5C (daily automation on the new
+pipeline). Read all of it before doing
 anything. The repository and this file are the source of truth; older design
 documents, the whitepaper and chat history are not.
 
@@ -59,6 +60,8 @@ Commits on `pillars-4-6-rebuild` that are not on `origin/main` (oldest first):
 | `1901202` | **Step 5A**: new pages published in `demo/`, `demo/next/` retired, official committee names, Pillar 1 tests off the old page. See section 3. |
 | `ca35529` | HANDOFF update for Step 5A. |
 | `a229172` | **Step 5B**: old Pillars 4–6 modules and tests removed; new independent Engine B supervisor; `pipeline.py` reduced to Pillar 1. See section 3. |
+| `c877e5c` | HANDOFF update for Step 5B. |
+| `a54cc21` | **Step 5C**: daily automation on the Engine B pipeline; old builder, page tests, whitepaper step, weekly schedule and election source removed. See section 3. |
 | (next) | This HANDOFF update. |
 
 Uncommitted in the working tree (leave them; they belong to the paused Engine A
@@ -107,7 +110,7 @@ Pillars 2, 3 and 7 belong to someone else and are out of scope.
 
 ---
 
-## 3. Completed work (Engine B, Steps 1–4, 5A and 5B)
+## 3. Completed work (Engine B, Steps 1–4 and 5A–5C)
 
 ### Step 1 — versioned inputs (`records.py`, `store.py`, `ingest.py`)
 
@@ -469,6 +472,51 @@ and every number on screen (31 in the checked state) opens its methodology.
 - **The current Pillars 4–6 result values did not change** (record
   `5f42ca01…`, `compute --verify` passes, pages current).
 
+### Step 5C — automation on the new pipeline — STEP 5C IS COMPLETE (`a54cc21`)
+
+- **The GitHub workflow (`.github/workflows/update.yml`) and the local scripts
+  now use the new Engine B pipeline. The update runs daily** (cron `0 11 * * *`,
+  11:00 UTC; the optional local launchd schedule, `scripts/install-schedule.sh`,
+  is daily too).
+- **The update order** (the workflow and `scripts/update.sh` run the same chain;
+  a test compares them):
+  1. fetch the verified snapshot (`python -m civicalign.agents`, all or nothing)
+  2. verify the snapshot (`civicalign.agents.verify`)
+  3. run the unchanged Pillar 1 bind and context checks (`civicalign.explain.bind`,
+     `civicalign.explain.context --check-fresh`)
+  4. ingest/version the Engine B inputs (`civicalign.ideology.ingest`)
+  5. record the bridge (`civicalign.ideology.bridge`)
+  6. refresh the reference anchors (`civicalign.ideology.anchors`)
+  7. compute the versioned Pillars 4–6 results (`civicalign.ideology.compute`)
+  8. build the published pages (`civicalign.build_pages`)
+  9. run the tests (`python -m pytest -q`, all of them)
+  10. run the supervisor/checker (`civicalign.agents.supervisor`)
+  11. commit (`demo/senator-check.html`, `demo/methodology.html`, `data/ideology`,
+      `data/raw/PROVENANCE.tsv`, `data/explanations`, and the snapshot only when
+      something else changed) and publish — only if everything passed and
+      something changed.
+- **Removed from the automation:** the old builder, the old page tests, the
+  whitepaper warning step, the weekly schedule, and the election-results
+  source (its fetch, its check and the `election_years` setting; nothing in
+  Pillar 1 or Engine B used it). **`scripts/build_demo.sh` is gone and replaced
+  by `scripts/build_pages.sh`.** `scripts/fetch_data.sh` now runs the verified
+  snapshot (it used to download files one by one, which the Engine B ingest
+  would then refuse); `scripts/report.sh` runs the new `python -m civicalign`.
+- **The reference anchors remain visual-only and do not affect calculations**:
+  the anchors step only refreshes `reference_anchors`; `compute` never reads it
+  (tested).
+- A local run of steps 2 and 4–8 plus the supervisor (without fetching) wrote
+  nothing: every table unchanged, compute "unchanged", pages current.
+- **Current test status: 292 passed, 0 failed, 1 expected-fail marker.** The
+  only remaining marker is the docs test
+  (`test_readme.py::test_every_code_file_the_docs_name_exists`), because
+  README.md and METHODOLOGY.md still describe the retired implementation.
+- **The current saved Pillars 4–6 result remains unchanged** (`5f42ca01…`).
+- **The branch is still local only and not live.** The GitHub workflow on
+  `origin/main` still runs the old product until publishing (Step 6). The
+  committed `data/raw/SNAPSHOT.json` still lists the election file from the last
+  fetch; the next full fetch drops it.
+
 ## 4. Current real numbers (record `5f42ca01…`, nominate_dim1, 100 active senators)
 
 **Pillar 5 — main comparison (PRIMARY method `population_weighted_mean_v1`)**
@@ -565,6 +613,9 @@ alignment scores, defiance/betrayal language, politician rankings.
 
 Run: `./.venv/bin/python -m pytest -q` (Python 3.14 venv; CI uses 3.12).
 
+**After Step 5C: 292 passed, 0 failed, 1 expected-fail marker** (the docs test).
+Automation/update chain 32, Engine B 71, Pillar 1 103, page 47, supervisor 21.
+
 **After Step 5B: 275 passed, 0 failed, 4 expected-fail markers.**
 - Engine B (71): `test_ideology_records.py` (incl. committee names),
   `test_ideology_pillars.py`, `test_ideology_incremental.py`,
@@ -580,9 +631,8 @@ Run: `./.venv/bin/python -m pytest -q` (Python 3.14 venv; CI uses 3.12).
 - Snapshot, regressions and docs (33 + 4 xfail): `test_update_chain.py`,
   `test_regressions.py`, `test_readme.py`, `test_docs.py`.
 
-Expected-fail markers (strict): `test_update_chain.py::test_every_module_the_update_runs_exists`
-for the workflow, `update.sh` and `build_demo.sh` (Step 5C), and
-`test_readme.py::test_every_code_file_the_docs_name_exists` (docs step).
+Expected-fail marker (strict): `test_readme.py::test_every_code_file_the_docs_name_exists`
+(docs step). The three automation markers became passing tests in Step 5C.
 
 History: before Step 5A the full suite was 425 passed, 9 failed (old page,
 report and whitepaper against newer bill archives); after Step 5A, 321 passed,
@@ -593,12 +643,9 @@ report and whitepaper against newer bill archives); after Step 5A, 321 passed,
 ## 7. Not built yet
 
 - Publishing the new page live (Step 6; the files in `demo/` are switched but not pushed)
-- **Anchor refresh in automation** (Step 5C): `python -m civicalign.ideology.anchors`
-  is not yet in `update.yml`/`scripts/update.sh`.
 - A valid public-to-legislator bridge
 - A national public ideology measure (definition and bridge)
 - Deterministic bill ideology / legislative outcome classification
-- GitHub workflow and scripts on the new pipeline (daily schedule, ingest/compute steps) (Step 5C)
 - README / METHODOLOGY rewrite and `docs/ENGINE_B_DATA_FLOW.md` (docs step)
 - Deployment (nothing is published; the live site still runs the old product)
 
@@ -625,16 +672,16 @@ report and whitepaper against newer bill archives); after Step 5A, 321 passed,
 
 ---
 
-## 9. Next step: Step 5C only
+## 9. Next step: the docs rewrite only
 
-Step 5B is complete (`a229172`; section 3). The next task is **Step 5C: the
-automation and scripts on the new Engine B pipeline** — `update.yml` daily in the
-order fetch → verify → ingest → bridge → anchors → compute → build pages → tests
-→ supervisor → commit; `scripts/update.sh` the same; `scripts/build_demo.sh`
-calls the new builder or is removed; the unused election-results fetch removed
-if nothing depends on it; the three automation expected-fail markers become
-passing tests. Not in 5C: README/METHODOLOGY (docs step), UI or calculation
-changes.
+Step 5C is complete (`a54cc21`; section 3). The next task is **the docs rewrite**:
+README.md, METHODOLOGY.md and a new `docs/ENGINE_B_DATA_FLOW.md` describe the
+system that exists now (Pillars 4–6 as built, bridge NONE, national estimate
+unresolved, anchors visual only, official committee names, versioned storage,
+the daily pipeline, methodology and verification rules, scientific limits),
+with no deleted modules or retired methods presented as current, and Engine A
+documentation intact. Then Step 6 (local end-to-end run; publishing only with
+the user's explicit approval).
 
 The Pillar 5 plain-language card is done; do not change its wording without the
 user. Review is local only; do not push.
