@@ -13,7 +13,7 @@ bridge/national        the bridge registry (none-v0, NONE) and the unresolved na
 pillars/compute        the calculations and the versioned, write-once results
 anchors/methodology    the reference anchors and the registry behind every displayed number
 
-Engine A (what a senator actually voted for) lives in civicalign.explain and
-civicalign.evaluation. Nothing in this package imports from them, and nothing
-here explains an individual vote. See docs/ENGINE_B_DATA_FLOW.md.
+Engine A (what a senator actually voted for) lives in civicalign.explain.
+Nothing in this package imports from it, and nothing here explains an
+individual vote. See docs/ENGINE_B_DATA_FLOW.md.
 """

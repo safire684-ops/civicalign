@@ -121,8 +121,9 @@ none of it.
   truncated.
 
 **Stage 3 (a Maker/Checker development evaluation of plain-English receipts)
-is set up in `src/civicalign/evaluation/`; one development run was stopped, and
-its results are local only. No generated explanation is currently published.**
+is developed separately and is not part of this release; one development run
+was stopped, and its results are local only. No generated explanation is
+currently published.**
 
 ## How the numbers are stored and checked
 
@@ -160,7 +161,6 @@ src/civicalign/
   cli.py             python -m civicalign: print the saved Pillars 4-6 record
   agents/            snapshot fetch and verify; supervisor.py (independent recount, Engine B and Pillar 1)
   explain/           Pillar 1: binding.py, bind.py (Stage 2); relevance.py, context.py (Stage 2.5)
-  evaluation/        Pillar 1 Stage 3 development evaluation (nothing is published from it)
   pipeline.py, receipts.py   Pillar 1 floor-vote evidence
   sources/           readers for Voteview, rosters, bill status, Senate votes, U.S. Code, Public Laws, Federal Register
 demo/                the published site (senator-check.html, methodology.html, civicalign.css)

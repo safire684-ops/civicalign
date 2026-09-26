@@ -118,3 +118,8 @@ def test_receipt_selection_never_reads_state_positions_or_dividing_lines():
             names.add(node.arg)
     banned = {"state_pos", "state_implied", "cutpoint", "yea_is_right", "state"}
     assert not (names & banned), names & banned
+
+
+def test_no_generated_summary_in_the_floor_vote_output(report):
+    """Pillar 1's own output: the recent floor votes carry no generated bill description."""
+    assert report.floor_votes and all(not v.summary for v in report.floor_votes)
