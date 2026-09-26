@@ -20,6 +20,9 @@ Engine B (Pillars 4-6), from the raw snapshot files and the stored records:
     median, recomputed from the committee membership file
   * the three Pillar 4 anchors against the Voteview file, and on the page
   * the committee names against the official congress-legislators list
+  * the Pillar 5 legislative-outcome counts (passed the Senate, enacted, by
+    sponsor class, public-law number recorded or pending), recounted bill by
+    bill from each bill's own XML actions and the Voteview file
   * gating: no senator-to-state distance while the bridge is NONE; no
     Senate-to-public gap and no committee-to-public drift while the national
     estimate is unresolved -- in the record and on the page
@@ -375,6 +378,10 @@ def eb_methodology_checks(record: dict, anchor_rows: list[dict], page_data: dict
             bad.append(f"{n['p']}: no entry"); continue
         if n["p"].startswith("reference_anchors."):
             continue
+        if n["p"].startswith("outcomes."):      # bill-table counts: display checked here, values in eb_outcome_checks
+            if e["kind"] != "outcome" or n["d"] != f"{n['v']:,}" or len(n.get("ids", [])) != n["v"]:
+                bad.append(f"{n['p']}: outcome count, display or bill ids")
+            continue
         try:
             q = _eb_resolve(record["results"], n["p"])
         except (KeyError, IndexError, ValueError):
@@ -392,6 +399,64 @@ def eb_methodology_checks(record: dict, anchor_rows: list[dict], page_data: dict
     out.append(Check("Engine B: every registry entry is on the page and in the methodology page", not missing_page and not missing_doc,
                      f"{len(M.REGISTRY)} entries" + (f"; not shown {missing_page}" if missing_page else "") + (f"; no methodology section {missing_doc}" if missing_doc else "")))
     return out
+
+
+def _eb_bill_outcomes(cfg: Config, raw: dict) -> dict[str, dict]:
+    """Each Senate bill's passage, enactment and sponsor class, re-read from its own XML
+    with separate code (a text search of the bill's own <actions>, not its related bills)."""
+    import re as _re
+    import zipfile as _zip
+    scores = {r["bioguide_id"]: r["nominate_dim1"] for r in raw["members"]
+              if r["chamber"] == "Senate" and r["congress"] == str(cfg.congress)}
+    out = {}
+    with _zip.ZipFile(cfg.billflow_zip) as z:
+        for n in z.namelist():
+            text = z.read(n).decode()
+            if f"<congress>{cfg.congress}</congress>" not in text or "<type>S</type>" not in text:
+                continue
+            num = _re.search(r"<bill>.*?<number>(\d+)</number>", text, _re.S).group(1)
+            own = _re.search(r"<actions>(.*?)</actions>", text, _re.S)
+            own = own.group(1) if own else ""
+            laws = _re.search(r"<laws>(.*?)</laws>", text, _re.S)
+            sponsor = _re.search(r"<sponsors>\s*<item>\s*<bioguideId>(\w+)</bioguideId>", text)
+            s = scores.get(sponsor.group(1)) if sponsor else None
+            s = float(s) if s not in (None, "") else None
+            out[f"S{num}"] = {"passed": "<actionCode>17000</actionCode>" in own,
+                              "enacted": "<text>Signed by President." in own or "<text>Became Public Law" in own
+                                         or bool(laws and "<item>" in laws.group(1)),
+                              "numbered": "<text>Became Public Law" in own or bool(laws and "<item>" in laws.group(1)),
+                              "class": "UNKNOWN" if s is None else "LIBERAL_SPONSOR" if s < 0 else "CONSERVATIVE_SPONSOR" if s > 0
+                                       else "ZERO_SCORE_SPONSOR"}
+    return out
+
+
+def eb_outcome_checks(cfg: Config, raw: dict, page_data: dict | None) -> list[Check]:
+    """The Pillar 5 legislative-outcome counts on the page, recounted from the raw bill-status archive and Voteview."""
+    if page_data is None or "outcomes" not in page_data.get("p5", {}):
+        return [Check("Engine B: Pillar 5 outcome counts on the page", False, "no outcome data on the page")]
+    if not cfg.billflow_zip.exists():
+        return [Check("Engine B: Pillar 5 outcome counts recounted from the bill-status archive", False, "no local archive")]
+    bills = _eb_bill_outcomes(cfg, raw)
+    O = page_data["p5"]["outcomes"]
+    passed = sorted(b for b, x in bills.items() if x["passed"])
+    enacted = sorted(b for b in passed if bills[b]["enacted"])
+    expect = {"passed_senate": passed, "enacted": enacted}
+    bad = []
+    for part, ids in expect.items():
+        if sorted(O[part]["total"]["ids"]) != ids or O[part]["total"]["v"] != len(ids):
+            bad.append(f"{part} total")
+        for cls in ("LIBERAL_SPONSOR", "CONSERVATIVE_SPONSOR", "ZERO_SCORE_SPONSOR", "UNKNOWN"):
+            mine = sorted(b for b in ids if bills[b]["class"] == cls)
+            if sorted(O[part][cls]["ids"]) != mine or O[part][cls]["v"] != len(mine):
+                bad.append(f"{part} {cls}")
+    if sorted(O["enacted"]["public_law_number_recorded"]["ids"]) != sorted(b for b in enacted if bills[b]["numbered"]) or \
+            sorted(O["enacted"]["public_law_number_pending"]["ids"]) != sorted(b for b in enacted if not bills[b]["numbered"]):
+        bad.append("public-law number recorded / pending")
+    missing = [b for b in passed if b not in O.get("bills", {})]
+    if missing:
+        bad.append(f"bills behind the counts not listed: {missing[:5]}")
+    return [Check("Engine B: Pillar 5 outcome counts recounted from the bill-status archive", not bad,
+                  f"passed Senate {len(passed)}, enacted {len(enacted)}" + (f"; mismatches {bad}" if bad else ""))]
 
 
 def _eb_git_head(path: Path) -> str | None:
@@ -462,6 +527,7 @@ def engine_b_checks(cfg: Config = DEFAULT, page_dir: Path | None = None) -> list
     out += eb_name_checks(raw, names, record, page_data)
     out += eb_gating_checks(record, BR.active(cfg)["status"], page_data)
     out += eb_methodology_checks(record, anchors, page_data, meth)
+    out += eb_outcome_checks(cfg, raw, page_data)
     out += eb_store_checks(cfg)
     out += eb_page_current_checks(cfg, page_dir)
     return out

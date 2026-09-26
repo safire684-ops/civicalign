@@ -7,6 +7,8 @@ Reads only
     the methodology registry           ideology/methodology.py
     the three Pillar 4 anchors         data/ideology/reference_anchors.jsonl (via anchors.current)
     official committee names          data/ideology/committee_names.jsonl (congress-legislators committee list)
+    Pillar 5 legislative outcomes     data/ideology/bill_sponsor_classifications.jsonl and
+                                      senate_bill_outcomes.jsonl (via bill_tallies.passed_senate_tally)
 and writes the published pages
     demo/senator-check.html            the three views, data embedded
     demo/methodology.html              every registry entry, with this build's versions
@@ -31,6 +33,9 @@ from pathlib import Path
 
 from .config import DEFAULT, Config
 from .ideology import anchors as A
+from .ideology import bill_outcomes as BO
+from .ideology import bill_tallies as BT
+from .ideology import bills as BL
 from .ideology import compute as C
 from .ideology import methodology as M
 from .ideology.store import Table, sha
@@ -153,10 +158,12 @@ def latest(cfg: Config) -> dict:
     return json.loads(body)
 
 
-def methods_payload(record: dict, anchors: list[dict]) -> dict:
+def methods_payload(record: dict, anchors: list[dict], outcome_versions: dict) -> dict:
     out = {}
     for e in M.ENTRIES:
-        if e["kind"] == "reference":
+        if e["kind"] == "outcome":
+            versions = [l for k in e["versions"] for l in version_lines(outcome_versions[k], f"{k.replace('_', ' ')} \u2014 ")]
+        elif e["kind"] == "reference":
             versions = [f"{a['display_name']}: " + "; ".join(version_lines({k: a[k] for k in e["versions"]})) for a in anchors]
         else:
             versions = [l for k in e["versions"] for l in version_lines(record["versions"][k], f"{k.replace('_', ' ')} \u2014 ")]
@@ -166,6 +173,56 @@ def methods_payload(record: dict, anchors: list[dict]) -> dict:
                                     for s in e["sources"]],
                         "versions": versions, "limitations": list(e["limitations"]), "not_available": e["not_available"]}
     return out
+
+
+SPONSOR_KEYS = ("LIBERAL_SPONSOR", "CONSERVATIVE_SPONSOR", "ZERO_SCORE_SPONSOR", "UNKNOWN")
+
+
+def outcomes_payload(cfg: Config) -> tuple[dict, dict]:
+    """Pillar 5 legislative outcomes from the saved bill tables: every count with the exact
+    bill ids behind it, the bills themselves (for "See bills"), and the versions and rules."""
+    cls, outs = BL.current(cfg), BO.current(cfg)
+    if not cls or not outs:
+        raise BuildError("no saved bill classifications or outcomes: run python -m civicalign.ideology.bills and bill_outcomes")
+    t = BT.passed_senate_tally(cls, outs)
+    for part in ("passed_senate", "enacted"):
+        probs = BT.trace_problems(t[part])
+        if probs:
+            raise BuildError(f"the {part} tally does not trace to its bill ids: {probs}")
+    by_c, by_o = {r["bill_id"]: r for r in cls}, {r["bill_id"]: r for r in outs}
+
+    def count(path, ids):
+        n = number(path, {"value": len(ids), "status": "AVAILABLE", "units": "Senate bills", "reason": None})
+        return {**n, "ids": list(ids)}
+
+    data = {}
+    for part in ("passed_senate", "enacted"):
+        tally = t[part]
+        data[part] = {"total": count(f"outcomes.{part}.total", tally["bill_ids"]), "set": tally["outcome_set"],
+                      **{k: count(f"outcomes.{part}.{k}", tally["by_classification"][k]["bill_ids"]) for k in SPONSOR_KEYS}}
+    data["enacted"]["public_law_number_recorded"] = count("outcomes.enacted.public_law_number_recorded",
+                                                          t["public_law_number_recorded"]["bill_ids"])
+    data["enacted"]["public_law_number_pending"] = count("outcomes.enacted.public_law_number_pending",
+                                                         t["public_law_number_pending"]["bill_ids"])
+    data["bills"] = {}
+    for b in t["passed_senate"]["bill_ids"]:
+        c, o = by_c[b], by_o[b]
+        data["bills"][b] = {"label": f"S. {c['bill_number']}", "title": c["title"], "sponsor": c["primary_sponsor_name"],
+                            "url": f"https://www.congress.gov/bill/{c['congress']}th-congress/senate-bill/{c['bill_number']}",
+                            "passed": o["passed_senate_date"], "enacted": o["enacted"], "law": o["public_law_number"],
+                            "pending": o["public_law_number_pending"], "signed": o["signed_date"]}
+    counted = [by_c[b] for b in t["passed_senate"]["bill_ids"]] + [by_o[b] for b in t["passed_senate"]["bill_ids"]]
+    archive = sorted({(r["source_version"], r["retrieved_at"]) for r in counted}, key=lambda x: x[1])
+    versions = {
+        "bill_archive_versions": [{"source_version": v, "retrieved_at": d} for v, d in archive],
+        "outcome_rule": t["outcome_rule"], "enactment_rule": t["enactment_rule"],
+        "classification_rule": sorted({by_c[b]["classification_rule"] for b in t["passed_senate"]["bill_ids"]}),
+        "sponsor_score_versions": sorted({by_c[b]["sponsor_score_source_version"] or "none" for b in t["passed_senate"]["bill_ids"]}),
+    }
+    data["meta"] = {"outcome_rule": t["outcome_rule"], "enactment_rule": t["enactment_rule"],
+                    "classification_rule": versions["classification_rule"],
+                    "latest_archive_retrieved": archive[-1][1][:10] if archive else None}
+    return data, versions
 
 
 def payload(cfg: Config = DEFAULT) -> dict:
@@ -200,6 +257,7 @@ def payload(cfg: Config = DEFAULT) -> dict:
                    **{k: number(f"pillar6.{c}.{k}", v[k]) for k in ("committee_median", "committee_senate_drift", "committee_public_drift")}}
                   for c, v in p6.items()]
     v = record["versions"]
+    outcomes, outcome_versions = outcomes_payload(cfg)
     return {
         "meta": {"input_key": record["input_key"], "input_key_short": record["input_key"][:8], "congress": v["congress"],
                  "measurement_date": v["measurement_date"], "score_column": v["legislator_model"]["score_column"],
@@ -207,7 +265,7 @@ def payload(cfg: Config = DEFAULT) -> dict:
                  "population": f"{v['population']['vintage']}, {v['population']['measurement_year']}",
                  "committee_observed": v["committee_membership"]["latest_observed_date"],
                  "primary_method": p5["configured_method"], "method_status": primary_label["method_status"]},
-        "methods": methods_payload(record, anchors),
+        "methods": methods_payload(record, anchors, outcome_versions),
         "p4": {"states": [{"code": st, "name": STATE_NAMES.get(st, st), "senators": sens}
                           for st, sens in sorted(states.items(), key=lambda kv: STATE_NAMES.get(kv[0], kv[0]))],
                "anchors": anchor_rows},
@@ -222,7 +280,8 @@ def payload(cfg: Config = DEFAULT) -> dict:
                "mdiff": number(f"pillar5.details.methods.{M.SECONDARY_METHOD}.population_weighting_difference",
                                secondary["population_weighting_difference"]),
                "national": number("pillar5.national_public", p5["national_public"]),
-               "gap": number("pillar5.chamber_public_gap", p5["chamber_public_gap"])},
+               "gap": number("pillar5.chamber_public_gap", p5["chamber_public_gap"]),
+               "outcomes": outcomes},
         "p6": {"senate_median": number("pillar5.details.chamber_median", p5["details"]["chamber_median"]),
                "national": number("pillar5.national_public", p5["national_public"]),
                "committees": sorted(committees, key=lambda c: c["name"])},

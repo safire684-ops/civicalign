@@ -267,3 +267,16 @@ def test_supervisor_catches_content_on_a_tracked_reference_and_wrong_metrics(tmp
     _edit(d / "packets" / "vote_119_1_00160.packet.json", lambda p: p["metrics"].update(total_source_chars=1))
     c = _context_checks(cfg)[0]
     assert not c.ok and "metrics" in c.detail
+
+
+# ---- Pillar 5 legislative-outcome counts --------------------------------------------------------------------
+
+def test_a_wrong_outcome_count_on_the_page_is_caught(raw, page_data):
+    assert not failed(S.eb_outcome_checks(DEFAULT, raw, page_data), "Engine B:")
+    p = copy.deepcopy(page_data)
+    ids = p["p5"]["outcomes"]["passed_senate"]["LIBERAL_SPONSOR"]["ids"]
+    p["p5"]["outcomes"]["passed_senate"]["CONSERVATIVE_SPONSOR"]["ids"].append(ids.pop())
+    assert failed(S.eb_outcome_checks(DEFAULT, raw, p), "Engine B: Pillar 5 outcome counts")
+    p = copy.deepcopy(page_data)
+    p["p5"]["outcomes"]["enacted"]["public_law_number_pending"]["ids"] = []
+    assert failed(S.eb_outcome_checks(DEFAULT, raw, p), "Engine B: Pillar 5 outcome counts")

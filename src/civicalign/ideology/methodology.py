@@ -15,15 +15,19 @@ Entry fields
     kind            quantity  a result.py quantity in the result record
                     count     a whole number in the result record
                     reference a Pillar 4 anchor from the reference_anchors table (not a result)
+                    outcome   a Pillar 5 legislative-outcome count from the saved bill tables
+                              (bill_sponsor_classifications, senate_bill_outcomes), not a result
     paths           where it sits in a result record's "results"; "*" stands for any
-                    senator (Pillar 4) or any committee (Pillar 6)
+                    senator (Pillar 4) or any committee (Pillar 6); for an outcome, its
+                    place in the page's outcome data ("outcomes.<set>.<count>")
     units           what the number is measured in
     decimals        how many decimals to display (None: shown as given, e.g. a count)
     sources         keys of SOURCES
     transformation  what is done to the raw source before the formula
     formula         how the number is calculated
     versions        keys of the result record's "versions" that trace it (for a
-                    reference: the fields of the anchor record that do)
+                    reference: the fields of the anchor record that do; for an outcome:
+                    the rules and source fields of the bill records that do)
     limitations     what the number does not tell you
     not_available   when and why it is NOT_AVAILABLE (None if it always has a value)
     extra_fields    other fields of the quantity shown with it (e.g. a standard error)
@@ -40,7 +44,7 @@ PRIMARY_METHOD = "population_weighted_mean_v1"
 SECONDARY_METHOD = "population_weighted_median_v1"
 VIEWS = ("senator_state", "senate_nation", "committee_senate_nation")
 PLACEMENTS = ("main", "details")
-KINDS = ("quantity", "count", "reference")
+KINDS = ("quantity", "count", "reference", "outcome")
 
 SOURCES = {
     "voteview": {"name": I.VOTEVIEW, "stored_in": "senator_ideology (reference_anchors for the anchors)",
@@ -51,6 +55,8 @@ SOURCES = {
     "committees": {"name": I.COMMITTEES, "stored_in": "committee_membership_events", "citation": None},
     "bridge": {"name": "CivicAlign bridge registry (bridge.py)", "stored_in": "ideology_bridge", "citation": None},
     "national": {"name": "CivicAlign national public estimate (national.py): UNRESOLVED", "stored_in": None, "citation": None},
+    "billstatus": {"name": "GovInfo bill-status bulk data (BILLSTATUS), Senate bills of the Congress",
+                   "stored_in": "bill_sponsor_classifications and senate_bill_outcomes", "citation": None},
 }
 
 LEGISLATOR = "Voteview DW-NOMINATE first dimension (nominate_dim1)"
@@ -85,6 +91,35 @@ COMMITTEE_LIMITS = (
     "Standing committees only; subcommittees, select and joint committees are not included.",
 )
 P5_VERSIONS = ("congress", "measurement_date", "legislator_model", "population", "weighting")
+SPONSOR_CLASS_KEYS = ("LIBERAL_SPONSOR", "CONSERVATIVE_SPONSOR", "ZERO_SCORE_SPONSOR", "UNKNOWN")
+OUTCOME_VERSIONS = ("bill_archive_versions", "outcome_rule", "enactment_rule", "classification_rule", "sponsor_score_versions")
+OUTCOME_TRANSFORM = ("Each Senate bill's own official action record in the GovInfo bill-status archive: a bill passed the "
+                     "Senate when the record has the Library of Congress action 17000, 'Passed/agreed to in Senate', and no "
+                     "later Senate action vitiates the passage (rule senate_passage_loc17000_v1).")
+ENACTED_TRANSFORM = ("A passed-Senate bill is enacted when the record shows a presidential signature or a recorded public law "
+                     "(rule enactment_signature_or_public_law_v1); a signed bill is enacted before its public-law number "
+                     "appears.")
+SPONSOR_TRANSFORM = ("Each bill's primary sponsor (Bioguide id in the bill-status record) is matched to that senator's "
+                     "Voteview nominate_dim1 (rule sponsor_nominate_dim1_sign_v1).")
+SPONSOR_FORMULA = ("count of bills in the set by the sign of the sponsor's score: negative = sponsored by a senator on the "
+                   "liberal side of the Voteview scale; positive = on the conservative side; exactly zero; or no available "
+                   "sponsor score.")
+OUTCOME_LIMITS = (
+    "Senate bills (S.) only: Senate joint resolutions, simple and concurrent resolutions, and House bills the Senate "
+    "passed are not included.",
+    "A bill passed by unanimous consent and a bill passed by a recorded vote count the same.",
+    "These counts do not show that the Senate's ideological average, or any senator, caused a bill to pass.",
+    "The counts change as the Senate acts; the record is refreshed daily from the official bill-status data.",
+)
+SPONSOR_LIMITS = (
+    "The grouping describes the primary sponsor's voting record, not the content or ideology of the bill; CivicAlign "
+    "does not decide whether a bill itself is liberal or conservative.",
+    "Only the primary sponsor counts; cosponsors, including those from the other party, are not considered.",
+    "The sponsor's score is their career-long Voteview nominate_dim1, relative to other members of Congress.",
+)
+ENACTED_LIMITS = (
+    "Enactment also depends on the House and the President, not only on the Senate.",
+)
 
 
 def _e(id, label, pillar, views, placement, kind, paths, units, decimals, sources, transformation, formula, versions,
@@ -192,6 +227,32 @@ ENTRIES = (
        "The Senate centre and the national public centre on the senator scale.", "Senate centre - national public centre.",
        ["national_public", "bridge"], ("Not calculated until the national estimate is defined and a bridge exists.",),
        not_available=NO_NATIONAL),
+
+    # ---- Pillar 5: what the Senate actually passed (legislative outcomes by sponsor voting position) ----
+    _e("p5.outcomes_passed_total", "Senate bills that passed the Senate", 5, ["senate_nation"], "main", "outcome",
+       ["outcomes.passed_senate.total"], "Senate bills", None, ["billstatus"],
+       OUTCOME_TRANSFORM, "count of Senate bills (S.) of the Congress that passed the Senate; each bill counted once.",
+       OUTCOME_VERSIONS, OUTCOME_LIMITS),
+    _e("p5.outcomes_passed_by_sponsor", "Passed-Senate bills by sponsor voting position", 5, ["senate_nation"], "main", "outcome",
+       [f"outcomes.passed_senate.{c}" for c in SPONSOR_CLASS_KEYS], "Senate bills", None, ["billstatus", "voteview"],
+       OUTCOME_TRANSFORM + " " + SPONSOR_TRANSFORM, SPONSOR_FORMULA, OUTCOME_VERSIONS, SPONSOR_LIMITS + OUTCOME_LIMITS),
+    _e("p5.outcomes_enacted_total", "Passed-Senate bills that were enacted", 5, ["senate_nation"], "main", "outcome",
+       ["outcomes.enacted.total"], "Senate bills", None, ["billstatus"],
+       OUTCOME_TRANSFORM + " " + ENACTED_TRANSFORM, "count of passed-Senate bills the record shows were enacted; each bill counted once.",
+       OUTCOME_VERSIONS, ENACTED_LIMITS + OUTCOME_LIMITS),
+    _e("p5.outcomes_enacted_by_sponsor", "Enacted bills by sponsor voting position", 5, ["senate_nation"], "main", "outcome",
+       [f"outcomes.enacted.{c}" for c in SPONSOR_CLASS_KEYS], "Senate bills", None, ["billstatus", "voteview"],
+       OUTCOME_TRANSFORM + " " + ENACTED_TRANSFORM + " " + SPONSOR_TRANSFORM, SPONSOR_FORMULA, OUTCOME_VERSIONS,
+       SPONSOR_LIMITS + ENACTED_LIMITS + OUTCOME_LIMITS),
+    _e("p5.outcomes_public_law_recorded", "Enacted bills with a public-law number", 5, ["senate_nation"], "main", "outcome",
+       ["outcomes.enacted.public_law_number_recorded"], "Senate bills", None, ["billstatus"],
+       ENACTED_TRANSFORM, "count of enacted bills whose bill-status record shows a public-law number.",
+       OUTCOME_VERSIONS, ENACTED_LIMITS),
+    _e("p5.outcomes_public_law_pending", "Enacted bills awaiting a public-law number", 5, ["senate_nation"], "main", "outcome",
+       ["outcomes.enacted.public_law_number_pending"], "Senate bills", None, ["billstatus"],
+       ENACTED_TRANSFORM, "count of enacted bills signed by the President whose public-law number has not yet appeared in the record.",
+       OUTCOME_VERSIONS, ENACTED_LIMITS + (
+           "These bills are already law: the signature enacts a bill, and the public-law number is assigned afterwards.",)),
 
     # ---- Pillar 6: committee / Senate / nation ----------------------------------------------------
     _e("p6.members_listed", "Committee members listed", 6, ["committee_senate_nation"], "main", "count",
@@ -304,7 +365,7 @@ def coverage(record: dict) -> list[str]:
             if e is None or e["kind"] != kind:
                 out.append(f"{kind} {p} has no methodology entry")
     for e in ENTRIES:
-        if e["kind"] == "reference":
+        if e["kind"] in ("reference", "outcome"):      # not result-record numbers
             continue
         for p in e["paths"]:
             if p not in found:

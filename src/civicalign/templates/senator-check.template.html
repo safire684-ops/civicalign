@@ -53,12 +53,30 @@
 .tiles .v{display:block;margin-top:4px}
 .tiles .v .num{font-family:var(--serif);font-size:26px}
 .explain{margin-top:16px;display:grid;gap:10px;font-size:15.5px;max-width:60ch}
-#p5-meaning{margin-top:14px}
-#p5-meaning .fine{font-size:14.5px;color:var(--ink);max-width:60ch}
-#p5-meaning .fine+.fine{margin-top:10px}
+#p5-meaning,#p5-outcomes-meaning{margin-top:14px}
+#p5-meaning .fine,#p5-outcomes-meaning .fine{font-size:14.5px;color:var(--ink);max-width:60ch}
+#p5-meaning .fine+.fine,#p5-outcomes-meaning .fine+.fine{margin-top:10px}
 .tiles .s{display:block;font-size:12.5px;color:var(--muted);margin-top:2px}
 .status{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;
   padding:2px 7px;border-radius:3px;border:1px solid var(--rule);color:var(--muted);vertical-align:1px}
+/* Pillar 5: what the Senate actually passed */
+#p5-outcomes .intro{margin-top:10px;font-size:15.5px;max-width:60ch}
+#p5-outcomes .kicker{margin-top:22px}
+#p5-outcomes .lead{margin-top:6px;font-size:16px}
+#p5-outcomes .lead .num{font-family:var(--serif);font-size:24px}
+.split{display:flex;height:14px;border-radius:7px;overflow:hidden;background:var(--rule-soft);margin-top:12px}
+.split .seg{display:block;height:100%;width:var(--w)}
+.split .seg.lib,.splitkey .sw.lib{background:var(--muted)}
+.split .seg.con,.splitkey .sw.con{background:var(--ink)}
+.splitkey{margin-top:12px;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px 18px}
+.splitkey div{display:grid;grid-template-columns:auto 1fr;gap:2px 10px;align-items:baseline}
+.splitkey .sw{display:inline-block;width:12px;height:12px;border-radius:2px;align-self:center}
+.splitkey .big .num{font-family:var(--serif);font-size:24px}
+.splitkey .k{grid-column:1 / -1;font-size:14px;color:var(--muted)}
+.seebills{margin-top:10px}
+.bills{margin:0;padding-left:18px;display:grid;gap:6px;font-size:14px}
+.bills .k{color:var(--muted);font-size:13px}
+.bills a{color:var(--alert);font-weight:600}
 dialog.method{max-width:640px;width:calc(100% - 32px);max-height:calc(100vh - 48px);border:1px solid var(--rule);border-radius:8px;
   background:var(--surface);color:var(--ink);padding:0;overflow:auto}
 dialog.method::backdrop{background:rgba(10,12,16,.55)}
@@ -117,6 +135,7 @@ dialog.method a{color:var(--alert);font-weight:600}
 <section id="senate-nation" class="view" role="tabpanel" aria-labelledby="tab-senate-nation" tabindex="-1" hidden>
   <div class="cm" id="p5-main"></div>
   <div class="cm statcard" id="p5-nation"></div>
+  <div class="cm" id="p5-outcomes"></div>
   <details class="more">
     <summary><span>Medians (secondary comparison)</span></summary>
     <div id="p5-medians"></div>
@@ -296,6 +315,51 @@ dialog.method a{color:var(--alert);font-weight:600}
     $('p5-medians').innerHTML='<div class="rows">'+row('Senate median (each senator counted once)',P5.median)+
       row('Population-weighted Senate median',P5.wmedian)+row('Difference (median − weighted median)',P5.mdiff)+'</div>'+
       '<p class="why">'+esc(M['p5.weighted_median'].limitations[0])+'</p>';
+  })();
+
+  // ================= Pillar 5: what the Senate actually passed =================
+  // Every count is read from the saved bill tables (P5.outcomes) and carries the bill ids behind it.
+  (function(){
+    var O=P5.outcomes, B=O.bills;
+    var GROUPS=[{key:'LIBERAL_SPONSOR',see:'See the bills sponsored by senators on the liberal side of the Voteview scale'},
+                {key:'CONSERVATIVE_SPONSOR',see:'See the bills sponsored by senators on the conservative side of the Voteview scale'},
+                {key:'ZERO_SCORE_SPONSOR',see:'See the bills sponsored by senators with a score of exactly zero'},
+                {key:'UNKNOWN',see:'See the bills with no available sponsor score'}];
+    function bills(n){return n.v===1?'bill':'bills'}
+    function split(set){
+      var l=set.LIBERAL_SPONSOR, c=set.CONSERVATIVE_SPONSOR, both=l.v+c.v, lw=both?100*l.v/both:0;
+      return '<p class="kicker">Sponsor voting position</p>'+
+        '<div class="split" aria-hidden="true"><span class="seg lib" style="--w:'+lw+'%"></span><span class="seg con" style="--w:'+(both?100-lw:0)+'%"></span></div>'+
+        '<p class="sr-only">Bar: '+esc(l.d)+' sponsored by senators on the liberal side of the Voteview scale and '+esc(c.d)+' on the conservative side.</p>'+
+        '<div class="splitkey">'+
+          '<div><i class="sw lib"></i><span class="big">'+num(l)+'</span><span class="k">Sponsored by senators on the liberal side of the Voteview scale</span></div>'+
+          '<div><i class="sw con"></i><span class="big">'+num(c)+'</span><span class="k">Sponsored by senators on the conservative side of the Voteview scale</span></div>'+
+        '</div>'+
+        '<p class="why">'+num(set.ZERO_SCORE_SPONSOR)+' sponsored by senators with a score of exactly zero · '+num(set.UNKNOWN)+' with no available sponsor score</p>';
+    }
+    function list(ids,enacted){
+      return '<ul class="bills">'+ids.map(function(b){var x=B[b];
+        var law=!enacted?'':x.law?' · enacted as Public Law '+esc(x.law):x.pending?' · enacted: signed by the President '+esc(x.signed)+', public-law number pending':'';
+        return '<li><a href="'+esc(x.url)+'">'+esc(x.label)+'</a> '+esc(x.title)+' <span class="k">'+esc(x.sponsor)+' · passed the Senate '+esc(x.passed)+law+'</span></li>'}).join('')+'</ul>';
+    }
+    function see(set,enacted){
+      return GROUPS.map(function(g){var n=set[g.key]; return n.v?'<details class="more seebills"><summary><span>'+esc(g.see)+'</span></summary>'+list(n.ids,enacted)+'</details>':''}).join('');
+    }
+    var P=O.passed_senate, E=O.enacted;
+    $('p5-outcomes').innerHTML='<div class="gh"><b>What the Senate actually passed</b></div>'+
+      '<p class="intro">The Senate’s ideology numbers are abstract. This shows a concrete view of the legislation the Senate approved during the current Congress, grouped by the voting position of each bill’s primary sponsor.</p>'+
+      '<p class="kicker">Passed the Senate</p>'+
+      '<p class="lead">'+num(P.total)+' Senate '+bills(P.total)+' passed the Senate.</p>'+split(P)+see(P,false)+
+      '<p class="kicker">Enacted into law</p>'+
+      '<p class="lead">'+num(E.total)+' Senate '+bills(E.total)+' enacted.</p>'+split(E)+
+      '<p class="why">'+num(E.public_law_number_recorded)+' currently have public-law numbers. '+num(E.public_law_number_pending)+' were signed by the President and are awaiting public-law numbers.</p>'+
+      '<p class="why">Becoming law also depends on the House and the President, not only on the Senate.</p>'+see(E,true)+
+      '<details class="more" id="p5-outcomes-meaning"><summary><span>What does this mean?</span></summary>'+
+        '<p class="fine">CivicAlign is not deciding whether a bill itself is liberal or conservative. Each bill is grouped only by the DW-NOMINATE voting score of the senator who sponsored it. A negative sponsor score appears on the liberal side of Voteview’s scale; a positive score appears on the conservative side.</p>'+
+        '<p class="fine">This gives readers a simple way to see the voting positions of the senators whose bills moved through the Senate, without using AI to guess the ideology of the legislation.</p>'+
+        '<p class="fine">These counts do not prove that the Senate’s ideological average caused these bills to pass.</p>'+
+      '</details>'+
+      '<p class="why">From the official bill-status records (latest retrieved '+esc(O.meta.latest_archive_retrieved)+'); rules '+esc(O.meta.outcome_rule)+', '+esc(O.meta.enactment_rule)+' and '+esc(O.meta.classification_rule.join(', '))+'. Select any number for its methodology.</p>';
   })();
 
   // ================= Pillar 6 =================

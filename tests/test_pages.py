@@ -53,7 +53,23 @@ def numbers(obj):
 
 
 def visible_text(page: str) -> str:
-    return re.sub(r"<style>.*?</style>", " ", page, flags=re.S)
+    """The page's own wording: without styles, and with the embedded data replaced by its
+    strings minus official bill titles and sponsor names (the government's words, which
+    CivicAlign must not alter; e.g. the "DEFIANCE Act", or "Fiscal Year" in a title)."""
+    page = re.sub(r"<style>.*?</style>", " ", page, flags=re.S)
+    m = re.search(r'<script id="data" type="application/json">(.*?)</script>', page, re.S)
+    if not m:
+        return page
+    data = json.loads(m.group(1))
+    data.get("p5", {}).get("outcomes", {}).pop("bills", None)
+
+    def strings(o):
+        if isinstance(o, dict):
+            return " ".join(strings(v) for v in o.values())
+        if isinstance(o, list):
+            return " ".join(strings(v) for v in o)
+        return o if isinstance(o, str) else ""
+    return page[:m.start()] + " " + strings(data) + " " + page[m.end():]
 
 
 # ---- formatting ----------------------------------------------------------------------------
@@ -82,7 +98,8 @@ def test_scale_labels_use_the_whole_surname():
 
 def test_every_displayed_number_carries_its_registry_entry(data):
     nums = list(numbers(data))
-    assert len(nums) == 400 + 3 + 10 + 16 * 5 + 2 - 1   # Pillar 4 (100 x 4), anchors, Pillar 5, Pillar 6 (16 x 5 + two shared)
+    # Pillar 4 (100 x 4), anchors, Pillar 5, Pillar 6 (16 x 5 + two shared), Pillar 5 outcomes (5 passed + 7 enacted)
+    assert len(nums) == 400 + 3 + 10 + 16 * 5 + 2 - 1 + 12
     for n in nums:
         e = M.REGISTRY[n["m"]]
         if n["s"] == "NOT_AVAILABLE":
@@ -107,7 +124,7 @@ def test_the_page_only_shows_numbers_through_num(pages):
     assert not re.search(r"\d\.\d{2,}", script), "no data value is written into the template"
     assert "throw new Error('number without a methodology entry" in script
     shown = re.findall(r"esc\((\w+)\.d\)", script)
-    assert set(shown) <= {"n", "md", "sm", "pl", "w"}, shown     # screen-reader text repeats numbers already shown by num()
+    assert set(shown) <= {"n", "md", "sm", "pl", "w", "l", "c"}, shown   # screen-reader text repeats numbers already shown by num()
 
 
 def test_the_build_refuses_a_number_without_an_entry(monkeypatch):
@@ -168,8 +185,8 @@ def test_pillar5_main_result_is_the_mean_and_medians_are_details_only(data):
 
 def test_pillar5_plain_language_card():
     """The approved Pillar 5 wording (2026-09-25): title, three rows, explanation and "What does this mean?"."""
-    start = TEMPLATE.index("// ================= Pillar 5")
-    p5 = TEMPLATE[start:TEMPLATE.index("// ================= Pillar 6")]
+    start = TEMPLATE.index("// ================= Pillar 5 =================")
+    p5 = TEMPLATE[start:TEMPLATE.index("// ================= Pillar 5: what the Senate actually passed")]
     for text in ("Counting states vs. weighting by population", "Senate average", "Each senator counted equally",
                  "Population-weighted", "Difference",
                  "Every state gets two senators regardless of its population. Normally, each senator counts equally when "
@@ -229,7 +246,8 @@ def test_no_political_judgment_labels(pages):
 def test_no_engine_a_or_bill_content(pages):
     for name, page in pages.items():
         text = visible_text(page)
-        for phrase in ("Recent votes", "recent vote", "receipt", "Yea", "Nay", "sent forward", "Yes / No", "sponsor",
+        # "sponsor" is now used on purpose (the Pillar 5 outcomes are grouped by sponsor voting position)
+        for phrase in ("Recent votes", "recent vote", "receipt", "Yea", "Nay", "sent forward", "Yes / No",
                        "scorecard", "bill ideology", "liberal bill", "conservative bill", "Pillar 1", "Maker", "Checker"):
             assert phrase not in text, (name, phrase)
 
@@ -399,3 +417,136 @@ def test_nothing_is_ordered_by_score(data):
 def test_both_colour_themes_are_defined():
     css = (ROOT / "demo" / "civicalign.css").read_text()
     assert "prefers-color-scheme:dark" in css and ':root[data-theme="dark"]' in css
+
+
+# ---- Pillar 5: what the Senate actually passed (legislative outcomes by sponsor voting position) ----------
+
+from civicalign.ideology import bill_outcomes as BO     # noqa: E402
+from civicalign.ideology import bill_tallies as BT      # noqa: E402
+from civicalign.ideology import bills as BL             # noqa: E402
+
+CLASSES = ("LIBERAL_SPONSOR", "CONSERVATIVE_SPONSOR", "ZERO_SCORE_SPONSOR", "UNKNOWN")
+
+
+def _outcome_script():
+    s = _script()
+    return s[s.index("// ================= Pillar 5: what the Senate actually passed"):s.index("// ================= Pillar 6")]
+
+
+def test_outcome_counts_come_from_the_saved_tables(data):
+    O = data["p5"]["outcomes"]
+    t = BT.passed_senate_tally(BL.current(DEFAULT), BO.current(DEFAULT))
+    for part in ("passed_senate", "enacted"):
+        assert O[part]["total"]["ids"] == t[part]["bill_ids"] and O[part]["total"]["v"] == t[part]["total"]
+        for c in CLASSES:
+            assert O[part][c]["ids"] == t[part]["by_classification"][c]["bill_ids"]
+    assert O["enacted"]["public_law_number_pending"]["ids"] == t["public_law_number_pending"]["bill_ids"]
+    # nothing about these counts is written into the page: the only number literal in the card's code is the
+    # 100 that turns counts into bar widths, and no current count appears as a literal
+    s = re.sub(r"//[^\n]*", "", _outcome_script())      # code only, not its comments ("Pillar 5")
+    assert set(re.findall(r"\b\d{2,}\b", s)) <= {"100"}, "the counts must be read from the data, never written in"
+    live = {O[p][k]["v"] for p in ("passed_senate", "enacted") for k in ("total",) + CLASSES}
+    assert not [v for v in live if v >= 2 and re.search(rf"(?<![\w.]){v}(?![\w.])", s)], live
+
+
+def test_passed_senate_and_enacted_stay_separate(data):
+    O = data["p5"]["outcomes"]
+    assert O["passed_senate"]["total"]["m"] == "p5.outcomes_passed_total" and O["enacted"]["total"]["m"] == "p5.outcomes_enacted_total"
+    assert O["passed_senate"]["total"]["p"] != O["enacted"]["total"]["p"]
+    assert set(O["enacted"]["total"]["ids"]) <= set(O["passed_senate"]["total"]["ids"])
+    s = _outcome_script()
+    assert s.index("Passed the Senate") < s.index("Enacted into law")
+
+
+def test_every_outcome_count_traces_to_exact_bill_ids_and_official_actions(data):
+    O = data["p5"]["outcomes"]
+    outs = {r["bill_id"]: r for r in BO.current(DEFAULT)}
+    cls = {r["bill_id"]: r for r in BL.current(DEFAULT)}
+    for part in ("passed_senate", "enacted"):
+        total = O[part]["total"]
+        assert total["v"] == len(total["ids"]) == len(set(total["ids"]))
+        assert sorted(sum((O[part][c]["ids"] for c in CLASSES), []), key=BT._order) == total["ids"], "the classes partition the total"
+        for c in CLASSES:
+            n = O[part][c]
+            assert n["v"] == len(n["ids"]) and all(cls[b]["sponsor_classification"] == c for b in n["ids"])
+    for b in O["passed_senate"]["total"]["ids"]:
+        assert outs[b]["passed_senate"] and outs[b]["loc_passage_actions"], b
+        assert outs[b]["bill_fingerprint"] == cls[b]["bill_fingerprint"], "the class and the outcome come from the same official record"
+        assert b in O["bills"] and O["bills"][b]["label"] == f"S. {cls[b]['bill_number']}"
+    for b in O["enacted"]["total"]["ids"]:
+        assert outs[b]["enacted"] and (outs[b]["signed_by_president"] or outs[b]["public_law_number"])
+
+
+def test_signed_bills_with_a_pending_number_count_as_enacted(data, pages):
+    O = data["p5"]["outcomes"]
+    pending, recorded = O["enacted"]["public_law_number_pending"], O["enacted"]["public_law_number_recorded"]
+    assert set(pending["ids"]) <= set(O["enacted"]["total"]["ids"])
+    assert recorded["v"] + pending["v"] == O["enacted"]["total"]["v"]
+    assert all(O["bills"][b]["enacted"] and O["bills"][b]["pending"] and not O["bills"][b]["law"] for b in pending["ids"])
+    s = _outcome_script()
+    assert "were signed by the President and are awaiting public-law numbers." in s
+    assert "enacted: signed by the President" in s
+    for phrase in ("not yet law", "not law yet", "not counted as law", "before becoming law", "not been enacted"):
+        assert phrase not in visible_text(pages["senator-check.html"]).lower() and phrase not in s.lower(), phrase
+
+
+def test_approved_scorecard_wording():
+    s = _outcome_script()
+    for text in ("What the Senate actually passed",
+                 "The Senate’s ideology numbers are abstract. This shows a concrete view of the legislation the Senate approved "
+                 "during the current Congress, grouped by the voting position of each bill’s primary sponsor.",
+                 "Passed the Senate", "Enacted into law", "Sponsor voting position",
+                 "Sponsored by senators on the liberal side of the Voteview scale",
+                 "Sponsored by senators on the conservative side of the Voteview scale",
+                 "' Senate '+bills(P.total)+' passed the Senate.", "' Senate '+bills(E.total)+' enacted.",
+                 "' currently have public-law numbers. '",
+                 "CivicAlign is not deciding whether a bill itself is liberal or conservative. Each bill is grouped only by the "
+                 "DW-NOMINATE voting score of the senator who sponsored it. A negative sponsor score appears on the liberal side of "
+                 "Voteview’s scale; a positive score appears on the conservative side.",
+                 "This gives readers a simple way to see the voting positions of the senators whose bills moved through the Senate, "
+                 "without using AI to guess the ideology of the legislation.",
+                 "These counts do not prove that the Senate’s ideological average caused these bills to pass.",
+                 "See the bills sponsored by senators on the liberal side of the Voteview scale"):
+        assert text in s, text
+
+
+def test_no_liberal_or_conservative_bills_anywhere(pages):
+    for text in [visible_text(pages["senator-check.html"]), pages["methodology.html"], TEMPLATE,
+                 (ROOT / "src" / "civicalign" / "ideology" / "methodology.py").read_text(),
+                 (ROOT / "src" / "civicalign" / "build_pages.py").read_text()]:
+        assert not re.search(r"\b(liberal|conservative) (bill|bills|legislation|law|laws)\b", text, re.I)
+
+
+def test_no_causal_claim_links_senate_ideology_to_these_outcomes():
+    s = _outcome_script().replace("These counts do not prove that the Senate’s ideological average caused these bills to pass.", "")
+    for phrase in ("because", "caused", "cause ", "led to", "resulted in", "result of", "due to", "thanks to", "explains why",
+                   "responsible for", "drove", "driven by"):
+        assert phrase not in s.lower(), phrase
+    assert "do not prove" in _outcome_script()
+
+
+def test_no_llm_in_the_scorecard_path():
+    for f in (ROOT / "src" / "civicalign" / "build_pages.py", ROOT / "src" / "civicalign" / "templates" / "senator-check.template.html",
+              ROOT / "src" / "civicalign" / "ideology" / "bill_tallies.py"):
+        src = f.read_text()
+        assert not re.search(r"openai|anthropic|langchain|claude|gpt-|llama|transformers|huggingface|cohere|gemini|ollama", src, re.I), f.name
+        assert "subprocess" not in src and "urllib" not in src and "fetch(" not in src, f.name
+
+
+def test_every_outcome_number_has_methodology(data, pages):
+    O = data["p5"]["outcomes"]
+    nums = [O[p][k] for p in ("passed_senate", "enacted") for k in ("total",) + CLASSES] + \
+           [O["enacted"]["public_law_number_recorded"], O["enacted"]["public_law_number_pending"]]
+    for n in nums:
+        e = M.REGISTRY[n["m"]]
+        assert e["kind"] == "outcome" and M.entry_for(n["p"])["id"] == n["m"] and f'id="{n["m"]}"' in pages["methodology.html"]
+        versions = " ".join(data["methods"][n["m"]]["versions"])
+        assert "outcome rule — senate_passage_loc17000_v1" in versions and "enactment rule — enactment_signature_or_public_law_v1" in versions
+        assert "classification rule — sponsor_nominate_dim1_sign_v1" in versions and "bill archive versions — source version" in versions
+    assert "not the content or ideology of the bill" in " ".join(M.REGISTRY["p5.outcomes_passed_by_sponsor"]["limitations"])
+
+
+def test_bill_lists_are_behind_see_bills_not_on_the_main_screen():
+    s = _outcome_script()
+    assert "<details class=\"more seebills\"><summary><span>'+esc(g.see)+'</span></summary>'+list(n.ids,enacted)+'</details>" in s
+    assert s.count("list(") == 2, "the bill list is built only inside the See bills sections"
