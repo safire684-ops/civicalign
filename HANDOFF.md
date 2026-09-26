@@ -9,7 +9,8 @@ old page), and after Step 5B (old Pillars 4–6 code and tests removed, new
 independent supervisor), after Step 5C (daily automation on the new
 pipeline), after the docs rewrite, and after the pre-publish validation (Stage 3 separated
 from the release, banner removed, Python 3.12 run, fresh update), and after
-publishing (26 September 2026: `e6f6428` live on GitHub `main`). Read all of it before doing
+publishing (26 September 2026: `e6f6428` live on GitHub `main`), and after the
+deterministic bill/sponsor data layer (`c0b592a`, local). Read all of it before doing
 anything. The repository and this file are the source of truth; older design
 documents, the whitepaper and chat history are not.
 
@@ -91,6 +92,9 @@ Commits in the Pillars 4–6 release (all on GitHub `main` since publishing; old
 | `940747c` | HANDOFF update for the docs rewrite. |
 | `ec0c422` | **Release cleanup**: preview banner removed; Stage 3 kept out of the release (README, package docstring, the floor-vote summary guard moved into `test_floor_votes.py`). |
 | `16d7b31` | **Fresh verified snapshot** from a local `scripts/update.sh` run (2026-09-26T01:32:57Z). See section 3. |
+| `e6f6428` | HANDOFF: pre-publish validation complete. **Published: live on GitHub `main`.** |
+| `ce6794a` | Post-publish docs: README says Pillars 4–6 is live; HANDOFF records the publication (pushed to GitHub `main`). |
+| `c0b592a` | **Bill/sponsor data layer** (local, not pushed): `ideology/bills.py`, `ideology/bill_tallies.py`, table `bill_sponsor_classifications`, `tests/test_bills.py`. See section 3. |
 | (next) | This HANDOFF update. |
 
 The working tree of the release branch is clean. The two Stage 3 edits that
@@ -159,6 +163,8 @@ Tables in `data/ideology/` (JSON Lines, tracked in git):
 | `committee_membership_events.jsonl` | congress, committee_id, bioguide_id | Standing committees only (`SS*`, four characters; no subcommittees, select or joint). Events `observed_joined` / `observed_left` / `observed_role_changed` with rank, title, majority/minority side. **Every date is OBSERVED**: the day CivicAlign first retrieved content showing the change, never an official appointment date (the `date_basis` field says so and the validator enforces it). The first observation of a committee is flagged `baseline` with a note that membership may have begun earlier. `records.membership_intervals()` derives `observed_start_date` / `observed_end_date`. Today: 351 baseline events, 16 committees, observed 2026-09-23. |
 | `ideology_bridge.jsonl` | bridge_version | See Step 2. |
 | `reference_anchors.jsonl` | anchor_id | The three Pillar 4 reference anchors; see Step 4 part 1. Visual only. |
+| `committee_names.jsonl` | committee_id | Official standing-committee names (Step 5A). |
+| `bill_sponsor_classifications.jsonl` | congress, bill_id | Every Senate bill classified by its primary sponsor's `nominate_dim1` sign; see "Bill/sponsor data layer" below. Not a calculation input. |
 
 Store (`store.py`): append-only; a new version is written only when content
 differs from the key's current version; each key's versions are hash-chained
@@ -640,6 +646,74 @@ and every number on screen (31 in the checked state) opens its methodology.
   commit is local until pushed**; if the daily bot has committed to `main` in
   the meantime, rebase it first.
 
+### Bill/sponsor data layer — COMPLETE (`c0b592a`, local, not pushed)
+
+**The deterministic bill/sponsor data layer is complete.** It prepares data for
+later Pillar 5 legislative-outcome counts and Pillar 6 committee bill-flow
+counts; nothing is displayed yet.
+
+- **Source**: the existing verified GovInfo BILLSTATUS archive in the source
+  snapshot (`data/raw/BILLSTATUS-119-s.zip`, read only if its bytes match
+  `SNAPSHOT.json`). **No Congress.gov API is required** (the archive carries
+  every needed field; no key is used).
+- **No LLM or AI classification is used**: fixed arithmetic on stored numbers,
+  no network call, no external program (`tests/test_bills.py` fails on any LLM
+  library, AI provider name, network or subprocess use in the pipeline).
+- **Every Senate bill is matched to its primary sponsor through the Bioguide id**
+  in the bill-status record, and **sponsor ideology uses `nominate_dim1`** from
+  the stored `senator_ideology` table (Voteview `HSall_members.csv`, this
+  Congress's Senate rows, including senators who have left).
+- **Classification** (rule `sponsor_nominate_dim1_sign_v1`):
+  negative score = `LIBERAL_SPONSOR`; positive score = `CONSERVATIVE_SPONSOR`;
+  zero = `ZERO_SCORE_SPONSOR`; missing or unmatched (no sponsor, no Bioguide id,
+  no Voteview row for the Congress, or no score) = `UNKNOWN`, with the reason.
+- **These labels describe the SPONSOR, not the ideology of the bill itself.**
+  Every record stores the fixed wording ("Bill sponsored by a senator with a
+  negative / positive DW-NOMINATE score") and a basis statement
+  (`SPONSOR_SCORE_ONLY: … not the content or ideology of the bill`), which the
+  validator enforces, so the frontend can never present the sponsor's score as
+  the bill's ideology.
+- **5,551 Senate bills are currently classified**: **2,735 `LIBERAL_SPONSOR`**,
+  **2,816 `CONSERVATIVE_SPONSOR`**, **0 `ZERO_SCORE_SPONSOR`**, **0 `UNKNOWN`**
+  (every bill has a sponsor with a Bioguide id, and all 102 distinct sponsors
+  have a scored 119th Senate Voteview row).
+- **These totals cover ALL Senate bills introduced in the 119th Congress (S
+  bills in the archive). They must NOT be presented as bills passed.** No
+  outcome set has been chosen; `sponsor_tally()` says so when called without one.
+- **37 of the Senate bills in the current data became law** (a public law is
+  listed in their bill-status record).
+- **Committee referred/reported tallies are now available and traceable to
+  exact bill ids**: `committee_tallies()` gives, for each of the 16 standing
+  committees, bills referred ("Referred To"), bills reported ("Reported By" or
+  "Reported Original Measure", so original measures count as reported without a
+  referral), and reported-of-referred, each split by sponsor class with the
+  sorted bill ids; `trace_problems()` checks that every count equals its id list
+  and that the classes partition the total. 154 bills have no standing-committee
+  action.
+- **Storage**: table `bill_sponsor_classifications` (key `congress, bill_id`),
+  one record per bill with congress, bill type and number, bill id, title,
+  introduced date, primary sponsor name, Bioguide id, by-request flag, sponsor
+  `nominate_dim1`, class, label, basis, rule, unknown reason, the sponsor score's
+  source and `senator_ideology` record id and version, the bill's GovInfo URL,
+  SHA-256 fingerprint and update date, status (latest action date and text,
+  laws), the standing committees with referred/reported/discharged flags and
+  dates, and the source fields. **The data file is about 12 MB and is
+  append-only/versioned**: a bill whose XML, sponsor score record and rule are
+  unchanged keeps its stored record, so an unchanged archive writes nothing;
+  `source_version` and `retrieved_at` name the archive version in which the
+  bill's current content was first seen.
+- Commands: `python -m civicalign.ideology.bills [--dry-run] [--tally]`.
+- **Scope**: Senate bills (type S) only. Senate joint resolutions, simple and
+  concurrent resolutions, and House bills referred to Senate committees are not
+  included (a House bill's sponsor is not on the senator scale).
+- **Current tests: 277 passed, 0 failed** (the 253 before plus 24 in
+  `tests/test_bills.py`); supervisor 31 of 31 (its store check now covers 8
+  tables). **The live pages and the existing Pillars 4–6 calculations are
+  unchanged** (result `5f42ca01…`; `compute` does not read the new table).
+- **This pipeline is not yet wired into the daily automation or the frontend**,
+  and the supervisor checks the table's integrity but does not yet recount the
+  classifications independently.
+
 ## 4. Current real numbers (record `5f42ca01…`, nominate_dim1, 100 active senators)
 
 **Pillar 5 — main comparison (PRIMARY method `population_weighted_mean_v1`)**
@@ -736,6 +810,8 @@ alignment scores, defiance/betrayal language, politician rankings.
 
 Run: `./.venv/bin/python -m pytest -q` (Python 3.14 venv; CI uses 3.12).
 
+**After the bill/sponsor data layer: 277 passed, 0 failed** (adds `tests/test_bills.py`, 24).
+
 **After the pre-publish validation: 253 passed, 0 failed** (Python 3.12 and 3.14), no
 expected-fail markers; supervisor 31 of 31. The 43 Stage 3 tests are on `pillar1-stage3`.
 
@@ -801,14 +877,23 @@ report and whitepaper against newer bill archives); after Step 5A, 321 passed,
 
 ## 9. Next step
 
-Publishing is done (section 3, "Published"). No next feature has been started.
-Open items, each only when the user asks:
+Publishing is done, and the bill/sponsor data layer is built (section 3). No
+scorecard or UI work has started. Open items, each only when the user asks:
 
-1. Push the local post-publish documentation commit (README and this file).
-2. Optional: republish the claude.ai copies of the page and the methodology
+1. **Pillar 5 decision needed (the user's): which Senate bills make up the
+   public-facing outcome set.** `sponsor_tally(records, outcome_set, name)` takes
+   any named set of bill ids; nothing is shown until the user defines it (for
+   example: bills that became law, bills that passed the Senate, bills reported
+   by a committee, or a named list), including whether Senate joint resolutions
+   or House bills should be in scope. Do not invent a set.
+2. Wire the bill layer into the daily update and add an independent supervisor
+   recount of the classifications and tallies before anything is displayed.
+3. Pillar 6 bill-flow UI, only when the user asks (the committee tallies exist).
+4. Push `c0b592a` and this HANDOFF update when the user approves.
+5. Optional: republish the claude.ai copies of the page and the methodology
    (section 12), which still show the old product.
-3. Future work listed in section 7 and section 8 (bridge, national estimate,
-   deterministic bill classification) needs the user's direction first.
+6. Future work in sections 7 and 8 (bridge, national estimate) needs the
+   user's direction first.
 
 The Pillar 5 plain-language card is done; do not change its wording without the
 user. Do not push, merge or deploy without the user's approval.
