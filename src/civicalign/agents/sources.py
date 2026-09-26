@@ -1,4 +1,4 @@
-"""The four update agents, each with the check that makes its data trustworthy.
+"""The update agents, one per source, each with the check that makes its data trustworthy.
 
 A validator's job is to catch the failure modes that do NOT look like failures:
 a truncated download, a server returning an HTML error page with a 200 status, a
@@ -104,7 +104,7 @@ def _populations(path: Path) -> str | None:
 
 
 def _ideology(path: Path) -> str | None:
-    """The bridged state estimates Pillars 4 and 5 rest on."""
+    """The American Ideology Project state estimates (Pillar 4), in the survey's own units; no bridge."""
     with path.open() as fh:
         reader = csv.DictReader(fh, delimiter="\t")
         if reader.fieldnames is None:
@@ -116,19 +116,6 @@ def _ideology(path: Path) -> str | None:
                 if r["presidential_year"] == str(DEFAULT.ideology_year)]
     if len(rows) < 50:
         return f"only {len(rows)} states for the {DEFAULT.ideology_year} wave"
-    return None
-
-
-def _elections(path: Path) -> str | None:
-    """Presidential results used for the vote-share cross-check."""
-    with path.open() as fh:
-        reader = csv.DictReader(fh)
-        if reader.fieldnames is None or "candidatevotes" not in reader.fieldnames:
-            return "expected candidate vote columns are missing"
-        years = {r["year"] for r in reader}
-    missing = {str(y) for y in DEFAULT.election_years} - years
-    if missing:
-        return f"election years {sorted(missing)} not in the file"
     return None
 
 
@@ -236,14 +223,6 @@ def all_agents() -> list[Agent]:
             target=RAW / "aip_states_ideology_v2022a.tab",
             validate=_ideology,
             min_bytes=10_000,
-        ),
-        Agent(
-            name="election results",
-            vintage="presidential elections 1976-2024",
-            url="https://dataverse.harvard.edu/api/access/datafile/13887042",
-            target=RAW / "mit_president_1976_2024.csv",
-            validate=_elections,
-            min_bytes=100_000,
         ),
         Agent(
             name="joint resolutions (Senate)",

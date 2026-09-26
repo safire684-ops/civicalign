@@ -6,10 +6,10 @@ source can be added to the accepted snapshot without refreshing the others; the
 workflow gates publication on every check; and the snapshot records what a
 reader needs to know about each source.
 
-Step 5B removed the old page builder (build_demo) and the old page tests; the
-GitHub workflow and scripts/update.sh are updated in Step 5C. Until then they
-still name removed modules, which test_every_module_the_update_runs_exists
-records as an expected failure.
+Since Step 5C the update runs daily on the Engine B pipeline: fetch -> verify ->
+(Pillar 1 bind and context, unchanged) -> ingest -> bridge -> anchors -> compute
+-> build pages -> tests -> supervisor -> commit. The old page builder and its
+tests are gone from the automation.
 """
 import json
 import zipfile
@@ -25,7 +25,12 @@ from civicalign.config import DEFAULT
 
 ROOT = Path(__file__).resolve().parents[1]
 WORKFLOW = ROOT / ".github" / "workflows" / "update.yml"
-REBUILD = __import__("re").compile(r"civicalign\.build_(?:pages|demo)")    # the page rebuild step, old or new name
+UPDATE_SH = ROOT / "scripts" / "update.sh"
+REBUILD = __import__("re").compile(r"civicalign\.build_pages")                # the page build step
+# the Engine B steps, in the order both the workflow and update.sh must run them
+ENGINE_B_ORDER = ["-m civicalign.agents", "civicalign.agents.verify", "civicalign.ideology.ingest",
+                  "civicalign.ideology.bridge", "civicalign.ideology.anchors", "civicalign.ideology.compute",
+                  "civicalign.build_pages", "-m pytest -q", "civicalign.agents.supervisor"]
 
 
 def _agent(name, src: Path, raw: Path, ok=True, critical=True, key=None):
@@ -120,34 +125,80 @@ def _order_is_kept(text: str, steps: list[str]) -> bool:
     return pos == sorted(pos)
 
 
+def _steps(text: str) -> str:
+    """The script body without its header comment."""
+    return text[text.index("PYTHONPATH=src"):]
+
+
 def test_workflow_gates_publication_on_every_check():
     y = WORKFLOW.read_text()
     assert "|| echo" not in y and "FETCH_FAILED" not in y, "a fetch failure must fail the job"
-    order = ["python -m civicalign.agents\n", "civicalign.agents.verify", "civicalign.explain.bind", "civicalign.explain.context --check-fresh",
-             REBUILD.search(y).group(0), "python -m pytest", "civicalign.agents.supervisor",
-             "git add demo/senator-check.html demo/methodology.html data/raw/PROVENANCE.tsv", "upload-pages-artifact"]
-    assert _order_is_kept(y, order), \
-        "fetch -> verify -> bind -> Stage 2.5 check -> rebuild -> tests -> supervisor -> commit -> upload"
+    body = _steps(y)
+    order = ENGINE_B_ORDER + ["git add demo/senator-check.html demo/methodology.html data/ideology data/raw/PROVENANCE.tsv",
+                              "upload-pages-artifact"]
+    assert _order_is_kept(body, order), \
+        "fetch -> verify -> ingest -> bridge -> anchors -> compute -> build -> tests -> supervisor -> commit -> upload"
     assert "needs: update" in y and "needs.update.result == 'success'" in y
-    assert 'cron: "0 11 * * 1"' in y, "the weekly schedule stays"
     assert "continue-on-error" not in y
 
 
-@pytest.mark.parametrize("path", [WORKFLOW, ROOT / "scripts" / "update.sh"], ids=["workflow", "update.sh"])
+def test_the_update_runs_daily():
+    y = WORKFLOW.read_text()
+    assert 'cron: "0 11 * * *"' in y and "name: Daily update" in y
+    assert "Weekday" not in (ROOT / "scripts" / "install-schedule.sh").read_text(), "the local schedule is daily too"
+
+
+@pytest.mark.parametrize("path", [WORKFLOW, UPDATE_SH], ids=["workflow", "update.sh"])
+def test_the_engine_b_steps_run_in_order(path):
+    assert _order_is_kept(_steps(path.read_text()), ENGINE_B_ORDER), path.name
+
+
+@pytest.mark.parametrize("path", [WORKFLOW, UPDATE_SH], ids=["workflow", "update.sh"])
 def test_no_test_runs_before_the_pages_are_rebuilt(path):
     """The invariant behind the 24 Sept CI failure: tests compare the pages with
     the raw files, so every test and the supervisor must run after the pages
-    have been rebuilt from the snapshot just fetched, and the rebuild must come
-    after the bindings and the Stage 2.5 check for that snapshot."""
-    text = path.read_text()
-    body = text[text.index("civicalign.agents") :]            # skip the header comment
-    rebuild = REBUILD.search(body).start()
+    have been built from the snapshot just fetched, and the build must come
+    after the Pillar 1 bindings and Stage 2.5 check and after the Pillars 4-6
+    ingest, bridge, anchors and compute for that snapshot."""
+    import re
+    body = _steps(path.read_text())
+    build = REBUILD.search(body).start()
     for probe in ("pytest", "civicalign.agents.supervisor"):
-        first = min(i for i in (m.start() for m in __import__("re").finditer(__import__("re").escape(probe), body)))
-        assert first > rebuild, f"{probe} runs before the rebuild in {path.name}"
-    assert body.index("civicalign.explain.bind") < rebuild and body.index("--check-fresh") < rebuild
+        first = min(m.start() for m in re.finditer(re.escape(probe), body))
+        assert first > build, f"{probe} runs before the build in {path.name}"
+    for before in ("civicalign.explain.bind", "--check-fresh", "civicalign.ideology.ingest", "civicalign.ideology.bridge",
+                   "civicalign.ideology.anchors", "civicalign.ideology.compute"):
+        assert body.index(before) < build, before
     if path == WORKFLOW:
         assert body.index("git commit") > body.index("civicalign.agents.supervisor"), "commit only after every gate"
+
+
+def test_the_workflow_and_update_sh_run_the_same_chain():
+    import re
+    runs = [re.findall(r"-m (civicalign[\w.]*(?: --[\w-]+)?|pytest)", _steps(p.read_text())) for p in (WORKFLOW, UPDATE_SH)]
+    assert runs[0] == runs[1], runs
+
+
+def test_pillar1_steps_are_unchanged():
+    for path in (WORKFLOW, UPDATE_SH):
+        text = path.read_text()
+        assert "civicalign.explain.bind" in text and "civicalign.explain.context --check-fresh" in text, path.name
+        assert "civicalign.evaluation" not in text, "no generation step in the automation"
+
+
+def test_the_anchor_refresh_is_visual_only():
+    """The anchors step refreshes the three reference figures; compute never reads them."""
+    y = WORKFLOW.read_text()
+    assert "Refresh the three reference anchors from the verified Voteview file (visual only)" in y
+    compute = (ROOT / "src" / "civicalign" / "ideology" / "compute.py").read_text()
+    assert "reference_anchors" not in compute and "anchors" not in compute
+
+
+def test_the_commit_keeps_the_versioned_records():
+    y = WORKFLOW.read_text()
+    add = next(l for l in y.splitlines() if "git add demo/" in l)
+    for f in ("demo/senator-check.html", "demo/methodology.html", "data/ideology", "data/raw/PROVENANCE.tsv", "data/explanations"):
+        assert f in add, f
 
 
 def test_fresh_checkout_compares_with_the_committed_snapshot_not_the_missing_file(tmp_path):
@@ -172,10 +223,10 @@ def test_a_no_change_week_commits_nothing():
     assert y.index("git diff --cached --quiet") < y.index("git add data/raw/SNAPSHOT.json")
 
 
-@pytest.mark.xfail(strict=True, reason="Step 5C: the workflow and update.sh still run the removed build_demo and "
-                   "tests/test_published_pages.py. Remove this marker when they are updated.")
-@pytest.mark.parametrize("path", [WORKFLOW, ROOT / "scripts" / "update.sh", ROOT / "scripts" / "build_demo.sh"],
-                         ids=["workflow", "update.sh", "build_demo.sh"])
+AUTOMATION = [WORKFLOW, UPDATE_SH] + sorted((ROOT / "scripts").glob("*.sh"))
+
+
+@pytest.mark.parametrize("path", AUTOMATION, ids=lambda p: p.name)
 def test_every_module_the_update_runs_exists(path):
     import re
     text = path.read_text()
@@ -228,3 +279,27 @@ def test_add_source_that_fails_changes_nothing(tmp_path):
     (src / "d.txt").write_text("d")
     r = add_source(_agent("d", src / "d.txt", raw, ok=False), raw)
     assert not r.ok and (raw / "SNAPSHOT.json").read_text() == before and not (raw / "d.txt").exists()
+
+
+def test_the_old_builder_and_its_tests_are_gone_from_the_automation():
+    assert not (ROOT / "scripts" / "build_demo.sh").exists()
+    assert (ROOT / "scripts" / "build_pages.sh").exists() and "civicalign.build_pages" in (ROOT / "scripts" / "build_pages.sh").read_text()
+    for path in AUTOMATION:
+        text = path.read_text()
+        for gone in ("build_demo", "test_published_pages", "test_whitepaper", "WHITEPAPER", "mit_president"):
+            assert gone not in text, (path.name, gone)
+    for f in (ROOT / "src" / "civicalign").rglob("*.py"):
+        assert "build_demo" not in f.read_text(), f.name
+
+
+def test_the_election_results_source_is_removed():
+    """Nothing in Pillar 1 or Pillars 4-6 reads presidential election results any more."""
+    assert "election results" not in {a.name for a in sources.all_agents()}
+    assert not hasattr(DEFAULT, "election_years")
+    for f in (ROOT / "src" / "civicalign").rglob("*.py"):
+        assert "mit_president" not in f.read_text(), f.name
+
+
+def test_fetch_data_goes_through_the_verified_snapshot():
+    text = _steps((ROOT / "scripts" / "fetch_data.sh").read_text())
+    assert "-m civicalign.agents" in text and "curl" not in text

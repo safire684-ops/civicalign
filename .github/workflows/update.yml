@@ -1,53 +1,57 @@
-# Runs the whole update chain in GitHub's cloud every week, then publishes the
-# pages. This is what moves CivicAlign off a laptop: nothing here depends on any
-# machine being switched on.
+# Runs the whole update chain in GitHub's cloud every day, then publishes the
+# pages. Nothing here depends on any machine being switched on.
 #
 # THE RULE: the site is always ONE verified snapshot. Every step is a gate.
-#   1 fetch      every source into staging; all critical sources succeed or NONE
-#                is installed (the previous snapshot stays intact) and the job fails
-#   2 verify     roster, join keys, record counts, no drastic shrinkage
-#   3 bind       Pillar 1 bindings re-derived from this snapshot
-#   4 context    Stage 2.5 records checked against those bindings and this
-#                snapshot's bill status (the archive-backed context job runs
-#                offline; anything built from other inputs fails the run)
-#   5 rebuild    both pages from this snapshot -- IN THE WORKSPACE ONLY
-#   6 data tests every figure recomputed from the raw files and compared with
-#                the pages rebuilt in step 5
-#   7 page tests the public-claim contract on the rebuilt pages
-#   8 supervisor separate code re-reads the raw files and reproduces every figure
-#   9 commit     only if every step above passed, and only if something changed
-#  10 publish    only if every step above passed
+#    1 fetch      every source into staging; all critical sources succeed or NONE
+#                 is installed (the previous snapshot stays intact) and the job fails
+#    2 verify     roster, join keys, record counts, no drastic shrinkage
+#   Pillar 1 (Engine A), unchanged:
+#      bind       Pillar 1 bindings re-derived from this snapshot
+#      context    Stage 2.5 records checked against those bindings and this
+#                 snapshot's bill status (anything stale fails the run)
+#   Pillars 4-6 (Engine B):
+#    3 ingest     versioned inputs from the verified snapshot (refuses files that
+#                 do not match it); append-only, a new version only on a change
+#    4 bridge     record the active public-to-legislator bridge (none-v0, NONE)
+#    5 anchors    refresh the three Pillar 4 reference figures from the verified
+#                 Voteview file -- visual references only: no calculation reads them
+#    6 compute    versioned Pillars 4-6 results, recomputed only where inputs changed
+#    7 build      both published pages from the saved results -- IN THE WORKSPACE ONLY
+#    8 tests      every test, against the pages just built
+#    9 supervisor separate code re-reads the raw files and reproduces every number
+#   10 commit     only if every step above passed, and only if something changed
+#   11 publish    only if every step above passed
 #
 # THE ORDER IS THE INVARIANT: no test may compare current source data with a page
-# generated from a different snapshot. So the rebuild comes before every test,
-# and nothing that reads a page runs until the page has been rebuilt from the
-# snapshot fetched in step 1 (tests/test_update_chain.py pins this).
+# generated from a different snapshot, so the build comes before every test, and
+# nothing that reads a page runs until the page has been built from the snapshot
+# fetched in step 1 (tests/test_update_chain.py pins this).
 #
-# Rebuilding early is not publishing early. Steps 3-5 only change files in this
-# runner's checkout. If any later test, public-claim check, supervisor check or
-# provenance check fails, the job fails: nothing is committed, the publish job
-# does not run, and GitHub Pages keeps serving the last verified site.
+# Building early is not publishing early. Steps 3-7 only change files in this
+# runner's checkout. If any later test or supervisor check fails, the job fails:
+# nothing is committed, the publish job does not run, and GitHub Pages keeps
+# serving the last verified site.
 
-name: Weekly update
+name: Daily update
 
 on:
   schedule:
-    - cron: "0 11 * * 1"   # Mondays 11:00 UTC (06:00 Eastern, 07:00 during DST)
+    - cron: "0 11 * * *"   # every day 11:00 UTC (06:00 Eastern, 07:00 during DST)
   workflow_dispatch:        # plus a "Run workflow" button for doing it by hand
 
 permissions:
-  contents: write           # commit the rebuilt page back to the repo
+  contents: write           # commit the rebuilt pages and versioned records back to the repo
   pages: write              # publish the site
   id-token: write
 
 concurrency:
-  group: weekly-update
+  group: daily-update
   cancel-in-progress: false
 
 jobs:
   update:
     runs-on: ubuntu-24.04
-    timeout-minutes: 25
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v7
 
@@ -66,7 +70,7 @@ jobs:
       - name: 2/10 Verify the snapshot (roster, join keys, record counts)
         run: PYTHONPATH=src python -m civicalign.agents.verify
 
-      - name: 3/10 Bind Senate passage votes to their official records (Pillar 1, deterministic)
+      - name: Pillar 1 -- bind Senate passage votes to their official records (deterministic)
         # Fetches the Senate's own record of each eligible vote and the GovInfo
         # text as voted on, cross-checks them against this snapshot's Voteview
         # and bill status, and writes tracked bindings. A network failure leaves
@@ -74,7 +78,7 @@ jobs:
         # judges them); nothing here calls a model.
         run: PYTHONPATH=src python -m civicalign.explain.bind
 
-      - name: 4/10 Stage 2.5 records belong to this snapshot (fails on anything stale)
+      - name: Pillar 1 -- Stage 2.5 records belong to this snapshot (fails on anything stale)
         # Every context record and source packet must have been built from the
         # bindings just re-derived and from this snapshot's bill-status
         # summaries. A stale record fails the run rather than mixing a fresh
@@ -82,49 +86,47 @@ jobs:
         # packet and is only reported.
         run: PYTHONPATH=src python -m civicalign.explain.context --check-fresh
 
-      - name: 5/10 Rebuild both pages from this snapshot (workspace only; nothing is published here)
-        run: PYTHONPATH=src python -m civicalign.build_demo
+      - name: 3/10 Ingest the versioned Pillars 4-6 inputs from the verified snapshot
+        run: PYTHONPATH=src python -m civicalign.ideology.ingest
 
-      - name: 6/10 Recompute every figure from the raw files and compare with the rebuilt pages (data tests)
-        run: >
-          python -m pytest -q
-          --ignore=tests/test_published_pages.py
-          --ignore=tests/test_whitepaper.py
+      - name: 4/10 Record the active bridge (none-v0, status NONE)
+        run: PYTHONPATH=src python -m civicalign.ideology.bridge
 
-      - name: 7/10 Check the public-claim contract on the rebuilt pages
-        run: python -m pytest -q tests/test_published_pages.py
+      - name: 5/10 Refresh the three reference anchors from the verified Voteview file (visual only)
+        # The anchors are never an input to any calculation: compute does not
+        # read them and they are not part of the result key.
+        run: PYTHONPATH=src python -m civicalign.ideology.anchors
 
-      - name: 8/10 Supervisor -- independent recount of every published figure
+      - name: 6/10 Compute the versioned Pillars 4-6 results (only where inputs changed)
+        run: PYTHONPATH=src python -m civicalign.ideology.compute
+
+      - name: 7/10 Build both published pages from the saved results (workspace only; nothing is published here)
+        run: PYTHONPATH=src python -m civicalign.build_pages
+
+      - name: 8/10 Run every test against the pages just built
+        run: python -m pytest -q
+
+      - name: 9/10 Supervisor -- independent recount of every published number
         run: PYTHONPATH=src python -m civicalign.agents.supervisor
 
-      - name: Check the hand-written whitepaper (warns, never blocks)
-        # WHITEPAPER.md is prose a person wrote. If its figures have moved it
-        # needs a person, but a stale essay is no reason to hold back a correct,
-        # freshly rebuilt site.
-        run: |
-          if ! python -m pytest -q tests/test_whitepaper.py; then
-            echo "::warning::WHITEPAPER.md quotes figures that have moved. The site"
-            echo "::warning::was still published. Update the prose when convenient."
-          fi
-
-      - name: 9/10 Commit the rebuilt pages, provenance and bindings (only reached if every gate passed)
-        # A week where no source's CONTENT changed produces identical pages and
-        # an unchanged provenance log; only the snapshot's "last checked" stamp
-        # moves, and a timestamp alone is not worth a commit.
+      - name: 10/10 Commit the pages, versioned records, provenance and bindings (only reached if every gate passed)
+        # A day where no source's CONTENT changed produces identical pages and
+        # records and an unchanged provenance log; only the snapshot's "last
+        # checked" stamp moves, and a timestamp alone is not worth a commit.
         run: |
           git config user.name  "civicalign-bot"
           git config user.email "civicalign-bot@users.noreply.github.com"
-          git add demo/senator-check.html demo/methodology.html data/raw/PROVENANCE.tsv data/explanations
+          git add demo/senator-check.html demo/methodology.html data/ideology data/raw/PROVENANCE.tsv data/explanations
           if git diff --cached --quiet; then
-            echo "No figures moved this week; the snapshot's check stamp alone is not committed."
+            echo "Nothing moved today; the snapshot's check stamp alone is not committed."
             git checkout -- data/raw/SNAPSHOT.json
           else
             git add data/raw/SNAPSHOT.json
-            git commit -m "Weekly update: figures refreshed from a verified source snapshot"
+            git commit -m "Daily update: pages and records refreshed from a verified source snapshot"
             git push
           fi
 
-      - name: 10/10 Upload the verified site (the publish job deploys it only if this job succeeded)
+      - name: Upload the verified site (the publish job deploys it only if this job succeeded)
         uses: actions/upload-pages-artifact@v5
         with:
           path: demo

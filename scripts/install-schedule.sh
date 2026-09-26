@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
-# Install (or remove) the weekly automatic update on this Mac.
+# Install (or remove) the daily automatic update on this Mac (scripts/update.sh).
 #
-#   ./scripts/install-schedule.sh          install, Mondays 06:00 local
+#   ./scripts/install-schedule.sh          install, every day 06:00 local
 #   ./scripts/install-schedule.sh remove   uninstall
 #   ./scripts/install-schedule.sh status   is it installed, did it last succeed
 #
 # Uses launchd rather than cron. The difference that matters on a laptop: if the
 # machine is asleep at 06:00, launchd runs the job when it next wakes. cron just
-# skips it, so a laptop that is closed on Monday mornings would never update.
+# skips it, so a laptop that is closed every morning would never update.
 set -euo pipefail
 cd "$(dirname "$0")/.."
 ROOT="$(pwd)"
@@ -47,7 +47,6 @@ case "${1:-install}" in
   <key>WorkingDirectory</key><string>$ROOT</string>
   <key>StartCalendarInterval</key>
   <dict>
-    <key>Weekday</key><integer>1</integer>
     <key>Hour</key><integer>6</integer>
     <key>Minute</key><integer>0</integer>
   </dict>
@@ -59,7 +58,7 @@ case "${1:-install}" in
 PLIST_EOF
     launchctl bootout "gui/$UID/$LABEL" 2>/dev/null || true
     launchctl bootstrap "gui/$UID" "$PLIST"
-    echo "installed. Runs Mondays at 06:00, or at the next wake if asleep."
+    echo "installed. Runs every day at 06:00, or at the next wake if asleep."
     echo "  log:    $LOG"
     echo "  check:  ./scripts/install-schedule.sh status"
     echo "  remove: ./scripts/install-schedule.sh remove"

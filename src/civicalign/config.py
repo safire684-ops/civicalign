@@ -21,12 +21,6 @@ class Config:
     # Congress. (Pillars 4-6 use pillars_score_column, nominate_dim1, below.)
     score_column: str = "nokken_poole_dim1"
 
-    # Presidential elections the snapshot's election-results file must contain
-    # (agents/sources.py). No published figure uses them since the old Pillar 4
-    # peer comparison was retired; the file is still fetched until the update
-    # automation is revised.
-    election_years: tuple[int, ...] = (2016, 2020, 2024)
-
     # The American Ideology Project wave the snapshot checks must find (2020 is the
     # most recent published wave; surveys fielded 2017-2021). Pillars 4-6 choose
     # their wave with pillars_aip_wave below.
