@@ -16,13 +16,13 @@
   ]
  },
  "classified": {
-  "CLOTURE": 290,
+  "CLOTURE": 291,
   "MOTION_TO_PROCEED": 86,
-  "AMENDMENT": 98,
+  "AMENDMENT": 99,
   "PASSAGE": 19,
   "NOMINATION": 222,
   "MOTION_TO_TABLE": 18,
-  "OTHER": 128,
+  "OTHER": 129,
   "JOINT_RESOLUTION_PASSAGE": 35,
   "POINT_OF_ORDER": 4
  },

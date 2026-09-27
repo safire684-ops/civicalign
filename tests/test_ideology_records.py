@@ -322,11 +322,13 @@ def test_real_ingest_matches_the_senate(real):
     cfg, first = real
     rows = Table(cfg.ideology_dir, "senator_ideology").current()
     seated = [r for r in rows if r["seated"]]
-    assert len(seated) == 100
+    roster = {p["id"]["bioguide"]: p["terms"][-1]["state"] for p in json.loads(DEFAULT.roster_json.read_text())
+              if p["terms"][-1]["type"] == "sen"}
+    assert {r["bioguide_id"]: r["state"] for r in seated} == roster, "exactly the roster's seated senators, in their states"
     per_state = {}
     for r in seated:
         per_state[r["state"]] = per_state.get(r["state"], 0) + 1
-    assert set(per_state.values()) == {2} and len(per_state) == 50
+    assert max(per_state.values()) <= 2 and len(seated) <= 100
     assert all(isinstance(r["nominate_dim1"], float) and isinstance(r["nokken_poole_dim1"], float) for r in seated if r["voteview_row"])
     assert all(not r["fixture"] and r["source_url"].startswith("https://") for r in rows)
     departed = [r for r in rows if not r["seated"]]

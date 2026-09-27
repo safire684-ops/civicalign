@@ -205,12 +205,14 @@ def outcomes_payload(cfg: Config) -> tuple[dict, dict]:
     data["enacted"]["public_law_number_pending"] = count("outcomes.enacted.public_law_number_pending",
                                                          t["public_law_number_pending"]["bill_ids"])
     data["bills"] = {}
+    now = BL.current_sponsor_scores(cfg)       # a sponsor's exact current score comes only from senator_ideology
     for b in t["passed_senate"]["bill_ids"]:
         c, o = by_c[b], by_o[b]
         data["bills"][b] = {"label": f"S. {c['bill_number']}", "title": c["title"], "sponsor": c["primary_sponsor_name"],
                             "url": f"https://www.congress.gov/bill/{c['congress']}th-congress/senate-bill/{c['bill_number']}",
                             "passed": o["passed_senate_date"], "enacted": o["enacted"], "law": o["public_law_number"],
-                            "pending": o["public_law_number_pending"], "signed": o["signed_date"]}
+                            "pending": o["public_law_number_pending"], "signed": o["signed_date"],
+                            "sponsor_score": (now.get(c["sponsor_bioguide_id"]) or {}).get("score")}
     counted = [by_c[b] for b in t["passed_senate"]["bill_ids"]] + [by_o[b] for b in t["passed_senate"]["bill_ids"]]
     archive = sorted({(r["source_version"], r["retrieved_at"]) for r in counted}, key=lambda x: x[1])
     versions = {
@@ -219,7 +221,7 @@ def outcomes_payload(cfg: Config) -> tuple[dict, dict]:
         "classification_rule": sorted({by_c[b]["classification_rule"] for b in t["passed_senate"]["bill_ids"]}),
         "sponsor_score_versions": sorted({by_c[b]["sponsor_score_source_version"] or "none" for b in t["passed_senate"]["bill_ids"]}),
     }
-    data["meta"] = {"table_fingerprints": BO.table_fingerprints(cfg),
+    data["meta"] = {"table_fingerprints": BO.table_fingerprints(cfg), "input_versions": BO.input_versions(cfg),
                     "outcome_rule": t["outcome_rule"], "enactment_rule": t["enactment_rule"],
                     "classification_rule": versions["classification_rule"],
                     "latest_archive_retrieved": archive[-1][1][:10] if archive else None}

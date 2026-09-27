@@ -33,11 +33,27 @@ The classification is fixed arithmetic on stored numbers. It reads no model,
 calls no network service, and runs no external program (tested).
 
 Versioning: one record per bill, key (congress, bill_id), stored append-only and
-hash-chained like every Engine B table. A bill whose archive content (SHA-256
-of its XML), sponsor score record and rule are all unchanged keeps its stored
-record, so an unchanged archive writes nothing; source_version and retrieved_at
-therefore name the archive version in which the bill's current content was
-first seen.
+hash-chained like every Engine B table. The record is the bill-to-sponsor
+classification. A new version is written only when a semantic field changes:
+the bill's official record (the SHA-256 of its XML), the primary sponsor or
+their Bioguide id, the classification (the SIGN of the sponsor's current score),
+the reason a score is unavailable, or the rule. Routine Voteview movement that
+keeps the sign (e.g. -0.400 -> -0.385) writes NOTHING; a sign change (e.g.
+-0.010 -> +0.005, or +0.010 -> 0) re-versions exactly that sponsor's bills.
+
+Scores: the exact current score of any sponsor is read from the verified
+senator_ideology table (current_sponsor_scores()), never from a bill record.
+sponsor_nominate_dim1 in a bill record is HISTORICAL: the score this
+classification version was derived from, with sponsor_score_record_id /
+sponsor_score_source_version naming the senator_ideology record that held it.
+It is kept (not removed) so every committed record stays readable and valid, and
+it never drives a new version. score_problems() (run by bill_outcomes --verify
+and the supervisor) checks every stored class against the sign of the LATEST
+score, and that the named record really held the historical score.
+
+Provenance: source_version and retrieved_at name the archive version in which
+the bill's current content was first seen. The page records the exact versions
+of every input it was built from (bill_outcomes.input_versions()).
 """
 import argparse
 import hashlib
@@ -163,15 +179,67 @@ def bill_records(cfg: Config, snap: dict, current: dict[tuple, dict]) -> list[di
             seen.add(key)
             fp = hashlib.sha256(data).hexdigest()
             prev = current.get(key)
-            _, rid, _, _ = (sponsor_score(parsed["sponsor_bioguide"], senators) if parsed["sponsor_count"]
-                            else (None, None, None, None))
-            if (prev is not None and prev["bill_fingerprint"] == fp and prev["sponsor_score_record_id"] == rid
-                    and prev["classification_rule"] == R.SPONSOR_RULE):
-                out.append(prev)          # unchanged: keep the stored record, so nothing is rewritten
+            if parsed["sponsor_count"]:
+                score, _, _, why = sponsor_score(parsed["sponsor_bioguide"], senators)
+            else:
+                score, why = None, "the bill-status record lists no primary sponsor"
+            if (prev is not None and prev["bill_fingerprint"] == fp and prev["classification_rule"] == R.SPONSOR_RULE
+                    and prev["sponsor_bioguide_id"] == parsed["sponsor_bioguide"]
+                    and prev["sponsor_classification"] == classify(score) and prev["unknown_reason"] == why):
+                out.append(prev)          # same bill, sponsor, class, reason and rule: keep it, write nothing
             else:
                 out.append(build_record(parsed, fp, member, senators, prov))
     if not out:
         raise I.SnapshotMismatch("no Senate bills of this Congress in the bill-status archive")
+    return out
+
+
+def current_sponsor_scores(cfg: Config = DEFAULT) -> dict[str, dict]:
+    """bioguide -> the sponsor's CURRENT score from the verified senator_ideology table:
+    {"score", "record_id", "source_version", "retrieved_at"}. The only source of a
+    sponsor's exact current score."""
+    out = {}
+    for l in Table(cfg.ideology_dir, "senator_ideology").latest().values():
+        c = l["content"]
+        if c["congress"] == cfg.congress:
+            out[c["bioguide_id"]] = {"score": c["nominate_dim1"], "record_id": l["record_id"],
+                                     "source_version": c["source_version"], "retrieved_at": c["retrieved_at"]}
+    return out
+
+
+def score_problems(cfg: Config = DEFAULT, rows: list[dict] | None = None) -> list[str]:
+    """Every stored classification checked against the LATEST verified Voteview rows:
+    the class equals the class of the sponsor's current nominate_dim1 (its sign), and
+    the named senator_ideology record really held the historical score the version was
+    derived from, for that sponsor. Empty means the table is valid against the latest
+    snapshot even where no new bill version was written."""
+    rows = rows if rows is not None else current(cfg)
+    lines = Table(cfg.ideology_dir, "senator_ideology").lines()
+    latest = {}
+    for l in lines:
+        if l["content"]["congress"] == cfg.congress:
+            latest[l["content"]["bioguide_id"]] = l["content"]
+    by_id = {l["record_id"]: l["content"] for l in lines}
+    out = []
+    for r in rows:
+        b = r["sponsor_bioguide_id"]
+        if b is None:
+            if r["sponsor_nominate_dim1"] is not None:
+                out.append(f"{r['bill_id']}: a score with no sponsor")
+            continue
+        cur = latest.get(b)
+        now = cur["nominate_dim1"] if cur else None
+        if r["sponsor_classification"] != classify(now):
+            out.append(f"{r['bill_id']}: class {r['sponsor_classification']} but Voteview now has {now} ({classify(now)})")
+        if (r["sponsor_nominate_dim1"] is None) != (now is None):
+            out.append(f"{r['bill_id']}: score availability changed (stored {r['sponsor_nominate_dim1']}, now {now})")
+        rid = r["sponsor_score_record_id"]
+        if rid is not None:
+            named = by_id.get(rid)
+            if named is None or named["bioguide_id"] != b or named["nominate_dim1"] != r["sponsor_nominate_dim1"]:
+                out.append(f"{r['bill_id']}: the named senator record does not hold this sponsor's stored score")
+        elif cur is not None:
+            out.append(f"{r['bill_id']}: sponsor {b} has a Voteview row but no score record is named")
     return out
 
 

@@ -39,6 +39,41 @@ def pages():
     return BP.build(DEFAULT)
 
 
+# ---- independent recomputation from the saved, verified data (real-data tests never pin current values) ----
+
+def _half_up(v, decimals, signed=False):
+    """The page's display rule, re-implemented here: half-up, U+2212 minus, + only when signed."""
+    from decimal import ROUND_HALF_UP, Decimal
+    d = Decimal(repr(v)).quantize(Decimal(1).scaleb(-decimals), rounding=ROUND_HALF_UP)
+    d = abs(d) if d == 0 else d
+    return ("\u2212" if d < 0 else "+" if signed and d > 0 else "") + f"{abs(d):.{decimals}f}"
+
+
+def _saved():
+    """Seated senators' scores, per-state weights and current committee members, read straight
+    from the saved tables with separate code."""
+    from fractions import Fraction
+    from statistics import median
+    sen = [r for r in Table(DEFAULT.ideology_dir, "senator_ideology").current() if r["congress"] == DEFAULT.congress and r["seated"]]
+    scores = {r["bioguide_id"]: r["nominate_dim1"] for r in sen if r["nominate_dim1"] is not None}
+    per_state = {}
+    for r in sen:
+        per_state[r["state"]] = per_state.get(r["state"], 0) + 1
+    pops = {r["geography_id"]: r["population"] for r in Table(DEFAULT.ideology_dir, "state_population").current()
+            if r["measurement_year"] == DEFAULT.pillar5_population_year and r["vintage"] == DEFAULT.pillar5_population_vintage}
+    state = {r["bioguide_id"]: r["state"] for r in sen}
+    w = {b: Fraction(pops[state[b]], per_state[state[b]]) for b in scores}
+    plain = sum(scores.values()) / len(scores)
+    weighted = float(sum(Fraction(x) * w[b] for b, x in scores.items()) / sum(w.values()))
+    members = {}
+    for e in Table(DEFAULT.ideology_dir, "committee_membership_events").current():
+        if e["congress"] == DEFAULT.congress and e["event"] != "observed_left":
+            members.setdefault(e["committee_id"], []).append(e["bioguide_id"])
+    med = median(scores.values())
+    cmeds = {c: median([scores[b] for b in ms if b in scores]) for c, ms in members.items()}
+    return {"sen": sen, "scores": scores, "plain": plain, "weighted": weighted, "median": med, "committees": cmeds}
+
+
 def numbers(obj):
     """Every displayed number in the payload (dicts carrying a registry id)."""
     if isinstance(obj, dict):
@@ -98,8 +133,10 @@ def test_scale_labels_use_the_whole_surname():
 
 def test_every_displayed_number_carries_its_registry_entry(data):
     nums = list(numbers(data))
-    # Pillar 4 (100 x 4), anchors, Pillar 5, Pillar 6 (16 x 5 + two shared), Pillar 5 outcomes (5 passed + 7 enacted)
-    assert len(nums) == 400 + 3 + 10 + 16 * 5 + 2 - 1 + 12
+    rec = BP.latest(DEFAULT)["results"]
+    # Pillar 4 (4 per seated senator), anchors, Pillar 5 (10), Pillar 6 (5 per committee + Senate median and national,
+    # the national shared with Pillar 5), Pillar 5 outcomes (5 passed + 7 enacted): counted from the record, not pinned
+    assert len(nums) == 4 * len(rec["pillar4"]) + 3 + 10 + 5 * len(rec["pillar6"]) + 2 - 1 + 12
     for n in nums:
         e = M.REGISTRY[n["m"]]
         if n["s"] == "NOT_AVAILABLE":
@@ -141,8 +178,8 @@ def test_the_build_refuses_a_tampered_record_or_missing_anchors(tmp_path):
     shutil.copytree(DEFAULT.ideology_dir, cfg.ideology_dir, ignore=shutil.ignore_patterns("reference_anchors.jsonl"))
     with pytest.raises(A.AnchorError):
         BP.payload(cfg)
-    f = next((cfg.ideology_dir / "metrics").glob("*.json"))
-    f.write_text(f.read_text().replace('"value":0.204', '"value":0.999', 1))
+    f = cfg.ideology_dir / "metrics" / f"{C.index(cfg)[-1]['input_key']}.json"     # the latest result, whatever its values
+    f.write_text(f.read_text().replace('"value":', '"value": ', 1))                  # any change to its bytes must be refused
     with pytest.raises(BP.BuildError, match="index hash"):
         BP.latest(cfg)
 
@@ -151,14 +188,24 @@ def test_the_build_refuses_a_tampered_record_or_missing_anchors(tmp_path):
 
 def test_pillar4_senators_and_exactly_three_labelled_anchors(data):
     states = data["p4"]["states"]
-    assert len(states) == 50 and all(len(s["senators"]) == 2 for s in states)
+    saved = _saved()
+    by_state = {}
+    for r in saved["sen"]:
+        by_state.setdefault(r["state"], set()).add(r["bioguide_id"])
+    assert {s["code"]: {x["id"] for x in s["senators"]} for s in states} == by_state, "every seated senator, in their own state"
+    for s in states:
+        for sen in s["senators"]:
+            if sen["id"] in saved["scores"]:
+                assert sen["senator_score"]["v"] == saved["scores"][sen["id"]]
+                assert sen["senator_score"]["d"] == _half_up(saved["scores"][sen["id"]], 3)
     for s in states:
         for sen in s["senators"]:
             assert sen["state_on_senator_scale"]["s"] == "NOT_AVAILABLE" and sen["distance"]["s"] == "NOT_AVAILABLE"
             assert sen["state_public_estimate"]["se"] and sen["state_public_estimate"]["period"]
     a = data["p4"]["anchors"]
     assert [x["name"] for x in a] == ["Bernie Sanders", "Joe Biden", "JD Vance"]
-    assert [x["score"]["d"] for x in a] == ["−0.546", "−0.314", "0.850"]
+    stored = {r["anchor_id"]: r["nominate_dim1"] for r in Table(DEFAULT.ideology_dir, "reference_anchors").current()}
+    assert [(x["score"]["v"], x["score"]["d"]) for x in a] == [(stored[x["id"]], _half_up(stored[x["id"]], 3)) for x in a]
     assert a[1]["basis"].startswith("Senate voting record") and "not his presidency" in a[1]["basis"]
     assert a[2]["basis"].startswith("Senate voting record") and "not his vice presidency" in a[2]["basis"]
     assert "House" in a[0]["basis"] and "Senate" in a[0]["basis"]
@@ -173,7 +220,13 @@ def test_anchors_appear_only_in_pillar4(data):
 def test_pillar5_main_result_is_the_mean_and_medians_are_details_only(data):
     p5 = data["p5"]
     assert (p5["plain"]["m"], p5["weighted"]["m"], p5["diff"]["m"]) == ("p5.plain_mean", "p5.weighted_mean", "p5.weighting_difference")
-    assert (p5["plain"]["d"], p5["weighted"]["d"], p5["diff"]["d"]) == ("0.120", "0.083", "+0.037")
+    saved = _saved()
+    diff = saved["plain"] - saved["weighted"]
+    assert p5["plain"]["v"] == pytest.approx(saved["plain"], abs=1e-12) and p5["weighted"]["v"] == pytest.approx(saved["weighted"], abs=1e-12)
+    assert p5["diff"]["v"] == pytest.approx(diff, abs=1e-12)
+    assert (p5["plain"]["d"], p5["weighted"]["d"], p5["diff"]["d"]) == \
+        (_half_up(p5["plain"]["v"], 3), _half_up(p5["weighted"]["v"], 3), _half_up(p5["diff"]["v"], 3, signed=True))
+    assert p5["median"]["v"] == pytest.approx(saved["median"], abs=1e-12)
     assert {p5[k]["m"] for k in ("median", "wmedian", "mdiff")} == {"p5.plain_median", "p5.weighted_median", "p5.median_difference"}
     assert p5["national"]["s"] == p5["gap"]["s"] == "NOT_AVAILABLE"
     # in the page, the medians are rendered only into the details block
@@ -211,14 +264,19 @@ def test_pillar5_plain_language_card():
 
 def test_pillar6_uses_only_committee_median_and_senate_drift(data):
     cs = data["p6"]["committees"]
-    assert len(cs) == 16
+    saved = _saved()
+    assert {c["code"] for c in cs} == set(saved["committees"]) == set(BP.latest(DEFAULT)["results"]["pillar6"])
     for c in cs:
         assert set(c) == {"code", "name", "official_name", "name_source", "name_retrieved", "listed", "scored", "left_out",
                           "committee_median", "committee_senate_drift", "committee_public_drift"}
         assert c["committee_public_drift"]["s"] == "NOT_AVAILABLE"
-    ssap = next(c for c in cs if c["code"] == "SSAP")
-    assert (ssap["committee_median"]["d"], ssap["committee_senate_drift"]["d"]) == ("−0.046", "−0.366")
-    assert data["p6"]["senate_median"]["d"] == "0.320" and data["p6"]["national"]["s"] == "NOT_AVAILABLE"
+    for c in cs:     # every committee, recomputed from the saved membership and scores
+        med, drift = saved["committees"][c["code"]], saved["committees"][c["code"]] - saved["median"]
+        assert c["committee_median"]["v"] == pytest.approx(med, abs=1e-12) and c["committee_median"]["d"] == _half_up(c["committee_median"]["v"], 3)
+        assert c["committee_senate_drift"]["v"] == pytest.approx(drift, abs=1e-12)
+        assert c["committee_senate_drift"]["d"] == _half_up(c["committee_senate_drift"]["v"], 3, signed=True)
+    assert data["p6"]["senate_median"]["v"] == pytest.approx(saved["median"], abs=1e-12)
+    assert data["p6"]["senate_median"]["d"] == _half_up(data["p6"]["senate_median"]["v"], 3) and data["p6"]["national"]["s"] == "NOT_AVAILABLE"
 
 
 def test_unavailable_values_say_why_on_the_page(data):
@@ -554,4 +612,13 @@ def test_bill_lists_are_behind_see_bills_not_on_the_main_screen():
 
 def test_the_page_uses_the_latest_bill_table_versions(data):
     assert data["p5"]["outcomes"]["meta"]["table_fingerprints"] == BO.table_fingerprints(DEFAULT)
+    iv = data["p5"]["outcomes"]["meta"]["input_versions"]
+    assert iv == BO.input_versions(DEFAULT)
+    for key in ("bill_sponsor_classifications", "senate_bill_outcomes", "senator_ideology", "voteview_source_versions",
+                "bill_status_archive", "classification_rule", "outcome_rule", "enactment_rule"):
+        assert iv[key], key
+    now = BL.current_sponsor_scores(DEFAULT)
+    cls = {r["bill_id"]: r for r in BL.current(DEFAULT)}
+    for b, x in data["p5"]["outcomes"]["bills"].items():     # a bill's exact sponsor score is the CURRENT one, from senator_ideology
+        assert x["sponsor_score"] == now[cls[b]["sponsor_bioguide_id"]]["score"], b
     assert BO.verify(DEFAULT) == [], "the tables the page was built from are current with the verified snapshot"

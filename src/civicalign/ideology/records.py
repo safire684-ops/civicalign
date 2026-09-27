@@ -65,7 +65,12 @@ bill_sponsor_classifications
                        by. SPONSOR-BASED: the classification describes the
                        sponsor's voting record, never the bill's content.
                        source_version and retrieved_at name the archive version
-                       in which this bill's current content was first seen.
+                       in which this bill's current content was first seen; the
+                       sponsor score fields are HISTORICAL: the score this version
+                       was derived from and the senator_ideology record holding it
+                       (the current score is read from senator_ideology). A new
+                       version only when the bill, sponsor, class (the score's
+                       sign), unknown reason or rule changes (bills.py).
                        Key: congress, bill_id.
 
 senate_bill_outcomes   one row per Senate bill of the Congress: whether the official

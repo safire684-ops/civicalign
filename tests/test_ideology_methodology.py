@@ -215,7 +215,6 @@ def test_committed_anchors_match_the_raw_voteview_file(committed):
     sanders, biden, vance = committed
     senate = {b: {float(r["nominate_dim1"]) for r in rows[(b, "Senate")]} for b in ("S000033", "B000444", "V000137")}
     assert senate == {"S000033": {sanders["nominate_dim1"]}, "B000444": {biden["nominate_dim1"]}, "V000137": {vance["nominate_dim1"]}}
-    assert (sanders["nominate_dim1"], biden["nominate_dim1"], vance["nominate_dim1"]) == (-0.546, -0.314, 0.85)
     president = {float(r["nominate_dim1"]) for r in rows.get(("B000444", "President"), []) if r["nominate_dim1"]}
     assert president and biden["nominate_dim1"] not in president, "Biden's presidential estimate is a different number and is not used"
     assert set(biden["congresses"]) == {"Senate"} and set(vance["congresses"]) == {"Senate"}

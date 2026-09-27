@@ -324,10 +324,11 @@ def test_real_sponsors_and_scores_match_the_raw_files(real):
         pytest.skip("the committed table is from a different archive version than the local file")
     for bid, r in by.items():
         assert r["sponsor_bioguide_id"] == sponsors[bid], bid
-        s = scores.get(sponsors[bid])
-        assert r["sponsor_nominate_dim1"] == s, bid
-        assert r["sponsor_classification"] == ("UNKNOWN" if s is None else "LIBERAL_SPONSOR" if s < 0
-                                               else "CONSERVATIVE_SPONSOR" if s > 0 else "ZERO_SCORE_SPONSOR"), bid
+        s = scores.get(sponsors[bid])                     # the latest Voteview score, straight from the raw file
+        assert r["sponsor_classification"] == BL.classify(s), bid
+        # the stored score is the historical one the class was derived from: same availability and same sign
+        assert (r["sponsor_nominate_dim1"] is None) == (s is None), bid
+        assert BL.classify(r["sponsor_nominate_dim1"]) == BL.classify(s), bid
 
 
 def test_real_tallies_trace_to_bill_ids(real):
@@ -338,3 +339,135 @@ def test_real_tallies_trace_to_bill_ids(real):
         for tally in slots.values():
             assert T.trace_problems(tally) == [], cid
         assert set(slots["reported_of_referred"]["bill_ids"]) <= set(slots["referred"]["bill_ids"])
+
+
+# ---- only a real change writes a new version (no churn from a newer Voteview file) ----------------------------
+
+def _new_voteview_version(cfg, changes: dict, source_version="FIXTURE-v2"):
+    """Append a newer version of every fixture senator record, as a fresh Voteview file does:
+    a new source version for everyone, and new scores only where `changes` says so."""
+    rows = []
+    for s in SENATORS:
+        r = {**s, "source_version": source_version, "retrieved_at": "2026-02-01T11:00:00Z"}
+        if s["bioguide_id"] in changes:
+            r["nominate_dim1"] = r["nokken_poole_dim1"] = changes[s["bioguide_id"]]
+        rows.append(r)
+    assert Table(cfg.ideology_dir, "senator_ideology").append(rows, "FIXTURE") == len(rows), "every senator record re-versioned"
+
+
+NO_LAW_WITHOUT_PASSAGE = {k: v for k, v in BILLS.items() if k != "BILLSTATUS-119s4.xml"}   # S4 lists a law but no passage
+
+
+def test_a_newer_voteview_file_with_the_same_scores_writes_no_bill_versions(cfg):
+    from civicalign.ideology import bill_outcomes as BO
+    write_archive(cfg, NO_LAW_WITHOUT_PASSAGE)
+    BL.run(cfg); BO.run(cfg)
+    before = {r["bill_id"]: r["sponsor_score_record_id"] for r in BL.current(cfg)}
+    _new_voteview_version(cfg, {})
+    assert BL.run(cfg)["new_versions_written"] == 0 and BO.run(cfg)["new_versions_written"] == 0
+    assert {r["bill_id"]: r["sponsor_score_record_id"] for r in BL.current(cfg)} == before, "provenance names the record the score was read from"
+    latest = {l["content"]["bioguide_id"]: l["record_id"] for l in Table(cfg.ideology_dir, "senator_ideology").latest().values()}
+    assert by_id(cfg)["S1"]["sponsor_score_record_id"] != latest["FX00001"], "an older senator record, still holding the same score"
+    assert BL.score_problems(cfg) == [], "the stored classifications are verified against the LATEST Voteview rows"
+
+
+@pytest.mark.parametrize("sponsor,old,new", [("FX00001", -0.4, -0.385), ("FX00002", 0.4, 0.45), ("FX00002", 0.5, 0.45)])
+def test_score_movement_that_keeps_the_sign_writes_no_bill_versions(cfg, sponsor, old, new):
+    from civicalign.ideology import bill_outcomes as BO
+    write_archive(cfg, NO_LAW_WITHOUT_PASSAGE)
+    _new_voteview_version(cfg, {sponsor: old}, source_version="FIXTURE-v2")      # start exactly at `old`
+    BL.run(cfg); BO.run(cfg)
+    stored = {r["bill_id"]: r for r in BL.current(cfg)}
+    _new_voteview_version(cfg, {sponsor: new}, source_version="FIXTURE-v3")
+    assert BL.run(cfg)["new_versions_written"] == 0 and BO.run(cfg)["new_versions_written"] == 0
+    assert BL.current(cfg) == list(stored.values()), "every bill record kept as it was"
+    assert BL.current_sponsor_scores(cfg)[sponsor]["score"] == new, "the exact current score comes from senator_ideology"
+    bill = next(r for r in BL.current(cfg) if r["sponsor_bioguide_id"] == sponsor)
+    assert bill["sponsor_nominate_dim1"] == old, "the bill keeps the historical score its classification was derived from"
+    assert BL.score_problems(cfg) == [] and BO.verify(cfg) == []
+
+
+def test_a_sign_change_re_versions_only_the_affected_bills(cfg):
+    extra = {**NO_LAW_WITHOUT_PASSAGE, "BILLSTATUS-119s8.xml": bill_xml(8, "FX00001")}     # a second bill by FX00001
+    write_archive(cfg, extra)
+    BL.run(cfg)
+    _new_voteview_version(cfg, {"FX00001": -0.010}, source_version="FIXTURE-v2")
+    assert BL.run(cfg)["new_versions_written"] == 0, "-0.400 -> -0.010 keeps the sign"
+    _new_voteview_version(cfg, {"FX00001": 0.005}, source_version="FIXTURE-v3")
+    assert BL.run(cfg)["new_versions_written"] == 2, "-0.010 -> +0.005: S1 and S8, and nothing else"
+    b = by_id(cfg)
+    assert b["S1"]["sponsor_classification"] == b["S8"]["sponsor_classification"] == "CONSERVATIVE_SPONSOR"
+    assert b["S1"]["sponsor_nominate_dim1"] == 0.005 and b["S1"]["sponsor_score_source_version"] == "FIXTURE-v3"
+    assert b["S2"]["sponsor_score_source_version"] == "FIXTURE-v1", "unaffected bills keep their records"
+    assert [h["content"]["sponsor_classification"] for h in Table(cfg.ideology_dir, "bill_sponsor_classifications").history((119, "S1"))] \
+        == ["LIBERAL_SPONSOR", "CONSERVATIVE_SPONSOR"]
+
+
+def test_a_move_to_exactly_zero_re_versions_to_zero_score_sponsor(cfg):
+    BL.run(cfg)
+    _new_voteview_version(cfg, {"FX00002": 0.010}, source_version="FIXTURE-v2")
+    assert BL.run(cfg)["new_versions_written"] == 0
+    _new_voteview_version(cfg, {"FX00002": 0.0}, source_version="FIXTURE-v3")
+    assert BL.run(cfg)["new_versions_written"] == 1, "S2 (S7 names no Bioguide id)"
+    r = by_id(cfg)["S2"]
+    assert (r["sponsor_classification"], r["sponsor_nominate_dim1"], r["sponsor_classification_label"]) == \
+        ("ZERO_SCORE_SPONSOR", 0.0, R.SPONSOR_LABELS["ZERO_SCORE_SPONSOR"])
+
+
+def test_historical_input_fingerprints_are_reproducible(cfg):
+    """Every table is append-only, so any earlier page's input fingerprints (and its counts)
+    can be recomputed from the prefix of the tables that existed when it was built."""
+    from civicalign.ideology import bill_outcomes as BO
+    from civicalign.ideology import bill_tallies as BT
+    write_archive(cfg, NO_LAW_WITHOUT_PASSAGE)
+    BL.run(cfg); BO.run(cfg)
+    then = {**BO.table_fingerprints(cfg),
+            "senator_ideology": BO.fingerprint_lines("senator_ideology", Table(cfg.ideology_dir, "senator_ideology").lines(), 119)}
+    sizes = {t: len(Table(cfg.ideology_dir, t).lines()) for t in then}
+    tally_then = BT.sponsor_tally(BL.current(cfg))["by_classification"]
+    _new_voteview_version(cfg, {"FX00001": 0.2})          # class change: new versions
+    BL.run(cfg); BO.run(cfg)
+    assert BO.table_fingerprints(cfg)["bill_sponsor_classifications"] != then["bill_sponsor_classifications"]
+    for table, fp in then.items():                          # recomputed from the lines that existed then
+        assert BO.fingerprint_lines(table, Table(cfg.ideology_dir, table).lines()[:sizes[table]], 119) == fp, table
+    prefix = Table(cfg.ideology_dir, "bill_sponsor_classifications").lines()[:sizes["bill_sponsor_classifications"]]
+    old_rows = list({l["content"]["bill_id"]: l["content"] for l in prefix}.values())
+    assert BT.sponsor_tally(old_rows)["by_classification"] == tally_then
+
+
+@pytest.mark.parametrize("new,cls", [(0.3, "CONSERVATIVE_SPONSOR"), (0.0, "ZERO_SCORE_SPONSOR")])
+def test_a_score_crossing_zero_changes_the_class(cfg, new, cls):
+    BL.run(cfg)
+    assert by_id(cfg)["S1"]["sponsor_classification"] == "LIBERAL_SPONSOR"
+    _new_voteview_version(cfg, {"FX00001": new})
+    assert BL.run(cfg)["new_versions_written"] == 1
+    r = by_id(cfg)["S1"]
+    assert (r["sponsor_nominate_dim1"], r["sponsor_classification"], r["sponsor_classification_label"]) == (new, cls, R.SPONSOR_LABELS[cls])
+
+
+def test_a_score_change_not_yet_applied_is_reported(cfg):
+    BL.run(cfg)
+    _new_voteview_version(cfg, {"FX00002": -0.1})          # a sign change; the table has not been refreshed yet
+    probs = BL.score_problems(cfg)
+    assert any("S2" in p and "Voteview now has -0.1" in p for p in probs)
+    BL.run(cfg)
+    assert BL.score_problems(cfg) == []
+
+
+def test_a_tampered_score_or_score_record_is_reported(cfg):
+    BL.run(cfg)
+    rows = [dict(r) for r in BL.current(cfg)]
+    s1 = next(r for r in rows if r["bill_id"] == "S1")
+    s1["sponsor_nominate_dim1"] = -0.9
+    assert any(p.startswith("S1:") for p in BL.score_problems(cfg, rows))
+    s1["sponsor_nominate_dim1"] = -0.4
+    s1["sponsor_score_record_id"] = "0" * 64
+    assert any("named senator record" in p for p in BL.score_problems(cfg, rows))
+
+
+def test_outcome_records_ignore_voteview_updates(cfg):
+    from civicalign.ideology import bill_outcomes as BO
+    write_archive(cfg, NO_LAW_WITHOUT_PASSAGE)
+    BO.run(cfg)
+    _new_voteview_version(cfg, {"FX00001": 0.9, "FX00002": -0.9})
+    assert BO.run(cfg)["new_versions_written"] == 0, "outcomes depend only on the bill-status record"

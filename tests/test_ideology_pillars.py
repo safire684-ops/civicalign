@@ -253,7 +253,8 @@ def test_real_pillar6_and_pillar4(real):
         assert c["committee_senate_drift"]["value"] == pytest.approx(med - statistics.median(scores.values()))
     assert set(real["pillar6"]) == {c for c in raw if c.startswith("SS") and len(c) == 4}
     p4 = real["pillar4"]
-    assert len(p4) == 100 and all(r["distance"]["status"] == "NOT_AVAILABLE" for r in p4)
+    assert {r["bioguide_id"] for r in p4} == set(seated), "every seated senator in the roster, no more"
+    assert all(r["distance"]["status"] == "NOT_AVAILABLE" for r in p4)
     assert all(r["state_public_estimate"]["status"] == "AVAILABLE" and r["state_public_estimate"]["standard_error"] > 0 for r in p4)
 
 

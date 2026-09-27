@@ -422,7 +422,7 @@ def _eb_bill_outcomes(cfg: Config, raw: dict) -> dict[str, dict]:
             sponsor = _re.search(r"<sponsors>\s*<item>\s*<bioguideId>(\w+)</bioguideId>", text)
             s = scores.get(sponsor.group(1)) if sponsor else None
             s = float(s) if s not in (None, "") else None
-            out[f"S{num}"] = {"passed": "<actionCode>17000</actionCode>" in own,
+            out[f"S{num}"] = {"sponsor": sponsor.group(1) if sponsor else None, "passed": "<actionCode>17000</actionCode>" in own,
                               "enacted": "<text>Signed by President." in own or "<text>Became Public Law" in own
                                          or bool(laws and "<item>" in laws.group(1)),
                               "numbered": "<text>Became Public Law" in own or bool(laws and "<item>" in laws.group(1)),
@@ -459,11 +459,31 @@ def eb_outcome_checks(cfg: Config, raw: dict, page_data: dict | None) -> list[Ch
     out = [Check("Engine B: Pillar 5 outcome counts recounted from the bill-status archive", not bad,
                  f"passed Senate {len(passed)}, enacted {len(enacted)}" + (f"; mismatches {bad}" if bad else ""))]
     from ..ideology import bill_outcomes as BO
-    shown = O.get("meta", {}).get("table_fingerprints")
+    from ..ideology import bills as BL
+    # every stored classification (not only the counted ones), against the raw files: (1) the sponsor's Bioguide id
+    # in the bill's own XML, (2) that senator's latest nominate_dim1 in the raw Voteview file, (3) its sign,
+    # (4) the stored class equals that sign's class
+    raw_scores = {r["bioguide_id"]: (float(r["nominate_dim1"]) if r["nominate_dim1"] not in ("", None) else None)
+                  for r in raw["members"] if r["chamber"] == "Senate" and r["congress"] == str(cfg.congress)}
+    stale, wrong_sponsor = [], []
+    rows = BL.current(cfg)
+    for r in rows:
+        if bills.get(r["bill_id"], {}).get("sponsor") != r["sponsor_bioguide_id"]:
+            wrong_sponsor.append(r["bill_id"])
+        now = raw_scores.get(r["sponsor_bioguide_id"]) if r["sponsor_bioguide_id"] else None
+        cls = "UNKNOWN" if now is None else "LIBERAL_SPONSOR" if now < 0 else "CONSERVATIVE_SPONSOR" if now > 0 else "ZERO_SCORE_SPONSOR"
+        if r["sponsor_classification"] != cls:
+            stale.append(r["bill_id"])
+    out.append(Check("Engine B: every bill's sponsor is the one in its own bill-status record", not wrong_sponsor and len(rows) == len(bills),
+                     f"{len(rows)} bills" + (f"; mismatches {wrong_sponsor[:5]}" if wrong_sponsor else "")))
+    out.append(Check("Engine B: every bill classification matches the sign of the latest Voteview sponsor score", not stale,
+                     f"{len(rows)} bills" + (f"; stale {stale[:5]}" if stale else "")))
+    # (5) the page names the exact input versions it was built from
+    meta = O.get("meta", {})
     tables = BO.verify(cfg)
-    current = shown == BO.table_fingerprints(cfg)
-    out.append(Check("Engine B: scorecard uses the current, verified bill-table versions", current and not tables,
-                     ("page built from other table versions; " if not current else "") + "; ".join(tables[:3])))
+    current = meta.get("table_fingerprints") == BO.table_fingerprints(cfg) and meta.get("input_versions") == BO.input_versions(cfg)
+    out.append(Check("Engine B: scorecard uses the current, verified input versions", current and not tables,
+                     ("page built from other input versions; " if not current else "") + "; ".join(tables[:3])))
     return out
 
 

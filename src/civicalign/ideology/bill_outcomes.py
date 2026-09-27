@@ -28,8 +28,9 @@ public_law_number_pending, and the dates.
 
 Fixed text and date matching on the official record; no model, no network call,
 no external program. Records are append-only and hash-chained; a bill whose
-archive content and rule are unchanged keeps its stored record, so an unchanged
-archive writes nothing.
+archive content and rules are unchanged keeps its stored record, so an unchanged
+archive writes nothing. Nothing here depends on Voteview, so a newer Voteview file
+never changes an outcome record.
 """
 import argparse
 import hashlib
@@ -138,16 +139,40 @@ def current(cfg: Config = DEFAULT, congress: int | None = None) -> list[dict]:
     return [r for r in Table(cfg.ideology_dir, TABLE).current() if r["congress"] == congress]
 
 
+def fingerprint_lines(table: str, lines: list[dict], congress: int) -> str:
+    """SHA-256 of the sorted record ids of each key's latest version among `lines`
+    for the Congress. Tables are append-only, so a prefix of a table's lines is its
+    state at an earlier moment: this reproduces any earlier page's fingerprint."""
+    latest = {}
+    for l in lines:
+        if l["content"]["congress"] == congress:
+            latest[R.key_of(table, l["content"])] = l["record_id"]
+    return hashlib.sha256("|".join(sorted(latest.values())).encode()).hexdigest()
+
+
 def table_fingerprints(cfg: Config = DEFAULT, congress: int | None = None) -> dict[str, str]:
-    """The exact versions of both bill tables for the Congress: SHA-256 of the sorted
-    record ids of each table's current records. The page embeds these, and the
-    supervisor checks they are the stored tables' newest versions."""
+    """The exact versions of both bill tables for the Congress. The page embeds these,
+    and the supervisor checks they are the stored tables' newest versions."""
     congress = congress or cfg.congress
-    out = {}
-    for table in (BL.TABLE, TABLE):
-        ids = sorted(l["record_id"] for l in Table(cfg.ideology_dir, table).latest().values() if l["content"]["congress"] == congress)
-        out[table] = hashlib.sha256("|".join(ids).encode()).hexdigest()
-    return out
+    return {table: fingerprint_lines(table, Table(cfg.ideology_dir, table).lines(), congress) for table in (BL.TABLE, TABLE)}
+
+
+def input_versions(cfg: Config = DEFAULT) -> dict:
+    """Every input the scorecard is built from, pinned to the exact version: both bill
+    tables and senator_ideology (fingerprints), the Voteview source version(s) behind the
+    current senator rows, the bill-status archive version in the accepted snapshot, and
+    the three rules."""
+    senators = Table(cfg.ideology_dir, "senator_ideology").lines()
+    current = [l["content"] for l in Table(cfg.ideology_dir, "senator_ideology").latest().values()
+               if l["content"]["congress"] == cfg.congress]
+    snap = I.snapshot(cfg)
+    arch = next((s for s in snap["sources"] if s["file"] == cfg.billflow_zip.name), {})
+    return {**table_fingerprints(cfg),
+            "senator_ideology": fingerprint_lines("senator_ideology", senators, cfg.congress),
+            "voteview_source_versions": sorted({c["source_version"] for c in current}),
+            "bill_status_archive": {"content_key": arch.get("content_key"), "sha256": arch.get("sha256"),
+                                    "content_changed_utc": arch.get("content_changed_utc")},
+            "classification_rule": R.SPONSOR_RULE, "outcome_rule": R.OUTCOME_RULE, "enactment_rule": R.ENACTMENT_RULE}
 
 
 def verify(cfg: Config = DEFAULT) -> list[str]:
@@ -167,6 +192,7 @@ def verify(cfg: Config = DEFAULT) -> list[str]:
     except ValueError as e:
         problems.append(str(e))
     problems += [f"passage evidence: {p}" for p in evidence_disagreements(outs)[:3]]
+    problems += [f"sponsor score: {p}" for p in BL.score_problems(cfg, cls)[:3]]
     try:
         stale = {BL.TABLE: BL.run(cfg, dry_run=True)["new_versions_that_would_be_written"],
                  TABLE: run(cfg, dry_run=True)["new_versions_that_would_be_written"]}

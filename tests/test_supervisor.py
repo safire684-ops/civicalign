@@ -285,4 +285,24 @@ def test_a_wrong_outcome_count_on_the_page_is_caught(raw, page_data):
 def test_a_scorecard_built_from_old_bill_tables_is_caught(raw, page_data):
     p = copy.deepcopy(page_data)
     p["p5"]["outcomes"]["meta"]["table_fingerprints"]["senate_bill_outcomes"] = "0" * 64
-    assert failed(S.eb_outcome_checks(DEFAULT, raw, p), "Engine B: scorecard uses the current, verified bill-table versions")
+    assert failed(S.eb_outcome_checks(DEFAULT, raw, p), "Engine B: scorecard uses the current, verified input versions")
+    for key in ("senator_ideology", "voteview_source_versions", "bill_status_archive", "classification_rule"):
+        p = copy.deepcopy(page_data)
+        p["p5"]["outcomes"]["meta"]["input_versions"][key] = "an older version"
+        assert failed(S.eb_outcome_checks(DEFAULT, raw, p), "Engine B: scorecard uses the current, verified input versions"), key
+
+
+def test_a_bill_classification_stale_against_voteview_is_caught(raw, page_data, monkeypatch):
+    from civicalign.ideology import bills as BL
+    rows = [dict(r) for r in BL.current(DEFAULT)]
+    rows[0]["sponsor_classification"] = "CONSERVATIVE_SPONSOR" if rows[0]["sponsor_classification"] != "CONSERVATIVE_SPONSOR" else "LIBERAL_SPONSOR"
+    monkeypatch.setattr(BL, "current", lambda cfg=None, congress=None: rows)
+    assert failed(S.eb_outcome_checks(DEFAULT, raw, page_data), "Engine B: every bill classification matches the sign of the latest Voteview")
+
+
+def test_a_bill_whose_sponsor_differs_from_its_own_record_is_caught(raw, page_data, monkeypatch):
+    from civicalign.ideology import bills as BL
+    rows = [dict(r) for r in BL.current(DEFAULT)]
+    rows[0]["sponsor_bioguide_id"] = "X000000"
+    monkeypatch.setattr(BL, "current", lambda cfg=None, congress=None: rows)
+    assert failed(S.eb_outcome_checks(DEFAULT, raw, page_data), "Engine B: every bill's sponsor is the one in its own bill-status record")
