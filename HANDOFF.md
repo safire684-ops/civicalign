@@ -15,7 +15,8 @@ layer (`5a5dd93`, local), the local Pillar 5 scorecard (`3f54d83`) and the bill
 tables in the daily update (`710a4fc`), after the failed scorecard publish
 attempt, after the bill-storage fix (`09f8baf`), and after the Pillar 5
 scorecard went LIVE (27 September 2026, GitHub `main` `8b4be86`), and after the
-Pillar 6 committee bill-flow section was built locally (`4889fe0`, not live). Read all of it before doing
+Pillar 6 committee bill-flow section went LIVE (27 September 2026, GitHub `main`
+`4a3893f`). **The Pillars 4–6 rebuild is LIVE / COMPLETE FOR CURRENT DEMO.** Read all of it before doing
 anything. The repository and this file are the source of truth; older design
 documents, the whitepaper and chat history are not.
 
@@ -34,10 +35,14 @@ Work one step at a time and stop for review after each step.
 
 ## 1. Current branch and repository state
 
-- **PILLAR 6 COMMITTEE BILL-FLOW SECTION: COMPLETE LOCALLY, NOT YET LIVE**
-  (`4889fe0` on `pillars-4-6-rebuild`, not pushed). GitHub `main` is `22c68b5`
-  (the post-publish HANDOFF), which still serves the live Pillar 5 release. See
-  "Pillar 6 committee bill-flow section" in section 3.
+- **PILLARS 4–6 REBUILD: LIVE / COMPLETE FOR CURRENT DEMO.**
+- **PILLAR 6 COMMITTEE BILL-FLOW IS LIVE (27 September 2026).** Final GitHub
+  `main` commit **`4a3893f`** (= `pillars-4-6-rebuild`, fast-forwarded from
+  `22c68b5`, no merge, no force). Workflow run **36332082042** (by hand, on
+  `main`) succeeded: **349 tests passed, 0 failed**, **checker 38/38**, no
+  source changed during the run (0 of 12), so the bot committed nothing, and
+  Pages deployed. The live files matched the verified workflow build
+  byte-for-byte. See "Pillar 6 committee bill-flow — LIVE" in section 3.
 - Repo: `/Users/sarthakkesavarapu/Desktop/CivicAlign`, remote
   https://github.com/safire684-ops/civicalign
 - **THE PILLAR 5 SCORECARD IS LIVE (27 September 2026).** `pillars-4-6-rebuild`
@@ -132,7 +137,8 @@ Commits in the Pillars 4–6 release (all on GitHub `main` since publishing; old
 | `8b4be86` | `civicalign-bot`: daily update from workflow run 36322957937 (one changed bill record, S4668). **Live.** |
 | `22c68b5` | HANDOFF update (post-publish). Pushed; GitHub `main` fast-forwarded to it (HANDOFF only). |
 | `4889fe0` | **Pillar 6 committee bill-flow section** (local, not pushed, not live). See section 3. |
-| (next) | This HANDOFF update. |
+| `4a3893f` | HANDOFF update for the local Pillar 6 section. Pushed; GitHub `main` fast-forwarded to it. **Live** (run 36332082042). |
+| (next) | This HANDOFF update (Pillars 4–6 release complete) and README facts (Pillar 5 and 6 bill counts, daily chain). |
 
 The working tree of the release branch is clean. The two Stage 3 edits that
 used to sit uncommitted here are preserved on `pillar1-stage3` (and in
@@ -1006,7 +1012,7 @@ Fixes the two problems behind the failed publish attempt.
   still recorded in the page's input provenance
   (`p5.outcomes.meta.input_versions.bill_status_archive`).
 
-### Pillar 6 committee bill-flow section — COMPLETE LOCALLY, NOT YET LIVE (`4889fe0`)
+### Pillar 6 committee bill-flow section — built (`4889fe0`); LIVE since 27 September 2026 (next subsection)
 
 - **What it is**: each committee card gains "Bills handled by this committee"
   under the existing median rows: Senate bills **referred to** and **reported
@@ -1053,7 +1059,45 @@ Fixes the two problems behind the failed publish attempt.
 - **Page size**: `senator-check.html` is about **1.41 MB** (was about 284 KB),
   mostly the titles of the ~5,400 listed bills. Accepted for this release; the
   bill lists may later be split into a lazy-loaded JSON file if needed.
-- **Not yet live.** Publishing needs the user's approval.
+- Published on 27 September 2026 (next subsection).
+
+### Pillar 6 committee bill-flow — LIVE (27 September 2026, GitHub `main` `4a3893f`)
+
+- **Published workflow**: run **36332082042** succeeded; **349 tests passed,
+  0 failed**; **checker 38/38**; final GitHub `main` commit **`4a3893f`**; the
+  live files (`senator-check.html`, `methodology.html`, `civicalign.css`,
+  `index.html`) matched the verified workflow build byte-for-byte (same SHA-256
+  as the run's uploaded site and the files on `main`). **No sources changed**
+  during the publication workflow, so no table versions and no bot commit.
+- **Current live Pillar 6 totals**: **5,387 Senate-bill referrals**, **403
+  committee reports**, **15 reported-without-referral cases**, **16 standing
+  committees covered** (identical to the approved local build).
+- The existing committee median / Senate median / difference calculations are
+  unchanged (the live Pillar 6 median data equals the previous live release).
+- The committee bill classifications describe the sponsor's voting position,
+  not the bill's ideology. **No LLM is used.**
+- Every count is traceable to its exact bills, their committee actions
+  (referred / reported dates) and the source versions (bill-status archive,
+  Voteview, classification rule), and every displayed number opens its
+  methodology.
+- **All 16 committee cards were checked live**: the median rows, the new
+  section, both split bars against their counts, the zero and unknown counts,
+  every "See bills" fold-out (bill counts, links, titles, sponsors, current
+  Voteview scores, action dates), all 15 reported-without-referral notes, and
+  the methodology for all 11 numbers per card and all 5,790 listed sponsor
+  scores. The required wording is present; no "liberal/conservative bills"
+  wording and no causal wording; no preview banner; no console errors.
+- **Pillars 4 and 5 remained unchanged**: their live page data equals the
+  previous live release, the template diff only adds Pillar 6 code, all 50
+  states and 600 Pillar 4 numbers and all 23 Pillar 5 numbers open their
+  methodology, and the page's input fingerprints match the current verified
+  tables.
+- The page is about **1.41 MB** (accepted; the bill lists could later move to a
+  lazy-loaded JSON file).
+- The Congress.gov links follow the expected URL format
+  (`https://www.congress.gov/bill/119th-congress/senate-bill/<number>`, checked
+  for every listed bill), but automated checking of the destination pages was
+  blocked by Congress.gov's bot protection.
 
 ## 4. Current real numbers (record `e0f5b6d9…`, measured 2026-09-27, nominate_dim1, 100 active senators)
 
@@ -1151,6 +1195,8 @@ alignment scores, defiance/betrayal language, politician rankings.
 
 Run: `./.venv/bin/python -m pytest -q` (Python 3.14 venv; CI uses 3.12).
 
+**Pillar 6 publication (run 36332082042, `4a3893f`): 349 passed, 0 failed; checker 38/38.**
+
 **After the Pillar 6 committee bill-flow section (`4889fe0`): 349 passed, 0 failed** (Python 3.12); checker 38/38.
 
 **After the bill-storage fix and unpinned tests (`09f8baf`): 326 passed, 0 failed** (Python 3.12); checker 35/35.
@@ -1201,7 +1247,8 @@ report and whitepaper against newer bill archives); after Step 5A, 321 passed,
 
 - A valid public-to-legislator bridge
 - A national public ideology measure (definition and bridge)
-- Deterministic bill ideology / legislative outcome classification
+- Deterministic bill ideology classification (the live Pillar 5 and Pillar 6
+  bill counts classify each bill's sponsor, not the bill)
 
 ---
 
@@ -1228,14 +1275,13 @@ report and whitepaper against newer bill archives); after Step 5A, 321 passed,
 
 ## 9. Next step
 
-The Pillar 5 scorecard is LIVE (GitHub `main` `8b4be86`, docs at `22c68b5`),
-with its automation and independent checker. The Pillar 6 committee bill-flow
-section is complete locally (`4889fe0`), not live. Open items, each only when
-the user asks:
+**The Pillars 4–6 rebuild is LIVE / COMPLETE FOR CURRENT DEMO** (GitHub `main`
+`4a3893f`): the Pillar 5 scorecard and the Pillar 6 committee bill-flow section
+are live, with the daily automation and the independent checker. No feature is
+in progress. Open items, each only when the user asks:
 
-1. **Publish the Pillar 6 section, only with the user's approval**: push
-   `pillars-4-6-rebuild`, fast-forward GitHub `main` if it is still `22c68b5`,
-   run the workflow once, check the live page against the workflow build.
+1. METHODOLOGY.md and docs/ENGINE_B_DATA_FLOW.md do not yet describe the
+   Pillar 5 and Pillar 6 bill counts or the bill-table steps (README does).
 2. Plan for bill-table growth: `bill_sponsor_classifications.jsonl` grows about
    155 KB a day at the current rate; GitHub rejects files over 100 MB.
 3. Optional: republish the claude.ai copies of the page and the methodology
