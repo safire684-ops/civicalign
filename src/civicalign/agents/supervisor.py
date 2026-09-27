@@ -24,6 +24,10 @@ Engine B (Pillars 4-6), from the raw snapshot files and the stored records:
     sponsor class, public-law number recorded or pending), recounted bill by
     bill from each bill's own XML actions and the Voteview file, and the
     scorecard built from the current, verified versions of both bill tables
+  * Pillar 6 bills handled by each committee (referred, reported, reported
+    without a referral, each by sponsor class), recounted bill by bill from each
+    bill's own committee activities in the XML and the Voteview file; every
+    listed bill's sponsor, committee action dates and current sponsor score
   * gating: no senator-to-state distance while the bridge is NONE; no
     Senate-to-public gap and no committee-to-public drift while the national
     estimate is unresolved -- in the record and on the page
@@ -383,6 +387,15 @@ def eb_methodology_checks(record: dict, anchor_rows: list[dict], page_data: dict
             if e["kind"] != "outcome" or n["d"] != f"{n['v']:,}" or len(n.get("ids", [])) != n["v"]:
                 bad.append(f"{n['p']}: outcome count, display or bill ids")
             continue
+        if n["p"].startswith("committee_bills."):   # committee bill-flow numbers: display here, values in eb_committee_bill_checks
+            if e["kind"] != "billflow":
+                bad.append(f"{n['p']}: not a bill-flow entry")
+            elif n["p"].endswith(".sponsor_score"):
+                if n["v"] is not None and n["d"] != _eb_half_up(n["v"], e["decimals"], False):
+                    bad.append(f"{n['p']}: display {n['d']}")
+            elif n["d"] != f"{n['v']:,}" or len(n.get("ids", [])) != n["v"]:
+                bad.append(f"{n['p']}: bill-flow count, display or bill ids")
+            continue
         try:
             q = _eb_resolve(record["results"], n["p"])
         except (KeyError, IndexError, ValueError):
@@ -487,6 +500,104 @@ def eb_outcome_checks(cfg: Config, raw: dict, page_data: dict | None) -> list[Ch
     return out
 
 
+def _eb_committee_flow(cfg: Config) -> dict[str, dict]:
+    """Each Senate bill's sponsor and, per Senate standing committee (systemCode ssXX00), whether the
+    committee was referred it ("Referred To") or reported it ("Reported By", "Reported Original
+    Measure") and the earliest date of each, re-read from the bill's own <committees> element with
+    separate code. Subcommittee activities are not read."""
+    import re as _re
+    import xml.etree.ElementTree as _ET
+    import zipfile as _zip
+    out = {}
+    with _zip.ZipFile(cfg.billflow_zip) as z:
+        for n in z.namelist():
+            root = _ET.fromstring(z.read(n))
+            bill = root.find("bill")
+            if bill is None or (bill.findtext("congress") or "").strip() != str(cfg.congress) or (bill.findtext("type") or "").strip() != "S":
+                continue
+            sp = bill.find("sponsors/item/bioguideId")
+            flow = {}
+            for item in (bill.find("committees") if bill.find("committees") is not None else []):
+                code = (item.findtext("systemCode") or "").strip().lower()
+                if not _re.fullmatch(r"ss[a-z]{2}00", code) or (item.findtext("chamber") or "").strip() != "Senate":
+                    continue
+                acts = [((a.findtext("name") or "").strip(), (a.findtext("date") or "").strip()[:10])
+                        for a in (item.find("activities") if item.find("activities") is not None else [])]
+                f = flow.setdefault(code[:4].upper(), {"referred": [], "reported": []})
+                f["referred"] += [d for name, d in acts if name == "Referred To"]
+                f["reported"] += [d for name, d in acts if name in ("Reported By", "Reported Original Measure")]
+            out[f"S{bill.findtext('number').strip()}"] = {"sponsor": sp.text.strip() if sp is not None and sp.text else None, "flow": flow}
+    return out
+
+
+def eb_committee_bill_checks(cfg: Config, raw: dict, page_data: dict | None) -> list[Check]:
+    """The Pillar 6 committee bill counts on the page, recounted from the raw bill-status archive and Voteview."""
+    name = "Engine B: Pillar 6 committee bill counts recounted from the bill-status archive"
+    if page_data is None or "bills" not in page_data.get("p6", {}):
+        return [Check(name, False, "no committee bill data on the page")]
+    if not cfg.billflow_zip.exists():
+        return [Check(name, False, "no local archive")]
+    bills = _eb_committee_flow(cfg)
+    scores = {r["bioguide_id"]: (float(r["nominate_dim1"]) if r["nominate_dim1"] not in ("", None) else None)
+              for r in raw["members"] if r["chamber"] == "Senate" and r["congress"] == str(cfg.congress)}
+
+    def cls(b):
+        s = scores.get(bills[b]["sponsor"]) if bills[b]["sponsor"] else None
+        return "UNKNOWN" if s is None else "LIBERAL_SPONSOR" if s < 0 else "CONSERVATIVE_SPONSOR" if s > 0 else "ZERO_SCORE_SPONSOR"
+
+    P6 = page_data["p6"]
+    codes = sorted({c for x in bills.values() for c, f in x["flow"].items() if f["referred"] or f["reported"]})
+    shown = {c["code"]: c for c in P6["committees"]}
+    bad = [f"committees with bills but no card: {sorted(set(codes) - set(shown))}"] if set(codes) - set(shown) else []
+    totals = {"referred": 0, "reported": 0, "reported_without_referral": 0}
+    for code, c in sorted(shown.items()):
+        F = c.get("bills")
+        if F is None:
+            bad.append(f"{code}: no bill section"); continue
+        mine = {part: sorted((b for b, x in bills.items() if x["flow"].get(code, {}).get(part)), key=lambda b: int(b[1:]))
+                for part in ("referred", "reported")}
+        mine["reported_without_referral"] = [b for b in mine["reported"] if not bills[b]["flow"][code]["referred"]]
+        for part, ids in mine.items():
+            totals[part] += len(ids)
+            node = F[part] if part == "reported_without_referral" else F[part]["total"]
+            if sorted(node["ids"], key=lambda b: int(b[1:])) != ids or node["v"] != len(ids):
+                bad.append(f"{code} {part}")
+            if part == "reported_without_referral":
+                continue
+            for k in ("LIBERAL_SPONSOR", "CONSERVATIVE_SPONSOR", "ZERO_SCORE_SPONSOR", "UNKNOWN"):
+                want = [b for b in ids if cls(b) == k]
+                if sorted(F[part][k]["ids"], key=lambda b: int(b[1:])) != want or F[part][k]["v"] != len(want):
+                    bad.append(f"{code} {part} {k}")
+    out = [Check(name, not bad, f"{len(shown)} committees; referred {totals['referred']}, reported {totals['reported']}, "
+                                f"reported without referral {totals['reported_without_referral']}" + (f"; mismatches {bad[:5]}" if bad else ""))]
+    # every listed bill: its sponsor, its committee action dates, and its sponsor's current score, against the raw files
+    wrong = []
+    counted = {b for c in shown.values() for part in ("referred", "reported") for b in c["bills"][part]["total"]["ids"]}
+    if set(P6["bills"]) != counted:
+        wrong.append("the listed bills are not exactly the counted bills")
+    for b in sorted(counted & set(P6["bills"]), key=lambda b: int(b[1:])):
+        x, r = P6["bills"][b], bills.get(b)
+        if r is None or x["sp"] != r["sponsor"]:
+            wrong.append(f"{b} sponsor"); continue
+        for code, (ref, rep) in x["a"].items():
+            f = r["flow"].get(code, {"referred": [], "reported": []})
+            if (ref is not None) != bool(f["referred"]) or (rep is not None) != bool(f["reported"]) \
+                    or (ref is not None and min(f["referred"]) and ref != min(f["referred"])) \
+                    or (rep is not None and min(f["reported"]) and rep != min(f["reported"])):
+                wrong.append(f"{b} {code} action dates")
+        s = P6["sponsors"].get(x["sp"], {}).get("score") if x["sp"] else None
+        if x["sp"] and (s is None or s["v"] != scores.get(x["sp"])):
+            wrong.append(f"{b} sponsor score")
+    out.append(Check("Engine B: every committee bill list matches its bill's sponsor, action dates and current Voteview score",
+                     not wrong, f"{len(counted)} bills" + (f"; mismatches {wrong[:5]}" if wrong else "")))
+    from ..ideology import bill_outcomes as BO
+    current = P6.get("bill_meta", {}).get("input_versions") == BO.input_versions(cfg)
+    probs = BO.verify(cfg)
+    out.append(Check("Engine B: committee bill counts use the current, verified input versions", current and not probs,
+                     ("page built from other input versions; " if not current else "") + "; ".join(probs[:3])))
+    return out
+
+
 def _eb_git_head(path: Path) -> str | None:
     import subprocess
     root = Path(__file__).resolve().parents[3]
@@ -556,6 +667,7 @@ def engine_b_checks(cfg: Config = DEFAULT, page_dir: Path | None = None) -> list
     out += eb_gating_checks(record, BR.active(cfg)["status"], page_data)
     out += eb_methodology_checks(record, anchors, page_data, meth)
     out += eb_outcome_checks(cfg, raw, page_data)
+    out += eb_committee_bill_checks(cfg, raw, page_data)
     out += eb_store_checks(cfg)
     out += eb_page_current_checks(cfg, page_dir)
     return out

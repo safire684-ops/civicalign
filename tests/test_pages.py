@@ -97,6 +97,7 @@ def visible_text(page: str) -> str:
         return page
     data = json.loads(m.group(1))
     data.get("p5", {}).get("outcomes", {}).pop("bills", None)
+    data.get("p6", {}).pop("bills", None)          # the committee bill lists: official titles and sponsor names
 
     def strings(o):
         if isinstance(o, dict):
@@ -135,8 +136,10 @@ def test_every_displayed_number_carries_its_registry_entry(data):
     nums = list(numbers(data))
     rec = BP.latest(DEFAULT)["results"]
     # Pillar 4 (4 per seated senator), anchors, Pillar 5 (10), Pillar 6 (5 per committee + Senate median and national,
-    # the national shared with Pillar 5), Pillar 5 outcomes (5 passed + 7 enacted): counted from the record, not pinned
-    assert len(nums) == 4 * len(rec["pillar4"]) + 3 + 10 + 5 * len(rec["pillar6"]) + 2 - 1 + 12
+    # the national shared with Pillar 5), Pillar 5 outcomes (5 passed + 7 enacted), Pillar 6 bills handled (11 per
+    # committee) and one current score per sponsor in the committee bill lists: counted from the data, not pinned
+    assert len(nums) == 4 * len(rec["pillar4"]) + 3 + 10 + 5 * len(rec["pillar6"]) + 2 - 1 + 12 + 11 * len(rec["pillar6"]) \
+        + len(data["p6"]["sponsors"])
     for n in nums:
         e = M.REGISTRY[n["m"]]
         if n["s"] == "NOT_AVAILABLE":
@@ -213,7 +216,10 @@ def test_pillar4_senators_and_exactly_three_labelled_anchors(data):
 
 
 def test_anchors_appear_only_in_pillar4(data):
-    elsewhere = json.dumps({k: data[k] for k in ("p5", "p6")})
+    # official bill titles and sponsor names in the committee bill lists are the government's words
+    # (e.g. "Overturn Biden's Offshore Energy Ban Act"), not a use of a reference figure
+    p6 = {**data["p6"], "bills": {b: {k: v for k, v in x.items() if k not in ("t", "sn")} for b, x in data["p6"].get("bills", {}).items()}}
+    elsewhere = json.dumps({"p5": data["p5"], "p6": p6})
     assert "p4.reference_anchor" not in elsewhere and "Biden" not in elsewhere and "Vance" not in elsewhere
 
 
@@ -268,7 +274,7 @@ def test_pillar6_uses_only_committee_median_and_senate_drift(data):
     assert {c["code"] for c in cs} == set(saved["committees"]) == set(BP.latest(DEFAULT)["results"]["pillar6"])
     for c in cs:
         assert set(c) == {"code", "name", "official_name", "name_source", "name_retrieved", "listed", "scored", "left_out",
-                          "committee_median", "committee_senate_drift", "committee_public_drift"}
+                          "committee_median", "committee_senate_drift", "committee_public_drift", "bills"}
         assert c["committee_public_drift"]["s"] == "NOT_AVAILABLE"
     for c in cs:     # every committee, recomputed from the saved membership and scores
         med, drift = saved["committees"][c["code"]], saved["committees"][c["code"]] - saved["median"]

@@ -73,6 +73,9 @@ def test_supervisor_confirms_every_figure():
                      "Engine B: no committee-to-public drift while bridge and national estimate are unavailable",
                      "Engine B: every displayed number has methodology and equals the record",
                      "Engine B: every stored record valid and hash-chained", "Engine B: stored records append-only against the last commit",
+                     "Engine B: Pillar 6 committee bill counts recounted from the bill-status archive",
+                     "Engine B: every committee bill list matches its bill's sponsor, action dates and current Voteview score",
+                     "Engine B: committee bill counts use the current, verified input versions",
                      "Pillar 1 bindings re-derived from cached first-party files",
                      "Pillar 1 context and packets re-derived from tracked artefacts"):
         assert required in names_, required
@@ -306,3 +309,68 @@ def test_a_bill_whose_sponsor_differs_from_its_own_record_is_caught(raw, page_da
     rows[0]["sponsor_bioguide_id"] = "X000000"
     monkeypatch.setattr(BL, "current", lambda cfg=None, congress=None: rows)
     assert failed(S.eb_outcome_checks(DEFAULT, raw, page_data), "Engine B: every bill's sponsor is the one in its own bill-status record")
+
+
+# ---- Pillar 6 bills handled by each committee -----------------------------------------------------------------
+
+COMMITTEE_COUNTS = "Engine B: Pillar 6 committee bill counts recounted from the bill-status archive"
+COMMITTEE_LISTS = "Engine B: every committee bill list matches its bill's sponsor, action dates and current Voteview score"
+
+
+def _committee(p, code=None):
+    cs = p["p6"]["committees"]
+    return next(c for c in cs if c["code"] == code) if code else max(cs, key=lambda c: c["bills"]["reported"]["total"]["v"])
+
+
+def test_committee_bill_counts_are_confirmed_from_the_raw_archive(raw, page_data):
+    checks = S.eb_committee_bill_checks(DEFAULT, raw, page_data)
+    assert not failed(checks, COMMITTEE_COUNTS) and not failed(checks, COMMITTEE_LISTS)
+
+
+def test_a_wrong_committee_bill_count_is_caught(raw, page_data):
+    p = copy.deepcopy(page_data)                     # a bill moved from one sponsor group to the other
+    c = _committee(p)["bills"]["referred"]
+    c["CONSERVATIVE_SPONSOR"]["ids"].append(c["LIBERAL_SPONSOR"]["ids"].pop())
+    assert failed(S.eb_committee_bill_checks(DEFAULT, raw, p), COMMITTEE_COUNTS)
+    p = copy.deepcopy(page_data)                     # a total that no longer matches its ids
+    _committee(p)["bills"]["reported"]["total"]["v"] += 1
+    assert failed(S.eb_committee_bill_checks(DEFAULT, raw, p), COMMITTEE_COUNTS)
+    p = copy.deepcopy(page_data)                     # reported quietly folded into referred
+    c = next((c["bills"] for c in p["p6"]["committees"] if c["bills"]["reported_without_referral"]["v"]), None)
+    if c is not None:
+        c["referred"]["total"]["ids"] = sorted(set(c["referred"]["total"]["ids"]) | set(c["reported"]["total"]["ids"]))
+        assert failed(S.eb_committee_bill_checks(DEFAULT, raw, p), COMMITTEE_COUNTS)
+
+
+def test_hiding_a_bill_reported_without_referral_is_caught(raw, page_data):
+    p = copy.deepcopy(page_data)
+    c = next((c for c in p["p6"]["committees"] if c["bills"]["reported_without_referral"]["v"]), None)
+    if c is None:
+        pytest.skip("no committee reported a bill without a referral in the current data")
+    c["bills"]["reported_without_referral"]["ids"], c["bills"]["reported_without_referral"]["v"] = [], 0
+    assert failed(S.eb_committee_bill_checks(DEFAULT, raw, p), COMMITTEE_COUNTS)
+
+
+def test_a_wrong_sponsor_score_or_action_date_in_a_bill_list_is_caught(raw, page_data):
+    p = copy.deepcopy(page_data)
+    bg = next(iter(p["p6"]["sponsors"]))
+    p["p6"]["sponsors"][bg]["score"]["v"] = (p["p6"]["sponsors"][bg]["score"]["v"] or 0) + 0.001
+    assert failed(S.eb_committee_bill_checks(DEFAULT, raw, p), COMMITTEE_LISTS)
+    p = copy.deepcopy(page_data)
+    b = next(b for b, x in p["p6"]["bills"].items() if any(r for r, _ in x["a"].values()))
+    code = next(c for c, (r, _) in p["p6"]["bills"][b]["a"].items() if r)
+    p["p6"]["bills"][b]["a"][code][0] = "1900-01-01"
+    assert failed(S.eb_committee_bill_checks(DEFAULT, raw, p), COMMITTEE_LISTS)
+
+
+def test_committee_bills_built_from_old_input_versions_are_caught(raw, page_data):
+    for key in ("bill_sponsor_classifications", "senator_ideology", "voteview_source_versions", "bill_status_archive"):
+        p = copy.deepcopy(page_data)
+        p["p6"]["bill_meta"]["input_versions"][key] = "an older version"
+        assert failed(S.eb_committee_bill_checks(DEFAULT, raw, p), "Engine B: committee bill counts use the current, verified input versions"), key
+
+
+def test_a_committee_bill_number_without_methodology_is_caught(record, anchors, page_data):
+    p = copy.deepcopy(page_data)
+    _committee(p)["bills"]["referred"]["total"]["m"] = "p6.committee_median"
+    assert failed(S.eb_methodology_checks(record, anchors, p, None), "Engine B: every displayed number has methodology")

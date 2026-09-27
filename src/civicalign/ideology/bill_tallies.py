@@ -13,7 +13,9 @@ Nothing here is displayed yet and nothing here chooses which bills matter:
 - committee_tallies(records) answers, for each Senate standing committee: bills
   referred ("Referred To"), bills reported ("Reported By" or "Reported Original
   Measure", which includes original measures a committee reported without a
-  referral), and reported-of-referred, each split by sponsor class.
+  referral), reported-of-referred, and reported-without-referral, each split by
+  sponsor class. Referred and reported are separate lists: reported is NOT
+  assumed to be a subset of referred.
 
 Every count is the length of the sorted list of bill ids returned beside it, so
 any number can be traced to the exact bills behind it. The classes describe
@@ -64,18 +66,23 @@ def sponsor_tally(records: list[dict], outcome_set: set[str] | None = None, outc
 
 
 def committee_tallies(records: list[dict]) -> dict[str, dict]:
-    """Pillar 6 support: per Senate standing committee, bills referred, reported, and
-    reported-of-referred, each split by sponsor class with the exact bill ids."""
+    """Pillar 6 support: per Senate standing committee, bills referred, reported,
+    reported-of-referred and reported-without-referral (a bill the committee reported
+    whose record has no "Referred To" activity for it, e.g. an original measure), each
+    split by sponsor class with the exact bill ids."""
     committees: dict[str, dict[str, list[dict]]] = {}
     for r in records:
         for c in r["referred_committees"]:
-            slot = committees.setdefault(c["committee_id"], {"referred": [], "reported": [], "reported_of_referred": []})
+            slot = committees.setdefault(c["committee_id"], {"referred": [], "reported": [], "reported_of_referred": [],
+                                                             "reported_without_referral": []})
             if c["referred"]:
                 slot["referred"].append(r)
             if c["reported"]:
                 slot["reported"].append(r)
             if c["referred"] and c["reported"]:
                 slot["reported_of_referred"].append(r)
+            if c["reported"] and not c["referred"]:
+                slot["reported_without_referral"].append(r)
     return {cid: {k: by_classification(v) for k, v in slots.items()} for cid, slots in sorted(committees.items())}
 
 

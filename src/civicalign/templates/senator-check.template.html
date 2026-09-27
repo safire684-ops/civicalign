@@ -77,6 +77,15 @@
 .bills{margin:0;padding-left:18px;display:grid;gap:6px;font-size:14px}
 .bills .k{color:var(--muted);font-size:13px}
 .bills a{color:var(--alert);font-weight:600}
+/* Pillar 6: bills handled by this committee */
+.cbills{margin-top:22px;padding-top:6px;border-top:1px solid var(--rule-soft)}
+.cbills .kicker{margin-top:18px}
+.cbills .kicker.head{font-size:13px;color:var(--ink)}
+.cbills .lead{margin-top:6px;font-size:16px}
+.cbills .lead .num{font-family:var(--serif);font-size:24px}
+.cbills .cb-meaning{margin-top:14px}
+.cbills .cb-meaning .fine{font-size:14.5px;color:var(--ink);max-width:60ch}
+.cbills .cb-meaning .fine+.fine{margin-top:10px}
 dialog.method{max-width:640px;width:calc(100% - 32px);max-height:calc(100vh - 48px);border:1px solid var(--rule);border-radius:8px;
   background:var(--surface);color:var(--ink);padding:0;overflow:auto}
 dialog.method::backdrop{background:rgba(10,12,16,.55)}
@@ -381,9 +390,66 @@ dialog.method a{color:var(--alert);font-weight:600}
       '<div class="rows">'+row('Committee median',md)+row('Senate median',sm)+row('Committee median − Senate median',dr)+
         row('National public centre',P6.national)+row('Committee median − national public centre',c.committee_public_drift)+
         row('Members listed',c.listed)+row('Members with a Voteview score',c.scored,c.left_out.length?'Left out (no score): '+esc(c.left_out.join(', ')):null)+'</div>'+
+      billsSection(c)+
       '<details class="more"><summary><span>More about this committee</span></summary><ul class="limits-list">'+
         M['p6.committee_median'].limitations.filter(function(x){return x.indexOf('recorded roll-call')<0}).map(function(x){return '<li>'+esc(x)+'</li>'}).join('')+
         '<li>Official name: '+esc(c.official_name)+' (code '+esc(c.code)+'), from '+esc(c.name_source)+', retrieved '+esc(c.name_retrieved)+'.</li></ul></details></div>';
+  }
+  // ---- Pillar 6: bills handled by this committee ----
+  // Every count is read from the saved bill table (committee_tallies) and carries the bill ids behind it.
+  // Referred and reported are separate lists: reported is not assumed to be a subset of referred.
+  var CB=P6.bills, CS=P6.sponsors, CM=P6.bill_meta;
+  var CGROUPS=[{key:'LIBERAL_SPONSOR',see:'See the bills sponsored by senators on the liberal side of the Voteview scale'},
+               {key:'CONSERVATIVE_SPONSOR',see:'See the bills sponsored by senators on the conservative side of the Voteview scale'},
+               {key:'ZERO_SCORE_SPONSOR',see:'See the bills sponsored by senators with a score of exactly zero'},
+               {key:'UNKNOWN',see:'See the bills with no available sponsor score'}];
+  function nb(n){return n.v===1?'bill':'bills'}
+  function cSplit(set){
+    var l=set.LIBERAL_SPONSOR, c=set.CONSERVATIVE_SPONSOR, both=l.v+c.v, lw=both?100*l.v/both:0;
+    return '<p class="kicker">Sponsor voting position</p>'+
+      '<div class="split" aria-hidden="true"><span class="seg lib" style="--w:'+lw+'%"></span><span class="seg con" style="--w:'+(both?100-lw:0)+'%"></span></div>'+
+      '<p class="sr-only">Bar: '+esc(l.d)+' sponsored by senators on the liberal side of the Voteview scale and '+esc(c.d)+' on the conservative side.</p>'+
+      '<div class="splitkey">'+
+        '<div><i class="sw lib"></i><span class="big">'+num(l)+'</span><span class="k">Sponsored by senators on the liberal side of the Voteview scale</span></div>'+
+        '<div><i class="sw con"></i><span class="big">'+num(c)+'</span><span class="k">Sponsored by senators on the conservative side of the Voteview scale</span></div>'+
+      '</div>'+
+      '<p class="why">'+num(set.ZERO_SCORE_SPONSOR)+' sponsored by senators with a score of exactly zero · '+num(set.UNKNOWN)+' with no available sponsor score</p>';
+  }
+  // a See bills list is built only when it is opened
+  function cSee(code,part,set){
+    return CGROUPS.map(function(g){return set[g.key].v?'<details class="more seebills" data-cb="'+esc(code+'|'+part+'|'+g.key)+'"><summary><span>'+esc(g.see)+'</span></summary><ul class="bills"></ul></details>':''}).join('');
+  }
+  function billItem(b,code,part){
+    var x=CB[b], a=x.a[code]||[null,null], s=x.sp&&CS[x.sp];
+    var act=part==='referred'?'referred '+esc(a[0])+(a[1]?' · reported '+esc(a[1]):''):
+      (a[0]?'referred '+esc(a[0]):'no referral to this committee recorded')+' · reported '+esc(a[1]);
+    return '<li><a href="https://www.congress.gov/bill/'+esc(CM.congress)+'th-congress/senate-bill/'+esc(x.n)+'">S. '+esc(x.n)+'</a> '+esc(x.t)+
+      ' <span class="k">'+esc(x.sn||'no primary sponsor listed')+(s?' · current Voteview score '+num(s.score):'')+' · '+act+'</span></li>';
+  }
+  document.addEventListener('toggle',function(ev){
+    var d=ev.target, k=d.getAttribute&&d.getAttribute('data-cb');
+    if(!k||!d.open||d.getAttribute('data-done')) return;
+    k=k.split('|');
+    var c=P6.committees.filter(function(x){return x.code===k[0]})[0];
+    d.querySelector('ul').innerHTML=c.bills[k[1]][k[2]].ids.map(function(b){return billItem(b,k[0],k[1])}).join('');
+    d.setAttribute('data-done','1');
+  },true);
+  function billsSection(c){
+    var F=c.bills, R=F.referred, P=F.reported, W=F.reported_without_referral;
+    return '<div class="cbills"><p class="kicker head">Bills handled by this committee</p>'+
+      '<p class="why">A bill is referred when it’s sent to the committee for review, and reported when the committee formally reports it back to the Senate.</p>'+
+      '<p class="kicker">Referred to this committee</p>'+
+      '<p class="lead">'+num(R.total)+' Senate '+nb(R.total)+' referred to this committee.</p>'+cSplit(R)+cSee(c.code,'referred',R)+
+      '<p class="kicker">Reported by this committee</p>'+
+      '<p class="lead">'+num(P.total)+' Senate '+nb(P.total)+' reported by this committee.</p>'+cSplit(P)+
+      '<p class="why">'+num(W)+' of the reported bills '+(W.v===1?'was':'were')+' not first recorded as referred to this committee. '+
+        'A committee can sometimes report a bill that was not first recorded as referred to that committee, so the reported count does not always have to be a subset of the referred count.</p>'+
+      cSee(c.code,'reported',P)+
+      '<details class="more cb-meaning"><summary><span>What does this mean?</span></summary>'+
+        '<p class="fine">This shows which senators sponsored the bills that moved through this committee. CivicAlign is not deciding whether the bills themselves are liberal or conservative. The groups are based only on the DW-NOMINATE voting score of each bill’s primary sponsor.</p>'+
+        '<p class="fine">These counts do not show why a committee reported or did not report any bill.</p>'+
+      '</details>'+
+      '<p class="why">From the official bill-status records (latest retrieved '+esc(CM.latest_archive_retrieved)+'); rule '+esc(CM.classification_rule.join(', '))+'. Select any number for its methodology.</p></div>';
   }
   function renderCommittee(code){
     var c=P6.committees.filter(function(x){return x.code===code})[0]; if(!c) return;

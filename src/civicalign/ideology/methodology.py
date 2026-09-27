@@ -17,17 +17,24 @@ Entry fields
                     reference a Pillar 4 anchor from the reference_anchors table (not a result)
                     outcome   a Pillar 5 legislative-outcome count from the saved bill tables
                               (bill_sponsor_classifications, senate_bill_outcomes), not a result
+                    billflow  a Pillar 6 committee bill-flow number from the saved
+                              bill_sponsor_classifications table (bills referred to and
+                              reported by a committee, by sponsor voting position, and
+                              the current sponsor scores shown beside those bills), not a result
     paths           where it sits in a result record's "results"; "*" stands for any
                     senator (Pillar 4) or any committee (Pillar 6); for an outcome, its
-                    place in the page's outcome data ("outcomes.<set>.<count>")
+                    place in the page's outcome data ("outcomes.<set>.<count>"); for a
+                    bill-flow number, its place in the committee bill data
+                    ("committee_bills.<committee or sponsor>.<count>")
     units           what the number is measured in
     decimals        how many decimals to display (None: shown as given, e.g. a count)
     sources         keys of SOURCES
     transformation  what is done to the raw source before the formula
     formula         how the number is calculated
     versions        keys of the result record's "versions" that trace it (for a
-                    reference: the fields of the anchor record that do; for an outcome:
-                    the rules and source fields of the bill records that do)
+                    reference: the fields of the anchor record that do; for an outcome
+                    or bill-flow number: the rules and source fields of the bill records
+                    that do)
     limitations     what the number does not tell you
     not_available   when and why it is NOT_AVAILABLE (None if it always has a value)
     extra_fields    other fields of the quantity shown with it (e.g. a standard error)
@@ -44,7 +51,7 @@ PRIMARY_METHOD = "population_weighted_mean_v1"
 SECONDARY_METHOD = "population_weighted_median_v1"
 VIEWS = ("senator_state", "senate_nation", "committee_senate_nation")
 PLACEMENTS = ("main", "details")
-KINDS = ("quantity", "count", "reference", "outcome")
+KINDS = ("quantity", "count", "reference", "outcome", "billflow")
 
 SOURCES = {
     "voteview": {"name": I.VOTEVIEW, "stored_in": "senator_ideology (reference_anchors for the anchors)",
@@ -119,6 +126,20 @@ SPONSOR_LIMITS = (
 )
 ENACTED_LIMITS = (
     "Enactment also depends on the House and the President, not only on the Senate.",
+)
+BILLFLOW_VERSIONS = ("committee_bill_archive_versions", "classification_rule", "committee_sponsor_score_versions")
+REFERRED_TRANSFORM = ("Each Senate bill's own committee record in the GovInfo bill-status archive: a Senate standing "
+                      "committee (code SS plus two letters) with the committee activity 'Referred To' was referred the bill.")
+REPORTED_TRANSFORM = ("Each Senate bill's own committee record in the GovInfo bill-status archive: a Senate standing "
+                      "committee with the committee activity 'Reported By' or 'Reported Original Measure' reported the bill "
+                      "(sent it to the full Senate). A committee can report a bill that was never recorded as referred to "
+                      "it, for example an original measure the committee wrote itself.")
+BILLFLOW_LIMITS = (
+    "Senate bills (S.) of the Congress only: joint, simple and concurrent resolutions and House bills are not included.",
+    "Standing committees only, and only the full committee's own activities; subcommittee activities are not counted.",
+    "A bill referred to several committees is counted once for each of them.",
+    "These counts say nothing about why a committee reported or did not report any bill.",
+    "The record is refreshed daily from the official bill-status data.",
 )
 
 
@@ -279,6 +300,38 @@ ENTRIES = (
        "The committee median and the national public centre on the senator scale.",
        "committee median - national public centre.", ["committee_membership", "national_public", "bridge"],
        COMMITTEE_LIMITS[:1], not_available=NO_NATIONAL),
+
+    # ---- Pillar 6: bills handled by each committee (sponsor voting position) -----------------------
+    _e("p6.bills_referred_total", "Senate bills referred to this committee", 6, ["committee_senate_nation"], "main", "billflow",
+       ["committee_bills.*.referred.total"], "Senate bills", None, ["billstatus"],
+       REFERRED_TRANSFORM, "count of Senate bills of the Congress referred to the committee; each bill counted once per committee.",
+       BILLFLOW_VERSIONS, BILLFLOW_LIMITS),
+    _e("p6.bills_referred_by_sponsor", "Bills referred to this committee by sponsor voting position", 6,
+       ["committee_senate_nation"], "main", "billflow",
+       [f"committee_bills.*.referred.{c}" for c in SPONSOR_CLASS_KEYS], "Senate bills", None, ["billstatus", "voteview"],
+       REFERRED_TRANSFORM + " " + SPONSOR_TRANSFORM, SPONSOR_FORMULA, BILLFLOW_VERSIONS, SPONSOR_LIMITS + BILLFLOW_LIMITS),
+    _e("p6.bills_reported_total", "Senate bills reported by this committee", 6, ["committee_senate_nation"], "main", "billflow",
+       ["committee_bills.*.reported.total"], "Senate bills", None, ["billstatus"],
+       REPORTED_TRANSFORM, "count of Senate bills of the Congress the committee reported; each bill counted once per committee. "
+       "Not necessarily a subset of the bills referred to it.",
+       BILLFLOW_VERSIONS, BILLFLOW_LIMITS),
+    _e("p6.bills_reported_by_sponsor", "Bills reported by this committee by sponsor voting position", 6,
+       ["committee_senate_nation"], "main", "billflow",
+       [f"committee_bills.*.reported.{c}" for c in SPONSOR_CLASS_KEYS], "Senate bills", None, ["billstatus", "voteview"],
+       REPORTED_TRANSFORM + " " + SPONSOR_TRANSFORM, SPONSOR_FORMULA, BILLFLOW_VERSIONS, SPONSOR_LIMITS + BILLFLOW_LIMITS),
+    _e("p6.bills_reported_without_referral", "Reported bills not first recorded as referred to this committee", 6,
+       ["committee_senate_nation"], "main", "billflow",
+       ["committee_bills.*.reported_without_referral"], "Senate bills", None, ["billstatus"],
+       REPORTED_TRANSFORM, "count of bills the committee reported whose record shows no 'Referred To' activity for that committee.",
+       BILLFLOW_VERSIONS, ("Such a bill is counted as reported and not as referred; nothing is hidden or moved between the two counts.",)
+       + BILLFLOW_LIMITS),
+    _e("p6.bill_sponsor_score", "Sponsor's current voting-record score", 6, ["committee_senate_nation"], "main", "billflow",
+       ["committee_bills.*.sponsor_score"], LEGISLATOR, 3, ["voteview"],
+       "The sponsor's Bioguide id in the bill-status record, matched to the latest verified senator_ideology record for the "
+       "Congress (Voteview HSall_members.csv).", "the sponsor's current nominate_dim1.",
+       ("current_sponsor_score_versions",), SCORE_LIMITS[:3] + (
+           "Describes the senator who sponsored the bill, not the bill.",),
+       not_available="the sponsor has no Voteview score for this Congress yet"),
 )
 REGISTRY = {e["id"]: e for e in ENTRIES}
 
@@ -288,7 +341,7 @@ REGISTRY = {e["id"]: e for e in ENTRIES}
 def normalise(path: str) -> str:
     """A concrete result path with the senator index or committee id replaced by "*"."""
     parts = path.split(".")
-    if len(parts) > 1 and parts[0] in ("pillar4", "pillar6"):
+    if len(parts) > 1 and parts[0] in ("pillar4", "pillar6", "committee_bills"):
         parts[1] = "*"
     return ".".join(parts)
 
@@ -365,7 +418,7 @@ def coverage(record: dict) -> list[str]:
             if e is None or e["kind"] != kind:
                 out.append(f"{kind} {p} has no methodology entry")
     for e in ENTRIES:
-        if e["kind"] in ("reference", "outcome"):      # not result-record numbers
+        if e["kind"] in ("reference", "outcome", "billflow"):      # not result-record numbers
             continue
         for p in e["paths"]:
             if p not in found:

@@ -9,6 +9,9 @@ Reads only
     official committee names          data/ideology/committee_names.jsonl (congress-legislators committee list)
     Pillar 5 legislative outcomes     data/ideology/bill_sponsor_classifications.jsonl and
                                       senate_bill_outcomes.jsonl (via bill_tallies.passed_senate_tally)
+    Pillar 6 bills per committee      data/ideology/bill_sponsor_classifications.jsonl (via
+                                      bill_tallies.committee_tallies), with each sponsor's current
+                                      score from senator_ideology (bills.current_sponsor_scores)
 and writes the published pages
     demo/senator-check.html            the three views, data embedded
     demo/methodology.html              every registry entry, with this build's versions
@@ -158,11 +161,13 @@ def latest(cfg: Config) -> dict:
     return json.loads(body)
 
 
-def methods_payload(record: dict, anchors: list[dict], outcome_versions: dict) -> dict:
+def methods_payload(record: dict, anchors: list[dict], outcome_versions: dict, billflow_versions: dict) -> dict:
     out = {}
     for e in M.ENTRIES:
         if e["kind"] == "outcome":
             versions = [l for k in e["versions"] for l in version_lines(outcome_versions[k], f"{k.replace('_', ' ')} \u2014 ")]
+        elif e["kind"] == "billflow":
+            versions = [l for k in e["versions"] for l in version_lines(billflow_versions[k], f"{k.replace('_', ' ')} \u2014 ")]
         elif e["kind"] == "reference":
             versions = [f"{a['display_name']}: " + "; ".join(version_lines({k: a[k] for k in e["versions"]})) for a in anchors]
         else:
@@ -228,6 +233,85 @@ def outcomes_payload(cfg: Config) -> tuple[dict, dict]:
     return data, versions
 
 
+BILLFLOW_PARTS = ("referred", "reported")
+
+
+def committee_bills_payload(cfg: Config, codes) -> tuple[dict, dict, dict, dict, dict]:
+    """Pillar 6 "Bills handled by this committee" from the saved bill_sponsor_classifications
+    table, through bill_tallies.committee_tallies():
+
+    per committee   bills referred and bills reported, each split by sponsor voting position,
+                    and the reported bills with no referral to that committee; every count
+                    carries its exact bill ids. Referred and reported are separate lists: a
+                    committee can report a bill never recorded as referred to it, so reported
+                    is not assumed to be a subset of referred.
+    bills           each counted bill (for "See bills"): number, title, sponsor, sponsor class
+                    and, per committee, the dates of its "Referred To" and "Reported" activities
+    sponsors        each sponsor's CURRENT score, read only from senator_ideology
+    meta, versions  the input versions and rules behind the counts
+
+    Returns (per_committee, bills, sponsors, meta, versions)."""
+    cls = BL.current(cfg)
+    if not cls:
+        raise BuildError("no saved bill classifications: run python -m civicalign.ideology.bills")
+    tallies = BT.committee_tallies(cls)
+    stray = sorted(set(tallies) - set(codes))
+    if stray:
+        raise BuildError(f"bills name standing committees with no Pillar 6 result: {stray}")
+    empty = BT.by_classification([])
+
+    def count(path, ids):
+        n = number(path, {"value": len(ids), "status": "AVAILABLE", "units": "Senate bills", "reason": None})
+        return {**n, "ids": list(ids)}
+
+    per, counted = {}, set()
+    for code in sorted(codes):
+        slots = tallies.get(code, {})
+        entry = {}
+        for part in BILLFLOW_PARTS + ("reported_without_referral",):
+            tally = slots.get(part, empty)
+            probs = BT.trace_problems(tally)
+            if probs:
+                raise BuildError(f"{code} {part} does not trace to its bill ids: {probs}")
+            counted |= set(tally["bill_ids"])
+            if part == "reported_without_referral":
+                entry[part] = count(f"committee_bills.{code}.{part}", tally["bill_ids"])
+            else:
+                entry[part] = {"total": count(f"committee_bills.{code}.{part}.total", tally["bill_ids"]),
+                               **{k: count(f"committee_bills.{code}.{part}.{k}", tally["by_classification"][k]["bill_ids"])
+                                  for k in SPONSOR_KEYS}}
+        per[code] = entry
+    by = {r["bill_id"]: r for r in cls}
+    bills = {}
+    for b in sorted(counted, key=BT._order):
+        r = by[b]
+        acts = {c["committee_id"]: [(c["referred_date"] or "date not recorded")[:10] if c["referred"] else None,
+                                    (c["reported_date"] or "date not recorded")[:10] if c["reported"] else None]
+                for c in r["referred_committees"] if c["referred"] or c["reported"]}
+        bills[b] = {"n": r["bill_number"], "t": r["title"], "sp": r["sponsor_bioguide_id"], "sn": r["primary_sponsor_name"],
+                    "c": r["sponsor_classification"], "a": acts}
+    now = BL.current_sponsor_scores(cfg)       # a sponsor's exact current score comes only from senator_ideology
+    sponsors = {}
+    for bg in sorted({x["sp"] for x in bills.values() if x["sp"]}):
+        cur = now.get(bg)
+        q = ({"value": cur["score"], "status": "AVAILABLE", "units": M.LEGISLATOR, "reason": None} if cur and cur["score"] is not None
+             else {"value": None, "status": "NOT_AVAILABLE", "units": M.LEGISLATOR,
+                   "reason": M.REGISTRY["p6.bill_sponsor_score"]["not_available"]})
+        sponsors[bg] = {"score": number(f"committee_bills.{bg}.sponsor_score", q),
+                        "version": short(cur["source_version"]) if cur else None}
+    rows = [by[b] for b in bills]
+    archive = sorted({(r["source_version"], r["retrieved_at"]) for r in rows}, key=lambda x: x[1])
+    versions = {
+        "committee_bill_archive_versions": [{"source_version": v, "retrieved_at": d} for v, d in archive],
+        "classification_rule": sorted({r["classification_rule"] for r in rows}),
+        "committee_sponsor_score_versions": sorted({r["sponsor_score_source_version"] or "none" for r in rows}),
+        "current_sponsor_score_versions": sorted({now[bg]["source_version"] for bg in sponsors if bg in now}),
+    }
+    meta = {"congress": cfg.congress, "input_versions": BO.input_versions(cfg), "classification_rule": versions["classification_rule"],
+            "latest_archive_retrieved": archive[-1][1][:10] if archive else None}
+    return per, bills, sponsors, meta, versions
+
+
 def payload(cfg: Config = DEFAULT) -> dict:
     record = latest(cfg)
     problems = M.problems() + M.coverage(record)
@@ -261,6 +345,9 @@ def payload(cfg: Config = DEFAULT) -> dict:
                   for c, v in p6.items()]
     v = record["versions"]
     outcomes, outcome_versions = outcomes_payload(cfg)
+    flow, flow_bills, flow_sponsors, flow_meta, flow_versions = committee_bills_payload(cfg, p6)
+    for c in committees:
+        c["bills"] = flow[c["code"]]
     return {
         "meta": {"input_key": record["input_key"], "input_key_short": record["input_key"][:8], "congress": v["congress"],
                  "measurement_date": v["measurement_date"], "score_column": v["legislator_model"]["score_column"],
@@ -268,7 +355,7 @@ def payload(cfg: Config = DEFAULT) -> dict:
                  "population": f"{v['population']['vintage']}, {v['population']['measurement_year']}",
                  "committee_observed": v["committee_membership"]["latest_observed_date"],
                  "primary_method": p5["configured_method"], "method_status": primary_label["method_status"]},
-        "methods": methods_payload(record, anchors, outcome_versions),
+        "methods": methods_payload(record, anchors, outcome_versions, flow_versions),
         "p4": {"states": [{"code": st, "name": STATE_NAMES.get(st, st), "senators": sens}
                           for st, sens in sorted(states.items(), key=lambda kv: STATE_NAMES.get(kv[0], kv[0]))],
                "anchors": anchor_rows},
@@ -287,7 +374,8 @@ def payload(cfg: Config = DEFAULT) -> dict:
                "outcomes": outcomes},
         "p6": {"senate_median": number("pillar5.details.chamber_median", p5["details"]["chamber_median"]),
                "national": number("pillar5.national_public", p5["national_public"]),
-               "committees": sorted(committees, key=lambda c: c["name"])},
+               "committees": sorted(committees, key=lambda c: c["name"]),
+               "bills": flow_bills, "sponsors": flow_sponsors, "bill_meta": flow_meta},
     }
 
 
