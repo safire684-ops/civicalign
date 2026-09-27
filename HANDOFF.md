@@ -13,7 +13,8 @@ publishing (26 September 2026: `e6f6428` live on GitHub `main`), and after the
 deterministic bill/sponsor data layer (`c0b592a`, local) and the Pillar 5 outcome
 layer (`5a5dd93`, local), the local Pillar 5 scorecard (`3f54d83`) and the bill
 tables in the daily update (`710a4fc`), after the failed scorecard publish
-attempt, and after the bill-storage fix (`09f8baf`, local). Read all of it before doing
+attempt, after the bill-storage fix (`09f8baf`), and after the Pillar 5
+scorecard went LIVE (27 September 2026, GitHub `main` `8b4be86`). Read all of it before doing
 anything. The repository and this file are the source of truth; older design
 documents, the whitepaper and chat history are not.
 
@@ -34,14 +35,22 @@ Work one step at a time and stop for review after each step.
 
 - Repo: `/Users/sarthakkesavarapu/Desktop/CivicAlign`, remote
   https://github.com/safire684-ops/civicalign
-- **THE LIVE SITE IS STILL THE PREVIOUS RELEASE (`e6f6428` pages, no scorecard).**
-  The scorecard publish attempt pushed `pillars-4-6-rebuild` and fast-forwarded
+- **THE PILLAR 5 SCORECARD IS LIVE (27 September 2026).** `pillars-4-6-rebuild`
+  (`dbafc3f`) was pushed and GitHub `main` fast-forwarded from `92c94ab` (no
+  merge, no force). Workflow run **36322957937** (by hand, on `main`) passed
+  every step: **326 tests passed**, **checker 35/35**, pages built, the bot
+  committed **`8b4be86`** (the final GitHub `main` commit), Pages deployed. The
+  live files (`senator-check.html`, `methodology.html`, `civicalign.css`,
+  `index.html`) matched the verified workflow build byte-for-byte (same SHA-256
+  as the run's uploaded site and as the files on `main`). Local
+  `pillars-4-6-rebuild` was fast-forwarded to `8b4be86`. See "Pillar 5
+  scorecard — LIVE" in section 3.
+- **Earlier failed attempt (26 September 2026):** the first scorecard publish attempt pushed `pillars-4-6-rebuild` and fast-forwarded
   GitHub `main` to `92c94ab`, but the workflow failed (scheduled run
   36250164547 and manual run 36262405658) on tests that pinned values from the
   source data, which had changed. Nothing was committed by the bot and Pages was
   not redeployed. Both causes (pinned tests, bill-table growth) are fixed
-  locally in `09f8baf`; see "Bill-storage fix" in section 3. GitHub `main` and
-  `origin/pillars-4-6-rebuild` are `92c94ab`.
+  in `09f8baf`; see "Bill-storage fix" in section 3.
 - **Earlier publish: `e6f6428` went live on GitHub `main`** (26 September 2026). The
   release branch `pillars-4-6-rebuild` was pushed to GitHub and `main` was
   fast-forwarded to it from `d4a942a` (no merge, no force, local `main` not
@@ -113,8 +122,10 @@ Commits in the Pillars 4–6 release (all on GitHub `main` since publishing; old
 | `db0f16b` | HANDOFF update for the Pillar 5 scorecard. |
 | `710a4fc` | **Daily update refreshes the bill tables** before the pages are built (pushed to GitHub `main` in the failed publish attempt; not live). See section 3. |
 | `92c94ab` | HANDOFF update for the automation (on GitHub `main`; not live). |
-| `09f8baf` | **Bill-storage fix, unpinned real-data tests, fresh deterministic data** (local, not pushed). See section 3. |
-| (next) | This HANDOFF update. |
+| `09f8baf` | **Bill-storage fix, unpinned real-data tests, fresh deterministic data**. See section 3. |
+| `dbafc3f` | HANDOFF update for the bill-storage fix. Pushed; GitHub `main` fast-forwarded to it. |
+| `8b4be86` | `civicalign-bot`: daily update from workflow run 36322957937 (one changed bill record, S4668). **Live.** |
+| (next) | This HANDOFF update (post-publish). |
 
 The working tree of the release branch is clean. The two Stage 3 edits that
 used to sit uncommitted here are preserved on `pillar1-stage3` (and in
@@ -943,8 +954,50 @@ Fixes the two problems behind the failed publish attempt.
   outside its data block. On the methodology page the existing "Versions in
   this build" lists now name two Voteview and two bill-archive versions,
   because bill records keep the version they were built from.
-- **The live site is still the previous release** (the `e6f6428` pages) because
-  the last deployment failed.
+- The live site stayed on the previous release until the scorecard was
+  published on 27 September 2026 (next subsection).
+
+### Pillar 5 scorecard — LIVE (27 September 2026, GitHub `main` `8b4be86`)
+
+- **Published workflow**: run **36322957937**, **326 tests passed**,
+  **checker 35/35**, final GitHub `main` commit **`8b4be86`**; the live files
+  matched the verified workflow build byte-for-byte.
+- **Current live values** (result record `e0f5b6d9…`):
+  - Senate averages: plain mean **0.12008**; population-weighted mean
+    **0.08487**; difference **+0.03521**
+  - Passed Senate: **192** total = **72** liberal-side sponsors, **120**
+    conservative-side sponsors, **0** zero-score, **0** unknown
+  - Enacted: **41** total = **5** liberal-side sponsors, **36**
+    conservative-side sponsors; **37** with public-law numbers; **4**
+    signed/enacted with public-law numbers pending (S550, S603, S759, S790)
+- **The scorecard classifications describe the sponsor's voting position, not
+  the bill's ideology.** The live page has no "liberal bills" or "conservative
+  bills" wording, and its only use of "caused" is the approved sentence saying
+  the counts do not show causation.
+- **No LLM is used** anywhere in bill classification or outcomes.
+- **The daily automation now refreshes and verifies both bill tables**
+  (classifications, then outcomes, then `bill_outcomes --verify`) before
+  computing, building, testing and checking.
+- **Current exact sponsor scores come from `senator_ideology`** (all 192 bills
+  on the live page checked).
+- **Pillars 4 and 6 remained unchanged**: their page data is identical to the
+  locally tested build, the page outside its data is identical to the previous
+  release, and both tabs render (three reference figures, 16 committees, no
+  console errors).
+- **S4668 was the only bill updated in the publish workflow** (its official
+  bill-status record changed; one new version in each bill table). It did not
+  pass the Senate, so it did not affect any count. Voteview was unchanged in
+  that run, so no senator versions and no new result record.
+- **Checked on the live page**: the scorecard is visible under "Senate /
+  Nation"; all four "See bills" lists open (72, 120, 5, 36 bills); the
+  methodology opens for all 12 scorecard numbers; no preview banner; the page's
+  input fingerprints match the tables in `8b4be86`.
+- **Expected methodology-page behaviour**: its "Versions in this build" lists
+  name the source versions actually used by the counted bills (two Voteview
+  and two bill-archive versions). The newest bill archive (the one that changed
+  only S4668) is not listed there because no counted bill came from it; it is
+  still recorded in the page's input provenance
+  (`p5.outcomes.meta.input_versions.bill_status_archive`).
 
 ## 4. Current real numbers (record `e0f5b6d9…`, measured 2026-09-27, nominate_dim1, 100 active senators)
 
@@ -1117,21 +1170,16 @@ report and whitepaper against newer bill archives); after Step 5A, 321 passed,
 
 ## 9. Next step
 
-The Pillar 5 scorecard and its automation are built; the bill-storage fix is
-committed locally (`09f8baf`). The live site still shows the previous release.
-Open items, each only when the user asks:
+The Pillar 5 scorecard is LIVE (GitHub `main` `8b4be86`), with its automation
+and independent checker. Open items, each only when the user asks:
 
-1. **New publish attempt, only with the user's approval**: push
-   `pillars-4-6-rebuild` and fast-forward GitHub `main` if it is still
-   `92c94ab`, run the workflow once, check the live scorecard against the local
-   build.
-2. Wire the bill layer into the daily update and add an independent supervisor
-   recount of the classifications and tallies before anything is displayed.
-3. Pillar 6 bill-flow UI, only when the user asks (the committee tallies exist).
-4. Push `c0b592a` and this HANDOFF update when the user approves.
-5. Optional: republish the claude.ai copies of the page and the methodology
+1. Pillar 6 bill-flow UI, only when the user asks (the committee tallies exist).
+   Do not start it without the user.
+2. Plan for bill-table growth: `bill_sponsor_classifications.jsonl` grows about
+   155 KB a day at the current rate; GitHub rejects files over 100 MB.
+3. Optional: republish the claude.ai copies of the page and the methodology
    (section 12), which still show the old product.
-6. Future work in sections 7 and 8 (bridge, national estimate) needs the
+4. Future work in sections 7 and 8 (bridge, national estimate) needs the
    user's direction first.
 
 The Pillar 5 plain-language card is done; do not change its wording without the
