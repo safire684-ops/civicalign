@@ -16,7 +16,8 @@ tables in the daily update (`710a4fc`), after the failed scorecard publish
 attempt, after the bill-storage fix (`09f8baf`), and after the Pillar 5
 scorecard went LIVE (27 September 2026, GitHub `main` `8b4be86`), and after the
 Pillar 6 committee bill-flow section went LIVE (27 September 2026, GitHub `main`
-`4a3893f`). **The Pillars 4–6 rebuild is LIVE / COMPLETE FOR CURRENT DEMO.** Read all of it before doing
+`4a3893f`). **The Pillars 4–6 rebuild is LIVE / COMPLETE FOR CURRENT DEMO.** Updated again
+after the major UI/UX redesign was completed locally (`7be8b01`, **not live**). Read all of it before doing
 anything. The repository and this file are the source of truth; older design
 documents, the whitepaper and chat history are not.
 
@@ -26,7 +27,8 @@ documents, the whitepaper and chat history are not.
 
 Do NOT restart the project, redesign Steps 1–4, change the
 three reference anchors, switch away from DW-NOMINATE
-(`nominate_dim1`), revive the retired 0–100 display, or bring back any retired
+(`nominate_dim1`), revive a 0–100 score or grade (the approved 0–100 display
+position is presentation only; see section 5, rule 7), or bring back any retired
 method (section 5) unless the user explicitly asks. Do not touch Engine A while
 working on Engine B. Do not push, merge or deploy without the user's approval.
 Work one step at a time and stop for review after each step.
@@ -35,6 +37,9 @@ Work one step at a time and stop for review after each step.
 
 ## 1. Current branch and repository state
 
+- **UI/UX REDESIGN: COMPLETE LOCALLY, NOT LIVE** (`7be8b01` on
+  `pillars-4-6-rebuild`, not pushed). The live site is still the previous page
+  design (GitHub `main` `e0139b1`). See "UI/UX redesign" in section 3.
 - **PILLARS 4–6 REBUILD: LIVE / COMPLETE FOR CURRENT DEMO.**
 - **PILLAR 6 COMMITTEE BILL-FLOW IS LIVE (27 September 2026).** Final GitHub
   `main` commit **`4a3893f`** (= `pillars-4-6-rebuild`, fast-forwarded from
@@ -138,7 +143,11 @@ Commits in the Pillars 4–6 release (all on GitHub `main` since publishing; old
 | `22c68b5` | HANDOFF update (post-publish). Pushed; GitHub `main` fast-forwarded to it (HANDOFF only). |
 | `4889fe0` | **Pillar 6 committee bill-flow section** (local, not pushed, not live). See section 3. |
 | `4a3893f` | HANDOFF update for the local Pillar 6 section. Pushed; GitHub `main` fast-forwarded to it. **Live** (run 36332082042). |
-| (next) | This HANDOFF update (Pillars 4–6 release complete) and README facts (Pillar 5 and 6 bill counts, daily chain). |
+| `3e81839` | README facts: Pillar 5 and 6 bill counts live; daily chain includes the bill tables. Pushed. |
+| `cfe712a` | HANDOFF: Pillars 4–6 complete for current demo. Pushed. |
+| `e0139b1` | METHODOLOGY.md and docs/ENGINE_B_DATA_FLOW.md describe the live bill counts and daily chain. Pushed; GitHub `main`. |
+| `7be8b01` | **UI/UX redesign** (local, not pushed, not live). See section 3. |
+| (next) | This HANDOFF update. |
 
 The working tree of the release branch is clean. The two Stage 3 edits that
 used to sit uncommitted here are preserved on `pillar1-stage3` (and in
@@ -1099,6 +1108,76 @@ Fixes the two problems behind the failed publish attempt.
   for every listed bill), but automated checking of the destination pages was
   blocked by Congress.gov's bot protection.
 
+### UI/UX redesign — COMPLETE LOCALLY, NOT LIVE (`7be8b01`)
+
+A major redesign of `senator-check.html` for average voters, approved by the
+user after two rounds of screenshot review (desktop 1440px, tablet 768px,
+phone 375px). **No data, calculation or automation change.**
+
+- **One scrolling page**: Choose your state → Your senators → What the Senate
+  passed → The Senate as a whole → Committees → What we can't measure yet → How
+  CivicAlign works / Sources and versions. Sticky navigation (Your senators ·
+  Senate · Committees · How it works); under 600px it folds into a **"Jump to"**
+  menu. URL state is shareable (`?state=VT&committee=SSVA#committees`; old
+  `#senator-state` / `#senate-nation` links still land).
+- **No default state**: the page opens with "Where do your senators stand?",
+  "Choose your state to begin." and a placeholder; senator cards appear only
+  after a state is chosen. No committee is preselected either.
+- **State picker and search** (senators, states, committees; accent-insensitive,
+  state codes; keyboard combobox), all from the page's own embedded data.
+- **Human-friendly 0–100 display position, for Voteview only**: display position
+  = (`nominate_dim1` + 1) × 50 on a line from 0 (liberal side) to 100
+  (conservative side). **Presentation only** (`ideology/display.py`, imported by
+  no calculation): every calculation still uses the raw Voteview values, which
+  stay under "How is this calculated?". **No "/100", no grade, rating, ranking
+  or alignment score**; 50 is Voteview's zero point only; **public-opinion
+  survey estimates are never placed on this scale**.
+- **Simplified senator cards**: name, party · state, side label ("Liberal side of
+  the voting scale"), the line with one small position number and grey Sanders /
+  Biden / Vance ticks, "Based on how [name] has voted in Congress."
+- **Simplified Senate view**: "What the Senate passed" shows only passed (192)
+  and became law (41) by default; the sponsor split is behind "Explore the
+  bills". "The Senate as a whole" shows one marker and "The Senate sits on the
+  conservative side of the voting scale. Weighting senators by state population
+  moves it slightly toward the liberal side." — no headline number.
+- **Simplified committee view**: a ring (Senate midpoint) and a dot (this
+  committee) with a legend and no numbers, a rule-based sentence ("This
+  committee sits to the conservative side of the Senate midpoint."), and
+  "207 Senate bills sent here · 14 sent back to the Senate". Exact positions are
+  in "See details".
+- **Wording rules** (published on the methodology page, re-derived by the
+  checker): `display_position_v1`, `side_label_v1`,
+  `senate_position_wording_v1` (2 display points), `population_shift_wording_v1`
+  (under 5 points: "slightly"), `committee_comparison_wording_v1` (2 display
+  points), all compared on raw values, never on rounded display numbers.
+- **Progressive disclosure** for technical details: See details, See bills,
+  Explore the bills, How is this calculated?, What we can't measure yet, Sources
+  and versions. All raw values, source versions, rules, fingerprints, bill ids
+  and evidence remain available.
+- **Source/trust lines** under each major answer ("Voteview voting records ·
+  Checked before publishing", "Official GovInfo bill records · …", "Voteview +
+  Census data · …", "Committee rosters, GovInfo bill records + Voteview · …").
+- **"How CivicAlign works"** explains the deterministic pipeline in plain
+  language: public government data, updated daily, checked independently
+  before publishing, no AI used to classify the political data.
+- **Party** (R, D, I) is read at build time from the verified congress-legislators
+  roster (only if its bytes match the snapshot), and its version is recorded in
+  the page's provenance (`meta.identity_source`). It is **not** stored in
+  `senator_ideology`.
+- Accessibility (combobox, disclosure buttons with `aria-expanded`, 44px tap
+  targets, skip link, live region, focus rings), reduced-motion support,
+  light/dark themes, one neutral ochre accent (no party or good/bad colours).
+- **The checker adds 4 independent checks** (42 in all): every display position
+  equals (score + 1) × 50; no survey estimate carries one; every side label and
+  sentence follows its rule; every party label matches the verified roster.
+- **The daily update is unchanged** (same schedule, same chain).
+- **Tests: 411 passed, 0 failed** (Python 3.12). **Checker: 42/42.** Result
+  record `e0f5b6d9…` unchanged; Pillar 5 (192 passed, 41 enacted) and Pillar 6
+  (5,387 referrals, 403 reports, 15 reported without referral) counts unchanged.
+- Page size: `senator-check.html` 1,411,283 → about 1.45 MB (+2.5%).
+- Review screenshots were saved locally in `review-screenshots/` (not committed).
+- **The redesign is NOT live yet.** Publishing needs the user's approval.
+
 ## 4. Current real numbers (record `e0f5b6d9…`, measured 2026-09-27, nominate_dim1, 100 active senators)
 
 **Pillar 5 — main comparison (PRIMARY method `population_weighted_mean_v1`)**
@@ -1166,7 +1245,13 @@ AIP units). Distance NOT_AVAILABLE for all.
    methodology/details. Both stay labelled candidate, not final.
 5. Committee drift is committee median − Senate median. Do not change it.
 6. `nominate_dim1` is the default score; `nokken_poole_dim1` is stored only.
-7. No arbitrary 0–100 representation score and no 0–100 display of any score.
+7. No 0–100 score, grade, rating or rank of anything. Since the UX redesign
+   (approved 2026-09-27) the page shows Voteview positions as a **display
+   position**, (`nominate_dim1` + 1) × 50, on a 0 (liberal side) to 100
+   (conservative side) line: presentation only, never "/100", never applied to
+   survey estimates, 50 = Voteview's zero point only (never "middle",
+   "moderate" or "centre"), and the raw value always available under "How is
+   this calculated?". Calculations use `nominate_dim1` unchanged.
 8. No politically evaluative labels (good/bad, aligned/misaligned as a grade,
    extreme, moderate, biased, fringe, representative score), no rankings of
    politicians, and no causal claims (gatekeeping, obstruction, why a bill failed).
@@ -1185,7 +1270,7 @@ AIP units). Distance NOT_AVAILABLE for all.
 Retired and not to be revived (their code was removed in Step 5B): the caucus-group peer comparison (`peers.py`), seats vs. nation
 (`representation.py`, including the retired regression used for diagnostics
 only), committee bill flow and Yes/No-split analysis (`gatekeeping.py`,
-`output_ideology.py`), `landmarks.py`, and the shared 0–100 display. Also
+`output_ideology.py`), `landmarks.py`, and the shared 0–100 score display. Also
 retired long ago and never to return: senator-minus-voter subtraction,
 alignment scores, defiance/betrayal language, politician rankings.
 
@@ -1194,6 +1279,8 @@ alignment scores, defiance/betrayal language, politician rankings.
 ## 6. Test status
 
 Run: `./.venv/bin/python -m pytest -q` (Python 3.14 venv; CI uses 3.12).
+
+**After the UI/UX redesign (`7be8b01`): 411 passed, 0 failed** (Python 3.12); checker 42/42.
 
 **Pillar 6 publication (run 36332082042, `4a3893f`): 349 passed, 0 failed; checker 38/38.**
 
@@ -1276,12 +1363,15 @@ report and whitepaper against newer bill archives); after Step 5A, 321 passed,
 ## 9. Next step
 
 **The Pillars 4–6 rebuild is LIVE / COMPLETE FOR CURRENT DEMO** (GitHub `main`
-`4a3893f`): the Pillar 5 scorecard and the Pillar 6 committee bill-flow section
-are live, with the daily automation and the independent checker. No feature is
-in progress. Open items, each only when the user asks:
+`e0139b1`): the Pillar 5 scorecard and the Pillar 6 committee bill-flow section
+are live, with the daily automation and the independent checker. The UI/UX
+redesign is complete locally (`7be8b01`) and **not live**. Open items, each only
+when the user asks:
 
-1. METHODOLOGY.md and docs/ENGINE_B_DATA_FLOW.md do not yet describe the
-   Pillar 5 and Pillar 6 bill counts or the bill-table steps (README does).
+1. **Publish the redesign, only with the user's approval**: push
+   `pillars-4-6-rebuild`, fast-forward GitHub `main` if it is still `e0139b1`,
+   run the workflow once, and check the live page against the workflow build at
+   desktop and phone widths.
 2. Plan for bill-table growth: `bill_sponsor_classifications.jsonl` grows about
    155 KB a day at the current rate; GitHub rejects files over 100 MB.
 3. Optional: republish the claude.ai copies of the page and the methodology
