@@ -41,7 +41,8 @@ def test_describes_the_current_product():
                    "weighted by the population they represent", "candidate method, not a final scientific standard",
                    "secondary comparison, shown only in details", "the national public estimate is **unresolved**",
                    "committee median minus the senate median", "committees-current.json", "append-only",
-                   "rebuilds daily", "the supervisor", "no 0–100", "stage 3", "not part of this release", "one development run was stopped",
+                   "rebuilds daily", "the supervisor", "no 0–100 score", "display position", "never a score, grade, rating or rank",
+                   "never written as \"/100\"", "survey estimates are never placed on this line", "stage 3", "not part of this release", "one development run was stopped",
                    "no generated explanation is currently published", "in the daily automated update"):
         assert phrase.lower() in LOW, phrase
     assert "does not rank politicians" in LOW and "does not claim to measure whether a senator represents their voters" in LOW

@@ -76,6 +76,10 @@ def test_supervisor_confirms_every_figure():
                      "Engine B: Pillar 6 committee bill counts recounted from the bill-status archive",
                      "Engine B: every committee bill list matches its bill's sponsor, action dates and current Voteview score",
                      "Engine B: committee bill counts use the current, verified input versions",
+                     "Engine B: every display position equals (Voteview score + 1) × 50",
+                     "Engine B: no survey estimate is shown on the display scale",
+                     "Engine B: every side label and sentence follows its published wording rule",
+                     "Engine B: party labels match the verified Senate roster",
                      "Pillar 1 bindings re-derived from cached first-party files",
                      "Pillar 1 context and packets re-derived from tracked artefacts"):
         assert required in names_, required
@@ -374,3 +378,71 @@ def test_a_committee_bill_number_without_methodology_is_caught(record, anchors, 
     p = copy.deepcopy(page_data)
     _committee(p)["bills"]["referred"]["total"]["m"] = "p6.committee_median"
     assert failed(S.eb_methodology_checks(record, anchors, p, None), "Engine B: every displayed number has methodology")
+
+
+# ---- presentation: display positions, wording, party --------------------------------------------------------------
+
+POSITIONS = "Engine B: every display position equals (Voteview score + 1) × 50"
+NO_SURVEY = "Engine B: no survey estimate is shown on the display scale"
+WORDING = "Engine B: every side label and sentence follows its published wording rule"
+PARTY = "Engine B: party labels match the verified Senate roster"
+
+
+def _meth():
+    return (ROOT / "demo" / "methodology.html").read_text()
+
+
+def test_the_presentation_checks_confirm_the_published_page(raw, record, page_data):
+    checks = S.eb_display_checks(DEFAULT, raw, record, page_data, _meth())
+    assert {c.name for c in checks} == {POSITIONS, NO_SURVEY, WORDING, PARTY}
+    assert not [c.line() for c in checks if not c.ok]
+
+
+def test_a_wrong_display_position_is_caught(raw, record, page_data):
+    p = copy.deepcopy(page_data)
+    s = next(x for st in p["p4"]["states"] for x in st["senators"] if x["senator_score"]["v"] is not None)
+    s["senator_score"]["p0"] = str(int(s["senator_score"]["p0"]) + 1)
+    assert failed(S.eb_display_checks(DEFAULT, raw, record, p, _meth()), POSITIONS)
+    p = copy.deepcopy(page_data)
+    p["p6"]["committees"][0]["committee_senate_drift"]["pts"] = "9.9"
+    assert failed(S.eb_display_checks(DEFAULT, raw, record, p, _meth()), POSITIONS)
+    p = copy.deepcopy(page_data)
+    b = next(iter(p["p5"]["outcomes"]["bills"]))
+    p["p5"]["outcomes"]["bills"][b]["sponsor_p0"] = "1"
+    assert failed(S.eb_display_checks(DEFAULT, raw, record, p, _meth()), POSITIONS)
+
+
+def test_a_survey_estimate_on_the_display_scale_is_caught(raw, record, page_data):
+    p = copy.deepcopy(page_data)
+    pub = p["p4"]["states"][0]["senators"][0]["state_public_estimate"]
+    pub["p0"] = "59"
+    assert failed(S.eb_display_checks(DEFAULT, raw, record, p, _meth()), NO_SURVEY)
+
+
+def test_wrong_wording_is_caught(raw, record, page_data):
+    p = copy.deepcopy(page_data)
+    s = next(x for st in p["p4"]["states"] for x in st["senators"] if x["side"])
+    s["side"] = "Liberal side of the voting scale" if s["side"].startswith("Conservative") else "Conservative side of the voting scale"
+    assert failed(S.eb_display_checks(DEFAULT, raw, record, p, _meth()), WORDING)
+    for key, text in (("position", "Taken together, the Senate sits close to Voteview’s zero point."),
+                      ("shift", "Every state gets two senators; if senators from states with more people counted more, the Senate would sit toward the conservative side.")):
+        p = copy.deepcopy(page_data)
+        if p["p5"]["wording"][key] == text:
+            continue
+        p["p5"]["wording"][key] = text
+        assert failed(S.eb_display_checks(DEFAULT, raw, record, p, _meth()), WORDING), key
+    p = copy.deepcopy(page_data)
+    c = p["p6"]["committees"][0]
+    c["sentence"] = "This committee sits close to the Senate midpoint." if "side" in (c["sentence"] or "") else "This committee sits to the liberal side of the Senate midpoint."
+    assert failed(S.eb_display_checks(DEFAULT, raw, record, p, _meth()), WORDING)
+    assert failed(S.eb_display_checks(DEFAULT, raw, record, page_data, "<html></html>"), WORDING), "every rule needs its methodology section"
+
+
+def test_a_wrong_party_or_roster_version_is_caught(raw, record, page_data):
+    p = copy.deepcopy(page_data)
+    s = p["p4"]["states"][0]["senators"][0]
+    s["party"] = "D" if s["party"] != "D" else "R"
+    assert failed(S.eb_display_checks(DEFAULT, raw, record, p, _meth()), PARTY)
+    p = copy.deepcopy(page_data)
+    p["meta"]["identity_source"]["source_sha256"] = "0" * 64
+    assert failed(S.eb_display_checks(DEFAULT, raw, record, p, _meth()), PARTY)

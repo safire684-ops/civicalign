@@ -40,11 +40,26 @@ python3 -m venv .venv && ./.venv/bin/pip install pytest
 
 ## What the site shows (Engine B, Pillars 4–6)
 
-Every number on the page opens its methodology: the raw source, what is done to
-it, the formula, the recorded versions it depends on, and its limits. A number
-without a methodology entry cannot be displayed. Numbers are shown in their own
-units (Voteview's −1 to +1 scale, or the survey's own scale); there is no 0–100
-display of anything.
+The page is one calm scrolling page: choose your state to see your senators,
+then what the Senate passed, the Senate as a whole, and each committee. By
+default each section shows a plain sentence, a position line and at most one or
+two numbers; everything else (raw values, source versions, rules, bill ids,
+evidence) is one or two taps away under "See details", "See bills", "Explore the
+bills" and "How is this calculated?". Every number has a methodology entry, and a
+number without one cannot be displayed.
+
+**The display position.** Voteview positions are shown on a line from 0 (the
+liberal side) to 100 (the conservative side): display position =
+(`nominate_dim1` + 1) × 50. It is presentation only, and every calculation uses
+`nominate_dim1` itself. It is a position, never a score, grade, rating or rank,
+and there is no 0–100 score of anything: higher is not better, it is never
+written as "/100", 50 is Voteview's zero point and nothing more, and the state
+survey estimates are never placed on this line. The raw Voteview value is always
+shown under "How is this calculated?". Side labels ("Conservative side of the
+voting scale") come from the sign of the raw value, and the Senate and committee
+sentences come from fixed, published rules (for example, a committee within 2
+display points of the Senate midpoint "sits close to the Senate midpoint").
+Party labels come from the verified congress-legislators roster.
 
 ### Pillar 4 — senator and state, side by side
 
@@ -111,7 +126,8 @@ peer comparison, the seats-versus-nation election figure and the state-vote
 fit that was used only for diagnostics, the old committee bill-flow shares and
 Yes/No-split analysis (the sponsor-based counts above are a separate, new
 method), landmark bills, the old score that subtracted a voter estimate from a
-senator's score, and any 0–100 display.
+senator's score, and any 0–100 score or grade (the display position above is a
+separate, presentation-only transformation of the Voteview value).
 
 ## Pillar 1 — official vote records (no generated explanations)
 

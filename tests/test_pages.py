@@ -26,6 +26,14 @@ ROOT = Path(__file__).resolve().parents[1]
 TEMPLATE = (ROOT / "src" / "civicalign" / "templates" / "senator-check.template.html").read_text()
 
 
+def _block(name: str) -> str:
+    """One part of the page's script, between its "// ===== <name> =====" marker and the next one."""
+    s = TEMPLATE[TEMPLATE.index("<script>"):]
+    start = s.index(f"// ===== {name} =====")
+    nxt = s.find("// ===== ", start + 10)
+    return s[start:nxt if nxt > 0 else len(s)]
+
+
 @pytest.fixture(scope="module")
 def data():
     try:
@@ -159,12 +167,15 @@ def test_every_registry_entry_reaches_the_page_and_the_methodology(data, pages):
         assert m["sources"] and m["formula"] and m["transformation"] and m["versions"] and m["limitations"]
 
 
-def test_the_page_only_shows_numbers_through_num(pages):
+def test_the_page_only_shows_numbers_from_the_data_with_a_methodology_entry(pages):
     script = TEMPLATE[TEMPLATE.index("<script>"):]
     assert not re.search(r"\d\.\d{2,}", script), "no data value is written into the template"
     assert "throw new Error('number without a methodology entry" in script
-    shown = re.findall(r"esc\((\w+)\.d\)", script)
-    assert set(shown) <= {"n", "md", "sm", "pl", "w", "l", "c"}, shown   # screen-reader text repeats numbers already shown by num()
+    # counts and raw values go through reg() (cnt/rawv/bills); display positions are read as recorded (p0/p1/pts)
+    shown = set(re.findall(r"esc\((\w+(?:\.\w+)*)\.d\)", script))
+    assert shown <= {"reg(n)"}, shown
+    for field in re.findall(r"\.(p0|p1|pts)\b", script):
+        assert field in ("p0", "p1", "pts")
 
 
 def test_the_build_refuses_a_number_without_an_entry(monkeypatch):
@@ -235,37 +246,47 @@ def test_pillar5_main_result_is_the_mean_and_medians_are_details_only(data):
     assert p5["median"]["v"] == pytest.approx(saved["median"], abs=1e-12)
     assert {p5[k]["m"] for k in ("median", "wmedian", "mdiff")} == {"p5.plain_median", "p5.weighted_median", "p5.median_difference"}
     assert p5["national"]["s"] == p5["gap"]["s"] == "NOT_AVAILABLE"
-    # in the page, the medians are rendered only into the details block
-    start = TEMPLATE.index("$('p5-medians')")
-    uses = [m.start() for m in re.finditer(r"P5\.(median|wmedian|mdiff)\b", TEMPLATE)]
-    assert len(uses) == 3 and all(start < u < start + 600 for u in uses)
-    assert '<summary><span>Medians (secondary comparison)</span></summary>\n    <div id="p5-medians">' in TEMPLATE
+    # in the page, the medians appear only inside "How is this calculated?" under the Senate's "See details"
+    s = _block("The Senate as a whole")
+    how = s.index("disc('How is this calculated?'")
+    uses = [m.start() for m in re.finditer(r"P5\.(median|wmedian|mdiff)\b", s)]
+    assert len(uses) == 6 and all(u > how for u in uses)
 
 
 def test_pillar5_plain_language_card():
-    """The approved Pillar 5 wording (2026-09-25): title, three rows, explanation and "What does this mean?"."""
-    start = TEMPLATE.index("// ================= Pillar 5 =================")
-    p5 = TEMPLATE[start:TEMPLATE.index("// ================= Pillar 5: what the Senate actually passed")]
-    for text in ("Counting states vs. weighting by population", "Senate average", "Each senator counted equally",
-                 "Population-weighted", "Difference",
-                 "Every state gets two senators regardless of its population. Normally, each senator counts equally when "
+    """The approved redesign (2026-09-27): one line, one sentence by default; the approved card's wording in details."""
+    s = _block("The Senate as a whole")
+    default = s[s.index("$('whole').innerHTML="):]
+    assert "esc(W.position)" in default and "esc(W.shift)" in default and "disc('See details',details)" in default
+    assert "text:'Senate'" in default and "num:" not in default, "no headline number by default"
+    for text in ("Every state gets two senators regardless of its population. Population weighting gives senators from states "
+                 "with more people more weight.",
+                 "Normally, each senator counts equally when "
                  "calculating the Senate average. If instead senators are weighted by the number of people their state "
-                 "represents, the average changes from '+num(pl)+' to '+num(w)+'.",
-                 "That is a difference of '+num(d)+'. ",
-                 "population weighting moves the Senate average slightly toward the '+side+' side of Voteview’s −1 to +1 voting scale.",
-                 "<summary><span>What does this mean?</span></summary>",
+                 "represents, the average changes from <strong>'+esc(pl.p1)+'</strong> to <strong>'+esc(w.p1)+'</strong>.",
+                 "That is a difference of '+esc(d.pts)+' points. '+esc(W.shift_detail)+'",
+                 "disc('What does this mean?'",
                  "Population weighting gives senators from larger states more weight and senators from smaller states less "
                  "weight. The two senators from the same state split that state’s population weight evenly.",
                  "This describes Senate voting records and state populations only. It does not tell us which laws passed, what "
                  "voters believe, or why Congress made a decision. This weighting method is still a CivicAlign candidate "
                  "method, not a final scientific standard."):
-        assert text in p5, text
-    # the side follows the sign of plain - weighted, so the words cannot contradict the numbers
-    assert "var side=d.v>0?'liberal':'conservative';" in p5
-    # the numbers in the card are the saved Pillar 5 main result, shown through num()
-    assert "num(pl)" in p5 and "num(w)" in p5 and "num(d)" in p5
-    for claim in ("because", "caused", "led to", "resulted in", "bill", "biased", "extreme", "unfair", "fair"):
-        assert not re.search(rf"\b{claim}\b", p5, flags=re.I), claim
+        assert text in s, text
+    for claim in ("because", "caused", "led to", "resulted in", "biased", "extreme", "unfair", "fair"):
+        assert not re.search(rf"\b{claim}\b", s, flags=re.I), claim
+
+
+def test_the_senate_sentences_follow_the_rules(data):
+    from civicalign.ideology import display as DS
+    p5 = data["p5"]
+    assert p5["wording"]["position"] == DS.senate_position_sentence(p5["plain"]["v"])
+    assert p5["wording"]["shift"] == DS.population_shift_sentence(p5["diff"]["v"])
+    assert p5["wording"]["shift_detail"] == DS.shift_detail_sentence(p5["diff"]["v"])
+    assert re.fullmatch(r"The Senate sits (on the (liberal|conservative) side of the voting scale|close to Voteview’s zero point)\.",
+                        p5["wording"]["position"])
+    assert re.fullmatch(r"Weighting senators by state population (moves it (slightly )?toward the (liberal|conservative) side|does not move it)\.",
+                        p5["wording"]["shift"])
+    assert "bigger states" not in json.dumps(p5["wording"])
 
 
 def test_pillar6_uses_only_committee_median_and_senate_drift(data):
@@ -274,7 +295,7 @@ def test_pillar6_uses_only_committee_median_and_senate_drift(data):
     assert {c["code"] for c in cs} == set(saved["committees"]) == set(BP.latest(DEFAULT)["results"]["pillar6"])
     for c in cs:
         assert set(c) == {"code", "name", "official_name", "name_source", "name_retrieved", "listed", "scored", "left_out",
-                          "committee_median", "committee_senate_drift", "committee_public_drift", "bills"}
+                          "committee_median", "committee_senate_drift", "committee_public_drift", "bills", "sentence"}
         assert c["committee_public_drift"]["s"] == "NOT_AVAILABLE"
     for c in cs:     # every committee, recomputed from the saved membership and scores
         med, drift = saved["committees"][c["code"]], saved["committees"][c["code"]] - saved["median"]
@@ -288,15 +309,23 @@ def test_pillar6_uses_only_committee_median_and_senate_drift(data):
 def test_unavailable_values_say_why_on_the_page(data):
     na = [n for n in numbers(data) if n["s"] == "NOT_AVAILABLE"]
     assert na and all(M.REGISTRY[n["m"]]["not_available"] for n in na)
-    assert "function why(n)" in TEMPLATE and "'<p class=\"why\">Why: '" in TEMPLATE
-    assert "row(" in TEMPLATE and "+why(n)+" in TEMPLATE
+    s = _block("How it works")
+    for eid in ("p4.distance", "p5.national_public", "p6.committee_public_drift"):
+        assert f"M['{eid}'].not_available" in s, eid       # "What we can't measure yet" gives each reason
+    assert "esc(on.r||M[on.m].not_available)" in TEMPLATE and "esc(dist.r||M[dist.m].not_available)" in TEMPLATE
 
 
 # ---- what the pages never contain -------------------------------------------------------------------
 
-def test_no_0_100_scale(pages):
+def test_the_display_position_is_never_a_grade(pages):
+    """0-100 appears only as a position on a line: never "/100", never called a score, grade, rating, rank or alignment."""
+    disclaimer = "A position on a line, not a score, grade, rating, rank or alignment."     # the rule saying what it is not
     for name, page in pages.items():
-        assert not re.search(r"\b0\s*(?:-|to|–)\s*100\b|/\s*100\b|display-scale|p100|\*\s*50\s*\+\s*50", page), name
+        text = visible_text(page).replace(disclaimer, "")
+        assert not re.search(r"/\s*100\b|out of 100|percent|%\s*(liberal|conservative)", text, re.I), name
+        assert not re.search(r"\b(grade|graded|rating|rated|alignment score|approval|effectiveness|percentile)\b", text, re.I), name
+    s = TEMPLATE[TEMPLATE.index("<script>"):]
+    assert not re.search(r"score[^'<]{0,24}'\+\s*esc\([\w.]*\.p[01]\)", s), "a display position is never called a score"
 
 
 def test_no_political_judgment_labels(pages):
@@ -418,32 +447,39 @@ def _script():
     return TEMPLATE[TEMPLATE.index("<script>"):]
 
 
-def test_every_drawn_track_is_hidden_from_screen_readers_and_described_in_text():
+def test_every_drawn_line_is_hidden_from_screen_readers_and_described_in_text():
     s = _script()
-    tracks = [m.start() for m in re.finditer(r"class=\"ctrack", s)]
-    assert len(tracks) == 3, "one track per view"
-    for i in tracks:
-        assert s[i:i + 60].count('aria-hidden="true"') == 1, s[i:i + 60]
-    assert s.count('class="sr-only"') >= 3, "each track has a text description"
+    fn = s[s.index("function scale(o)"):s.index("function settle(")]
+    assert '<div class="pline" aria-hidden="true">' in fn and '<figcaption class="sr-only">\'+esc(o.spoken)+\'</figcaption>' in fn
+    assert s.count("scale({") == 4, "senator, Senate (default and details) and committee lines"
+    assert len(re.findall(r"(?<!o\.)\bspoken:", s)) == 4
 
 
 def test_data_strings_are_escaped_before_html_insertion():
     s = _script()
-    # the screen-reader sentences are built as plain text and escaped as a whole where they are inserted
-    for var in re.findall(r"var (spoken)=", s):
-        assert f"esc({var})" in s and f"+{var}+" not in s, "inserted only through esc()"
-        s = re.sub(rf"var {var}=[^;]*;", "", s)
-    raw = re.findall(r"'\+\s*([a-z]\w*(?:\.\w+)*\.(?:name|official_name|name_source|basis|code|period|short|r|reason))\s*\+'", s)
+    # plain-text strings escaped as a whole where they are inserted: screen-reader sentences (esc(o.spoken)),
+    # disclosure labels (esc(label)) and live-region messages (textContent)
+    assert "esc(o.spoken)" in s and "esc(label)" in s and "l.textContent=msg" in s
+    s = re.sub(r"var spoken=[^;]*;", "", s)
+    s = re.sub(r"spoken:'[^']*'(\+[^,}]*)*", "", s)
+    s = re.sub(r"disc\('What about '\+st\.name\+'’s voters\?'", "", s)
+    s = re.sub(r"say\('[^;]*\);", "", s)
+    s = re.sub(r"setAttribute\('aria-label',[^;]*\)", "", s)          # set through the DOM, never parsed as HTML
+    raw = re.findall(r"'\+\s*([a-z]\w*(?:\.\w+)*\.(?:name|official_name|name_source|basis|code|period|short|r|reason|label|title|t|sn|sponsor|side|sentence|party))\s*\+'", s)
     assert not raw, f"inserted without esc(): {raw}"
     assert "function esc(s)" in s and ".replace(/[&<>\"']/g" in s
 
 
-def test_three_views_with_only_the_first_shown_at_load():
-    tabs = re.findall(r'<a href="#([\w-]+)" role="tab"', TEMPLATE)
-    assert tabs == ["senator-state", "senate-nation", "committees"]
-    assert '<a href="methodology.html">Methodology</a>' in TEMPLATE
-    sections = re.findall(r'<section id="([\w-]+)" class="view"[^>]*?( hidden)?>', TEMPLATE)
-    assert sections == [("senator-state", ""), ("senate-nation", " hidden"), ("committees", " hidden")]
+def test_one_scrolling_page_with_simple_navigation():
+    assert 'role="tab"' not in TEMPLATE and "tabpanel" not in TEMPLATE
+    links = [("senators", "Your senators"), ("senate", "Senate"), ("committees", "Committees"), ("how", "How it works")]
+    nav = re.findall(r'<li><a href="#([\w-]+)">([^<]+)</a></li>', TEMPLATE)
+    assert nav == links * 2, "the section links, and the same links in the phone \"Jump to\" menu"
+    assert '<nav aria-label="Sections">' in TEMPLATE and 'id="jump" aria-expanded="false" aria-controls="jump-menu">Jump to' in TEMPLATE
+    assert "@media (max-width:599px){#barchip{display:none!important}.topbar nav{display:none}.jump{display:block}}" in TEMPLATE
+    order = [m.group(1) for m in re.finditer(r'<section id="([\w-]+)" class="sec"', TEMPLATE)]
+    assert order == ["senators", "senate", "senate-whole", "committees", "how"]
+    assert TEMPLATE.index('id="senate"') < TEMPLATE.index('id="senate-whole"'), "what the Senate passed comes before the averages"
 
 
 def test_sources_are_named_with_full_links(pages):
@@ -455,27 +491,31 @@ def test_sources_are_named_with_full_links(pages):
 
 
 def test_survey_period_measurement_date_and_observed_dates_are_shown(data):
-    assert "'Survey period '+esc(pub.period)" in TEMPLATE and "Survey period '+esc(n.period)" in TEMPLATE
-    assert "Measurement date: '+esc(meta.measurement_date)" in TEMPLATE
-    assert "Committee membership observed: '+esc(meta.committee_observed)" in TEMPLATE
+    assert "['Survey period',esc(pub.period||'')]" in TEMPLATE
+    assert "['Measurement date',esc(m.measurement_date)]" in TEMPLATE
+    assert "['Committee membership observed',esc(m.committee_observed)]" in TEMPLATE
     assert data["meta"]["measurement_date"] and data["meta"]["committee_observed"]
     assert all(s["senators"][0]["state_public_estimate"]["period"] for s in data["p4"]["states"])
 
 
 def test_the_two_measurement_systems_are_described_as_separate(pages):
     text = visible_text(pages["senator-check.html"])
-    assert "different measurement system" in text and "never on the senator scale" in text
-    assert "no distance between" in text
+    assert "The survey uses a different measurement from senators’ voting records, so CivicAlign does not put them on the same line or compare them." in text
+    assert "no distance between a senator and the state’s public is calculated" in text
 
 
 def test_nothing_is_ordered_by_score(data):
-    """States and committees are listed by name; senators within a state by the result record's order, never by score."""
+    """States and committees are listed by name, senators within a state by surname; the only sorts in the page
+    place reference labels on the line (by position, for spacing) and rank search matches by relevance."""
     names = [s["name"] for s in data["p4"]["states"]]
     assert names == sorted(names)
     cnames = [c["name"] for c in data["p6"]["committees"]]
     assert cnames == sorted(cnames)
-    assert "sort(function(a,b){return a.score.v-b.score.v})" in _script(), "only the three anchor ticks are placed by score"
-    assert _script().count(".sort(") == 1
+    for s in data["p4"]["states"]:
+        assert [x["short"] for x in s["senators"]] == sorted(x["short"] for x in s["senators"])
+    sorts = re.findall(r"\.sort\(function\(a,b\)\{return ([^}]*)\}\)", _script())
+    assert sorted(sorts) == ["a.x-b.x", "kinds[a.it.kind]-kinds[b.it.kind]||b.rel-a.rel||a.i-b.i"], sorts
+    assert _script().count(".sort(") == 2
 
 
 def test_both_colour_themes_are_defined():
@@ -493,8 +533,7 @@ CLASSES = ("LIBERAL_SPONSOR", "CONSERVATIVE_SPONSOR", "ZERO_SCORE_SPONSOR", "UNK
 
 
 def _outcome_script():
-    s = _script()
-    return s[s.index("// ================= Pillar 5: what the Senate actually passed"):s.index("// ================= Pillar 6")]
+    return _block("What the Senate passed")
 
 
 def test_outcome_counts_come_from_the_saved_tables(data):
@@ -519,7 +558,7 @@ def test_passed_senate_and_enacted_stay_separate(data):
     assert O["passed_senate"]["total"]["p"] != O["enacted"]["total"]["p"]
     assert set(O["enacted"]["total"]["ids"]) <= set(O["passed_senate"]["total"]["ids"])
     s = _outcome_script()
-    assert s.index("Passed the Senate") < s.index("Enacted into law")
+    assert s.index("Passed the Senate") < s.index("Became law")
 
 
 def test_every_outcome_count_traces_to_exact_bill_ids_and_official_actions(data):
@@ -548,30 +587,32 @@ def test_signed_bills_with_a_pending_number_count_as_enacted(data, pages):
     assert recorded["v"] + pending["v"] == O["enacted"]["total"]["v"]
     assert all(O["bills"][b]["enacted"] and O["bills"][b]["pending"] and not O["bills"][b]["law"] for b in pending["ids"])
     s = _outcome_script()
-    assert "were signed by the President and are awaiting public-law numbers." in s
+    assert "were signed by the President and are waiting for one." in s
     assert "enacted: signed by the President" in s
     for phrase in ("not yet law", "not law yet", "not counted as law", "before becoming law", "not been enacted"):
         assert phrase not in visible_text(pages["senator-check.html"]).lower() and phrase not in s.lower(), phrase
 
 
 def test_approved_scorecard_wording():
+    """The redesign: two numbers by default (passed, became law); the sponsor split and approved wording behind "Explore"."""
     s = _outcome_script()
-    for text in ("What the Senate actually passed",
-                 "The Senate’s ideology numbers are abstract. This shows a concrete view of the legislation the Senate approved "
-                 "during the current Congress, grouped by the voting position of each bill’s primary sponsor.",
-                 "Passed the Senate", "Enacted into law", "Sponsor voting position",
-                 "Sponsored by senators on the liberal side of the Voteview scale",
-                 "Sponsored by senators on the conservative side of the Voteview scale",
-                 "' Senate '+bills(P.total)+' passed the Senate.", "' Senate '+bills(E.total)+' enacted.",
-                 "' currently have public-law numbers. '",
+    default = s[s.index("$('passed').innerHTML="):]
+    assert "cnt(P.total)" in default and "cnt(E.total)" in default and "disc('Explore the bills',explorePassed)" in default
+    assert "split(" not in default, "the sponsor breakdown is not on the default view"
+    for text in ("Passed the Senate: who sponsored them", "Became law", "' passed the Senate in the '",
+                 "' become law.", "Grouped by who sponsored each bill, not by what the bill says.",
+                 "' have public-law numbers; '",
                  "CivicAlign is not deciding whether a bill itself is liberal or conservative. Each bill is grouped only by the "
                  "DW-NOMINATE voting score of the senator who sponsored it. A negative sponsor score appears on the liberal side of "
                  "Voteview’s scale; a positive score appears on the conservative side.",
                  "This gives readers a simple way to see the voting positions of the senators whose bills moved through the Senate, "
                  "without using AI to guess the ideology of the legislation.",
                  "These counts do not prove that the Senate’s ideological average caused these bills to pass.",
-                 "See the bills sponsored by senators on the liberal side of the Voteview scale"):
+                 "Becoming law also depends on the House and the President, not only on the Senate."):
         assert text in s, text
+    for text in ("Sponsored by senators on the liberal side of the Voteview scale", "Sponsored by senators on the conservative side of the Voteview scale",
+                 "See the bills sponsored by senators on the liberal side of the Voteview scale"):
+        assert text in _script(), text
 
 
 def test_no_liberal_or_conservative_bills_anywhere(pages):
@@ -612,8 +653,9 @@ def test_every_outcome_number_has_methodology(data, pages):
 
 def test_bill_lists_are_behind_see_bills_not_on_the_main_screen():
     s = _outcome_script()
-    assert "<details class=\"more seebills\"><summary><span>'+esc(g.see)+'</span></summary>'+list(n.ids,enacted)+'</details>" in s
-    assert s.count("list(") == 2, "the bill list is built only inside the See bills sections"
+    assert "return n.v?disc(g.see,function(){return billList(n.ids,outcomeRow(enacted),'bills')}):''" in s
+    assert s.count("billList(") == 1, "the bill list is built only inside the See bills sections, when opened"
+    assert "LISTS[key]={ids:ids,row:row,shown:20" in _script() and "Show more" in _script()
 
 
 def test_the_page_uses_the_latest_bill_table_versions(data):

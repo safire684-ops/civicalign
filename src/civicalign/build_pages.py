@@ -12,6 +12,9 @@ Reads only
     Pillar 6 bills per committee      data/ideology/bill_sponsor_classifications.jsonl (via
                                       bill_tallies.committee_tallies), with each sponsor's current
                                       score from senator_ideology (bills.current_sponsor_scores)
+    each senator's current party      the congress-legislators roster (legislators-current.json), read
+                                      only if its bytes match the verified snapshot; its version is
+                                      recorded in the page's provenance (identity data, not ideology)
 and writes the published pages
     demo/senator-check.html            the three views, data embedded
     demo/methodology.html              every registry entry, with this build's versions
@@ -21,10 +24,19 @@ is a value from the record (or an anchor record), rounded for display to the
 registry's decimals, and carries the id of its registry entry so the page can
 show its methodology. A number whose path has no registry entry stops the build.
 
+Presentation (ideology/display.py, never a calculation input): each value on
+Voteview's scale also carries its display position, (nominate_dim1 + 1) x 50, as
+a whole number (p0) and with one decimal (p1); each difference carries its size in
+display points (pts); senators carry their side label; and the Senate and
+committee sentences are generated here by fixed rules, so the page and the
+supervisor can check every word against the stored numbers. Survey estimates of
+the public never get a display position.
+
 A committee whose code has no official name in committee_names stops the
 build: a name is never guessed.
 
-No Engine A import, no Pillar 1 content, no 0-100 display.
+No Engine A import, no Pillar 1 content. The 0-100 display position is a position
+on a line only: never a score, grade, rating, rank or alignment, never "/100".
 """
 import argparse
 import html
@@ -40,6 +52,8 @@ from .ideology import bill_outcomes as BO
 from .ideology import bill_tallies as BT
 from .ideology import bills as BL
 from .ideology import compute as C
+from .ideology import display as DS
+from .ideology import ingest as I
 from .ideology import methodology as M
 from .ideology.store import Table, sha
 from .sources.population import USPS
@@ -53,6 +67,10 @@ STATE_NAMES = {v: k for k, v in USPS.items()}
 # Differences keep their sign on display.
 SIGNED = {"p5.weighting_difference", "p5.median_difference", "p6.committee_senate_drift",
           "p4.distance", "p5.chamber_public_gap", "p6.committee_public_drift"}
+# Values on Voteview's scale that the page shows as a display position, and differences shown in display points.
+POSITIONS = {"p4.senator_score", "p4.reference_anchor", "p5.plain_mean", "p5.weighted_mean", "p5.plain_median",
+             "p5.weighted_median", "p6.committee_median", "p6.bill_sponsor_score"}
+POINTS = {"p5.weighting_difference", "p5.median_difference", "p6.committee_senate_drift"}
 VIEW_TITLES = {"senator_state": "Senator / State (Pillar 4)", "senate_nation": "Senate / Nation (Pillar 5)",
                "committee_senate_nation": "Committee / Senate / Nation (Pillar 6)"}
 
@@ -125,6 +143,10 @@ def number(path: str, q: dict, entry_id: str | None = None) -> dict:
     e = M.REGISTRY[entry_id] if entry_id else M.entry_for(path)
     out = {"m": e["id"], "p": path, "s": q["status"], "u": q["units"], "r": q.get("reason"), "v": q.get("value")}
     out["d"] = fmt(q["value"], e["decimals"], e["id"] in SIGNED) if q.get("value") is not None else None
+    if out["v"] is not None and e["id"] in POSITIONS:
+        out["p0"], out["p1"] = DS.position_text(out["v"], 0), DS.position_text(out["v"], 1)
+    if out["v"] is not None and e["id"] in POINTS:
+        out["pts"] = DS.points_text(out["v"])
     if "standard_error" in q:
         out["se"] = fmt(q["standard_error"], e["decimals"])
     if "survey_period" in q:
@@ -218,6 +240,8 @@ def outcomes_payload(cfg: Config) -> tuple[dict, dict]:
                             "passed": o["passed_senate_date"], "enacted": o["enacted"], "law": o["public_law_number"],
                             "pending": o["public_law_number_pending"], "signed": o["signed_date"],
                             "sponsor_score": (now.get(c["sponsor_bioguide_id"]) or {}).get("score")}
+        s = data["bills"][b]["sponsor_score"]
+        data["bills"][b]["sponsor_p0"] = DS.position_text(s, 0) if s is not None else None
     counted = [by_c[b] for b in t["passed_senate"]["bill_ids"]] + [by_o[b] for b in t["passed_senate"]["bill_ids"]]
     archive = sorted({(r["source_version"], r["retrieved_at"]) for r in counted}, key=lambda x: x[1])
     versions = {
@@ -312,6 +336,25 @@ def committee_bills_payload(cfg: Config, codes) -> tuple[dict, dict, dict, dict,
     return per, bills, sponsors, meta, versions
 
 
+def identity(cfg: Config) -> tuple[dict[str, str | None], dict]:
+    """Each senator's current party (R, D, I) from the congress-legislators roster, read only if the
+    file on disk is the one the verified snapshot accepted, and that roster's version for the page's
+    provenance. Party is identity data: it is never stored in, or read from, senator_ideology."""
+    try:
+        snap = I.snapshot(cfg)
+        entry = I.source_entry(cfg, snap, cfg.roster_json.name)
+    except I.SnapshotMismatch as err:
+        raise BuildError(f"the roster for party labels cannot be verified: {err}")
+    party = {}
+    for p in json.loads(cfg.roster_json.read_text()):
+        term = p["terms"][-1]
+        if term["type"] == "sen":
+            party[p["id"]["bioguide"]] = DS.party_abbreviation(term.get("party"))
+    source = {"source": I.ROSTER, "source_url": entry["url"], "source_version": str(entry["content_key"]),
+              "source_sha256": entry["sha256"], "retrieved_at": entry["content_changed_utc"]}
+    return party, source
+
+
 def payload(cfg: Config = DEFAULT) -> dict:
     record = latest(cfg)
     problems = M.problems() + M.coverage(record)
@@ -323,12 +366,16 @@ def payload(cfg: Config = DEFAULT) -> dict:
     p5, p6 = res["pillar5"], res["pillar6"]
     states: dict[str, list] = {}
     anchor_names = {a["bioguide_id"]: a["display_name"] for a in anchors}
+    party, identity_source = identity(cfg)
     for i, s in enumerate(res["pillar4"]):
         base = f"pillar4.{i}"
         states.setdefault(s["state"], []).append({
             "id": s["bioguide_id"], "name": anchor_names.get(s["bioguide_id"]) or display_name(s["name"]),
-            "short": surname(s["name"]),
+            "short": surname(s["name"]), "party": party.get(s["bioguide_id"]),
+            "side": DS.side_label(s["senator_score"]["value"]),
             **{k: number(f"{base}.{k}", s[k]) for k in ("senator_score", "state_public_estimate", "state_on_senator_scale", "distance")}})
+    for sens in states.values():          # within a state, by surname: never by position
+        sens.sort(key=lambda x: (x["short"], x["name"]))
     anchor_rows = [{"id": a["anchor_id"], "name": a["display_name"], "short": a["display_name"].split()[-1],
                     "basis": en_dash_years(a["record_basis"]), "bioguide": a["bioguide_id"],
                     "score": number(f"reference_anchors.{a['anchor_id']}.nominate_dim1",
@@ -341,7 +388,8 @@ def payload(cfg: Config = DEFAULT) -> dict:
                    "name_source": names[c]["source"], "name_retrieved": names[c]["retrieved_at"][:10],
                    "listed": count(f"pillar6.{c}.members_listed", v["members_listed"]),
                    "scored": count(f"pillar6.{c}.members_scored", v["members_scored"]), "left_out": v["members_left_out"],
-                   **{k: number(f"pillar6.{c}.{k}", v[k]) for k in ("committee_median", "committee_senate_drift", "committee_public_drift")}}
+                   **{k: number(f"pillar6.{c}.{k}", v[k]) for k in ("committee_median", "committee_senate_drift", "committee_public_drift")},
+                   "sentence": DS.committee_sentence(v["committee_senate_drift"]["value"])}
                   for c, v in p6.items()]
     v = record["versions"]
     outcomes, outcome_versions = outcomes_payload(cfg)
@@ -354,7 +402,9 @@ def payload(cfg: Config = DEFAULT) -> dict:
                  "aip_wave": v["public_model"]["wave"], "bridge": f"{v['bridge']['bridge_version']} ({v['bridge']['status']})",
                  "population": f"{v['population']['vintage']}, {v['population']['measurement_year']}",
                  "committee_observed": v["committee_membership"]["latest_observed_date"],
-                 "primary_method": p5["configured_method"], "method_status": primary_label["method_status"]},
+                 "primary_method": p5["configured_method"], "method_status": primary_label["method_status"],
+                 "identity_source": identity_source},
+        "display_rules": [{"id": rid, "label": label, "rule": rule, "limits": list(limits)} for rid, label, rule, limits in DS.RULES],
         "methods": methods_payload(record, anchors, outcome_versions, flow_versions),
         "p4": {"states": [{"code": st, "name": STATE_NAMES.get(st, st), "senators": sens}
                           for st, sens in sorted(states.items(), key=lambda kv: STATE_NAMES.get(kv[0], kv[0]))],
@@ -371,6 +421,11 @@ def payload(cfg: Config = DEFAULT) -> dict:
                                secondary["population_weighting_difference"]),
                "national": number("pillar5.national_public", p5["national_public"]),
                "gap": number("pillar5.chamber_public_gap", p5["chamber_public_gap"]),
+               "wording": {"position": DS.senate_position_sentence(p5["plain_center"]["value"]),
+                           "shift": DS.population_shift_sentence(p5["population_weighting_difference"]["value"]),
+                           "shift_words": DS.shift_words(p5["population_weighting_difference"]["value"]),
+                           "shift_detail": DS.shift_detail_sentence(p5["population_weighting_difference"]["value"]),
+                           "rules": [DS.SENATE_RULE, DS.SHIFT_RULE]},
                "outcomes": outcomes},
         "p6": {"senate_median": number("pillar5.details.chamber_median", p5["details"]["chamber_median"]),
                "national": number("pillar5.national_public", p5["national_public"]),
@@ -407,13 +462,20 @@ def methodology_html(data: dict) -> str:
                 f'<dt>Formula</dt><dd class="formula">{e(m["formula"])}</dd>'
                 f'<dt>Versions in this build</dt><dd><ul>{"".join(f"<li>{e(s)}</li>" for s in m["versions"])}</ul></dd>'
                 f'<dt>Limitations</dt><dd><ul>{"".join(f"<li>{e(s)}</li>" for s in m["limitations"])}</ul></dd>{na}</dl></section>')
-    anchors = "".join(f'<tr><td>{e(a["name"])}</td><td class="n">{e(a["score"]["d"])}</td><td>{e(a["basis"])}</td></tr>'
-                      for a in data["p4"]["anchors"])
+    anchors = "".join(f'<tr><td>{e(a["name"])}</td><td class="n">{e(a["score"]["d"])}</td><td class="n">{e(a["score"]["p0"])}</td>'
+                      f'<td>{e(a["basis"])}</td></tr>' for a in data["p4"]["anchors"])
+    rules = "".join(f'<section class="entry" id="{e(r["id"])}"><h3>{e(r["label"])} <code>{e(r["id"])}</code></h3><dl>'
+                    f'<dt>Rule</dt><dd class="formula">{e(r["rule"])}</dd>'
+                    f'<dt>Limits</dt><dd><ul>{"".join(f"<li>{e(x)}</li>" for x in r["limits"])}</ul></dd></dl></section>'
+                    for r in data["display_rules"])
     body = (f'<p class="asof">Result record <code>{e(meta["input_key"])}</code> &middot; measurement date '
             f'{e(meta["measurement_date"])} &middot; {e(meta["congress"])}th Congress &middot; score column '
             f'<code>{e(meta["score_column"])}</code> &middot; bridge {e(meta["bridge"])}</p>'
             f'<h2 id="anchors">Pillar 4 reference figures</h2><p>Visual reference points only. They are never an input to '
-            f'any calculation.</p><table class="anchors"><tr><th>Figure</th><th>Score</th><th>Record used</th></tr>{anchors}</table>'
+            f'any calculation.</p><table class="anchors"><tr><th>Figure</th><th>Voteview score</th><th>Display position</th>'
+            f'<th>Record used</th></tr>{anchors}</table>'
+            f'<h2 id="display-rules">How the page presents these numbers</h2><p>These rules only change how a stored number is '
+            f'shown. Every calculation uses the Voteview values themselves.</p>{rules}'
             + "".join(parts))
     return body
 

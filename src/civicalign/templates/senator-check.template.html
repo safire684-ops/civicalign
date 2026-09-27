@@ -3,471 +3,757 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Senate Context Check</title>
-<meta name="description" content="Where senators, the Senate and its committees sit on Voteview's voting-record scale, with the methodology behind every number.">
+<title>Where Your Senators Stand</title>
+<meta name="description" content="Where your senators’ voting records place them, what the Senate has passed, and which bills its committees handle, with the method behind every number.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Public+Sans:wght@400;500;600;700&display=swap">
 <link rel="stylesheet" href="civicalign.css">
 <style>
-/* Pillars 4-6 additions on top of civicalign.css: numbers that open their methodology,
-   reference ticks, stat tiles, not-available rows, the methodology panel. */
-.num{font:inherit;font-weight:700;font-variant-numeric:tabular-nums;color:inherit;background:none;border:0;
-  padding:0 1px;margin:0;cursor:pointer;text-decoration:underline dotted 1.5px;text-underline-offset:3px}
-.num:hover{text-decoration-style:solid}
-.num:focus-visible{outline:3px solid var(--alert);outline-offset:2px;border-radius:2px}
-.na{font-weight:700;color:var(--alert)}
-.why{margin-top:4px;font-size:13.5px;color:var(--muted);max-width:60ch}
-.why .num,.why button{font-size:13px}
-.info{font:inherit;font-size:12px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);
-  background:none;border:1px solid var(--rule);border-radius:3px;padding:2px 8px;cursor:pointer;margin-left:6px;vertical-align:1px}
-.info:hover{color:var(--ink);border-color:var(--muted)}
-.rows{margin-top:14px;border-top:1px solid var(--rule-soft)}
-.rows>div{display:grid;grid-template-columns:1fr auto;gap:4px 16px;padding:10px 0;border-bottom:1px solid var(--rule-soft);font-size:15px}
-.rows .k{color:var(--muted)}
-.rows .v{text-align:right;white-space:nowrap}
-.rows .why{grid-column:1 / -1;margin-top:0}
-.cm .gh .who{font-size:13px;color:var(--muted)}
-.bignum{margin-top:10px;font-size:15px;color:var(--muted)}
-.bignum .num{font-family:var(--serif);font-size:30px;color:var(--ink);letter-spacing:-.01em}
-.ctrack.p4{margin:calc(30px + var(--toprows,1) * 17px) 0 60px}
-.ctrack .tick{position:absolute;left:var(--x);top:50%;transform:translate(-50%,-50%);width:2px;height:22px;background:var(--muted);border-radius:1px;opacity:.85}
-.ctrack .tl{position:absolute;left:var(--x);transform:translateX(-50%);top:calc(-24px - var(--row,0) * 17px);
-  white-space:nowrap;font-size:12px;font-weight:600;color:var(--muted)}
-.ctrack .cmk.mem{--dot:var(--ink)}
-.ctrack .ct.b{--dot:var(--ink)}
-.ctrack .ct.w{top:26px;color:var(--ink);font-weight:700}
-.ctrack .conn,.ctrack .conn.left{background:var(--muted);opacity:.35}
-.cm .ends{gap:12px}.cm .ends span:last-child{text-align:right}
-.cm .scalename{margin-top:16px;font-size:11.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
-.anchorkey{margin-top:14px;display:grid;gap:8px}
-.anchorkey div{font-size:14px;display:grid;grid-template-columns:1fr auto;gap:2px 12px;align-items:baseline;
-  padding-bottom:8px;border-bottom:1px solid var(--rule-soft)}
-.anchorkey b{font-weight:700}
-.anchorkey span{grid-column:1 / -1;color:var(--muted);font-size:13px}
-.statcard{border-left:4px solid var(--muted)}
-.statcard .note{margin-top:10px;font-size:13.5px;color:var(--muted);max-width:60ch}
-.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule);margin-top:14px}
-.tiles div{background:var(--surface);padding:12px 14px}
-.tiles .k{display:block;font-size:12.5px;color:var(--muted)}
-.tiles .v{display:block;margin-top:4px}
-.tiles .v .num{font-family:var(--serif);font-size:26px}
-.explain{margin-top:16px;display:grid;gap:10px;font-size:15.5px;max-width:60ch}
-#p5-meaning,#p5-outcomes-meaning{margin-top:14px}
-#p5-meaning .fine,#p5-outcomes-meaning .fine{font-size:14.5px;color:var(--ink);max-width:60ch}
-#p5-meaning .fine+.fine,#p5-outcomes-meaning .fine+.fine{margin-top:10px}
-.tiles .s{display:block;font-size:12.5px;color:var(--muted);margin-top:2px}
-.status{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;
-  padding:2px 7px;border-radius:3px;border:1px solid var(--rule);color:var(--muted);vertical-align:1px}
-/* Pillar 5: what the Senate actually passed */
-#p5-outcomes .intro{margin-top:10px;font-size:15.5px;max-width:60ch}
-#p5-outcomes .kicker{margin-top:22px}
-#p5-outcomes .lead{margin-top:6px;font-size:16px}
-#p5-outcomes .lead .num{font-family:var(--serif);font-size:24px}
-.split{display:flex;height:14px;border-radius:7px;overflow:hidden;background:var(--rule-soft);margin-top:12px}
+/* One calm scrolling page on top of civicalign.css (its colour tokens give both themes).
+   Positions on a line arrive as --x custom properties. */
+:root{--radius:18px;--bar-h:58px;--accent:#8A5A14;--accent-soft:#F4E9D9}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--accent:#E2A955;--accent-soft:#2C2317}}
+:root[data-theme="dark"]{--accent:#E2A955;--accent-soft:#2C2317}
+html{scroll-padding-top:calc(var(--bar-h) + 14px)}
+@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+body{background:var(--paper)}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+.skip{position:absolute;left:-9999px;top:8px;z-index:40;background:var(--surface);color:var(--ink);padding:10px 14px;border-radius:10px;font-weight:600}
+.skip:focus{left:12px}
+a:focus-visible,button:focus-visible,select:focus-visible,input:focus-visible,[tabindex]:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+
+/* sticky bar */
+.topbar{position:sticky;top:0;z-index:20;background:var(--paper);border-bottom:1px solid var(--rule)}
+@supports (backdrop-filter:blur(8px)){.topbar{background:color-mix(in srgb,var(--paper) 86%,transparent);backdrop-filter:blur(10px)}}
+.barin{max-width:1040px;margin:0 auto;padding:0 12px;display:flex;align-items:center;gap:6px;min-height:var(--bar-h)}
+.brand{font-family:var(--serif);font-weight:700;font-size:18px;color:var(--ink);text-decoration:none;white-space:nowrap;padding:0 6px;
+  min-height:44px;display:flex;align-items:center}
+.topbar nav{flex:1;min-width:0;overflow-x:auto;scrollbar-width:none}
+.topbar nav::-webkit-scrollbar{display:none}
+.topbar nav ul{display:flex;gap:2px;list-style:none;margin:0;padding:0}
+.topbar nav a{display:flex;align-items:center;min-height:44px;padding:0 12px;border-radius:999px;color:var(--muted);text-decoration:none;
+  font-size:14.5px;font-weight:600;white-space:nowrap;transition:background .2s,color .2s}
+.topbar nav a:hover{color:var(--ink)}
+.topbar nav a[aria-current="true"]{color:var(--accent);background:var(--accent-soft)}
+.chip{font:inherit;font-size:14px;font-weight:600;min-height:44px;padding:0 14px;border-radius:999px;border:1px solid var(--rule);
+  background:var(--surface);color:var(--ink);cursor:pointer;white-space:nowrap}
+.chip:hover,.chip[aria-expanded="true"]{border-color:var(--accent);color:var(--accent)}
+/* under 600px the section links fold into one "Jump to" control */
+.jump{display:none;position:relative;margin-left:auto}
+.jumpmenu{position:absolute;right:0;top:calc(100% + 6px);z-index:25;min-width:210px;margin:0;padding:6px;list-style:none;background:var(--surface);
+  border:1px solid var(--rule);border-radius:14px;box-shadow:0 12px 32px rgba(0,0,0,.14)}
+.jumpmenu a{display:flex;align-items:center;min-height:44px;padding:0 12px;border-radius:10px;color:var(--ink);text-decoration:none;font-weight:600}
+.jumpmenu a:hover,.jumpmenu a[aria-current="true"]{background:var(--accent-soft);color:var(--accent)}
+
+/* page */
+.page{max-width:1040px;margin:0 auto;padding:0 16px 80px}
+.hero{padding:40px 0 16px;text-align:center}
+.hero .eyebrow{margin:0 auto}
+.hero h1{margin-top:14px;font-size:clamp(34px,6.4vw,54px);line-height:1.06}
+.lede{margin:12px auto 0;max-width:44ch;color:var(--muted);font-size:18px}
+.choose{margin:22px auto 0;max-width:540px;display:grid;gap:10px;text-align:left}
+select,input[type=search]{font:inherit;font-size:17px;min-height:54px;width:100%;padding:0 16px;border:1px solid var(--rule);
+  border-radius:14px;background:var(--surface);color:var(--ink);appearance:auto}
+select{cursor:pointer}
+select:focus,input[type=search]:focus{border-color:var(--accent)}
+.helper{margin-top:14px;color:var(--muted);font-size:15px;text-align:center}
+.search{position:relative}
+.suggest{position:absolute;left:0;right:0;top:calc(100% + 6px);z-index:15;margin:0;padding:6px;list-style:none;background:var(--surface);
+  border:1px solid var(--rule);border-radius:14px;box-shadow:0 12px 32px rgba(0,0,0,.14);max-height:60vh;overflow:auto}
+.suggest .grp{padding:8px 10px 4px;font-size:11.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.suggest [role=option]{display:flex;justify-content:space-between;gap:10px;align-items:center;min-height:44px;padding:6px 10px;border-radius:10px;cursor:pointer}
+.suggest [role=option] span{color:var(--muted);font-size:13.5px}
+.suggest [role=option][aria-selected="true"],.suggest [role=option]:hover{background:var(--rule-soft)}
+.noresult{margin-top:8px;color:var(--muted);font-size:14.5px}
+
+.sec{padding-top:40px}
+.sechead{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.sec h2{font-size:clamp(23px,3.2vw,29px)}
+.sec .intro{margin-top:8px;color:var(--muted);font-size:16px;max-width:56ch}
+.cards{display:grid;gap:16px;margin-top:18px}
+.pair{display:grid;gap:0}
+@media (min-width:760px){.cards.two{grid-template-columns:1fr 1fr}.pair{grid-template-columns:1fr 1fr;gap:18px}.pair .sec{min-width:0}}
+.box{background:var(--surface);border:1px solid var(--rule);border-radius:var(--radius);padding:22px 20px 12px;margin-top:18px;
+  transition:box-shadow .25s,transform .25s}
+.cards .box{margin-top:0}
+@media (hover:hover){.box:hover{box-shadow:0 10px 30px rgba(0,0,0,.07);transform:translateY(-1px)}}
+.box h3{font-size:23px}
+.ident{margin-top:3px;color:var(--muted);font-size:14.5px}
+.side{margin-top:16px;font-size:18.5px;font-weight:700;line-height:1.3}
+.sentence{margin-top:16px;font-size:16px;max-width:56ch}
+.trust{margin-top:10px;font-size:12.5px;color:var(--muted);letter-spacing:.01em}.trust .nw{white-space:nowrap}
+.placeholder{margin-top:18px;border:1.5px dashed var(--rule);border-radius:var(--radius);padding:30px 20px;text-align:center;color:var(--muted)}
+.heronum{font-family:var(--serif);font-size:60px;font-weight:700;line-height:1;margin-top:6px;font-variant-numeric:tabular-nums}
+.bigsub{margin-top:8px;font-size:17px;max-width:30ch}
+.also{margin-top:10px;font-size:17px;font-weight:600}
+.flowline{margin-top:16px;font-size:16px}
+.flowline b{font-family:var(--serif);font-size:24px;font-variant-numeric:tabular-nums}
+.select-wrap{margin-top:16px;max-width:540px}
+.stamp{margin-top:26px;color:var(--muted);font-size:14px}
+.fade-in{animation:fadein .22s ease}
+@keyframes fadein{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+.flash{animation:flash 1.6s ease}
+@keyframes flash{0%{box-shadow:0 0 0 4px var(--accent)}100%{box-shadow:0 0 0 0 transparent}}
+
+/* the position line */
+.pscale{margin:18px 4px 0}
+.pline{position:relative;height:2px;background:var(--rule);margin:0 10px;border-radius:2px}
+.pscale.up .pline{margin-top:36px}
+.pscale.down .pline{margin-bottom:34px}
+.pline .zero{position:absolute;left:50%;top:-6px;width:1px;height:14px;background:var(--rule)}
+.mk{position:absolute;left:var(--x);top:50%;width:18px;height:18px;margin:-9px 0 0 -9px;border-radius:50%;background:var(--accent);
+  transition:left .5s cubic-bezier(.2,.7,.2,1)}
+.mk.ring{background:var(--surface);border:3px solid var(--ink)}
+.mk.small{width:12px;height:12px;margin:-6px 0 0 -6px}
+.plegend{display:flex;gap:18px;flex-wrap:wrap;margin-top:10px;font-size:13.5px;font-weight:600;color:var(--ink)}
+.plegend span{display:inline-flex;align-items:center;gap:7px}
+.plegend i{display:inline-block;width:14px;height:14px;border-radius:50%}
+.plegend i.solid{background:var(--accent)}.plegend i.ring{background:var(--surface);border:3px solid var(--ink)}
+.mk .lab{position:absolute;left:50%;bottom:calc(100% + 7px);transform:translateX(-50%);white-space:nowrap;font-size:13px;font-weight:700;
+  line-height:1.2;color:var(--ink);font-variant-numeric:tabular-nums}
+.mk .lab small{font-weight:600;color:var(--muted);font-size:12.5px}
+.mk.down .lab{bottom:auto;top:calc(100% + 7px)}
+.mk.l .lab{left:-2px;transform:none}.mk.r .lab{left:auto;right:-2px;transform:none}
+.rt{position:absolute;left:var(--x);top:-5px;width:2px;height:12px;margin-left:-1px;background:var(--muted);opacity:.55}
+.tlabs{position:relative;margin:6px 10px 0;height:calc(var(--rows,1) * 18px)}
+.tlab{position:absolute;left:var(--x);top:calc(var(--row) * 18px);transform:translateX(-50%);font-size:12px;color:var(--muted);white-space:nowrap}
+.tlab.l{transform:none}.tlab.r{transform:translateX(-100%)}
+.scale-ends{display:flex;justify-content:space-between;gap:12px;margin:8px 0 0;font-size:12.5px;font-weight:600;color:var(--muted)}
+
+/* progressive disclosure */
+.disc{margin-top:14px;border-top:1px solid var(--rule-soft)}
+.box>.disc:last-child{margin-bottom:0}
+.box>.disc:first-child{margin-top:0;border-top:0}
+#voters .box{padding-top:4px;padding-bottom:4px}
+.dbtn{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;min-height:48px;padding:8px 0;background:none;border:0;
+  color:var(--ink);font:inherit;font-weight:600;font-size:15.5px;cursor:pointer;text-align:left}
+.dbtn:hover{color:var(--accent)}
+.dbtn i{flex:none;width:9px;height:9px;margin-right:4px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;
+  transform:rotate(45deg);transition:transform .22s}
+.dbtn[aria-expanded="true"] i{transform:rotate(-135deg)}
+.dpanel{overflow:hidden;transition:height .24s ease,opacity .24s ease}
+.din{padding:4px 0 16px;display:grid;gap:12px;font-size:15px}
+.din .disc{margin-top:0}
+.din h4{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:6px 0 0}
+.din p{max-width:62ch}
+.din .muted,.muted{color:var(--muted)}
+.plain-list{margin:0;padding-left:20px;display:grid;gap:8px;max-width:62ch}
+.sec>.disc{background:var(--surface);border:1px solid var(--rule);border-radius:var(--radius);padding:4px 20px;margin-top:12px}
+
+/* sponsor split (in Explore / See bills) */
+.split{display:flex;height:12px;border-radius:6px;overflow:hidden;background:var(--rule-soft)}
 .split .seg{display:block;height:100%;width:var(--w)}
-.split .seg.lib,.splitkey .sw.lib{background:var(--muted)}
-.split .seg.con,.splitkey .sw.con{background:var(--ink)}
-.splitkey{margin-top:12px;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px 18px}
-.splitkey div{display:grid;grid-template-columns:auto 1fr;gap:2px 10px;align-items:baseline}
-.splitkey .sw{display:inline-block;width:12px;height:12px;border-radius:2px;align-self:center}
-.splitkey .big .num{font-family:var(--serif);font-size:24px}
-.splitkey .k{grid-column:1 / -1;font-size:14px;color:var(--muted)}
-.seebills{margin-top:10px}
-.bills{margin:0;padding-left:18px;display:grid;gap:6px;font-size:14px}
-.bills .k{color:var(--muted);font-size:13px}
-.bills a{color:var(--alert);font-weight:600}
-/* Pillar 6: bills handled by this committee */
-.cbills{margin-top:22px;padding-top:6px;border-top:1px solid var(--rule-soft)}
-.cbills .kicker{margin-top:18px}
-.cbills .kicker.head{font-size:13px;color:var(--ink)}
-.cbills .lead{margin-top:6px;font-size:16px}
-.cbills .lead .num{font-family:var(--serif);font-size:24px}
-.cbills .cb-meaning{margin-top:14px}
-.cbills .cb-meaning .fine{font-size:14.5px;color:var(--ink);max-width:60ch}
-.cbills .cb-meaning .fine+.fine{margin-top:10px}
-dialog.method{max-width:640px;width:calc(100% - 32px);max-height:calc(100vh - 48px);border:1px solid var(--rule);border-radius:8px;
-  background:var(--surface);color:var(--ink);padding:0;overflow:auto}
-dialog.method::backdrop{background:rgba(10,12,16,.55)}
-dialog.method .mh{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:18px 20px 0}
-dialog.method h2{font-size:20px}
-dialog.method .close{font:inherit;font-size:14px;font-weight:600;background:none;border:1px solid var(--rule);color:var(--ink);border-radius:4px;padding:6px 12px;cursor:pointer}
-dialog.method .mb{padding:6px 20px 20px}
-dialog.method dl{margin:10px 0 0;display:grid;gap:10px}
-dialog.method dt{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
-dialog.method dd{margin:2px 0 0;font-size:14.5px}
-dialog.method ul{margin:4px 0 0;padding-left:18px;display:grid;gap:4px}
-dialog.method .formula{font-family:var(--mono);font-size:13px;background:var(--rule-soft);padding:8px 10px;border-radius:3px;overflow-x:auto}
-dialog.method .val{font-family:var(--serif);font-size:24px;font-weight:700}
-dialog.method a{color:var(--alert);font-weight:600}
+.split .seg.lib,.key .sw.lib{background:var(--muted)}
+.split .seg.con,.key .sw.con{background:var(--ink)}
+.key{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px 18px}
+.key div{display:grid;grid-template-columns:auto 1fr;gap:2px 10px;align-items:baseline}
+.key .sw{display:inline-block;width:12px;height:12px;border-radius:3px;align-self:center}
+.key b{font-family:var(--serif);font-size:22px;font-variant-numeric:tabular-nums}
+.key span{grid-column:1 / -1;color:var(--muted);font-size:14px}
+
+/* bill lists */
+.blist{display:grid;gap:10px}
+.blist input[type=search]{min-height:44px;font-size:15px;border-radius:10px}
+.bills{margin:0;padding-left:18px;display:grid;gap:8px;font-size:14.5px}
+.bills .meta{color:var(--muted);font-size:13.5px}
+.bills a{color:var(--accent);font-weight:600}
+.morebtn{font:inherit;font-weight:600;min-height:44px;padding:0 16px;border-radius:10px;border:1px solid var(--rule);background:var(--surface);
+  color:var(--ink);cursor:pointer;justify-self:start}
+
+/* "How is this calculated?" */
+.raw{display:grid;grid-template-columns:1fr auto;gap:4px 14px;margin:0;font-size:14.5px}
+.raw dt{color:var(--muted)}.raw dd{margin:0;text-align:right;font-variant-numeric:tabular-nums;font-weight:600}
+.mblock{border:1px solid var(--rule-soft);border-radius:12px;padding:12px 14px;display:grid;gap:6px;font-size:14px}
+.mblock h5{font-size:15px;margin:0;font-family:var(--sans)}
+.mblock .f{font-family:var(--mono);font-size:12.5px;background:var(--rule-soft);padding:6px 8px;border-radius:6px;overflow-x:auto}
+.mblock ul{margin:0;padding-left:18px;display:grid;gap:3px}
+.mblock a,.din a{color:var(--accent);font-weight:600}
+.srclist{margin:0;padding-left:20px;display:grid;gap:6px}
+code{font-family:var(--mono);font-size:.92em;overflow-wrap:anywhere}
+
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
+@media (max-width:420px){.box{padding:20px 16px 10px}.heronum{font-size:52px}.hero{padding-top:32px}}
+@media (max-width:599px){#barchip{display:none!important}.topbar nav{display:none}.jump{display:block}}
 </style>
 </head>
 <body>
-<div class="wrap">
-<header>
-  <p class="eyebrow">CivicAlign &middot; <span id="congress"></span> Congress</p>
-  <h1>Senators, the Senate and its committees, in context</h1>
-  <p class="sub">Where voting records sit on Voteview’s scale compared with a state, the Senate as a
-    whole, and each standing committee. Select any underlined number to see where it comes from.</p>
-  <p class="separate">State public-opinion estimates use a different measurement system and are
-    shown separately, never on the senator scale.</p>
-  <p class="updated" id="updated"></p>
+<a class="skip" href="#senators">Skip to your senators</a>
+<header class="topbar">
+  <div class="barin">
+    <a class="brand" href="#top">CivicAlign</a>
+    <nav aria-label="Sections">
+      <ul>
+        <li><a href="#senators">Your senators</a></li>
+        <li><a href="#senate">Senate</a></li>
+        <li><a href="#committees">Committees</a></li>
+        <li><a href="#how">How it works</a></li>
+      </ul>
+    </nav>
+    <div class="jump">
+      <button type="button" class="chip" id="jump" aria-expanded="false" aria-controls="jump-menu">Jump to <span aria-hidden="true">▾</span></button>
+      <ul class="jumpmenu" id="jump-menu" hidden>
+        <li><a href="#senators">Your senators</a></li>
+        <li><a href="#senate">Senate</a></li>
+        <li><a href="#committees">Committees</a></li>
+        <li><a href="#how">How it works</a></li>
+      </ul>
+    </div>
+    <button type="button" class="chip" id="barchip" hidden></button>
+  </div>
 </header>
 
-<nav class="nav" role="tablist" aria-label="Views">
-  <a href="#senator-state" role="tab" id="tab-senator-state" aria-controls="senator-state" aria-selected="true">Senator / State</a>
-  <a href="#senate-nation" role="tab" id="tab-senate-nation" aria-controls="senate-nation" aria-selected="false" tabindex="-1">Senate / Nation</a>
-  <a href="#committees" role="tab" id="tab-committees" aria-controls="committees" aria-selected="false" tabindex="-1">Committees</a>
-  <a href="methodology.html">Methodology</a>
-</nav>
+<main class="page" id="top">
+  <section class="hero" aria-labelledby="title">
+    <p class="eyebrow">CivicAlign &middot; <span id="congress"></span> Congress</p>
+    <h1 id="title">Where do your senators stand?</h1>
+    <p class="lede">See how your senators vote, what the Senate passed, and which bills committees handle.</p>
+    <div class="choose">
+      <label for="state" class="sr-only">Choose your state</label>
+      <select id="state"><option value="" selected>Choose your state</option></select>
+      <div class="search">
+        <label for="q" class="sr-only">Search a senator, state or committee</label>
+        <input id="q" type="search" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="q-list"
+               autocomplete="off" spellcheck="false" placeholder="Search a senator, state or committee">
+        <ul id="q-list" class="suggest" role="listbox" aria-label="Search results" hidden></ul>
+        <p id="q-empty" class="noresult" hidden>No match. Try a state name, a senator’s last name, or a committee.</p>
+      </div>
+    </div>
+    <p class="helper" id="begin">Choose your state to begin.</p>
+  </section>
 
-<!-- ============ Pillar 4: senator / state ============ -->
-<section id="senator-state" class="view" role="tabpanel" aria-labelledby="tab-senator-state" tabindex="-1">
-  <p class="takeaway" id="take-p4"></p>
-  <div class="picker">
-    <label for="state">State</label>
-    <select id="state"></select>
+  <section id="senators" class="sec" aria-labelledby="h-senators">
+    <div class="sechead"><h2 id="h-senators" tabindex="-1">Your senators</h2><button type="button" class="chip" id="chip" hidden></button></div>
+    <div id="senator-cards"><p class="placeholder">Your two senators will appear here after you choose a state.</p></div>
+    <div id="voters"></div>
+  </section>
+
+  <div class="pair">
+    <section id="senate" class="sec" aria-labelledby="h-passed">
+      <h2 id="h-passed">What the Senate passed</h2>
+      <div class="box" id="passed"></div>
+    </section>
+    <section id="senate-whole" class="sec" aria-labelledby="h-whole">
+      <h2 id="h-whole">The Senate as a whole</h2>
+      <div class="box" id="whole"></div>
+    </section>
   </div>
-  <div id="p4-cards"></div>
-  <div class="cm statcard" id="p4-public"></div>
-  <p class="limit">A senator’s score comes from their recorded Senate votes. The state estimate comes
-    from surveys of the state’s public. They are different measurement systems, so no distance between
-    them is calculated until a validated bridge between the two scales exists.</p>
-  <details class="more">
-    <summary><span>About the three reference figures</span></summary>
-    <div class="anchorkey" id="anchorkey"></div>
-    <ul class="limits-list" id="anchorlimits"></ul>
-  </details>
-</section>
 
-<!-- ============ Pillar 5: Senate / nation ============ -->
-<section id="senate-nation" class="view" role="tabpanel" aria-labelledby="tab-senate-nation" tabindex="-1" hidden>
-  <div class="cm" id="p5-main"></div>
-  <div class="cm statcard" id="p5-nation"></div>
-  <div class="cm" id="p5-outcomes"></div>
-  <details class="more">
-    <summary><span>Medians (secondary comparison)</span></summary>
-    <div id="p5-medians"></div>
-  </details>
-</section>
+  <section id="committees" class="sec" aria-labelledby="h-committees">
+    <h2 id="h-committees">Committees</h2>
+    <p class="intro">Senate committees review bills before the full Senate votes.</p>
+    <div class="select-wrap">
+      <label for="committee" class="sr-only">Choose a committee</label>
+      <select id="committee"><option value="" selected>Choose a committee</option></select>
+    </div>
+    <div id="committee-card"></div>
+  </section>
 
-<!-- ============ Pillar 6: committee / Senate / nation ============ -->
-<section id="committees" class="view" role="tabpanel" aria-labelledby="tab-committees" tabindex="-1" hidden>
-  <p class="takeaway" id="take-p6"></p>
-  <p class="why">Senate standing committees review bills in their subject area. This view describes
-    where each committee’s current members sit compared with the Senate as a whole.</p>
-  <div class="picker">
-    <label for="committee">Committee</label>
-    <select id="committee"></select>
-  </div>
-  <div id="committee-cards"></div>
-  <p class="limit">Descriptive only: where a committee’s members sit says nothing on its own about what
-    the committee did or decided.</p>
-</section>
-
-<footer>
-  <h3>Sources</h3>
-  <ul>
-    <li>Senator scores and reference figures: Voteview (UCLA), member file <code>HSall_members.csv</code>, <code>nominate_dim1</code>.</li>
-    <li>State public estimates: American Ideology Project (Tausanovitch &amp; Warshaw), v2022a, <a href="https://doi.org/10.7910/DVN/BQKU4M">doi:10.7910/DVN/BQKU4M</a>.</li>
-    <li>State populations: U.S. Census Bureau, Vintage 2024 estimates.</li>
-    <li>Committee membership and Senate roster: unitedstates/congress-legislators.</li>
-  </ul>
-  <p><a href="methodology.html">Full methodology for every number</a></p>
-  <p class="asof" id="asof"></p>
-</footer>
-</div>
-
-<dialog class="method" id="method" aria-labelledby="method-title">
-  <div class="mh"><h2 id="method-title"></h2><button type="button" class="close" id="method-close">Close</button></div>
-  <div class="mb" id="method-body"></div>
-</dialog>
+  <section id="how" class="sec" aria-labelledby="h-how">
+    <h2 id="h-how" class="sr-only">How it works</h2>
+    <div class="disc">
+      <button type="button" class="dbtn" aria-expanded="false" aria-controls="cant"><span>What we can’t measure yet</span><i aria-hidden="true"></i></button>
+      <div class="dpanel" id="cant" hidden><div class="din" id="cant-body"></div></div>
+    </div>
+    <div class="disc">
+      <button type="button" class="dbtn" aria-expanded="false" aria-controls="works"><span>How CivicAlign works</span><i aria-hidden="true"></i></button>
+      <div class="dpanel" id="works" hidden><div class="din">
+        <p>CivicAlign collects public government data, checks it independently, and turns it into plain-language explanations.</p>
+        <ul class="plain-list">
+          <li><strong>Where the data comes from:</strong> Voteview (UCLA) for how members of Congress have voted on recorded roll calls; the official GovInfo bill-status records for Senate bills, their sponsors and committee actions; the U.S. Census Bureau for state populations; the American Ideology Project survey for each state’s public; and the public congress-legislators roster for senators, parties and committee membership.</li>
+          <li><strong>Updated daily:</strong> the site refreshes every day from those sources.</li>
+          <li><strong>Checked before publishing:</strong> a separate checker recounts every published number from the source files with its own code. If anything disagrees, nothing is published and the previous version stays up.</li>
+          <li><strong>No AI:</strong> no AI is used to classify the political data. Every group and sentence comes from a fixed, published rule.</li>
+        </ul>
+        <p><a href="methodology.html">Full methodology for every number</a></p>
+      </div></div>
+    </div>
+    <div class="disc">
+      <button type="button" class="dbtn" aria-expanded="false" aria-controls="sources"><span>Sources and versions</span><i aria-hidden="true"></i></button>
+      <div class="dpanel" id="sources" hidden><div class="din">
+        <ul class="srclist">
+          <li>Senators’ positions and the reference figures: Voteview (UCLA), member file <code>HSall_members.csv</code>, <code>nominate_dim1</code>.</li>
+          <li>Bills, their actions, sponsors and committees: GovInfo bill-status bulk data (BILLSTATUS), Senate bills.</li>
+          <li>State public estimates: American Ideology Project (Tausanovitch &amp; Warshaw), v2022a, <a href="https://doi.org/10.7910/DVN/BQKU4M">doi:10.7910/DVN/BQKU4M</a>.</li>
+          <li>State populations: U.S. Census Bureau, Vintage 2024 estimates.</li>
+          <li>Senate roster, party, committee membership and committee names: unitedstates/congress-legislators.</li>
+        </ul>
+        <div id="versions"></div>
+      </div></div>
+    </div>
+    <p class="stamp" id="updated"></p>
+  </section>
+  <p id="live" class="sr-only" aria-live="polite"></p>
+</main>
 
 <!--DATA-->
 <script>
 (function(){
   'use strict';
-  var D=JSON.parse(document.getElementById('data').textContent);
-  var M=D.methods;
   function $(id){return document.getElementById(id)}
+  var D=JSON.parse($('data').textContent);
+  var M=D.methods;
+  var REDUCED=!!(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches);
   function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
-  function pos(x){return Math.max(0,Math.min(100,(x+1)*50))}
 
-  // ---- every number goes through num(): it shows the value and opens its methodology ----
-  var NUMS=[];
-  function reg(n){if(!n||!M[n.m]) throw new Error('number without a methodology entry: '+(n&&n.p)); NUMS.push(n); return NUMS.length-1}
-  function num(n){
-    var i=reg(n);
-    if(n.s==='NOT_AVAILABLE') return '<span class="na">Not available</span><button type="button" class="info" data-i="'+i+'" aria-label="Why is '+esc(M[n.m].label)+' not available?">Why?</button>';
-    var extra=n.s==='PROVISIONAL'?' <span class="status">Provisional</span>':'';
-    return '<button type="button" class="num" data-i="'+i+'" aria-label="'+esc(n.d)+': '+esc(M[n.m].label)+', show methodology">'+esc(n.d)+'</button>'+extra;
+  /* pure:start -- search and URL state, with no DOM access (tested outside the browser) */
+  var SECTIONS=['senators','senate','senate-whole','committees','how'];
+  var ALIASES={'senator-state':'senators','senate-nation':'senate'};
+  function norm(s){return String(s==null?'':s).normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim()}
+  function searchIndex(data){
+    var out=[];
+    data.p4.states.forEach(function(s){
+      s.senators.forEach(function(x){out.push({kind:'senator',label:x.name,sub:(x.party?x.party+' · ':'')+s.name,state:s.code,id:x.id,keys:[norm(x.name),norm(x.short)]})});
+    });
+    data.p4.states.forEach(function(s){out.push({kind:'state',label:s.name,sub:'State',state:s.code,keys:[norm(s.name),norm(s.code)]})});
+    data.p6.committees.forEach(function(c){out.push({kind:'committee',label:c.name,sub:'Committee',committee:c.code,keys:[norm(c.name),norm(c.official_name)]})});
+    return out;
   }
-  function why(n){return n.s==='NOT_AVAILABLE'?'<p class="why">Why: '+esc(M[n.m].not_available||n.r)+'.</p>':''}
-  function row(label,n,note){
-    return '<div><span class="k">'+esc(label)+'</span><span class="v">'+num(n)+(n.se?' <span class="k">± '+num({m:n.m,p:n.p+'.standard_error',s:'AVAILABLE',d:n.se,u:n.u})+' s.e.</span>':'')+'</span>'+why(n)+(note?'<p class="why">'+note+'</p>':'')+'</div>';
+  // best match first within each group (senators, then states, then committees); at most `limit` results
+  function matchSearch(q,index,limit){
+    q=norm(q); if(!q) return [];
+    var kinds={senator:0,state:1,committee:2}, hits=[];
+    index.forEach(function(it,i){
+      var best=-1;
+      it.keys.forEach(function(k){
+        if(k===q) best=Math.max(best,3);
+        else if(k.indexOf(q)===0) best=Math.max(best,2);
+        else if((' '+k).indexOf(' '+q)>=0) best=Math.max(best,1);
+      });
+      if(best>=0) hits.push({rel:best,i:i,it:it});
+    });
+    hits.sort(function(a,b){return kinds[a.it.kind]-kinds[b.it.kind]||b.rel-a.rel||a.i-b.i});
+    return hits.slice(0,limit||8).map(function(h){return h.it});
   }
-  function openMethod(i){
-    var n=NUMS[i], m=M[n.m];
-    $('method-title').textContent=m.label;
-    var list=function(a){return '<ul>'+a.map(function(x){return '<li>'+esc(x)+'</li>'}).join('')+'</ul>'};
-    var value=n.s==='NOT_AVAILABLE'
-      ?'<dt>Status</dt><dd><span class="na">Not available</span></dd><dt>Why</dt><dd>'+esc(n.r||m.not_available)+'</dd>'
-      :'<dt>Value</dt><dd><span class="val">'+esc(n.d)+'</span> <span class="k">'+esc(n.u)+'</span>'+(n.period?'<br><span class="k">Survey period '+esc(n.period)+'</span>':'')+'</dd>';
-    $('method-body').innerHTML='<dl>'+value+
-      '<dt>Raw source</dt><dd>'+list(m.sources)+'</dd>'+
-      '<dt>Transformation</dt><dd>'+esc(m.transformation)+'</dd>'+
-      '<dt>Formula</dt><dd class="formula">'+esc(m.formula)+'</dd>'+
-      '<dt>Versions</dt><dd>'+list(m.versions)+'</dd>'+
-      '<dt>Limitations</dt><dd>'+list(m.limitations)+'</dd>'+
-      '<dt>Methodology entry</dt><dd><a href="methodology.html#'+encodeURIComponent(n.m)+'">'+esc(n.m)+'</a> &middot; shown in '+esc(m.views.join(', '))+'</dd></dl>';
-    var dlg=$('method');
-    if(dlg.showModal) dlg.showModal(); else dlg.setAttribute('open','');
+  function parseState(search,hash,states,committees){
+    var p={};
+    String(search||'').replace(/^\?/,'').split('&').forEach(function(kv){
+      if(!kv) return; var i=kv.indexOf('=');
+      try{p[decodeURIComponent(i<0?kv:kv.slice(0,i))]=decodeURIComponent((i<0?'':kv.slice(i+1)).replace(/\+/g,' '))}catch(e){}
+    });
+    var st=String(p.state||'').toUpperCase(), cm=String(p.committee||'').toUpperCase(), h=String(hash||'').replace(/^#/,'');
+    h=ALIASES[h]||h;
+    return {state:states.indexOf(st)>=0?st:null, committee:committees.indexOf(cm)>=0?cm:null, section:SECTIONS.indexOf(h)>=0?h:null};
+  }
+  function formatState(s){
+    var q=[];
+    if(s.state) q.push('state='+encodeURIComponent(s.state));
+    if(s.committee) q.push('committee='+encodeURIComponent(s.committee));
+    return (q.length?'?'+q.join('&'):'')+(s.section?'#'+s.section:'');
+  }
+  /* pure:end */
+
+  // ---- every number comes from the embedded data and names its methodology entry ----
+  function reg(n){if(!n||!M[n.m]) throw new Error('number without a methodology entry: '+(n&&n.p)); return n}
+  function cnt(n){return esc(reg(n).d)}            // a count, as recorded
+  function rawv(n){return esc(reg(n).d)}           // a raw value, in its own units (details only)
+  function bills(n){return reg(n).v===1?'bill':'bills'}
+  // a quiet source line under each answer; the full provenance is under "How is this calculated?" and "Sources and versions"
+  function trust(sources){return '<p class="trust">'+esc(sources)+' · <span class="nw">Checked before publishing</span></p>'}
+  var MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  function longDate(iso){var m=/^(\d{4})-(\d{2})-(\d{2})/.exec(iso||''); return m?(+m[3])+' '+MONTHS[+m[2]-1]+' '+m[1]:String(iso||'')}
+  function say(msg){var l=$('live'); l.textContent=''; setTimeout(function(){l.textContent=msg},30)}
+
+  // ---- progressive disclosure: a button that opens its panel in place ----
+  var UID=0, LAZY={};
+  function disc(label,body){
+    var id='d'+(++UID);
+    if(typeof body==='function'){LAZY[id]=body; body=''}
+    return '<div class="disc"><button type="button" class="dbtn" aria-expanded="false" aria-controls="'+id+'"><span>'+esc(label)+'</span><i aria-hidden="true"></i></button>'+
+      '<div class="dpanel" id="'+id+'" hidden><div class="din">'+body+'</div></div></div>';
+  }
+  function openPanel(btn,open){
+    var p=$(btn.getAttribute('aria-controls')); if(!p) return;
+    if(open&&LAZY[p.id]){p.firstChild.innerHTML=LAZY[p.id](); delete LAZY[p.id]; settle(p)}
+    btn.setAttribute('aria-expanded',open?'true':'false');
+    if(REDUCED){p.hidden=!open; p.style.height=''; return}
+    if(open){
+      p.hidden=false; var h=p.scrollHeight; p.style.height='0px'; p.style.opacity='0';
+      p.offsetHeight; p.style.height=h+'px'; p.style.opacity='1';
+      p.addEventListener('transitionend',function e(){p.style.height=''; p.removeEventListener('transitionend',e)});
+    }else{
+      p.style.height=p.scrollHeight+'px'; p.offsetHeight; p.style.height='0px'; p.style.opacity='0';
+      p.addEventListener('transitionend',function e(){p.hidden=true; p.style.height=''; p.removeEventListener('transitionend',e)});
+    }
   }
   document.addEventListener('click',function(ev){
-    var b=ev.target.closest&&ev.target.closest('[data-i]'); if(b){openMethod(+b.getAttribute('data-i'))}
+    var b=ev.target.closest&&ev.target.closest('.dbtn'); if(b){openPanel(b,b.getAttribute('aria-expanded')!=='true'); return}
+    var m=ev.target.closest&&ev.target.closest('.morebtn'); if(m){LISTS[m.getAttribute('data-list')].shown+=20; drawList(m.getAttribute('data-list'))}
   });
-  $('method-close').addEventListener('click',function(){$('method').close()});
-  $('method').addEventListener('click',function(ev){if(ev.target===$('method')) $('method').close()});
 
-  // ---- header ----
-  var meta=D.meta;
-  $('congress').textContent=meta.congress+'th';
-  $('updated').innerHTML='<span>Measurement date: '+esc(meta.measurement_date)+'</span><span>Committee membership observed: '+esc(meta.committee_observed)+'</span><span>Result record '+esc(meta.input_key_short)+'</span>';
-  $('asof').textContent='Built from result record '+meta.input_key+' ('+meta.score_column+', state survey wave '+meta.aip_wave+', population '+meta.population+', bridge '+meta.bridge+').';
-
-  // ---- labels on a track: stagger into rows so neighbours never overlap ----
-  function trackPx(){return Math.min(716,Math.max(280,window.innerWidth-84))}
-  function stagger(items){
-    var px=trackPx(), ends=[], rows=[];
-    items.forEach(function(it){
-      var w=it.label.length*7+8, l=(it.x+1)/2*px-w/2, r=0;
-      while(ends[r]!==undefined&&ends[r]>l) r++;
-      ends[r]=l+w; rows.push(r);
-    });
+  // ---- the position line: 0 (liberal side) to 100 (conservative side); markers slide into place ----
+  function xOf(v){return Math.max(0,Math.min(100,(v+1)*50))}
+  function edge(x){return x<12?' l':x>88?' r':''}
+  function stagger(ticks){      // label rows so neighbouring labels never overlap (placement only)
+    var byX=ticks.map(function(t,i){return {x:t.x,i:i}}).sort(function(a,b){return a.x-b.x}), ends=[], rows=[];
+    byX.forEach(function(t){var r=0; while(ends[r]!==undefined&&t.x-ends[r]<17) r++; ends[r]=t.x; rows[t.i]=r});
     return rows;
   }
-  var ENDS='<div class="ends"><span>← −1 · more liberal voting</span><span>more conservative voting · +1 →</span></div>';
-  var AXIS='';
+  // o.marks: [{v, text, num, kind:'solid'|'ring', dir:'up'|'down'}]; o.ticks: [{v, label}]; o.spoken: the same line in words
+  function scale(o){
+    var marks=o.marks||[], ticks=(o.ticks||[]).map(function(t){return {x:xOf(t.v),label:t.label}}), rows=stagger(ticks);
+    var labelled=function(m){return m.num!=null||!!m.text};
+    var up=marks.some(function(m){return labelled(m)&&m.dir!=='down'}), down=marks.some(function(m){return labelled(m)&&m.dir==='down'});
+    var top=Math.max.apply(null,rows.concat([-1]))+1;
+    return '<figure class="pscale'+(up?' up':'')+(down?' down':'')+'"><div class="pline" aria-hidden="true"><span class="zero"></span>'+
+      ticks.map(function(t){return '<span class="rt" style="--x:'+t.x+'%"></span>'}).join('')+
+      marks.map(function(m){var x=xOf(m.v);
+        return '<span class="mk '+(m.kind||'solid')+(m.small?' small':'')+(m.dir==='down'?' down':'')+edge(x)+'" data-x="'+x+'" style="--x:'+(REDUCED?x:50)+'%">'+
+          (labelled(m)?'<span class="lab">'+(m.num!=null?esc(m.num):'')+(m.text?(m.num!=null?' ':'')+'<small>'+esc(m.text)+'</small>':'')+'</span>':'')+'</span>'}).join('')+
+      '</div>'+
+      (ticks.length?'<div class="tlabs" aria-hidden="true" style="--rows:'+top+'">'+ticks.map(function(t,i){
+        return '<span class="tlab'+edge(t.x)+'" style="--x:'+t.x+'%;--row:'+rows[i]+'">'+esc(t.label)+'</span>'}).join('')+'</div>':'')+
+      '<div class="scale-ends" aria-hidden="true"><span>Liberal side</span><span>Conservative side</span></div>'+
+      (o.legend?'<p class="plegend" aria-hidden="true">'+o.legend.map(function(l){return '<span><i class="'+l[0]+'"></i>'+esc(l[1])+'</span>'}).join('')+'</p>':'')+
+      '<figcaption class="sr-only">'+esc(o.spoken)+'</figcaption></figure>';
+  }
+  function settle(root){
+    var ms=(root||document).querySelectorAll('.mk[data-x]');
+    if(REDUCED){ms.forEach(function(m){m.style.setProperty('--x',m.getAttribute('data-x')+'%')}); return}
+    requestAnimationFrame(function(){requestAnimationFrame(function(){ms.forEach(function(m){m.style.setProperty('--x',m.getAttribute('data-x')+'%')})})});
+  }
 
-  // ================= Pillar 4 =================
-  var P4=D.p4, ssel=$('state');
-  ssel.innerHTML=P4.states.map(function(s){return '<option value="'+esc(s.code)+'">'+esc(s.name)+'</option>'}).join('');
-  var anchors=P4.anchors.slice().sort(function(a,b){return a.score.v-b.score.v});
+  // ---- "How is this calculated?": raw values and the registry entries behind them ----
+  function rawList(rows){return '<dl class="raw">'+rows.map(function(r){return '<dt>'+esc(r[0])+'</dt><dd>'+r[1]+'</dd>'}).join('')+'</dl>'}
+  function methodBlock(ids){
+    return ids.map(function(id){var m=M[id];
+      var list=function(a){return '<ul>'+a.map(function(x){return '<li>'+esc(x)+'</li>'}).join('')+'</ul>'};
+      return '<div class="mblock"><h5>'+esc(m.label)+'</h5><div><span class="muted">From:</span> '+esc(m.sources.join('; '))+'</div>'+
+        '<div>'+esc(m.transformation)+'</div><div class="f">'+esc(m.formula)+'</div>'+
+        '<div><span class="muted">Versions in this build</span>'+list(m.versions)+'</div>'+
+        '<div><span class="muted">Limits</span>'+list(m.limitations)+'</div>'+
+        (m.not_available?'<div><span class="muted">When it is not available:</span> '+esc(m.not_available)+'</div>':'')+
+        '<a href="methodology.html#'+encodeURIComponent(id)+'">Full methodology</a></div>'}).join('');
+  }
+  var RULES={}; D.display_rules.forEach(function(r){RULES[r.id]=r});
+  function ruleBlock(ids){
+    return ids.map(function(id){var r=RULES[id];
+      return '<div class="mblock"><h5>'+esc(r.label)+' <code>'+esc(r.id)+'</code></h5><div class="f">'+esc(r.rule)+'</div>'+
+        '<ul>'+r.limits.map(function(x){return '<li>'+esc(x)+'</li>'}).join('')+'</ul>'+
+        '<a href="methodology.html#'+encodeURIComponent(id)+'">Full methodology</a></div>'}).join('');
+  }
+
+  // ---- bill lists: first 20, a search box, then "Show more" ----
+  var LISTS={}, LUID=0;
+  function billList(ids,row,noun){
+    var key='L'+(++LUID); LISTS[key]={ids:ids,row:row,shown:20,q:'',noun:noun};
+    return '<div class="blist" data-list="'+key+'"><label class="sr-only" for="'+key+'q">Search these '+esc(noun)+'</label>'+
+      '<input type="search" id="'+key+'q" class="bfilter" data-list="'+key+'" placeholder="Search these '+esc(noun)+'" autocomplete="off">'+
+      '<ul class="bills" id="'+key+'u">'+drawRows(key)+'</ul><p class="muted" id="'+key+'n"></p>'+
+      '<button type="button" class="morebtn" data-list="'+key+'"'+(ids.length>20?'':' hidden')+'>Show more</button></div>';
+  }
+  function visibleIds(key){var L=LISTS[key]; return L.q?L.ids.filter(function(b){return norm(L.row(b)).indexOf(L.q)>=0}):L.ids}
+  function drawRows(key){var L=LISTS[key]; return visibleIds(key).slice(0,L.shown).map(L.row).join('')}
+  function drawList(key){
+    var L=LISTS[key], ids=visibleIds(key), u=$(key+'u'); if(!u) return;
+    u.innerHTML=drawRows(key);
+    $(key+'n').textContent=L.q?(ids.length?'Showing '+Math.min(L.shown,ids.length)+' of '+ids.length+' matching '+L.noun+'.':'No matching '+L.noun+'.'):'';
+    var btn=u.parentNode.querySelector('.morebtn'); btn.hidden=ids.length<=L.shown;
+  }
+  document.addEventListener('input',function(ev){
+    var t=ev.target; if(!t.classList||!t.classList.contains('bfilter')) return;
+    var L=LISTS[t.getAttribute('data-list')]; L.q=norm(t.value); L.shown=20; drawList(t.getAttribute('data-list'));
+  });
+
+  var GROUPS=[{key:'LIBERAL_SPONSOR',see:'See the bills sponsored by senators on the liberal side of the Voteview scale'},
+              {key:'CONSERVATIVE_SPONSOR',see:'See the bills sponsored by senators on the conservative side of the Voteview scale'},
+              {key:'ZERO_SCORE_SPONSOR',see:'See the bills sponsored by senators at Voteview’s zero point'},
+              {key:'UNKNOWN',see:'See the bills with no available sponsor position'}];
+  function split(set){
+    var l=set.LIBERAL_SPONSOR, c=set.CONSERVATIVE_SPONSOR, both=l.v+c.v, lw=both?100*l.v/both:0;
+    return '<div class="split" aria-hidden="true"><span class="seg lib" style="--w:'+lw+'%"></span><span class="seg con" style="--w:'+(both?100-lw:0)+'%"></span></div>'+
+      '<div class="key">'+
+        '<div><i class="sw lib"></i><b>'+cnt(l)+'</b><span>Sponsored by senators on the liberal side of the Voteview scale</span></div>'+
+        '<div><i class="sw con"></i><b>'+cnt(c)+'</b><span>Sponsored by senators on the conservative side of the Voteview scale</span></div>'+
+      '</div>'+
+      (set.ZERO_SCORE_SPONSOR.v||set.UNKNOWN.v?'<p class="muted">'+cnt(set.ZERO_SCORE_SPONSOR)+' sponsored by senators at Voteview’s zero point · '+cnt(set.UNKNOWN)+' with no available sponsor position</p>':'');
+  }
+  function zeroUnknown(set,what){
+    return [['Sponsored by senators at Voteview’s zero point ('+what+')',cnt(set.ZERO_SCORE_SPONSOR)],['With no available sponsor position ('+what+')',cnt(set.UNKNOWN)]];
+  }
+
+  // ===== Senators =====
+  var P4=D.p4, STATES=P4.states.map(function(s){return s.code}), CODES=D.p6.committees.map(function(c){return c.code});
+  var ssel=$('state');
+  P4.states.forEach(function(s){var o=document.createElement('option'); o.value=s.code; o.textContent=s.name; ssel.appendChild(o)});
+  function anchorTicks(){return P4.anchors.map(function(a){return {v:a.score.v,label:a.short}})}
+  function senatorDetails(s){
+    var sc=s.senator_score;
+    return '<p><strong>'+esc(sc.p0)+'</strong> on the voting scale. The line runs from the liberal side (0) to the conservative side (100) and shows where a voting record sits compared with other members of Congress. Higher is not better.</p>'+
+      '<p>50 on the line is Voteview’s zero point, nothing more.</p>'+
+      '<h4>For context</h4><ul class="plain-list">'+P4.anchors.map(function(a){return '<li>'+esc(a.name)+': <strong>'+esc(a.score.p0)+'</strong> — '+esc(a.basis)+'</li>'}).join('')+'</ul>'+
+      '<p class="muted">The three figures are reference points only. They are never part of any calculation.</p>'+
+      disc('How is this calculated?',function(){
+        return rawList([['Voteview score (nominate_dim1)',rawv(sc)],['Display position (whole number)',esc(sc.p0)],['Display position (one decimal)',esc(sc.p1)],['Party (from the Senate roster)',esc(s.party||'not listed')]])+
+          '<p>Display position = (Voteview score + 1) × 50. Every calculation uses the Voteview score itself.</p>'+
+          ruleBlock(['display_position_v1','side_label_v1'])+methodBlock(['p4.senator_score','p4.reference_anchor'])+
+          '<p class="muted">Party comes from '+esc(D.meta.identity_source.source)+', version '+esc(D.meta.identity_source.source_version.slice(0,12))+'…, retrieved '+esc(D.meta.identity_source.retrieved_at.slice(0,10))+'.</p>';
+      });
+  }
   function senatorCard(s,st){
     var sc=s.senator_score, has=sc.s!=='NOT_AVAILABLE';
-    var ticks=anchors.map(function(a){return {x:a.score.v,label:a.short}});
-    var rows=stagger(ticks), top=Math.max.apply(null,rows.concat([0]))+1;
-    var track='<p class="scalename">Voteview voting-record scale, −1 to +1 (reference figures above, this senator below)</p>'+ENDS+
-      '<div class="ctrack p4" aria-hidden="true" style="--toprows:'+top+'">'+
-        anchors.map(function(a,i){return '<div class="tick" style="--x:'+pos(a.score.v)+'%"></div><div class="tl" style="--x:'+pos(a.score.v)+'%;--row:'+rows[i]+'">'+esc(a.short)+'</div>'}).join('')+
-        (has?'<div class="cmk mem" style="--x:'+pos(sc.v)+'%"></div><div class="ct b" style="--x:'+pos(sc.v)+'%">'+esc(s.short)+'</div>':'')+
-      '</div>'+AXIS;
-    var spoken=has?'Chart: '+s.name+' is at '+sc.d+'; reference figures: '+anchors.map(function(a){return a.name+' '+a.score.d}).join(', ')+'.':'';
-    var self=P4.anchors.filter(function(a){return a.bioguide===s.id})[0];
-    return '<div class="cm"><div class="gh"><b>'+esc(s.name)+'</b><span class="who">Senator for '+esc(st.name)+'</span></div>'+
-      '<p class="bignum">Voting-record score '+num(sc)+'</p>'+why(sc)+
-      (has?track+'<p class="sr-only">'+esc(spoken)+'</p>':'')+
-      (self?'<p class="why">'+esc(s.name)+' is also one of the three reference figures; the reference point is the same number.</p>':'')+
-      '<div class="rows">'+row('Distance between this senator and the state public',s.distance)+'</div></div>';
+    var head='<h3>'+esc(s.name)+'</h3><p class="ident">'+(s.party?esc(s.party)+' · ':'')+esc(st.name)+'</p>';
+    if(!has) return '<article class="box sen" id="sen-'+esc(s.id)+'">'+head+'<p class="side">Not on the voting scale yet</p>'+
+      '<p class="sentence">There are not enough recorded votes yet to place '+esc(s.name)+'.</p>'+
+      disc('See details','<p>'+esc(sc.r||M[sc.m].not_available)+'</p>'+methodBlock(['p4.senator_score']))+'</article>';
+    var spoken=s.name+': position '+sc.p0+' on a line from 0, the liberal side, to 100, the conservative side. '+s.side+'.';
+    return '<article class="box sen" id="sen-'+esc(s.id)+'">'+head+'<p class="side">'+esc(s.side)+'</p>'+
+      scale({marks:[{v:sc.v,num:sc.p0,kind:'solid'}],ticks:anchorTicks(),spoken:spoken})+
+      '<p class="sentence">Based on how '+esc(s.name)+' has voted in Congress.</p>'+trust('Voteview voting records')+
+      disc('See details',function(){return senatorDetails(s)})+'</article>';
   }
-  function renderState(code){
+  function votersPanel(st){
+    var pub=st.senators[0].state_public_estimate, on=st.senators[0].state_on_senator_scale, dist=st.senators[0].distance;
+    return disc('What about '+st.name+'’s voters?',
+      '<p>Surveys estimate the political views of each state’s public. The survey uses a different measurement from senators’ voting records, so CivicAlign does not put them on the same line or compare them.</p>'+
+      disc('See the survey estimate',function(){
+        return rawList([[st.name+'’s public (survey units, not the voting scale)',rawv(pub)+(pub.se?' ± '+esc(pub.se):'')],['Survey period',esc(pub.period||'')]])+
+          '<p class="muted">'+esc(pub.u)+'. A different measurement system: no distance between a senator and the state’s public is calculated.</p>'+
+          '<p><strong>Why it is not on the senators’ line:</strong> '+esc(on.r||M[on.m].not_available)+'.</p>'+
+          '<p><strong>Why there is no distance:</strong> '+esc(dist.r||M[dist.m].not_available)+'.</p>'+
+          methodBlock(['p4.state_public_estimate','p4.state_on_senator_scale','p4.distance']);
+      }));
+  }
+  var CURRENT={state:null,committee:null};
+  function setState(code,opts){
+    opts=opts||{};
     var st=P4.states.filter(function(s){return s.code===code})[0]; if(!st) return;
-    var pub=st.senators[0].state_public_estimate, onscale=st.senators[0].state_on_senator_scale;
-    $('p4-cards').innerHTML=st.senators.map(function(s){return senatorCard(s,st)}).join('');
-    $('p4-public').innerHTML='<div class="gh"><b>'+esc(st.name)+'’s public</b><span class="who">survey estimate, a separate measurement system</span></div>'+
-      '<div class="rows">'+row('Estimated ideology of the state’s public (survey scale)',pub,pub.period?'Survey period '+esc(pub.period)+'. On the survey’s own scale, which has no common metric with senator scores.':null)+
-      row('State public on the senator scale',onscale)+'</div>';
-    var names=st.senators.map(function(s){return s.name});
-    $('take-p4').innerHTML=st.senators.map(function(s){
-      return s.senator_score.s==='NOT_AVAILABLE'?esc(s.name)+' has no Voteview score yet.':esc(s.name)+'’s voting-record score is '+num(s.senator_score)+'.'}).join(' ')+
-      ' Negative scores are on the liberal side of Voteview’s scale and positive scores on the conservative side.';
+    CURRENT.state=code; ssel.value=code;
+    var box=$('senator-cards');
+    box.className='cards two fade-in';
+    box.innerHTML=st.senators.map(function(s){return senatorCard(s,st)}).join('')+
+      (st.senators.length<2?'<p class="placeholder">'+(2-st.senators.length===1?'One':'Two')+' '+esc(st.name)+' seat'+(st.senators.length?' is':'s are')+' currently vacant.</p>':'');
+    $('voters').innerHTML='<div class="box">'+votersPanel(st)+'</div>';
+    settle(box);
+    $('begin').hidden=true;
+    [$('chip'),$('barchip')].forEach(function(c){c.hidden=false; c.textContent=st.name+' ▾'; c.setAttribute('aria-label','Change state (now '+st.name+')')});
+    writeURL();
+    say('Showing senators for '+st.name+'.');
+    if(opts.scroll) $('senators').scrollIntoView({behavior:REDUCED?'auto':'smooth',block:'start'});
+    if(opts.flash){var card=$('sen-'+opts.flash); if(card){card.classList.remove('flash'); card.offsetWidth; card.classList.add('flash'); card.scrollIntoView({behavior:REDUCED?'auto':'smooth',block:'center'})}}
   }
-  ssel.addEventListener('change',function(){renderState(ssel.value)});
-  $('anchorkey').innerHTML=P4.anchors.map(function(a){return '<div><b>'+esc(a.name)+'</b>'+num(a.score)+'<span>'+esc(a.basis)+'</span></div>'}).join('');
-  $('anchorlimits').innerHTML=M['p4.reference_anchor'].limitations.slice(0,6).map(function(x){return '<li>'+esc(x)+'</li>'}).join('');
-  renderState(ssel.value);
+  ssel.addEventListener('change',function(){if(ssel.value) setState(ssel.value,{scroll:true})});
+  [$('chip'),$('barchip')].forEach(function(c){c.addEventListener('click',function(){ssel.scrollIntoView({behavior:REDUCED?'auto':'smooth',block:'center'}); ssel.focus()})});
 
-  // ================= Pillar 5 =================
-  var P5=D.p5;
-  (function(){
-    var pl=P5.plain, w=P5.weighted, d=P5.diff;
-    // the side of the scale the weighted average moves toward follows the sign of the difference (plain - weighted)
-    var side=d.v>0?'liberal':'conservative';
-    var moves=d.v===0?'In plain terms, population weighting does not move the Senate average on Voteview’s −1 to +1 voting scale.':
-      'In plain terms, population weighting moves the Senate average slightly toward the '+side+' side of Voteview’s −1 to +1 voting scale.';
-    var l=Math.min(pos(pl.v),pos(w.v)), wd=Math.abs(pos(pl.v)-pos(w.v));
-    $('p5-main').innerHTML='<div class="gh"><b>Counting states vs. weighting by population</b><span class="who"><span class="status">candidate method, not final</span></span></div>'+
-      '<p class="kicker">Senate average</p>'+
-      '<div class="tiles">'+
-        '<div><span class="k">Each senator counted equally</span><span class="v">'+num(pl)+'</span></div>'+
-        '<div><span class="k">Population-weighted</span><span class="v">'+num(w)+'</span></div>'+
-        '<div><span class="k">Difference</span><span class="v">'+num(d)+'</span></div>'+
-      '</div>'+
-      '<div class="explain">'+
-        '<p>Every state gets two senators regardless of its population. Normally, each senator counts equally when calculating the Senate average. If instead senators are weighted by the number of people their state represents, the average changes from '+num(pl)+' to '+num(w)+'.</p>'+
-        '<p>That is a difference of '+num(d)+'. '+moves+'</p>'+
-      '</div>'+
-      '<details class="more" id="p5-meaning"><summary><span>What does this mean?</span></summary>'+
-        '<p class="fine">Population weighting gives senators from larger states more weight and senators from smaller states less weight. The two senators from the same state split that state’s population weight evenly.</p>'+
-        '<p class="fine">This describes Senate voting records and state populations only. It does not tell us which laws passed, what voters believe, or why Congress made a decision. This weighting method is still a CivicAlign candidate method, not a final scientific standard.</p>'+
-      '</details>'+
-      '<p class="scalename" style="margin-top:22px">Voteview voting-record scale, −1 to +1</p>'+ENDS+
-      '<div class="ctrack" aria-hidden="true">'+
-        '<div class="conn" style="--l:'+l+'%;--w:'+wd+'%"></div>'+
-        '<div class="cmk sen" style="--x:'+pos(pl.v)+'%"></div><div class="ct a" style="--x:'+pos(pl.v)+'%">Counted equally</div>'+
-        '<div class="cmk mem" style="--x:'+pos(w.v)+'%"></div><div class="ct w" style="--x:'+pos(w.v)+'%">Population-weighted</div>'+
-      '</div>'+AXIS+
-      '<p class="sr-only">Chart: the Senate average with each senator counted equally is '+esc(pl.d)+' and the population-weighted average is '+esc(w.d)+'.</p>'+
-      (P5.unscored.length?'<p class="why">Seated senators without a Voteview score, left out: '+esc(P5.unscored.join(', '))+'.</p>':'');
-    $('p5-nation').innerHTML='<div class="gh"><b>The Senate and the national public</b></div>'+
-      '<div class="rows">'+row('National public centre',P5.national)+row('Gap between the Senate and the national public',P5.gap)+'</div>';
-    $('p5-medians').innerHTML='<div class="rows">'+row('Senate median (each senator counted once)',P5.median)+
-      row('Population-weighted Senate median',P5.wmedian)+row('Difference (median − weighted median)',P5.mdiff)+'</div>'+
-      '<p class="why">'+esc(M['p5.weighted_median'].limitations[0])+'</p>';
-  })();
-
-  // ================= Pillar 5: what the Senate actually passed =================
-  // Every count is read from the saved bill tables (P5.outcomes) and carries the bill ids behind it.
-  (function(){
-    var O=P5.outcomes, B=O.bills;
-    var GROUPS=[{key:'LIBERAL_SPONSOR',see:'See the bills sponsored by senators on the liberal side of the Voteview scale'},
-                {key:'CONSERVATIVE_SPONSOR',see:'See the bills sponsored by senators on the conservative side of the Voteview scale'},
-                {key:'ZERO_SCORE_SPONSOR',see:'See the bills sponsored by senators with a score of exactly zero'},
-                {key:'UNKNOWN',see:'See the bills with no available sponsor score'}];
-    function bills(n){return n.v===1?'bill':'bills'}
-    function split(set){
-      var l=set.LIBERAL_SPONSOR, c=set.CONSERVATIVE_SPONSOR, both=l.v+c.v, lw=both?100*l.v/both:0;
-      return '<p class="kicker">Sponsor voting position</p>'+
-        '<div class="split" aria-hidden="true"><span class="seg lib" style="--w:'+lw+'%"></span><span class="seg con" style="--w:'+(both?100-lw:0)+'%"></span></div>'+
-        '<p class="sr-only">Bar: '+esc(l.d)+' sponsored by senators on the liberal side of the Voteview scale and '+esc(c.d)+' on the conservative side.</p>'+
-        '<div class="splitkey">'+
-          '<div><i class="sw lib"></i><span class="big">'+num(l)+'</span><span class="k">Sponsored by senators on the liberal side of the Voteview scale</span></div>'+
-          '<div><i class="sw con"></i><span class="big">'+num(c)+'</span><span class="k">Sponsored by senators on the conservative side of the Voteview scale</span></div>'+
-        '</div>'+
-        '<p class="why">'+num(set.ZERO_SCORE_SPONSOR)+' sponsored by senators with a score of exactly zero · '+num(set.UNKNOWN)+' with no available sponsor score</p>';
-    }
-    function list(ids,enacted){
-      return '<ul class="bills">'+ids.map(function(b){var x=B[b];
-        var law=!enacted?'':x.law?' · enacted as Public Law '+esc(x.law):x.pending?' · enacted: signed by the President '+esc(x.signed)+', public-law number pending':'';
-        return '<li><a href="'+esc(x.url)+'">'+esc(x.label)+'</a> '+esc(x.title)+' <span class="k">'+esc(x.sponsor)+' · passed the Senate '+esc(x.passed)+law+'</span></li>'}).join('')+'</ul>';
-    }
-    function see(set,enacted){
-      return GROUPS.map(function(g){var n=set[g.key]; return n.v?'<details class="more seebills"><summary><span>'+esc(g.see)+'</span></summary>'+list(n.ids,enacted)+'</details>':''}).join('');
-    }
+  // ===== What the Senate passed =====
+  var P5=D.p5, O=P5.outcomes, B=O.bills;
+  function outcomeRow(enacted){
+    return function(b){var x=B[b];
+      var law=!enacted?'':x.law?' · enacted as Public Law '+esc(x.law):x.pending?' · enacted: signed by the President '+esc(x.signed)+', public-law number pending':'';
+      return '<li><a href="'+esc(x.url)+'">'+esc(x.label)+'</a> '+esc(x.title)+' <span class="meta">'+esc(x.sponsor)+
+        (x.sponsor_p0!=null?' · sponsor’s position '+esc(x.sponsor_p0):'')+' · passed the Senate '+esc(x.passed)+law+'</span></li>'};
+  }
+  function seeOutcome(set,enacted){
+    return GROUPS.map(function(g){var n=set[g.key];
+      return n.v?disc(g.see,function(){return billList(n.ids,outcomeRow(enacted),'bills')}):''}).join('');
+  }
+  function explorePassed(){
     var P=O.passed_senate, E=O.enacted;
-    $('p5-outcomes').innerHTML='<div class="gh"><b>What the Senate actually passed</b></div>'+
-      '<p class="intro">The Senate’s ideology numbers are abstract. This shows a concrete view of the legislation the Senate approved during the current Congress, grouped by the voting position of each bill’s primary sponsor.</p>'+
-      '<p class="kicker">Passed the Senate</p>'+
-      '<p class="lead">'+num(P.total)+' Senate '+bills(P.total)+' passed the Senate.</p>'+split(P)+see(P,false)+
-      '<p class="kicker">Enacted into law</p>'+
-      '<p class="lead">'+num(E.total)+' Senate '+bills(E.total)+' enacted.</p>'+split(E)+
-      '<p class="why">'+num(E.public_law_number_recorded)+' currently have public-law numbers. '+num(E.public_law_number_pending)+' were signed by the President and are awaiting public-law numbers.</p>'+
-      '<p class="why">Becoming law also depends on the House and the President, not only on the Senate.</p>'+see(E,true)+
-      '<details class="more" id="p5-outcomes-meaning"><summary><span>What does this mean?</span></summary>'+
-        '<p class="fine">CivicAlign is not deciding whether a bill itself is liberal or conservative. Each bill is grouped only by the DW-NOMINATE voting score of the senator who sponsored it. A negative sponsor score appears on the liberal side of Voteview’s scale; a positive score appears on the conservative side.</p>'+
-        '<p class="fine">This gives readers a simple way to see the voting positions of the senators whose bills moved through the Senate, without using AI to guess the ideology of the legislation.</p>'+
-        '<p class="fine">These counts do not prove that the Senate’s ideological average caused these bills to pass.</p>'+
-      '</details>'+
-      '<p class="why">From the official bill-status records (latest retrieved '+esc(O.meta.latest_archive_retrieved)+'); rules '+esc(O.meta.outcome_rule)+', '+esc(O.meta.enactment_rule)+' and '+esc(O.meta.classification_rule.join(', '))+'. Select any number for its methodology.</p>';
+    return '<h4>Passed the Senate: who sponsored them</h4>'+split(P)+
+      '<p>Grouped by who sponsored each bill, not by what the bill says.</p>'+seeOutcome(P,false)+
+      '<h4>Became law</h4>'+split(E)+
+      '<p>'+cnt(E.public_law_number_recorded)+' have public-law numbers; '+cnt(E.public_law_number_pending)+' were signed by the President and are waiting for one.</p>'+
+      '<p>Becoming law also depends on the House and the President, not only on the Senate.</p>'+seeOutcome(E,true)+
+      disc('What does this mean?',
+        '<p>CivicAlign is not deciding whether a bill itself is liberal or conservative. Each bill is grouped only by the DW-NOMINATE voting score of the senator who sponsored it. A negative sponsor score appears on the liberal side of Voteview’s scale; a positive score appears on the conservative side.</p>'+
+        '<p>This gives readers a simple way to see the voting positions of the senators whose bills moved through the Senate, without using AI to guess the ideology of the legislation.</p>'+
+        '<p>These counts do not prove that the Senate’s ideological average caused these bills to pass.</p>')+
+      disc('How is this calculated?',function(){
+        return rawList(zeroUnknown(P,'passed').concat(zeroUnknown(E,'became law')))+
+          '<p>From the official bill-status records (latest retrieved '+esc(O.meta.latest_archive_retrieved)+'); rules '+esc(O.meta.outcome_rule)+', '+esc(O.meta.enactment_rule)+' and '+esc(O.meta.classification_rule.join(', '))+'.</p>'+
+          methodBlock(['p5.outcomes_passed_total','p5.outcomes_passed_by_sponsor','p5.outcomes_enacted_total','p5.outcomes_enacted_by_sponsor','p5.outcomes_public_law_recorded','p5.outcomes_public_law_pending']);
+      });
+  }
+  (function(){
+    var P=O.passed_senate, E=O.enacted;
+    $('passed').innerHTML='<p class="heronum">'+cnt(P.total)+'</p>'+
+      '<p class="bigsub">Senate '+bills(P.total)+' passed the Senate in the '+esc(D.meta.congress)+'th Congress.</p>'+
+      '<p class="also">'+cnt(E.total)+' '+(E.total.v===1?'has':'have')+' become law.</p>'+trust('Official GovInfo bill records')+
+      disc('Explore the bills',explorePassed);
   })();
 
-  // ================= Pillar 6 =================
-  var P6=D.p6, csel=$('committee');
-  csel.innerHTML=P6.committees.map(function(c){return '<option value="'+esc(c.code)+'">'+esc(c.name)+'</option>'}).join('');
-  function committeeCard(c){
-    var md=c.committee_median, dr=c.committee_senate_drift, sm=P6.senate_median, has=md.s!=='NOT_AVAILABLE';
-    var l=has?Math.min(pos(md.v),pos(sm.v)):0, w=has?Math.abs(pos(md.v)-pos(sm.v)):0;
-    var dir=!has?'':dr.v>0?'the committee median is higher on the scale than the Senate median, toward its conservative end':dr.v<0?'the committee median is lower on the scale than the Senate median, toward its liberal end':'the two medians are equal';
-    return '<div class="cm"><div class="gh"><b>'+esc(c.name)+'</b><span>'+num(c.listed)+' members · '+num(c.scored)+' with a Voteview score · code '+esc(c.code)+'</span></div>'+
-      '<p class="scalename">Senate voting scale (Voteview, −1 to +1)</p>'+ENDS+
-      '<div class="ctrack" aria-hidden="true">'+
-        (has?'<div class="conn" style="--l:'+l+'%;--w:'+w+'%"></div>':'')+
-        '<div class="cmk sen" style="--x:'+pos(sm.v)+'%"></div><div class="ct a" style="--x:'+pos(sm.v)+'%">Senate median</div>'+
-        (has?'<div class="cmk mem" style="--x:'+pos(md.v)+'%"></div><div class="ct b" style="--x:'+pos(md.v)+'%">This committee</div>':'')+
-      '</div>'+AXIS+
-      (has?'<p class="sr-only">Chart: the committee median is '+esc(md.d)+' and the Senate median '+esc(sm.d)+'.</p>':'')+
-      '<p class="say">'+(has?'This committee’s median is '+num(md)+'. Minus the Senate median, that is '+num(dr)+': '+esc(dir)+'.':'This committee has no scored current members.')+'</p>'+
-      '<div class="rows">'+row('Committee median',md)+row('Senate median',sm)+row('Committee median − Senate median',dr)+
-        row('National public centre',P6.national)+row('Committee median − national public centre',c.committee_public_drift)+
-        row('Members listed',c.listed)+row('Members with a Voteview score',c.scored,c.left_out.length?'Left out (no score): '+esc(c.left_out.join(', ')):null)+'</div>'+
-      billsSection(c)+
-      '<details class="more"><summary><span>More about this committee</span></summary><ul class="limits-list">'+
-        M['p6.committee_median'].limitations.filter(function(x){return x.indexOf('recorded roll-call')<0}).map(function(x){return '<li>'+esc(x)+'</li>'}).join('')+
-        '<li>Official name: '+esc(c.official_name)+' (code '+esc(c.code)+'), from '+esc(c.name_source)+', retrieved '+esc(c.name_retrieved)+'.</li></ul></details></div>';
-  }
-  // ---- Pillar 6: bills handled by this committee ----
-  // Every count is read from the saved bill table (committee_tallies) and carries the bill ids behind it.
-  // Referred and reported are separate lists: reported is not assumed to be a subset of referred.
-  var CB=P6.bills, CS=P6.sponsors, CM=P6.bill_meta;
-  var CGROUPS=[{key:'LIBERAL_SPONSOR',see:'See the bills sponsored by senators on the liberal side of the Voteview scale'},
-               {key:'CONSERVATIVE_SPONSOR',see:'See the bills sponsored by senators on the conservative side of the Voteview scale'},
-               {key:'ZERO_SCORE_SPONSOR',see:'See the bills sponsored by senators with a score of exactly zero'},
-               {key:'UNKNOWN',see:'See the bills with no available sponsor score'}];
-  function nb(n){return n.v===1?'bill':'bills'}
-  function cSplit(set){
-    var l=set.LIBERAL_SPONSOR, c=set.CONSERVATIVE_SPONSOR, both=l.v+c.v, lw=both?100*l.v/both:0;
-    return '<p class="kicker">Sponsor voting position</p>'+
-      '<div class="split" aria-hidden="true"><span class="seg lib" style="--w:'+lw+'%"></span><span class="seg con" style="--w:'+(both?100-lw:0)+'%"></span></div>'+
-      '<p class="sr-only">Bar: '+esc(l.d)+' sponsored by senators on the liberal side of the Voteview scale and '+esc(c.d)+' on the conservative side.</p>'+
-      '<div class="splitkey">'+
-        '<div><i class="sw lib"></i><span class="big">'+num(l)+'</span><span class="k">Sponsored by senators on the liberal side of the Voteview scale</span></div>'+
-        '<div><i class="sw con"></i><span class="big">'+num(c)+'</span><span class="k">Sponsored by senators on the conservative side of the Voteview scale</span></div>'+
-      '</div>'+
-      '<p class="why">'+num(set.ZERO_SCORE_SPONSOR)+' sponsored by senators with a score of exactly zero · '+num(set.UNKNOWN)+' with no available sponsor score</p>';
-  }
-  // a See bills list is built only when it is opened
-  function cSee(code,part,set){
-    return CGROUPS.map(function(g){return set[g.key].v?'<details class="more seebills" data-cb="'+esc(code+'|'+part+'|'+g.key)+'"><summary><span>'+esc(g.see)+'</span></summary><ul class="bills"></ul></details>':''}).join('');
-  }
-  function billItem(b,code,part){
-    var x=CB[b], a=x.a[code]||[null,null], s=x.sp&&CS[x.sp];
-    var act=part==='referred'?'referred '+esc(a[0])+(a[1]?' · reported '+esc(a[1]):''):
-      (a[0]?'referred '+esc(a[0]):'no referral to this committee recorded')+' · reported '+esc(a[1]);
-    return '<li><a href="https://www.congress.gov/bill/'+esc(CM.congress)+'th-congress/senate-bill/'+esc(x.n)+'">S. '+esc(x.n)+'</a> '+esc(x.t)+
-      ' <span class="k">'+esc(x.sn||'no primary sponsor listed')+(s?' · current Voteview score '+num(s.score):'')+' · '+act+'</span></li>';
-  }
-  document.addEventListener('toggle',function(ev){
-    var d=ev.target, k=d.getAttribute&&d.getAttribute('data-cb');
-    if(!k||!d.open||d.getAttribute('data-done')) return;
-    k=k.split('|');
-    var c=P6.committees.filter(function(x){return x.code===k[0]})[0];
-    d.querySelector('ul').innerHTML=c.bills[k[1]][k[2]].ids.map(function(b){return billItem(b,k[0],k[1])}).join('');
-    d.setAttribute('data-done','1');
-  },true);
-  function billsSection(c){
-    var F=c.bills, R=F.referred, P=F.reported, W=F.reported_without_referral;
-    return '<div class="cbills"><p class="kicker head">Bills handled by this committee</p>'+
-      '<p class="why">A bill is referred when it’s sent to the committee for review, and reported when the committee formally reports it back to the Senate.</p>'+
-      '<p class="kicker">Referred to this committee</p>'+
-      '<p class="lead">'+num(R.total)+' Senate '+nb(R.total)+' referred to this committee.</p>'+cSplit(R)+cSee(c.code,'referred',R)+
-      '<p class="kicker">Reported by this committee</p>'+
-      '<p class="lead">'+num(P.total)+' Senate '+nb(P.total)+' reported by this committee.</p>'+cSplit(P)+
-      '<p class="why">'+num(W)+' of the reported bills '+(W.v===1?'was':'were')+' not first recorded as referred to this committee. '+
-        'A committee can sometimes report a bill that was not first recorded as referred to that committee, so the reported count does not always have to be a subset of the referred count.</p>'+
-      cSee(c.code,'reported',P)+
-      '<details class="more cb-meaning"><summary><span>What does this mean?</span></summary>'+
-        '<p class="fine">This shows which senators sponsored the bills that moved through this committee. CivicAlign is not deciding whether the bills themselves are liberal or conservative. The groups are based only on the DW-NOMINATE voting score of each bill’s primary sponsor.</p>'+
-        '<p class="fine">These counts do not show why a committee reported or did not report any bill.</p>'+
-      '</details>'+
-      '<p class="why">From the official bill-status records (latest retrieved '+esc(CM.latest_archive_retrieved)+'); rule '+esc(CM.classification_rule.join(', '))+'. Select any number for its methodology.</p></div>';
-  }
-  function renderCommittee(code){
-    var c=P6.committees.filter(function(x){return x.code===code})[0]; if(!c) return;
-    $('committee-cards').innerHTML=committeeCard(c);
-    var dr=c.committee_senate_drift;
-    $('take-p6').innerHTML=c.committee_median.s==='NOT_AVAILABLE'?'The '+esc(c.name)+' Committee has no scored current members.':
-      'The '+esc(c.name)+' Committee’s median is '+num(c.committee_median)+', compared with a Senate median of '+num(P6.senate_median)+': a difference of '+num(dr)+'.';
-  }
-  csel.addEventListener('change',function(){renderCommittee(csel.value)});
-  renderCommittee(csel.value);
+  // ===== The Senate as a whole =====
+  (function(){
+    var pl=P5.plain, w=P5.weighted, d=P5.diff, W=P5.wording;
+    function details(){
+      return scale({marks:[{v:pl.v,num:pl.p1,text:'counted equally',kind:'solid'},{v:w.v,num:w.p1,text:'weighted by population',kind:'ring',dir:'down'}],
+                    spoken:'Each senator counted equally: '+pl.p1+'. Weighted by state population: '+w.p1+'. On a line from 0, the liberal side, to 100, the conservative side.'})+
+        '<p>Every state gets two senators regardless of its population. Population weighting gives senators from states with more people more weight.</p>'+
+        '<p>Normally, each senator counts equally when calculating the Senate average. If instead senators are weighted by the number of people their state represents, the average changes from <strong>'+esc(pl.p1)+'</strong> to <strong>'+esc(w.p1)+'</strong>.</p>'+
+        '<p>That is a difference of '+esc(d.pts)+' points. '+esc(W.shift_detail)+'</p>'+
+        disc('What does this mean?',
+          '<p>Population weighting gives senators from larger states more weight and senators from smaller states less weight. The two senators from the same state split that state’s population weight evenly.</p>'+
+          '<p>This describes Senate voting records and state populations only. It does not tell us which laws passed, what voters believe, or why Congress made a decision. This weighting method is still a CivicAlign candidate method, not a final scientific standard.</p>')+
+        disc('How is this calculated?',function(){
+          return rawList([['Senate average, each senator counted equally (Voteview score)',rawv(pl)],['Senate average, weighted by population (Voteview score)',rawv(w)],
+                          ['Difference (Voteview score)',rawv(d)],['Senators included',cnt(P5.active)],
+                          ['Senate midpoint (median): display position',esc(P5.median.p1)+' ('+rawv(P5.median)+')'],
+                          ['Population-weighted midpoint: display position',esc(P5.wmedian.p1)+' ('+rawv(P5.wmedian)+')'],
+                          ['Midpoint difference (display points)',esc(P5.mdiff.pts)+' ('+rawv(P5.mdiff)+')']])+
+            (P5.unscored.length?'<p class="muted">Seated senators without a Voteview score, left out: '+esc(P5.unscored.join(', '))+'.</p>':'')+
+            '<p class="muted">The midpoints are a secondary comparison. '+esc(M['p5.weighted_median'].limitations[0])+'</p>'+
+            ruleBlock(['display_position_v1','senate_position_wording_v1','population_shift_wording_v1'])+
+            methodBlock(['p5.plain_mean','p5.weighted_mean','p5.weighting_difference','p5.active_senators','p5.plain_median','p5.weighted_median','p5.median_difference']);
+        });
+    }
+    $('whole').innerHTML=scale({marks:[{v:pl.v,text:'Senate',kind:'solid',dir:'down'}],
+                                spoken:'The Senate as a whole, each senator counted equally: position '+pl.p1+' on a line from 0, the liberal side, to 100, the conservative side.'})+
+      '<p class="sentence">'+esc(W.position)+' '+esc(W.shift)+'</p>'+trust('Voteview + Census data')+disc('See details',details);
+  })();
 
-  // ---- tabs ----
-  var tabs=[].slice.call(document.querySelectorAll('.nav [role=tab]'));
-  function show(id){
-    tabs.forEach(function(t){var on=t.getAttribute('aria-controls')===id; t.setAttribute('aria-selected',on); t.tabIndex=on?0:-1; $(t.getAttribute('aria-controls')).hidden=!on});
+  // ===== Committees =====
+  var P6=D.p6, CB=P6.bills, CS=P6.sponsors, CM=P6.bill_meta, csel=$('committee');
+  P6.committees.forEach(function(c){var o=document.createElement('option'); o.value=c.code; o.textContent=c.name; csel.appendChild(o)});
+  var NOT_A_SUBSET='A committee can sometimes report a bill that was not first recorded as referred to that committee, so the reported count does not always have to be a subset of the referred count.';
+  function committeeRow(code,part){
+    return function(b){var x=CB[b], a=x.a[code]||[null,null], s=x.sp&&CS[x.sp];
+      var act=part==='referred'?'referred '+esc(a[0])+(a[1]?' · reported '+esc(a[1]):''):
+        (a[0]?'referred '+esc(a[0]):'no referral to this committee recorded')+' · reported '+esc(a[1]);
+      return '<li><a href="https://www.congress.gov/bill/'+esc(CM.congress)+'th-congress/senate-bill/'+esc(x.n)+'">S. '+esc(x.n)+'</a> '+esc(x.t)+
+        ' <span class="meta">'+esc(x.sn||'no primary sponsor listed')+(s&&s.score.p0!=null?' · sponsor’s position '+esc(s.score.p0):'')+' · '+act+'</span></li>'};
   }
-  tabs.forEach(function(t){t.addEventListener('click',function(ev){ev.preventDefault(); show(t.getAttribute('aria-controls')); history.replaceState(null,'','#'+t.getAttribute('aria-controls'))})});
-  var start=location.hash.slice(1); if(tabs.some(function(t){return t.getAttribute('aria-controls')===start})) show(start);
+  function seeCommittee(code,part,set){
+    return GROUPS.map(function(g){var n=set[g.key];
+      return n.v?disc(g.see,function(){return billList(n.ids,committeeRow(code,part),'bills')}):''}).join('');
+  }
+  function committeeBills(c){
+    var F=c.bills, R=F.referred, P=F.reported, Wr=F.reported_without_referral;
+    return '<p>A bill is referred when it’s sent to the committee for review, and reported when the committee formally reports it back to the Senate.</p>'+
+      '<h4>Sent here: '+cnt(R.total)+' Senate '+bills(R.total)+'</h4>'+split(R)+seeCommittee(c.code,'referred',R)+
+      '<h4>Sent back to the Senate: '+cnt(P.total)+' Senate '+bills(P.total)+'</h4>'+(P.total.v?split(P):'')+
+      (Wr.v?'<p>'+cnt(Wr)+' of these '+(Wr.v===1?'was':'were')+' sent back without first being recorded as sent here. '+NOT_A_SUBSET+'</p>':'')+
+      seeCommittee(c.code,'reported',P)+
+      disc('What does this mean?',
+        '<p>This shows which senators sponsored the bills that moved through this committee. CivicAlign is not deciding whether the bills themselves are liberal or conservative. The groups are based only on the DW-NOMINATE voting score of each bill’s primary sponsor.</p>'+
+        '<p>These counts do not show why a committee reported or did not report any bill.</p>')+
+      disc('How is this calculated?',function(){
+        return rawList(zeroUnknown(R,'sent here').concat(zeroUnknown(P,'sent back'),[['Sent back without a recorded referral',cnt(Wr)]]))+
+          '<p>From the official bill-status records (latest retrieved '+esc(CM.latest_archive_retrieved)+'); rule '+esc(CM.classification_rule.join(', '))+'.</p>'+
+          methodBlock(['p6.bills_referred_total','p6.bills_referred_by_sponsor','p6.bills_reported_total','p6.bills_reported_by_sponsor','p6.bills_reported_without_referral','p6.bill_sponsor_score']);
+      });
+  }
+  function committeeDetails(c){
+    var md=c.committee_median, sm=P6.senate_median, dr=c.committee_senate_drift, has=md.s!=='NOT_AVAILABLE';
+    return (has?'<p>This committee’s midpoint: <strong>'+esc(md.p0)+'</strong> · Senate midpoint: <strong>'+esc(sm.p0)+'</strong>. Half of the members sit on each side of a midpoint.</p>'+
+        '<p>Committees are compared with the Senate midpoint. The Senate average in “The Senate as a whole” is a different summary of the same line.</p>':'')+
+      '<p>'+cnt(c.listed)+' members listed · '+cnt(c.scored)+' with a voting-scale position.'+(c.left_out.length?' Left out (no position yet): '+esc(c.left_out.join(', '))+'.':'')+'</p>'+
+      '<p class="muted">Official name: '+esc(c.official_name)+' (code '+esc(c.code)+'), from '+esc(c.name_source)+', retrieved '+esc(c.name_retrieved)+'.</p>'+
+      disc('How is this calculated?',function(){
+        return rawList((has?[['Committee midpoint (Voteview score)',rawv(md)],['Senate midpoint (Voteview score)',rawv(sm)],
+                             ['Difference (Voteview score)',rawv(dr)],['Difference (display points)',esc(dr.pts)]]:[])
+                       .concat([['Committee compared with the public',esc(M[c.committee_public_drift.m].not_available)]]))+
+          ruleBlock(['display_position_v1','committee_comparison_wording_v1'])+
+          methodBlock(['p6.committee_median','p5.plain_median','p6.committee_senate_drift','p6.members_listed','p6.members_scored','p6.committee_public_drift']);
+      });
+  }
+  function committeeCard(c){
+    var md=c.committee_median, sm=P6.senate_median, has=md.s!=='NOT_AVAILABLE', F=c.bills;
+    var spoken=has?c.name+': this committee’s midpoint is '+md.p0+' and the Senate midpoint is '+sm.p0+', on a line from 0, the liberal side, to 100, the conservative side. '+c.sentence:'';
+    return '<article class="box cmte fade-in"><h3>'+esc(c.name)+'</h3>'+
+      (has?scale({marks:[{v:sm.v,kind:'ring'},{v:md.v,kind:'solid',small:true}],legend:[['ring','Senate'],['solid','This committee']],spoken:spoken})+
+           '<p class="sentence">'+esc(c.sentence)+'</p>':'<p class="sentence">No current member of this committee has a voting-scale position yet.</p>')+
+      '<p class="flowline"><b>'+cnt(F.referred.total)+'</b> Senate '+bills(F.referred.total)+' sent here &middot; <b>'+cnt(F.reported.total)+'</b> sent back to the Senate</p>'+trust('Committee rosters, GovInfo bill records + Voteview')+
+      disc('See bills',function(){return committeeBills(c)})+disc('See details',function(){return committeeDetails(c)})+'</article>';
+  }
+  function setCommittee(code,opts){
+    opts=opts||{};
+    var c=P6.committees.filter(function(x){return x.code===code})[0]; if(!c) return;
+    CURRENT.committee=code; csel.value=code;
+    $('committee-card').innerHTML=committeeCard(c); settle($('committee-card'));
+    writeURL(); say('Showing the '+c.name+' committee.');
+    if(opts.scroll) $('committees').scrollIntoView({behavior:REDUCED?'auto':'smooth',block:'start'});
+  }
+  csel.addEventListener('change',function(){if(csel.value) setCommittee(csel.value)});
+
+  // ===== How it works =====
+  (function(){
+    var gated=[[ 'How close each senator is to their state’s voters', M['p4.distance'].not_available],
+               ['Where the national public sits', M['p5.national_public'].not_available],
+               ['How committees compare with the public', M['p6.committee_public_drift'].not_available]];
+    $('cant-body').innerHTML='<ul class="plain-list">'+gated.map(function(g){return '<li><strong>'+esc(g[0])+'.</strong> Not measured yet: '+esc(g[1])+'.</li>'}).join('')+'</ul>'+
+      '<p class="muted">The survey of each state’s public and senators’ voting records use different measurements, and no validated way to connect them exists yet.</p>';
+    var m=D.meta, iv=O.meta.input_versions, idn=m.identity_source;
+    function short(h){return String(h).slice(0,12)+'…'}
+    $('versions').innerHTML=rawList([
+      ['Measurement date',esc(m.measurement_date)],['Committee membership observed',esc(m.committee_observed)],
+      ['Result record','<code>'+esc(m.input_key)+'</code>'],['Score column','<code>'+esc(m.score_column)+'</code>'],
+      ['State survey wave',esc(m.aip_wave)],['Population',esc(m.population)],['Bridge',esc(m.bridge)],
+      ['Roster (party, seats)','<code>'+esc(short(idn.source_version))+'</code> retrieved '+esc(idn.retrieved_at.slice(0,10))],
+      ['Voteview version','<code>'+esc(iv.voteview_source_versions.map(short).join(', '))+'</code>'],
+      ['Bill-status archive','<code>'+esc(short(iv.bill_status_archive.content_key))+'</code> changed '+esc(String(iv.bill_status_archive.content_changed_utc).slice(0,10))],
+      ['Bill classifications table','<code>'+esc(short(iv.bill_sponsor_classifications))+'</code>'],
+      ['Senate bill outcomes table','<code>'+esc(short(iv.senate_bill_outcomes))+'</code>'],
+      ['Senator scores table','<code>'+esc(short(iv.senator_ideology))+'</code>'],
+      ['Rules','<code>'+esc([iv.classification_rule,iv.outcome_rule,iv.enactment_rule].concat(D.display_rules.map(function(r){return r.id})).join(', '))+'</code>']])+
+      '<p><a href="methodology.html">Full methodology for every number</a></p>';
+    $('updated').textContent='Updated '+longDate(m.measurement_date)+' · Every number is checked independently before it is published.';
+    $('congress').textContent=m.congress+'th';
+  })();
+
+  // ===== Search: senators, states and committees, from this page's own data =====
+  (function(){
+    var input=$('q'), list=$('q-list'), empty=$('q-empty'), INDEX=searchIndex(D), results=[], active=-1;
+    var GROUPNAME={senator:'Senators',state:'States',committee:'Committees'};
+    function close(){list.hidden=true; input.setAttribute('aria-expanded','false'); input.removeAttribute('aria-activedescendant'); active=-1}
+    function draw(){
+      results=matchSearch(input.value,INDEX,8); active=-1;
+      empty.hidden=!(norm(input.value)&&!results.length);
+      if(!results.length){list.innerHTML=''; close(); return}
+      var html='', last=null;
+      results.forEach(function(r,i){
+        if(r.kind!==last){html+='<li class="grp" role="presentation">'+GROUPNAME[r.kind]+'</li>'; last=r.kind}
+        html+='<li role="option" id="q-o'+i+'" data-i="'+i+'" aria-selected="false">'+esc(r.label)+'<span>'+esc(r.sub)+'</span></li>';
+      });
+      list.innerHTML=html; list.hidden=false; input.setAttribute('aria-expanded','true');
+    }
+    function mark(i){
+      active=i;
+      [].forEach.call(list.querySelectorAll('[role=option]'),function(o){o.setAttribute('aria-selected',o.getAttribute('data-i')==String(i)?'true':'false')});
+      if(i>=0){input.setAttribute('aria-activedescendant','q-o'+i); var o=$('q-o'+i); if(o&&o.scrollIntoView) o.scrollIntoView({block:'nearest'})}
+    }
+    function choose(r){
+      close(); input.value='';
+      if(r.kind==='committee') setCommittee(r.committee,{scroll:true});
+      else if(r.kind==='senator') setState(r.state,{flash:r.id});
+      else setState(r.state,{scroll:true});
+    }
+    input.addEventListener('input',draw);
+    input.addEventListener('keydown',function(ev){
+      if(ev.key==='ArrowDown'){ev.preventDefault(); if(list.hidden) draw(); if(results.length) mark(Math.min(active+1,results.length-1))}
+      else if(ev.key==='ArrowUp'){ev.preventDefault(); if(results.length) mark(Math.max(active-1,0))}
+      else if(ev.key==='Enter'){if(results.length){ev.preventDefault(); choose(results[active<0?0:active])}}
+      else if(ev.key==='Escape'){if(!list.hidden){ev.preventDefault(); close()} else input.value=''}
+    });
+    list.addEventListener('mousedown',function(ev){var o=ev.target.closest('[role=option]'); if(o){ev.preventDefault(); choose(results[+o.getAttribute('data-i')])}});
+    input.addEventListener('blur',function(){setTimeout(close,120)});
+  })();
+
+  // ===== Navigation: the link for the section in view; shareable URL state =====
+  function writeURL(){
+    try{history.replaceState(null,'',location.pathname+formatState({state:CURRENT.state,committee:CURRENT.committee,section:(location.hash||'').replace(/^#/,'')||null}))}catch(e){}
+  }
+  (function(){
+    var links=[].slice.call(document.querySelectorAll('.topbar nav a, #jump-menu a'));
+    // "Jump to" (under 600px): a disclosure of the same four section links
+    var jump=$('jump'), menu=$('jump-menu');
+    function jumpOpen(open){jump.setAttribute('aria-expanded',open?'true':'false'); menu.hidden=!open; if(open){var f=menu.querySelector('a'); if(f) f.focus()}}
+    jump.addEventListener('click',function(){jumpOpen(menu.hidden)});
+    menu.addEventListener('click',function(ev){if(ev.target.closest('a')) jumpOpen(false)});
+    document.addEventListener('keydown',function(ev){if(ev.key==='Escape'&&!menu.hidden){jumpOpen(false); jump.focus()}});
+    document.addEventListener('click',function(ev){if(!menu.hidden&&!ev.target.closest('.jump')) jumpOpen(false)});
+    if('IntersectionObserver' in window){
+      var io=new IntersectionObserver(function(entries){
+        entries.forEach(function(en){if(!en.isIntersecting) return; var id=en.target.id==='senate-whole'?'senate':en.target.id==='top'?'':en.target.id;
+          links.forEach(function(a){a.setAttribute('aria-current',a.getAttribute('href')==='#'+id?'true':'false')})});
+      },{rootMargin:'-35% 0px -60% 0px'});
+      ['senators','senate','senate-whole','committees','how'].forEach(function(id){io.observe($(id))});
+    }
+    var start=parseState(location.search,location.hash,STATES,CODES);
+    if(start.state) setState(start.state);
+    if(start.committee) setCommittee(start.committee);
+    settle(document);
+    if(start.section){var el=$(start.section); if(el) setTimeout(function(){el.scrollIntoView({behavior:'auto',block:'start'})},0)}
+  })();
 })();
 </script>
 </body>

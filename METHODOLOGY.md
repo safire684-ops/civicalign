@@ -24,7 +24,10 @@ Engine A (Pillar 1: vote bindings and source packets) is documented in
    methods, not final.
 5. Committee drift is committee median − Senate median.
 6. `nominate_dim1` is the score; `nokken_poole_dim1` is stored only.
-7. No 0–100 score and no 0–100 display of any score.
+7. No 0–100 score, grade, rating or rank. The only 0–100 number is the display
+   position, (`nominate_dim1` + 1) × 50: presentation only, never written as
+   "/100", never applied to survey estimates, with 50 meaning Voteview's zero
+   point and nothing more; the raw value is always available beneath it.
 8. No evaluative labels, no ordering of politicians by score, and no causal
    claims about what a committee or the Senate did.
 9. Bill counts group bills by their primary sponsor's voting position only. A
@@ -258,6 +261,42 @@ The exact current score shown beside a bill always comes from the latest
 verified `senator_ideology` record. A bill's classification record also keeps,
 as history, the score it was classified from; see "Storage and versions".
 
+## How the page presents numbers
+
+These rules change only how a stored number is shown; every calculation uses
+the stored values. Each is published on `methodology.html` with its id, and the
+supervisor re-derives every displayed position, label and sentence from the raw
+values with separate code.
+
+- **Display position** (`display_position_v1`): (`nominate_dim1` + 1) × 50, so
+  −1 is 0, 0 is 50 and +1 is 100; a whole number on a marker, one decimal in
+  details, rounded half-up from the exact decimal value. It is a position on a
+  line, not a score, grade, rating or rank; higher is not better. 50 is
+  Voteview's zero point, nothing more. Survey estimates of the public are never
+  shown on this line.
+- **Side label** (`side_label_v1`): from the sign of the raw value, "Liberal
+  side of the voting scale", "Conservative side of the voting scale", or "At
+  Voteview's zero point".
+- **Where the Senate sits** (`senate_position_wording_v1`): from the plain
+  Senate mean; within 2 display points of 50, "The Senate sits close to
+  Voteview's zero point.", otherwise "The Senate sits on the liberal (or
+  conservative) side of the voting scale."
+- **What changes with population** (`population_shift_wording_v1`): shift =
+  |plain − population-weighted| × 50 display points; exactly 0 "Weighting
+  senators by state population does not move it.", under 5 points "… moves it
+  slightly toward the <side> side.", 5 or more "… moves it toward the <side>
+  side.", the side being where the weighted mean falls.
+- **Committee compared with the Senate** (`committee_comparison_wording_v1`):
+  under 2 display points from the Senate midpoint, "This committee sits close to
+  the Senate midpoint."; otherwise the side it falls on.
+- Every threshold is compared on the exact raw value, never on a rounded
+  display number, so two committees shown with the same rounded markers can
+  read differently when their exact distances fall either side of 2 points.
+- **Party** labels (R, D, I) are identity data read from the verified
+  congress-legislators roster when the page is built; they are never stored in
+  or read from `senator_ideology`, and the roster version is recorded in the
+  page's provenance.
+
 ## Storage and versions
 
 All Engine B inputs and results are stored in `data/ideology/` as JSON Lines,
@@ -343,6 +382,7 @@ signed gap and the ordering built on it); the caucus-group peer comparison; the
 seats-versus-nation election figure and the state-vote fit that was kept for
 diagnostics only; the old committee bill-flow shares and the Yes/No-split
 analysis (the sponsor-based "Bills handled by this committee" counts above are
-a separate, new method); landmark bills; and every 0–100 display. None of them is replaced by a hidden
+a separate, new method); landmark bills; and every 0–100 score or grade (the display position above is a
+separate, presentation-only transformation). None of them is replaced by a hidden
 equivalent. The documents that described them are kept, marked as archived,
 under `docs/archive/`.

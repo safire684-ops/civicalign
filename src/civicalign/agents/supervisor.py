@@ -28,6 +28,10 @@ Engine B (Pillars 4-6), from the raw snapshot files and the stored records:
     without a referral, each by sponsor class), recounted bill by bill from each
     bill's own committee activities in the XML and the Voteview file; every
     listed bill's sponsor, committee action dates and current sponsor score
+  * the page's presentation: every 0-100 display position equals (Voteview
+    score + 1) x 50 with half-up rounding, no survey estimate carries one, every
+    side label and every Senate and committee sentence follows its published
+    wording rule, and every party label matches the verified Senate roster
   * gating: no senator-to-state distance while the bridge is NONE; no
     Senate-to-public gap and no committee-to-public drift while the national
     estimate is unresolved -- in the record and on the page
@@ -598,6 +602,136 @@ def eb_committee_bill_checks(cfg: Config, raw: dict, page_data: dict | None) -> 
     return out
 
 
+# ---- presentation: display positions, wording and identity, re-derived with separate code ----
+
+_EB_POSITION_IDS = {"p4.senator_score", "p4.reference_anchor", "p5.plain_mean", "p5.weighted_mean", "p5.plain_median",
+                    "p5.weighted_median", "p6.committee_median", "p6.bill_sponsor_score"}
+_EB_POINT_IDS = {"p5.weighting_difference", "p5.median_difference", "p6.committee_senate_drift"}
+_EB_SURVEY_IDS = {"p4.state_public_estimate", "p4.state_on_senator_scale", "p4.distance", "p5.national_public",
+                  "p5.chamber_public_gap", "p6.committee_public_drift"}
+_EB_RULE_IDS = {"display_position_v1", "side_label_v1", "senate_position_wording_v1", "population_shift_wording_v1",
+                "committee_comparison_wording_v1"}
+
+
+def _eb_pos(v, decimals: int) -> str:
+    from decimal import ROUND_HALF_UP, Decimal
+    d = (Decimal(repr(v)) + 1) * 50
+    return f"{d.quantize(Decimal(1).scaleb(-decimals), rounding=ROUND_HALF_UP):.{decimals}f}"
+
+
+def _eb_points(v) -> str:
+    from decimal import ROUND_HALF_UP, Decimal
+    return f"{(abs(Decimal(repr(v))) * 50).quantize(Decimal('0.1'), rounding=ROUND_HALF_UP):.1f}"
+
+
+def _eb_words(v) -> dict:
+    """The published wording rules, re-implemented: sign and exact display-point distance of a raw value."""
+    from decimal import Decimal
+    d = Decimal(repr(v))
+    return {"side": "liberal" if d < 0 else "conservative" if d > 0 else "zero", "points": abs(d) * 50}
+
+
+def _eb_side_label(v):
+    if v is None:
+        return None
+    s = _eb_words(v)["side"]
+    return "At Voteview’s zero point" if s == "zero" else ("Liberal" if s == "liberal" else "Conservative") + " side of the voting scale"
+
+
+def eb_display_checks(cfg: Config, raw: dict, record: dict, page_data: dict | None, methodology_html: str | None) -> list[Check]:
+    """Presentation only: the 0-100 display positions, the survey exclusion, the wording rules and the party labels."""
+    if page_data is None:
+        return [Check("Engine B: every display position equals (Voteview score + 1) × 50", False, "no page data")]
+    nums = list(_eb_numbers(page_data))
+    bad, survey, n_pos = [], [], 0
+    for n in nums:
+        shown = [k for k in ("p0", "p1", "pts") if k in n]
+        if n["m"] in _EB_SURVEY_IDS:
+            if shown:
+                survey.append(n["p"])
+            continue
+        if n["m"] in _EB_POSITION_IDS and n["v"] is not None:
+            n_pos += 1
+            if (n.get("p0"), n.get("p1")) != (_eb_pos(n["v"], 0), _eb_pos(n["v"], 1)):
+                bad.append(f"{n['p']}: {n.get('p0')}/{n.get('p1')}")
+        elif n["m"] in _EB_POINT_IDS and n["v"] is not None:
+            if n.get("pts") != _eb_points(n["v"]):
+                bad.append(f"{n['p']}: points {n.get('pts')}")
+        elif shown:
+            bad.append(f"{n['p']}: a display position on something that is not a Voteview position")
+    # the sponsor positions in the passed-Senate bill lists, from each bill's own sponsor and the raw Voteview file
+    scores = {r["bioguide_id"]: (float(r["nominate_dim1"]) if r["nominate_dim1"] not in ("", None) else None)
+              for r in raw["members"] if r["chamber"] == "Senate" and r["congress"] == str(cfg.congress)}
+    if cfg.billflow_zip.exists():
+        sponsor = {b: x["sponsor"] for b, x in _eb_bill_outcomes(cfg, raw).items()}
+        for b, x in page_data["p5"]["outcomes"].get("bills", {}).items():
+            s = scores.get(sponsor.get(b))
+            if x.get("sponsor_score") != s or x.get("sponsor_p0") != (_eb_pos(s, 0) if s is not None else None):
+                bad.append(f"{b}: sponsor position")
+            else:
+                n_pos += s is not None
+    out = [Check("Engine B: every display position equals (Voteview score + 1) × 50", not bad,
+                 f"{n_pos} positions" + (f"; mismatches {bad[:5]}" if bad else "")),
+           Check("Engine B: no survey estimate is shown on the display scale", not survey,
+                 f"{sum(1 for n in nums if n['m'] in _EB_SURVEY_IDS)} survey and unavailable values" + (f"; with a position: {survey[:5]}" if survey else ""))]
+    # wording: side labels from the raw Voteview file; Senate and committee sentences from the recount-confirmed record
+    wrong = []
+    for st in page_data["p4"]["states"]:
+        for s in st["senators"]:
+            if s.get("side") != _eb_side_label(scores.get(s["id"])):
+                wrong.append(f"{s['id']} side label")
+    p5 = record["results"]["pillar5"]
+    plain, diff = p5["plain_center"]["value"], p5["population_weighting_difference"]["value"]
+    pw, dw = _eb_words(plain), _eb_words(diff)
+    want_pos = ("The Senate sits close to Voteview’s zero point." if pw["points"] < 2
+                else f"The Senate sits on the {pw['side']} side of the voting scale.")
+    toward = "liberal" if dw["side"] == "conservative" else "conservative"   # plain - weighted > 0: the weighted average sits lower
+    how = (None if dw["side"] == "zero" else
+           (f"slightly toward the {toward} side" if dw["points"] < 5 else f"toward the {toward} side"))
+    want_shift = ("Weighting senators by state population does not move it." if how is None
+                  else f"Weighting senators by state population moves it {how}.")
+    want_detail = ("In plain terms, population weighting does not move the Senate average." if how is None
+                   else f"In plain terms, population weighting moves the Senate average {how} of the voting scale.")
+    W = page_data["p5"].get("wording", {})
+    if W.get("position") != want_pos:
+        wrong.append("Senate position sentence")
+    if W.get("shift") != want_shift or W.get("shift_words") != how or W.get("shift_detail") != want_detail:
+        wrong.append("population-shift sentence")
+    for c in page_data["p6"]["committees"]:
+        drift = record["results"]["pillar6"][c["code"]]["committee_senate_drift"]["value"]
+        if drift is None:
+            want = None
+        else:
+            w = _eb_words(drift)
+            want = ("This committee sits close to the Senate midpoint." if w["points"] < 2
+                    else f"This committee sits to the {w['side']} side of the Senate midpoint.")
+        if c.get("sentence") != want:
+            wrong.append(f"{c['code']} sentence")
+    rules = {r["id"] for r in page_data.get("display_rules", [])}
+    if rules != _EB_RULE_IDS:
+        wrong.append(f"display rules on the page: {sorted(rules)}")
+    if methodology_html is not None:
+        wrong += [f"no methodology section for {r}" for r in sorted(_EB_RULE_IDS) if f'id="{r}"' not in methodology_html]
+    out.append(Check("Engine B: every side label and sentence follows its published wording rule", not wrong,
+                     f"{sum(len(st['senators']) for st in page_data['p4']['states'])} senators, Senate, "
+                     f"{len(page_data['p6']['committees'])} committees" + (f"; {wrong[:5]}" if wrong else "")))
+    # identity: party from the verified roster, and the roster version named in the page's provenance
+    import hashlib
+    party_of = {"Republican": "R", "Democrat": "D", "Independent": "I"}
+    roster = _roster(cfg)
+    pbad = [s["id"] for st in page_data["p4"]["states"] for s in st["senators"]
+            if s.get("party") != (party_of.get(roster[s["id"]]["party"], roster[s["id"]]["party"] or None) if s["id"] in roster else None)]
+    src = page_data["meta"].get("identity_source", {})
+    snap = json.loads((cfg.raw_dir / "SNAPSHOT.json").read_text())
+    entry = next((e for e in snap["sources"] if e["file"] == cfg.roster_json.name), {})
+    disk = hashlib.sha256(cfg.roster_json.read_bytes()).hexdigest()
+    if not (src.get("source_sha256") == entry.get("sha256") == disk and src.get("source_version") == str(entry.get("content_key"))):
+        pbad.append("the page's roster version is not the verified roster")
+    out.append(Check("Engine B: party labels match the verified Senate roster", not pbad,
+                     f"{sum(len(st['senators']) for st in page_data['p4']['states'])} senators" + (f"; {pbad[:5]}" if pbad else "")))
+    return out
+
+
 def _eb_git_head(path: Path) -> str | None:
     import subprocess
     root = Path(__file__).resolve().parents[3]
@@ -668,6 +802,7 @@ def engine_b_checks(cfg: Config = DEFAULT, page_dir: Path | None = None) -> list
     out += eb_methodology_checks(record, anchors, page_data, meth)
     out += eb_outcome_checks(cfg, raw, page_data)
     out += eb_committee_bill_checks(cfg, raw, page_data)
+    out += eb_display_checks(cfg, raw, record, page_data, meth)
     out += eb_store_checks(cfg)
     out += eb_page_current_checks(cfg, page_dir)
     return out

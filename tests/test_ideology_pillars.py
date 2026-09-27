@@ -184,9 +184,13 @@ def test_config_defaults_are_the_decided_ones():
 
 
 def test_nothing_is_rescaled_to_0_100():
+    """No calculation is rescaled. The only 0-100 number is the page's display position, made in the
+    presentation module ideology/display.py, which no calculation imports (tests/test_redesign.py)."""
     import re
     for f in (ROOT / "src" / "civicalign" / "ideology").glob("*.py"):
-        assert not re.search(r"\*\s*50\s*\+\s*50|0\s*(?:-|to)\s*100", f.read_text()), f.name
+        if f.name == "display.py":
+            continue
+        assert not re.search(r"\*\s*50\s*\+\s*50|0\s*(?:-|to)\s*100|\+\s*1\)\s*\*\s*50", f.read_text()), f.name
 
 
 # ---- the real snapshot, recomputed independently ----------------------------------------------------

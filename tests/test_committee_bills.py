@@ -36,8 +36,14 @@ NOT_A_SUBSET = ("A committee can sometimes report a bill that was not first reco
 
 
 def _script() -> str:
-    s = TEMPLATE
-    return s[s.index("// ---- Pillar 6: bills handled by this committee ----"):s.index("function renderCommittee(")]
+    """The committee part of the page's script."""
+    s = TEMPLATE[TEMPLATE.index("<script>"):]
+    return s[s.index("// ===== Committees ====="):s.index("// ===== How it works =====")]
+
+
+def visible_text_of(page: str) -> str:
+    """The page without its embedded data (whose official bill titles are the government's words)."""
+    return re.sub(r'<script id="data" type="application/json">.*?</script>', " ", page, flags=re.S)
 
 
 def _counts(F):
@@ -89,7 +95,7 @@ def test_every_committee_count_comes_from_the_saved_bill_table(data):
 def test_no_committee_count_is_typed_into_the_page_code():
     code = re.sub(r"//[^\n]*", "", _script())                  # comments aside
     literals = set(re.findall(r"(?<![\w.#-])\d+(?![\w%-])", code))
-    assert literals <= {"0", "1", "2", "100"}, literals          # 2: the third part of a fold-out key
+    assert literals <= {"0", "1", "100"}, literals              # 100: the end of the line, in the spoken description
 
 
 def test_every_tally_traces_to_exact_bill_ids(data):
@@ -155,23 +161,27 @@ def test_the_real_data_shows_every_reported_without_referral_case(data):
 
 def test_the_section_says_sponsor_not_bill(pages):
     s = _script()
-    for text in ("Bills handled by this committee", "Referred to this committee", "Reported by this committee",
+    for text in ("Senate committees review bills before the full Senate votes.",
+                 "' sent here &middot; <b>'", "sent back to the Senate</p>'", "<h4>Sent here: '", "<h4>Sent back to the Senate: '",
                  "A bill is referred when it’s sent to the committee for review, and reported when the committee formally "
                  "reports it back to the Senate.",
                  "These counts do not show why a committee reported or did not report any bill.",
-                 "Senate '+nb(R.total)+' referred to this committee.", "Senate '+nb(P.total)+' reported by this committee.",
-                 "Sponsored by senators on the liberal side of the Voteview scale",
+                 "</b> Senate '+bills(F.referred.total)+' sent here", "' Senate '+bills(R.total)+'",
+                 "disc('What does this mean?'", MEANING, NOT_A_SUBSET):
+        assert text in s or text in TEMPLATE, text
+    for text in ("Sponsored by senators on the liberal side of the Voteview scale",
                  "Sponsored by senators on the conservative side of the Voteview scale",
-                 "What does this mean?", MEANING, NOT_A_SUBSET):
-        assert text in s, text
-    for see in ("See the bills sponsored by senators on the liberal side of the Voteview scale",
-                "See the bills sponsored by senators on the conservative side of the Voteview scale"):
-        assert see in s
+                 "See the bills sponsored by senators on the liberal side of the Voteview scale",
+                 "See the bills sponsored by senators on the conservative side of the Voteview scale"):
+        assert text in TEMPLATE, text
+    # by default the card shows only the line, one sentence and the two bill counts; the sponsor split is behind "See bills"
+    card = s[s.index("function committeeCard(c)"):s.index("function setCommittee(")]
+    assert "split(" not in card and "disc('See bills',function(){return committeeBills(c)})" in card
 
 
 def test_no_liberal_or_conservative_bills_wording(pages):
     bad = re.compile(r"\b(liberal|conservative) (committee )?(bill|bills|legislation|law|laws|measure|measures)\b", re.I)
-    for text in (_script(), pages["senator-check.html"], pages["methodology.html"],
+    for text in (_script(), visible_text_of(pages["senator-check.html"]), pages["methodology.html"],
                  (ROOT / "src" / "civicalign" / "ideology" / "methodology.py").read_text()):
         assert not bad.search(text)
 
@@ -214,13 +224,14 @@ def test_every_committee_bill_number_has_methodology(data, pages):
     assert "current sponsor score versions" in " ".join(data["methods"]["p6.bill_sponsor_score"]["versions"])
     assert "not the content or ideology of the bill" in " ".join(M.REGISTRY["p6.bills_reported_by_sponsor"]["limitations"])
     s = _script()
-    assert "num(s.score)" in s and "num(R.total)" in s and "num(P.total)" in s and "num(W)" in s
+    assert "cnt(R.total)" in s and "cnt(P.total)" in s and "cnt(Wr)" in s and "s.score.p0" in s
+    assert "cnt(F.referred.total)" in s and "cnt(F.reported.total)" in s
 
 
 def test_bill_lists_are_behind_see_bills_and_link_to_congress_gov(data):
     s = _script()
-    assert '<details class="more seebills" data-cb="' in s and "<ul class=\"bills\"></ul></details>" in s
-    assert "set[g.key].v?" in s, "a fold-out appears only when its group has bills"
+    assert "return n.v?disc(g.see,function(){return billList(n.ids,committeeRow(code,part),'bills')}):''" in s
+    assert "n.v?" in s, "a fold-out appears only when its group has bills"
     assert "https://www.congress.gov/bill/'+esc(CM.congress)+'th-congress/senate-bill/'+esc(x.n)+'" in s
     for x in list(data["p6"]["bills"].values())[:20]:
         assert x["t"] and isinstance(x["n"], int)
@@ -244,7 +255,8 @@ def test_all_sixteen_standing_committees_still_render(data):
     assert sorted(codes) == sorted(record["results"]["pillar6"]) and len(codes) == 16
     for c in data["p6"]["committees"]:
         assert set(c["bills"]) == {"referred", "reported", "reported_without_referral"}
-    assert "billsSection(c)+" in TEMPLATE
+    assert "disc('See bills',function(){return committeeBills(c)})" in TEMPLATE
+    assert '<option value="" selected>Choose a committee</option>' in TEMPLATE, "no committee is preselected"
 
 
 def _without_bill_section(monkeypatch):
@@ -274,4 +286,4 @@ def test_pillars_4_and_5_are_unchanged_by_the_bill_section(data, monkeypatch):
         if M.REGISTRY[eid]["kind"] != "billflow":
             assert m == plain["methods"][eid], eid
     assert set(data["p5"]) == {"active", "diff", "gap", "mdiff", "median", "national", "outcomes", "plain", "unscored", "weighted",
-                            "wmedian"}
+                            "wmedian", "wording"}
