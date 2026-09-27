@@ -15,7 +15,9 @@ claim to measure whether a senator represents their voters.
 
 - Live site: https://safire684-ops.github.io/civicalign/ (`/senator-check.html`,
   methodology `/methodology.html`). The current Pillars 4–6 implementation
-  described here is live: published on 26 September 2026 from GitHub `main`.
+  described here is live: published on 26 September 2026 from GitHub `main`;
+  the Pillar 5 "What the Senate actually passed" counts and the Pillar 6 "Bills
+  handled by this committee" counts were added on 27 September 2026.
 - The site rebuilds daily from a verified source snapshot. Figures, rosters and
   committee memberships are expected to change; the methods below are not.
 
@@ -77,6 +79,15 @@ The national public estimate is **unresolved**: no definition has been chosen,
 and no bridge would place it on the senator scale. So no Senate-to-public gap is
 calculated.
 
+**What the Senate actually passed.** Beside the averages, the page counts the
+Senate bills (S.) of the current Congress that passed the Senate and those that
+were enacted, grouped by the primary sponsor's side of the Voteview scale
+(negative or positive `nominate_dim1`). The groups describe the sponsor's voting
+record, not the bill: CivicAlign does not classify any bill as liberal or
+conservative, and no model is used. Every count lists its exact bills, read from
+each bill's official GovInfo bill-status record. The counts do not show that the
+Senate's average, or any senator, caused a bill to pass.
+
 ### Pillar 6 — committees and the Senate
 
 For each standing committee: the median score of its current members, and the
@@ -87,10 +98,19 @@ list (`committees-current.json`). Membership dates are the dates CivicAlign
 observed them, not official appointment dates. No committee-to-public drift is
 calculated while the national estimate is unresolved.
 
+**Bills handled by this committee.** Each committee card also counts the Senate
+bills referred to the committee and the Senate bills it reported, each grouped
+by the primary sponsor's side of the Voteview scale, from the same bill-status
+records. Referred and reported are separate counts: a committee can report a
+bill that was never recorded as referred to it, and such bills are shown. The
+groups describe sponsors, not bills; the counts do not show why a committee
+reported or did not report any bill.
+
 Retired and not coming back (their code has been removed): the caucus-group
 peer comparison, the seats-versus-nation election figure and the state-vote
-fit that was used only for diagnostics, the committee bill-flow and Yes/No-split
-analysis, landmark bills, the old score that subtracted a voter estimate from a
+fit that was used only for diagnostics, the old committee bill-flow shares and
+Yes/No-split analysis (the sponsor-based counts above are a separate, new
+method), landmark bills, the old score that subtracted a voter estimate from a
 senator's score, and any 0–100 display.
 
 ## Pillar 1 — official vote records (no generated explanations)
@@ -133,13 +153,16 @@ currently published.**
   old is overwritten or deleted.
 - **The daily update** runs as one gated chain: fetch the verified snapshot,
   verify it, the Pillar 1 binding and context checks, then for Pillars 4–6
-  ingest, bridge, reference anchors, compute, build the pages, run every test,
-  and run the supervisor. Only if every step passes, and something changed, is
+  ingest, bridge, reference anchors, the bill/sponsor classifications, the
+  passed-Senate and enacted outcomes, a check of both bill tables, compute,
+  build the pages, run every test, and run the supervisor. Only if every step passes, and something changed, is
   anything committed and published; otherwise the previous verified site stays
   live.
 - **The supervisor** (`python -m civicalign.agents.supervisor`) re-reads the raw
   files with separate code and reproduces every published Pillars 4–6 number,
   checks the reference anchors and committee names against their sources,
+  recounts every Pillar 5 and Pillar 6 bill count bill by bill from the raw
+  bill-status archive and Voteview file,
   confirms nothing that needs the bridge or a national estimate is shown,
   checks every displayed number against its methodology entry, and verifies the
   stored records; it also re-derives every Pillar 1 binding and source packet.
