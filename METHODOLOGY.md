@@ -4,8 +4,9 @@ Written to be published, not hidden. It describes the system that exists now.
 Every displayed number also has its own entry in the methodology registry
 (`src/civicalign/ideology/methodology.py`), shown on the published
 `methodology.html` with the versions it was built from. Figures quoted below are
-illustrations from result record `5f42ca01…` (measured 2026-09-24); the site
-rebuilds daily and the page carries the current figures.
+illustrations from result record `e0f5b6d9…` (measured 2026-09-27) and the bill
+tables of the same day; the site rebuilds daily and the page carries the current
+figures.
 
 Engine A (Pillar 1: vote bindings and source packets) is documented in
 `README.md` and `HANDOFF.md`; nothing here applies to it.
@@ -26,9 +27,14 @@ Engine A (Pillar 1: vote bindings and source packets) is documented in
 7. No 0–100 score and no 0–100 display of any score.
 8. No evaluative labels, no ordering of politicians by score, and no causal
    claims about what a committee or the Senate did.
-9. Inputs and results are versioned and append-only; nothing old is
+9. Bill counts group bills by their primary sponsor's voting position only. A
+   sponsor's position is never presented as the bill's ideology, and CivicAlign
+   does not classify any bill as liberal or conservative.
+10. No LLM or other model is used anywhere in Engine B: every classification is
+   fixed arithmetic or fixed text matching on official records.
+11. Inputs and results are versioned and append-only; nothing old is
    overwritten or deleted.
-10. Committee membership dates are observed dates, labelled as such.
+12. Committee membership dates are observed dates, labelled as such.
 
 ## The one-dimension assumption
 
@@ -110,8 +116,8 @@ the sitting senator; an unscored seated senator's share is left out with them.
 **Primary method — `population_weighted_mean_v1`.** The main comparison is the
 plain Senate mean (each senator counted equally, 0.120) against the
 population-weighted mean (the sum of each score times its weight, divided by the
-total weight, 0.083), and their difference, plain − weighted, sign kept
-(+0.037). A positive difference means the weighted average sits lower on the
+total weight, 0.085), and their difference, plain − weighted, sign kept
+(+0.035). A positive difference means the weighted average sits lower on the
 scale, toward its liberal end. The published page explains this in plain words
 and says that it describes Senate voting records and state populations only,
 not which laws passed, what voters believe, or why Congress made a decision.
@@ -137,6 +143,38 @@ chosen, a population-weighted average of states is not treated as the national
 median, and even a defined national estimate would need a bridge. So the
 national public centre and the Senate-to-public gap are NOT_AVAILABLE.
 
+**What the Senate actually passed.** Beside the averages, the page counts the
+Senate bills (S.) of the current Congress that passed the Senate, and those of
+them that were enacted, each grouped by sponsor voting position (see "Sponsor
+voting position" below). Source: the GovInfo bill-status archive for the
+Congress's Senate bills (`BILLSTATUS-119-s.zip`), read only if its bytes match
+the verified snapshot.
+
+- *Passed the Senate* — rule `senate_passage_loc17000_v1`: the bill's own
+  record has a Library of Congress action with code 17000 ("Passed/agreed to in
+  Senate"), and no later Senate action vitiates the passage. The stored evidence
+  is every code-17000 action (date and text), the Senate's own floor action
+  saying the bill passed, and whether an "Engrossed in Senate" text exists; a
+  bill with several passage actions is one bill, dated by the earliest.
+- *Enacted* — rule `enactment_signature_or_public_law_v1`: a passed-Senate bill
+  whose record shows a presidential signature ("Signed by President") or a
+  recorded public law (its laws element or a "Became Public Law" action, which
+  also covers a law enacted without a signature or over a veto). A signed bill
+  is law from the signature, so its public-law number is not required: the page
+  counts enacted bills with a public-law number and those still awaiting one
+  separately.
+- Illustration (2026-09-27): 192 Senate bills passed the Senate (72 sponsored by
+  senators on the liberal side of the Voteview scale, 120 on the conservative
+  side); 41 were enacted (5 and 36), 37 with a public-law number and 4 signed and
+  awaiting one.
+
+Every count lists its exact bill ids, and each bill links to its official
+record. Limits: Senate bills only (joint, simple and concurrent resolutions and
+House bills the Senate passed are not included); a bill passed by unanimous
+consent counts the same as one passed by a recorded vote; enactment also depends
+on the House and the President. The counts do not show that the Senate's
+ideological average, or any senator, caused a bill to pass.
+
 ## Pillar 6 — committees and the Senate
 
 For each of the 16 Senate standing committees (codes `SS` + two letters;
@@ -148,6 +186,7 @@ subcommittees, select and joint committees are not included):
   median. Positive means the committee median sits higher on the scale.
 - **Committee − national public drift**: NOT_AVAILABLE (no national estimate,
   no bridge).
+- **Bills handled by this committee** (below).
 
 Committee names come from the official congress-legislators committee list
 (`committees-current.json`); the short name shown is the official name without
@@ -167,6 +206,58 @@ member sits. A small committee's median can move a long way when one member
 changes. Every member the source lists is counted; no title (chair, ranking
 member or any other) is treated differently.
 
+**Bills handled by this committee.** From the same bill-status archive, each
+committee card counts, for the Senate bills (S.) of the Congress:
+
+- *Referred Senate bills*: bills whose own committee record shows the activity
+  "Referred To" for the committee.
+- *Reported Senate bills*: bills whose committee record shows "Reported By" or
+  "Reported Original Measure" for the committee, meaning the committee formally
+  reported the bill back to the Senate.
+- *Reported without referral*: reported bills whose record has no "Referred To"
+  activity for that committee (for example an original measure the committee
+  wrote itself). Referred and reported are kept as separate lists, so the
+  reported count is not assumed to be a subset of the referred count, and these
+  bills are counted and shown, never hidden or moved.
+
+Each count is split by sponsor voting position (see "Sponsor voting position"
+below), lists its exact bill ids, and each listed bill shows its committee
+action dates, its sponsor, the sponsor's current score and a link to its
+official record. Illustration (2026-09-27): 5,387 referrals and 403 reports
+across the 16 standing committees, with 15 reported-without-referral cases in 7
+committees. Limits: only the full committee's own activities are read
+(subcommittee activities are not); a bill referred to several committees counts
+once for each; a discharge is not a report. The counts describe where bills
+went, not why: they do not show why a committee reported or did not report any
+bill, and they say nothing about a committee's motives.
+
+## Sponsor voting position (bill counts in Pillars 5 and 6)
+
+Every bill count groups bills by their primary sponsor only (rule
+`sponsor_nominate_dim1_sign_v1`). The sponsor's Bioguide id in the bill's own
+bill-status record is matched to that senator's `nominate_dim1` in the verified
+`senator_ideology` table:
+
+- score below zero: "Sponsored by senators on the liberal side of the Voteview
+  scale";
+- score above zero: "Sponsored by senators on the conservative side of the
+  Voteview scale";
+- score exactly zero: a separate group;
+- no sponsor, no Bioguide id, no Voteview row or no score: UNKNOWN, with the
+  reason.
+
+**This is not bill ideology.** The group describes the sponsor's voting record,
+never the content of the bill. CivicAlign does not decide whether any bill is
+liberal or conservative, and the page never says "liberal bills" or
+"conservative bills". Only the primary sponsor counts; cosponsors, including
+those from the other party, are not considered. The sponsor's score is their
+career-long Voteview score, relative to other members of Congress. No LLM or
+other model is used: the rule is the sign of a stored number.
+
+The exact current score shown beside a bill always comes from the latest
+verified `senator_ideology` record. A bill's classification record also keeps,
+as history, the score it was classified from; see "Storage and versions".
+
 ## Storage and versions
 
 All Engine B inputs and results are stored in `data/ideology/` as JSON Lines,
@@ -177,8 +268,24 @@ snapshot version, SHA-256, retrieval date and a fixture flag (fixtures live only
 under `tests/fixtures/`). Result records are keyed by the record ids of every
 input they used plus every setting that changes a number, are written once, and
 are indexed in order; only committees whose membership changed are recomputed,
-and a carried result always equals a full recompute. The details are in
-`docs/ENGINE_B_DATA_FLOW.md`.
+and a carried result always equals a full recompute.
+
+The bill layer has two further tables. `bill_sponsor_classifications` holds one
+record per Senate bill: the bill-to-sponsor classification, the bill's committee
+activities, and the fingerprint of its official record. A new version is
+written only when something that matters changes: the bill's official record,
+its sponsor or Bioguide id, the classification rule, the class (the sign of the
+sponsor's current score) or the reason a score is unavailable. A Voteview update
+that moves a score but keeps it on the same side of zero writes no bill
+versions; a change of side re-versions exactly that sponsor's bills. The score
+stored in a classification record is historical (the score it was classified
+from); current scores come only from `senator_ideology`. `senate_bill_outcomes`
+holds each bill's Senate passage and enactment evidence under the two rules
+above and never depends on Voteview. Each published page records the
+fingerprints of the input versions it was built from (both bill tables,
+`senator_ideology`, the Voteview and bill-status source versions, and the rule
+versions), so any earlier page can be traced to the exact table contents behind
+it. The details are in `docs/ENGINE_B_DATA_FLOW.md`.
 
 ## Verification
 
@@ -189,10 +296,19 @@ and a carried result always equals a full recompute. The details are in
   configured reference figures are stored, or if a committee has no official
   name. Displayed values are the saved values rounded half-up to the registry's
   decimals (three on the Voteview scale, two for survey estimates).
+- Before anything is computed, both bill tables are verified: valid and
+  hash-chained, consistent with each other, every class matching the sign of
+  the sponsor's latest score, and current with the verified snapshot (a dry
+  refresh would write nothing).
 - The supervisor re-reads the raw files with separate code and reproduces every
   senator score and state estimate, the Pillar 5 means and medians and their
   differences, every committee median and drift, the reference figures and the
-  committee names; it confirms that nothing needing the bridge or a national
+  committee names; it recounts every Pillar 5 outcome count and every Pillar 6
+  committee bill count bill by bill from each bill's own XML and the Voteview
+  file, checks each listed bill's sponsor, committee action dates and current
+  sponsor score, confirms every stored class matches the sign of the latest
+  score, and checks that the page names the current, verified input versions;
+  it confirms that nothing needing the bridge or a national
   estimate carries a value, that every displayed number equals the saved record
   with its registry rounding, that every stored record is valid, hash-chained
   and append-only against the last commit, and that the published pages are the
@@ -213,6 +329,9 @@ and a carried result always equals a full recompute. The details are in
 - The Pillar 5 weighting counts residents, not voters, and both methods are
   candidates; the median is sensitive to the gap between the parties.
 - Committee medians are sensitive to small and evenly split memberships.
+- The bill counts describe sponsors, not bills, and only the primary sponsor;
+  they cover Senate bills (S.) only, and the committee counts read only full
+  committees' own activities.
 - Census vintages revise earlier years; the vintage is part of every population
   record's key.
 
@@ -222,7 +341,8 @@ Removed from the code and the site, and not coming back: the alignment score
 (a voter estimate subtracted from a senator score and scaled to 0–100, with the
 signed gap and the ordering built on it); the caucus-group peer comparison; the
 seats-versus-nation election figure and the state-vote fit that was kept for
-diagnostics only; the committee bill-flow and Yes/No-split analysis; landmark
-bills; and every 0–100 display. None of them is replaced by a hidden
+diagnostics only; the old committee bill-flow shares and the Yes/No-split
+analysis (the sponsor-based "Bills handled by this committee" counts above are
+a separate, new method); landmark bills; and every 0–100 display. None of them is replaced by a hidden
 equivalent. The documents that described them are kept, marked as archived,
 under `docs/archive/`.
