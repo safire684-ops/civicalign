@@ -12,7 +12,8 @@ from the release, banner removed, Python 3.12 run, fresh update), and after
 publishing (26 September 2026: `e6f6428` live on GitHub `main`), and after the
 deterministic bill/sponsor data layer (`c0b592a`, local) and the Pillar 5 outcome
 layer (`5a5dd93`, local), the local Pillar 5 scorecard (`3f54d83`) and the bill
-tables in the daily update (`710a4fc`, local). Read all of it before doing
+tables in the daily update (`710a4fc`), after the failed scorecard publish
+attempt, and after the bill-storage fix (`09f8baf`, local). Read all of it before doing
 anything. The repository and this file are the source of truth; older design
 documents, the whitepaper and chat history are not.
 
@@ -33,7 +34,15 @@ Work one step at a time and stop for review after each step.
 
 - Repo: `/Users/sarthakkesavarapu/Desktop/CivicAlign`, remote
   https://github.com/safire684-ops/civicalign
-- **PUBLISHED: `e6f6428` is live on GitHub `main`** (26 September 2026). The
+- **THE LIVE SITE IS STILL THE PREVIOUS RELEASE (`e6f6428` pages, no scorecard).**
+  The scorecard publish attempt pushed `pillars-4-6-rebuild` and fast-forwarded
+  GitHub `main` to `92c94ab`, but the workflow failed (scheduled run
+  36250164547 and manual run 36262405658) on tests that pinned values from the
+  source data, which had changed. Nothing was committed by the bot and Pages was
+  not redeployed. Both causes (pinned tests, bill-table growth) are fixed
+  locally in `09f8baf`; see "Bill-storage fix" in section 3. GitHub `main` and
+  `origin/pillars-4-6-rebuild` are `92c94ab`.
+- **Earlier publish: `e6f6428` went live on GitHub `main`** (26 September 2026). The
   release branch `pillars-4-6-rebuild` was pushed to GitHub and `main` was
   fast-forwarded to it from `d4a942a` (no merge, no force, local `main` not
   used). Workflow run 36209333754 (by hand, on `main`) passed: 253 tests, all 31
@@ -102,7 +111,9 @@ Commits in the Pillars 4–6 release (all on GitHub `main` since publishing; old
 | `8daec7d` | HANDOFF update for the Pillar 5 outcome layer. |
 | `3f54d83` | **Pillar 5 scorecard** "What the Senate actually passed" (local, not pushed, not live). See section 3. |
 | `db0f16b` | HANDOFF update for the Pillar 5 scorecard. |
-| `710a4fc` | **Daily update refreshes the bill tables** before the pages are built (local, not pushed). See section 3. |
+| `710a4fc` | **Daily update refreshes the bill tables** before the pages are built (pushed to GitHub `main` in the failed publish attempt; not live). See section 3. |
+| `92c94ab` | HANDOFF update for the automation (on GitHub `main`; not live). |
+| `09f8baf` | **Bill-storage fix, unpinned real-data tests, fresh deterministic data** (local, not pushed). See section 3. |
 | (next) | This HANDOFF update. |
 
 The working tree of the release branch is clean. The two Stage 3 edits that
@@ -874,15 +885,76 @@ national-public card (both unchanged).
 - **Pillars 4 and 6 are unchanged** (their page data is byte-identical; the only
   page change in this step is the embedded table versions).
 
-## 4. Current real numbers (record `5f42ca01…`, nominate_dim1, 100 active senators)
+
+### Bill-storage fix and unpinned tests — COMPLETE (`09f8baf`, local, not pushed)
+
+Fixes the two problems behind the failed publish attempt.
+
+- **Real-data tests no longer pin changing source values.** Tests on the real
+  data recompute each value independently from the saved inputs (Pillar 5
+  means and medians, committee medians, counts, anchors, the seated senators)
+  instead of comparing with numbers typed into the test, so a new Voteview file
+  cannot break them.
+- **Bill classifications no longer re-version when `nominate_dim1` changes but
+  stays on the same side of zero.** A bill gets a new
+  `bill_sponsor_classifications` version only when its bill record, sponsor,
+  sponsor Bioguide id, classification rule, class (the sign of the score) or
+  unknown reason changes.
+- **A sign/classification change still creates new bill versions** (only for
+  the bills of the affected sponsor; tested: −0.010 → +0.005 re-versions exactly
+  those bills and flips their class; +0.010 → 0 gives ZERO_SCORE_SPONSOR).
+- **Current exact sponsor scores come from `senator_ideology`**
+  (`bills.current_sponsor_scores()`); no separate sponsor-score table. The page
+  data carries each bill's current score from there.
+- **Historical `sponsor_nominate_dim1` stays in old and current records for
+  reproducibility but does not drive version creation.** It is the score used
+  when that classification version was created (with the `senator_ideology`
+  record and Voteview version it came from). Today 1,183 bills hold an older
+  score than the current one, all on the same side of zero.
+- **Page provenance now records** (`p5.outcomes.meta.input_versions`) both
+  bill-table fingerprints, the `senator_ideology` fingerprint and Voteview
+  source version, the bill-status archive version, and the classification,
+  outcome and enactment rule versions. Tables are append-only, so an earlier
+  page's fingerprints can be recomputed from the prefix of each table (tested,
+  and checked against the page committed in `92c94ab`).
+- **The checker adds three checks**: every bill's sponsor is the one in its own
+  bill-status record; every class matches the sign of the latest Voteview
+  sponsor score; the scorecard uses the current, verified input versions.
+- **Fresh production update** (full `scripts/update.sh` chain under Python 3.12,
+  from the committed data; result record `e0f5b6d9…`, measured 2026-09-27):
+  - Senate mean: **0.12008**; population-weighted mean: **0.08487**;
+    difference: **+0.03521**
+  - Passed Senate: **192** = 72 liberal-side sponsors / 120 conservative-side sponsors
+  - Enacted: **41** = 5 / 36; **37** with public-law numbers; **4** signed/enacted
+    with numbers pending (S550, S603, S759, S790)
+  - Today's Voteview score movements (25 senators' scores changed) caused
+    **0 bill versions** by themselves.
+  - **69 bill versions** were added because the official GovInfo bill records
+    changed (titles, text versions, update dates, actions); the same 69 in
+    `senate_bill_outcomes`. Under the old rule the Voteview update alone would
+    have re-versioned about 1,251 bills.
+  - `bill_sponsor_classifications.jsonl` is 12,375,080 bytes (+157 KB, about
+    2.2 KB per version). Expected growth is about 155 KB a day at today's rate
+    of GovInfo changes (roughly 57 MB a year); `senator_ideology` adds about
+    112 KB per new Voteview file. GitHub rejects files over 100 MB, so plan for
+    this within the year.
+- **Full suite: 326 passed, 0 failed** (Python 3.12). **Checker: 35/35.**
+- **No UI change**: templates untouched; the senator-check page is identical
+  outside its data block. On the methodology page the existing "Versions in
+  this build" lists now name two Voteview and two bill-archive versions,
+  because bill records keep the version they were built from.
+- **The live site is still the previous release** (the `e6f6428` pages) because
+  the last deployment failed.
+
+## 4. Current real numbers (record `e0f5b6d9…`, measured 2026-09-27, nominate_dim1, 100 active senators)
 
 **Pillar 5 — main comparison (PRIMARY method `population_weighted_mean_v1`)**
 
 | Quantity | Value |
 |---|---|
-| Plain Senate mean | 0.11971 |
-| Population-weighted Senate mean | 0.08296 |
-| Population weighting difference (plain − weighted) | +0.03675 |
+| Plain Senate mean | 0.12008 |
+| Population-weighted Senate mean | 0.08487 |
+| Population weighting difference (plain − weighted) | +0.03521 |
 
 **Pillar 5 — details only (SECONDARY method `population_weighted_median_v1`)**
 
@@ -905,8 +977,8 @@ moves smoothly. National public and chamber–public gap: NOT_AVAILABLE.
 | SSGA | 15 | 0.536 | +0.2165 |
 | SSFR | 22 | 0.4495 | +0.130 |
 | SSSB | 19 | 0.444 | +0.1245 |
-| SSVA | 19 | 0.387 | +0.0675 |
-| SSBK | 24 | 0.3705 | +0.051 |
+| SSVA | 19 | 0.388 | +0.0685 |
+| SSBK | 24 | 0.371 | +0.0515 |
 | SSAF, SSFI, SSJU | 23, 27, 21 | 0.362 | +0.0425 |
 | SSAS | 27 | 0.354 | +0.0345 |
 | SSCM | 28 | 0.3315 | +0.012 |
@@ -914,7 +986,7 @@ moves smoothly. National public and chamber–public gap: NOT_AVAILABLE.
 | SSRA | 17 | 0.285 | −0.0345 |
 | SSHR | 23 | 0.124 | −0.1955 |
 | SSBU | 20 | 0.073 | −0.2465 |
-| SSEV | 18 | 0.0065 | −0.313 |
+| SSEV | 18 | 0.006 | −0.3135 |
 | SSAP | 28 | −0.046 | −0.3655 |
 
 Known and accepted: SSAP, SSBU and SSEV have even memberships whose two middle
@@ -969,6 +1041,8 @@ alignment scores, defiance/betrayal language, politician rankings.
 ## 6. Test status
 
 Run: `./.venv/bin/python -m pytest -q` (Python 3.14 venv; CI uses 3.12).
+
+**After the bill-storage fix and unpinned tests (`09f8baf`): 326 passed, 0 failed** (Python 3.12); checker 35/35.
 
 **After the bill tables were added to the daily update: 312 passed, 0 failed** (3.14 and 3.12); supervisor 33/33.
 
@@ -1043,13 +1117,14 @@ report and whitepaper against newer bill archives); after Step 5A, 321 passed,
 
 ## 9. Next step
 
-Publishing is done, and the bill/sponsor data layer is built (section 3). No
-scorecard or UI work has started. Open items, each only when the user asks:
+The Pillar 5 scorecard and its automation are built; the bill-storage fix is
+committed locally (`09f8baf`). The live site still shows the previous release.
+Open items, each only when the user asks:
 
-1. **Pillar 5 scorecard: complete locally, automation wired** (section 3).
-   Next: publish only with the user's approval (push `pillars-4-6-rebuild`,
-   fast-forward GitHub `main` if it is still `ce6794a`, run the workflow once,
-   check the live scorecard against the local build).
+1. **New publish attempt, only with the user's approval**: push
+   `pillars-4-6-rebuild` and fast-forward GitHub `main` if it is still
+   `92c94ab`, run the workflow once, check the live scorecard against the local
+   build.
 2. Wire the bill layer into the daily update and add an independent supervisor
    recount of the classifications and tallies before anything is displayed.
 3. Pillar 6 bill-flow UI, only when the user asks (the committee tallies exist).
