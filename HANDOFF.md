@@ -14,7 +14,8 @@ deterministic bill/sponsor data layer (`c0b592a`, local) and the Pillar 5 outcom
 layer (`5a5dd93`, local), the local Pillar 5 scorecard (`3f54d83`) and the bill
 tables in the daily update (`710a4fc`), after the failed scorecard publish
 attempt, after the bill-storage fix (`09f8baf`), and after the Pillar 5
-scorecard went LIVE (27 September 2026, GitHub `main` `8b4be86`). Read all of it before doing
+scorecard went LIVE (27 September 2026, GitHub `main` `8b4be86`), and after the
+Pillar 6 committee bill-flow section was built locally (`4889fe0`, not live). Read all of it before doing
 anything. The repository and this file are the source of truth; older design
 documents, the whitepaper and chat history are not.
 
@@ -33,6 +34,10 @@ Work one step at a time and stop for review after each step.
 
 ## 1. Current branch and repository state
 
+- **PILLAR 6 COMMITTEE BILL-FLOW SECTION: COMPLETE LOCALLY, NOT YET LIVE**
+  (`4889fe0` on `pillars-4-6-rebuild`, not pushed). GitHub `main` is `22c68b5`
+  (the post-publish HANDOFF), which still serves the live Pillar 5 release. See
+  "Pillar 6 committee bill-flow section" in section 3.
 - Repo: `/Users/sarthakkesavarapu/Desktop/CivicAlign`, remote
   https://github.com/safire684-ops/civicalign
 - **THE PILLAR 5 SCORECARD IS LIVE (27 September 2026).** `pillars-4-6-rebuild`
@@ -125,7 +130,9 @@ Commits in the Pillars 4–6 release (all on GitHub `main` since publishing; old
 | `09f8baf` | **Bill-storage fix, unpinned real-data tests, fresh deterministic data**. See section 3. |
 | `dbafc3f` | HANDOFF update for the bill-storage fix. Pushed; GitHub `main` fast-forwarded to it. |
 | `8b4be86` | `civicalign-bot`: daily update from workflow run 36322957937 (one changed bill record, S4668). **Live.** |
-| (next) | This HANDOFF update (post-publish). |
+| `22c68b5` | HANDOFF update (post-publish). Pushed; GitHub `main` fast-forwarded to it (HANDOFF only). |
+| `4889fe0` | **Pillar 6 committee bill-flow section** (local, not pushed, not live). See section 3. |
+| (next) | This HANDOFF update. |
 
 The working tree of the release branch is clean. The two Stage 3 edits that
 used to sit uncommitted here are preserved on `pillar1-stage3` (and in
@@ -999,6 +1006,55 @@ Fixes the two problems behind the failed publish attempt.
   still recorded in the page's input provenance
   (`p5.outcomes.meta.input_versions.bill_status_archive`).
 
+### Pillar 6 committee bill-flow section — COMPLETE LOCALLY, NOT YET LIVE (`4889fe0`)
+
+- **What it is**: each committee card gains "Bills handled by this committee"
+  under the existing median rows: Senate bills **referred to** and **reported
+  by** the committee, each split by the primary sponsor's side of the Voteview
+  scale, with a split bar like the Pillar 5 scorecard, "See bills" fold-outs
+  (built only when opened; shown only for groups with bills), and a "What does
+  this mean?" note. Wording: "A bill is referred when it’s sent to the committee
+  for review, and reported when the committee formally reports it back to the
+  Senate." and "These counts do not show why a committee reported or did not
+  report any bill." "Senate bills" is kept wherever the scope matters: the
+  section covers Senate-originated bills (S.) only.
+- **16 standing committees covered**; **5,387 Senate-bill referrals**; **403
+  committee reports**; **15 reported-without-referral cases across 7
+  committees** (Appropriations 7: S2256, S2257, S2354, S2431, S2465, S2572,
+  S2587; Agriculture 3: S3095, S3755, S5526; Armed Services 2: S2296, S4784;
+  Banking S2651; Budget S2; Finance S5441). Referred and reported are separate
+  lists (reported is not assumed to be a subset of referred); the
+  reported-without-referral count is shown on the card with the explanation.
+  Rules and Administration reported 0 bills.
+- **Sponsor-side classifications only, not bill ideology**: the groups are
+  "Sponsored by senators on the liberal/conservative side of the Voteview
+  scale"; no "liberal bills" or "conservative bills" wording (tested).
+- **No LLM is used** (tested); every count is read from the saved
+  `bill_sponsor_classifications` table via `bill_tallies.committee_tallies()`
+  (which now also returns `reported_without_referral`); nothing is hardcoded.
+- **Traceable**: every count carries its exact bill ids; each listed bill shows
+  its title, sponsor, the sponsor's current Voteview score (from
+  `senator_ideology`), its committee action dates ("Referred To", "Reported
+  By"/"Reported Original Measure") and a Congress.gov link; six new
+  methodology entries (`p6.bills_referred_total`, `p6.bills_referred_by_sponsor`,
+  `p6.bills_reported_total`, `p6.bills_reported_by_sponsor`,
+  `p6.bills_reported_without_referral`, `p6.bill_sponsor_score`, kind
+  `billflow`) list the bill-archive, classification-rule and Voteview versions;
+  the page records the input versions (`p6.bill_meta.input_versions`).
+- **The checker adds three checks** (38 in all): every committee count
+  recounted from the raw GovInfo archive and Voteview file with separate code;
+  every listed bill's sponsor, action dates and current score; the section uses
+  the current, verified input versions.
+- **Pillars 4 and 5 are unchanged**, and so are the existing Pillar 6 names,
+  medians, Senate median, differences and member rows (tested by building the
+  page with and without the new section).
+- **Tests: 349 passed, 0 failed** (Python 3.12, full `scripts/update.sh` chain
+  with a fresh fetch: no source changed, no new table versions). **Checker: 38/38.**
+- **Page size**: `senator-check.html` is about **1.41 MB** (was about 284 KB),
+  mostly the titles of the ~5,400 listed bills. Accepted for this release; the
+  bill lists may later be split into a lazy-loaded JSON file if needed.
+- **Not yet live.** Publishing needs the user's approval.
+
 ## 4. Current real numbers (record `e0f5b6d9…`, measured 2026-09-27, nominate_dim1, 100 active senators)
 
 **Pillar 5 — main comparison (PRIMARY method `population_weighted_mean_v1`)**
@@ -1095,6 +1151,8 @@ alignment scores, defiance/betrayal language, politician rankings.
 
 Run: `./.venv/bin/python -m pytest -q` (Python 3.14 venv; CI uses 3.12).
 
+**After the Pillar 6 committee bill-flow section (`4889fe0`): 349 passed, 0 failed** (Python 3.12); checker 38/38.
+
 **After the bill-storage fix and unpinned tests (`09f8baf`): 326 passed, 0 failed** (Python 3.12); checker 35/35.
 
 **After the bill tables were added to the daily update: 312 passed, 0 failed** (3.14 and 3.12); supervisor 33/33.
@@ -1170,11 +1228,14 @@ report and whitepaper against newer bill archives); after Step 5A, 321 passed,
 
 ## 9. Next step
 
-The Pillar 5 scorecard is LIVE (GitHub `main` `8b4be86`), with its automation
-and independent checker. Open items, each only when the user asks:
+The Pillar 5 scorecard is LIVE (GitHub `main` `8b4be86`, docs at `22c68b5`),
+with its automation and independent checker. The Pillar 6 committee bill-flow
+section is complete locally (`4889fe0`), not live. Open items, each only when
+the user asks:
 
-1. Pillar 6 bill-flow UI, only when the user asks (the committee tallies exist).
-   Do not start it without the user.
+1. **Publish the Pillar 6 section, only with the user's approval**: push
+   `pillars-4-6-rebuild`, fast-forward GitHub `main` if it is still `22c68b5`,
+   run the workflow once, check the live page against the workflow build.
 2. Plan for bill-table growth: `bill_sponsor_classifications.jsonl` grows about
    155 KB a day at the current rate; GitHub rejects files over 100 MB.
 3. Optional: republish the claude.ai copies of the page and the methodology
