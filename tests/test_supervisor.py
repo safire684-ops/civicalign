@@ -285,7 +285,14 @@ def test_a_wrong_outcome_count_on_the_page_is_caught(raw, page_data):
     p["p5"]["outcomes"]["passed_senate"]["CONSERVATIVE_SPONSOR"]["ids"].append(ids.pop())
     assert failed(S.eb_outcome_checks(DEFAULT, raw, p), "Engine B: Pillar 5 outcome counts")
     p = copy.deepcopy(page_data)
-    p["p5"]["outcomes"]["enacted"]["public_law_number_pending"]["ids"] = []
+    # Plant a real error even when there are zero laws awaiting a number.
+    pending = p["p5"]["outcomes"]["enacted"]["public_law_number_pending"]
+    numbered = p["p5"]["outcomes"]["enacted"]["public_law_number_recorded"]
+    if pending["ids"]:
+        pending["ids"].pop()
+    else:
+        assert numbered["ids"], "a verified enacted bill is needed for this sabotage test"
+        pending["ids"].append(numbered["ids"][0])
     assert failed(S.eb_outcome_checks(DEFAULT, raw, p), "Engine B: Pillar 5 outcome counts")
 
 
