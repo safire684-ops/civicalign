@@ -627,6 +627,8 @@ code{font-family:var(--mono);font-size:.92em;overflow-wrap:anywhere}
   }
   function allCommitteeMeasures(c){
     var x=c.all_measures;
+    if(!x) return '<p class="muted">All-measure counts are not available yet: '+esc(P6.measure_meta.reason)+
+      '. Only the Senate-bill (S.) subset below has been verified for this snapshot.</p>';
     function typeRows(part){
       return MEASURE_TYPES.map(function(pair){
         var ids=x.by_type[pair[0]][part];
@@ -677,7 +679,7 @@ code{font-family:var(--mono);font-size:.92em;overflow-wrap:anywhere}
     return '<article class="box cmte fade-in"><h3>'+esc(c.name)+'</h3>'+
       (has?scale({marks:[{v:sm.v,kind:'ring'},{v:md.v,kind:'solid',small:true}],legend:[['ring','Senate'],['solid','This committee']],spoken:spoken})+
            '<p class="sentence">'+esc(c.sentence)+'</p>':'<p class="sentence">No current member of this committee has a voting-scale position yet.</p>')+
-      '<p class="flowline"><b>'+c.all_measures.referred.length+'</b> measures referred &middot; <b>'+c.all_measures.reported.length+'</b> reported</p>'+ '<p class="muted">All bill and resolution types. Senate-bill-only breakdown under See bills.</p>'+trust('Committee rosters, GovInfo bill records + Voteview')+
+      '<p class="flowline">'+(c.all_measures?'<b>'+c.all_measures.referred.length+'</b> measures referred &middot; <b>'+c.all_measures.reported.length+'</b> reported':'All-measure counts unavailable')+'</p>'+ '<p class="muted">'+(c.all_measures?'All bill and resolution types. Senate-bill-only breakdown under See bills.':'Verified Senate-bill (S.) subset is shown under See bills; other types not yet verified.')+'</p>'+trust('Committee rosters, GovInfo bill records + Voteview')+
       disc('See bills',function(){return committeeBills(c)})+disc('See details',function(){return committeeDetails(c)})+'</article>';
   }
   function setCommittee(code,opts){
