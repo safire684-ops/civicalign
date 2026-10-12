@@ -398,7 +398,7 @@ def payload(cfg: Config = DEFAULT) -> dict:
     complete_flow = CM.totals(cfg, p6)
     for c in committees:
         c["bills"] = flow[c["code"]]
-        c["all_measures"] = complete_flow["committees"][c["code"]]
+        c["all_measures"] = complete_flow["committees"].get(c["code"]) if complete_flow["available"] else None
     return {
         "meta": {"input_key": record["input_key"], "input_key_short": record["input_key"][:8], "congress": v["congress"],
                  "measurement_date": v["measurement_date"], "score_column": v["legislator_model"]["score_column"],
@@ -434,7 +434,8 @@ def payload(cfg: Config = DEFAULT) -> dict:
                "national": number("pillar5.national_public", p5["national_public"]),
                "committees": sorted(committees, key=lambda c: c["name"]),
                "bills": flow_bills, "sponsors": flow_sponsors, "bill_meta": flow_meta,
-               "measure_meta": {"types": complete_flow["types"], "versions": complete_flow["versions"]},
+               "measure_meta": {"available": complete_flow["available"], "reason": complete_flow["reason"],
+                                "types": complete_flow["types"], "versions": complete_flow["versions"]},
                "measures": complete_flow["measures"]},
     }
 
