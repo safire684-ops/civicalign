@@ -602,7 +602,7 @@ code{font-family:var(--mono);font-size:.92em;overflow-wrap:anywhere}
   })();
 
   // ===== Committees =====
-  var P6=D.p6, CB=P6.bills, CS=P6.sponsors, CM=P6.bill_meta, csel=$('committee');
+  var P6=D.p6, CB=P6.bills, CS=P6.sponsors, CM=P6.bill_meta, AM=P6.measures, csel=$('committee');
   P6.committees.forEach(function(c){var o=document.createElement('option'); o.value=c.code; o.textContent=c.name; csel.appendChild(o)});
   var NOT_A_SUBSET='A committee can sometimes report a bill that was not first recorded as referred to that committee, so the reported count does not always have to be a subset of the referred count.';
   function committeeRow(code,part){
@@ -616,9 +616,36 @@ code{font-family:var(--mono);font-size:.92em;overflow-wrap:anywhere}
     return GROUPS.map(function(g){var n=set[g.key];
       return n.v?disc(g.see,function(){return billList(n.ids,committeeRow(code,part),'bills')}):''}).join('');
   }
+  var MEASURE_TYPES=[['s','Senate bills (S.)'],['hr','House bills (H.R.)'],
+      ['sres','Senate resolutions (S.Res.)'],['hres','House resolutions (H.Res.)'],
+      ['sjres','Senate joint resolutions (S.J.Res.)'],['hjres','House joint resolutions (H.J.Res.)'],
+      ['sconres','Senate concurrent resolutions (S.Con.Res.)'],
+      ['hconres','House concurrent resolutions (H.Con.Res.)']];
+  function allMeasureRow(b){
+    var m=AM[b];
+    return '<li><a href="'+esc(m.url)+'">'+esc(m.label)+'</a> '+esc(m.title)+'</li>';
+  }
+  function allCommitteeMeasures(c){
+    var x=c.all_measures;
+    if(!x) return '<p class="muted">All-measure counts are not available yet: '+esc(P6.measure_meta.reason)+
+      '. Only the Senate-bill (S.) subset below has been verified for this snapshot.</p>';
+    function typeRows(part){
+      return MEASURE_TYPES.map(function(pair){
+        var ids=x.by_type[pair[0]][part];
+        return '<tr><th scope="row">'+esc(pair[1])+'</th><td>'+ids.length+'</td></tr>';
+      }).join('');
+    }
+    return '<p>Includes all eight GovInfo bill and resolution types handled by Senate standing committees, including House-originated measures. These totals are separate from the Senate-bill-only sponsor analysis below.</p>'+
+      '<h4>All measure types: '+x.referred.length+' referred · '+x.reported.length+' reported</h4>'+
+      '<table><caption>Committee measures by type</caption><thead><tr><th>Type</th><th>Referred</th></tr></thead><tbody>'+typeRows('referred')+'</tbody></table>'+
+      '<table><caption>Measures reported by type</caption><thead><tr><th>Type</th><th>Reported</th></tr></thead><tbody>'+typeRows('reported')+'</tbody></table>'+
+      disc('See all referred measures',function(){return billList(x.referred,allMeasureRow,'measures')})+
+      disc('See all reported measures',function(){return billList(x.reported,allMeasureRow,'measures')})+
+      '<p class="muted">A measure can be reported without a recorded referral. Counts follow the committee activities in official GovInfo bill-status records. They are not directly comparable to GovTrack without matching scope, dates and rules.</p>';
+  }
   function committeeBills(c){
     var F=c.bills, R=F.referred, P=F.reported, Wr=F.reported_without_referral;
-    return '<p>A bill is referred when it’s sent to the committee for review, and reported when the committee formally reports it back to the Senate.</p>'+
+    return allCommitteeMeasures(c)+ '<h4>Senate bills (S.) only — sponsor-side breakdown</h4><p>These are a subset of all measures, not the committee’s entire activity.</p>'+ '<p>A Senate bill is referred when sent to the committee and reported when formally reported.</p>'+
       '<h4>Sent here: '+cnt(R.total)+' Senate '+bills(R.total)+'</h4>'+split(R)+seeCommittee(c.code,'referred',R)+
       '<h4>Sent back to the Senate: '+cnt(P.total)+' Senate '+bills(P.total)+'</h4>'+(P.total.v?split(P):'')+
       (Wr.v?'<p>'+cnt(Wr)+' of these '+(Wr.v===1?'was':'were')+' sent back without first being recorded as sent here. '+NOT_A_SUBSET+'</p>':'')+
@@ -652,7 +679,7 @@ code{font-family:var(--mono);font-size:.92em;overflow-wrap:anywhere}
     return '<article class="box cmte fade-in"><h3>'+esc(c.name)+'</h3>'+
       (has?scale({marks:[{v:sm.v,kind:'ring'},{v:md.v,kind:'solid',small:true}],legend:[['ring','Senate'],['solid','This committee']],spoken:spoken})+
            '<p class="sentence">'+esc(c.sentence)+'</p>':'<p class="sentence">No current member of this committee has a voting-scale position yet.</p>')+
-      '<p class="flowline"><b>'+cnt(F.referred.total)+'</b> Senate '+bills(F.referred.total)+' sent here &middot; <b>'+cnt(F.reported.total)+'</b> sent back to the Senate</p>'+trust('Committee rosters, GovInfo bill records + Voteview')+
+      '<p class="flowline">'+(c.all_measures?'<b>'+c.all_measures.referred.length+'</b> measures referred &middot; <b>'+c.all_measures.reported.length+'</b> reported':'All-measure counts unavailable')+'</p>'+ '<p class="muted">'+(c.all_measures?'All bill and resolution types. Senate-bill-only breakdown under See bills.':'Verified Senate-bill (S.) subset is shown under See bills; other types not yet verified.')+'</p>'+trust('Committee rosters, GovInfo bill records + Voteview')+
       disc('See bills',function(){return committeeBills(c)})+disc('See details',function(){return committeeDetails(c)})+'</article>';
   }
   function setCommittee(code,opts){

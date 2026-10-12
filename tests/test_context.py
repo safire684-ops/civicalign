@@ -392,7 +392,15 @@ def _rewrite(path, fn):
 
 def test_stage_2_5_records_belong_to_the_current_snapshot(records):
     r = C.freshness(DEFAULT)
-    assert r["checked"] == len(records) and not r["stale"] and not r["no_context_yet"], r
+    bindings = {f.name for f in BDIR.glob("vote_*.json")}
+    contexts = {f.name.replace(".context.json", ".json") for f in CDIR.glob("vote_*.context.json")}
+    packets = {f.name.replace(".packet.json", ".json") for f in PDIR.glob("vote_*.packet.json")}
+    missing = set(r["no_context_yet"])
+    # New votes may wait for offline context generation. They must never have
+    # a publishable packet, and existing context must remain current.
+    assert r["checked"] == len(records) == len(contexts) and not r["stale"], r
+    assert missing == bindings - contexts, r
+    assert not missing & packets, f"unexplained votes must not have packets: {missing & packets}"
 
 
 def test_freshness_gate_fails_on_records_from_another_snapshot(tmp_path):
@@ -412,7 +420,14 @@ def test_freshness_gate_fails_on_records_from_another_snapshot(tmp_path):
 
 def test_a_new_vote_without_context_is_reported_not_mixed(tmp_path):
     cfg, d = _scratch_records(tmp_path)
-    (d / "context" / "vote_119_1_00095.context.json").unlink()
+    before = C.freshness(cfg)
+    assert not before["stale"], before
+    target = "vote_119_1_00095.json"
+    assert target not in before["no_context_yet"]
+    (d / "context" / target.replace(".json", ".context.json")).unlink()
     r = C.freshness(cfg)
-    assert r["no_context_yet"] == ["vote_119_1_00095.json"]
+    # Compare against the starting snapshot, not a fixed list that breaks
+    # whenever Congress adds a vote waiting for its context record.
+    assert set(r["no_context_yet"]) == set(before["no_context_yet"]) | {target}, r
+    assert len(r["no_context_yet"]) == len(before["no_context_yet"]) + 1
     assert any("packet with no context record" in s for s in r["stale"]), "a packet may never outlive its context"

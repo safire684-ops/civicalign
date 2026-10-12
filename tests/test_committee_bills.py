@@ -162,12 +162,11 @@ def test_the_real_data_shows_every_reported_without_referral_case(data):
 def test_the_section_says_sponsor_not_bill(pages):
     s = _script()
     for text in ("Senate committees review bills before the full Senate votes.",
-                 "' sent here &middot; <b>'", "sent back to the Senate</p>'", "<h4>Sent here: '", "<h4>Sent back to the Senate: '",
-                 "A bill is referred when it’s sent to the committee for review, and reported when the committee formally "
-                 "reports it back to the Senate.",
+                 "All measure types:", "Senate bills (S.) only", "measures referred",
+                 "<h4>Sent here: '", "<h4>Sent back to the Senate: '",
+                 "A Senate bill is referred when sent to the committee and reported when formally reported.",
                  "These counts do not show why a committee reported or did not report any bill.",
-                 "</b> Senate '+bills(F.referred.total)+' sent here", "' Senate '+bills(R.total)+'",
-                 "disc('What does this mean?'", MEANING, NOT_A_SUBSET):
+                 "' Senate '+bills(R.total)+'", "disc('What does this mean?'", MEANING, NOT_A_SUBSET):
         assert text in s or text in TEMPLATE, text
     for text in ("Sponsored by senators on the liberal side of the Voteview scale",
                  "Sponsored by senators on the conservative side of the Voteview scale",
