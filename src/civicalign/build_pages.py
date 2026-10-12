@@ -50,6 +50,7 @@ from .config import DEFAULT, Config
 from .ideology import anchors as A
 from .ideology import bill_outcomes as BO
 from .ideology import bill_tallies as BT
+from .ideology import committee_measures as CM
 from .ideology import bills as BL
 from .ideology import compute as C
 from .ideology import display as DS
@@ -394,8 +395,10 @@ def payload(cfg: Config = DEFAULT) -> dict:
     v = record["versions"]
     outcomes, outcome_versions = outcomes_payload(cfg)
     flow, flow_bills, flow_sponsors, flow_meta, flow_versions = committee_bills_payload(cfg, p6)
+    complete_flow = CM.totals(cfg, p6)
     for c in committees:
         c["bills"] = flow[c["code"]]
+        c["all_measures"] = complete_flow["committees"][c["code"]]
     return {
         "meta": {"input_key": record["input_key"], "input_key_short": record["input_key"][:8], "congress": v["congress"],
                  "measurement_date": v["measurement_date"], "score_column": v["legislator_model"]["score_column"],
@@ -430,7 +433,9 @@ def payload(cfg: Config = DEFAULT) -> dict:
         "p6": {"senate_median": number("pillar5.details.chamber_median", p5["details"]["chamber_median"]),
                "national": number("pillar5.national_public", p5["national_public"]),
                "committees": sorted(committees, key=lambda c: c["name"]),
-               "bills": flow_bills, "sponsors": flow_sponsors, "bill_meta": flow_meta},
+               "bills": flow_bills, "sponsors": flow_sponsors, "bill_meta": flow_meta,
+               "measure_meta": {"types": complete_flow["types"], "versions": complete_flow["versions"]},
+               "measures": complete_flow["measures"]},
     }
 
 
