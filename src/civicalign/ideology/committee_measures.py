@@ -73,7 +73,13 @@ def read_measures(cfg: Config = DEFAULT):
 
 
 def totals(cfg: Config = DEFAULT, codes=()):
-    measures, versions = read_measures(cfg)
+    try:
+        measures, versions = read_measures(cfg)
+    except I.SnapshotMismatch as exc:
+        # Existing snapshots and test fixtures may predate full coverage.
+        # This is NOT zero committee activity: explicitly withhold the totals.
+        return {"available": False, "reason": str(exc), "types": list(TYPES),
+                "versions": {}, "committees": {}, "measures": {}}
     committees = {}
     for code in sorted(codes):
         referred = sorted((m["id"] for m in measures.values()
@@ -91,6 +97,6 @@ def totals(cfg: Config = DEFAULT, codes=()):
             "reported_without_referral": sorted(set(reported) - set(referred)),
             "by_type": by_type,
         }
-    return {"types": list(TYPES), "versions": versions, "committees": committees,
+    return {"available": True, "reason": None, "types": list(TYPES), "versions": versions, "committees": committees,
             "measures": {b: m for b, m in measures.items() if any(
                 b in c["referred"] or b in c["reported"] for c in committees.values())}}
