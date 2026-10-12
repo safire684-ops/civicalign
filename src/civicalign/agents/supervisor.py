@@ -780,6 +780,88 @@ def eb_page_current_checks(cfg: Config, page_dir: Path) -> list[Check]:
     return [Check("Engine B: published pages are the builder's output", not stale, f"stale {stale}" if stale else "")]
 
 
+def eb_all_measure_checks(cfg: Config, page_data: dict | None) -> list[Check]:
+    """Independent recount of all eight bill/resolution archives, not via the calculation module."""
+    import hashlib
+    import xml.etree.ElementTree as ET
+    import zipfile
+
+    name = "Engine B: all committee measure types independently recounted"
+    if page_data is None or "measure_meta" not in page_data.get("p6", {}):
+        return [Check(name, False, "missing full-coverage status")]
+    meta = page_data["p6"]["measure_meta"]
+    raw = cfg.raw_dir
+    snapshot_path = raw / "SNAPSHOT.json"
+    if not snapshot_path.exists():
+        return [Check(name, False, "no verified snapshot")]
+    snapshot = json.loads(snapshot_path.read_text())
+    kinds = ("s", "hr", "sres", "hres", "sjres", "hjres", "sconres", "hconres")
+    present = {x["file"]: x for x in snapshot.get("sources", [])}
+    missing = [f"BILLSTATUS-{cfg.congress}-{typ}.zip" for typ in kinds
+               if f"BILLSTATUS-{cfg.congress}-{typ}.zip" not in present
+               or not (raw / f"BILLSTATUS-{cfg.congress}-{typ}.zip").exists()]
+    if missing:
+        ok = not meta.get("available") and all(c.get("all_measures") is None
+                 for c in page_data["p6"]["committees"])
+        return [Check(name, ok, "archive coverage incomplete; all-measure counts withheld"
+                      if ok else f"incomplete coverage displayed: {missing}")]
+    if not meta.get("available"):
+        return [Check(name, False, "all source archives present but totals are missing")]
+    values = {}
+    mismatches = []
+    for typ in kinds:
+        filename = f"BILLSTATUS-{cfg.congress}-{typ}.zip"
+        path = raw / filename
+        digest = hashlib.sha256(path.read_bytes()).hexdigest()
+        if digest != present[filename]["sha256"] or meta["versions"][typ]["sha256"] != digest:
+            return [Check(name, False, f"snapshot/source fingerprint mismatch: {filename}")]
+        with zipfile.ZipFile(path) as z:
+            for member in z.namelist():
+                if not member.endswith(".xml"):
+                    continue
+                root = ET.fromstring(z.read(member))
+                bill = root.find("bill")
+                if bill is None:
+                    mismatches.append(f"{member}: missing measure")
+                    continue
+                number = bill.findtext("number")
+                if bill.findtext("congress") != str(cfg.congress) or (bill.findtext("type") or "").lower() != typ or not (number or "").isdigit():
+                    mismatches.append(f"{member}: unexpected identity")
+                    continue
+                key = typ.upper() + str(int(number))
+                if key in values:
+                    mismatches.append(f"{key}: duplicate")
+                    continue
+                committees = {}
+                for item in bill.findall("committees/item"):
+                    code = (item.findtext("systemCode") or "").strip().lower()
+                    if not re.fullmatch(r"ss[a-z]{2}00", code) or (item.findtext("chamber") or "").strip() != "Senate":
+                        continue
+                    names = [(x.findtext("name") or "").strip() for x in item.findall("activities/item")]
+                    if "Referred To" in names or "Reported By" in names or "Reported Original Measure" in names:
+                        flags = committees.setdefault(code[:4].upper(), {"referred": False, "reported": False})
+                        flags["referred"] |= "Referred To" in names
+                        flags["reported"] |= "Reported By" in names or "Reported Original Measure" in names
+                values[key] = (typ, committees)
+    for c in page_data["p6"]["committees"]:
+        code, shown = c["code"], c.get("all_measures")
+        if shown is None:
+            mismatches.append(f"{code}: unavailable")
+            continue
+        for kind in ("referred", "reported"):
+            want = {key for key, (_, cm) in values.items() if cm.get(code, {}).get(kind)}
+            if set(shown[kind]) != want or len(shown[kind]) != len(want):
+                mismatches.append(f"{code}: {kind} mismatch")
+            for typ in kinds:
+                type_want = {key for key in want if values[key][0] == typ}
+                if set(shown["by_type"][typ][kind]) != type_want or len(shown["by_type"][typ][kind]) != len(type_want):
+                    mismatches.append(f"{code}: {typ} {kind} mismatch")
+        if set(shown["reported_without_referral"]) != set(shown["reported"]) - set(shown["referred"]):
+            mismatches.append(f"{code}: reported without referral mismatch")
+    return [Check(name, not mismatches, f"{len(values)} measures; "
+                  + (f"mismatches {mismatches[:5]}" if mismatches else "all committee breakdowns confirmed"))]
+
+
 def engine_b_checks(cfg: Config = DEFAULT, page_dir: Path | None = None) -> list[Check]:
     from ..ideology import bridge as BR
     from ..ideology import compute as C
@@ -802,6 +884,7 @@ def engine_b_checks(cfg: Config = DEFAULT, page_dir: Path | None = None) -> list
     out += eb_methodology_checks(record, anchors, page_data, meth)
     out += eb_outcome_checks(cfg, raw, page_data)
     out += eb_committee_bill_checks(cfg, raw, page_data)
+    out += eb_all_measure_checks(cfg, page_data)
     out += eb_display_checks(cfg, raw, record, page_data, meth)
     out += eb_store_checks(cfg)
     out += eb_page_current_checks(cfg, page_dir)
