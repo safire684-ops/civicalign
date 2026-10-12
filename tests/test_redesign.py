@@ -225,7 +225,7 @@ def test_default_numbers_are_limited():
     whole = SCRIPT[SCRIPT.index("$('whole').innerHTML="):SCRIPT.index("// ===== Committees")]
     assert "num:" not in whole and "cnt(" not in whole, "the Senate as a whole: no headline number"
     cmte = SCRIPT[SCRIPT.index("function committeeCard(c)"):SCRIPT.index("function setCommittee(")]
-    assert cmte.count("cnt(") == 2 and cmte.count("num:") == 0, "committee: the two bill counts; the markers carry no number"
+    assert "c.all_measures.referred.length" in cmte and "c.all_measures.reported.length" in cmte and cmte.count("num:") == 0, "committee: use full measure counts, not ideology numbers"
     assert "legend:[['ring','Senate'],['solid','This committee']]" in cmte
     details = SCRIPT[SCRIPT.index("function committeeDetails(c)"):SCRIPT.index("function committeeCard(c)")]
     assert "esc(md.p0)" in details and "esc(sm.p0)" in details, "the exact positions are in See details"
