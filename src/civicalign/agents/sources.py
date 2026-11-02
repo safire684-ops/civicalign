@@ -91,6 +91,21 @@ def _joint_resolutions(path: Path) -> str | None:
     return None
 
 
+
+def _committee_measures(path: Path) -> str | None:
+    """Validate a nonempty, correctly structured GovInfo measure ZIP."""
+    try:
+        with zipfile.ZipFile(path) as z:
+            files = [n for n in z.namelist() if n.endswith(".xml")]
+            if not files:
+                return "no measure XML records"
+            if any(z.getinfo(n).file_size == 0 for n in files):
+                return "empty measure XML"
+    except zipfile.BadZipFile:
+        return "invalid GovInfo measure ZIP"
+    return None
+
+
 def _populations(path: Path) -> str | None:
     col = f"POPESTIMATE{DEFAULT.population_year}"
     with path.open() as fh:
@@ -231,7 +246,7 @@ def all_agents() -> list[Agent]:
             target=RAW / f"BILLSTATUS-{DEFAULT.congress}-sjres.zip",
             validate=_joint_resolutions,
             min_bytes=50_000,
-            critical=False,
+            critical=True,
             content_key=zip_content_key,
         ),
         Agent(
@@ -241,8 +256,48 @@ def all_agents() -> list[Agent]:
             target=RAW / f"BILLSTATUS-{DEFAULT.congress}-hjres.zip",
             validate=_joint_resolutions,
             min_bytes=50_000,
-            critical=False,
+            critical=True,
             content_key=zip_content_key,
+        ),
+        Agent(
+            name="committee measures (sres)",
+            vintage="current Congress; GovInfo bill-status SRES",
+            content_key=zip_content_key,
+            url=f"https://www.govinfo.gov/bulkdata/BILLSTATUS/{DEFAULT.congress}/sres/BILLSTATUS-{DEFAULT.congress}-sres.zip",
+            target=RAW / f"BILLSTATUS-{DEFAULT.congress}-sres.zip",
+            validate=_committee_measures,
+            min_bytes=1024,
+            timeout=300,
+        ),
+        Agent(
+            name="committee measures (hres)",
+            vintage="current Congress; GovInfo bill-status HRES",
+            content_key=zip_content_key,
+            url=f"https://www.govinfo.gov/bulkdata/BILLSTATUS/{DEFAULT.congress}/hres/BILLSTATUS-{DEFAULT.congress}-hres.zip",
+            target=RAW / f"BILLSTATUS-{DEFAULT.congress}-hres.zip",
+            validate=_committee_measures,
+            min_bytes=1024,
+            timeout=300,
+        ),
+        Agent(
+            name="committee measures (sconres)",
+            vintage="current Congress; GovInfo bill-status SCONRES",
+            content_key=zip_content_key,
+            url=f"https://www.govinfo.gov/bulkdata/BILLSTATUS/{DEFAULT.congress}/sconres/BILLSTATUS-{DEFAULT.congress}-sconres.zip",
+            target=RAW / f"BILLSTATUS-{DEFAULT.congress}-sconres.zip",
+            validate=_committee_measures,
+            min_bytes=1024,
+            timeout=300,
+        ),
+        Agent(
+            name="committee measures (hconres)",
+            vintage="current Congress; GovInfo bill-status HCONRES",
+            content_key=zip_content_key,
+            url=f"https://www.govinfo.gov/bulkdata/BILLSTATUS/{DEFAULT.congress}/hconres/BILLSTATUS-{DEFAULT.congress}-hconres.zip",
+            target=RAW / f"BILLSTATUS-{DEFAULT.congress}-hconres.zip",
+            validate=_committee_measures,
+            min_bytes=1024,
+            timeout=300,
         ),
         Agent(
             name="state populations",

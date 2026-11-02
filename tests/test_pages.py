@@ -295,7 +295,7 @@ def test_pillar6_uses_only_committee_median_and_senate_drift(data):
     assert {c["code"] for c in cs} == set(saved["committees"]) == set(BP.latest(DEFAULT)["results"]["pillar6"])
     for c in cs:
         assert set(c) == {"code", "name", "official_name", "name_source", "name_retrieved", "listed", "scored", "left_out",
-                          "committee_median", "committee_senate_drift", "committee_public_drift", "bills", "sentence"}
+                          "committee_median", "committee_senate_drift", "committee_public_drift", "bills", "all_measures", "sentence"}
         assert c["committee_public_drift"]["s"] == "NOT_AVAILABLE"
     for c in cs:     # every committee, recomputed from the saved membership and scores
         med, drift = saved["committees"][c["code"]], saved["committees"][c["code"]] - saved["median"]
