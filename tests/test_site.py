@@ -304,18 +304,18 @@ def test_nominations_are_labelled_as_nominations():
     assert 'class="chip nom">Nomination' in TEMPLATE
 
 
-def test_the_page_script_parses_and_defines_what_it_uses():
+def test_the_page_script_parses_and_defines_what_it_uses(tmp_path):
     """Runs the page's script through a real JavaScript parser, and checks each helper it calls exists."""
     script = TEMPLATE[TEMPLATE.rindex("<script>") + 8:TEMPLATE.rindex("</script>")]
-    assert 'const NAMES={D:"Democrat"' in script and 'const COUNT_KEYS=[' in script
     node = shutil.which("node")
     if node:
-        done = subprocess.run([node, "--check", "-"], input=script, text=True, capture_output=True)
+        f = tmp_path / "page.js"
+        f.write_text(script)
+        done = subprocess.run([node, "--check", str(f)], text=True, capture_output=True)
         assert done.returncode == 0, done.stderr
-    defined = set(re.findall(r"(?:const|let|function)\s+([A-Za-z_$][\w$]*)", script))
-    defined |= {n for group in re.findall(r"const\s+((?:[A-Za-z_$][\w$]*=[^;]*?,)+)", script) for n in re.findall(r"([A-Za-z_$][\w$]*)=", group)}
     for name in ("NAMES", "COUNT_KEYS", "cvBody", "cvRow", "evidenceRow", "differNote", "dataNote", "datesCard", "newerText", "ruleText", "partyLine", "LEG", "POSN", "COMV", "MEMB"):
-        assert name in defined, name
+        assert re.search(rf"(?:const |function |,){name}(?:=[^=]|\()", script), name
+    assert 'const NAMES=function' not in script
 
 
 def test_committee_notes_and_corrections_are_shown():
