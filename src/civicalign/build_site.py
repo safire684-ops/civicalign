@@ -92,7 +92,7 @@ def data_dates(cfg: Config, drop: dict, meta: dict) -> dict:
             snapped("Committee membership", ["committee rosters", "committee names"], "Current committees"),
             snapped("Senate bills, passage and law, policy areas", ["bill flow", "bill flow (House bills)", "joint resolutions (Senate)", "joint resolutions (House)"], "Official bill-status files"),
             snapped("State survey estimates", ["state ideology"], f"Survey wave {meta['aip_wave']}", "Shown on their own scale only."),
-            snapped("State populations", ["state populations"], f"Census {meta['population']}"),
+            snapped("State populations", ["state populations"], f"Census {meta['population'].split(',')[0]}"),
             row("Floor votes, senator votes, bills and nominations", made, made, f"Votes through {floor}"),
             row("Committee votes", made, made, f"Votes through {committee}"),
             row("Official Senate vote records (used for cross-checks)", pulled, pulled, f"{len(senate['records'])} passage votes", senate["note"])]

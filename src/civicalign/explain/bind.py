@@ -281,7 +281,7 @@ def run(cfg: Config = DEFAULT, offline: bool = False, verbose: bool = True) -> d
         rel = f"senate/vote_{row['congress']}_{session}_{clerk:05d}.xml"
         f = store.fetch(senate_vote_url(int(row["congress"]), session, clerk), rel, offline=offline)
         senate = None
-        senate_copies["stored copy" if "cached copy" in f.message else "retrieved" if f.ok else "unavailable"] += 1
+        senate_copies["retrieved" if f.message in ("changed", "unchanged") else "stored copy" if f.ok else "unavailable"] += 1
         if f.ok and f.path is not None:
             try:
                 senate = parse_senate_vote(f.path)
@@ -302,6 +302,7 @@ def run(cfg: Config = DEFAULT, offline: bool = False, verbose: bool = True) -> d
     index = {"schema": BINDING_SCHEMA, "congress": cfg.congress, "rule": {
                  "supported_kinds": sorted(B.SUPPORTED_KINDS), "pending_window_days": B.PENDING_WINDOW_DAYS,
                  "never_selected_versions": sorted(B.NEVER)},
+             "senate_records": dict(senate_copies),   # how this run's records were obtained: VERIFIED means the records agree, not that they are new
              "classified": dict(kinds), "bound": [
                  {"file": f"vote_{b['vote']['congress']}_{b['vote']['session']}_{b['vote']['clerk_number']:05d}.json",
                   "measure": b["object"]["id"], "kind": b["classification"]["kind"], "verification": b["verification"]["status"],

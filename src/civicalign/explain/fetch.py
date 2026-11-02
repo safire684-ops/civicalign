@@ -62,6 +62,8 @@ class Store:
                 break
             except (urllib.error.URLError, urllib.error.HTTPError, TimeoutError, OSError, http.client.HTTPException) as e:
                 err = e
+                if isinstance(e, urllib.error.HTTPError) and e.code == 403:
+                    break                   # a refusal, not a glitch: asking again won't help
                 import time as _t
                 _t.sleep(2 * (attempt + 1))
         if data is None:

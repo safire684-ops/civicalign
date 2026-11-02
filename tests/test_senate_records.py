@@ -5,6 +5,7 @@ UNAVAILABLE (never verified), and that a changed stored record is caught.
 """
 import json
 import urllib.error
+from pathlib import Path
 
 from civicalign.agents import supervisor as S
 from civicalign.agents.base import sha256_bytes
@@ -36,6 +37,23 @@ def test_a_blocked_fetch_with_no_stored_copy_is_not_verified(tmp_path, monkeypat
     assert status == "UNAVAILABLE" and checks[0]["check"] == "senate_record_exists" and not checks[0]["ok"]
 
 
+def test_a_refusal_is_not_retried(tmp_path, monkeypatch):
+    calls = []
+    def refuse(*a, **k):
+        calls.append(1)
+        _blocked()
+    monkeypatch.setattr("urllib.request.urlopen", refuse)
+    monkeypatch.setattr("time.sleep", lambda *_: None)
+    assert not Store(tmp_path).fetch("https://www.senate.gov/x.xml", "senate/v.xml").ok
+    assert len(calls) == 1
+
+
+def test_the_run_records_that_it_used_stored_copies():
+    src = (Path(BD.__file__)).read_text()
+    assert '"senate_records": dict(senate_copies)' in src
+    assert '"stored copy"' in src and '"retrieved" if f.message in ("changed", "unchanged")' in src
+
+
 def test_stored_records_pass_the_checks():
     assert all(c.ok for c in S.senate_record_checks(DEFAULT))
 
@@ -50,6 +68,7 @@ def _copy(tmp_path):
         (raw / "explanations" / "senate" / f.name).write_bytes(f.read_bytes())
     for f in DEFAULT.bindings_dir.glob("vote_*.json"):
         (bindings / f.name).write_bytes(f.read_bytes())
+    (bindings / "index.json").write_text(json.dumps({"senate_records": {"stored copy": 55}}))
     return type("C", (), {"explain_raw_dir": raw / "explanations", "bindings_dir": bindings})()
 
 

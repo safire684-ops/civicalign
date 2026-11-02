@@ -1024,7 +1024,9 @@ def senate_record_checks(cfg: Config) -> list[Check]:
         name = f.name.replace(".json", ".xml")
         if name in prov and got != prov[name]["sha256"]:
             named.append(f.name)
-    return [Check("Pillar 1: stored Senate records unchanged", not bad, f"changed {bad[:5]}" if bad else f"{len(prov)} records"),
+    how = json.loads((cfg.bindings_dir / "index.json").read_text()).get("senate_records")
+    return [Check("Pillar 1: this run says how it got each Senate record", bool(how), str(how)),
+            Check("Pillar 1: stored Senate records unchanged", not bad, f"changed {bad[:5]}" if bad else f"{len(prov)} records"),
             Check("Pillar 1: bindings name the stored Senate records", not named, f"differ {named[:5]}" if named else "")]
 
 
