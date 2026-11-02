@@ -7,6 +7,8 @@ and that the independent checker catches tampering with each thing it recounts.
 import copy
 import json
 import re
+import shutil
+import subprocess
 from pathlib import Path
 
 import pytest
@@ -300,6 +302,20 @@ def test_nominations_are_labelled_as_nominations():
     assert 'nomination:["Nomination","nom"]' in TEMPLATE
     assert "This is a nomination, not a bill" in TEMPLATE
     assert 'class="chip nom">Nomination' in TEMPLATE
+
+
+def test_the_page_script_parses_and_defines_what_it_uses():
+    """Runs the page's script through a real JavaScript parser, and checks each helper it calls exists."""
+    script = TEMPLATE[TEMPLATE.rindex("<script>") + 8:TEMPLATE.rindex("</script>")]
+    assert 'const NAMES={D:"Democrat"' in script and 'const COUNT_KEYS=[' in script
+    node = shutil.which("node")
+    if node:
+        done = subprocess.run([node, "--check", "-"], input=script, text=True, capture_output=True)
+        assert done.returncode == 0, done.stderr
+    defined = set(re.findall(r"(?:const|let|function)\s+([A-Za-z_$][\w$]*)", script))
+    defined |= {n for group in re.findall(r"const\s+((?:[A-Za-z_$][\w$]*=[^;]*?,)+)", script) for n in re.findall(r"([A-Za-z_$][\w$]*)=", group)}
+    for name in ("NAMES", "COUNT_KEYS", "cvBody", "cvRow", "evidenceRow", "differNote", "dataNote", "datesCard", "newerText", "ruleText", "partyLine", "LEG", "POSN", "COMV", "MEMB"):
+        assert name in defined, name
 
 
 def test_committee_notes_and_corrections_are_shown():
