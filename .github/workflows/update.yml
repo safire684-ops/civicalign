@@ -131,6 +131,9 @@ jobs:
       - name: 12/13 Supervisor -- independent recount of every published number
         run: PYTHONPATH=src python -m civicalign.agents.supervisor
 
+      - name: Audit legislative export freshness (non-blocking; reports missing data)
+        run: python scripts/check_legislative_freshness.py
+
       - name: 13/13 Commit the pages, versioned records, provenance and bindings (only reached if every gate passed)
         # Only main commits. A manual run on another branch is a test: it runs every gate and keeps the built site as an artifact.
         if: github.ref == 'refs/heads/main'
