@@ -26,6 +26,8 @@
 #   11 tests      every test, against the pages just built
 #   12 supervisor separate code re-reads the raw files and reproduces every number
 #   13 commit     only if every step above passed, and only if something changed
+#      arrange    copy demo/ to _site/; in the copy, senator-check.html redirects to the
+#                 integrated site and the original moves to senator-check-original.html
 #   14 publish    only if every step above passed
 #
 # THE ORDER IS THE INVARIANT: no test may compare current source data with a page
@@ -148,10 +150,14 @@ jobs:
             git push
           fi
 
+      - name: Arrange the publish folder (the old address redirects; the original page is kept for rollback)
+        # Works on a copy, so demo/ stays exactly what the gates above checked.
+        run: PYTHONPATH=src python -m civicalign.publish_site
+
       - name: Upload the verified site (the publish job deploys it only if this job succeeded)
         uses: actions/upload-pages-artifact@v5
         with:
-          path: demo
+          path: _site
 
   publish:
     # Runs only when every gate in `update` passed. A failure above leaves the

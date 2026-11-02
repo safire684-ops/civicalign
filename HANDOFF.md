@@ -42,8 +42,11 @@ Work one step at a time and stop for review after each step.
 `src/civicalign/build_site.py`, `src/civicalign/templates/site.template.html`,
 `data/legislative/119/2026-10-29/`, `site_checks` in the supervisor, `tests/test_site.py`.
 `demo/civicalign.html` and `demo/data/` are generated and not committed. `demo/index.html`
-now opens `civicalign.html`; `senator-check.html` is still built, tested and checked, but
-unlinked, until the owner approves retiring it. A new drop arrives with
+opens `civicalign.html`. `demo/senator-check.html` is still built, tested and checked, then
+`civicalign.publish_site` copies `demo/` to `_site/`, which is what gets published. In that
+copy `/senator-check.html` redirects to the site and the original page is byte for byte at
+`/senator-check-original.html`. To roll back: point `demo/index.html` at
+`senator-check-original.html` and run the workflow on `main`. A new drop arrives with
 `python -m civicalign.legislative import <folder>`; updates aren't automatic.
 
 Since about Oct 16 2026 senate.gov refuses automated requests (from GitHub and elsewhere), so

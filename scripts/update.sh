@@ -95,4 +95,8 @@ echo "12/12 supervisor: independent recount of every published number"
 PYTHONPATH=src $PY -m civicalign.agents.supervisor || exit 14
 
 echo
+echo "arranging the publish folder (_site, not committed)"
+PYTHONPATH=src $PY -m civicalign.publish_site || exit 15
+
+echo
 echo "done. Snapshot accepted, every check passed, pages built."
