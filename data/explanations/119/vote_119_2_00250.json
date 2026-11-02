@@ -1,0 +1,169 @@
+{
+ "schema": "civicalign.binding/1.0",
+ "vote": {
+  "congress": 119,
+  "session": 2,
+  "clerk_number": 250,
+  "voteview_id": 909,
+  "date": "2026-09-28",
+  "question": "On Passage of the Bill",
+  "result": "Bill Passed",
+  "required": "1/2",
+  "yeas": 77,
+  "nays": 22,
+  "measure": "S4668",
+  "senate_url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1192/vote_119_2_00250.xml",
+  "senate_sha256": "7194114ea5332c376bef6c1cb308103dcfd014c48c701f69834fa8402dc06e32",
+  "senate_title": "S. 4668, as amended",
+  "senate_document_text": "A bill to protect the name, image, and likeness rights of, and provide protections for, student athletes and to promote fair competition among intercollegiate athletics, and for other purposes.",
+  "amendment_number": null,
+  "voteview_url": "https://voteview.com/rollcall/RS1190909"
+ },
+ "classification": {
+  "kind": "PASSAGE_AS_AMENDED",
+  "summary_eligible": true,
+  "kind_supported": true,
+  "basis": [
+   "voteview.question='On Passage of the Bill'",
+   "senate.question='On Passage of the Bill'",
+   "senate.title=As Amended"
+  ],
+  "conflict": null
+ },
+ "object": {
+  "type": "bill",
+  "id": "S4668",
+  "title": "Protect College Sports Act of 2026",
+  "short_title": "Protect College Sports Act of 2026",
+  "origin_chamber": "Senate",
+  "billstatus_source": "https://www.govinfo.gov/bulkdata/BILLSTATUS/119/s/BILLSTATUS-119s4668.xml",
+  "billstatus_sha256": "2a8e93f20b3f7193eedc1d94af8982d8948dd6b5f126b7716e44d9c99f2e63fb",
+  "billstatus_update_date": "2026-10-07T11:42:24Z",
+  "passage_action_text": "Passed Senate with an amendment by Yea-Nay Vote. 77 - 22. Record Vote Number: 250. (text: CR S5044-5063)"
+ },
+ "text_binding": {
+  "status": "TEXT_BOUND",
+  "version_code": "es",
+  "version_name": "Engrossed in Senate",
+  "version_date": "2026-09-28",
+  "govinfo_url": "https://www.govinfo.gov/content/pkg/BILLS-119s4668es/xml/BILLS-119s4668es.xml",
+  "sha256": "f43d687ea41cfb55eb25040762048ff183bd8793d87c4752b2d0bb88427d0efd",
+  "bytes": 336787,
+  "stage_attribute_matches": true,
+  "selection_reason": "engrossed by the Senate on the vote date (es): the measure as passed",
+  "candidates": [
+   "es@2026-09-28",
+   "rs@2026-06-24",
+   "is@2026-06-02"
+  ]
+ },
+ "cra": {
+  "is_cra": false,
+  "agency": null,
+  "rule_title": null,
+  "title_form": null,
+  "consequence_ref": null,
+  "underlying_rule_source": null,
+  "underlying_rule_sha256": null
+ },
+ "receipt": {
+  "deciding": "On Passage of the Bill S. 4668",
+  "heading_success": "If the bill, as amended, passes",
+  "heading_failure": "If the bill does not pass",
+  "yea_means": "A Yea vote is a vote to pass the bill as the Senate amended it.",
+  "nay_means": "A Nay vote is a vote against passing the amended bill.",
+  "vote_result": {
+   "outcome": "PASSED",
+   "official_result": "Bill Passed",
+   "statement": "The Senate passed the bill."
+  },
+  "next_step": {
+   "case": "SENATE_ORIGIN",
+   "actual": "The Senate passed the bill. It next goes to the House.",
+   "hypothetical": null,
+   "basis": {
+    "measure_type": "bill",
+    "origin_chamber": "Senate",
+    "billstatus_origin_chamber": "Senate",
+    "senate_changed_text": true,
+    "house_passage_before_vote": null,
+    "official_result": "Bill Passed (77-22, 1/2 required)"
+   }
+  },
+  "sources": [
+   {
+    "what": "Senate roll-call record",
+    "url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1192/vote_119_2_00250.xml"
+   },
+   {
+    "what": "Bill status (GovInfo)",
+    "url": "https://www.govinfo.gov/bulkdata/BILLSTATUS/119/s/BILLSTATUS-119s4668.xml"
+   },
+   {
+    "what": "Text as voted on (Engrossed in Senate)",
+    "url": "https://www.govinfo.gov/content/pkg/BILLS-119s4668es/xml/BILLS-119s4668es.xml"
+   },
+   {
+    "what": "Roll call at Voteview",
+    "url": "https://voteview.com/rollcall/RS1190909"
+   }
+  ]
+ },
+ "verification": {
+  "status": "VERIFIED",
+  "checks": [
+   {
+    "check": "senate_record_exists",
+    "ok": true,
+    "detail": ""
+   },
+   {
+    "check": "identity_matches",
+    "ok": true,
+    "detail": "senate 119/2/250 vs voteview 119/2/250"
+   },
+   {
+    "check": "date_compatible",
+    "ok": true,
+    "detail": "senate 2026-09-28 vs voteview 2026-09-28"
+   },
+   {
+    "check": "question_matches",
+    "ok": true,
+    "detail": "'On Passage of the Bill' vs 'On Passage of the Bill'"
+   },
+   {
+    "check": "tallies_match",
+    "ok": true,
+    "detail": "senate 77-22 vs voteview 77-22"
+   },
+   {
+    "check": "threshold_matches",
+    "ok": true,
+    "detail": "1/2 vs 1/2"
+   },
+   {
+    "check": "member_votes_match",
+    "ok": true,
+    "detail": "yea 77/77 nay 22/22"
+   },
+   {
+    "check": "measure_matches",
+    "ok": true,
+    "detail": "senate 'S4668' vs voteview 'S4668'"
+   },
+   {
+    "check": "billstatus_present",
+    "ok": true,
+    "detail": "BILLSTATUS-119s4668.xml"
+   },
+   {
+    "check": "billstatus_links_vote",
+    "ok": true,
+    "detail": "recorded-vote link to this Senate vote number"
+   }
+  ]
+ },
+ "history": [],
+ "recorded_utc": "2026-11-02T04:42:42Z"
+}

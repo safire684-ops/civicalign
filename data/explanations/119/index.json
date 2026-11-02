@@ -15,14 +15,17 @@
    "ppl"
   ]
  },
+ "senate_records": {
+  "stored copy": 55
+ },
  "classified": {
-  "CLOTURE": 291,
-  "MOTION_TO_PROCEED": 86,
-  "AMENDMENT": 99,
-  "PASSAGE": 19,
-  "NOMINATION": 222,
+  "CLOTURE": 294,
+  "MOTION_TO_PROCEED": 87,
+  "AMENDMENT": 104,
+  "PASSAGE": 20,
+  "NOMINATION": 223,
   "MOTION_TO_TABLE": 18,
-  "OTHER": 129,
+  "OTHER": 130,
   "JOINT_RESOLUTION_PASSAGE": 35,
   "POINT_OF_ORDER": 4
  },
@@ -32,6 +35,7 @@
    "measure": "S5",
    "kind": "PASSAGE_AS_AMENDED",
    "verification": "VERIFIED",
+   "senate_record": "stored copy",
    "text": "TEXT_BOUND",
    "summary_eligible": true,
    "cra": false
@@ -41,6 +45,7 @@
    "measure": "SJRES11",
    "kind": "JOINT_RESOLUTION_PASSAGE",
    "verification": "VERIFIED",
+   "senate_record": "stored copy",
    "text": "TEXT_BOUND",
    "summary_eligible": true,
    "cra": true
@@ -50,6 +55,7 @@
    "measure": "SJRES10",
    "kind": "JOINT_RESOLUTION_PASSAGE",
    "verification": "VERIFIED",
+   "senate_record": "stored copy",
    "text": "TEXT_BOUND",
    "summary_eligible": true,
    "cra": false
@@ -59,6 +65,7 @@
    "measure": "HJRES35",
    "kind": "JOINT_RESOLUTION_PASSAGE",
    "verification": "VERIFIED",
+   "senate_record": "stored copy",
    "text": "TEXT_BOUND",
    "summary_eligible": true,
    "cra": true
@@ -68,6 +75,7 @@
    "measure": "SJRES3",
    "kind": "JOINT_RESOLUTION_PASSAGE",
    "verification": "VERIFIED",
+   "senate_record": "stored copy",
    "text": "TEXT_BOUND",
    "summary_eligible": true,
    "cra": true
@@ -77,6 +85,7 @@
    "measure": "SJRES28",
    "kind": "JOINT_RESOLUTION_PASSAGE",
    "verification": "VERIFIED",
+   "senate_record": "stored copy",
    "text": "TEXT_BOUND",
    "summary_eligible": true,
    "cra": true
@@ -86,6 +95,7 @@
    "measure": "S331",
    "kind": "PASSAGE_AS_AMENDED",
    "verification": "VERIFIED",
+   "senate_record": "stored copy",
    "text": "TEXT_BOUND",
    "summary_eligible": true,
    "cra": false
@@ -95,6 +105,7 @@
    "measure": "HR1968",
    "kind": "PASSAGE",
    "verification": "VERIFIED",
+   "senate_record": "stored copy",
    "text": "TEXT_BOUND",
    "summary_eligible": true,
    "cra": false
@@ -104,6 +115,7 @@
    "measure": "HJRES25",
    "kind": "JOINT_RESOLUTION_PASSAGE",
    "verification": "VERIFIED",
+   "senate_record": "stored copy",
    "text": "TEXT_BOUND",
    "summary_eligible": true,
    "cra": true
@@ -113,6 +125,7 @@
    "measure": "SJRES18",
    "kind": "JOINT_RESOLUTION_PASSAGE",
    "verification": "VERIFIED",
+   "senate_record": "stored copy",
    "text": "TEXT_BOUND",
    "summary_eligible": true,
    "cra": true
@@ -122,6 +135,7 @@
    "measure": "SJRES37",
    "kind": "JOINT_RESOLUTION_PASSAGE",
    "verification": "VERIFIED",
+   "senate_record": "stored copy",
    "text": "TEXT_BOUND",
    "summary_eligible": true,
    "cra": false
@@ -131,6 +145,7 @@
    "measure": "HJRES24",
    "kind": "JOINT_RESOLUTION_PASSAGE",
    "verification": "VERIFIED",
+   "senate_record": "stored copy",
    "text": "TEXT_BOUND",
    "summary_eligible": true,
    "cra": true
@@ -140,6 +155,7 @@
    "measure": "HJRES20",
    "kind": "JOINT_RESOLUTION_PASSAGE",
    "verification": "VERIFIED",
+   "senate_record": "stored copy",
    "text": "TEXT_BOUND",
    "summary_eligible": true,
    "cra": true
@@ -149,6 +165,7 @@
    "measure": "HJRES42",
    "kind": "JOINT_RESOLUTION_PASSAGE",
    "verification": "VERIFIED",
+   "senate_record": "stored copy",
    "text": "TEXT_BOUND",
    "summary_eligible": true,
    "cra": true
@@ -158,6 +175,7 @@
    "measure": "SJRES49",
    "kind": "JOINT_RESOLUTION_PASSAGE",
    "verification": "VERIFIED",
+   "senate_record": "stored copy",
    "text": "TEXT_BOUND",
    "summary_eligible": true,
    "cra": false
@@ -167,6 +185,7 @@
    "measure": "HJRES75",
    "kind": "JOINT_RESOLUTION_PASSAGE",
    "verification": "VERIFIED",
+   "senate_record": "stored copy",
    "text": "TEXT_BOUND",
    "summary_eligible": true,
    "cra": true
@@ -176,6 +195,7 @@
    "measure": "SJRES31",
    "kind": "JOINT_RESOLUTION_PASSAGE",
    "verification": "VERIFIED",
+   "senate_record": "stored copy",
    "text": "TEXT_BOUND",
    "summary_eligible": true,
    "cra": true
@@ -185,6 +205,7 @@
    "measure": "HJRES61",
    "kind": "JOINT_RESOLUTION_PASSAGE",
    "verification": "VERIFIED",
+   "senate_record": "stored copy",
    "text": "TEXT_BOUND",
    "summary_eligible": true,
    "cra": true
@@ -194,6 +215,7 @@
    "measure": "SJRES13",
    "kind": "JOINT_RESOLUTION_PASSAGE",
    "verification": "VERIFIED",
+   "senate_record": "stored copy",
    "text": "TEXT_BOUND",
    "summary_eligible": true,
    "cra": true
@@ -203,6 +225,7 @@
    "measure": "SJRES7",
    "kind": "JOINT_RESOLUTION_PASSAGE",
    "verification": "VERIFIED",
+   "senate_record": "stored copy",
    "text": "TEXT_BOUND",
    "summary_eligible": true,
    "cra": true
@@ -212,6 +235,7 @@
    "measure": "HJRES60",
    "kind": "JOINT_RESOLUTION_PASSAGE",
    "verification": "VERIFIED",
+   "senate_record": "stored copy",
    "text": "TEXT_BOUND",
    "summary_eligible": true,
    "cra": true
@@ -221,6 +245,7 @@
    "measure": "SJRES55",
    "kind": "JOINT_RESOLUTION_PASSAGE",
    "verification": "VERIFIED",
+   "senate_record": "stored copy",
    "text": "TEXT_BOUND",
    "summary_eligible": true,
    "cra": true
@@ -230,6 +255,7 @@
    "measure": "HJRES88",
    "kind": "JOINT_RESOLUTION_PASSAGE",
    "verification": "VERIFIED",
+   "senate_record": "stored copy",
    "text": "TEXT_BOUND",
    "summary_eligible": true,
    "cra": true
@@ -239,6 +265,7 @@
    "measure": "HJRES87",
    "kind": "JOINT_RESOLUTION_PASSAGE",
    "verification": "VERIFIED",
+   "senate_record": "stored copy",
    "text": "TEXT_BOUND",
    "summary_eligible": true,
    "cra": true
@@ -248,6 +275,7 @@
    "measure": "HJRES89",
    "kind": "JOINT_RESOLUTION_PASSAGE",
    "verification": "VERIFIED",
+   "senate_record": "stored copy",
    "text": "TEXT_BOUND",
    "summary_eligible": true,
    "cra": true
@@ -257,6 +285,7 @@
    "measure": "S1582",
    "kind": "PASSAGE_AS_AMENDED",
    "verification": "VERIFIED",
+   "senate_record": "stored copy",
    "text": "TEXT_BOUND",
    "summary_eligible": true,
    "cra": false
@@ -266,6 +295,7 @@
    "measure": "HR1",
    "kind": "PASSAGE_AS_AMENDED",
    "verification": "VERIFIED",
+   "senate_record": "stored copy",
    "text": "TEXT_BOUND",
    "summary_eligible": true,
    "cra": false
@@ -275,6 +305,7 @@
    "measure": "HR4",
    "kind": "PASSAGE_AS_AMENDED",
    "verification": "VERIFIED",
+   "senate_record": "stored copy",
    "text": "TEXT_BOUND",
    "summary_eligible": true,
    "cra": false
@@ -284,6 +315,7 @@
    "measure": "HR3944",
    "kind": "PASSAGE_AS_AMENDED",
    "verification": "VERIFIED",
+   "senate_record": "stored copy",
    "text": "TEXT_BOUND",
    "summary_eligible": true,
    "cra": false
@@ -293,6 +325,7 @@
    "measure": "S2882",
    "kind": "PASSAGE",
    "verification": "VERIFIED",
+   "senate_record": "stored copy",
    "text": "TEXT_BOUND",
    "summary_eligible": true,
    "cra": false
@@ -302,6 +335,7 @@
    "measure": "HR5371",
    "kind": "PASSAGE",
    "verification": "VERIFIED",
+   "senate_record": "stored copy",
    "text": "TEXT_BOUND",
    "summary_eligible": true,
    "cra": false
@@ -311,6 +345,7 @@
    "measure": "S2882",
    "kind": "PASSAGE",
    "verification": "VERIFIED",
+   "senate_record": "stored copy",
    "text": "TEXT_BOUND",
    "summary_eligible": true,
    "cra": false
@@ -320,6 +355,7 @@
    "measure": "HR5371",
    "kind": "PASSAGE",
    "verification": "VERIFIED",
+   "senate_record": "stored copy",
    "text": "TEXT_BOUND",
    "summary_eligible": true,
    "cra": false
@@ -329,6 +365,7 @@
    "measure": "HJRES104",
    "kind": "JOINT_RESOLUTION_PASSAGE",
    "verification": "VERIFIED",
+   "senate_record": "stored copy",
    "text": "TEXT_BOUND",
    "summary_eligible": true,
    "cra": true
@@ -338,6 +375,7 @@
    "measure": "SJRES71",
    "kind": "JOINT_RESOLUTION_PASSAGE",
    "verification": "VERIFIED",
+   "senate_record": "stored copy",
    "text": "TEXT_BOUND",
    "summary_eligible": true,
    "cra": false
@@ -347,6 +385,7 @@
    "measure": "HJRES105",
    "kind": "JOINT_RESOLUTION_PASSAGE",
    "verification": "VERIFIED",
+   "senate_record": "stored copy",
    "text": "TEXT_BOUND",
    "summary_eligible": true,
    "cra": true
@@ -356,6 +395,7 @@
    "measure": "HJRES106",
    "kind": "JOINT_RESOLUTION_PASSAGE",
    "verification": "VERIFIED",
+   "senate_record": "stored copy",
    "text": "TEXT_BOUND",
    "summary_eligible": true,
    "cra": true
@@ -365,6 +405,7 @@
    "measure": "S2296",
    "kind": "PASSAGE_AS_AMENDED",
    "verification": "VERIFIED",
+   "senate_record": "stored copy",
    "text": "TEXT_BOUND",
    "summary_eligible": true,
    "cra": false
@@ -374,6 +415,7 @@
    "measure": "SJRES81",
    "kind": "JOINT_RESOLUTION_PASSAGE",
    "verification": "VERIFIED",
+   "senate_record": "stored copy",
    "text": "TEXT_BOUND",
    "summary_eligible": true,
    "cra": false
@@ -383,6 +425,7 @@
    "measure": "SJRES77",
    "kind": "JOINT_RESOLUTION_PASSAGE",
    "verification": "VERIFIED",
+   "senate_record": "stored copy",
    "text": "TEXT_BOUND",
    "summary_eligible": true,
    "cra": false
@@ -392,6 +435,7 @@
    "measure": "SJRES80",
    "kind": "JOINT_RESOLUTION_PASSAGE",
    "verification": "VERIFIED",
+   "senate_record": "stored copy",
    "text": "TEXT_BOUND",
    "summary_eligible": true,
    "cra": true
@@ -401,6 +445,7 @@
    "measure": "SJRES88",
    "kind": "JOINT_RESOLUTION_PASSAGE",
    "verification": "VERIFIED",
+   "senate_record": "stored copy",
    "text": "TEXT_BOUND",
    "summary_eligible": true,
    "cra": false
@@ -410,6 +455,7 @@
    "measure": "HR5371",
    "kind": "PASSAGE_AS_AMENDED",
    "verification": "VERIFIED",
+   "senate_record": "stored copy",
    "text": "TEXT_BOUND",
    "summary_eligible": true,
    "cra": false
@@ -419,6 +465,7 @@
    "measure": "HJRES130",
    "kind": "JOINT_RESOLUTION_PASSAGE",
    "verification": "VERIFIED",
+   "senate_record": "stored copy",
    "text": "TEXT_BOUND",
    "summary_eligible": true,
    "cra": true
@@ -428,6 +475,7 @@
    "measure": "HJRES131",
    "kind": "JOINT_RESOLUTION_PASSAGE",
    "verification": "VERIFIED",
+   "senate_record": "stored copy",
    "text": "TEXT_BOUND",
    "summary_eligible": true,
    "cra": true
@@ -437,6 +485,7 @@
    "measure": "SJRES82",
    "kind": "JOINT_RESOLUTION_PASSAGE",
    "verification": "VERIFIED",
+   "senate_record": "stored copy",
    "text": "TEXT_BOUND",
    "summary_eligible": true,
    "cra": true
@@ -446,6 +495,7 @@
    "measure": "HR6938",
    "kind": "PASSAGE",
    "verification": "VERIFIED",
+   "senate_record": "stored copy",
    "text": "TEXT_BOUND",
    "summary_eligible": true,
    "cra": false
@@ -455,6 +505,7 @@
    "measure": "HR7148",
    "kind": "PASSAGE_AS_AMENDED",
    "verification": "VERIFIED",
+   "senate_record": "stored copy",
    "text": "TEXT_BOUND",
    "summary_eligible": true,
    "cra": false
@@ -464,6 +515,7 @@
    "measure": "HJRES142",
    "kind": "JOINT_RESOLUTION_PASSAGE",
    "verification": "VERIFIED",
+   "senate_record": "stored copy",
    "text": "TEXT_BOUND",
    "summary_eligible": true,
    "cra": false
@@ -473,6 +525,7 @@
    "measure": "HR6644",
    "kind": "PASSAGE_AS_AMENDED",
    "verification": "VERIFIED",
+   "senate_record": "stored copy",
    "text": "TEXT_BOUND",
    "summary_eligible": true,
    "cra": false
@@ -482,6 +535,7 @@
    "measure": "HJRES140",
    "kind": "JOINT_RESOLUTION_PASSAGE",
    "verification": "VERIFIED",
+   "senate_record": "stored copy",
    "text": "TEXT_BOUND",
    "summary_eligible": true,
    "cra": true
@@ -491,6 +545,7 @@
    "measure": "S2",
    "kind": "PASSAGE_AS_AMENDED",
    "verification": "VERIFIED",
+   "senate_record": "stored copy",
    "text": "TEXT_BOUND",
    "summary_eligible": true,
    "cra": false
@@ -500,6 +555,7 @@
    "measure": "HR5334",
    "kind": "PASSAGE_AS_AMENDED",
    "verification": "VERIFIED",
+   "senate_record": "stored copy",
    "text": "TEXT_BOUND",
    "summary_eligible": true,
    "cra": false
@@ -509,6 +565,17 @@
    "measure": "HR6500",
    "kind": "PASSAGE_AS_AMENDED",
    "verification": "VERIFIED",
+   "senate_record": "stored copy",
+   "text": "TEXT_BOUND",
+   "summary_eligible": true,
+   "cra": false
+  },
+  {
+   "file": "vote_119_2_00250.json",
+   "measure": "S4668",
+   "kind": "PASSAGE_AS_AMENDED",
+   "verification": "VERIFIED",
+   "senate_record": "stored copy",
    "text": "TEXT_BOUND",
    "summary_eligible": true,
    "cra": false
