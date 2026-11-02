@@ -297,6 +297,34 @@ values with separate code.
   or read from `senator_ideology`, and the roster version is recorded in the
   page's provenance.
 
+## The integrated site: legislative records and Issue Positions
+
+`demo/civicalign.html` joins Engine B's results with a drop of legislative records
+(floor votes, how each senator voted, bills, committee votes, nominations) from the
+50degrees pipeline. A drop is copied byte for byte into `data/legislative/<congress>/<date>/`
+with a manifest of SHA-256 hashes; any changed file is refused. The two systems meet only
+through official IDs (Bioguide, roll call, bill, nomination), and a broken ID stops the
+build. Engine B's numbers are reused from `build_pages.payload`, never recalculated.
+
+**Votes that split the two sides (rule `vote_division_v1`).** Senators with a negative and
+with a positive `nominate_dim1` are counted separately, among those voting Yea or Nay. If a
+strict majority of one group voted Yea and a strict majority of the other voted Nay, the vote
+split the two sides, and each answer is labelled with the side that mostly gave it. All other
+votes are not labelled, and a senator with a score of exactly zero counts for neither group.
+
+This describes how senators voted, not what a measure does. It never labels a bill, and no
+number is derived from it for any senator or issue: there is no issue score. Issue Positions
+groups the labelled votes by the bill's official policy area, read from the verified
+bill-status archives. Nominations form their own group. Measures with no archive in the
+snapshot (concurrent and simple resolutions) or no area yet are shown as having none.
+
+**Bill facts** are shown with the drop's own label as provisional, each with the quote and
+source that prove it. Explanations appear only with status `verified` or `approved`. The
+senator-to-state comparison stays unavailable while the bridge is NONE. Committee votes are
+party totals only, because the records don't say how each member voted.
+
+The supervisor's `site_checks` re-derives all of this from the raw files with separate code.
+
 ## Storage and versions
 
 All Engine B inputs and results are stored in `data/ideology/` as JSON Lines,

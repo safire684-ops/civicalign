@@ -201,7 +201,9 @@ src/civicalign/
   explain/           Pillar 1: binding.py, bind.py (Stage 2); relevance.py, context.py (Stage 2.5)
   pipeline.py, receipts.py   Pillar 1 floor-vote evidence
   sources/           readers for Voteview, rosters, bill status, Senate votes, U.S. Code, Public Laws, Federal Register
-demo/                the published site (senator-check.html, methodology.html, civicalign.css)
+demo/                the published site (senator-check.html, methodology.html, civicalign.css);
+                     civicalign.html and data/ are built by civicalign.build_site on branch integrated-site, not committed
+data/legislative/    legislative data drops, byte for byte, each with a SHA-256 manifest
 data/ideology/       Engine B versioned inputs and results
 data/raw/            the source snapshot (files gitignored; SNAPSHOT.json and PROVENANCE.tsv tracked)
 docs/archive/        superseded design documents, kept for history only
