@@ -52,6 +52,10 @@ unchanged. The official records retrieved on Oct 9 are now tracked in
 `data/raw/explanations/senate/` with their hashes, and the supervisor checks them. Do not try to
 get around the block. New passage votes stay unverified until a source is available.
 
+Each run marks every Senate record `stored copy` or `retrieved` in `data/explanations/119/index.json`.
+Only `main` commits or publishes: a manual run on another branch runs every gate and keeps the built
+site as an artifact. Roll calls newer than the legislative files come from Voteview, marked Provisional.
+
 - **UI/UX REDESIGN: COMPLETE LOCALLY, NOT LIVE** (`7be8b01` on
   `pillars-4-6-rebuild`, not pushed). The live site is still the previous page
   design (GitHub `main` `e0139b1`). See "UI/UX redesign" in section 3.

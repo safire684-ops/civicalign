@@ -1,0 +1,36 @@
+{
+ "note": "Why the legislative files and Voteview record a senator's vote differently. A difference with no entry here is shown on the site as unresolved.",
+ "checked": "2026-11-02",
+ "entries": [
+  {
+   "vote": "119-1-26",
+   "senator": "P000145",
+   "status": "confirmed",
+   "explanation": "By unanimous consent on February 4, 2025, the Senate let Senator Padilla change this vote from nay to aye, since it would not affect the outcome. The original count was 79 to 18, and the corrected count is 80 to 17. Voteview shows the original.",
+   "source": {
+    "title": "Congressional Record, Daily Digest, February 4, 2025, page D112",
+    "url": "https://www.govinfo.gov/content/pkg/CREC-2025-02-04/pdf/CREC-2025-02-04-dailydigest.pdf"
+   }
+  },
+  {
+   "vote": "119-1-89",
+   "senator": "B001267",
+   "status": "confirmed",
+   "explanation": "By unanimous consent on February 26, 2025, the Senate let Senator Bennet change this vote from yea to nay, since it would not affect the outcome. The original count was 55 to 42, and the corrected count is 54 to 43. Voteview shows the original.",
+   "source": {
+    "title": "Congressional Record, Daily Digest, February 26, 2025, page D190",
+    "url": "https://www.govinfo.gov/content/pkg/CREC-2025-02-26/pdf/CREC-2025-02-26-dailydigest.pdf"
+   }
+  },
+  {
+   "vote": "119-1-114",
+   "senator": "A000382",
+   "status": "confirmed",
+   "explanation": "By unanimous consent on March 12, 2025, the Senate let Senator Alsobrooks change this vote from yea to nay, since it would not affect the outcome. The original count was 77 to 19, and the corrected count is 76 to 20. Voteview shows the original.",
+   "source": {
+    "title": "Congressional Record, Daily Digest, March 12, 2025, page D256",
+    "url": "https://www.govinfo.gov/content/pkg/CREC-2025-03-12/pdf/CREC-2025-03-12-dailydigest.pdf"
+   }
+  }
+ ]
+}

@@ -68,8 +68,16 @@ def _copy(tmp_path):
         (raw / "explanations" / "senate" / f.name).write_bytes(f.read_bytes())
     for f in DEFAULT.bindings_dir.glob("vote_*.json"):
         (bindings / f.name).write_bytes(f.read_bytes())
-    (bindings / "index.json").write_text(json.dumps({"senate_records": {"stored copy": 55}}))
+    (bindings / "index.json").write_text(json.dumps({"senate_records": {"stored copy": 1}, "bound": [{"senate_record": "stored copy"}]}))
     return type("C", (), {"explain_raw_dir": raw / "explanations", "bindings_dir": bindings})()
+
+
+def test_a_record_with_no_stored_or_retrieved_label_is_caught(tmp_path):
+    cfg = _copy(tmp_path)
+    (cfg.bindings_dir / "index.json").write_text(json.dumps({"senate_records": {"stored copy": 1}, "bound": [{}]}))
+    assert any(not c.ok and "labelled stored or retrieved" in c.name for c in S.senate_record_checks(cfg))
+    (cfg.bindings_dir / "index.json").write_text(json.dumps({"senate_records": {"retrieved": 1}, "bound": [{"senate_record": "stored copy"}]}))
+    assert any(not c.ok and "labelled stored or retrieved" in c.name for c in S.senate_record_checks(cfg))
 
 
 def test_a_changed_stored_record_is_caught(tmp_path):

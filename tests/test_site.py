@@ -150,7 +150,7 @@ def test_a_tampered_label_or_policy_area_is_caught(built):
     assert failed(S.site_derived_checks(DEFAULT, built["raw"], built["drop"], d), "Site: policy areas")
     d = copy.deepcopy(built["derived"])
     d["status"]["s5"]["enacted"] = not d["status"]["s5"]["enacted"]
-    assert failed(S.site_derived_checks(DEFAULT, built["raw"], built["drop"], d), "Site: bill status")
+    assert failed(S.site_derived_checks(DEFAULT, built["raw"], built["drop"], d, L.supplement(built["drop"], DEFAULT)), "Site: bill status")
 
 
 # ---- data dates and the comparison between the two systems ----
@@ -316,6 +316,57 @@ def test_the_page_script_parses_and_defines_what_it_uses(tmp_path):
     for name in ("NAMES", "COUNT_KEYS", "cvBody", "cvRow", "evidenceRow", "differNote", "dataNote", "datesCard", "newerText", "ruleText", "partyLine", "LEG", "POSN", "COMV", "MEMB"):
         assert re.search(rf"(?:const |function |,){name}(?:=[^=]|\()", script), name
     assert 'const NAMES=function' not in script
+
+
+# ---- the newer roll calls and the three vote differences ----
+def test_newer_votes_are_provisional_and_recounted(built):
+    extra = L.supplement(built["drop"], DEFAULT)
+    assert extra["votes"] and all(v["provisional"] and v["meaning"] is None for v in extra["votes"])
+    assert all(built["derived"]["evidence"][v["id"]] == "insufficient" for v in extra["votes"])
+    assert not failed(S.site_supplement_checks(DEFAULT, built["raw"], built["drop"], extra, built["derived"]), "Site: provisional")
+    bad = copy.deepcopy(extra)
+    bad["votes"][0]["counts"]["yea"] += 1
+    assert failed(S.site_supplement_checks(DEFAULT, built["raw"], built["drop"], bad, built["derived"]), "Site: provisional")
+    bad = copy.deepcopy(extra)
+    bad["votes"][0]["provisional"] = False
+    assert failed(S.site_supplement_checks(DEFAULT, built["raw"], built["drop"], bad, built["derived"]), "Site: provisional")
+    bad = copy.deepcopy(extra)
+    bad["votes"].pop()
+    assert failed(S.site_supplement_checks(DEFAULT, built["raw"], built["drop"], bad, built["derived"]), "Site: provisional")
+
+
+def test_the_drop_files_are_still_published_unchanged():
+    pages = BS.build(DEFAULT)
+    d = L.latest_dir(DEFAULT)
+    assert pages["data/votes.json"] == (d / "votes.json").read_bytes() and pages["data/positions.json"] == (d / "positions.json").read_bytes()
+
+
+def test_the_three_differences_are_documented_from_the_congressional_record(built):
+    notes = L.differences(DEFAULT)
+    assert {(n["vote"], n["senator"]) for n in notes["entries"]} == {("119-1-26", "P000145"), ("119-1-89", "B001267"), ("119-1-114", "A000382")}
+    assert all("Daily Digest" in n["source"]["title"] and n["source"]["url"].startswith("https://www.govinfo.gov/") for n in notes["entries"])
+    assert not failed(S.site_difference_checks(built["core"], notes), "Site: every vote difference")
+
+
+def test_an_undocumented_difference_says_unresolved(built):
+    core = copy.deepcopy(built["core"])
+    notes = copy.deepcopy(L.differences(DEFAULT))
+    x = core["reconcile"]["positions"]["119-1-26"][0]
+    x["status"] = "confirmed"
+    x["source"] = {"url": "https://example.com/blog", "title": "a blog"}
+    assert failed(S.site_difference_checks(core, notes), "Site: every vote difference")
+    notes["entries"].append({"vote": "119-1-1", "senator": "X", "status": "confirmed"})
+    assert failed(S.site_difference_checks(built["core"], notes), "Site: every vote difference")
+    assert "<b>Unresolved:</b>" in TEMPLATE
+
+
+def test_only_main_commits_or_publishes():
+    y = (ROOT / ".github" / "workflows" / "update.yml").read_text()
+    assert "if: ${{ needs.update.result == 'success' && github.ref == 'refs/heads/main' }}" in y
+    commit = y[y.index("13/13 Commit"):y.index("git config user.name")]
+    assert "if: github.ref == 'refs/heads/main'" in commit
+    upload = y[y.index("Upload the verified site"):y.index("  publish:")]
+    assert "if:" not in upload.replace("only if", ""), "a test run keeps the built site"
 
 
 def test_committee_notes_and_corrections_are_shown():

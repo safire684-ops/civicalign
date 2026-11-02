@@ -886,12 +886,12 @@ def site_join_checks(drop: dict, scored: set[str]) -> list[Check]:
     return out
 
 
-def site_derived_checks(cfg: Config, raw: dict, drop: dict, derived: dict) -> list[Check]:
+def site_derived_checks(cfg: Config, raw: dict, drop: dict, derived: dict, extra: dict | None = None) -> list[Check]:
     """The split labels, policy areas and bill status, recounted from the raw files."""
     import html as _html
     import zipfile as _zip
     wrong = [v["id"] for v in drop["votes"] if derived["evidence"].get(v["id"]) != site_evidence(v) or derived["parties"].get(v["id"]) != site_majorities(v["by_party"])]
-    out = [Check("Site: every evidence and party-majority label recounted", not wrong and len(derived["evidence"]) == len(drop["votes"]), f"wrong {wrong[:5]}" if wrong else f"{sum(1 for x in derived['evidence'].values() if x == 'direct')} direct votes")]
+    out = [Check("Site: every evidence and party-majority label recounted", not wrong and len(derived["evidence"]) == len(drop["votes"]) + len(derived.get("supplement", [])), f"wrong {wrong[:5]}" if wrong else f"{sum(1 for x in derived['evidence'].values() if x == 'direct')} direct votes")]
     zips = {"s": cfg.billflow_zip, "hr": cfg.billflow_house_zip, "sjres": cfg.billstatus_sjres_zip, "hjres": cfg.billstatus_hjres_zip}
     opened = {k: _zip.ZipFile(p) for k, p in zips.items()}
     wrong = []
@@ -905,11 +905,12 @@ def site_derived_checks(cfg: Config, raw: dict, drop: dict, derived: dict) -> li
             wrong.append(b["id"])
     out.append(Check("Site: policy areas re-read from each bill's XML", not wrong, f"wrong {wrong[:5]}" if wrong else f"{sum(1 for x in derived['policy_area'].values() if x)} of {len(drop['bills'])} have one"))
     own = _eb_bill_outcomes(cfg, raw)
-    votes = {v["id"]: v for v in drop["votes"]}
+    newer = (extra or {"votes": []})["votes"]
+    votes = {v["id"]: v for v in drop["votes"] + newer}
     wrong = []
     for b in drop["bills"]:
         st = derived["status"][b["id"]]
-        last = max((votes[v] for v in b["votes"]), key=lambda v: (v["date"], v["session"], v["number"]), default=None)
+        last = max((votes[v] for v in b["votes"] + [n["id"] for n in newer if n["bill"] == b["id"]]), key=lambda v: (v["date"], v["session"], v["number"]), default=None)
         if (st["last_vote"], st["last_result"]) != ((last["id"], last["result"]) if last else (None, None)):
             wrong.append(b["id"])
         rec = own.get(b["id"].upper()) if b["type"] == "s" else None
@@ -1008,6 +1009,55 @@ def site_reconcile_checks(cfg: Config, raw: dict, drop: dict, core: dict) -> lis
     return out
 
 
+def site_supplement_checks(cfg: Config, raw: dict, drop: dict, extra: dict, derived: dict) -> list[Check]:
+    """The provisional votes recounted from Voteview, and every difference's explanation."""
+    who, party = {}, {}
+    for r in raw["members"]:
+        if r["chamber"] == "Senate" and r["congress"] == str(cfg.congress):
+            who[r["icpsr"]] = r["bioguide_id"]
+            party[r["bioguide_id"]] = {"100": "D", "200": "R"}.get(r["party_code"], "I")
+    with cfg.rollcalls_csv.open() as fh:
+        rolls = {f"{r['congress']}-{r['session']}-{r['clerk_rollnumber']}": r for r in csv.DictReader(fh)}
+    ours = {v["id"] for v in drop["votes"]}
+    want_ids = {k for k in rolls if k not in ours}
+    by_number = {rolls[k]["rollnumber"]: k for k in want_ids}
+    words = {"1": "Yea", "2": "Yea", "3": "Yea", "4": "Nay", "5": "Nay", "6": "Nay", "7": "Present", "8": "Present"}
+    cast: dict[str, dict[str, str]] = {k: {} for k in want_ids}
+    with cfg.votes_csv.open() as fh:
+        for r in csv.DictReader(fh):
+            if r["rollnumber"] in by_number and r["icpsr"] in who:
+                cast[by_number[r["rollnumber"]]][who[r["icpsr"]]] = words.get(r["cast_code"], "Not Voting")
+    wrong = [] if {v["id"] for v in extra["votes"]} == want_ids else ["set of votes"]
+    for v in extra["votes"]:
+        r, pos = rolls.get(v["id"]), cast.get(v["id"], {})
+        recount: dict[str, dict[str, int]] = {}
+        for sid, p in pos.items():
+            recount.setdefault(party[sid], {}).setdefault(p, 0)
+            recount[party[sid]][p] += 1
+        if (not r or extra["positions"].get(v["id"]) != pos or v["by_party"] != recount or v["result"] != r["vote_result"]
+                or (v["counts"]["yea"], v["counts"]["nay"]) != (int(r["yea_count"]), int(r["nay_count"]))
+                or not v["provisional"] or v["meaning"] is not None or derived["evidence"].get(v["id"]) != "insufficient"):
+            wrong.append(v["id"])
+    out = [Check("Site: provisional votes recounted and marked", not wrong and sorted(derived["supplement"]) == sorted(want_ids), f"wrong {wrong[:5]}" if wrong else f"{len(want_ids)} votes")]
+    return out
+
+
+def site_difference_checks(core: dict, notes: dict) -> list[Check]:
+    """A confirmed difference names an official source; anything else on the page says unresolved."""
+    live = {(v, x["id"]) for v, xs in core["reconcile"]["positions"].items() for x in xs}
+    known = {(n["vote"], n["senator"]) for n in notes["entries"]}
+    bad = [str(k) for k in known - live]
+    for v, xs in core["reconcile"]["positions"].items():
+        for x in xs:
+            if x["status"] == "confirmed":
+                host = (x.get("source") or {}).get("url", "")
+                if (v, x["id"]) not in known or not re.match(r"https://www\.(govinfo|congress|senate)\.gov/", host) or not x.get("explanation"):
+                    bad.append(f"{v} {x['id']}")
+            elif x["status"] != "unresolved" or (v, x["id"]) in {(n["vote"], n["senator"]) for n in notes["entries"] if n["status"] == "confirmed"}:
+                bad.append(f"{v} {x['id']}")
+    return [Check("Site: every vote difference is explained or marked unresolved", not bad, f"wrong {bad[:5]}" if bad else f"{sum(1 for xs in core['reconcile']['positions'].values() for x in xs if x['status'] == 'confirmed')} confirmed of {len(live)}")]
+
+
 def L_dir(cfg: Config) -> Path:
     return sorted(p for p in (cfg.ideology_dir.parent / "legislative" / str(cfg.congress)).glob("*") if (p / "MANIFEST.json").exists())[-1]
 
@@ -1024,8 +1074,11 @@ def senate_record_checks(cfg: Config) -> list[Check]:
         name = f.name.replace(".json", ".xml")
         if name in prov and got != prov[name]["sha256"]:
             named.append(f.name)
-    how = json.loads((cfg.bindings_dir / "index.json").read_text()).get("senate_records")
-    return [Check("Pillar 1: this run says how it got each Senate record", bool(how), str(how)),
+    index = json.loads((cfg.bindings_dir / "index.json").read_text())
+    how = index.get("senate_records") or {}
+    per_vote = [b.get("senate_record") for b in index.get("bound", [])]
+    labelled = bool(how) and None not in per_vote and all(per_vote.count(k) == n for k, n in how.items()) and set(per_vote) <= {"retrieved", "stored copy", "unavailable"}
+    return [Check("Pillar 1: every Senate record is labelled stored or retrieved", labelled, str(how)),
             Check("Pillar 1: stored Senate records unchanged", not bad, f"changed {bad[:5]}" if bad else f"{len(prov)} records"),
             Check("Pillar 1: bindings name the stored Senate records", not named, f"differ {named[:5]}" if named else "")]
 
@@ -1063,7 +1116,10 @@ def site_checks(cfg: Config = DEFAULT, page_dir: Path | None = None) -> list[Che
     core = json.loads(re.search(r'<script id="data" type="application/json">(.*?)</script>', page, re.S).group(1))
     derived = json.loads(pages["data/derived.json"])
     scored = {r["bioguide_id"] for r in raw["members"] if r["chamber"] == "Senate" and r["congress"] == str(cfg.congress)}
-    out = site_drop_checks(drop_dir, pages) + site_join_checks(drop, scored) + site_derived_checks(cfg, raw, drop, derived)
+    extra = json.loads(pages["data/supplement.json"])
+    notes = json.loads((drop_dir.parent.parent / "vote_differences.json").read_text())
+    out = site_drop_checks(drop_dir, pages) + site_join_checks(drop, scored) + site_derived_checks(cfg, raw, drop, derived, extra)
+    out += site_supplement_checks(cfg, raw, drop, extra, derived) + site_difference_checks(core, notes)
     out += site_core_checks(cfg, raw, core, BR.active(cfg)["status"]) + site_page_checks(drop, page) + site_reconcile_checks(cfg, raw, drop, core)
     where = page_dir if page_dir is not None else DEMO
     if page_dir is None or (where / BS.PAGE).exists():

@@ -130,6 +130,8 @@ jobs:
         run: PYTHONPATH=src python -m civicalign.agents.supervisor
 
       - name: 13/13 Commit the pages, versioned records, provenance and bindings (only reached if every gate passed)
+        # Only main commits. A manual run on another branch is a test: it runs every gate and keeps the built site as an artifact.
+        if: github.ref == 'refs/heads/main'
         # A day where no source's CONTENT changed produces identical pages and
         # records and an unchanged provenance log; only the snapshot's "last
         # checked" stamp moves, and a timestamp alone is not worth a commit.
@@ -155,7 +157,7 @@ jobs:
     # Runs only when every gate in `update` passed. A failure above leaves the
     # previously deployed site in place.
     needs: update
-    if: ${{ needs.update.result == 'success' }}
+    if: ${{ needs.update.result == 'success' && github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-24.04
     environment:
       name: github-pages

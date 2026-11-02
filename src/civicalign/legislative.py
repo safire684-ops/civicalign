@@ -21,16 +21,22 @@ votes as a whole and is never applied to a senator.
 
 reconcile() compares the drop with Voteview's raw roll calls in the current snapshot, so that
 a disagreement or a gap between the two systems is published instead of hidden.
+
+supplement() fills that gap: a roll call in Voteview's verified file but not yet in the drop
+is published with its question, result and counts, marked provisional, with no plain-language
+meaning. Voteview can miss a later vote change, so these stay provisional until a drop has them.
 """
 import csv
 import hashlib
 import json
+import re
 import shutil
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
 from .config import DEFAULT, Config
+from .sources.senate_votes import senate_vote_url
 
 FILES = ("meta.json", "senators.json", "votes.json", "positions.json", "bills.json", "committee_votes.json", "nominations.json", "README.md")
 EVIDENCE_RULE = "issue_votes_v1"
@@ -43,6 +49,10 @@ PARTY_RULE = "party_majorities_v1"
 PARTY_TEXT = ("Among Democrats and among Republicans who voted Yes or No, a roll call counts as opposed when a strict majority of one party voted Yes "
               "and a strict majority of the other voted No. It describes roll calls across the Senate and is never applied to a single senator.")
 DIRECT = {"passage", "amendment", "motion_to_concur"}
+LABELS = {"S": "S.", "HR": "H.R.", "SJRES": "S.J.Res.", "HJRES": "H.J.Res.", "SRES": "S.Res.", "HRES": "H.Res.", "SCONRES": "S.Con.Res.", "HCONRES": "H.Con.Res.", "PN": "PN"}
+QUESTIONS = {"On the Cloture Motion": "cloture", "On the Nomination": "nomination", "On the Amendment": "amendment", "On Passage of the Bill": "passage",
+             "On the Joint Resolution": "passage", "On the Concurrent Resolution": "passage", "On the Resolution": "passage", "On the Motion to Proceed": "motion_to_proceed",
+             "On the Motion to Discharge": "motion_to_discharge", "On Cloture on the Motion to Proceed": "cloture_motion_to_proceed", "On the Motion to Table": "motion_to_table"}
 CAST = {"1": "Yea", "2": "Yea", "3": "Yea", "4": "Nay", "5": "Nay", "6": "Nay", "7": "Present", "8": "Present", "9": "Not Voting"}
 
 
@@ -166,8 +176,68 @@ def reconcile(drop: dict, cfg: Config = DEFAULT) -> dict:
             if here.get(sid, "Not Voting") != pos:
                 positions.setdefault(v["id"], []).append({"id": sid, "here": here.get(sid, "Not Voting"), "voteview": pos})
     newer = sorted(r["date"] for k, r in rows.items() if k not in {v["id"] for v in drop["votes"]})
+    notes = {(n["vote"], n["senator"]): n for n in differences(cfg)["entries"]}
+    for vote, xs in positions.items():
+        for x in xs:
+            n = notes.get((vote, x["id"]))
+            x.update(status=n["status"], explanation=n["explanation"], source=n["source"]) if n else x.update(status="unresolved")
     return {"shared": sum(1 for v in drop["votes"] if v["id"] in rows), "positions_compared": compared, "tallies": tallies, "positions": positions,
             "only_in_drop": sorted(v["id"] for v in drop["votes"] if v["id"] not in rows), "newer_count": len(newer), "newer_through": newer[-1] if newer else None}
+
+
+def _voteview(cfg: Config) -> tuple[dict, dict, dict]:
+    """(roll calls by vote id, Bioguide id by ICPSR, party letter by Bioguide id) from the snapshot."""
+    with cfg.rollcalls_csv.open() as fh:
+        rolls = {f"{r['congress']}-{r['session']}-{r['clerk_rollnumber']}": r for r in csv.DictReader(fh)}
+    who, party = {}, {}
+    with cfg.members_csv.open() as fh:
+        for r in csv.DictReader(fh):
+            if r["chamber"] == "Senate" and r["congress"] == str(cfg.congress):
+                who[r["icpsr"]] = r["bioguide_id"]
+                party[r["bioguide_id"]] = {"100": "D", "200": "R", "328": "I"}.get(r["party_code"], "I")
+    return rolls, who, party
+
+
+def _measure_label(raw: str) -> str:
+    m = re.fullmatch(r"([A-Z]+)(\d+)", raw or "")
+    if not m or m.group(1) not in LABELS:
+        return raw or "Roll call"
+    return f"{LABELS[m.group(1)]} {m.group(2)}"
+
+
+def supplement(drop: dict, cfg: Config = DEFAULT) -> dict:
+    """Roll calls in Voteview's current file that the drop doesn't have yet."""
+    rolls, who, party = _voteview(cfg)
+    have = {v["id"] for v in drop["votes"]}
+    bills = {b["id"] for b in drop["bills"]}
+    missing = {k: r for k, r in rolls.items() if k not in have}
+    numbers = {r["rollnumber"]: k for k, r in missing.items()}
+    positions: dict[str, dict[str, str]] = {k: {} for k in missing}
+    with cfg.votes_csv.open() as fh:
+        for r in csv.DictReader(fh):
+            if r["rollnumber"] in numbers and r["icpsr"] in who:
+                positions[numbers[r["rollnumber"]]][who[r["icpsr"]]] = CAST.get(r["cast_code"], "Not Voting")
+    votes = []
+    for k, r in sorted(missing.items(), key=lambda x: (x[1]["date"], int(x[1]["clerk_rollnumber"]))):
+        by_party: dict[str, dict[str, int]] = {}
+        for sid, pos in positions[k].items():
+            group = by_party.setdefault(party[sid], {})
+            group[pos] = group.get(pos, 0) + 1
+        tally = list(positions[k].values())
+        question = r["vote_question"]
+        raw = r["bill_number"] or ""
+        votes.append({"id": k, "congress": int(r["congress"]), "session": int(r["session"]), "number": int(r["clerk_rollnumber"]), "date": r["date"],
+                      "question": question, "question_type": QUESTIONS.get(question, "other"), "title": r["vote_desc"] or question, "result": r["vote_result"],
+                      "counts": {"yea": int(r["yea_count"]), "nay": int(r["nay_count"]), "present": tally.count("Present"), "not_voting": tally.count("Not Voting")},
+                      "required_majority": r["majority_requirement"], "by_party": by_party,
+                      "measure_type": "nomination" if raw.startswith("PN") else "amendment" if question == "On the Amendment" else "bill",
+                      "bill": raw.lower() if raw.lower() in bills else None, "nominations": [], "measure_label": _measure_label(raw), "meaning": None,
+                      "provisional": True, "source_url": senate_vote_url(int(r["congress"]), int(r["session"]), int(r["clerk_rollnumber"]))})
+    return {"source": "Voteview roll calls in the current verified snapshot", "votes": votes, "positions": positions}
+
+
+def differences(cfg: Config = DEFAULT) -> dict:
+    return json.loads((root(cfg).parent / "vote_differences.json").read_text())
 
 
 if __name__ == "__main__":

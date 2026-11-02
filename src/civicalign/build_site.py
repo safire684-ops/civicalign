@@ -94,6 +94,7 @@ def data_dates(cfg: Config, drop: dict, meta: dict) -> dict:
             snapped("State survey estimates", ["state ideology"], f"Survey wave {meta['aip_wave']}", "Shown on their own scale only."),
             snapped("State populations", ["state populations"], f"Census {meta['population'].split(',')[0]}"),
             row("Floor votes, senator votes, bills and nominations", made, made, f"Votes through {floor}"),
+            snapped("Newer floor votes, provisional", ["floor roll calls"], f"Votes through {last_roll}", "From Voteview, because the files above don't have them yet. Question, result and counts only."),
             row("Committee votes", made, made, f"Votes through {committee}"),
             row("Official Senate vote records (used for cross-checks)", pulled, pulled, f"{len(senate['records'])} passage votes", senate["note"])]
     return {"snapshot": today, "floor_through": floor, "rows": rows}
@@ -120,6 +121,9 @@ def assemble(cfg: Config = DEFAULT) -> tuple[dict, dict, dict]:
     if bad:
         raise BP.BuildError("the legislative data does not join: " + "; ".join(bad[:5]))
 
+    extra = L.supplement(drop, cfg)
+    all_votes = drop["votes"] + extra["votes"]
+
     # ---- senators: identity and terms from the drop, positions from Engine B ----
     seated = {s["id"]: (st, s) for st in d["p4"]["states"] for s in st["senators"]}
     members = committee_members(cfg)
@@ -130,9 +134,9 @@ def assemble(cfg: Config = DEFAULT) -> tuple[dict, dict, dict]:
             on.setdefault(m["id"], []).append({"code": code, "name": names.get(code, code), "title": m["title"]})
     senators = []
     tally: dict[str, dict] = {s["id"]: {"Yea": 0, "Nay": 0, "Present": 0, "Not Voting": 0} for s in drop["senators"]}
-    for m in drop["positions"].values():
+    for m in [*drop["positions"].values(), *extra["positions"].values()]:
         for sid, pos in m.items():
-            tally[sid][pos] += 1
+            tally.setdefault(sid, {"Yea": 0, "Nay": 0, "Present": 0, "Not Voting": 0})[pos] += 1
     # a senator seated after the drop was made has no floor votes yet, but still belongs on the site
     people = drop["senators"] + [{"id": i, "name": e["name"], "last_name": e["short"], "party": LETTER.get(e["party"], e["party"]), "caucus": None, "state": st["code"], "terms": []}
                                  for i, (st, e) in seated.items() if i not in tally]
@@ -186,12 +190,17 @@ def assemble(cfg: Config = DEFAULT) -> tuple[dict, dict, dict]:
     }
 
     # ---- derived: only what the verified inputs determine ----
-    votes = {v["id"]: v for v in drop["votes"]}
+    votes = {v["id"]: v for v in all_votes}
+    newer = {}
+    for v in extra["votes"]:
+        if v["bill"]:
+            newer.setdefault(v["bill"], []).append(v["id"])
     outcomes = {o["bill_id"]: o for o in BO.current(cfg)}
-    derived = {"evidence": {v["id"]: L.vote_evidence(v) for v in drop["votes"]},
-               "parties": {v["id"]: L.party_majorities(v["by_party"]) for v in drop["votes"]},
+    derived = {"evidence": {v["id"]: L.vote_evidence(v) for v in all_votes},
+               "parties": {v["id"]: L.party_majorities(v["by_party"]) for v in all_votes},
+               "supplement": [v["id"] for v in extra["votes"]],
                "policy_area": policy_areas(cfg, drop["bills"]),
-               "status": {b["id"]: bill_status(b, votes, outcomes) for b in drop["bills"]}}
+               "status": {b["id"]: bill_status({**b, "votes": b["votes"] + newer.get(b["id"], [])}, votes, outcomes) for b in drop["bills"]}}
     engine_bills = {"outcomes": {"passed": {k: O["passed_senate"][k]["ids"] for k in ("LIBERAL_SPONSOR", "CONSERVATIVE_SPONSOR", "ZERO_SCORE_SPONSOR", "UNKNOWN")},
                                  "enacted": {k: O["enacted"][k]["ids"] for k in ("LIBERAL_SPONSOR", "CONSERVATIVE_SPONSOR", "ZERO_SCORE_SPONSOR", "UNKNOWN")}, "bills": O["bills"]},
                     "committee_bills": d["p6"]["bills"], "sponsors": {k: {"p0": v["score"].get("p0"), "d": v["score"].get("d")} for k, v in d["p6"]["sponsors"].items()}}
@@ -206,7 +215,7 @@ def build(cfg: Config = DEFAULT) -> dict[str, bytes]:
         raise BP.BuildError("site template must contain <!--DATA--> exactly once")
     embedded = f'<script id="data" type="application/json">{_dump(core).replace("</", "<" + chr(92) + "/")}</script>'
     pages = {PAGE: template.replace("<!--DATA-->", embedded).encode(),
-             "data/derived.json": _dump(derived).encode(), "data/engine_bills.json": _dump(engine_bills).encode()}
+             "data/derived.json": _dump(derived).encode(), "data/engine_bills.json": _dump(engine_bills).encode(), "data/supplement.json": _dump(L.supplement(L.load(cfg), cfg)).encode()}
     d = L.latest_dir(cfg)
     for name in COPIED:
         pages[f"data/{name}"] = (d / name).read_bytes()

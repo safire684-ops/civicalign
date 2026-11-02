@@ -168,13 +168,15 @@ const NA="Not available";
 const cache={};
 const load=n=>cache[n]||(cache[n]=fetch(`data/${n}.json`).then(r=>{if(!r.ok)throw new Error(n);return r.json()}));
 let IDX=null;
-async function index(){if(IDX)return IDX;const[votes,positions,bills,nominations,derived]=await Promise.all(["votes","positions","bills","nominations","derived"].map(load));
+async function index(){if(IDX)return IDX;const[base,basePositions,bills,nominations,derived,extra]=await Promise.all(["votes","positions","bills","nominations","derived","supplement"].map(load));
+  const votes=[...base,...extra.votes],positions={...basePositions,...extra.positions};
+  for(const v of extra.votes)if(v.bill){const b=bills.find(x=>x.id==v.bill);if(b&&!b.votes.includes(v.id))b.votes.push(v.id)}
   votes.sort((a,b)=>b.date.localeCompare(a.date)||b.session-a.session||b.number-a.number);
   const when={};for(const[k,x]of[...bills.map(b=>[b.id,b]),...nominations.map(n=>[n.id,n])]){when[k]=x.votes.length?null:(x.latest_action_date||"")}
   const vById=Object.fromEntries(votes.map(v=>[v.id,v]));
   for(const x of[...bills,...nominations]){for(const id of x.votes){const d=vById[id].date;if(!when[x.id]||d>when[x.id])when[x.id]=d}}
   return IDX={votes,positions,bills,nominations,derived,when,vById,bById:Object.fromEntries(bills.map(b=>[b.id,b])),nById:Object.fromEntries(nominations.map(n=>[n.id,n]))}}
-function measure(v,X){if(v.bill)return{label:X.bById[v.bill].label,href:`#/bills/${v.bill}`};if(v.nominations.length){const n=v.nominations[0];return{label:n+(v.nominations.length>1?` +${v.nominations.length-1}`:""),href:`#/bills/${n}`}}return{label:v.id,href:`#/vote/${v.id}`}}
+function measure(v,X){if(v.bill)return{label:X.bById[v.bill].label,href:`#/bills/${v.bill}`};if(v.nominations.length){const n=v.nominations[0];return{label:n+(v.nominations.length>1?` +${v.nominations.length-1}`:""),href:`#/bills/${n}`}}return{label:v.measure_label||v.id,href:`#/vote/${v.id}`}}
 
 /* ---- expand on demand: <details data-lazy> ---- */
 let lazy={},lazyN=0;
@@ -200,14 +202,15 @@ const senItems=()=>D.senators.map(s=>({id:s.id,label:`${s.name} (${s.party} - ${
 const partyTable=bp=>{const cols=["Yea","Nay","Present","Not Voting"],names={D:"Democrats",I:"Independents",R:"Republicans"};const rows=["D","I","R"].filter(k=>bp[k]);
   return`<table class="n"><thead><tr><th>Party</th>${cols.map(c=>`<th class="r">${POS[c][0]}</th>`).join("")}</tr></thead><tbody>${rows.map(k=>`<tr><td>${names[k]}</td>${cols.map(c=>`<td class="r">${bp[k][c]||0}</td>`).join("")}</tr>`).join("")}</tbody></table>`};
 const RC=D.reconcile;
-function differNote(v){const t=RC.tallies[v.id],p=RC.positions[v.id];if(!t&&!p)return"";const who=(p||[]).map(x=>`${esc(SEN[x.id]?SEN[x.id].name:x.id)} (this record says ${POS[x.here][0]}, Voteview says ${POS[x.voteview][0]})`).join("; ");
-  return`<div class="flag" style="margin-bottom:8px"><b>Sources differ.</b> ${t?`Voteview lists ${t.yea} Yes and ${t.nay} No for this vote.`:""} ${who?`Vote recorded differently: ${who}.`:""} Please use the official Senate record to confirm.</div>`}
+function differNote(v){const t=RC.tallies[v.id],p=RC.positions[v.id];if(!t&&!p)return"";
+  const who=(p||[]).map(x=>`<p style="margin:4px 0 0">${esc(SEN[x.id]?SEN[x.id].name:x.id)}: this record says ${POS[x.here][0]}, Voteview says ${POS[x.voteview][0]}. ${x.status=="confirmed"?`<b>Confirmed:</b> ${esc(x.explanation)} ${ext(x.source.url,x.source.title)}`:`<b>Unresolved:</b> we haven't found an authoritative explanation. Please use the official Senate record.`}</p>`).join("");
+  return`<div class="flag" style="margin-bottom:8px"><b>Sources differ.</b> ${t?`Voteview lists ${t.yea} Yes and ${t.nay} No for this vote.`:""}${who}</div>`}
 function voteBody(v,X){const m=v.meaning,mm=measure(v,X);
   return`<div class="vd"><dl><dt>Question</dt><dd>${esc(v.question)}</dd><dt>Result</dt><dd>${esc(v.result)} (${v.counts.yea} Yes, ${v.counts.nay} No${v.counts.present?`, ${v.counts.present} Present`:""}, ${v.counts.not_voting} not voting)</dd>
-  ${m?`<dt>A Yes meant</dt><dd>${esc(m.yes_means)}</dd><dt>A No meant</dt><dd>${esc(m.no_means)}</dd><dt>Why this result</dt><dd>${esc(m.outcome)}</dd>`:""}</dl>
+  ${v.provisional?`<dt>Status</dt><dd><span class="chip warn">Provisional</span> From Voteview, because the legislative files don't have this vote yet. There's no plain-language explanation yet, so only the question, result and counts are shown. Voteview can miss a later vote change.</dd>`:""}${m?`<dt>A Yes meant</dt><dd>${esc(m.yes_means)}</dd><dt>A No meant</dt><dd>${esc(m.no_means)}</dd><dt>Why this result</dt><dd>${esc(m.outcome)}</dd>`:""}</dl>
   ${partyTable(v.by_party)}${differNote(v)}<div class="links"><a href="${mm.href}">${v.nominations.length?"Open the nomination":v.bill?"Open "+esc(mm.label):"Vote page"}</a>${ext(v.source_url,"Official Senate roll call record")}<a href="#/vote/${esc(v.id)}">Link to this vote</a></div></div>`}
 function voteRow(v,X,sid){const mm=measure(v,X),t=v.title||v.question;
-  return`<details class="vt" data-lazy="${later(()=>voteBody(v,X))}"><summary><span class="lab">${esc(mm.label)}${typeChip(v.measure_type)}</span><span class="ttl">${esc(t)}</span><span class="vv">${sid?pill(X.positions[v.id][sid]):`<span class="small">${esc(v.result)}</span>`}</span><span class="dt small">${fmtDate(v.date)}</span><span class="chev"></span></summary><div class="fill"></div></details>`}
+  return`<details class="vt" data-lazy="${later(()=>voteBody(v,X))}"><summary><span class="lab">${esc(mm.label)}${typeChip(v.measure_type)}${v.provisional?`<span class="chip warn">Provisional</span>`:""}</span><span class="ttl">${esc(t)}</span><span class="vv">${sid?pill(X.positions[v.id][sid]):`<span class="small">${esc(v.result)}</span>`}</span><span class="dt small">${fmtDate(v.date)}</span><span class="chev"></span></summary><div class="fill"></div></details>`}
 const voteHead=sid=>`<div class="vt-h"><span>Measure</span><span>Title</span><span>${sid?"Vote":"Result"}</span><span>Date</span><span></span></div>`;
 
 /* ---- Senators ---- */
@@ -417,13 +420,13 @@ function vAbout(anchor){const M=D.meta,L=M.legislative;const li=(a,b)=>`<li><b>$
   if(anchor){const a=document.getElementById(anchor);a&&a.scrollIntoView()}}
 function ruleText(id){return D.rules.find(r=>r.id==id).rule}
 const statusChip=st=>`<span class="chip ${st=="Latest available"?"ok":"warn"}">${st}</span>`;
-function newerText(){return RC.newer_count?`Voteview already lists ${RC.newer_count} newer ${RC.newer_count==1?"roll call":"roll calls"}, through ${fmtDate(RC.newer_through)}, that aren't in these files yet.`:""}
+function newerText(){return RC.newer_count?`${RC.newer_count} newer ${RC.newer_count==1?"roll call":"roll calls"}, through ${fmtDate(RC.newer_through)}, ${RC.newer_count==1?"comes":"come"} from Voteview and ${RC.newer_count==1?"is":"are"} marked Provisional, with no plain-language explanation yet.`:""}
 function dataNote(names){const rows=D.dates.rows.filter(r=>names.includes(r.label));return`<p class="datanote">${rows.map(r=>`${statusChip(r.status)}${esc(r.label)}: checked ${fmtDate(r.checked)}. ${esc(r.covers.replace(/\d{4}-\d{2}-\d{2}/,m=>fmtDate(m)))}.`).join(" ")} ${names.includes(LEG)?newerText():""} <a href="#/about/dates">Data dates</a></p>`}
 const LEG="Floor votes, senator votes, bills and nominations",POSN="Senator positions",COMV="Committee votes",MEMB="Committee membership";
 function datesCard(){const dif=Object.keys(RC.tallies).length,difp=Object.keys(RC.positions).length,ids=[...new Set([...Object.keys(RC.tallies),...Object.keys(RC.positions)])].sort();
   return`<div class="card" id="dates"><h2 class="sec" style="margin-bottom:8px">Data dates</h2><p style="margin-top:0">The latest verified snapshot is from <b>${fmtDate(D.dates.snapshot)}</b>. “Latest available” means the source was checked in that snapshot. “Older snapshot” means it was last retrieved before then.</p>
   <div class="tablewrap"><table class="n dates"><thead><tr><th>Information</th><th>Status</th><th>Last checked</th><th>Last changed</th><th>Covers</th></tr></thead><tbody>${D.dates.rows.map(r=>`<tr><td>${esc(r.label)}${r.note?`<br><span class="small muted">${esc(r.note)}</span>`:""}</td><td>${statusChip(r.status)}</td><td class="nowrap">${fmtDate(r.checked)}</td><td class="nowrap">${fmtDate(r.changed)}</td><td>${esc(r.covers.replace(/\d{4}-\d{2}-\d{2}/,m=>fmtDate(m)))}</td></tr>`).join("")}</tbody></table></div>
-  <h3 style="font-size:16px;margin:14px 0 6px">How the two sets compare</h3><p style="margin:0">We compared ${RC.positions_compared.toLocaleString("en-US")} individual senator votes across ${RC.shared} roll calls with Voteview. ${newerText()}${ids.length?` ${ids.length} ${ids.length==1?"vote differs":"votes differ"}, and ${ids.length==1?"it is":"they are"} flagged on the page: ${ids.map(i=>`<a href="#/vote/${esc(i)}">${esc(i)}</a>`).join(", ")}.`:" None differ."}</p></div>`}
+  <h3 style="font-size:16px;margin:14px 0 6px">How the two sets compare</h3><p style="margin:0">We compared ${RC.positions_compared.toLocaleString("en-US")} individual senator votes across ${RC.shared} roll calls with Voteview. ${newerText()}${ids.length?` ${ids.length} ${ids.length==1?"vote differs":"votes differ"}, and each is flagged with its explanation:`:" None differ."}</p>${ids.map(i=>`<div style="margin-top:8px"><a href="#/vote/${esc(i)}"><b>${esc(i)}</b></a>${differNote({id:i})}</div>`).join("")}</div>`}
 function vMissing(t){$("#app").innerHTML=`<div class="card"><h1 class="page-title">Not found</h1><p>${esc(t)}</p><a href="#/senators">Back to Senators</a></div>`}
 
 /* ---- global search ---- */
@@ -448,7 +451,7 @@ async function render(){const[a="senators",b,c]=route();lazy={};$$("[data-nav]")
   catch(err){console.error(err);$("#app").innerHTML=`<div class="card"><h1 style="font-size:24px">Couldn't load this page's data</h1><p class="muted">The data files didn't load. Please try reloading the page.</p></div>`}
   if(!(a=="about"&&b)&&c!="votes")window.scrollTo(0,0)}
 window.addEventListener("hashchange",render);
-$("#ft").innerHTML=`Latest verified snapshot: ${fmtDate(D.dates.snapshot)}. Floor votes, bills and nominations: 50degrees files made ${fmtDate(D.meta.legislative.generated_at)}, votes through ${fmtDate(D.dates.floor_through)}. Not affiliated with the U.S. Senate. <a href="#/about/dates">Data dates</a> · <a href="#/about">Sources and methods</a> · <a href="methodology.html">Methodology</a>`;
+$("#ft").innerHTML=`Latest verified snapshot: ${fmtDate(D.dates.snapshot)}. Floor votes, bills and nominations: 50degrees files made ${fmtDate(D.meta.legislative.generated_at)}, votes through ${fmtDate(D.dates.floor_through)}, then provisional votes from Voteview. Not affiliated with the U.S. Senate. <a href="#/about/dates">Data dates</a> · <a href="#/about">Sources and methods</a> · <a href="methodology.html">Methodology</a>`;
 render();
 </script>
 </body>

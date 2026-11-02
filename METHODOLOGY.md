@@ -333,6 +333,10 @@ party totals only, because the records don't say how each member voted.
 
 The supervisor's `site_checks` re-derives all of this from the raw files with separate code.
 
+**Newer votes.** A roll call in Voteview's verified file that the legislative files don't have yet is published as Provisional, with its question, result and counts, and no plain-language meaning. In Issue Positions it counts as Insufficient evidence. Voteview can miss a later vote change, so it stays provisional until a legislative drop includes it.
+
+**Differences from Voteview.** `data/legislative/vote_differences.json` records why a senator's vote differs between the two systems, each with an official source. A difference with no entry is shown as unresolved. The three known differences are confirmed vote changes in the Congressional Record's Daily Digest: Padilla on 119-1-26, Bennet on 119-1-89, Alsobrooks on 119-1-114.
+
 **Stored Senate records.** senate.gov refuses automated requests, so the Pillar 1 cross-checks use
 the official vote records stored in `data/raw/explanations/senate/` with their hashes and
 retrieval dates. A Senate correction made after retrieval would not be seen, and a new vote
