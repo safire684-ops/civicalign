@@ -13,8 +13,9 @@ A Senate accountability tool made of two separate engines:
 It is not an ideology lookup, it does not rank politicians, and it does not
 claim to measure whether a senator represents their voters.
 
-- Live site: https://safire684-ops.github.io/civicalign/ (`/senator-check.html`,
-  methodology `/methodology.html`). The current Pillars 4–6 implementation
+- Live site: https://safire684-ops.github.io/civicalign/ (`/civicalign.html`,
+  methodology `/methodology.html`; `/senator-check.html` redirects to the site, and the
+  original page is kept at `/senator-check-original.html` for rollback). The current Pillars 4–6 implementation
   described here is live: published on 26 September 2026 from GitHub `main`;
   the Pillar 5 "What the Senate actually passed" counts and the Pillar 6 "Bills
   handled by this committee" counts were added on 27 September 2026.

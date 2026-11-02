@@ -26,3 +26,5 @@ secrets*
 # Built by python -m civicalign.build_site from committed inputs; published from the workspace.
 demo/civicalign.html
 demo/data/
+# Arranged by python -m civicalign.publish_site from demo/ after every gate passes.
+_site/
