@@ -20,6 +20,8 @@
 #    7 outcomes   refresh senate_bill_outcomes (passed the Senate, enacted) from the same archive
 #    8 check      both bill tables valid, consistent and current with the snapshot
 #    9 compute    versioned Pillars 4-6 results, only where inputs changed
+#      drop       import a new legislative drop from the approved publisher, if one is set
+#      record     read new roll calls and change-of-vote notices from the Congressional Record
 #   10 build      both published pages from the saved results and the newest verified bill tables
 #   11 tests      every test, against the pages just built
 #   12 supervisor independent recount of every published number
@@ -78,6 +80,14 @@ echo "9/12 computing the versioned Pillars 4-6 results"
 PYTHONPATH=src $PY -m civicalign.ideology.compute || exit 11
 
 echo
+echo "importing a new legislative drop, if a publisher is set"
+PYTHONPATH=src $PY -m civicalign.legislative_sync || exit 16
+
+echo
+echo "reading new roll calls and change-of-vote notices from the Congressional Record"
+PYTHONPATH=src $PY -m civicalign.record_votes || exit 17
+
+echo
 echo "10/12 building both published pages from the saved results and bill tables (working copy only)"
 PYTHONPATH=src $PY -m civicalign.build_pages || exit 12
 PYTHONPATH=src $PY -m civicalign.build_site || exit 12
@@ -93,6 +103,10 @@ fi
 echo
 echo "12/12 supervisor: independent recount of every published number"
 PYTHONPATH=src $PY -m civicalign.agents.supervisor || exit 14
+
+echo
+echo "reporting data health"
+PYTHONPATH=src $PY -m civicalign.health --report || exit 18
 
 echo
 echo "arranging the publish folder (_site, not committed)"

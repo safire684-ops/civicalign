@@ -49,6 +49,12 @@ copy `/senator-check.html` redirects to the site and the original page is byte f
 `senator-check-original.html` and run the workflow on `main`. A new drop arrives with
 `python -m civicalign.legislative import <folder>`; updates aren't automatic.
 
+**Official vote lists (branch `automatic-data-updates`, not merged).** `record_votes.py` reads every
+Senate roll call and change-of-vote notice from the Congressional Record on GovInfo and appends the results to
+`data/legislative/119/record_votes.jsonl` and `record_changes.jsonl`. `legislative_sync.py` imports new drops
+once `CIVICALIGN_DROP_URL` is set. `health.py` and `scripts/data_alert.py` report gaps and keep one alert issue
+open while there's a problem. The audit, plan and checklist are in `docs/ROADMAP.md`.
+
 Since about Oct 16 2026 senate.gov refuses automated requests (from GitHub and elsewhere), so
 all 55 bindings fell to UNAVAILABLE and the Stage 2.5 gate failed every run. The gate is
 unchanged. The official records retrieved on Oct 9 are now tracked in

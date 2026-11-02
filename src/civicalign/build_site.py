@@ -18,7 +18,9 @@ import zipfile
 from pathlib import Path
 
 from . import build_pages as BP
+from . import health as H
 from . import legislative as L
+from . import record_votes as RV
 from .config import DEFAULT, Config
 from .ideology import bills as BL
 from .ideology import display as DS
@@ -86,6 +88,9 @@ def data_dates(cfg: Config, drop: dict, meta: dict) -> dict:
     floor, committee = max(v["date"] for v in drop["votes"]), max(c["date"] for c in drop["committee_votes"])
     senate = json.loads((cfg.explain_raw_dir / "senate" / "PROVENANCE.json").read_text())
     pulled = max(r["checked_utc"] for r in senate["records"].values())
+    record = RV.compare(cfg)
+    sync = json.loads(RV.status_path(cfg).read_text()) if RV.status_path(cfg).exists() else {}
+    record_checked = sync["checked_utc"] if sync.get("state") == "ok" else max((r["retrieved_utc"] for r in RV.read_jsonl(RV.store_path(cfg))), default=today)
     rows = [snapped("Senator positions", ["senator scores"], f"Votes through {last_roll}"),
             snapped("Voteview roll-call list", ["floor roll calls", "senator votes"], f"Votes through {last_roll}"),
             snapped("Who is seated", ["seated senators"], "Current roster"),
@@ -96,8 +101,26 @@ def data_dates(cfg: Config, drop: dict, meta: dict) -> dict:
             row("Floor votes, senator votes, bills and nominations", made, made, f"Votes through {floor}"),
             snapped("Newer floor votes, provisional", ["floor roll calls"], f"Votes through {last_roll}", "From Voteview, because the files above don't have them yet. Question, result and counts only."),
             row("Committee votes", made, made, f"Votes through {committee}"),
+            row("Official vote lists (Congressional Record)", record_checked, record_checked, f"{record['counts']['verified']} of {len(record['votes'])} roll calls match", "The Senate's printed list of how each senator voted, read from GovInfo."),
             row("Official Senate vote records (used for cross-checks)", pulled, pulled, f"{len(senate['records'])} passage votes", senate["note"])]
     return {"snapshot": today, "floor_through": floor, "rows": rows}
+
+
+def with_record(extra: dict, cfg: Config) -> dict:
+    """Each provisional vote with what the Congressional Record says about it."""
+    votes = RV.compare(cfg)["votes"]
+    for v in extra["votes"]:
+        c = votes.get(v["id"], {"status": "pending"})
+        v["official_record"] = {"status": c["status"], "url": c.get("url"), "issue": c.get("issue"), "changes": c.get("changes", [])}
+    return extra
+
+
+def record_summary(cfg: Config) -> dict:
+    c = RV.compare(cfg)
+    return {"counts": c["counts"], "total": len(c["votes"]),
+            "conflicts": sorted(k for k, v in c["votes"].items() if v["status"] == "conflict"),
+            "pending": sorted(k for k, v in c["votes"].items() if v["status"] == "pending"),
+            "changes": sorted(k for k, v in c["votes"].items() if v.get("changes"))}
 
 
 def bill_status(bill: dict, votes: dict[str, dict], outcomes: dict[str, dict]) -> dict:
@@ -121,7 +144,7 @@ def assemble(cfg: Config = DEFAULT) -> tuple[dict, dict, dict]:
     if bad:
         raise BP.BuildError("the legislative data does not join: " + "; ".join(bad[:5]))
 
-    extra = L.supplement(drop, cfg)
+    extra = with_record(L.supplement(drop, cfg), cfg)
     all_votes = drop["votes"] + extra["votes"]
 
     # ---- senators: identity and terms from the drop, positions from Engine B ----
@@ -187,6 +210,7 @@ def assemble(cfg: Config = DEFAULT) -> tuple[dict, dict, dict]:
         "rules": d["display_rules"] + [{"id": L.EVIDENCE_RULE, "label": "Issue Positions: which votes are shown", "rule": L.EVIDENCE_TEXT, "limits": []},
                                        {"id": L.PARTY_RULE, "label": "Votes where party majorities were opposed", "rule": L.PARTY_TEXT, "limits": []}],
         "dates": data_dates(cfg, drop, d["meta"]), "reconcile": L.reconcile(drop, cfg),
+        "record": record_summary(cfg), "health": H.report(cfg),
     }
 
     # ---- derived: only what the verified inputs determine ----
@@ -215,7 +239,7 @@ def build(cfg: Config = DEFAULT) -> dict[str, bytes]:
         raise BP.BuildError("site template must contain <!--DATA--> exactly once")
     embedded = f'<script id="data" type="application/json">{_dump(core).replace("</", "<" + chr(92) + "/")}</script>'
     pages = {PAGE: template.replace("<!--DATA-->", embedded).encode(),
-             "data/derived.json": _dump(derived).encode(), "data/engine_bills.json": _dump(engine_bills).encode(), "data/supplement.json": _dump(L.supplement(L.load(cfg), cfg)).encode()}
+             "data/derived.json": _dump(derived).encode(), "data/engine_bills.json": _dump(engine_bills).encode(), "data/supplement.json": _dump(with_record(L.supplement(L.load(cfg), cfg), cfg)).encode()}
     d = L.latest_dir(cfg)
     for name in COPIED:
         pages[f"data/{name}"] = (d / name).read_bytes()

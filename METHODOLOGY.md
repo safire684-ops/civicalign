@@ -431,3 +431,21 @@ a separate, new method); landmark bills; and every 0–100 score or grade (the d
 separate, presentation-only transformation). None of them is replaced by a hidden
 equivalent. The documents that described them are kept, marked as archived,
 under `docs/archive/`.
+
+## Checking votes against the Congressional Record
+
+Voteview supplies the roll calls the site publishes. Every roll call is also checked against the
+Congressional Record, the official account of Senate proceedings, read from GovInfo. The Record prints each
+vote by name, and prints a CHANGE OF VOTE notice when the Senate lets a senator correct a vote. Each stored
+result keeps the page's address and SHA-256, and stored lines are never rewritten.
+
+- **Verified:** the printed totals equal Voteview's, and the names match once any change-of-vote notice granted
+  by the Senate is applied.
+- **Conflict:** they don't match, and nothing official explains why. The page says the sources differ.
+- **Pending:** the vote hasn't been found in the Record, or its list couldn't be read completely.
+
+Limits: this checks who voted how, not what a vote means. A vote in Voteview but not the legislative files stays
+Provisional, with no plain-language explanation, even when its list is verified. Every provisional vote's page is
+read again on each run, along with a rotating sample of others, so an official correction to an older page may
+take some weeks to be noticed. A printed surname is matched to a senator by name and state; when a successor has
+the same name and state, Voteview's list of who could vote on that roll call settles which senator it was.

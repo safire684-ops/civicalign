@@ -1101,6 +1101,80 @@ def site_page_checks(drop: dict, page: str) -> list[Check]:
     return out
 
 
+def site_record_checks(cfg: Config, raw: dict, core: dict, extra: dict, store: Path | None = None) -> list[Check]:
+    """The Congressional Record comparison redone with separate code: stored lists against
+    Voteview, every published status, and any saved page read by a separate parser."""
+    import hashlib as _h
+    base = store if store is not None else cfg.ideology_dir.parent / "legislative" / str(cfg.congress)
+    rows = [json.loads(l) for l in (base / "record_votes.jsonl").read_text().splitlines() if l.strip()]
+    notices = [json.loads(l) for l in (base / "record_changes.jsonl").read_text().splitlines() if l.strip()]
+    latest = {r["id"]: r for r in rows}
+    words = {"1": "Yea", "2": "Yea", "3": "Yea", "4": "Nay", "5": "Nay", "6": "Nay", "7": "Present", "8": "Present"}
+    who = {r["icpsr"]: r["bioguide_id"] for r in raw["members"] if r["chamber"] == "Senate" and r["congress"] == str(cfg.congress)}
+    with cfg.rollcalls_csv.open() as fh:
+        rolls = {f"{r['congress']}-{r['session']}-{r['clerk_rollnumber']}": r for r in csv.DictReader(fh)}
+    number = {r["rollnumber"]: k for k, r in rolls.items()}
+    cast: dict[str, dict[str, str]] = {k: {} for k in rolls}
+    with cfg.votes_csv.open() as fh:
+        for r in csv.DictReader(fh):
+            if r["rollnumber"] in number and r["icpsr"] in who:
+                cast[number[r["rollnumber"]]][who[r["icpsr"]]] = words.get(r["cast_code"], "Not Voting")
+    corrected: dict[str, dict[str, str]] = {}
+    for n in notices:
+        if not n.get("unread") and n.get("senator") and n.get("granted"):
+            corrected.setdefault(n["id"], {})[n["senator"]] = n["to"]
+    status, malformed = {}, []
+    for vote, roll in rolls.items():
+        rec = latest.get(vote)
+        if rec is None or not rec["complete"] or rec["unknown"]:
+            status[vote] = "pending"
+            continue
+        printed: dict[str, str] = {}
+        for position in ("Yea", "Nay", "Present", "Not Voting"):
+            for sid in rec.get(position, []):
+                if sid in printed:
+                    malformed.append(vote)
+                printed[sid] = position
+        said = rec["announced"]
+        if said and (said["yea"], said["nay"]) != (len(rec["Yea"]), len(rec["Nay"])):
+            malformed.append(vote)
+        if not rec["url"].startswith("https://www.govinfo.gov/content/pkg/CREC-") or len(rec["sha256"]) != 64:
+            malformed.append(vote)
+        mine = cast[vote]
+        final = {**printed, **corrected.get(vote, {})}
+        gap = {s for s in set(printed) | set(mine) if printed.get(s, "Not Voting") != mine.get(s, "Not Voting")}
+        gap2 = {s for s in set(final) | set(mine) if final.get(s, "Not Voting") != mine.get(s, "Not Voting")}
+        same = (len(rec["Yea"]), len(rec["Nay"])) == (int(roll["yea_count"]), int(roll["nay_count"]))
+        status[vote] = "verified" if same and (not gap or not gap2 or gap2 <= set(corrected.get(vote, {}))) else "conflict"
+    tally = {s: sum(1 for x in status.values() if x == s) for s in ("verified", "conflict", "pending")}
+    shown = core["record"]
+    wrong = sorted(v["id"] for v in extra["votes"] if v["official_record"]["status"] != status[v["id"]])
+    ok = (not malformed and tally == shown["counts"] and shown["total"] == len(rolls) and not wrong
+          and shown["conflicts"] == sorted(k for k, x in status.items() if x == "conflict") and shown["pending"] == sorted(k for k, x in status.items() if x == "pending"))
+    out = [Check("Site: Congressional Record comparison recounted", ok, f"{tally}; malformed {malformed[:5]}; wrong {wrong[:5]}" if not ok else f"{tally}")]
+    read, bad = 0, []
+    for vote, rec in latest.items():
+        path = cfg.raw_dir / "congressional_record" / rec["issue"] / f"{rec['granule']}.htm"
+        if not path.exists():
+            continue
+        body = path.read_bytes()
+        if _h.sha256(body).hexdigest() != rec["sha256"]:
+            continue                                  # a page saved before a later correction; its own line covers it
+        read += 1
+        text = body.decode("utf-8", "replace").replace("&#x27;", "'")
+        at = re.search(rf"(?im)^\s*\[Rollcall vote No\.\s*{vote.split('-')[2]}\b[^\]]*\]\s*$", text)
+        if not at:
+            bad.append(vote)
+            continue
+        tail = text[at.end():]
+        yeas = re.search(r"(?m)^\s*YEAS\s*-+\s*(\d+)\s*$", tail)
+        nays = re.search(r"(?m)^\s*NAYS\s*-+\s*(\d+)\s*$", tail)
+        if (int(yeas.group(1)) if yeas else 0, int(nays.group(1)) if nays and (not yeas or nays.start() > yeas.start()) else 0) != (len(rec["Yea"]), len(rec["Nay"])):
+            bad.append(vote)
+    out.append(Check("Site: saved Congressional Record pages re-read separately", not bad, f"disagree {bad[:5]}" if bad else f"{read} pages' vote totals"))
+    return out
+
+
 def site_checks(cfg: Config = DEFAULT, page_dir: Path | None = None) -> list[Check]:
     from .. import build_site as BS
     from .. import legislative as L
@@ -1120,7 +1194,7 @@ def site_checks(cfg: Config = DEFAULT, page_dir: Path | None = None) -> list[Che
     notes = json.loads((drop_dir.parent.parent / "vote_differences.json").read_text())
     out = site_drop_checks(drop_dir, pages) + site_join_checks(drop, scored) + site_derived_checks(cfg, raw, drop, derived, extra)
     out += site_supplement_checks(cfg, raw, drop, extra, derived) + site_difference_checks(core, notes)
-    out += site_core_checks(cfg, raw, core, BR.active(cfg)["status"]) + site_page_checks(drop, page) + site_reconcile_checks(cfg, raw, drop, core)
+    out += site_core_checks(cfg, raw, core, BR.active(cfg)["status"]) + site_page_checks(drop, page) + site_reconcile_checks(cfg, raw, drop, core) + site_record_checks(cfg, raw, core, extra)
     where = page_dir if page_dir is not None else DEMO
     if page_dir is None or (where / BS.PAGE).exists():
         stale = [n for n, b in pages.items() if not (where / n).exists() or (where / n).read_bytes() != b]

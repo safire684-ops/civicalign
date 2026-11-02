@@ -21,6 +21,9 @@
 #                 same archive; unchanged bills write nothing, changed bills append
 #    8 check      both bill tables valid, consistent and current with the snapshot
 #    9 compute    versioned Pillars 4-6 results, recomputed only where inputs changed
+#      drop       import a new legislative drop from the approved publisher, if one is set;
+#                 a bad or missing drop leaves the last valid one in place
+#      record     read new roll calls and change-of-vote notices from the Congressional Record
 #   10 build      both published pages from the saved results and the newest verified
 #                 bill tables -- IN THE WORKSPACE ONLY
 #   11 tests      every test, against the pages just built
@@ -52,6 +55,7 @@ on:
 permissions:
   contents: write           # commit the rebuilt pages and versioned records back to the repo
   pages: write              # publish the site
+  issues: write             # keep the data alert issue up to date
   id-token: write
 
 concurrency:
@@ -119,6 +123,15 @@ jobs:
       - name: 9/13 Compute the versioned Pillars 4-6 results (only where inputs changed)
         run: PYTHONPATH=src python -m civicalign.ideology.compute
 
+      - name: Import a new legislative drop from the approved publisher, if one is set (a bad drop changes nothing)
+        env:
+          CIVICALIGN_DROP_URL: ${{ vars.CIVICALIGN_DROP_URL }}
+          CIVICALIGN_DROP_TOKEN: ${{ secrets.CIVICALIGN_DROP_TOKEN }}
+        run: PYTHONPATH=src python -m civicalign.legislative_sync
+
+      - name: Read new roll calls and change-of-vote notices from the Congressional Record
+        run: PYTHONPATH=src python -m civicalign.record_votes
+
       - name: 10/13 Build both published pages from the saved results and bill tables (workspace only; nothing is published here)
         run: PYTHONPATH=src python -m civicalign.build_pages
 
@@ -131,6 +144,9 @@ jobs:
       - name: 12/13 Supervisor -- independent recount of every published number
         run: PYTHONPATH=src python -m civicalign.agents.supervisor
 
+      - name: Report data health (missing, stale or conflicting data)
+        run: PYTHONPATH=src python -m civicalign.health --report
+
       - name: 13/13 Commit the pages, versioned records, provenance and bindings (only reached if every gate passed)
         # Only main commits. A manual run on another branch is a test: it runs every gate and keeps the built site as an artifact.
         if: github.ref == 'refs/heads/main'
@@ -140,7 +156,7 @@ jobs:
         run: |
           git config user.name  "civicalign-bot"
           git config user.email "civicalign-bot@users.noreply.github.com"
-          git add demo/senator-check.html demo/methodology.html data/ideology data/ideology/bill_sponsor_classifications.jsonl data/ideology/senate_bill_outcomes.jsonl data/raw/PROVENANCE.tsv data/explanations data/raw/explanations/senate
+          git add demo/senator-check.html demo/methodology.html data/ideology data/ideology/bill_sponsor_classifications.jsonl data/ideology/senate_bill_outcomes.jsonl data/raw/PROVENANCE.tsv data/explanations data/raw/explanations/senate data/legislative
           if git diff --cached --quiet; then
             echo "Nothing moved today; the snapshot's check stamp alone is not committed."
             git checkout -- data/raw/SNAPSHOT.json
@@ -149,6 +165,13 @@ jobs:
             git commit -m "Daily update: pages and records refreshed from a verified source snapshot"
             git push
           fi
+
+      - name: Open, update or close the data alert (reports only)
+        if: ${{ always() && github.ref == 'refs/heads/main' }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: python scripts/data_alert.py --job-status "${{ job.status }}"
 
       - name: Arrange the publish folder (the old address redirects; the original page is kept for rollback)
         # Works on a copy, so demo/ stays exactly what the gates above checked.
