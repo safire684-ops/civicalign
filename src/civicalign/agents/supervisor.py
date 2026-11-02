@@ -1586,12 +1586,12 @@ def pillar1_checks(cfg: Config = DEFAULT) -> list[Check]:
     scores = _scores(cfg, roster)
     if not (cfg.rollcalls_csv.exists() and scores):
         return []
-    return _binding_checks(cfg, roster, scores) + _context_checks(cfg)
+    return _binding_checks(cfg, roster, scores) + _context_checks(cfg) + senate_record_checks(cfg)
 
 
 def checks(cfg: Config = DEFAULT, page_dir: Path | None = None) -> list[Check]:
     """Everything: the Engine B recount, the integrated site and the Pillar 1 checks."""
-    return engine_b_checks(cfg, page_dir) + site_checks(cfg, page_dir) + pillar1_checks(cfg) + senate_record_checks(cfg)
+    return engine_b_checks(cfg, page_dir) + site_checks(cfg, page_dir) + pillar1_checks(cfg)
 
 
 def main() -> int:
