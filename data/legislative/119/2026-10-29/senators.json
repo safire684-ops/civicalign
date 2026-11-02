@@ -1,0 +1,3265 @@
+[
+ {
+  "id": "A000382",
+  "name": "Angela D. Alsobrooks",
+  "first_name": "Angela",
+  "last_name": "Alsobrooks",
+  "party": "Democrat",
+  "caucus": "Democrat",
+  "state": "MD",
+  "icpsr_id": null,
+  "lis_id": "S428",
+  "terms": [
+   {
+    "state": "MD",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2025-01-03",
+    "end": "2031-01-03"
+   }
+  ]
+ },
+ {
+  "id": "A000383",
+  "name": "Alan Armstrong",
+  "first_name": "Alan",
+  "last_name": "Armstrong",
+  "party": "Republican",
+  "caucus": "Republican",
+  "state": "OK",
+  "icpsr_id": null,
+  "lis_id": "S440",
+  "terms": [
+   {
+    "state": "OK",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2026-03-24",
+    "end": "2027-01-03"
+   }
+  ]
+ },
+ {
+  "id": "B001230",
+  "name": "Tammy Baldwin",
+  "first_name": "Tammy",
+  "last_name": "Baldwin",
+  "party": "Democrat",
+  "caucus": "Democrat",
+  "state": "WI",
+  "icpsr_id": 29940,
+  "lis_id": "S354",
+  "terms": [
+   {
+    "state": "WI",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2013-01-03",
+    "end": "2019-01-03"
+   },
+   {
+    "state": "WI",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2019-01-03",
+    "end": "2025-01-03"
+   },
+   {
+    "state": "WI",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2025-01-03",
+    "end": "2031-01-03"
+   }
+  ]
+ },
+ {
+  "id": "B001299",
+  "name": "Jim Banks",
+  "first_name": "Jim",
+  "last_name": "Banks",
+  "party": "Republican",
+  "caucus": "Republican",
+  "state": "IN",
+  "icpsr_id": 21702,
+  "lis_id": "S429",
+  "terms": [
+   {
+    "state": "IN",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2025-01-03",
+    "end": "2031-01-03"
+   }
+  ]
+ },
+ {
+  "id": "B001261",
+  "name": "John Barrasso",
+  "first_name": "John",
+  "last_name": "Barrasso",
+  "party": "Republican",
+  "caucus": "Republican",
+  "state": "WY",
+  "icpsr_id": 40707,
+  "lis_id": "S317",
+  "terms": [
+   {
+    "state": "WY",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2007-06-25",
+    "end": "2013-01-03"
+   },
+   {
+    "state": "WY",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2013-01-03",
+    "end": "2019-01-03"
+   },
+   {
+    "state": "WY",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2019-01-03",
+    "end": "2025-01-03"
+   },
+   {
+    "state": "WY",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2025-01-03",
+    "end": "2031-01-03"
+   }
+  ]
+ },
+ {
+  "id": "B001267",
+  "name": "Michael F. Bennet",
+  "first_name": "Michael",
+  "last_name": "Bennet",
+  "party": "Democrat",
+  "caucus": "Democrat",
+  "state": "CO",
+  "icpsr_id": 40910,
+  "lis_id": "S330",
+  "terms": [
+   {
+    "state": "CO",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2009-01-22",
+    "end": "2011-01-03"
+   },
+   {
+    "state": "CO",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2011-01-05",
+    "end": "2017-01-03"
+   },
+   {
+    "state": "CO",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2017-01-03",
+    "end": "2023-01-03"
+   },
+   {
+    "state": "CO",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2023-01-03",
+    "end": "2029-01-03"
+   }
+  ]
+ },
+ {
+  "id": "B001243",
+  "name": "Marsha Blackburn",
+  "first_name": "Marsha",
+  "last_name": "Blackburn",
+  "party": "Republican",
+  "caucus": "Republican",
+  "state": "TN",
+  "icpsr_id": 20351,
+  "lis_id": "S396",
+  "terms": [
+   {
+    "state": "TN",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2019-01-03",
+    "end": "2025-01-03"
+   },
+   {
+    "state": "TN",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2025-01-03",
+    "end": "2031-01-03"
+   }
+  ]
+ },
+ {
+  "id": "B001277",
+  "name": "Richard Blumenthal",
+  "first_name": "Richard",
+  "last_name": "Blumenthal",
+  "party": "Democrat",
+  "caucus": "Democrat",
+  "state": "CT",
+  "icpsr_id": 41101,
+  "lis_id": "S341",
+  "terms": [
+   {
+    "state": "CT",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2011-01-05",
+    "end": "2017-01-03"
+   },
+   {
+    "state": "CT",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2017-01-03",
+    "end": "2023-01-03"
+   },
+   {
+    "state": "CT",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2023-01-03",
+    "end": "2029-01-03"
+   }
+  ]
+ },
+ {
+  "id": "B001303",
+  "name": "Lisa Blunt Rochester",
+  "first_name": "Lisa",
+  "last_name": "Blunt Rochester",
+  "party": "Democrat",
+  "caucus": "Democrat",
+  "state": "DE",
+  "icpsr_id": 21706,
+  "lis_id": "S430",
+  "terms": [
+   {
+    "state": "DE",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2025-01-03",
+    "end": "2031-01-03"
+   }
+  ]
+ },
+ {
+  "id": "B001288",
+  "name": "Cory A. Booker",
+  "first_name": "Cory",
+  "last_name": "Booker",
+  "party": "Democrat",
+  "caucus": "Democrat",
+  "state": "NJ",
+  "icpsr_id": 41308,
+  "lis_id": "S370",
+  "terms": [
+   {
+    "state": "NJ",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2013-10-31",
+    "end": "2015-01-03"
+   },
+   {
+    "state": "NJ",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2015-01-06",
+    "end": "2021-01-03"
+   },
+   {
+    "state": "NJ",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2021-01-03",
+    "end": "2027-01-03"
+   }
+  ]
+ },
+ {
+  "id": "B001236",
+  "name": "John Boozman",
+  "first_name": "John",
+  "last_name": "Boozman",
+  "party": "Republican",
+  "caucus": "Republican",
+  "state": "AR",
+  "icpsr_id": 20101,
+  "lis_id": "S343",
+  "terms": [
+   {
+    "state": "AR",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2011-01-05",
+    "end": "2017-01-03"
+   },
+   {
+    "state": "AR",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2017-01-03",
+    "end": "2023-01-03"
+   },
+   {
+    "state": "AR",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2023-01-03",
+    "end": "2029-01-03"
+   }
+  ]
+ },
+ {
+  "id": "B001319",
+  "name": "Katie Boyd Britt",
+  "first_name": "Katie",
+  "last_name": "Britt",
+  "party": "Republican",
+  "caucus": "Republican",
+  "state": "AL",
+  "icpsr_id": null,
+  "lis_id": "S416",
+  "terms": [
+   {
+    "state": "AL",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2023-01-03",
+    "end": "2029-01-03"
+   }
+  ]
+ },
+ {
+  "id": "B001305",
+  "name": "Ted Budd",
+  "first_name": "Ted",
+  "last_name": "Budd",
+  "party": "Republican",
+  "caucus": "Republican",
+  "state": "NC",
+  "icpsr_id": 21708,
+  "lis_id": "S417",
+  "terms": [
+   {
+    "state": "NC",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2023-01-03",
+    "end": "2029-01-03"
+   }
+  ]
+ },
+ {
+  "id": "C000127",
+  "name": "Maria Cantwell",
+  "first_name": "Maria",
+  "last_name": "Cantwell",
+  "party": "Democrat",
+  "caucus": "Democrat",
+  "state": "WA",
+  "icpsr_id": 39310,
+  "lis_id": "S275",
+  "terms": [
+   {
+    "state": "WA",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2001-01-03",
+    "end": "2007-01-03"
+   },
+   {
+    "state": "WA",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2007-01-04",
+    "end": "2013-01-03"
+   },
+   {
+    "state": "WA",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2013-01-03",
+    "end": "2019-01-03"
+   },
+   {
+    "state": "WA",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2019-01-03",
+    "end": "2025-01-03"
+   },
+   {
+    "state": "WA",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2025-01-03",
+    "end": "2031-01-03"
+   }
+  ]
+ },
+ {
+  "id": "C001047",
+  "name": "Shelley Moore Capito",
+  "first_name": "Shelley",
+  "last_name": "Capito",
+  "party": "Republican",
+  "caucus": "Republican",
+  "state": "WV",
+  "icpsr_id": 20146,
+  "lis_id": "S372",
+  "terms": [
+   {
+    "state": "WV",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2015-01-06",
+    "end": "2021-01-03"
+   },
+   {
+    "state": "WV",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2021-01-03",
+    "end": "2027-01-03"
+   }
+  ]
+ },
+ {
+  "id": "C001075",
+  "name": "Bill Cassidy",
+  "first_name": "Bill",
+  "last_name": "Cassidy",
+  "party": "Republican",
+  "caucus": "Republican",
+  "state": "LA",
+  "icpsr_id": 20919,
+  "lis_id": "S373",
+  "terms": [
+   {
+    "state": "LA",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2015-01-06",
+    "end": "2021-01-03"
+   },
+   {
+    "state": "LA",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2021-01-03",
+    "end": "2027-01-03"
+   }
+  ]
+ },
+ {
+  "id": "C001035",
+  "name": "Susan M. Collins",
+  "first_name": "Susan",
+  "last_name": "Collins",
+  "party": "Republican",
+  "caucus": "Republican",
+  "state": "ME",
+  "icpsr_id": 49703,
+  "lis_id": "S252",
+  "terms": [
+   {
+    "state": "ME",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "1997-01-07",
+    "end": "2003-01-03"
+   },
+   {
+    "state": "ME",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2003-01-07",
+    "end": "2009-01-03"
+   },
+   {
+    "state": "ME",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2009-01-06",
+    "end": "2015-01-03"
+   },
+   {
+    "state": "ME",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2015-01-06",
+    "end": "2021-01-03"
+   },
+   {
+    "state": "ME",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2021-01-03",
+    "end": "2027-01-03"
+   }
+  ]
+ },
+ {
+  "id": "C001088",
+  "name": "Christopher A. Coons",
+  "first_name": "Christopher",
+  "last_name": "Coons",
+  "party": "Democrat",
+  "caucus": "Democrat",
+  "state": "DE",
+  "icpsr_id": 40916,
+  "lis_id": "S337",
+  "terms": [
+   {
+    "state": "DE",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2010-11-15",
+    "end": "2015-01-03"
+   },
+   {
+    "state": "DE",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2015-01-06",
+    "end": "2021-01-03"
+   },
+   {
+    "state": "DE",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2021-01-03",
+    "end": "2027-01-03"
+   }
+  ]
+ },
+ {
+  "id": "C001056",
+  "name": "John Cornyn",
+  "first_name": "John",
+  "last_name": "Cornyn",
+  "party": "Republican",
+  "caucus": "Republican",
+  "state": "TX",
+  "icpsr_id": 40305,
+  "lis_id": "S287",
+  "terms": [
+   {
+    "state": "TX",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2002-11-30",
+    "end": "2003-01-03"
+   },
+   {
+    "state": "TX",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2003-01-07",
+    "end": "2009-01-03"
+   },
+   {
+    "state": "TX",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2009-01-06",
+    "end": "2015-01-03"
+   },
+   {
+    "state": "TX",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2015-01-06",
+    "end": "2021-01-03"
+   },
+   {
+    "state": "TX",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2021-01-03",
+    "end": "2027-01-03"
+   }
+  ]
+ },
+ {
+  "id": "C001113",
+  "name": "Catherine Cortez Masto",
+  "first_name": "Catherine",
+  "last_name": "Cortez Masto",
+  "party": "Democrat",
+  "caucus": "Democrat",
+  "state": "NV",
+  "icpsr_id": 41700,
+  "lis_id": "S385",
+  "terms": [
+   {
+    "state": "NV",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2017-01-03",
+    "end": "2023-01-03"
+   },
+   {
+    "state": "NV",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2023-01-03",
+    "end": "2029-01-03"
+   }
+  ]
+ },
+ {
+  "id": "C001095",
+  "name": "Tom Cotton",
+  "first_name": "Tom",
+  "last_name": "Cotton",
+  "party": "Republican",
+  "caucus": "Republican",
+  "state": "AR",
+  "icpsr_id": 21301,
+  "lis_id": "S374",
+  "terms": [
+   {
+    "state": "AR",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2015-01-06",
+    "end": "2021-01-03"
+   },
+   {
+    "state": "AR",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2021-01-03",
+    "end": "2027-01-03"
+   }
+  ]
+ },
+ {
+  "id": "C001096",
+  "name": "Kevin Cramer",
+  "first_name": "Kevin",
+  "last_name": "Cramer",
+  "party": "Republican",
+  "caucus": "Republican",
+  "state": "ND",
+  "icpsr_id": 21350,
+  "lis_id": "S398",
+  "terms": [
+   {
+    "state": "ND",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2019-01-03",
+    "end": "2025-01-03"
+   },
+   {
+    "state": "ND",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2025-01-03",
+    "end": "2031-01-03"
+   }
+  ]
+ },
+ {
+  "id": "C000880",
+  "name": "Mike Crapo",
+  "first_name": "Mike",
+  "last_name": "Crapo",
+  "party": "Republican",
+  "caucus": "Republican",
+  "state": "ID",
+  "icpsr_id": 29345,
+  "lis_id": "S266",
+  "terms": [
+   {
+    "state": "ID",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "1999-01-06",
+    "end": "2005-01-03"
+   },
+   {
+    "state": "ID",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2005-01-04",
+    "end": "2011-01-03"
+   },
+   {
+    "state": "ID",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2011-01-05",
+    "end": "2017-01-03"
+   },
+   {
+    "state": "ID",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2017-01-03",
+    "end": "2023-01-03"
+   },
+   {
+    "state": "ID",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2023-01-03",
+    "end": "2029-01-03"
+   }
+  ]
+ },
+ {
+  "id": "C001098",
+  "name": "Ted Cruz",
+  "first_name": "Ted",
+  "last_name": "Cruz",
+  "party": "Republican",
+  "caucus": "Republican",
+  "state": "TX",
+  "icpsr_id": 41304,
+  "lis_id": "S355",
+  "terms": [
+   {
+    "state": "TX",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2013-01-03",
+    "end": "2019-01-03"
+   },
+   {
+    "state": "TX",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2019-01-03",
+    "end": "2025-01-03"
+   },
+   {
+    "state": "TX",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2025-01-03",
+    "end": "2031-01-03"
+   }
+  ]
+ },
+ {
+  "id": "C001114",
+  "name": "John R. Curtis",
+  "first_name": "John",
+  "last_name": "Curtis",
+  "party": "Republican",
+  "caucus": "Republican",
+  "state": "UT",
+  "icpsr_id": 21755,
+  "lis_id": "S431",
+  "terms": [
+   {
+    "state": "UT",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2025-01-03",
+    "end": "2031-01-03"
+   }
+  ]
+ },
+ {
+  "id": "D000618",
+  "name": "Steve Daines",
+  "first_name": "Steve",
+  "last_name": "Daines",
+  "party": "Republican",
+  "caucus": "Republican",
+  "state": "MT",
+  "icpsr_id": 21338,
+  "lis_id": "S375",
+  "terms": [
+   {
+    "state": "MT",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2015-01-06",
+    "end": "2021-01-03"
+   },
+   {
+    "state": "MT",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2021-01-03",
+    "end": "2027-01-03"
+   }
+  ]
+ },
+ {
+  "id": "D000622",
+  "name": "Tammy Duckworth",
+  "first_name": "Tammy",
+  "last_name": "Duckworth",
+  "party": "Democrat",
+  "caucus": "Democrat",
+  "state": "IL",
+  "icpsr_id": 21325,
+  "lis_id": "S386",
+  "terms": [
+   {
+    "state": "IL",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2017-01-03",
+    "end": "2023-01-03"
+   },
+   {
+    "state": "IL",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2023-01-03",
+    "end": "2029-01-03"
+   }
+  ]
+ },
+ {
+  "id": "D000563",
+  "name": "Richard J. Durbin",
+  "first_name": "Richard",
+  "last_name": "Durbin",
+  "party": "Democrat",
+  "caucus": "Democrat",
+  "state": "IL",
+  "icpsr_id": 15021,
+  "lis_id": "S253",
+  "terms": [
+   {
+    "state": "IL",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "1997-01-07",
+    "end": "2003-01-03"
+   },
+   {
+    "state": "IL",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2003-01-07",
+    "end": "2009-01-03"
+   },
+   {
+    "state": "IL",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2009-01-06",
+    "end": "2015-01-03"
+   },
+   {
+    "state": "IL",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2015-01-06",
+    "end": "2021-01-03"
+   },
+   {
+    "state": "IL",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2021-01-03",
+    "end": "2027-01-03"
+   }
+  ]
+ },
+ {
+  "id": "E000295",
+  "name": "Joni Ernst",
+  "first_name": "Joni",
+  "last_name": "Ernst",
+  "party": "Republican",
+  "caucus": "Republican",
+  "state": "IA",
+  "icpsr_id": 41502,
+  "lis_id": "S376",
+  "terms": [
+   {
+    "state": "IA",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2015-01-06",
+    "end": "2021-01-03"
+   },
+   {
+    "state": "IA",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2021-01-03",
+    "end": "2027-01-03"
+   }
+  ]
+ },
+ {
+  "id": "F000479",
+  "name": "John Fetterman",
+  "first_name": "John",
+  "last_name": "Fetterman",
+  "party": "Democrat",
+  "caucus": "Democrat",
+  "state": "PA",
+  "icpsr_id": null,
+  "lis_id": "S418",
+  "terms": [
+   {
+    "state": "PA",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2023-01-03",
+    "end": "2029-01-03"
+   }
+  ]
+ },
+ {
+  "id": "F000463",
+  "name": "Deb Fischer",
+  "first_name": "Deb",
+  "last_name": "Fischer",
+  "party": "Republican",
+  "caucus": "Republican",
+  "state": "NE",
+  "icpsr_id": 41302,
+  "lis_id": "S357",
+  "terms": [
+   {
+    "state": "NE",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2013-01-03",
+    "end": "2019-01-03"
+   },
+   {
+    "state": "NE",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2019-01-03",
+    "end": "2025-01-03"
+   },
+   {
+    "state": "NE",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2025-01-03",
+    "end": "2031-01-03"
+   }
+  ]
+ },
+ {
+  "id": "G000574",
+  "name": "Ruben Gallego",
+  "first_name": "Ruben",
+  "last_name": "Gallego",
+  "party": "Democrat",
+  "caucus": "Democrat",
+  "state": "AZ",
+  "icpsr_id": 21502,
+  "lis_id": "S432",
+  "terms": [
+   {
+    "state": "AZ",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2025-01-03",
+    "end": "2031-01-03"
+   }
+  ]
+ },
+ {
+  "id": "G000555",
+  "name": "Kirsten E. Gillibrand",
+  "first_name": "Kirsten",
+  "last_name": "Gillibrand",
+  "party": "Democrat",
+  "caucus": "Democrat",
+  "state": "NY",
+  "icpsr_id": 20735,
+  "lis_id": "S331",
+  "terms": [
+   {
+    "state": "NY",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2009-01-27",
+    "end": "2013-01-03"
+   },
+   {
+    "state": "NY",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2013-01-03",
+    "end": "2019-01-03"
+   },
+   {
+    "state": "NY",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2019-01-03",
+    "end": "2025-01-03"
+   },
+   {
+    "state": "NY",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2025-01-03",
+    "end": "2031-01-03"
+   }
+  ]
+ },
+ {
+  "id": "G000359",
+  "name": "Lindsey Graham",
+  "first_name": "Lindsey",
+  "last_name": "Graham",
+  "party": "Republican",
+  "caucus": "Republican",
+  "state": "SC",
+  "icpsr_id": 29566,
+  "lis_id": "S293",
+  "terms": [
+   {
+    "state": "SC",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2003-01-07",
+    "end": "2009-01-03"
+   },
+   {
+    "state": "SC",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2009-01-06",
+    "end": "2015-01-03"
+   },
+   {
+    "state": "SC",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2015-01-06",
+    "end": "2021-01-03"
+   },
+   {
+    "state": "SC",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2021-01-03",
+    "end": "2026-07-11"
+   }
+  ]
+ },
+ {
+  "id": "G000608",
+  "name": "Darline Graham",
+  "first_name": "Darline",
+  "last_name": "Graham Nordone",
+  "party": "Republican",
+  "caucus": "Republican",
+  "state": "SC",
+  "icpsr_id": null,
+  "lis_id": "S441",
+  "terms": [
+   {
+    "state": "SC",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2026-07-14",
+    "end": "2027-01-03"
+   }
+  ]
+ },
+ {
+  "id": "G000386",
+  "name": "Chuck Grassley",
+  "first_name": "Chuck",
+  "last_name": "Grassley",
+  "party": "Republican",
+  "caucus": "Republican",
+  "state": "IA",
+  "icpsr_id": 14226,
+  "lis_id": "S153",
+  "terms": [
+   {
+    "state": "IA",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "1981-01-05",
+    "end": "1987-01-03"
+   },
+   {
+    "state": "IA",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "1987-01-06",
+    "end": "1993-01-03"
+   },
+   {
+    "state": "IA",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "1993-01-05",
+    "end": "1999-01-03"
+   },
+   {
+    "state": "IA",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "1999-01-06",
+    "end": "2005-01-03"
+   },
+   {
+    "state": "IA",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2005-01-04",
+    "end": "2011-01-03"
+   },
+   {
+    "state": "IA",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2011-01-05",
+    "end": "2017-01-03"
+   },
+   {
+    "state": "IA",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2017-01-03",
+    "end": "2023-01-03"
+   },
+   {
+    "state": "IA",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2023-01-03",
+    "end": "2029-01-03"
+   }
+  ]
+ },
+ {
+  "id": "H000601",
+  "name": "Bill Hagerty",
+  "first_name": "Bill",
+  "last_name": "Hagerty",
+  "party": "Republican",
+  "caucus": "Republican",
+  "state": "TN",
+  "icpsr_id": null,
+  "lis_id": "S407",
+  "terms": [
+   {
+    "state": "TN",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2021-01-03",
+    "end": "2027-01-03"
+   }
+  ]
+ },
+ {
+  "id": "H001076",
+  "name": "Margaret Wood Hassan",
+  "first_name": "Maggie",
+  "last_name": "Hassan",
+  "party": "Democrat",
+  "caucus": "Democrat",
+  "state": "NH",
+  "icpsr_id": 41702,
+  "lis_id": "S388",
+  "terms": [
+   {
+    "state": "NH",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2017-01-03",
+    "end": "2023-01-03"
+   },
+   {
+    "state": "NH",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2023-01-03",
+    "end": "2029-01-03"
+   }
+  ]
+ },
+ {
+  "id": "H001089",
+  "name": "Josh Hawley",
+  "first_name": "Josh",
+  "last_name": "Hawley",
+  "party": "Republican",
+  "caucus": "Republican",
+  "state": "MO",
+  "icpsr_id": 41901,
+  "lis_id": "S399",
+  "terms": [
+   {
+    "state": "MO",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2019-01-03",
+    "end": "2025-01-03"
+   },
+   {
+    "state": "MO",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2025-01-03",
+    "end": "2031-01-03"
+   }
+  ]
+ },
+ {
+  "id": "H001046",
+  "name": "Martin Heinrich",
+  "first_name": "Martin",
+  "last_name": "Heinrich",
+  "party": "Democrat",
+  "caucus": "Democrat",
+  "state": "NM",
+  "icpsr_id": 20930,
+  "lis_id": "S359",
+  "terms": [
+   {
+    "state": "NM",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2013-01-03",
+    "end": "2019-01-03"
+   },
+   {
+    "state": "NM",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2019-01-03",
+    "end": "2025-01-03"
+   },
+   {
+    "state": "NM",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2025-01-03",
+    "end": "2031-01-03"
+   }
+  ]
+ },
+ {
+  "id": "H000273",
+  "name": "John W. Hickenlooper",
+  "first_name": "John",
+  "last_name": "Hickenlooper",
+  "party": "Democrat",
+  "caucus": "Democrat",
+  "state": "CO",
+  "icpsr_id": null,
+  "lis_id": "S408",
+  "terms": [
+   {
+    "state": "CO",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2021-01-03",
+    "end": "2027-01-03"
+   }
+  ]
+ },
+ {
+  "id": "H001042",
+  "name": "Mazie K. Hirono",
+  "first_name": "Mazie",
+  "last_name": "Hirono",
+  "party": "Democrat",
+  "caucus": "Democrat",
+  "state": "HI",
+  "icpsr_id": 20713,
+  "lis_id": "S361",
+  "terms": [
+   {
+    "state": "HI",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2013-01-03",
+    "end": "2019-01-03"
+   },
+   {
+    "state": "HI",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2019-01-03",
+    "end": "2025-01-03"
+   },
+   {
+    "state": "HI",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2025-01-03",
+    "end": "2031-01-03"
+   }
+  ]
+ },
+ {
+  "id": "H001061",
+  "name": "John Hoeven",
+  "first_name": "John",
+  "last_name": "Hoeven",
+  "party": "Republican",
+  "caucus": "Republican",
+  "state": "ND",
+  "icpsr_id": 41107,
+  "lis_id": "S344",
+  "terms": [
+   {
+    "state": "ND",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2011-01-05",
+    "end": "2017-01-03"
+   },
+   {
+    "state": "ND",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2017-01-03",
+    "end": "2023-01-03"
+   },
+   {
+    "state": "ND",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2023-01-03",
+    "end": "2029-01-03"
+   }
+  ]
+ },
+ {
+  "id": "H001104",
+  "name": "Jon Husted",
+  "first_name": "Jon",
+  "last_name": "Husted",
+  "party": "Republican",
+  "caucus": "Republican",
+  "state": "OH",
+  "icpsr_id": null,
+  "lis_id": "S438",
+  "terms": [
+   {
+    "state": "OH",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2025-01-21",
+    "end": "2026-11-03"
+   }
+  ]
+ },
+ {
+  "id": "H001079",
+  "name": "Cindy Hyde-Smith",
+  "first_name": "Cindy",
+  "last_name": "Hyde-Smith",
+  "party": "Republican",
+  "caucus": "Republican",
+  "state": "MS",
+  "icpsr_id": 41707,
+  "lis_id": "S395",
+  "terms": [
+   {
+    "state": "MS",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2018-04-09",
+    "end": "2018-11-27"
+   },
+   {
+    "state": "MS",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2018-11-28",
+    "end": "2021-01-03"
+   },
+   {
+    "state": "MS",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2021-01-03",
+    "end": "2027-01-03"
+   }
+  ]
+ },
+ {
+  "id": "J000293",
+  "name": "Ron Johnson",
+  "first_name": "Ron",
+  "last_name": "Johnson",
+  "party": "Republican",
+  "caucus": "Republican",
+  "state": "WI",
+  "icpsr_id": 41111,
+  "lis_id": "S345",
+  "terms": [
+   {
+    "state": "WI",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2011-01-05",
+    "end": "2017-01-03"
+   },
+   {
+    "state": "WI",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2017-01-03",
+    "end": "2023-01-03"
+   },
+   {
+    "state": "WI",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2023-01-03",
+    "end": "2029-01-03"
+   }
+  ]
+ },
+ {
+  "id": "J000312",
+  "name": "James C. Justice",
+  "first_name": "Jim",
+  "last_name": "Justice",
+  "party": "Republican",
+  "caucus": "Republican",
+  "state": "WV",
+  "icpsr_id": null,
+  "lis_id": "S437",
+  "terms": [
+   {
+    "state": "WV",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2025-01-14",
+    "end": "2031-01-03"
+   }
+  ]
+ },
+ {
+  "id": "K000384",
+  "name": "Tim Kaine",
+  "first_name": "Tim",
+  "last_name": "Kaine",
+  "party": "Democrat",
+  "caucus": "Democrat",
+  "state": "VA",
+  "icpsr_id": 41305,
+  "lis_id": "S362",
+  "terms": [
+   {
+    "state": "VA",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2013-01-03",
+    "end": "2019-01-03"
+   },
+   {
+    "state": "VA",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2019-01-03",
+    "end": "2025-01-03"
+   },
+   {
+    "state": "VA",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2025-01-03",
+    "end": "2031-01-03"
+   }
+  ]
+ },
+ {
+  "id": "K000377",
+  "name": "Mark Kelly",
+  "first_name": "Mark",
+  "last_name": "Kelly",
+  "party": "Democrat",
+  "caucus": "Democrat",
+  "state": "AZ",
+  "icpsr_id": null,
+  "lis_id": "S406",
+  "terms": [
+   {
+    "state": "AZ",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2020-12-02",
+    "end": "2023-01-03"
+   },
+   {
+    "state": "AZ",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2023-01-03",
+    "end": "2029-01-03"
+   }
+  ]
+ },
+ {
+  "id": "K000393",
+  "name": "John Kennedy",
+  "first_name": "John",
+  "last_name": "Kennedy",
+  "party": "Republican",
+  "caucus": "Republican",
+  "state": "LA",
+  "icpsr_id": 41703,
+  "lis_id": "S389",
+  "terms": [
+   {
+    "state": "LA",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2017-01-03",
+    "end": "2023-01-03"
+   },
+   {
+    "state": "LA",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2023-01-03",
+    "end": "2029-01-03"
+   }
+  ]
+ },
+ {
+  "id": "K000394",
+  "name": "Andy Kim",
+  "first_name": "Andy",
+  "last_name": "Kim",
+  "party": "Democrat",
+  "caucus": "Democrat",
+  "state": "NJ",
+  "icpsr_id": 21937,
+  "lis_id": "S426",
+  "terms": [
+   {
+    "state": "NJ",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2024-12-09",
+    "end": "2025-01-03"
+   },
+   {
+    "state": "NJ",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2025-01-03",
+    "end": "2031-01-03"
+   }
+  ]
+ },
+ {
+  "id": "K000383",
+  "name": "Angus S. King, Jr.",
+  "first_name": "Angus",
+  "last_name": "King",
+  "party": "Independent",
+  "caucus": "Democrat",
+  "state": "ME",
+  "icpsr_id": 41300,
+  "lis_id": "S363",
+  "terms": [
+   {
+    "state": "ME",
+    "party": "Independent",
+    "caucus": "Democrat",
+    "start": "2013-01-03",
+    "end": "2019-01-03"
+   },
+   {
+    "state": "ME",
+    "party": "Independent",
+    "caucus": "Democrat",
+    "start": "2019-01-03",
+    "end": "2025-01-03"
+   },
+   {
+    "state": "ME",
+    "party": "Independent",
+    "caucus": "Democrat",
+    "start": "2025-01-03",
+    "end": "2031-01-03"
+   }
+  ]
+ },
+ {
+  "id": "K000367",
+  "name": "Amy Klobuchar",
+  "first_name": "Amy",
+  "last_name": "Klobuchar",
+  "party": "Democrat",
+  "caucus": "Democrat",
+  "state": "MN",
+  "icpsr_id": 40700,
+  "lis_id": "S311",
+  "terms": [
+   {
+    "state": "MN",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2007-01-04",
+    "end": "2013-01-03"
+   },
+   {
+    "state": "MN",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2013-01-03",
+    "end": "2019-01-03"
+   },
+   {
+    "state": "MN",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2019-01-03",
+    "end": "2025-01-03"
+   },
+   {
+    "state": "MN",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2025-01-03",
+    "end": "2031-01-03"
+   }
+  ]
+ },
+ {
+  "id": "L000575",
+  "name": "James Lankford",
+  "first_name": "James",
+  "last_name": "Lankford",
+  "party": "Republican",
+  "caucus": "Republican",
+  "state": "OK",
+  "icpsr_id": 21166,
+  "lis_id": "S378",
+  "terms": [
+   {
+    "state": "OK",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2015-01-06",
+    "end": "2017-01-03"
+   },
+   {
+    "state": "OK",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2017-01-03",
+    "end": "2023-01-03"
+   },
+   {
+    "state": "OK",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2023-01-03",
+    "end": "2029-01-03"
+   }
+  ]
+ },
+ {
+  "id": "L000577",
+  "name": "Mike Lee",
+  "first_name": "Mike",
+  "last_name": "Lee",
+  "party": "Republican",
+  "caucus": "Republican",
+  "state": "UT",
+  "icpsr_id": 41110,
+  "lis_id": "S346",
+  "terms": [
+   {
+    "state": "UT",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2011-01-05",
+    "end": "2017-01-03"
+   },
+   {
+    "state": "UT",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2017-01-03",
+    "end": "2023-01-03"
+   },
+   {
+    "state": "UT",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2023-01-03",
+    "end": "2029-01-03"
+   }
+  ]
+ },
+ {
+  "id": "L000570",
+  "name": "Ben Ray Luján",
+  "first_name": "Ben",
+  "last_name": "Luján",
+  "party": "Democrat",
+  "caucus": "Democrat",
+  "state": "NM",
+  "icpsr_id": 20932,
+  "lis_id": "S409",
+  "terms": [
+   {
+    "state": "NM",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2021-01-03",
+    "end": "2027-01-03"
+   }
+  ]
+ },
+ {
+  "id": "L000571",
+  "name": "Cynthia M. Lummis",
+  "first_name": "Cynthia",
+  "last_name": "Lummis",
+  "party": "Republican",
+  "caucus": "Republican",
+  "state": "WY",
+  "icpsr_id": 20953,
+  "lis_id": "S410",
+  "terms": [
+   {
+    "state": "WY",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2021-01-03",
+    "end": "2027-01-03"
+   }
+  ]
+ },
+ {
+  "id": "M000133",
+  "name": "Edward J. Markey",
+  "first_name": "Ed",
+  "last_name": "Markey",
+  "party": "Democrat",
+  "caucus": "Democrat",
+  "state": "MA",
+  "icpsr_id": 14435,
+  "lis_id": "S369",
+  "terms": [
+   {
+    "state": "MA",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2013-07-16",
+    "end": "2015-01-03"
+   },
+   {
+    "state": "MA",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2015-01-06",
+    "end": "2021-01-03"
+   },
+   {
+    "state": "MA",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2021-01-03",
+    "end": "2027-01-03"
+   }
+  ]
+ },
+ {
+  "id": "M001198",
+  "name": "Roger Marshall",
+  "first_name": "Roger",
+  "last_name": "Marshall",
+  "party": "Republican",
+  "caucus": "Republican",
+  "state": "KS",
+  "icpsr_id": 21734,
+  "lis_id": "S411",
+  "terms": [
+   {
+    "state": "KS",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2021-01-03",
+    "end": "2027-01-03"
+   }
+  ]
+ },
+ {
+  "id": "M000355",
+  "name": "Mitch McConnell",
+  "first_name": "Mitch",
+  "last_name": "McConnell",
+  "party": "Republican",
+  "caucus": "Republican",
+  "state": "KY",
+  "icpsr_id": 14921,
+  "lis_id": "S174",
+  "terms": [
+   {
+    "state": "KY",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "1985-01-03",
+    "end": "1991-01-03"
+   },
+   {
+    "state": "KY",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "1991-01-03",
+    "end": "1997-01-03"
+   },
+   {
+    "state": "KY",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "1997-01-07",
+    "end": "2003-01-03"
+   },
+   {
+    "state": "KY",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2003-01-07",
+    "end": "2009-01-03"
+   },
+   {
+    "state": "KY",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2009-01-06",
+    "end": "2015-01-03"
+   },
+   {
+    "state": "KY",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2015-01-06",
+    "end": "2021-01-03"
+   },
+   {
+    "state": "KY",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2021-01-03",
+    "end": "2027-01-03"
+   }
+  ]
+ },
+ {
+  "id": "M001243",
+  "name": "David McCormick",
+  "first_name": "Dave",
+  "last_name": "McCormick",
+  "party": "Republican",
+  "caucus": "Republican",
+  "state": "PA",
+  "icpsr_id": null,
+  "lis_id": "S433",
+  "terms": [
+   {
+    "state": "PA",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2025-01-03",
+    "end": "2031-01-03"
+   }
+  ]
+ },
+ {
+  "id": "M001176",
+  "name": "Jeff Merkley",
+  "first_name": "Jeff",
+  "last_name": "Merkley",
+  "party": "Democrat",
+  "caucus": "Democrat",
+  "state": "OR",
+  "icpsr_id": 40908,
+  "lis_id": "S322",
+  "terms": [
+   {
+    "state": "OR",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2009-01-06",
+    "end": "2015-01-03"
+   },
+   {
+    "state": "OR",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2015-01-06",
+    "end": "2021-01-03"
+   },
+   {
+    "state": "OR",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2021-01-03",
+    "end": "2027-01-03"
+   }
+  ]
+ },
+ {
+  "id": "M001244",
+  "name": "Ashley Moody",
+  "first_name": "Ashley",
+  "last_name": "Moody",
+  "party": "Republican",
+  "caucus": "Republican",
+  "state": "FL",
+  "icpsr_id": null,
+  "lis_id": "S439",
+  "terms": [
+   {
+    "state": "FL",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2025-01-21",
+    "end": "2026-11-03"
+   }
+  ]
+ },
+ {
+  "id": "M000934",
+  "name": "Jerry Moran",
+  "first_name": "Jerry",
+  "last_name": "Moran",
+  "party": "Republican",
+  "caucus": "Republican",
+  "state": "KS",
+  "icpsr_id": 29722,
+  "lis_id": "S347",
+  "terms": [
+   {
+    "state": "KS",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2011-01-05",
+    "end": "2017-01-03"
+   },
+   {
+    "state": "KS",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2017-01-03",
+    "end": "2023-01-03"
+   },
+   {
+    "state": "KS",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2023-01-03",
+    "end": "2029-01-03"
+   }
+  ]
+ },
+ {
+  "id": "M001242",
+  "name": "Bernie Moreno",
+  "first_name": "Bernie",
+  "last_name": "Moreno",
+  "party": "Republican",
+  "caucus": "Republican",
+  "state": "OH",
+  "icpsr_id": null,
+  "lis_id": "S434",
+  "terms": [
+   {
+    "state": "OH",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2025-01-03",
+    "end": "2031-01-03"
+   }
+  ]
+ },
+ {
+  "id": "M001190",
+  "name": "Markwayne Mullin",
+  "first_name": "Markwayne",
+  "last_name": "Mullin",
+  "party": "Republican",
+  "caucus": "Republican",
+  "state": "OK",
+  "icpsr_id": 21355,
+  "lis_id": "S419",
+  "terms": [
+   {
+    "state": "OK",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2023-01-03",
+    "end": "2026-03-23"
+   }
+  ]
+ },
+ {
+  "id": "M001153",
+  "name": "Lisa Murkowski",
+  "first_name": "Lisa",
+  "last_name": "Murkowski",
+  "party": "Republican",
+  "caucus": "Republican",
+  "state": "AK",
+  "icpsr_id": 40300,
+  "lis_id": "S288",
+  "terms": [
+   {
+    "state": "AK",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2003-01-07",
+    "end": "2005-01-03"
+   },
+   {
+    "state": "AK",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2005-01-04",
+    "end": "2011-01-03"
+   },
+   {
+    "state": "AK",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2011-01-05",
+    "end": "2017-01-03"
+   },
+   {
+    "state": "AK",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2017-01-03",
+    "end": "2023-01-03"
+   },
+   {
+    "state": "AK",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2023-01-03",
+    "end": "2029-01-03"
+   }
+  ]
+ },
+ {
+  "id": "M001169",
+  "name": "Christopher Murphy",
+  "first_name": "Christopher",
+  "last_name": "Murphy",
+  "party": "Democrat",
+  "caucus": "Democrat",
+  "state": "CT",
+  "icpsr_id": 20707,
+  "lis_id": "S364",
+  "terms": [
+   {
+    "state": "CT",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2013-01-03",
+    "end": "2019-01-03"
+   },
+   {
+    "state": "CT",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2019-01-03",
+    "end": "2025-01-03"
+   },
+   {
+    "state": "CT",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2025-01-03",
+    "end": "2031-01-03"
+   }
+  ]
+ },
+ {
+  "id": "M001111",
+  "name": "Patty Murray",
+  "first_name": "Patty",
+  "last_name": "Murray",
+  "party": "Democrat",
+  "caucus": "Democrat",
+  "state": "WA",
+  "icpsr_id": 49308,
+  "lis_id": "S229",
+  "terms": [
+   {
+    "state": "WA",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "1993-01-05",
+    "end": "1999-01-03"
+   },
+   {
+    "state": "WA",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "1999-01-06",
+    "end": "2005-01-03"
+   },
+   {
+    "state": "WA",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2005-01-04",
+    "end": "2011-01-03"
+   },
+   {
+    "state": "WA",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2011-01-05",
+    "end": "2017-01-03"
+   },
+   {
+    "state": "WA",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2017-01-03",
+    "end": "2023-01-03"
+   },
+   {
+    "state": "WA",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2023-01-03",
+    "end": "2029-01-03"
+   }
+  ]
+ },
+ {
+  "id": "O000174",
+  "name": "Jon Ossoff",
+  "first_name": "Jon",
+  "last_name": "Ossoff",
+  "party": "Democrat",
+  "caucus": "Democrat",
+  "state": "GA",
+  "icpsr_id": null,
+  "lis_id": "S414",
+  "terms": [
+   {
+    "state": "GA",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2021-01-20",
+    "end": "2027-01-03"
+   }
+  ]
+ },
+ {
+  "id": "P000145",
+  "name": "Alex Padilla",
+  "first_name": "Alex",
+  "last_name": "Padilla",
+  "party": "Democrat",
+  "caucus": "Democrat",
+  "state": "CA",
+  "icpsr_id": null,
+  "lis_id": "S413",
+  "terms": [
+   {
+    "state": "CA",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2021-01-20",
+    "end": "2022-12-21"
+   },
+   {
+    "state": "CA",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2022-12-22",
+    "end": "2023-01-03"
+   },
+   {
+    "state": "CA",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2023-01-03",
+    "end": "2029-01-03"
+   }
+  ]
+ },
+ {
+  "id": "P000603",
+  "name": "Rand Paul",
+  "first_name": "Rand",
+  "last_name": "Paul",
+  "party": "Republican",
+  "caucus": "Republican",
+  "state": "KY",
+  "icpsr_id": 41104,
+  "lis_id": "S348",
+  "terms": [
+   {
+    "state": "KY",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2011-01-05",
+    "end": "2017-01-03"
+   },
+   {
+    "state": "KY",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2017-01-03",
+    "end": "2023-01-03"
+   },
+   {
+    "state": "KY",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2023-01-03",
+    "end": "2029-01-03"
+   }
+  ]
+ },
+ {
+  "id": "P000595",
+  "name": "Gary C. Peters",
+  "first_name": "Gary",
+  "last_name": "Peters",
+  "party": "Democrat",
+  "caucus": "Democrat",
+  "state": "MI",
+  "icpsr_id": 20923,
+  "lis_id": "S380",
+  "terms": [
+   {
+    "state": "MI",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2015-01-06",
+    "end": "2021-01-03"
+   },
+   {
+    "state": "MI",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2021-01-03",
+    "end": "2027-01-03"
+   }
+  ]
+ },
+ {
+  "id": "R000122",
+  "name": "Jack Reed",
+  "first_name": "Jack",
+  "last_name": "Reed",
+  "party": "Democrat",
+  "caucus": "Democrat",
+  "state": "RI",
+  "icpsr_id": 29142,
+  "lis_id": "S259",
+  "terms": [
+   {
+    "state": "RI",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "1997-01-07",
+    "end": "2003-01-03"
+   },
+   {
+    "state": "RI",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2003-01-07",
+    "end": "2009-01-03"
+   },
+   {
+    "state": "RI",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2009-01-06",
+    "end": "2015-01-03"
+   },
+   {
+    "state": "RI",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2015-01-06",
+    "end": "2021-01-03"
+   },
+   {
+    "state": "RI",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2021-01-03",
+    "end": "2027-01-03"
+   }
+  ]
+ },
+ {
+  "id": "R000618",
+  "name": "Pete Ricketts",
+  "first_name": "Pete",
+  "last_name": "Ricketts",
+  "party": "Republican",
+  "caucus": "Republican",
+  "state": "NE",
+  "icpsr_id": null,
+  "lis_id": "S423",
+  "terms": [
+   {
+    "state": "NE",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2023-01-23",
+    "end": "2024-11-05"
+   },
+   {
+    "state": "NE",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2024-11-05",
+    "end": "2027-01-03"
+   }
+  ]
+ },
+ {
+  "id": "R000584",
+  "name": "James E. Risch",
+  "first_name": "James",
+  "last_name": "Risch",
+  "party": "Republican",
+  "caucus": "Republican",
+  "state": "ID",
+  "icpsr_id": 40902,
+  "lis_id": "S323",
+  "terms": [
+   {
+    "state": "ID",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2009-01-06",
+    "end": "2015-01-03"
+   },
+   {
+    "state": "ID",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2015-01-06",
+    "end": "2021-01-03"
+   },
+   {
+    "state": "ID",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2021-01-03",
+    "end": "2027-01-03"
+   }
+  ]
+ },
+ {
+  "id": "R000608",
+  "name": "Jacky Rosen",
+  "first_name": "Jacky",
+  "last_name": "Rosen",
+  "party": "Democrat",
+  "caucus": "Democrat",
+  "state": "NV",
+  "icpsr_id": 21743,
+  "lis_id": "S402",
+  "terms": [
+   {
+    "state": "NV",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2019-01-03",
+    "end": "2025-01-03"
+   },
+   {
+    "state": "NV",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2025-01-03",
+    "end": "2031-01-03"
+   }
+  ]
+ },
+ {
+  "id": "R000605",
+  "name": "Mike Rounds",
+  "first_name": "Mike",
+  "last_name": "Rounds",
+  "party": "Republican",
+  "caucus": "Republican",
+  "state": "SD",
+  "icpsr_id": 41505,
+  "lis_id": "S381",
+  "terms": [
+   {
+    "state": "SD",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2015-01-06",
+    "end": "2021-01-03"
+   },
+   {
+    "state": "SD",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2021-01-03",
+    "end": "2027-01-03"
+   }
+  ]
+ },
+ {
+  "id": "R000595",
+  "name": "Marco Rubio",
+  "first_name": "Marco",
+  "last_name": "Rubio",
+  "party": "Republican",
+  "caucus": "Republican",
+  "state": "FL",
+  "icpsr_id": 41102,
+  "lis_id": "S350",
+  "terms": [
+   {
+    "state": "FL",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2011-01-05",
+    "end": "2017-01-03"
+   },
+   {
+    "state": "FL",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2017-01-03",
+    "end": "2023-01-03"
+   },
+   {
+    "state": "FL",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2023-01-03",
+    "end": "2025-01-20"
+   }
+  ]
+ },
+ {
+  "id": "S000033",
+  "name": "Bernard Sanders",
+  "first_name": "Bernie",
+  "last_name": "Sanders",
+  "party": "Independent",
+  "caucus": "Democrat",
+  "state": "VT",
+  "icpsr_id": 29147,
+  "lis_id": "S313",
+  "terms": [
+   {
+    "state": "VT",
+    "party": "Independent",
+    "caucus": "Democrat",
+    "start": "2007-01-04",
+    "end": "2013-01-03"
+   },
+   {
+    "state": "VT",
+    "party": "Independent",
+    "caucus": "Democrat",
+    "start": "2013-01-03",
+    "end": "2019-01-03"
+   },
+   {
+    "state": "VT",
+    "party": "Independent",
+    "caucus": "Democrat",
+    "start": "2019-01-03",
+    "end": "2025-01-03"
+   },
+   {
+    "state": "VT",
+    "party": "Independent",
+    "caucus": "Democrat",
+    "start": "2025-01-03",
+    "end": "2031-01-03"
+   }
+  ]
+ },
+ {
+  "id": "S001194",
+  "name": "Brian Schatz",
+  "first_name": "Brian",
+  "last_name": "Schatz",
+  "party": "Democrat",
+  "caucus": "Democrat",
+  "state": "HI",
+  "icpsr_id": 41112,
+  "lis_id": "S353",
+  "terms": [
+   {
+    "state": "HI",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2012-12-27",
+    "end": "2015-01-03"
+   },
+   {
+    "state": "HI",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2015-01-06",
+    "end": "2017-01-03"
+   },
+   {
+    "state": "HI",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2017-01-03",
+    "end": "2023-01-03"
+   },
+   {
+    "state": "HI",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2023-01-03",
+    "end": "2029-01-03"
+   }
+  ]
+ },
+ {
+  "id": "S001150",
+  "name": "Adam B. Schiff",
+  "first_name": "Adam",
+  "last_name": "Schiff",
+  "party": "Democrat",
+  "caucus": "Democrat",
+  "state": "CA",
+  "icpsr_id": 20104,
+  "lis_id": "S427",
+  "terms": [
+   {
+    "state": "CA",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2024-12-09",
+    "end": "2025-01-03"
+   },
+   {
+    "state": "CA",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2025-01-03",
+    "end": "2031-01-03"
+   }
+  ]
+ },
+ {
+  "id": "S001227",
+  "name": "Eric Schmitt",
+  "first_name": "Eric",
+  "last_name": "Schmitt",
+  "party": "Republican",
+  "caucus": "Republican",
+  "state": "MO",
+  "icpsr_id": null,
+  "lis_id": "S420",
+  "terms": [
+   {
+    "state": "MO",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2023-01-03",
+    "end": "2029-01-03"
+   }
+  ]
+ },
+ {
+  "id": "S000148",
+  "name": "Charles E. Schumer",
+  "first_name": "Chuck",
+  "last_name": "Schumer",
+  "party": "Democrat",
+  "caucus": "Democrat",
+  "state": "NY",
+  "icpsr_id": 14858,
+  "lis_id": "S270",
+  "terms": [
+   {
+    "state": "NY",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "1999-01-06",
+    "end": "2005-01-03"
+   },
+   {
+    "state": "NY",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2005-01-04",
+    "end": "2011-01-03"
+   },
+   {
+    "state": "NY",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2011-01-05",
+    "end": "2017-01-03"
+   },
+   {
+    "state": "NY",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2017-01-03",
+    "end": "2023-01-03"
+   },
+   {
+    "state": "NY",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2023-01-03",
+    "end": "2029-01-03"
+   }
+  ]
+ },
+ {
+  "id": "S001217",
+  "name": "Rick Scott",
+  "first_name": "Rick",
+  "last_name": "Scott",
+  "party": "Republican",
+  "caucus": "Republican",
+  "state": "FL",
+  "icpsr_id": 41903,
+  "lis_id": "S404",
+  "terms": [
+   {
+    "state": "FL",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2019-01-08",
+    "end": "2025-01-03"
+   },
+   {
+    "state": "FL",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2025-01-03",
+    "end": "2031-01-03"
+   }
+  ]
+ },
+ {
+  "id": "S001184",
+  "name": "Tim Scott",
+  "first_name": "Tim",
+  "last_name": "Scott",
+  "party": "Republican",
+  "caucus": "Republican",
+  "state": "SC",
+  "icpsr_id": 21173,
+  "lis_id": "S365",
+  "terms": [
+   {
+    "state": "SC",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2013-01-03",
+    "end": "2015-01-03"
+   },
+   {
+    "state": "SC",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2015-01-06",
+    "end": "2017-01-03"
+   },
+   {
+    "state": "SC",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2017-01-03",
+    "end": "2023-01-03"
+   },
+   {
+    "state": "SC",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2023-01-03",
+    "end": "2029-01-03"
+   }
+  ]
+ },
+ {
+  "id": "S001181",
+  "name": "Jeanne Shaheen",
+  "first_name": "Jeanne",
+  "last_name": "Shaheen",
+  "party": "Democrat",
+  "caucus": "Democrat",
+  "state": "NH",
+  "icpsr_id": 40906,
+  "lis_id": "S324",
+  "terms": [
+   {
+    "state": "NH",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2009-01-06",
+    "end": "2015-01-03"
+   },
+   {
+    "state": "NH",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2015-01-06",
+    "end": "2021-01-03"
+   },
+   {
+    "state": "NH",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2021-01-03",
+    "end": "2027-01-03"
+   }
+  ]
+ },
+ {
+  "id": "S001232",
+  "name": "Tim Sheehy",
+  "first_name": "Tim",
+  "last_name": "Sheehy",
+  "party": "Republican",
+  "caucus": "Republican",
+  "state": "MT",
+  "icpsr_id": null,
+  "lis_id": "S435",
+  "terms": [
+   {
+    "state": "MT",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2025-01-03",
+    "end": "2031-01-03"
+   }
+  ]
+ },
+ {
+  "id": "S001208",
+  "name": "Elissa Slotkin",
+  "first_name": "Elissa",
+  "last_name": "Slotkin",
+  "party": "Democrat",
+  "caucus": "Democrat",
+  "state": "MI",
+  "icpsr_id": 21965,
+  "lis_id": "S436",
+  "terms": [
+   {
+    "state": "MI",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2025-01-03",
+    "end": "2031-01-03"
+   }
+  ]
+ },
+ {
+  "id": "S001203",
+  "name": "Tina Smith",
+  "first_name": "Tina",
+  "last_name": "Smith",
+  "party": "Democrat",
+  "caucus": "Democrat",
+  "state": "MN",
+  "icpsr_id": 41706,
+  "lis_id": "S394",
+  "terms": [
+   {
+    "state": "MN",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2018-01-03",
+    "end": "2018-11-06"
+   },
+   {
+    "state": "MN",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2018-11-07",
+    "end": "2021-01-03"
+   },
+   {
+    "state": "MN",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2021-01-03",
+    "end": "2027-01-03"
+   }
+  ]
+ },
+ {
+  "id": "S001198",
+  "name": "Dan Sullivan",
+  "first_name": "Dan",
+  "last_name": "Sullivan",
+  "party": "Republican",
+  "caucus": "Republican",
+  "state": "AK",
+  "icpsr_id": 41500,
+  "lis_id": "S383",
+  "terms": [
+   {
+    "state": "AK",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2015-01-06",
+    "end": "2021-01-03"
+   },
+   {
+    "state": "AK",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2021-01-03",
+    "end": "2027-01-03"
+   }
+  ]
+ },
+ {
+  "id": "T000250",
+  "name": "John Thune",
+  "first_name": "John",
+  "last_name": "Thune",
+  "party": "Republican",
+  "caucus": "Republican",
+  "state": "SD",
+  "icpsr_id": 29754,
+  "lis_id": "S303",
+  "terms": [
+   {
+    "state": "SD",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2005-01-04",
+    "end": "2011-01-03"
+   },
+   {
+    "state": "SD",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2011-01-05",
+    "end": "2017-01-03"
+   },
+   {
+    "state": "SD",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2017-01-03",
+    "end": "2023-01-03"
+   },
+   {
+    "state": "SD",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2023-01-03",
+    "end": "2029-01-03"
+   }
+  ]
+ },
+ {
+  "id": "T000476",
+  "name": "Thom Tillis",
+  "first_name": "Thom",
+  "last_name": "Tillis",
+  "party": "Republican",
+  "caucus": "Republican",
+  "state": "NC",
+  "icpsr_id": 41504,
+  "lis_id": "S384",
+  "terms": [
+   {
+    "state": "NC",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2015-01-06",
+    "end": "2021-01-03"
+   },
+   {
+    "state": "NC",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2021-01-03",
+    "end": "2027-01-03"
+   }
+  ]
+ },
+ {
+  "id": "T000278",
+  "name": "Tommy Tuberville",
+  "first_name": "Tommy",
+  "last_name": "Tuberville",
+  "party": "Republican",
+  "caucus": "Republican",
+  "state": "AL",
+  "icpsr_id": null,
+  "lis_id": "S412",
+  "terms": [
+   {
+    "state": "AL",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2021-01-03",
+    "end": "2027-01-03"
+   }
+  ]
+ },
+ {
+  "id": "V000128",
+  "name": "Chris Van Hollen",
+  "first_name": "Chris",
+  "last_name": "Van Hollen",
+  "party": "Democrat",
+  "caucus": "Democrat",
+  "state": "MD",
+  "icpsr_id": 20330,
+  "lis_id": "S390",
+  "terms": [
+   {
+    "state": "MD",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2017-01-03",
+    "end": "2023-01-03"
+   },
+   {
+    "state": "MD",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2023-01-03",
+    "end": "2029-01-03"
+   }
+  ]
+ },
+ {
+  "id": "V000137",
+  "name": "J.D. Vance",
+  "first_name": "J.D.",
+  "last_name": "Vance",
+  "party": "Republican",
+  "caucus": "Republican",
+  "state": "OH",
+  "icpsr_id": null,
+  "lis_id": "S421",
+  "terms": [
+   {
+    "state": "OH",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2023-01-03",
+    "end": "2025-01-09"
+   }
+  ]
+ },
+ {
+  "id": "W000805",
+  "name": "Mark R. Warner",
+  "first_name": "Mark",
+  "last_name": "Warner",
+  "party": "Democrat",
+  "caucus": "Democrat",
+  "state": "VA",
+  "icpsr_id": 40909,
+  "lis_id": "S327",
+  "terms": [
+   {
+    "state": "VA",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2009-01-06",
+    "end": "2015-01-03"
+   },
+   {
+    "state": "VA",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2015-01-06",
+    "end": "2021-01-03"
+   },
+   {
+    "state": "VA",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2021-01-03",
+    "end": "2027-01-03"
+   }
+  ]
+ },
+ {
+  "id": "W000790",
+  "name": "Raphael G. Warnock",
+  "first_name": "Raphael",
+  "last_name": "Warnock",
+  "party": "Democrat",
+  "caucus": "Democrat",
+  "state": "GA",
+  "icpsr_id": null,
+  "lis_id": "S415",
+  "terms": [
+   {
+    "state": "GA",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2021-01-20",
+    "end": "2023-01-03"
+   },
+   {
+    "state": "GA",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2023-01-03",
+    "end": "2029-01-03"
+   }
+  ]
+ },
+ {
+  "id": "W000817",
+  "name": "Elizabeth Warren",
+  "first_name": "Elizabeth",
+  "last_name": "Warren",
+  "party": "Democrat",
+  "caucus": "Democrat",
+  "state": "MA",
+  "icpsr_id": 41301,
+  "lis_id": "S366",
+  "terms": [
+   {
+    "state": "MA",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2013-01-03",
+    "end": "2019-01-03"
+   },
+   {
+    "state": "MA",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2019-01-03",
+    "end": "2025-01-03"
+   },
+   {
+    "state": "MA",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2025-01-03",
+    "end": "2031-01-03"
+   }
+  ]
+ },
+ {
+  "id": "W000800",
+  "name": "Peter Welch",
+  "first_name": "Peter",
+  "last_name": "Welch",
+  "party": "Democrat",
+  "caucus": "Democrat",
+  "state": "VT",
+  "icpsr_id": 20750,
+  "lis_id": "S422",
+  "terms": [
+   {
+    "state": "VT",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2023-01-03",
+    "end": "2029-01-03"
+   }
+  ]
+ },
+ {
+  "id": "W000802",
+  "name": "Sheldon Whitehouse",
+  "first_name": "Sheldon",
+  "last_name": "Whitehouse",
+  "party": "Democrat",
+  "caucus": "Democrat",
+  "state": "RI",
+  "icpsr_id": 40704,
+  "lis_id": "S316",
+  "terms": [
+   {
+    "state": "RI",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2007-01-04",
+    "end": "2013-01-03"
+   },
+   {
+    "state": "RI",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2013-01-03",
+    "end": "2019-01-03"
+   },
+   {
+    "state": "RI",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2019-01-03",
+    "end": "2025-01-03"
+   },
+   {
+    "state": "RI",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2025-01-03",
+    "end": "2031-01-03"
+   }
+  ]
+ },
+ {
+  "id": "W000437",
+  "name": "Roger F. Wicker",
+  "first_name": "Roger",
+  "last_name": "Wicker",
+  "party": "Republican",
+  "caucus": "Republican",
+  "state": "MS",
+  "icpsr_id": 29534,
+  "lis_id": "S318",
+  "terms": [
+   {
+    "state": "MS",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2007-12-31",
+    "end": "2013-01-03"
+   },
+   {
+    "state": "MS",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2013-01-03",
+    "end": "2019-01-03"
+   },
+   {
+    "state": "MS",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2019-01-03",
+    "end": "2025-01-03"
+   },
+   {
+    "state": "MS",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2025-01-03",
+    "end": "2031-01-03"
+   }
+  ]
+ },
+ {
+  "id": "W000779",
+  "name": "Ron Wyden",
+  "first_name": "Ron",
+  "last_name": "Wyden",
+  "party": "Democrat",
+  "caucus": "Democrat",
+  "state": "OR",
+  "icpsr_id": 14871,
+  "lis_id": "S247",
+  "terms": [
+   {
+    "state": "OR",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "1996-02-05",
+    "end": "1999-01-03"
+   },
+   {
+    "state": "OR",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "1999-01-06",
+    "end": "2005-01-03"
+   },
+   {
+    "state": "OR",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2005-01-04",
+    "end": "2011-01-03"
+   },
+   {
+    "state": "OR",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2011-01-05",
+    "end": "2017-01-03"
+   },
+   {
+    "state": "OR",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2017-01-03",
+    "end": "2023-01-03"
+   },
+   {
+    "state": "OR",
+    "party": "Democrat",
+    "caucus": "Democrat",
+    "start": "2023-01-03",
+    "end": "2029-01-03"
+   }
+  ]
+ },
+ {
+  "id": "Y000064",
+  "name": "Todd Young",
+  "first_name": "Todd",
+  "last_name": "Young",
+  "party": "Republican",
+  "caucus": "Republican",
+  "state": "IN",
+  "icpsr_id": 21133,
+  "lis_id": "S391",
+  "terms": [
+   {
+    "state": "IN",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2017-01-03",
+    "end": "2023-01-03"
+   },
+   {
+    "state": "IN",
+    "party": "Republican",
+    "caucus": "Republican",
+    "start": "2023-01-03",
+    "end": "2029-01-03"
+   }
+  ]
+ }
+]

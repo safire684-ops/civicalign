@@ -10,26 +10,40 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Public+Sans:wght@400;500;600;700&display=swap">
 <link rel="stylesheet" href="civicalign.css">
 <style>
-.wrap h2{margin-top:40px;padding-top:18px;border-top:2px solid var(--ink)}
-.entry{margin-top:18px;background:var(--surface);border:1px solid var(--rule);padding:16px 18px;border-radius:6px}
-.entry:target{outline:3px solid var(--alert);outline-offset:2px}
+:root,:root:not([data-theme="light"]),:root[data-theme="dark"]{color-scheme:light;--paper:#f4f6f9;--surface:#fff;--ink:#14274e;--muted:#5d6880;--rule:#e2e6ee;--rule-soft:#eef1f6;--alert:#b4532a;--alert-soft:#fbf1ec;--calm:#1f7a4d;--calm-soft:#e6f4ec;--rep:#c0392b;--dem:#2f5fb3;--text:#2a3550}
+body{background:var(--paper);color:var(--text);font-size:15px;line-height:1.55}
+a{color:var(--alert);text-decoration:none}a:hover{text-decoration:underline}
+.site{background:#fff;border-bottom:1px solid var(--rule)}.site-in{max-width:1240px;margin:auto;padding:0 24px;display:flex;align-items:center;gap:28px;min-height:68px;flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:9px;font:700 24px var(--serif);color:var(--ink);white-space:nowrap}.logo:hover{text-decoration:none}.logo b{color:var(--alert);font-weight:700}
+.site nav{display:flex;gap:24px;align-self:stretch;overflow-x:auto;scrollbar-width:none}.site nav a{display:flex;align-items:center;color:var(--muted);font-weight:500;white-space:nowrap;min-height:40px}.site nav a:hover{color:var(--ink);text-decoration:none}
+.wrap{max-width:980px;padding:28px 24px 48px}
+h1,h2,h3{color:var(--ink);font-weight:700}h1{font-size:38px;line-height:1.2;letter-spacing:0}
+.eyebrow{font-family:var(--sans);font-weight:700;letter-spacing:.09em}.sub{font-size:15px;max-width:760px;margin-top:6px}
+.wrap>header{margin-bottom:8px}
+.wrap h2{margin-top:28px;font-size:22px}
+.rules,.entry{background:var(--surface);border-radius:16px;box-shadow:0 1px 2px rgba(20,39,78,.05),0 6px 20px rgba(20,39,78,.06);border:0}
+.rules{margin-top:14px;padding:20px 24px 20px 40px;display:grid;gap:6px;font-size:14.5px;max-width:none}
+.entry{margin-top:14px;padding:22px 24px}
+.entry:target{outline:2px solid var(--alert);outline-offset:2px}
 .entry h3{font-size:18px}
 .entry h3 code{font-family:var(--mono);font-size:12px;font-weight:400;color:var(--muted);margin-left:6px}
 .entry dl{margin:10px 0 0;display:grid;gap:8px}
 .entry dt{font-size:11.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
 .entry dd{margin:2px 0 0;font-size:14.5px;overflow-wrap:anywhere}
 .entry ul{margin:2px 0 0;padding-left:18px;display:grid;gap:3px}
-.entry .formula{font-family:var(--mono);font-size:13px;background:var(--rule-soft);padding:8px 10px;border-radius:3px}
+.entry .formula{font-family:var(--mono);font-size:13px;background:var(--rule-soft);padding:8px 10px;border-radius:8px}
 .asof{margin-top:14px;font-size:13px;color:var(--muted);overflow-wrap:anywhere}
-.rules{margin-top:14px;padding-left:20px;display:grid;gap:6px;font-size:15px;max-width:62ch}
-table.anchors{border-collapse:collapse;width:100%;margin-top:12px;font-size:14.5px}
+table.anchors{border-collapse:collapse;width:100%;margin-top:12px;font-size:14px}
 table.anchors th,table.anchors td{text-align:left;padding:8px 10px 8px 0;border-bottom:1px solid var(--rule-soft);vertical-align:top}
 table.anchors th{font-size:12px;color:var(--muted);font-weight:600}
 table.anchors td.n{font-variant-numeric:tabular-nums;font-weight:700;white-space:nowrap}
-.back{margin-top:18px;font-size:15px}.back a{color:var(--alert);font-weight:600}
+.back{margin-top:18px;font-size:14px}.back a{color:var(--alert);font-weight:600}
+@media (max-width:640px){.site-in{padding:10px 16px;gap:6px 16px}.site nav{flex:1 1 100%;gap:18px}.wrap{padding:16px 16px 36px}h1{font-size:30px}.rules{padding:16px 16px 16px 32px}.entry{padding:16px}}
 </style>
 </head>
 <body>
+<div class="site"><div class="site-in"><a class="logo" href="civicalign.html"><svg width="30" height="30" viewBox="0 0 32 32" fill="none" stroke="#14274e" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M16 3v3M9 15a7 7 0 0 1 14 0M7 15h18M9 15v9M13 15v9M19 15v9M23 15v9M5 24h22M3 28h26"/></svg><span>Civic<b>Align</b></span></a>
+<nav aria-label="Main"><a href="civicalign.html#/senators">Senators</a><a href="civicalign.html#/bills">Bills</a><a href="civicalign.html#/committees">Committees</a><a href="civicalign.html#/senate">Senate as a Whole</a><a href="civicalign.html#/about">About</a></nav></div></div>
 <div class="wrap">
 <header>
   <p class="eyebrow">CivicAlign &middot; Pillars 4–6</p>
@@ -37,7 +51,7 @@ table.anchors td.n{font-variant-numeric:tabular-nums;font-weight:700;white-space
   <p class="sub">Each number on the page has one entry here: where it comes from, what is done to the
     source, how it is calculated, which recorded versions it depends on, and what it does not tell you.
     The page cannot show a number that has no entry.</p>
-  <p class="back"><a href="senator-check.html">← Back to the page</a></p>
+  <p class="back"><a href="civicalign.html">← Back to CivicAlign</a></p>
 </header>
 
 <h2>Rules that apply to every number</h2>
@@ -52,7 +66,7 @@ table.anchors td.n{font-variant-numeric:tabular-nums;font-weight:700;white-space
 
 <!--METHODOLOGY-->
 
-<footer><p class="back"><a href="senator-check.html">← Back to the page</a></p></footer>
+<footer><p class="back"><a href="civicalign.html">← Back to CivicAlign</a></p></footer>
 </div>
 </body>
 </html>

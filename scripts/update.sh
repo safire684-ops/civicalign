@@ -80,6 +80,7 @@ PYTHONPATH=src $PY -m civicalign.ideology.compute || exit 11
 echo
 echo "10/12 building both published pages from the saved results and bill tables (working copy only)"
 PYTHONPATH=src $PY -m civicalign.build_pages || exit 12
+PYTHONPATH=src $PY -m civicalign.build_site || exit 12
 
 echo
 echo "11/12 running every test against the pages just built"

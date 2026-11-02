@@ -274,12 +274,17 @@ def run(cfg: Config = DEFAULT, offline: bool = False, verbose: bool = True) -> d
             eligible_rows.append(row)
     mv = member_votes_for(cfg, {int(r["rollnumber"]) for r in eligible_rows})
     outcomes = Counter(); text_statuses = Counter(); ver_statuses = Counter(); kinds_final = Counter(); writes = Counter()
+    senate_copies = Counter()
+    senate_how = {}
     bindings = []
     for row in eligible_rows:
         session, clerk = int(row["session"]), int(row["clerk_rollnumber"])
         rel = f"senate/vote_{row['congress']}_{session}_{clerk:05d}.xml"
         f = store.fetch(senate_vote_url(int(row["congress"]), session, clerk), rel, offline=offline)
         senate = None
+        how = "retrieved" if f.message in ("changed", "unchanged") else "stored copy" if f.ok else "unavailable"
+        senate_copies[how] += 1
+        senate_how[(session, clerk)] = how
         if f.ok and f.path is not None:
             try:
                 senate = parse_senate_vote(f.path)
@@ -300,14 +305,16 @@ def run(cfg: Config = DEFAULT, offline: bool = False, verbose: bool = True) -> d
     index = {"schema": BINDING_SCHEMA, "congress": cfg.congress, "rule": {
                  "supported_kinds": sorted(B.SUPPORTED_KINDS), "pending_window_days": B.PENDING_WINDOW_DAYS,
                  "never_selected_versions": sorted(B.NEVER)},
+             "senate_records": dict(senate_copies),   # how this run's records were obtained: VERIFIED means the records agree, not that they are new
              "classified": dict(kinds), "bound": [
                  {"file": f"vote_{b['vote']['congress']}_{b['vote']['session']}_{b['vote']['clerk_number']:05d}.json",
                   "measure": b["object"]["id"], "kind": b["classification"]["kind"], "verification": b["verification"]["status"],
+                  "senate_record": senate_how[(b["vote"]["session"], b["vote"]["clerk_number"])],
                   "text": b["text_binding"]["status"], "summary_eligible": b["classification"]["summary_eligible"],
                   "cra": b["cra"]["is_cra"]} for b in sorted(bindings, key=lambda x: (x["vote"]["session"], x["vote"]["clerk_number"]))]}
     (cfg.bindings_dir / "index.json").write_text(json.dumps(index, indent=1, ensure_ascii=False) + "\n")
     summary = {"classified": dict(kinds), "bound_kinds": dict(kinds_final), "verification": dict(ver_statuses),
-               "text": dict(text_statuses), "eligibility": dict(outcomes), "writes": dict(writes)}
+               "text": dict(text_statuses), "eligibility": dict(outcomes), "writes": dict(writes), "senate_records": dict(senate_copies)}
     if verbose:
         print(json.dumps(summary, indent=1))
     return summary

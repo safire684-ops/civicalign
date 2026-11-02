@@ -1,0 +1,26 @@
+{
+ "congress": 119,
+ "generated_at": "2026-10-29T14:29:05+00:00",
+ "counts": {
+  "senators": 104,
+  "votes": 897,
+  "positions": 897,
+  "bills": 128,
+  "committee_votes": 537,
+  "nominations": 592
+ },
+ "explanations_prompt_version": "p7-2026-10-12",
+ "files": {
+  "senators.json": "everyone with a Senate floor vote this Congress, with their terms",
+  "votes.json": "every floor roll call: question, result, counts, by party, what yes and no meant, why",
+  "positions.json": "each senator's position on each vote: {vote id: {bioguide id: position}}",
+  "bills.json": "every measure with a floor vote: title, importance, cost estimates, votes, explanations",
+  "committee_votes.json": "verified committee roll calls with the count by party",
+  "nominations.json": "nominations with a recorded vote and their 'if confirmed / if not' explanation"
+ },
+ "notes": [
+  "A bill part marked held has no explanation yet: the AI's checker did not pass it, and no person has.",
+  "key_facts (40 bills) are the answer key's facts, shown until the AI explanations are written: see key_facts.about on each bill for how they were made and checked.",
+  "Committee votes that failed a check are held for review and left out."
+ ]
+}

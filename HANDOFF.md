@@ -37,6 +37,25 @@ Work one step at a time and stop for review after each step.
 
 ## 1. Current branch and repository state
 
+**Branch `integrated-site` (not merged, not deployed):** one site joining Engine B with the
+50degrees legislative drop of 2026-10-29. New: `src/civicalign/legislative.py`,
+`src/civicalign/build_site.py`, `src/civicalign/templates/site.template.html`,
+`data/legislative/119/2026-10-29/`, `site_checks` in the supervisor, `tests/test_site.py`.
+`demo/civicalign.html` and `demo/data/` are generated and not committed. `demo/index.html`
+now opens `civicalign.html`; `senator-check.html` is still built, tested and checked, but
+unlinked, until the owner approves retiring it. A new drop arrives with
+`python -m civicalign.legislative import <folder>`; updates aren't automatic.
+
+Since about Oct 16 2026 senate.gov refuses automated requests (from GitHub and elsewhere), so
+all 55 bindings fell to UNAVAILABLE and the Stage 2.5 gate failed every run. The gate is
+unchanged. The official records retrieved on Oct 9 are now tracked in
+`data/raw/explanations/senate/` with their hashes, and the supervisor checks them. Do not try to
+get around the block. New passage votes stay unverified until a source is available.
+
+Each run marks every Senate record `stored copy` or `retrieved` in `data/explanations/119/index.json`.
+Only `main` commits or publishes: a manual run on another branch runs every gate and keeps the built
+site as an artifact. Roll calls newer than the legislative files come from Voteview, marked Provisional.
+
 - **UI/UX REDESIGN: COMPLETE LOCALLY, NOT LIVE** (`7be8b01` on
   `pillars-4-6-rebuild`, not pushed). The live site is still the previous page
   design (GitHub `main` `e0139b1`). See "UI/UX redesign" in section 3.

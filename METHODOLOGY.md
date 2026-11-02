@@ -297,6 +297,51 @@ values with separate code.
   or read from `senator_ideology`, and the roster version is recorded in the
   page's provenance.
 
+## The integrated site: legislative records and Issue Positions
+
+`demo/civicalign.html` joins Engine B's results with a drop of legislative records
+(floor votes, how each senator voted, bills, committee votes, nominations) from the
+50degrees pipeline. A drop is copied byte for byte into `data/legislative/<congress>/<date>/`
+with a manifest of SHA-256 hashes; any changed file is refused. The two systems meet only
+through official IDs (Bioguide, roll call, bill, nomination), and a broken ID stops the
+build. Engine B's numbers are reused from `build_pages.payload`, never recalculated.
+
+**Issue Positions (rule `issue_votes_v1`).** Votes are grouped by the official policy area of
+the bill, read from the verified bill-status archives. A direct vote is a Yes or No on the
+measure itself: passage, an amendment, or accepting the other chamber's version. Other votes
+are procedural steps, listed separately. Each vote shows how the senator voted, what a Yes and
+a No meant, the count by party, and links to the official roll call and the bill's record. Votes
+on nominations are kept apart, because they are about a person. If a senator has no direct Yes
+or No in an area, or a measure has no official policy area, or a vote has no plain-language
+meaning, the page says Insufficient evidence. No score or liberal or conservative label is
+worked out. An earlier rule, `vote_division_v1`, labelled votes by which side of the Voteview
+scale mostly gave each answer; it was removed because it mostly measured partisan voting.
+
+**Party majorities (rule `party_majorities_v1`).** Senate as a Whole counts the roll calls where
+a strict majority of Democrats and a strict majority of Republicans voting Yes or No were on
+opposite sides. It describes roll calls and is never applied to one senator.
+
+**Data dates.** Each source shows when it was last checked and what it covers. A source last
+retrieved before the current verified snapshot is labelled Older snapshot. The legislative
+files are compared with Voteview's raw roll calls on every build, and any newer roll call or
+any difference in a tally or a senator's vote is published on the site.
+
+**Bill facts** are shown with the drop's own label as provisional, each with the quote and
+source that prove it. Explanations appear only with status `verified` or `approved`. The
+senator-to-state comparison stays unavailable while the bridge is NONE. Committee votes are
+party totals only, because the records don't say how each member voted.
+
+The supervisor's `site_checks` re-derives all of this from the raw files with separate code.
+
+**Newer votes.** A roll call in Voteview's verified file that the legislative files don't have yet is published as Provisional, with its question, result and counts, and no plain-language meaning. In Issue Positions it counts as Insufficient evidence. Voteview can miss a later vote change, so it stays provisional until a legislative drop includes it.
+
+**Differences from Voteview.** `data/legislative/vote_differences.json` records why a senator's vote differs between the two systems, each with an official source. A difference with no entry is shown as unresolved. The three known differences are confirmed vote changes in the Congressional Record's Daily Digest: Padilla on 119-1-26, Bennet on 119-1-89, Alsobrooks on 119-1-114.
+
+**Stored Senate records.** senate.gov refuses automated requests, so the Pillar 1 cross-checks use
+the official vote records stored in `data/raw/explanations/senate/` with their hashes and
+retrieval dates. A Senate correction made after retrieval would not be seen, and a new vote
+with no stored record stays unverified.
+
 ## Storage and versions
 
 All Engine B inputs and results are stored in `data/ideology/` as JSON Lines,
