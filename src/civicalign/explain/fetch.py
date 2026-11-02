@@ -66,12 +66,11 @@ class Store:
                 _t.sleep(2 * (attempt + 1))
         if data is None:
             if path.exists():
-                return Fetched(True, path, rec.get("sha256", sha256_bytes(path.read_bytes())), path.stat().st_size,
-                               f"fetch failed ({err}); using cached copy", False)
+                return Fetched(True, path, self._stored(rel, url, path), path.stat().st_size, f"fetch failed ({err}); using cached copy", False)
             return Fetched(False, None, "", 0, f"fetch failed: {err}", False)
         if len(data) < min_bytes or (not allow_html and b"<html" in data[:600].lower()):
             if path.exists():
-                return Fetched(True, path, rec.get("sha256", ""), path.stat().st_size, "unexpected response; using cached copy", False)
+                return Fetched(True, path, self._stored(rel, url, path), path.stat().st_size, "unexpected response; using cached copy", False)
             return Fetched(False, None, "", len(data), "unexpected response (too small or HTML)", False)
         digest = sha256_bytes(data)
         changed = rec.get("sha256") != digest
@@ -84,6 +83,14 @@ class Store:
                               "content_changed_utc": stamp if changed else rec.get("content_changed_utc", stamp),
                               "checked_utc": stamp}
         return Fetched(True, path, digest, len(data), "changed" if changed else "unchanged", changed)
+
+    def _stored(self, rel: str, url: str, path: Path) -> str:
+        """The hash of a stored copy used when a fetch fails. The tracked Senate records arrive
+        without the (untracked) manifest, so a record is made from the bytes themselves."""
+        if rel not in self.manifest:
+            data = path.read_bytes()
+            self.manifest[rel] = {"url": url, "bytes": len(data), "sha256": sha256_bytes(data), "stored_copy": True}
+        return self.manifest[rel]["sha256"]
 
     def save(self):
         self.manifest_path.write_text(json.dumps(self.manifest, indent=1, sort_keys=True) + "\n")

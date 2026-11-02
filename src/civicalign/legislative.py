@@ -8,13 +8,21 @@ of each file's SHA-256, and load() refuses any file that no longer matches. Noth
 changes or recalculates Engine B: the two systems meet only through shared ids (senator
 Bioguide id, vote id, bill id, nomination id), and problems() lists any id that fails to join.
 
-vote_division(): the one thing calculated from a drop. For a roll call, the senators with a
-negative nominate_dim1 and those with a positive one are counted separately. If a strict
-majority of one group voted Yea and a strict majority of the other voted Nay, the vote divided
-the two sides of the Voteview scale, and each answer is labelled with the side that mostly gave
-it. Any other vote is not labelled. This describes how senators voted, never what the measure
-is, and no number is derived from it for any senator or issue. Rule vote_division_v1.
+Two things are worked out from a drop, and neither is a score for anyone:
+
+vote_evidence() sorts a roll call by what kind of evidence it is (rule issue_votes_v1):
+"direct" is a Yes or No on a measure itself (passage, an amendment, accepting the other
+chamber's version); "procedural" is a step such as ending debate or tabling; "nomination" is
+a vote on a person, not a policy stance; "insufficient" has no usable plain-language meaning.
+
+party_majorities() says whether most Democrats and most Republicans who voted Yes or No
+landed on opposite sides of a roll call (rule party_majorities_v1). It describes the Senate's
+votes as a whole and is never applied to a senator.
+
+reconcile() compares the drop with Voteview's raw roll calls in the current snapshot, so that
+a disagreement or a gap between the two systems is published instead of hidden.
 """
+import csv
 import hashlib
 import json
 import shutil
@@ -25,10 +33,17 @@ from pathlib import Path
 from .config import DEFAULT, Config
 
 FILES = ("meta.json", "senators.json", "votes.json", "positions.json", "bills.json", "committee_votes.json", "nominations.json", "README.md")
-DIVISION_RULE = "vote_division_v1"
-DIVISION_TEXT = ("Senators with a negative and with a positive Voteview score are counted separately. If a strict majority of one "
-                 "group voted Yes and a strict majority of the other voted No, each answer is labelled with the side that mostly "
-                 "gave it. Other votes are not labelled. It describes how senators voted, not the content of the measure.")
+EVIDENCE_RULE = "issue_votes_v1"
+EVIDENCE_TEXT = ("Votes are grouped by the official policy area of the bill they belong to. A direct vote is a Yes or No on the measure itself: "
+                 "passage, an amendment, or accepting the other chamber's version. Other votes are procedural steps, listed separately because "
+                 "they don't by themselves show a position on the measure. Votes on nominations are kept apart, because they are about a person. "
+                 "If a senator has no direct Yes or No in an area, or a vote has no plain-language meaning, the page says Insufficient evidence. "
+                 "No score or liberal or conservative label is worked out from these votes.")
+PARTY_RULE = "party_majorities_v1"
+PARTY_TEXT = ("Among Democrats and among Republicans who voted Yes or No, a roll call counts as opposed when a strict majority of one party voted Yes "
+              "and a strict majority of the other voted No. It describes roll calls across the Senate and is never applied to a single senator.")
+DIRECT = {"passage", "amendment", "motion_to_concur"}
+CAST = {"1": "Yea", "2": "Yea", "3": "Yea", "4": "Nay", "5": "Nay", "6": "Nay", "7": "Present", "8": "Present", "9": "Not Voting"}
 
 
 class LegislativeError(RuntimeError):
@@ -101,21 +116,58 @@ def problems(drop: dict, engine_ids: set[str]) -> list[str]:
     return out
 
 
-def vote_division(positions: dict[str, str], scores: dict[str, float]) -> str | None:
-    """"yes_liberal" / "yes_conservative" for a roll call that divided the two sides, else None."""
-    count = {"lib": {"Yea": 0, "Nay": 0}, "con": {"Yea": 0, "Nay": 0}}
-    for sid, pos in positions.items():
-        s = scores.get(sid)
-        if s is None or s == 0 or pos not in ("Yea", "Nay"):
+def vote_evidence(vote: dict) -> str:
+    m = vote.get("meaning")
+    if not m or not m.get("yes_means") or not m.get("no_means") or m.get("outcome_kind") == "unexplained":
+        return "insufficient"
+    if vote["measure_type"] == "nomination":
+        return "nomination"
+    return "direct" if vote["question_type"] in DIRECT else "procedural"
+
+
+def party_majorities(by_party: dict) -> str:
+    """"opposed" / "together" / "no_majority" (a tie, or a party with no Yes or No votes)."""
+    leans = []
+    for party in ("D", "R"):
+        c = by_party.get(party, {})
+        yes, no = c.get("Yea", 0), c.get("Nay", 0)
+        leans.append(None if yes == no else yes > no)
+    if None in leans:
+        return "no_majority"
+    return "opposed" if leans[0] != leans[1] else "together"
+
+
+def reconcile(drop: dict, cfg: Config = DEFAULT) -> dict:
+    """The drop against Voteview's raw roll calls in the current snapshot."""
+    rows = {}
+    with cfg.rollcalls_csv.open() as fh:
+        for r in csv.DictReader(fh):
+            rows[f"{r['congress']}-{r['session']}-{r['clerk_rollnumber']}"] = r
+    icpsr = {}
+    with cfg.members_csv.open() as fh:
+        for r in csv.DictReader(fh):
+            if r["chamber"] == "Senate" and r["congress"] == str(cfg.congress):
+                icpsr[r["icpsr"]] = r["bioguide_id"]
+    cast: dict[str, dict[str, str]] = {}
+    with cfg.votes_csv.open() as fh:
+        for r in csv.DictReader(fh):
+            if r["icpsr"] in icpsr:
+                cast.setdefault(r["rollnumber"], {})[icpsr[r["icpsr"]]] = CAST.get(r["cast_code"], "Not Voting")
+    tallies, positions, compared = {}, {}, 0
+    for v in drop["votes"]:
+        r = rows.get(v["id"])
+        if r is None:
             continue
-        count["lib" if s < 0 else "con"][pos] += 1
-    # strict majority of those voting Yea or Nay in each group
-    lib, con = count["lib"], count["con"]
-    if lib["Yea"] > lib["Nay"] and con["Nay"] > con["Yea"]:
-        return "yes_liberal"
-    if lib["Nay"] > lib["Yea"] and con["Yea"] > con["Nay"]:
-        return "yes_conservative"
-    return None
+        if (int(r["yea_count"]), int(r["nay_count"])) != (v["counts"]["yea"], v["counts"]["nay"]):
+            tallies[v["id"]] = {"yea": int(r["yea_count"]), "nay": int(r["nay_count"])}
+        here = drop["positions"][v["id"]]
+        for sid, pos in cast.get(r["rollnumber"], {}).items():
+            compared += 1
+            if here.get(sid, "Not Voting") != pos:
+                positions.setdefault(v["id"], []).append({"id": sid, "here": here.get(sid, "Not Voting"), "voteview": pos})
+    newer = sorted(r["date"] for k, r in rows.items() if k not in {v["id"] for v in drop["votes"]})
+    return {"shared": sum(1 for v in drop["votes"] if v["id"] in rows), "positions_compared": compared, "tallies": tallies, "positions": positions,
+            "only_in_drop": sorted(v["id"] for v in drop["votes"] if v["id"] not in rows), "newer_count": len(newer), "newer_through": newer[-1] if newer else None}
 
 
 if __name__ == "__main__":

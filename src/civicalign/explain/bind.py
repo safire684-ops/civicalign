@@ -274,12 +274,14 @@ def run(cfg: Config = DEFAULT, offline: bool = False, verbose: bool = True) -> d
             eligible_rows.append(row)
     mv = member_votes_for(cfg, {int(r["rollnumber"]) for r in eligible_rows})
     outcomes = Counter(); text_statuses = Counter(); ver_statuses = Counter(); kinds_final = Counter(); writes = Counter()
+    senate_copies = Counter()
     bindings = []
     for row in eligible_rows:
         session, clerk = int(row["session"]), int(row["clerk_rollnumber"])
         rel = f"senate/vote_{row['congress']}_{session}_{clerk:05d}.xml"
         f = store.fetch(senate_vote_url(int(row["congress"]), session, clerk), rel, offline=offline)
         senate = None
+        senate_copies["stored copy" if "cached copy" in f.message else "retrieved" if f.ok else "unavailable"] += 1
         if f.ok and f.path is not None:
             try:
                 senate = parse_senate_vote(f.path)
@@ -307,7 +309,7 @@ def run(cfg: Config = DEFAULT, offline: bool = False, verbose: bool = True) -> d
                   "cra": b["cra"]["is_cra"]} for b in sorted(bindings, key=lambda x: (x["vote"]["session"], x["vote"]["clerk_number"]))]}
     (cfg.bindings_dir / "index.json").write_text(json.dumps(index, indent=1, ensure_ascii=False) + "\n")
     summary = {"classified": dict(kinds), "bound_kinds": dict(kinds_final), "verification": dict(ver_statuses),
-               "text": dict(text_statuses), "eligibility": dict(outcomes), "writes": dict(writes)}
+               "text": dict(text_statuses), "eligibility": dict(outcomes), "writes": dict(writes), "senate_records": dict(senate_copies)}
     if verbose:
         print(json.dumps(summary, indent=1))
     return summary

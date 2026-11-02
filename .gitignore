@@ -8,6 +8,10 @@ __pycache__/
 data/raw/*
 !data/raw/PROVENANCE.tsv
 !data/raw/SNAPSHOT.json
+# The official Senate vote records behind the Pillar 1 bindings: senate.gov now refuses automated requests.
+!data/raw/explanations/
+data/raw/explanations/*
+!data/raw/explanations/senate/
 data/processed/*
 !data/processed/.gitkeep
 

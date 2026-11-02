@@ -204,6 +204,7 @@ src/civicalign/
 demo/                the published site (senator-check.html, methodology.html, civicalign.css);
                      civicalign.html and data/ are built by civicalign.build_site on branch integrated-site, not committed
 data/legislative/    legislative data drops, byte for byte, each with a SHA-256 manifest
+data/raw/explanations/senate/  stored official Senate vote records (senate.gov refuses automated requests)
 data/ideology/       Engine B versioned inputs and results
 data/raw/            the source snapshot (files gitignored; SNAPSHOT.json and PROVENANCE.tsv tracked)
 docs/archive/        superseded design documents, kept for history only

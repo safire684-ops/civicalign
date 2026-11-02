@@ -111,35 +111,72 @@ def test_a_wrong_count_on_a_vote_is_caught(built):
     assert failed(S.site_join_checks(drop, set(BL.current_sponsor_scores(DEFAULT))), "Site: every roll call's counts")
 
 
-# ---- the split rule ----
-SCORES = {"a": -.5, "b": -.4, "c": -.3, "x": .3, "y": .4, "z": .5}
+# ---- what kind of evidence each vote is ----
+def _vote(qt="passage", mt="bill", meaning=True, kind="passed"):
+    return {"question_type": qt, "measure_type": mt, "meaning": {"yes_means": "y", "no_means": "n", "outcome_kind": kind} if meaning else None}
 
 
-@pytest.mark.parametrize("positions, want", [
-    ({"a": "Yea", "b": "Yea", "c": "Nay", "x": "Nay", "y": "Nay", "z": "Yea"}, "yes_liberal"),
-    ({"a": "Nay", "b": "Nay", "c": "Nay", "x": "Yea", "y": "Yea", "z": "Yea"}, "yes_conservative"),
-    ({"a": "Yea", "b": "Yea", "c": "Yea", "x": "Yea", "y": "Yea", "z": "Yea"}, None),      # everyone together
-    ({"a": "Yea", "b": "Nay", "x": "Nay", "y": "Nay"}, None),                              # a tie on one side
-    ({"a": "Not Voting", "b": "Present", "x": "Yea", "y": "Yea"}, None),                   # one side has no votes
-    ({"zero": "Yea", "a": "Nay", "x": "Yea"}, "yes_conservative"),                         # a zero score counts for neither
+@pytest.mark.parametrize("vote, want", [
+    (_vote("passage"), "direct"), (_vote("amendment", "amendment"), "direct"), (_vote("motion_to_concur"), "direct"),
+    (_vote("cloture"), "procedural"), (_vote("motion_to_proceed"), "procedural"), (_vote("motion_to_waive", "amendment"), "procedural"),
+    (_vote("nomination", "nomination"), "nomination"), (_vote("cloture", "nomination"), "nomination"),
+    (_vote(meaning=False), "insufficient"), (_vote(kind="unexplained"), "insufficient"), (_vote("nomination", "nomination", meaning=False), "insufficient"),
 ])
-def test_the_split_rule(positions, want):
-    scores = {**SCORES, "zero": 0.0}
-    assert L.vote_division(positions, scores) == want
-    assert S.site_division(positions, scores) == want
+def test_vote_evidence(vote, want):
+    assert L.vote_evidence(vote) == want and S.site_evidence(vote) == want
 
 
-def test_a_tampered_split_label_or_policy_area_is_caught(built):
+@pytest.mark.parametrize("by_party, want", [
+    ({"D": {"Yea": 40, "Nay": 2}, "R": {"Yea": 3, "Nay": 50}}, "opposed"),
+    ({"D": {"Yea": 40}, "R": {"Yea": 50}}, "together"),
+    ({"D": {"Yea": 20, "Nay": 20}, "R": {"Nay": 50}}, "no_majority"),
+    ({"D": {"Not Voting": 2}, "R": {"Yea": 50}}, "no_majority"),
+])
+def test_party_majorities(by_party, want):
+    assert L.party_majorities(by_party) == want and S.site_majorities(by_party) == want
+
+
+def test_a_tampered_label_or_policy_area_is_caught(built):
     d = copy.deepcopy(built["derived"])
-    flip = next(k for k, v in d["division"].items() if v == "yes_liberal")
-    d["division"][flip] = "yes_conservative"
-    assert failed(S.site_derived_checks(DEFAULT, built["raw"], built["drop"], d), "Site: every split label")
+    d["evidence"]["119-1-4"] = "procedural"
+    assert failed(S.site_derived_checks(DEFAULT, built["raw"], built["drop"], d), "Site: every evidence")
+    d = copy.deepcopy(built["derived"])
+    d["parties"]["119-1-4"] = "together" if d["parties"]["119-1-4"] != "together" else "opposed"
+    assert failed(S.site_derived_checks(DEFAULT, built["raw"], built["drop"], d), "Site: every evidence")
     d = copy.deepcopy(built["derived"])
     d["policy_area"]["s5"] = "Sports and Recreation"
     assert failed(S.site_derived_checks(DEFAULT, built["raw"], built["drop"], d), "Site: policy areas")
     d = copy.deepcopy(built["derived"])
     d["status"]["s5"]["enacted"] = not d["status"]["s5"]["enacted"]
     assert failed(S.site_derived_checks(DEFAULT, built["raw"], built["drop"], d), "Site: bill status")
+
+
+# ---- data dates and the comparison between the two systems ----
+def test_every_difference_from_voteview_must_be_disclosed(built):
+    core = copy.deepcopy(built["core"])
+    assert not failed(S.site_reconcile_checks(DEFAULT, built["raw"], built["drop"], core), "Site: every difference")
+    core["reconcile"]["positions"] = {}
+    core["reconcile"]["tallies"] = {}
+    assert built["core"]["reconcile"]["tallies"] == {} or failed(S.site_reconcile_checks(DEFAULT, built["raw"], built["drop"], core), "Site: every difference")
+    core = copy.deepcopy(built["core"])
+    core["reconcile"]["newer_count"] += 1
+    assert failed(S.site_reconcile_checks(DEFAULT, built["raw"], built["drop"], core), "Site: every difference")
+
+
+def test_an_older_source_cannot_be_called_latest(built):
+    core = copy.deepcopy(built["core"])
+    row = next(r for r in core["dates"]["rows"] if r["label"].startswith("Official Senate"))
+    row["checked"] = "2020-01-01"
+    row["status"] = "Latest available"
+    assert failed(S.site_reconcile_checks(DEFAULT, built["raw"], built["drop"], core), "Site: every data date")
+    core = copy.deepcopy(built["core"])
+    next(r for r in core["dates"]["rows"] if r["label"] == "Committee votes")["checked"] = "2030-01-01"
+    assert failed(S.site_reconcile_checks(DEFAULT, built["raw"], built["drop"], core), "Site: every data date")
+
+
+def test_the_page_labels_dates_and_differences():
+    assert "Older snapshot" in TEMPLATE or "statusChip" in TEMPLATE
+    assert "Sources differ." in TEMPLATE and 'id="dates"' in TEMPLATE and "newerText()" in TEMPLATE
 
 
 # ---- Engine B's numbers are reused, not recalculated ----
@@ -216,18 +253,38 @@ def test_the_checker_catches_banned_wording(built):
     assert failed(S.site_page_checks(built["drop"], TEMPLATE + "<p>A moderate senator</p>"), "Site: none of the banned")
 
 
-def test_no_issue_score_is_calculated():
-    """Issue Positions lists votes. It never turns them into a ratio, share or percent."""
-    body = TEMPLATE[TEMPLATE.index("function issues("):TEMPLATE.index("/* ---- Bills ---- */")]
-    assert "%" not in body and "/n" not in body and "Math." not in body
-    assert "#/vote/" in body, "every label links to the actual vote"
-    assert "there is no issue score" in body
+def _issues():
+    return TEMPLATE[TEMPLATE.index("function evidenceRow("):TEMPLATE.index("/* ---- Bills ---- */")]
+
+
+def test_issue_positions_never_rates_a_senator():
+    """It lists votes. No ratio, share or percent, and no side label for a senator or an issue."""
+    body = _issues()
+    assert "%" not in body and "Math." not in body and "liberal side" not in body and "conservative side" not in body
+    assert "vote_division" not in TEMPLATE and "division" not in TEMPLATE
+    assert "no issue score" in body
+
+
+def test_issue_positions_explains_and_sources_every_vote():
+    body = _issues()
+    assert "esc(mine)" in body and "esc(other)" in body and "partyLine(v.by_party)" in body
+    assert 'ext(v.source_url,"Official Senate roll call")' in body and 'ext(rec.url,"Congress.gov record")' in body
+    assert "Insufficient evidence" in body and 'data-lazy="${later' in body
+
+
+def test_nominations_are_separate_from_policy_areas():
+    body = _issues()
+    assert 'if(v.measure_type=="nomination"){noms.push(v);continue}' in body and "aren't policy stances" in body
+
+
+def test_old_issue_rule_is_gone():
+    assert not hasattr(L, "vote_division") and not hasattr(S, "site_division")
 
 
 def test_missing_data_says_so():
     for phrase in ["Estimated Net Worth", "Stocks Held"]:
         assert re.search(phrase + r"</b><span>\$\{NA\}", TEMPLATE), phrase
-    assert "No policy area in available official data" in TEMPLATE
+    assert "No verified policy area" in TEMPLATE
     assert "Explanation coming soon" in TEMPLATE
     assert "how each member voted isn't in this data" in TEMPLATE
 
@@ -254,9 +311,18 @@ def test_the_page_is_light_only():
     assert "civicalign.css" not in TEMPLATE, "the shared stylesheet carries a dark theme"
 
 
-def test_the_division_rule_is_published(built):
-    assert any(r["id"] == L.DIVISION_RULE and r["rule"] == L.DIVISION_TEXT for r in built["core"]["rules"])
-    assert L.DIVISION_RULE in (ROOT / "METHODOLOGY.md").read_text()
+def test_the_issue_rules_are_published(built):
+    rules = {r["id"]: r["rule"] for r in built["core"]["rules"]}
+    assert rules[L.EVIDENCE_RULE] == L.EVIDENCE_TEXT and rules[L.PARTY_RULE] == L.PARTY_TEXT
+    text = (ROOT / "METHODOLOGY.md").read_text()
+    assert L.EVIDENCE_RULE in text and L.PARTY_RULE in text and "vote_division_v1" in text
+
+
+def test_the_methodology_page_matches_the_site_and_stays_light():
+    page = BP.build(DEFAULT)["methodology.html"]
+    assert 'color-scheme:light' in page and 'civicalign.html#/senate' in page and "--alert:#b4532a" in page
+    # the old page keeps its own look, available for rollback
+    assert "--alert:#b4532a" not in BP.build(DEFAULT)["senator-check.html"]
 
 
 def test_both_update_chains_build_the_site_before_the_tests():

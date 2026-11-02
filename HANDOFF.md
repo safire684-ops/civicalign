@@ -46,6 +46,12 @@ now opens `civicalign.html`; `senator-check.html` is still built, tested and che
 unlinked, until the owner approves retiring it. A new drop arrives with
 `python -m civicalign.legislative import <folder>`; updates aren't automatic.
 
+Since about Oct 16 2026 senate.gov refuses automated requests (from GitHub and elsewhere), so
+all 55 bindings fell to UNAVAILABLE and the Stage 2.5 gate failed every run. The gate is
+unchanged. The official records retrieved on Oct 9 are now tracked in
+`data/raw/explanations/senate/` with their hashes, and the supervisor checks them. Do not try to
+get around the block. New passage votes stay unverified until a source is available.
+
 - **UI/UX REDESIGN: COMPLETE LOCALLY, NOT LIVE** (`7be8b01` on
   `pillars-4-6-rebuild`, not pushed). The live site is still the previous page
   design (GitHub `main` `e0139b1`). See "UI/UX redesign" in section 3.

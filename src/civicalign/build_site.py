@@ -10,6 +10,7 @@ A failed join stops the build. The senator-to-state comparison stays unavailable
 bridge is NONE, and survey estimates never receive a display position.
 """
 import argparse
+import csv
 import json
 import sys
 import xml.etree.ElementTree as ET
@@ -65,6 +66,37 @@ def committee_members(cfg: Config) -> dict[str, list[dict]]:
             members.setdefault(e["committee_id"], []).append(
                 {"id": e["bioguide_id"], "title": e.get("title"), "rank": e.get("rank"), "side": e.get("side")})
     return members
+
+
+def data_dates(cfg: Config, drop: dict, meta: dict) -> dict:
+    """When each source was last checked and what it covers. A source retrieved before the
+    current verified snapshot is an older snapshot, and the page says so."""
+    snap = I.snapshot(cfg)
+    today = snap["run_utc"][:10]
+    sources = {s["name"]: s for s in snap["sources"]}
+    def row(label, checked, changed, covers, note=None):
+        return {"label": label, "checked": checked[:10], "changed": changed[:10] if changed else None, "covers": covers, "note": note,
+                "status": "Latest available" if checked[:10] >= today else "Older snapshot"}
+    def snapped(label, names, covers, note=None):
+        picked = [sources[n] for n in names]
+        return row(label, min(p["checked_utc"] for p in picked), max(p["content_changed_utc"] for p in picked), covers, note)
+    with cfg.rollcalls_csv.open() as fh:
+        last_roll = max(r["date"] for r in csv.DictReader(fh))
+    made = drop["manifest"]["generated_at"]
+    floor, committee = max(v["date"] for v in drop["votes"]), max(c["date"] for c in drop["committee_votes"])
+    senate = json.loads((cfg.explain_raw_dir / "senate" / "PROVENANCE.json").read_text())
+    pulled = max(r["checked_utc"] for r in senate["records"].values())
+    rows = [snapped("Senator positions", ["senator scores"], f"Votes through {last_roll}"),
+            snapped("Voteview roll-call list", ["floor roll calls", "senator votes"], f"Votes through {last_roll}"),
+            snapped("Who is seated", ["seated senators"], "Current roster"),
+            snapped("Committee membership", ["committee rosters", "committee names"], "Current committees"),
+            snapped("Senate bills, passage and law, policy areas", ["bill flow", "bill flow (House bills)", "joint resolutions (Senate)", "joint resolutions (House)"], "Official bill-status files"),
+            snapped("State survey estimates", ["state ideology"], f"Survey wave {meta['aip_wave']}", "Shown on their own scale only."),
+            snapped("State populations", ["state populations"], f"Census {meta['population']}"),
+            row("Floor votes, senator votes, bills and nominations", made, made, f"Votes through {floor}"),
+            row("Committee votes", made, made, f"Votes through {committee}"),
+            row("Official Senate vote records (used for cross-checks)", pulled, pulled, f"{len(senate['records'])} passage votes", senate["note"])]
+    return {"snapshot": today, "floor_through": floor, "rows": rows}
 
 
 def bill_status(bill: dict, votes: dict[str, dict], outcomes: dict[str, dict]) -> dict:
@@ -148,13 +180,16 @@ def assemble(cfg: Config = DEFAULT) -> tuple[dict, dict, dict]:
                    "wording": p5["wording"], "national": {"s": p5["national"]["s"], "r": p5["national"]["r"]}, "gap": {"s": p5["gap"]["s"], "r": p5["gap"]["r"]},
                    "passed": {k: trim(O["passed_senate"][k]) for k in ("total", "LIBERAL_SPONSOR", "CONSERVATIVE_SPONSOR", "ZERO_SCORE_SPONSOR", "UNKNOWN")},
                    "enacted": {k: trim(O["enacted"][k]) for k in ("total", "LIBERAL_SPONSOR", "CONSERVATIVE_SPONSOR", "ZERO_SCORE_SPONSOR", "UNKNOWN", "public_law_number_recorded", "public_law_number_pending")}},
-        "rules": d["display_rules"] + [{"id": L.DIVISION_RULE, "label": "Votes that divided the two sides", "rule": L.DIVISION_TEXT, "limits": []}],
+        "rules": d["display_rules"] + [{"id": L.EVIDENCE_RULE, "label": "Issue Positions: which votes are shown", "rule": L.EVIDENCE_TEXT, "limits": []},
+                                       {"id": L.PARTY_RULE, "label": "Votes where party majorities were opposed", "rule": L.PARTY_TEXT, "limits": []}],
+        "dates": data_dates(cfg, drop, d["meta"]), "reconcile": L.reconcile(drop, cfg),
     }
 
     # ---- derived: only what the verified inputs determine ----
     votes = {v["id"]: v for v in drop["votes"]}
     outcomes = {o["bill_id"]: o for o in BO.current(cfg)}
-    derived = {"division": {vid: L.vote_division(m, scores) for vid, m in drop["positions"].items()},
+    derived = {"evidence": {v["id"]: L.vote_evidence(v) for v in drop["votes"]},
+               "parties": {v["id"]: L.party_majorities(v["by_party"]) for v in drop["votes"]},
                "policy_area": policy_areas(cfg, drop["bills"]),
                "status": {b["id"]: bill_status(b, votes, outcomes) for b in drop["bills"]}}
     engine_bills = {"outcomes": {"passed": {k: O["passed_senate"][k]["ids"] for k in ("LIBERAL_SPONSOR", "CONSERVATIVE_SPONSOR", "ZERO_SCORE_SPONSOR", "UNKNOWN")},

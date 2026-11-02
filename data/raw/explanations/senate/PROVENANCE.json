@@ -1,0 +1,390 @@
+{
+ "note": "Stored copies. senate.gov has refused automated requests since October 2026, so these records can't be re-fetched by the update job.",
+ "records": {
+  "vote_119_1_00007.xml": {
+   "url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1191/vote_119_1_00007.xml",
+   "bytes": 28483,
+   "sha256": "75569bb8cc84e5f08771697375f15cd4b0e7f930f6face533ae46f22e76e29cc",
+   "first_retrieved_utc": "2026-09-24T01:07:17Z",
+   "checked_utc": "2026-10-09T03:49:06Z"
+  },
+  "vote_119_1_00092.xml": {
+   "url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1191/vote_119_1_00092.xml",
+   "bytes": 28963,
+   "sha256": "0ad8ff97727b66827c788718f072b5c14d7bd07b93cfe59112f39c0fb4cfe162",
+   "first_retrieved_utc": "2026-09-24T01:07:18Z",
+   "checked_utc": "2026-10-09T03:49:07Z"
+  },
+  "vote_119_1_00095.xml": {
+   "url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1191/vote_119_1_00095.xml",
+   "bytes": 28672,
+   "sha256": "9ef1c2411b12bc98cc07ff88dba59c7e04f886b6286d0b3047298652e023b246",
+   "first_retrieved_utc": "2026-09-24T01:07:18Z",
+   "checked_utc": "2026-10-09T03:49:07Z"
+  },
+  "vote_119_1_00097.xml": {
+   "url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1191/vote_119_1_00097.xml",
+   "bytes": 29469,
+   "sha256": "dd7709dfac91b8459f75580e18deb600ec1705cc5f3fcaa35b6a5faeea87d67e",
+   "first_retrieved_utc": "2026-09-24T01:07:19Z",
+   "checked_utc": "2026-10-09T03:49:07Z"
+  },
+  "vote_119_1_00102.xml": {
+   "url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1191/vote_119_1_00102.xml",
+   "bytes": 29050,
+   "sha256": "05c65e84d65f84bd5e84dad1273eb2c01f2d619ca6fae07a12e090f9e6ce96c3",
+   "first_retrieved_utc": "2026-09-24T01:07:19Z",
+   "checked_utc": "2026-10-09T03:49:08Z"
+  },
+  "vote_119_1_00106.xml": {
+   "url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1191/vote_119_1_00106.xml",
+   "bytes": 28909,
+   "sha256": "210a58efc35ee10dc121ce1a9d6ec08414f5798e76c0fb227423763575b658b2",
+   "first_retrieved_utc": "2026-09-24T01:07:20Z",
+   "checked_utc": "2026-10-09T03:49:08Z"
+  },
+  "vote_119_1_00127.xml": {
+   "url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1191/vote_119_1_00127.xml",
+   "bytes": 28703,
+   "sha256": "db946beb802b973fec60926250c66fe9130c240a86eefac0739d4a454a1bbd40",
+   "first_retrieved_utc": "2026-09-24T01:07:20Z",
+   "checked_utc": "2026-10-09T03:49:08Z"
+  },
+  "vote_119_1_00133.xml": {
+   "url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1191/vote_119_1_00133.xml",
+   "bytes": 28878,
+   "sha256": "b7cacf27a97a168a5c98148dcc1251c5d785b2a840aa00ed689d55a34a9a5d8d",
+   "first_retrieved_utc": "2026-09-24T01:07:21Z",
+   "checked_utc": "2026-10-09T03:49:09Z"
+  },
+  "vote_119_1_00151.xml": {
+   "url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1191/vote_119_1_00151.xml",
+   "bytes": 29346,
+   "sha256": "f41950cdae5de3c4412be7b437a9683dd52941c62d94c51c10355a6de5c60130",
+   "first_retrieved_utc": "2026-09-24T01:07:21Z",
+   "checked_utc": "2026-10-09T03:49:09Z"
+  },
+  "vote_119_1_00153.xml": {
+   "url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1191/vote_119_1_00153.xml",
+   "bytes": 28803,
+   "sha256": "7ec30d167ea22232fd77c7daf798243fc4edd05e12aa13a60784046a90b84827",
+   "first_retrieved_utc": "2026-09-24T01:07:22Z",
+   "checked_utc": "2026-10-09T03:49:10Z"
+  },
+  "vote_119_1_00160.xml": {
+   "url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1191/vote_119_1_00160.xml",
+   "bytes": 28714,
+   "sha256": "ba46bf7b00f9ae32db542cfd78f816331c9cf0d70bdadde212219919761cdd37",
+   "first_retrieved_utc": "2026-09-24T01:07:22Z",
+   "checked_utc": "2026-10-09T03:49:11Z"
+  },
+  "vote_119_1_00162.xml": {
+   "url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1191/vote_119_1_00162.xml",
+   "bytes": 29351,
+   "sha256": "b23ad8099b92ac745d7844603aa45bc788f33b34eb82c8b0d3f0f52bb7ca21a9",
+   "first_retrieved_utc": "2026-09-24T01:07:23Z",
+   "checked_utc": "2026-10-09T03:49:11Z"
+  },
+  "vote_119_1_00207.xml": {
+   "url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1191/vote_119_1_00207.xml",
+   "bytes": 29368,
+   "sha256": "65247d3a3407ce44c498cbdbf57c48675eb6cde28e3502517005771aeb28ae8f",
+   "first_retrieved_utc": "2026-09-24T01:07:23Z",
+   "checked_utc": "2026-10-09T03:49:11Z"
+  },
+  "vote_119_1_00223.xml": {
+   "url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1191/vote_119_1_00223.xml",
+   "bytes": 29589,
+   "sha256": "7b8e805f70b3cfcb3352c2dc9f0ee421b05d5b3a86daae9ce5a6e5b3704aa77a",
+   "first_retrieved_utc": "2026-09-24T01:07:23Z",
+   "checked_utc": "2026-10-09T03:49:12Z"
+  },
+  "vote_119_1_00225.xml": {
+   "url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1191/vote_119_1_00225.xml",
+   "bytes": 28676,
+   "sha256": "50d4fad74928582a0b6bca6dec880b3d483d89f43e7044d496b46b192006522f",
+   "first_retrieved_utc": "2026-09-24T01:07:24Z",
+   "checked_utc": "2026-10-09T03:49:12Z"
+  },
+  "vote_119_1_00228.xml": {
+   "url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1191/vote_119_1_00228.xml",
+   "bytes": 29557,
+   "sha256": "ebff7b04ed27aa526d5f2966755b3db1df1ccf0f02ccb5147e053524c726e12c",
+   "first_retrieved_utc": "2026-09-24T01:07:25Z",
+   "checked_utc": "2026-10-09T03:49:12Z"
+  },
+  "vote_119_1_00229.xml": {
+   "url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1191/vote_119_1_00229.xml",
+   "bytes": 29074,
+   "sha256": "f80a54faa4b247fbbd0d65f2bef001e6f60af3f9e5924060fdd53934103693fb",
+   "first_retrieved_utc": "2026-09-24T01:07:25Z",
+   "checked_utc": "2026-10-09T03:49:13Z"
+  },
+  "vote_119_1_00232.xml": {
+   "url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1191/vote_119_1_00232.xml",
+   "bytes": 29287,
+   "sha256": "512b15c75ae0328af24e47ac067f72eb25562485926d6e3dc6e66a28c547ab97",
+   "first_retrieved_utc": "2026-09-24T01:07:26Z",
+   "checked_utc": "2026-10-09T03:49:13Z"
+  },
+  "vote_119_1_00237.xml": {
+   "url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1191/vote_119_1_00237.xml",
+   "bytes": 29038,
+   "sha256": "be07159e026a0e4e100b2d197d3dd619c986cd21a44a9d944496c0e44985acc4",
+   "first_retrieved_utc": "2026-09-24T01:07:26Z",
+   "checked_utc": "2026-10-09T03:49:13Z"
+  },
+  "vote_119_1_00238.xml": {
+   "url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1191/vote_119_1_00238.xml",
+   "bytes": 29036,
+   "sha256": "dc1f4a2b063d7db4cae2e83c0830632b13e480c4ae2887fe669284a79cb9f750",
+   "first_retrieved_utc": "2026-09-24T01:07:27Z",
+   "checked_utc": "2026-10-09T03:49:14Z"
+  },
+  "vote_119_1_00239.xml": {
+   "url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1191/vote_119_1_00239.xml",
+   "bytes": 29223,
+   "sha256": "a40fe82d426c7b2aa6c774cd3718388ed247806233d742e04cfcceaa07b26ffb",
+   "first_retrieved_utc": "2026-09-24T01:07:27Z",
+   "checked_utc": "2026-10-09T03:49:14Z"
+  },
+  "vote_119_1_00275.xml": {
+   "url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1191/vote_119_1_00275.xml",
+   "bytes": 29209,
+   "sha256": "c2998627bb225e36b6181a885582a16345c3bdf3016bf87421ae62c6c13328f6",
+   "first_retrieved_utc": "2026-09-24T01:07:28Z",
+   "checked_utc": "2026-10-09T03:49:14Z"
+  },
+  "vote_119_1_00277.xml": {
+   "url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1191/vote_119_1_00277.xml",
+   "bytes": 29479,
+   "sha256": "3dc952e609a100ee448fe83835848a78d3be85871eec5c862321434e837f4827",
+   "first_retrieved_utc": "2026-09-24T01:07:28Z",
+   "checked_utc": "2026-10-09T03:49:15Z"
+  },
+  "vote_119_1_00279.xml": {
+   "url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1191/vote_119_1_00279.xml",
+   "bytes": 29913,
+   "sha256": "940e181e8a365bc5e2d90633c6f614e7a9b0fa30fb97e5fdd76de68ff3f2c35b",
+   "first_retrieved_utc": "2026-09-24T01:07:29Z",
+   "checked_utc": "2026-10-09T03:49:15Z"
+  },
+  "vote_119_1_00281.xml": {
+   "url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1191/vote_119_1_00281.xml",
+   "bytes": 29566,
+   "sha256": "4a843852c0d1d5d11d91e66c0928ff2248ecbabdd7c7e9ba6c5975978e4ecad0",
+   "first_retrieved_utc": "2026-09-24T01:07:29Z",
+   "checked_utc": "2026-10-09T03:49:15Z"
+  },
+  "vote_119_1_00318.xml": {
+   "url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1191/vote_119_1_00318.xml",
+   "bytes": 28632,
+   "sha256": "379f39e4d1c0c48d0e158dc9725a408536d2fe347d2c4d9443218d42b2c5e217",
+   "first_retrieved_utc": "2026-09-24T01:07:29Z",
+   "checked_utc": "2026-10-09T03:49:16Z"
+  },
+  "vote_119_1_00372.xml": {
+   "url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1191/vote_119_1_00372.xml",
+   "bytes": 28801,
+   "sha256": "b7c0944df3ffefd23575b12c92d405bac12e594b5b002417ff9ee1354ebacc13",
+   "first_retrieved_utc": "2026-09-24T01:07:30Z",
+   "checked_utc": "2026-10-09T03:49:16Z"
+  },
+  "vote_119_1_00411.xml": {
+   "url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1191/vote_119_1_00411.xml",
+   "bytes": 29222,
+   "sha256": "5988b8fb3da987b8d0b30f355598f34af9efbde023150b3f9ffb44cbf9518fe2",
+   "first_retrieved_utc": "2026-09-24T01:07:30Z",
+   "checked_utc": "2026-10-09T03:49:17Z"
+  },
+  "vote_119_1_00480.xml": {
+   "url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1191/vote_119_1_00480.xml",
+   "bytes": 29081,
+   "sha256": "eb2b6356a221df2f8b1dd5ec3e0f573b463750321122c6e62d9974e608dab45b",
+   "first_retrieved_utc": "2026-09-24T01:07:31Z",
+   "checked_utc": "2026-10-09T03:49:17Z"
+  },
+  "vote_119_1_00527.xml": {
+   "url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1191/vote_119_1_00527.xml",
+   "bytes": 28751,
+   "sha256": "a112b7adc7f38cc1789d28b07a68c0d88b29564c7b3fda455a432b5ff40a5970",
+   "first_retrieved_utc": "2026-09-24T01:07:31Z",
+   "checked_utc": "2026-10-09T03:49:17Z"
+  },
+  "vote_119_1_00528.xml": {
+   "url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1191/vote_119_1_00528.xml",
+   "bytes": 28862,
+   "sha256": "af76a25dbedfee666ae028a56a149a4463ee8bc1ff498e588706693524e0e91b",
+   "first_retrieved_utc": "2026-09-24T01:07:32Z",
+   "checked_utc": "2026-10-09T03:49:18Z"
+  },
+  "vote_119_1_00534.xml": {
+   "url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1191/vote_119_1_00534.xml",
+   "bytes": 28708,
+   "sha256": "d8d776715ba10f72945c5c7fc2fbc5bcdfacf982c3bb045e45973586daab7db4",
+   "first_retrieved_utc": "2026-09-24T01:07:33Z",
+   "checked_utc": "2026-10-09T03:49:18Z"
+  },
+  "vote_119_1_00535.xml": {
+   "url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1191/vote_119_1_00535.xml",
+   "bytes": 28818,
+   "sha256": "edf0679edeaa9f7d58ebb1df16045460168ccc56b424c68bda4cf8c193e13914",
+   "first_retrieved_utc": "2026-09-24T01:07:33Z",
+   "checked_utc": "2026-10-09T03:49:19Z"
+  },
+  "vote_119_1_00549.xml": {
+   "url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1191/vote_119_1_00549.xml",
+   "bytes": 29320,
+   "sha256": "d2bd7913b0d764e25635407a75d8392ce2c57af8de0adca35d84ea5ad729c527",
+   "first_retrieved_utc": "2026-09-24T01:07:33Z",
+   "checked_utc": "2026-10-09T03:49:19Z"
+  },
+  "vote_119_1_00554.xml": {
+   "url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1191/vote_119_1_00554.xml",
+   "bytes": 28676,
+   "sha256": "f1ac8430c62ffaf7e31df10711f2864ff4401afe00d7c9903b6ca8ea4b655e56",
+   "first_retrieved_utc": "2026-09-24T01:07:34Z",
+   "checked_utc": "2026-10-09T03:49:19Z"
+  },
+  "vote_119_1_00556.xml": {
+   "url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1191/vote_119_1_00556.xml",
+   "bytes": 29324,
+   "sha256": "963114935bc2fc6738f2be0ce4b27a830b7bdb8771ac74babcdad213bb6c76ee",
+   "first_retrieved_utc": "2026-09-24T01:07:34Z",
+   "checked_utc": "2026-10-09T03:49:20Z"
+  },
+  "vote_119_1_00560.xml": {
+   "url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1191/vote_119_1_00560.xml",
+   "bytes": 29281,
+   "sha256": "d8d16defcff75ccc9ea3b7cd1837a5c7c503d4cefe9a2b7e601ff8e422a295b2",
+   "first_retrieved_utc": "2026-09-24T01:07:35Z",
+   "checked_utc": "2026-10-09T03:49:20Z"
+  },
+  "vote_119_1_00570.xml": {
+   "url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1191/vote_119_1_00570.xml",
+   "bytes": 29078,
+   "sha256": "abf2ebf8da845213e464d9eec4d258b90394efd90d5c66d915f41cc48da7ae7a",
+   "first_retrieved_utc": "2026-09-24T01:07:35Z",
+   "checked_utc": "2026-10-09T03:49:20Z"
+  },
+  "vote_119_1_00594.xml": {
+   "url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1191/vote_119_1_00594.xml",
+   "bytes": 28703,
+   "sha256": "22e3d3930e6cc00e37dc9d37f2b6eb5c6f769b7d23b6b008ef0fa6ccaf6da0b2",
+   "first_retrieved_utc": "2026-09-24T01:07:36Z",
+   "checked_utc": "2026-10-09T03:49:21Z"
+  },
+  "vote_119_1_00598.xml": {
+   "url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1191/vote_119_1_00598.xml",
+   "bytes": 28740,
+   "sha256": "215026d89edd53edcd8de6472751cfe3754bd933dd2521603081d8b5062e86a0",
+   "first_retrieved_utc": "2026-09-24T01:07:37Z",
+   "checked_utc": "2026-10-09T03:49:22Z"
+  },
+  "vote_119_1_00599.xml": {
+   "url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1191/vote_119_1_00599.xml",
+   "bytes": 29022,
+   "sha256": "f08b6da4ad532c44d322c23776893acfe77898ecb1d9e855f0f1c1fbffb81318",
+   "first_retrieved_utc": "2026-09-24T01:07:37Z",
+   "checked_utc": "2026-10-09T03:49:22Z"
+  },
+  "vote_119_1_00600.xml": {
+   "url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1191/vote_119_1_00600.xml",
+   "bytes": 28676,
+   "sha256": "443e963bb198d3cd21a90ab45c5a9094b3b32122b9c96a1b427357fc22a29255",
+   "first_retrieved_utc": "2026-09-24T01:07:38Z",
+   "checked_utc": "2026-10-09T03:49:22Z"
+  },
+  "vote_119_1_00618.xml": {
+   "url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1191/vote_119_1_00618.xml",
+   "bytes": 28779,
+   "sha256": "ab81bac6e53d98c8cc170882c53231ee2cc9fd0a4b4addbbdd264879d17e0129",
+   "first_retrieved_utc": "2026-09-24T01:07:38Z",
+   "checked_utc": "2026-10-09T03:49:22Z"
+  },
+  "vote_119_1_00623.xml": {
+   "url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1191/vote_119_1_00623.xml",
+   "bytes": 29347,
+   "sha256": "90a6c2c985c2c27fd9287542fb70c743ad06bf6b6581e8ce7ba382ae7ee56719",
+   "first_retrieved_utc": "2026-09-24T01:07:39Z",
+   "checked_utc": "2026-10-09T03:49:23Z"
+  },
+  "vote_119_1_00632.xml": {
+   "url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1191/vote_119_1_00632.xml",
+   "bytes": 29267,
+   "sha256": "4a17db3e379f8831f74e02f72782f57e95348796671ac586fd44ba9b5ced3540",
+   "first_retrieved_utc": "2026-09-24T01:07:40Z",
+   "checked_utc": "2026-10-09T03:49:23Z"
+  },
+  "vote_119_1_00654.xml": {
+   "url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1191/vote_119_1_00654.xml",
+   "bytes": 29061,
+   "sha256": "944d2687b80c924d3cb6d0a57de6add201135d214967fe8c1c0100cba5bba191",
+   "first_retrieved_utc": "2026-09-24T01:07:40Z",
+   "checked_utc": "2026-10-09T03:49:23Z"
+  },
+  "vote_119_2_00011.xml": {
+   "url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1192/vote_119_2_00011.xml",
+   "bytes": 28830,
+   "sha256": "b26ec9898899f33a23b55d3906a6d48d0a6e9d183a15ea574c77257fc3f38126",
+   "first_retrieved_utc": "2026-09-24T01:07:40Z",
+   "checked_utc": "2026-10-09T03:49:24Z"
+  },
+  "vote_119_2_00020.xml": {
+   "url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1192/vote_119_2_00020.xml",
+   "bytes": 28859,
+   "sha256": "46610848870b2036c5a52225a8faef45b5d45c71afdd5973fe44d0b0f16a5a04",
+   "first_retrieved_utc": "2026-09-24T01:07:41Z",
+   "checked_utc": "2026-10-09T03:49:24Z"
+  },
+  "vote_119_2_00037.xml": {
+   "url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1192/vote_119_2_00037.xml",
+   "bytes": 29089,
+   "sha256": "d6bce6b1aca41efe418c0b8a44f6d7c85af495220df2e26f66ff51847f12dfa0",
+   "first_retrieved_utc": "2026-09-24T01:07:41Z",
+   "checked_utc": "2026-10-09T03:49:24Z"
+  },
+  "vote_119_2_00053.xml": {
+   "url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1192/vote_119_2_00053.xml",
+   "bytes": 28737,
+   "sha256": "273cd528bc074737a7a546bdefb706ff5ebfffc98841b4ccabb7f22d48944589",
+   "first_retrieved_utc": "2026-09-24T01:07:42Z",
+   "checked_utc": "2026-10-09T03:49:25Z"
+  },
+  "vote_119_2_00084.xml": {
+   "url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1192/vote_119_2_00084.xml",
+   "bytes": 29341,
+   "sha256": "ba4e9f9a641d3574730b0df5b2fbc7b736a126e818750baac9bb3c987ce70994",
+   "first_retrieved_utc": "2026-09-24T01:07:42Z",
+   "checked_utc": "2026-10-09T03:49:25Z"
+  },
+  "vote_119_2_00163.xml": {
+   "url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1192/vote_119_2_00163.xml",
+   "bytes": 28619,
+   "sha256": "44e9c6a8bde4a388c68965e2f03c25366d3a82c51a50d8b28871a852910f16e7",
+   "first_retrieved_utc": "2026-09-24T01:07:43Z",
+   "checked_utc": "2026-10-09T03:49:26Z"
+  },
+  "vote_119_2_00224.xml": {
+   "url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1192/vote_119_2_00224.xml",
+   "bytes": 28999,
+   "sha256": "476688b518081e46b27098b9b9459a293930b1bd516dc4152d32b4ef598b700d",
+   "first_retrieved_utc": "2026-09-24T01:07:43Z",
+   "checked_utc": "2026-10-09T03:49:26Z"
+  },
+  "vote_119_2_00228.xml": {
+   "url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1192/vote_119_2_00228.xml",
+   "bytes": 28940,
+   "sha256": "908e78a7a1077aadc6b0b024fad86de805dccd8667c4d9eaf6cac233c01cc24c",
+   "first_retrieved_utc": "2026-09-24T01:07:44Z",
+   "checked_utc": "2026-10-09T03:49:26Z"
+  },
+  "vote_119_2_00250.xml": {
+   "url": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1192/vote_119_2_00250.xml",
+   "bytes": 28854,
+   "sha256": "7194114ea5332c376bef6c1cb308103dcfd014c48c701f69834fa8402dc06e32",
+   "first_retrieved_utc": "2026-10-09T03:49:27Z",
+   "checked_utc": "2026-10-09T03:49:27Z"
+  }
+ }
+}
