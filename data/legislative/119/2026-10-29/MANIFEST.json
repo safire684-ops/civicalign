@@ -1,0 +1,15 @@
+{
+ "congress": 119,
+ "generated_at": "2026-10-29T14:29:05+00:00",
+ "imported_at": "2026-11-02T01:13:44Z",
+ "files": {
+  "meta.json": "5cf2885b352efff5557d023cbab934034dbd8844c7d4ff2e3f18fc5dab24edf0",
+  "senators.json": "821542b5990cd094e6fe1aa1a7d14cda46775b337650013bee02aa7b076c2237",
+  "votes.json": "75625655ddf6bbc73f1594d41606833b8ad2886720383a7954e700e0d2dff353",
+  "positions.json": "74aaed670e9dec082753cecde46d09ea866ea5ac7ebab40693391b3510155f8b",
+  "bills.json": "a16265e613285fa3cdfa9eac883c77c7f33cf7603fc75dd03cc1865c64907b77",
+  "committee_votes.json": "f6a10277ebbe1ab8af398cb4108a105cdc0184aa4a3b3c59f6a0b3ffafd249a8",
+  "nominations.json": "d3a2aad0c858af702a00f7cfe1a6a7e8b18ad8fccd658d14dcf1f9a0124e2e94",
+  "README.md": "e5e689e99a4c21721b808ecc2593c1be04e224a31738db333f4857b053c40599"
+ }
+}

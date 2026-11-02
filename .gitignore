@@ -18,3 +18,7 @@ data/processed/*
 *.key
 .env
 secrets*
+
+# Built by python -m civicalign.build_site from committed inputs; published from the workspace.
+demo/civicalign.html
+demo/data/

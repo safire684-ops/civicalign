@@ -120,6 +120,9 @@ jobs:
       - name: 10/13 Build both published pages from the saved results and bill tables (workspace only; nothing is published here)
         run: PYTHONPATH=src python -m civicalign.build_pages
 
+      - name: 10/13 Build the integrated site from the same results and the legislative data (workspace only; nothing is published here)
+        run: PYTHONPATH=src python -m civicalign.build_site
+
       - name: 11/13 Run every test against the pages just built
         run: python -m pytest -q
 

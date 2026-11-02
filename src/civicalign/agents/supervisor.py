@@ -42,6 +42,19 @@ Engine B (Pillars 4-6), from the raw snapshot files and the stored records:
     current, nothing committed rewritten (append-only against the last commit),
     and the published pages equal to the builder's output
 
+The integrated site (site_checks), from the raw files and the legislative drop itself:
+  * every drop file against its manifest, and the published copies byte for byte
+  * every senator, vote, bill and nomination id resolves across the files
+  * every roll call's totals and party counts recounted from the senators' positions
+  * every "split the two sides" label (vote_division_v1) recounted from Voteview and
+    the positions; every official policy area re-read from the bill's own XML
+  * every senator's position and party, every committee's members, chair, ranking
+    member, midpoint and Senate-bill counts, and every passage and law status
+    against the raw files
+  * no senator-to-state comparison while the bridge is NONE and no display position
+    on any survey estimate; bill facts carry their label, source and quote; the page
+    carries none of the banned wording; the published site is the builder's output
+
 Pillar 1 (Engine A), unchanged: every vote binding and every context record and
 packet re-derived from Pillar 1's own cached first-party files (pillar1_checks).
 
@@ -808,6 +821,188 @@ def engine_b_checks(cfg: Config = DEFAULT, page_dir: Path | None = None) -> list
     return out
 
 
+# ==== The integrated site ================================================================
+def site_division(positions: dict[str, str], scores: dict[str, float]) -> str | None:
+    """vote_division_v1 recounted with separate code."""
+    lib_y = sum(1 for b, p in positions.items() if p == "Yea" and scores.get(b, 0) < 0)
+    lib_n = sum(1 for b, p in positions.items() if p == "Nay" and scores.get(b, 0) < 0)
+    con_y = sum(1 for b, p in positions.items() if p == "Yea" and scores.get(b, 0) > 0)
+    con_n = sum(1 for b, p in positions.items() if p == "Nay" and scores.get(b, 0) > 0)
+    return "yes_liberal" if lib_y > lib_n and con_n > con_y else "yes_conservative" if lib_n > lib_y and con_y > con_n else None
+
+
+def site_drop_checks(drop_dir: Path, published: dict[str, bytes] | None = None) -> list[Check]:
+    """The drop's files against their manifest, and the copies the site publishes."""
+    import hashlib as _h
+    manifest = json.loads((drop_dir / "MANIFEST.json").read_text())
+    bad = [n for n, want in manifest["files"].items() if _h.sha256((drop_dir / n).read_bytes()).hexdigest() != want]
+    out = [Check("Site: legislative files match their manifest", not bad and len(manifest["files"]) == 8, f"changed {bad}" if bad else f"{len(manifest['files'])} files")]
+    if published is not None:
+        differ = [n for n in ("votes.json", "positions.json", "bills.json", "committee_votes.json", "nominations.json") if published.get(f"data/{n}") != (drop_dir / n).read_bytes()]
+        out.append(Check("Site: published data files are the verified copies", not differ, f"differ {differ}" if differ else ""))
+    return out
+
+
+def site_join_checks(drop: dict, scored: set[str]) -> list[Check]:
+    """Every id resolves, and every roll call's totals recount from the senators' positions."""
+    who = {s["id"]: s for s in drop["senators"]}
+    votes = {v["id"]: v for v in drop["votes"]}
+    bills, noms = {b["id"] for b in drop["bills"]}, {n["id"] for n in drop["nominations"]}
+    broken = [i for m in drop["positions"].values() for i in m if i not in who]
+    broken += [i for i in who if i not in scored]
+    broken += [v["bill"] for v in drop["votes"] if v["bill"] and v["bill"] not in bills]
+    broken += [x for v in drop["votes"] for x in v["nominations"] if x not in noms]
+    broken += [x for r in drop["bills"] + drop["nominations"] for x in r["votes"] if x not in votes]
+    broken += [v for v in drop["positions"] if v not in votes] + [v for v in votes if v not in drop["positions"]]
+    out = [Check("Site: every senator, vote, bill and nomination id joins", not broken, f"{len(broken)} broken, e.g. {broken[:3]}" if broken else f"{len(votes)} votes")]
+    wrong = []
+    letter = {"Democrat": "D", "Republican": "R", "Independent": "I"}
+    names = {"yea": "Yea", "nay": "Nay", "present": "Present", "not_voting": "Not Voting"}
+    for vid, v in votes.items():
+        pos = drop["positions"].get(vid, {})
+        if any(sum(1 for p in pos.values() if p == name) != v["counts"][key] for key, name in names.items()):
+            wrong.append(vid)
+            continue
+        recount: dict[str, dict[str, int]] = {}
+        for b, p in pos.items():
+            if b not in who:
+                continue
+            party = letter.get(who[b]["party"], who[b]["party"])
+            recount.setdefault(party, {})
+            recount[party][p] = recount[party].get(p, 0) + 1
+        if recount != v["by_party"]:
+            wrong.append(vid)
+    out.append(Check("Site: every roll call's counts recount from positions", not wrong, f"wrong {wrong[:5]}" if wrong else f"{len(votes)} roll calls"))
+    return out
+
+
+def site_derived_checks(cfg: Config, raw: dict, drop: dict, derived: dict) -> list[Check]:
+    """The split labels, policy areas and bill status, recounted from the raw files."""
+    import html as _html
+    import zipfile as _zip
+    scores = {r["bioguide_id"]: float(r["nominate_dim1"]) for r in raw["members"]
+              if r["chamber"] == "Senate" and r["congress"] == str(cfg.congress) and r["nominate_dim1"] not in ("", None)}
+    wrong = [v for v, m in drop["positions"].items() if derived["division"].get(v, "missing") != site_division(m, scores)]
+    out = [Check("Site: every split label recounted from Voteview", not wrong and len(derived["division"]) == len(drop["positions"]), f"wrong {wrong[:5]}" if wrong else f"{sum(1 for x in derived['division'].values() if x)} of {len(wrong) + len(derived['division'])} labelled")]
+    zips = {"s": cfg.billflow_zip, "hr": cfg.billflow_house_zip, "sjres": cfg.billstatus_sjres_zip, "hjres": cfg.billstatus_hjres_zip}
+    opened = {k: _zip.ZipFile(p) for k, p in zips.items()}
+    wrong = []
+    for b in drop["bills"]:
+        z, n = opened.get(b["type"]), f"BILLSTATUS-{cfg.congress}{b['type']}{b['number']}.xml"
+        area = None
+        if z is not None and n in z.namelist():
+            m = re.search(r"<policyArea>\s*<name>([^<]+)</name>", z.read(n).decode())
+            area = _html.unescape(m.group(1)).strip() if m else None
+        if derived["policy_area"].get(b["id"], "missing") != area:
+            wrong.append(b["id"])
+    out.append(Check("Site: policy areas re-read from each bill's XML", not wrong, f"wrong {wrong[:5]}" if wrong else f"{sum(1 for x in derived['policy_area'].values() if x)} of {len(drop['bills'])} have one"))
+    own = _eb_bill_outcomes(cfg, raw)
+    votes = {v["id"]: v for v in drop["votes"]}
+    wrong = []
+    for b in drop["bills"]:
+        st = derived["status"][b["id"]]
+        last = max((votes[v] for v in b["votes"]), key=lambda v: (v["date"], v["session"], v["number"]), default=None)
+        if (st["last_vote"], st["last_result"]) != ((last["id"], last["result"]) if last else (None, None)):
+            wrong.append(b["id"])
+        rec = own.get(b["id"].upper()) if b["type"] == "s" else None
+        if rec and (st.get("passed_senate") != rec["passed"] or st.get("enacted") != rec["enacted"]):
+            wrong.append(b["id"])
+    out.append(Check("Site: bill status recounted from votes and XML", not wrong, f"wrong {wrong[:5]}" if wrong else f"{len(drop['bills'])} measures"))
+    return out
+
+
+def site_core_checks(cfg: Config, raw: dict, core: dict, bridge_status: str) -> list[Check]:
+    """Senators and committees on the page against the raw files; every gated comparison still gated."""
+    rows = {r["bioguide_id"]: r for r in raw["members"] if r["chamber"] == "Senate" and r["congress"] == str(cfg.congress)}
+    roster, seated = _roster(cfg), raw["seated"]
+    wrong = []
+    for s in core["senators"]:
+        p, row = s["position"], rows.get(s["id"])
+        if p is None or row is None or row["nominate_dim1"] in ("", None):
+            wrong.append(s["id"])
+        elif not _eb_close(p["v"], float(row["nominate_dim1"])) or p["p1"] != _eb_pos(p["v"], 1) or p["p0"] != _eb_pos(p["v"], 0):
+            wrong.append(s["id"])
+        if s["seated"] != (s["id"] in seated) or (s["seated"] and s["state"] != seated[s["id"]]):
+            wrong.append(s["id"])
+        if s["seated"] and {"Democrat": "D", "Republican": "R", "Independent": "I"}.get(roster[s["id"]]["party"]) != s["party"]:
+            wrong.append(s["id"])
+    missing = [b for b in seated if b not in {s["id"] for s in core["senators"]}]
+    out = [Check("Site: every senator's position and party match the sources", not wrong and not missing, f"wrong {wrong[:5]} missing {missing[:5]}" if wrong or missing else f"{len(core['senators'])} senators")]
+
+    data = json.loads(cfg.committees_json.read_text())
+    flow = _eb_committee_flow(cfg)
+    wrong, scores = [], {b: float(r["nominate_dim1"]) for b, r in rows.items() if r["nominate_dim1"] not in ("", None)}
+    standing = [c for c in core["committees"] if not c.get("votes_only")]
+    if {c["code"] for c in standing} != set(raw["committees"]):
+        wrong.append("set of committees")
+    for c in standing:
+        ms = {m["bioguide"]: m for m in data[c["code"]] if m.get("bioguide")}
+        got = {m["id"]: m for m in c["members"]}
+        if set(got) != set(ms) or any(got[b]["title"] != ms[b].get("title") for b in got):
+            wrong.append(c["code"])
+        if not _eb_close(c["committee_median"]["v"], _eb_median([scores[b] for b in ms if b in scores])):
+            wrong.append(c["code"])
+        ref = sum(1 for f in flow.values() if f["flow"].get(c["code"], {}).get("referred"))
+        rep = sum(1 for f in flow.values() if f["flow"].get(c["code"], {}).get("reported"))
+        if (str(ref), str(rep)) != (str(c["referred"]), str(c["reported"])):
+            wrong.append(c["code"])
+    out.append(Check("Site: committee members, leaders, midpoints and bill counts", not wrong, f"wrong {wrong[:5]}" if wrong else f"{len(standing)} committees"))
+
+    bad = []
+    if bridge_status == "NONE":
+        for s in core["senators"]:
+            for key in ("state_on_senator_scale", "distance"):
+                if s["public"] and (s["public"][key]["s"] != "NOT_AVAILABLE" or s["public"][key]["v"] is not None):
+                    bad.append(s["id"])
+        if core["senate"]["national"]["s"] != "NOT_AVAILABLE" or core["senate"]["gap"]["s"] != "NOT_AVAILABLE":
+            bad.append("national")
+    bad += [s["id"] for s in core["senators"] if s["public"] and ({"p0", "p1"} & set(s["public"]["state_public_estimate"]))]
+    out.append(Check("Site: state and public comparisons stay unavailable", not bad, f"wrong {bad[:5]}" if bad else f"bridge {bridge_status}"))
+    return out
+
+
+SITE_BANNED = ("/100", "moderate", "centrist", "political center", "liberal bills", "conservative bills", "extreme", "biased", "alignment score", "% aligned")
+
+
+def site_page_checks(drop: dict, page: str) -> list[Check]:
+    """What the drop's rules require of the content, and wording the page must never carry."""
+    bad = [b["id"] for b in drop["bills"] if b["key_facts"] and (not b["key_facts"].get("about") or any(
+        not f.get("claim") or not f.get("quote") or not f.get("source") or f.get("side") not in ("passes", "fails", "change") for f in b["key_facts"]["facts"]))]
+    out = [Check("Site: every bill fact has its label, quote and source", not bad, f"wrong {bad[:5]}" if bad else f"{sum(1 for b in drop['bills'] if b['key_facts'])} bills")]
+    held = [b["id"] for b in drop["bills"] for e in b["explanations"] if e.get("status") not in ("verified", "approved") and e.get("text")]
+    gate = 'e.status=="verified"||e.status=="approved"' in page and "Explanation coming soon" in page
+    out.append(Check("Site: only verified explanations can be shown", not held and gate, f"held text in {held[:5]}" if held else ""))
+    script_end = page.rfind('<script id="data"')
+    shell = page[:script_end].lower() + page[page.find("</script>", script_end):].lower()
+    found = [w for w in SITE_BANNED if w in shell]
+    out.append(Check("Site: none of the banned wording on the page", not found, f"found {found}" if found else ""))
+    return out
+
+
+def site_checks(cfg: Config = DEFAULT, page_dir: Path | None = None) -> list[Check]:
+    from .. import build_site as BS
+    from .. import legislative as L
+    from ..ideology import bridge as BR
+    try:
+        pages = BS.build(cfg)
+    except Exception as e:                      # a build refusal is itself a failed check
+        return [Check("Site: the site builds", False, f"build refused: {e}")]
+    drop_dir = L.latest_dir(cfg)
+    drop = {n: json.loads((drop_dir / f"{n}.json").read_text()) for n in ("senators", "votes", "positions", "bills", "nominations")}
+    raw = eb_raw(cfg)
+    page = pages[BS.PAGE].decode()
+    core = json.loads(re.search(r'<script id="data" type="application/json">(.*?)</script>', page, re.S).group(1))
+    derived = json.loads(pages["data/derived.json"])
+    scored = {r["bioguide_id"] for r in raw["members"] if r["chamber"] == "Senate" and r["congress"] == str(cfg.congress)}
+    out = site_drop_checks(drop_dir, pages) + site_join_checks(drop, scored) + site_derived_checks(cfg, raw, drop, derived)
+    out += site_core_checks(cfg, raw, core, BR.active(cfg)["status"]) + site_page_checks(drop, page)
+    where = page_dir if page_dir is not None else DEMO
+    if page_dir is None or (where / BS.PAGE).exists():
+        stale = [n for n, b in pages.items() if not (where / n).exists() or (where / n).read_bytes() != b]
+        out.append(Check("Site: published site is the builder's output", not stale, f"stale {stale}" if stale else ""))
+    return out
+
+
 # ==== Pillar 1 (Engine A): unchanged ==========================================================
 
 def _binding_checks(cfg: Config, roster: dict, scores: dict[str, float]) -> list[Check]:
@@ -1326,8 +1521,8 @@ def pillar1_checks(cfg: Config = DEFAULT) -> list[Check]:
 
 
 def checks(cfg: Config = DEFAULT, page_dir: Path | None = None) -> list[Check]:
-    """Everything: the Engine B recount and the Pillar 1 checks."""
-    return engine_b_checks(cfg, page_dir) + pillar1_checks(cfg)
+    """Everything: the Engine B recount, the integrated site and the Pillar 1 checks."""
+    return engine_b_checks(cfg, page_dir) + site_checks(cfg, page_dir) + pillar1_checks(cfg)
 
 
 def main() -> int:
