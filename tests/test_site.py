@@ -436,3 +436,5 @@ def test_a_provisional_vote_keeps_its_label_whatever_the_record_says():
 
 def test_the_health_card_is_on_the_about_page():
     assert "${healthCard()}" in TEMPLATE and "D.health" in TEMPLATE and "D.record" in TEMPLATE
+    start = TEMPLATE.index("function healthCard")
+    assert "<table" not in TEMPLATE[start:TEMPLATE.index("function vMissing", start)], "long sentences must wrap on a phone"
