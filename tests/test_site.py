@@ -211,8 +211,8 @@ def test_the_state_comparison_stays_unavailable(built):
         assert s["public"]["distance"]["s"] == "NOT_AVAILABLE" and s["public"]["distance"]["v"] is None
         assert s["public"]["state_on_senator_scale"]["v"] is None
         assert "p0" not in s["public"]["state_public_estimate"] and "p1" not in s["public"]["state_public_estimate"]
-    assert "<h3>State vs Senator</h3>" in TEMPLATE
-    assert 'class="big-n na">${NA}</span>' in TEMPLATE
+    assert "<h3>State vs Senator</h3>" not in TEMPLATE
+    assert "no validated method places survey answers on the senators" in TEMPLATE
 
 
 def test_a_published_state_distance_is_caught(built):
@@ -316,6 +316,25 @@ def test_the_page_script_parses_and_defines_what_it_uses(tmp_path):
     for name in ("NAMES", "COUNT_KEYS", "cvBody", "cvRow", "evidenceRow", "differNote", "dataNote", "datesCard", "newerText", "ruleText", "partyLine", "LEG", "POSN", "COMV", "MEMB"):
         assert re.search(rf"(?:const |function |,){name}(?:=[^=]|\()", script), name
     assert 'const NAMES=function' not in script
+
+
+def test_senator_and_committee_navigation_offer_sorting_and_dismissal():
+    assert 'id="sen-region"' in TEMPLATE and 'id="sen-party"' in TEMPLATE
+    assert 'id="sen-side"' in TEMPLATE and 'id="sen-sort"' in TEMPLATE
+    assert 'value="state">State A–Z' in TEMPLATE
+    assert 'Close profile ×' in TEMPLATE and 'id="sen-bills"' in TEMPLATE
+    assert 'committee_median?.s=="AVAILABLE"' in TEMPLATE
+
+
+def test_bill_sponsor_party_comes_from_a_verified_roster(built):
+    rows = {s["id"]: s for s in built["core"]["senators"]}
+    for source in BL.current(DEFAULT):
+        key = f"s{source['bill_number']}"
+        if source["bill_type"] != "S" or not source["primary_sponsor_name"]:
+            continue
+        shown = built["derived"]["sponsors"][key]
+        assert shown["name"] == source["primary_sponsor_name"]
+        assert shown["party"] == rows.get(source["sponsor_bioguide_id"], {}).get("party_name")
 
 
 # ---- the newer roll calls and the three vote differences ----
