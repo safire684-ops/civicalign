@@ -9,6 +9,8 @@ import json
 import re
 import shutil
 import subprocess
+import tempfile
+from pathlib import Path
 
 import pytest
 
@@ -38,7 +40,10 @@ def details():
 def js(code: str, data) -> object:
     """Runs the page's list functions plus `code` (which must print JSON) with `data` as DATA."""
     src = LISTS + f"\nconst DATA={json.dumps(data)};\n" + code
-    done = subprocess.run([NODE, "-e", src], text=True, capture_output=True, timeout=60)
+    with tempfile.TemporaryDirectory() as d:          # a file, not `node -e`: the data is too long for a command line on Linux
+        f = Path(d) / "lists.js"
+        f.write_text(src)
+        done = subprocess.run([NODE, str(f)], text=True, capture_output=True, timeout=60)
     assert done.returncode == 0, done.stderr
     return json.loads(done.stdout)
 
