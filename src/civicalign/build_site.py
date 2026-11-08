@@ -196,10 +196,20 @@ def assemble(cfg: Config = DEFAULT) -> tuple[dict, dict, dict]:
         if v["bill"]:
             newer.setdefault(v["bill"], []).append(v["id"])
     outcomes = {o["bill_id"]: o for o in BO.current(cfg)}
+    sponsor_roster = {s["id"]: s for s in senators}
+    sponsor_meta = {
+        f"s{row['bill_number']}": {
+            "name": row["primary_sponsor_name"],
+            "party": sponsor_roster.get(row["sponsor_bioguide_id"], {}).get("party_name"),
+        }
+        for row in BL.current(cfg)
+        if row["bill_type"] == "S" and row["primary_sponsor_name"]
+    }
     derived = {"evidence": {v["id"]: L.vote_evidence(v) for v in all_votes},
                "parties": {v["id"]: L.party_majorities(v["by_party"]) for v in all_votes},
                "supplement": [v["id"] for v in extra["votes"]],
                "policy_area": policy_areas(cfg, drop["bills"]),
+               "sponsors": sponsor_meta,
                "status": {b["id"]: bill_status({**b, "votes": b["votes"] + newer.get(b["id"], [])}, votes, outcomes) for b in drop["bills"]}}
     engine_bills = {"outcomes": {"passed": {k: O["passed_senate"][k]["ids"] for k in ("LIBERAL_SPONSOR", "CONSERVATIVE_SPONSOR", "ZERO_SCORE_SPONSOR", "UNKNOWN")},
                                  "enacted": {k: O["enacted"][k]["ids"] for k in ("LIBERAL_SPONSOR", "CONSERVATIVE_SPONSOR", "ZERO_SCORE_SPONSOR", "UNKNOWN")}, "bills": O["bills"]},
