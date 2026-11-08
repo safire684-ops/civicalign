@@ -1478,3 +1478,9 @@ PYTHONPATH=src ./.venv/bin/python -m civicalign                     # print the 
   https://claude.ai/code/artifact/683a9e36-3046-4827-a7af-7442b49ef7e3
 - Rotate the Congress.gov API key that was once pasted into an old chat; it is
   used nowhere and must never be committed.
+
+## Voter navigation branch (2026-11-08)
+Branch `voter-navigation` adds Senators filters and sorting, committee midpoint ordering, clearer profiles, full bill
+pages with official summaries, and "Last updated" dates. It's built on `automatic-data-updates`, which isn't merged
+yet, so merge that first (or merge this one instead, which contains both). Status table: `docs/ROADMAP.md`. Finances
+stay "Not available": see `docs/FINANCES.md`.

@@ -52,7 +52,7 @@ and, if it needs a key, `CIVICALIGN_DROP_TOKEN` as a secret:
 - [ ] A scheduled run on `main` passes on this code
 
 ### 2. Bill explanations
-- [ ] Official summaries for bills beyond the 40 with facts
+- [ ] Official summaries for bills beyond the 40 with facts: *on branch `voter-navigation`; 107 of 128 bills show the Congressional Research Service summary, the rest say "Not available"*
 - [ ] Claim-level checks, with source excerpts and bill text links
 - [ ] Yes/No meanings for the 18 newest votes
 - [ ] Held and unavailable parts labelled
@@ -78,5 +78,33 @@ and, if it needs a key, `CIVICALIGN_DROP_TOKEN` as a secret:
 - [ ] Historical trends
 - [ ] State map
 - [ ] Better bill search and filters
-- [ ] Shareable links to findings
+- [ ] Senators filters and sorting (party, position, Census region, state, committee): *on branch `voter-navigation`*
+- [ ] Shareable links to findings: *on branch `voter-navigation` for Senators filters, committee order and bill tabs*
 - [ ] Accessibility review, real phone test, load test
+
+## Voter navigation (branch `voter-navigation`, 2026-11-08)
+
+Built on top of `automatic-data-updates` (not yet merged) with today's `main` merged in. Nothing here is merged or deployed.
+
+| Requirement | State |
+|---|---|
+| Senators sorted by state, then last name | Done and tested |
+| Filters: party, position on Voteview's scale, Census region, state, committee; combine and reset; shareable link | Done and tested |
+| Sort: state, last name, party, most liberal, most conservative | Done and tested |
+| Profiles reachable from search, committee members, bill sponsors, Senate chart | Done |
+| Committee member opens the full profile, with a way back; a highlighted member can be cleared | Done and tested |
+| Committees sorted alphabetically or by midpoint, with a marker under each and an explanation | Done and tested |
+| State vs Senator card removed from the profile | Done; the data still says NOT_AVAILABLE and the supervisor still checks it |
+| Voting position shown on a labelled 0 to 100 scale, never called a percentage | Done and tested |
+| "How to read this" on the profile and on About | Done |
+| Recent votes open the bill's official summary and checked facts | Done |
+| Bill page with Overview, Voting Record, Explanation, Sources | Done and tested |
+| Sponsor and party, official summary, latest action, short title for every bill | Done for all 128; summaries for 107 |
+| What a bill would change | Only where checked facts exist (40 bills); "Not available" otherwise |
+| Net worth and stocks | **Blocked:** see `docs/FINANCES.md` |
+| Last updated date on every page | Done |
+| Bill records, summaries and explanations monitored in Data checks | Done |
+
+Every bill's sponsor, summary, latest action and short title come from GovInfo's bill-status files, which the
+pipeline already downloads each day (three resolution archives were added so all 128 measures are covered). The
+supervisor re-reads them with its own code and fails the run if the site differs.

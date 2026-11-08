@@ -91,6 +91,18 @@ def _joint_resolutions(path: Path) -> str | None:
     return None
 
 
+def _resolutions(path: Path) -> str | None:
+    """Resolution archives: concurrent resolutions can number only a handful early in a Congress."""
+    try:
+        with zipfile.ZipFile(path) as z:
+            xml = [n for n in z.namelist() if n.endswith(".xml")]
+    except zipfile.BadZipFile:
+        return "not a valid zip -- the server probably returned an error page"
+    if not xml:
+        return "no resolutions in the archive"
+    return None
+
+
 def _populations(path: Path) -> str | None:
     col = f"POPESTIMATE{DEFAULT.population_year}"
     with path.open() as fh:
@@ -241,6 +253,36 @@ def all_agents() -> list[Agent]:
             target=RAW / f"BILLSTATUS-{DEFAULT.congress}-hjres.zip",
             validate=_joint_resolutions,
             min_bytes=50_000,
+            critical=False,
+            content_key=zip_content_key,
+        ),
+        Agent(
+            name="simple resolutions (Senate)",
+            vintage="current Congress; GovInfo republishes daily",
+            url=f"https://www.govinfo.gov/bulkdata/BILLSTATUS/{DEFAULT.congress}/sres/BILLSTATUS-{DEFAULT.congress}-sres.zip",
+            target=RAW / f"BILLSTATUS-{DEFAULT.congress}-sres.zip",
+            validate=_resolutions,
+            min_bytes=5_000,
+            critical=False,
+            content_key=zip_content_key,
+        ),
+        Agent(
+            name="concurrent resolutions (Senate)",
+            vintage="current Congress; GovInfo republishes daily",
+            url=f"https://www.govinfo.gov/bulkdata/BILLSTATUS/{DEFAULT.congress}/sconres/BILLSTATUS-{DEFAULT.congress}-sconres.zip",
+            target=RAW / f"BILLSTATUS-{DEFAULT.congress}-sconres.zip",
+            validate=_resolutions,
+            min_bytes=5_000,
+            critical=False,
+            content_key=zip_content_key,
+        ),
+        Agent(
+            name="concurrent resolutions (House)",
+            vintage="current Congress; GovInfo republishes daily",
+            url=f"https://www.govinfo.gov/bulkdata/BILLSTATUS/{DEFAULT.congress}/hconres/BILLSTATUS-{DEFAULT.congress}-hconres.zip",
+            target=RAW / f"BILLSTATUS-{DEFAULT.congress}-hconres.zip",
+            validate=_resolutions,
+            min_bytes=5_000,
             critical=False,
             content_key=zip_content_key,
         ),

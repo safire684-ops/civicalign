@@ -449,3 +449,20 @@ Provisional, with no plain-language explanation, even when its list is verified.
 read again on each run, along with a rotating sample of others, so an official correction to an older page may
 take some weeks to be noticed. A printed surname is matched to a senator by name and state; when a successor has
 the same name and state, Voteview's list of who could vote on that roll call settles which senator it was.
+
+## Bill details and the voter navigation pages
+
+- **Sponsor, official summary, latest action, short title, latest text.** Read from GovInfo's bill-status XML for
+  every measure on the site (`build_site.bill_record`), published as `data/bill_details.json`. Summaries are the
+  Congressional Research Service's own text, shown in full with the version and date they describe; CivicAlign
+  never writes or shortens one into new words. A bill with no summary says "Not available". The supervisor
+  (`site_bill_detail_checks`) re-reads each file with regular expressions and fails the run on any difference.
+- **What a Yes or No meant** on a bill page is the `meaning` of its main direct vote (fixed rules, not AI). If no
+  vote on the bill has a checked meaning, the page says so.
+- **What it would change** shows only the checked "change" facts from the legislative files (40 bills).
+- **Regions** are the Census Bureau's four statistical regions.
+- **Senator and committee ordering** uses Voteview scores (the committee midpoint is the median of its scored
+  members). Position bands on the Senators page are equal slices of the 0 to 100 display line, labelled with numbers
+  only. A position is never described as a grade, a percentage or agreement.
+- **The State vs Senator card** was removed from profiles. The comparison is still unavailable (bridge NONE), and
+  the supervisor still fails a build that publishes one.

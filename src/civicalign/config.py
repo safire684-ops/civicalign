@@ -83,6 +83,19 @@ class Config:
     def billstatus_hjres_zip(self) -> Path:
         return self.raw_dir / f"BILLSTATUS-{self.congress}-hjres.zip"
 
+    # Simple and concurrent resolutions: sponsor, official summary and status for the Bills tab (non-critical).
+    @property
+    def billstatus_sres_zip(self) -> Path:
+        return self.raw_dir / f"BILLSTATUS-{self.congress}-sres.zip"
+
+    @property
+    def billstatus_sconres_zip(self) -> Path:
+        return self.raw_dir / f"BILLSTATUS-{self.congress}-sconres.zip"
+
+    @property
+    def billstatus_hconres_zip(self) -> Path:
+        return self.raw_dir / f"BILLSTATUS-{self.congress}-hconres.zip"
+
     # Pillar 1 binding artefacts: raw fetches (ignored by git) and the tracked bindings.
     @property
     def explain_raw_dir(self) -> Path:

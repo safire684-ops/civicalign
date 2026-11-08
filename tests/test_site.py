@@ -211,8 +211,8 @@ def test_the_state_comparison_stays_unavailable(built):
         assert s["public"]["distance"]["s"] == "NOT_AVAILABLE" and s["public"]["distance"]["v"] is None
         assert s["public"]["state_on_senator_scale"]["v"] is None
         assert "p0" not in s["public"]["state_public_estimate"] and "p1" not in s["public"]["state_public_estimate"]
-    assert "<h3>State vs Senator</h3>" in TEMPLATE
-    assert 'class="big-n na">${NA}</span>' in TEMPLATE
+    # the profile carries no state comparison card at all (removed at the user's request, 2026-11-08)
+    assert "State vs Senator" not in TEMPLATE and "state_public_estimate" not in TEMPLATE
 
 
 def test_a_published_state_distance_is_caught(built):

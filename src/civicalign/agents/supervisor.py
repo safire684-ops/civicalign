@@ -886,14 +886,71 @@ def site_join_checks(drop: dict, scored: set[str]) -> list[Check]:
     return out
 
 
+def _bill_archives(cfg: Config) -> dict:
+    """Every bill-status archive on disk, opened directly (the snapshot itself is checked elsewhere)."""
+    import zipfile as _zip
+    zips = {"s": cfg.billflow_zip, "hr": cfg.billflow_house_zip, "sjres": cfg.billstatus_sjres_zip, "hjres": cfg.billstatus_hjres_zip,
+            "sres": cfg.billstatus_sres_zip, "sconres": cfg.billstatus_sconres_zip, "hconres": cfg.billstatus_hconres_zip}
+    return {k: _zip.ZipFile(p) for k, p in zips.items() if p.exists()}
+
+
+def site_bill_detail_checks(cfg: Config, drop: dict, details: dict) -> list[Check]:
+    """Each bill's sponsor, latest action and official summary re-read from its XML with regular
+    expressions (separate code from the builder's parser), and compared with what the site publishes."""
+    import html as _html
+    opened = _bill_archives(cfg)
+    flat = lambda t: re.sub(r"\s+", "", _html.unescape(re.sub(r"<[^>]+>", " ", t)))     # the words, ignoring spacing
+    one = lambda pat, t: (m.group(1).strip() if (m := re.search(pat, t, re.S)) else "")
+    wrong, missing, summarised, sponsored = [], [], 0, 0
+    for b in drop["bills"]:
+        z, n = opened.get(b["type"]), f"BILLSTATUS-{cfg.congress}{b['type']}{b['number']}.xml"
+        got = details.get(b["id"], "absent")
+        if z is None or n not in z.namelist():
+            (missing if got is None else wrong).append(b["id"])
+            continue
+        if not got:
+            wrong.append(b["id"])
+            continue
+        # the bill's own fields only: related bills and amendments carry their own sponsors and actions
+        x = z.read(n).decode()
+        for tag in ("amendments", "relatedBills", "actions", "committees", "cosponsors"):      # outermost first
+            x = re.sub(rf"<{tag}>.*</{tag}>", "", x, flags=re.S)
+        sp = one(r"<sponsors>\s*<item>(.*?)</item>", x)
+        want_sp = (one(r"<bioguideId>(.*?)</bioguideId>", sp), one(r"<party>(.*?)</party>", sp)) if sp else None
+        have_sp = (got["sponsor"]["id"], got["sponsor"]["party"]) if got["sponsor"] else None
+        la = one(r"<latestAction>(.*?)</latestAction>", x)
+        want_la = (one(r"<actionDate>(.*?)</actionDate>", la)[:10], _html.unescape(one(r"<text>(.*?)</text>", la))) if la else None
+        have_la = (got["latest_action"]["date"], got["latest_action"]["text"]) if got["latest_action"] else None
+        sums = re.findall(r"<summary>(.*?)</summary>", one(r"<summaries>(.*?)</summaries>", x), re.S)
+        want_sum = None
+        if sums:
+            key = lambda t: (one(r"<actionDate>(.*?)</actionDate>", t), one(r"<updateDate>(.*?)</updateDate>", t), one(r"<versionCode>(.*?)</versionCode>", t))
+            pick = max(sums, key=key)
+            text = one(r"<text>(.*?)</text>", pick)
+            text = one(r"<!\[CDATA\[(.*?)\]\]>", text) or _html.unescape(text)
+            want_sum = (key(pick)[0][:10], flat(text))
+        have_sum = (got["summary"]["date"], flat(" ".join(got["summary"]["paragraphs"]))) if got["summary"] else None
+        titles = re.findall(r"<item>\s*<titleType>([^<]*)</titleType>.*?<title>([^<]*)</title>", one(r"<titles>(.*?)</titles>", x), re.S)
+        if got.get("short_title") != next((_html.unescape(t).strip() for k, t in titles if "Short Title" in k and t.strip()), None):
+            wrong.append(b["id"])
+        party_ok = not got["sponsor"] or got["sponsor"]["party_name"] == {"D": "Democrat", "R": "Republican", "I": "Independent", "ID": "Independent"}.get(got["sponsor"]["party"])
+        if want_sp != have_sp or want_la != have_la or want_sum != have_sum or not party_ok:
+            wrong.append(b["id"])
+        summarised += bool(have_sum)
+        sponsored += bool(have_sp)
+    extra = sorted(set(details) - {b["id"] for b in drop["bills"]})
+    return [Check("Site: bill sponsors, summaries and latest actions re-read from each bill's XML", not wrong and not extra,
+                  f"wrong {wrong[:5]} extra {extra[:3]}" if wrong or extra else
+                  f"{sponsored} sponsors, {summarised} official summaries; {len(missing)} bills with no record available")]
+
+
 def site_derived_checks(cfg: Config, raw: dict, drop: dict, derived: dict, extra: dict | None = None) -> list[Check]:
     """The split labels, policy areas and bill status, recounted from the raw files."""
     import html as _html
     import zipfile as _zip
     wrong = [v["id"] for v in drop["votes"] if derived["evidence"].get(v["id"]) != site_evidence(v) or derived["parties"].get(v["id"]) != site_majorities(v["by_party"])]
     out = [Check("Site: every evidence and party-majority label recounted", not wrong and len(derived["evidence"]) == len(drop["votes"]) + len(derived.get("supplement", [])), f"wrong {wrong[:5]}" if wrong else f"{sum(1 for x in derived['evidence'].values() if x == 'direct')} direct votes")]
-    zips = {"s": cfg.billflow_zip, "hr": cfg.billflow_house_zip, "sjres": cfg.billstatus_sjres_zip, "hjres": cfg.billstatus_hjres_zip}
-    opened = {k: _zip.ZipFile(p) for k, p in zips.items()}
+    opened = _bill_archives(cfg)
     wrong = []
     for b in drop["bills"]:
         z, n = opened.get(b["type"]), f"BILLSTATUS-{cfg.congress}{b['type']}{b['number']}.xml"
@@ -1194,6 +1251,7 @@ def site_checks(cfg: Config = DEFAULT, page_dir: Path | None = None) -> list[Che
     notes = json.loads((drop_dir.parent.parent / "vote_differences.json").read_text())
     out = site_drop_checks(drop_dir, pages) + site_join_checks(drop, scored) + site_derived_checks(cfg, raw, drop, derived, extra)
     out += site_supplement_checks(cfg, raw, drop, extra, derived) + site_difference_checks(core, notes)
+    out += site_bill_detail_checks(cfg, drop, json.loads(pages["data/bill_details.json"]))
     out += site_core_checks(cfg, raw, core, BR.active(cfg)["status"]) + site_page_checks(drop, page) + site_reconcile_checks(cfg, raw, drop, core) + site_record_checks(cfg, raw, core, extra)
     where = page_dir if page_dir is not None else DEMO
     if page_dir is None or (where / BS.PAGE).exists():

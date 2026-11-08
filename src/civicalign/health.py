@@ -59,6 +59,19 @@ def report(cfg: Config = DEFAULT, today: date | None = None) -> dict:
             missing = sorted(f"{r['congress']}-{r['session']}-{r['clerk_rollnumber']}" for r in L.csv.DictReader(fh)
                              if f"{r['congress']}-{r['session']}-{r['clerk_rollnumber']}" not in have)
         add("warn" if missing else "ok", "drop_coverage", f"{len(missing)} roll calls in Voteview aren't in the legislative files yet, so they have no plain-language explanation." if missing else "Every Voteview roll call is in the legislative files.")
+        from . import build_site as BS                 # here, not at the top: build_site imports this module
+        try:
+            details = BS.bill_details(cfg, drop["bills"]) if drop["bills"] else {}
+        except I.SnapshotMismatch as err:
+            details = {}
+            add("error", "bill_records_unreadable", f"The official bill-status records couldn't be read: {err}")
+        if details:
+            no_record = sorted(k for k, d in details.items() if not d)
+            no_summary = sorted(k for k, d in details.items() if d and not (d["summary"] and d["summary"]["paragraphs"]))
+            add("warn" if no_record else "ok", "bill_records", f"{len(no_record)} bills have no official bill-status record available, so their sponsor and status show as not available: {', '.join(no_record[:10])}." if no_record else f"All {len(details)} bills have an official bill-status record (sponsor, status and latest action).")
+            add("ok", "bill_summaries", f"{len(details) - len(no_record) - len(no_summary)} of {len(details)} bills have an official summary from the Congressional Research Service. The other {len(no_summary) + len(no_record)} say it's not available until one is published.")
+            unexplained = [b["id"] for b in drop["bills"] if not b["key_facts"] and not any(e.get("status") in ("verified", "approved") for e in b["explanations"])]
+            add("warn" if unexplained else "ok", "bill_explanations", f"{len(unexplained)} of {len(drop['bills'])} bills have no checked explanation of what passing or rejecting them means, so they show “Explanation coming soon”." if unexplained else "Every bill has a checked explanation.")
     sync = _read(SYNC.status_path(cfg))
     if sync:
         level = {"imported": "ok", "current": "ok", "not_configured": "warn"}.get(sync["state"], "error")
