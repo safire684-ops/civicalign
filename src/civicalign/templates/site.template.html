@@ -225,7 +225,7 @@ const REGIONS=Object.fromEntries(Object.entries({
 const senFilters={q:"",party:"",region:"",side:"",sort:"state"};
 function vSenators(){
 const F=senFilters;
-$("#app").innerHTML=`<h1 class="page-title">Senators</h1><p class="sub">Find senators by state, party, region, and voting position. Positions describe voting records, not grades or issue stances.</p>${dataNote([POSN,LEG])${selectCard()}
+$("#app").innerHTML=`<h1 class="page-title">Senators</h1><p class="sub">Find senators by state, party, region, and voting position. Positions describe voting records, not grades or issue stances.</p>${dataNote([POSN,LEG])}${selectCard()}
 <div class="card"><div class="sec-head"><h2 class="sec">Current senators</h2><span id="sen-count" class="small muted"></span></div>
 <div class="ctl">
 <input id="sen-q" class="wide" type="search" placeholder="Search name or state" aria-label="Search senators">
@@ -245,7 +245,7 @@ const found=D.senators.filter(s=>s.seated&&(!q||(s.name+" "+s.state_name+" "+s.s
 const alpha=(a,b)=>a.state_name.localeCompare(b.state_name)||a.name.localeCompare(b.name);
 const value=s=>s.position&&typeof s.position.v=="number"?s.position.v:null;
 found.sort((a,b)=>F.sort=="name"?a.name.localeCompare(b.name):F.sort=="state"?alpha(a,b):value(a)===null?value(b)===null?alpha(a,b):1:value(b)===null?-1:(F.sort=="liberal"?value(a)-value(b):value(b)-value(a))||alpha(a,b));
-$("#sen-count").textContent=${found.length} of ${D.senators.filter(s=>s.seated).length} senators;
+$("#sen-count").textContent=`${found.length} of ${D.senators.filter(s=>s.seated).length} senators`;
 $("#sen-results").innerHTML=found.map(s=>`<a href="#/senators/${s.id}">${photo(s)}<span>${esc(s.name)}<small>${esc(s.state_name)} · ${esc(s.party_name)}${s.position?` · Position ${esc(s.position.p1)}`:""}</small></span></a>`).join("")||"<p class='muted'>No senators match these filters.</p>";
 }
 draw();
