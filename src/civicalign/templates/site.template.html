@@ -265,8 +265,8 @@ async function vSenator(id,sub){const s=SEN[id];if(!s)return vMissing("That sena
      <div class="kv">${icon("flag")}<div><b>State</b><span>${esc(s.state_name)}</span></div></div>
      <div class="kv">${icon("cal")}<div><b>${s.since?`In the Senate since ${yr(s.since)}`:"Start date not available"}</b><span>${s.term_end?(s.seated?`Current term ends ${yr(s.term_end)}`:`Last recorded term ended ${yr(s.term_end)}`):"Not in the floor-vote records yet"}</span></div></div>
      <div class="kv">${icon("tick")}<div><b>Floor votes this Congress</b><span>${s.tally.Yea} Yes · ${s.tally.Nay} No · ${s.tally.Present} Present · ${s.tally["Not Voting"]} not voting</span></div></div>
-     <div class="kv">${icon("money")}<div><b>Estimated Net Worth</b><span>${NA}: not in our verified data</span></div></div>
-     <div class="kv">${icon("chart")}<div><b>Stocks Held</b><span>${NA}: not in our verified data</span></div></div></div>
+     <div class="kv">${icon("money")}<div><b>Estimated Net Worth</b><span>${NA}: not in our verified data. Filing values are reported in ranges, not a verified personal net-worth figure. ${ext("https://efdsearch.senate.gov/search/home/","Official Senate financial disclosures")}</span></div></div>
+     <div class="kv">${icon("chart")}<div><b>Stocks Held</b><span>${NA}: not in our verified data. ${ext("https://efdsearch.senate.gov/search/home/","Search public asset and transaction filings")}</span></div></div></div>
    <div class="card" id="votes"><div class="loading">Loading votes…</div></div></div>
    <div class="card" id="sen-bills"><div class="loading">Loading bills…</div></div><div class="card" id="issues"></div>${dataNote([POSN,LEG])}`;
   mountSelect(s);
