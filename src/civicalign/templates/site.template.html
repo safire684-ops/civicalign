@@ -167,7 +167,7 @@ const pill=p=>p?`<span class="pill ${POS[p]?POS[p][1]:""}">${esc(POS[p]?POS[p][0
 const TYPE={nomination:["Nomination","nom"],amendment:["Amendment","amd"],bill:["Bill","bill"]};
 const typeChip=t=>`<span class="chip ${TYPE[t][1]}">${TYPE[t][0]}</span>`;
 const initials=n=>n.split(/\s+/).filter(Boolean).map(w=>w[0]).filter((_,i,a)=>i==0||i==a.length-1).join("");
-const photo=(s,cls="")=>`<span class="ph ${cls}"><i>${esc(initials(s.name))}</i><img loading="lazy" alt="" src="https://unitedstates.github.io/images/congress/450x550/${esc(s.id)}.jpg" data-alt="https://bioguide.congress.gov/bioguide/photo/${esc(s.id[0])}/${esc(s.id)}.jpg"></span>`;
+const photo=(s,cls="")=>`<span class="ph ${cls}" ${s.photo?"":`title="No official photo is available yet"`}><i>${esc(initials(s.name))}</i>${s.photo?`<img loading="lazy" decoding="async" alt="" src="${esc(s.photo)}">`:""}</span>`;
 const badge=(s,sm)=>`<span class="badge ${esc(s.party)} ${sm?"sm":""}" title="${esc(s.party_name)}">${esc(s.party)}</span>`;
 const marker=p=>`${p}%`;
 const line=(v,ticks=[],off)=>`<div class="line ${off?"off":""}">${off?"":`<span class="k" style="left:${marker(+v)}"></span>`}${ticks.map(t=>`<span class="t" style="left:${marker(+t)}"></span>`).join("")}</div>`;
@@ -217,7 +217,7 @@ function measure(v,X){if(v.bill)return{label:X.bById[v.bill].label,href:`#/bills
 let lazy={},lazyN=0;
 const later=fn=>{const k="L"+(++lazyN);lazy[k]=fn;return k};
 document.addEventListener("toggle",e=>{const d=e.target;if(d.tagName=="DETAILS"&&d.open&&d.dataset.lazy&&lazy[d.dataset.lazy]){const fn=lazy[d.dataset.lazy];delete lazy[d.dataset.lazy];const h=d.querySelector(":scope>.fill");Promise.resolve(fn()).then(x=>{h.innerHTML=x})}},true);
-document.addEventListener("error",e=>{const i=e.target;if(i.tagName!="IMG"||!i.closest(".ph"))return;if(i.dataset.alt){const a=i.dataset.alt;delete i.dataset.alt;i.src=a}else i.remove()},true);
+document.addEventListener("error",e=>{const i=e.target;if(i.tagName=="IMG"&&i.closest(".ph"))i.remove()},true);   /* only if a saved photo fails to load: the initials underneath show */
 
 /* ---- search-select ---- */
 function combo(host,{placeholder,label,items,value,pick}){
@@ -524,7 +524,7 @@ function vAbout(anchor){const M=D.meta,L=M.legislative;const li=(a,b)=>`<li><b>$
    <li><b>All-measure committee activity.</b> Referred and reported counts cover Senate bills (S.) only.</li></ul></div>
   <div class="card"><h2 class="sec" style="margin-bottom:8px">Methodology and checks</h2><p style="margin-top:0">Method status: ${M.method_status=="CANDIDATE_METHOD_NOT_FINAL"?"a candidate method, not final":esc(M.method_status)}. Before publishing, an independent checker re-reads the original records and recounts the published numbers and joins without using the site's own code. If a check fails, nothing is published.</p>
    ${D.rules.map(r=>`<details class="plain"><summary>${esc(r.label)}</summary><p class="small" style="margin:6px 0">${esc(r.rule)}</p>${(r.limits||[]).map(l=>`<p class="small muted" style="margin:3px 0">${esc(l)}</p>`).join("")}</details>`).join("")}
-   <p style="margin-bottom:0"><a href="methodology.html">Read the full methodology →</a></p><p class="small muted" style="margin:8px 0 0">Data version ${esc(M.input_key.slice(0,12))}. Legislative files imported ${fmtDate(L.imported_at)}. Senator photos come from the public unitedstates/images project.</p></div>`;
+   <p style="margin-bottom:0"><a href="methodology.html">Read the full methodology →</a></p><p class="small muted" style="margin:8px 0 0">Data version ${esc(M.input_key.slice(0,12))}. Legislative files imported ${fmtDate(L.imported_at)}. Senator photos: ${esc(D.photos.sources.join("; "))}. They're official portraits in the public domain, saved with the site.${D.photos.unavailable.length?` ${D.photos.unavailable.map(i=>esc(SEN[i]?SEN[i].name:i)).join(", ")}: no official photo is available yet, so initials are shown.`:""}</p></div>`;
   if(anchor){const a=document.getElementById(anchor);a&&a.scrollIntoView()}}
 function howToRead(){return`<ul style="margin:0;padding-left:18px">
    <li><b>Voting position.</b> A place on a line from 0 (most liberal) to 100 (most conservative), from Voteview's score. Voteview works it out from which senators vote together on roll calls. 50 is Voteview's zero point, and a tick marks the Senate's midpoint. It isn't a grade, a percentage or a measure of agreement, and higher isn't better.</li>
@@ -549,9 +549,9 @@ function vMissing(t){$("#app").innerHTML=`<div class="card"><h1 class="page-titl
 /* ---- global search ---- */
 (function(){const host=$("#gs"),inp=$("input",host);let pop=null,act=0,res=[];const close=()=>{pop&&pop.remove();pop=null};
   const show=async()=>{const q=inp.value.trim().toLowerCase();close();if(q.length<2)return;res=[];
-    for(const s of D.senators)if((s.name+" "+s.state_name+" "+s.state).toLowerCase().includes(q))res.push({t:s.name,sub:`Senator · ${s.party} - ${s.state}`,h:`#/senators/${s.id}`});
+    for(const s of D.senators)if((s.name+" "+s.state_name+" "+s.state).toLowerCase().includes(q))res.push({t:s.name,sub:`Senator · ${s.party} - ${s.state}`,h:`#/senators/${s.id}`,img:photo(s,"xs")});
     for(const c of D.committees)if(c.name.toLowerCase().includes(q))res.push({t:c.name,sub:"Committee",h:`#/committees/${c.code}`});
-    const draw=()=>{close();pop=document.createElement("div");pop.className="pop";pop.innerHTML=res.length?res.slice(0,14).map((r,i)=>`<button type="button" data-i="${i}" class="${i?"":"act"}"><span>${esc(r.t)}<small>${esc(r.sub)}</small></span></button>`).join(""):`<div class="none">No matches</div>`;host.append(pop);act=0;pop.addEventListener("mousedown",e=>{const b=e.target.closest("button");if(b){e.preventDefault();pick(+b.dataset.i)}})};
+    const draw=()=>{close();pop=document.createElement("div");pop.className="pop";pop.innerHTML=res.length?res.slice(0,14).map((r,i)=>`<button type="button" data-i="${i}" class="${i?"":"act"}">${r.img||""}<span>${esc(r.t)}<small>${esc(r.sub)}</small></span></button>`).join(""):`<div class="none">No matches</div>`;host.append(pop);act=0;pop.addEventListener("mousedown",e=>{const b=e.target.closest("button");if(b){e.preventDefault();pick(+b.dataset.i)}})};
     draw();const X=await index();if(inp.value.trim().toLowerCase()!==q)return;
     for(const b of X.bills)if((b.label+" "+b.id+" "+b.title+" "+(X.derived.policy_area[b.id]||"")).toLowerCase().includes(q))res.push({t:`${b.label}: ${b.title}`,sub:`Bill · ${b.importance.tier}`,h:`#/bills/${b.id}`});
     for(const n of X.nominations)if((n.id+" "+n.description+" "+n.position+" "+n.agency).toLowerCase().includes(q))res.push({t:n.description||n.position,sub:`Nomination · ${n.id}`,h:`#/bills/${n.id}`});

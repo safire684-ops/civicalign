@@ -466,3 +466,9 @@ the same name and state, Voteview's list of who could vote on that roll call set
   only. A position is never described as a grade, a percentage or agreement.
 - **The State vs Senator card** was removed from profiles. The comparison is still unavailable (bridge NONE), and
   the supervisor still fails a build that publishes one.
+- **Senator photos** are official portraits in the public domain: the unitedstates/images copy of the Government
+  Publishing Office's Member Guide (225 x 275), or the Biographical Directory of the U.S. Congress when that has none
+  (and for three senators whose Member Guide copy is a wide shot). `photos.py` saves each one once in
+  `data/photos/` with its source, URL and checksum, and the site serves those files, so no photo depends on another
+  site being up. A senator with no official photo anywhere shows initials and is listed in Data checks; the
+  supervisor fails a build where a saved photo changed, is missing, or was swapped for initials.

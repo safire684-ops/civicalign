@@ -94,6 +94,18 @@ def report(cfg: Config = DEFAULT, today: date | None = None) -> dict:
         if rec.get("ahead_of_voteview"):
             add("warn", "voteview_behind", f"{len(rec['ahead_of_voteview'])} roll calls are in the Congressional Record but not in Voteview yet: {', '.join(rec['ahead_of_voteview'][:10])}.")
 
+    # senator photos
+    from . import photos as PH
+    pics = PH.read_manifest(cfg)
+    if pics["photos"] or pics["unavailable"]:
+        bad = PH.verify(cfg)
+        if bad:
+            add("error", "photos_broken", f"Saved senator photos don't match their records: {'; '.join(bad[:5])}.")
+        missing = [f"{p['name']} (since {p['since']})" for p in pics["unavailable"].values()]
+        add("warn" if missing else "ok", "photos_missing",
+            f"{len(missing)} {'senator has' if len(missing) == 1 else 'senators have'} no official photo yet, so the site shows initials: {', '.join(missing)}. Each run asks again." if missing
+            else f"Every senator has an official photo ({len(pics['photos'])}).")
+
     # the verified snapshot and the Senate's own site
     old = sorted(s["name"] for s in snap["sources"] if s["checked_utc"][:10] < snap["run_utc"][:10])
     add("warn" if old else "ok", "sources_older", f"These sources couldn't be refreshed in the latest snapshot: {', '.join(old)}." if old else "Every source was checked in the latest snapshot.")

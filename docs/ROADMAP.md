@@ -104,6 +104,7 @@ Built on top of `automatic-data-updates` (not yet merged) with today's `main` me
 | Net worth and stocks | **Blocked:** see `docs/FINANCES.md` |
 | Last updated date on every page | Done |
 | Bill records, summaries and explanations monitored in Data checks | Done |
+| Senator photos saved with the site, checked, and shown in search, profiles, committee grids and the Senate view | Done and tested: 103 of 104 senators; Alan Armstrong (seated 2026-03-24) has no official photo at any source yet, so initials show and each run asks again |
 
 Every bill's sponsor, summary, latest action and short title come from GovInfo's bill-status files, which the
 pipeline already downloads each day (three resolution archives were added so all 128 measures are covered). The

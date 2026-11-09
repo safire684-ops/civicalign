@@ -88,6 +88,10 @@ echo "reading new roll calls and change-of-vote notices from the Congressional R
 PYTHONPATH=src $PY -m civicalign.record_votes || exit 17
 
 echo
+echo "saving an official photo for any senator who doesn't have one yet"
+PYTHONPATH=src $PY -m civicalign.photos || exit 19
+
+echo
 echo "10/12 building both published pages from the saved results and bill tables (working copy only)"
 PYTHONPATH=src $PY -m civicalign.build_pages || exit 12
 PYTHONPATH=src $PY -m civicalign.build_site || exit 12

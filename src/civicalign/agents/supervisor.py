@@ -894,6 +894,31 @@ def _bill_archives(cfg: Config) -> dict:
     return {k: _zip.ZipFile(p) for k, p in zips.items() if p.exists()}
 
 
+def site_photo_checks(cfg: Config, core: dict, pages: dict) -> list[Check]:
+    """Every senator's published photo is the saved official file, byte for byte, and a JPEG; a senator with
+    no photo is one the photo record lists as unavailable. Reads data/photos directly, not through photos.py."""
+    import hashlib as _h
+    folder = cfg.ideology_dir.parent / "photos"
+    record = json.loads((folder / "PHOTOS.json").read_text()) if (folder / "PHOTOS.json").exists() else {"photos": {}, "unavailable": {}}
+    wrong, missing = [], []
+    for s in core["senators"]:
+        sid, path = s["id"], s.get("photo")
+        if path is None:
+            if sid not in record["unavailable"]:
+                missing.append(sid)
+            continue
+        body = pages.get(path)
+        entry = record["photos"].get(sid)
+        if (path != f"photos/{sid}.jpg" or body is None or entry is None or body[:3] != b"\xff\xd8\xff"
+                or _h.sha256(body).hexdigest() != entry["sha256"] or (folder / f"{sid}.jpg").read_bytes() != body):
+            wrong.append(sid)
+    extra = sorted(k for k in pages if k.startswith("photos/") and k[7:-4] not in record["photos"])
+    shown = sum(1 for s in core["senators"] if s.get("photo"))
+    return [Check("Site: every senator photo is the saved official file, or listed as unavailable", not wrong and not missing and not extra,
+                  f"wrong {wrong[:5]} unlisted {missing[:5]} extra {extra[:3]}" if wrong or missing or extra else
+                  f"{shown} photos; {len(core['senators']) - shown} listed as unavailable")]
+
+
 def site_bill_detail_checks(cfg: Config, drop: dict, details: dict) -> list[Check]:
     """Each bill's sponsor, latest action and official summary re-read from its XML with regular
     expressions (separate code from the builder's parser), and compared with what the site publishes."""
@@ -1252,6 +1277,7 @@ def site_checks(cfg: Config = DEFAULT, page_dir: Path | None = None) -> list[Che
     out = site_drop_checks(drop_dir, pages) + site_join_checks(drop, scored) + site_derived_checks(cfg, raw, drop, derived, extra)
     out += site_supplement_checks(cfg, raw, drop, extra, derived) + site_difference_checks(core, notes)
     out += site_bill_detail_checks(cfg, drop, json.loads(pages["data/bill_details.json"]))
+    out += site_photo_checks(cfg, core, pages)
     out += site_core_checks(cfg, raw, core, BR.active(cfg)["status"]) + site_page_checks(drop, page) + site_reconcile_checks(cfg, raw, drop, core) + site_record_checks(cfg, raw, core, extra)
     where = page_dir if page_dir is not None else DEMO
     if page_dir is None or (where / BS.PAGE).exists():

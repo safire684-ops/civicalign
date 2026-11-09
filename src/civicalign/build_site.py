@@ -7,6 +7,7 @@ the legislative drop (legislative.load) through verified ids. Writes
     demo/civicalign.html        the page, with the core data embedded
     demo/data/*.json            the drop's files byte for byte, plus derived.json, engine_bills.json and
                                 bill_details.json (each bill's sponsor, official summary and latest action)
+    demo/photos/*.jpg           official senator photos, byte for byte from data/photos (photos.py)
 A failed join stops the build. The senator-to-state comparison stays unavailable while the
 bridge is NONE, and survey estimates never receive a display position.
 """
@@ -23,6 +24,7 @@ from pathlib import Path
 from . import build_pages as BP
 from . import health as H
 from . import legislative as L
+from . import photos as PH
 from . import record_votes as RV
 from .config import DEFAULT, Config
 from .ideology import bills as BL
@@ -318,7 +320,11 @@ def assemble(cfg: Config = DEFAULT) -> tuple[dict, dict, dict]:
                                        {"id": L.PARTY_RULE, "label": "Votes where party majorities were opposed", "rule": L.PARTY_TEXT, "limits": []}],
         "dates": data_dates(cfg, drop, d["meta"]), "reconcile": L.reconcile(drop, cfg),
         "record": record_summary(cfg), "health": H.report(cfg),
+        "photos": {"sources": PH.read_manifest(cfg).get("sources", []), "unavailable": sorted(PH.read_manifest(cfg)["unavailable"])},
     }
+    pics = PH.read_manifest(cfg)["photos"]
+    for s in senators:
+        s["photo"] = f"photos/{s['id']}.jpg" if s["id"] in pics else None
 
     # ---- derived: only what the verified inputs determine ----
     votes = {v["id"]: v for v in all_votes}
@@ -348,6 +354,11 @@ def build(cfg: Config = DEFAULT) -> dict[str, bytes]:
     pages = {PAGE: template.replace("<!--DATA-->", embedded).encode(),
              "data/derived.json": _dump(derived).encode(), "data/engine_bills.json": _dump(engine_bills).encode(),
              "data/bill_details.json": _dump(bill_details(cfg, L.load(cfg)["bills"])).encode(), "data/supplement.json": _dump(with_record(L.supplement(L.load(cfg), cfg), cfg)).encode()}
+    bad = PH.verify(cfg)
+    if bad:
+        raise BP.BuildError("senator photos don't match their records: " + "; ".join(bad[:5]))
+    for pid in PH.read_manifest(cfg)["photos"]:
+        pages[f"photos/{pid}.jpg"] = (PH.home(cfg) / f"{pid}.jpg").read_bytes()
     d = L.latest_dir(cfg)
     for name in COPIED:
         pages[f"data/{name}"] = (d / name).read_bytes()
