@@ -1,3 +1,30 @@
+# CivicAlign — current delivery status (November 18, 2026)
+
+**Source of truth:** [Issue #5](https://github.com/safire684-ops/civicalign/issues/5), this status and the linked GitHub test/deploy evidence. The older November 2/8 planning snapshot below is historical, not a claim that its branch labels are still current. Do not check any acceptance item without actual evidence.
+
+## What has been released
+
+- **LIVE:** release PR [#11](https://github.com/safire684-ops/civicalign/pull/11), with [successful production run 44211967008](https://github.com/safire684-ops/civicalign/actions/runs/44211967008): **630 tests and 67 independent checks**, GitHub Pages publish completed.
+- **LIVE:** approved white/navy/rust layout, senator list/filters/sorting and links, committee-to-profile navigation and median display positions, four-tab bill details and official CRS summaries, data-health reporting and verified locally stored photos. Alan Armstrong remains an explicit initials fallback.
+- **LIVE and limited:** 128 bills have an official status record, 107 have an official CRS summary. Only **40** have provisional text-linked bill facts; **88** still lack checked plain-English explanations. This is not AI auto-generation.
+- **LIVE:** Congressional Record cross-check matched 923 Senate roll calls in the November 18 release. 26 newer Voteview roll calls still lack 50degrees plain-language explanation; show as provisional.
+- **TESTED ON BRANCH, NOT LIVE:** two-senator comparison on `feature-senator-comparison-2026-11-18`, pending its own CI run and merged deployment.
+- Superseded overlapping PRs **#6** and **#9** were closed after release #11; separate committee measure expansion **PR #2 remains open for independent review**.
+
+## Remaining blockers / prioritized next work
+
+1. **End-to-end legislative updates: BLOCKED by an approved 50degrees publisher.** The GitHub importer already exists and fails closed; nobody should invent or substitute a new publisher, or claim the process is fully automated. Configure repository variable `CIVICALIGN_DROP_URL`, and only if needed secret `CIVICALIGN_DROP_TOKEN`, after validating the actual publisher and digest manifest. The October 29 export was 20 days old at the November 18 release.
+2. **AI bill explanations: OPEN, NO PAID API APPROVED.** Audit the separate 50degrees pipeline and existing AI provider before adding a key; preserve official CRS summaries independently, verify every new plain-English claim against authoritative bill text, show unavailable/pending for all unsupported text, and do not create a redundant pipeline.
+3. **Broader committee measures: OPEN.** Existing committee referral/reported stats are scoped to Senate bills (S.). PR #2 proposes all eight types but is stale against the current UI/verified sources; review carefully and do not merge it unchanged or silently infer individual committee votes.
+4. **Exploration:** finish comparison testing/deployment, historical voting trends, evidence-backed issue findings and navigation, state discovery, full-text filters, accessibility, real-phone/browser QA, and load tests.
+5. **Methodology blockers:** senator/state ideology alignment stays **NOT_AVAILABLE** without valid bridging. Exact net worth and stock holdings remain unavailable until source permissions, reproducibility and data uncertainty are solved. Senate.gov continues to block automated requests; official Congressional Record is used where available.
+
+## Historical plan below (November 2–9)
+
+The following text documents decisions made at the time. Statements that something was only “on branch” were superseded by PR #11 unless the current status above still calls it blocked. New work should always check the current main branch, Issue #5 and GitHub Actions instead of assuming these dates are current.
+
+---
+
 # CivicAlign audit, plan and checklist
 
 Status as of November 2, 2026. This tracks [issue #5](https://github.com/safire684-ops/civicalign/issues/5). A box is
