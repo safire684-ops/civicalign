@@ -48,6 +48,15 @@
 name: Daily update
 
 on:
+  push:
+    branches: ["release-voter-navigation-2026-11-17", "main"]
+    paths:
+      - "src/**"
+      - "scripts/**"
+      - "tests/**"
+      - ".github/workflows/update.yml"
+      - "data/photos/**"
+      - "data/legislative/**"
   schedule:
     - cron: "0 11 * * *"   # every day 11:00 UTC (06:00 Eastern, 07:00 during DST)
   workflow_dispatch:        # plus a "Run workflow" button for doing it by hand
