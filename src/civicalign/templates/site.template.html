@@ -293,7 +293,29 @@ function vSenators(){const f=Object.fromEntries(SFILTERS.map(k=>[k,query()[k]||"
   $("#sreset").onclick=()=>go("#/senators");draw()}
 function vSenatorsKeep(f){history.replaceState(null,"",withQuery("#/senators",f));vSenators()}
 function positionText(s){const p=s.position;return p&&p.p1?p.p1:null}
+/* Financial disclosures are sourced snapshots, never live portfolios or exact wealth. */
+function financeWorth(s,f){
+  const link=ext(f?.profile_url||("https://senatefiles.org/senator/"+s.id),"Disclosure details");
+  const official=ext("https://efdsearch.senate.gov/search/","Official Senate reports");
+  if(!f||!f.net_worth)return 'Explore the most recent disclosed asset and debt ranges: '+link+' · '+official+'.';
+  return '<strong>'+esc(f.net_worth)+'</strong> <span class="small muted">Estimated range from '+esc(f.year)+
+    ' annual disclosure'+(f.filed?', filed '+esc(f.filed):'')+
+    '. Includes reported assets and debts, not a complete assessment of personal wealth. '+link+' · '+official+'.</span>';
+}
+function financeStocks(s,f){
+  const link=ext(f?.profile_url||("https://senatefiles.org/senator/"+s.id),"View full holdings source");
+  if(!f||!f.details_checked)return 'Explore the investments listed in the latest disclosure: '+link+'.';
+  const direct=f.stocks||[],funds=f.other_holdings||[];
+  const display=e=>'<li>'+esc(e.name)+' <span class="muted small">('+esc(e.range)+', '+esc(e.owner)+')</span></li>';
+  if(direct.length)return '<span class="small muted">Selected individual stocks from the '+esc(f.year)+
+    ' annual filing (not a real-time portfolio):</span><ul style="margin:6px 0;padding-left:18px">'+direct.map(display).join('')+
+    '</ul><span class="small muted">'+link+'. Reports may list only the largest positions; trades after the filing are separate.</span>';
+  return '<span class="small muted">No individual company stocks in the source’s largest-holdings summary for '+
+    esc(f.year)+'. Other reported investments include:</span><ul style="margin:6px 0;padding-left:18px">'+funds.slice(0,3).map(display).join('')+
+    '</ul><span class="small muted">This is not proof that no stocks are held; a blind trust or fund does not disclose all underlying companies. '+link+'.</span>';
+}
 async function vSenator(id,sub){const s=SEN[id];if(!s)return vMissing("That senator isn't in the data.");
+  const F=await load("financials").catch(()=>({entries:{}})),fin=(F.entries||{})[id];
   const med=D.senate.median,from=COM[query().from];
   $("#app").innerHTML=`${from?`<p><a href="#/committees/${esc(from.code)}">← Back to ${esc(from.name)}</a></p>`:""}${selectCard()}<div class="card profile">${photo(s,"big")}<div>
    <div class="eyebrow">${s.seated?"Senator":"Not on the current roster"}</div><h1 class="pname">${esc(s.name)} ${badge(s)}</h1><div class="muted">${s.seated?"United States Senator from ":"Voted in this Congress as a senator from "}${esc(s.state_name)}</div><p class="small" style="margin:6px 0 0"><a href="${withQuery("#/compare",{a:s.id})}">Compare with another senator →</a></p>
@@ -307,8 +329,8 @@ async function vSenator(id,sub){const s=SEN[id];if(!s)return vMissing("That sena
      <div class="kv">${icon("flag")}<div><b>State</b><span>${esc(s.state_name)}</span></div></div>
      <div class="kv">${icon("cal")}<div><b>${s.since?`In the Senate since ${yr(s.since)}`:"Start date not available"}</b><span>${s.term_end?(s.seated?`Current term ends ${yr(s.term_end)}`:`Last recorded term ended ${yr(s.term_end)}`):"Not in the floor-vote records yet"}</span></div></div>
      <div class="kv">${icon("tick")}<div><b>Floor votes this Congress</b><span>${s.tally.Yea} Yes · ${s.tally.Nay} No · ${s.tally.Present} Present · ${s.tally["Not Voting"]} not voting</span></div></div>
-     <div class="kv">${icon("money")}<div><b>Estimated Net Worth</b><span>${NA}: Senate financial disclosures report value ranges, not exact amounts, and aren't in our verified data yet. <a href="#/about/finances">Why</a></span></div></div>
-     <div class="kv">${icon("chart")}<div><b>Stocks Held</b><span>${NA}: not in our verified data yet. <a href="#/about/finances">Why</a></span></div></div></div>
+     <div class="kv">${icon("money")}<div><b>Estimated Net Worth</b><span>${financeWorth(s,fin)}</span></div></div>
+     <div class="kv">${icon("chart")}<div><b>Stocks Held</b><span>${financeStocks(s,fin)}</span></div></div></div>
    <div class="card" id="votes"><div class="loading">Loading votes…</div></div></div>
    <div class="card" id="issues"></div>${dataNote([POSN,LEG])}`;
   mountSelect(s);
@@ -526,7 +548,7 @@ function vAbout(anchor){const M=D.meta,L=M.legislative;const li=(a,b)=>`<li><b>$
    <li><b>The Senate or a committee compared with the national public.</b> Same reason, and no national estimate has been defined.</li>
    <li><b>An issue-by-issue ideology score.</b> Not supported by the data.</li>
    <li><b>How each member voted in committee.</b> The records give party totals only.</li>
-   <li id="finances"><b>Net worth and stocks held.</b> Not in our verified data. Senators file yearly financial disclosures and stock trade reports with the Senate, but they list each asset as a value range (for example $1,001 to $15,000), so no exact net worth exists. The official search site only opens after the reader accepts limits on how the reports may be used, and it offers no bulk download. Until that's settled, these stay “Not available”. We won't show a precise figure, and a reported trade doesn't prove someone still owns a stock.</li>
+   <li id="finances"><b>Net worth and stocks held.</b> Senator profiles show source-attributed estimated ranges derived from annual financial disclosures, plus selected directly named stocks and funds. Senators report amounts in broad value bands, not exact current prices; spouses and dependent children may be included, while personal residences and other assets can be absent. A blind trust does not reveal underlying companies. The <a href="https://efdsearch.senate.gov/search/" target="_blank" rel="noopener">official Senate eFD site</a> holds the filings. <a href="https://senatefiles.org/about" target="_blank" rel="noopener">Senate Files</a> provides the publicly readable summaries refreshed weekly by CivicAlign. Annual reports reflect the listed calendar year; later stock trades do not prove current ownership, and estimates from different sources may use different debt rules.</li>
    <li><b>Committee jurisdiction and senator biographies.</b> Not in our verified data.</li>
    <li><b>All-measure committee activity.</b> Referred and reported counts cover Senate bills (S.) only.</li></ul></div>
   <div class="card"><h2 class="sec" style="margin-bottom:8px">Methodology and checks</h2><p style="margin-top:0">Method status: ${M.method_status=="CANDIDATE_METHOD_NOT_FINAL"?"a candidate method, not final":esc(M.method_status)}. Before publishing, an independent checker re-reads the original records and recounts the published numbers and joins without using the site's own code. If a check fails, nothing is published.</p>
@@ -539,7 +561,7 @@ function howToRead(){return`<ul style="margin:0;padding-left:18px">
    <li><b>Votes.</b> Yes, No, Present or Not voting, from the official roll call. “Provisional” votes come from Voteview before the main data files have them. “Matches the official list” means every senator's vote agrees with the Congressional Record.</li>
    <li><b>Issue positions.</b> The actual votes a senator cast, grouped by each bill's official policy area. Procedural steps and votes with no checked meaning are kept apart, and there's no issue score.</li>
    <li><b>Bills.</b> Official summaries come from the Congressional Research Service. Where no checked explanation exists, the page says so instead of guessing.</li>
-   <li><b>What isn't shown.</b> A comparison between a senator and their state's voters, because no validated method puts survey answers on the same line as votes. Net worth and stock holdings, because they aren't in our verified data.</li></ul>`}
+   <li><b>What isn't shown.</b> A comparison between a senator and their state's voters, because no validated method puts survey answers on the same line as votes. Financial disclosure estimates are sourced separately and are not exact or real-time wealth measurements.</li></ul>`}
 function ruleText(id){return D.rules.find(r=>r.id==id).rule}
 const statusChip=st=>`<span class="chip ${st=="Latest available"?"ok":"warn"}">${st}</span>`;
 function newerText(){return RC.newer_count?`${RC.newer_count} newer ${RC.newer_count==1?"roll call":"roll calls"}, through ${fmtDate(RC.newer_through)}, ${RC.newer_count==1?"comes":"come"} from Voteview and ${RC.newer_count==1?"is":"are"} marked Provisional, with no plain-language explanation yet. Each vote's page says whether it matches the Congressional Record.`:""}
