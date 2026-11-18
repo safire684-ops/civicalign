@@ -144,6 +144,9 @@ jobs:
       - name: Save an official photo for any senator who doesn't have one yet (saved photos are kept if a source is down)
         run: PYTHONPATH=src python -m civicalign.photos
 
+      - name: Refresh public Senate financial disclosure estimates weekly (no API key; keep prior data on source failure)
+        run: PYTHONPATH=src python -m civicalign.financials
+
       - name: 10/13 Build both published pages from the saved results and bill tables (workspace only; nothing is published here)
         run: PYTHONPATH=src python -m civicalign.build_pages
 
@@ -168,7 +171,7 @@ jobs:
         run: |
           git config user.name  "civicalign-bot"
           git config user.email "civicalign-bot@users.noreply.github.com"
-          git add demo/senator-check.html demo/methodology.html data/ideology data/ideology/bill_sponsor_classifications.jsonl data/ideology/senate_bill_outcomes.jsonl data/raw/PROVENANCE.tsv data/explanations data/raw/explanations/senate data/legislative data/photos
+          git add demo/senator-check.html demo/methodology.html data/ideology data/ideology/bill_sponsor_classifications.jsonl data/ideology/senate_bill_outcomes.jsonl data/raw/PROVENANCE.tsv data/explanations data/raw/explanations/senate data/legislative data/photos data/financials
           if git diff --cached --quiet; then
             echo "Nothing moved today; the snapshot's check stamp alone is not committed."
             git checkout -- data/raw/SNAPSHOT.json
