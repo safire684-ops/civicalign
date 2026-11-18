@@ -197,6 +197,12 @@ function senatorList(list,f){
 function committeeList(list,sort){const mid=c=>c.committee_median&&c.committee_median.s=="AVAILABLE"?+c.committee_median.v:null,byName=(a,b)=>a.name.localeCompare(b.name);
   if(sort!="liberal"&&sort!="conservative")return[...list].sort(byName);const dir=sort=="liberal"?1:-1;
   return[...list].sort((a,b)=>{const x=mid(a),y=mid(b);if(x==null||y==null)return(x==null)-(y==null)||byName(a,b);return dir*(x-y)||byName(a,b)})}
+
+/* Direct roll-call comparison: count only recorded Yes/No votes for both people. */
+function compareRecordedVotes(votes,positions,first,second){
+  return votes.map(v=>({vote:v,first:positions[v.id]&&positions[v.id][first],second:positions[v.id]&&positions[v.id][second]}))
+    .filter(r=>(r.first==="Yea"||r.first==="Nay")&&(r.second==="Yea"||r.second==="Nay"));
+}
 /* lists:end */
 
 /* ---- data loaded on demand ---- */
@@ -266,7 +272,7 @@ const SFILTERS=["party","position","region","state","committee","sort"];
 function vSenators(){const f=Object.fromEntries(SFILTERS.map(k=>[k,query()[k]||""])),seated=D.senators.filter(s=>s.seated);
   const opt=(v,t,cur)=>`<option value="${esc(v)}" ${v==cur?"selected":""}>${esc(t)}</option>`,states=[...new Map(seated.map(s=>[s.state,s])).values()].sort((a,b)=>a.state_name.localeCompare(b.state_name));
   const coms=D.committees.filter(c=>c.members.length).sort((a,b)=>a.name.localeCompare(b.name)),regions=[...new Set(seated.map(s=>s.region).filter(Boolean))].sort();
-  $("#app").innerHTML=`<h1 class="page-title">Senators</h1><p class="sub">How each senator voted in the 119th Congress, where their voting record sits on Voteview's scale, and the committees they serve on. Choose a senator, or narrow the list below.</p>${dataNote([POSN,LEG])}${selectCard()}
+  $("#app").innerHTML=`<h1 class="page-title">Senators</h1><p class="sub">How each senator voted in the 119th Congress, where their voting record sits on Voteview's scale, and the committees they serve on. Choose a senator, or narrow the list below.</p><p class="small" style="margin:-6px 0 16px"><a href="#/compare">Compare two senators side by side →</a></p>${dataNote([POSN,LEG])}${selectCard()}
   <div class="card" style="padding:16px 18px"><div class="ctl" style="margin:0" id="sf" role="group" aria-label="Filter and sort senators">
    <select data-f="party" aria-label="Party">${opt("","All parties",f.party)}${opt("D","Democrats",f.party)}${opt("R","Republicans",f.party)}${opt("I","Independents",f.party)}</select>
    <select data-f="position" aria-label="Position on Voteview's scale">${opt("","Any position",f.position)}${opt("liberal","Liberal side of the scale",f.position)}${opt("conservative","Conservative side of the scale",f.position)}${BANDS.map(([lo,hi])=>opt(`${lo}-${hi}`,`Positions ${lo} to ${hi}`,f.position)).join("")}${seated.some(s=>!s.position)?opt("none","No Voteview position",f.position):""}</select>
@@ -290,7 +296,7 @@ function positionText(s){const p=s.position;return p&&p.p1?p.p1:null}
 async function vSenator(id,sub){const s=SEN[id];if(!s)return vMissing("That senator isn't in the data.");
   const med=D.senate.median,from=COM[query().from];
   $("#app").innerHTML=`${from?`<p><a href="#/committees/${esc(from.code)}">← Back to ${esc(from.name)}</a></p>`:""}${selectCard()}<div class="card profile">${photo(s,"big")}<div>
-   <div class="eyebrow">${s.seated?"Senator":"Not on the current roster"}</div><h1 class="pname">${esc(s.name)} ${badge(s)}</h1><div class="muted">${s.seated?"United States Senator from ":"Voted in this Congress as a senator from "}${esc(s.state_name)}</div>
+   <div class="eyebrow">${s.seated?"Senator":"Not on the current roster"}</div><h1 class="pname">${esc(s.name)} ${badge(s)}</h1><div class="muted">${s.seated?"United States Senator from ":"Voted in this Congress as a senator from "}${esc(s.state_name)}</div><p class="small" style="margin:6px 0 0"><a href="${withQuery("#/compare",{a:s.id})}">Compare with another senator →</a></p>
    <div class="rows"><div class="head eyebrow">At a glance</div>
    <details class="prow" open><summary>${icon("senate")}<div><h3>Voting position</h3><div class="small muted">${s.position?`${esc(s.side)}. The tick marks the Senate midpoint, ${esc(med.p1)}.`:"No Voteview position available."}</div>${s.position?line(s.position.p1,[med.p1]):line(0,[],true)}${scaleEnds}</div><span class="big-n ${s.position?"":"na"}">${s.position?`${esc(s.position.p0)}<small>Position</small>`:NA}</span><span class="chev"></span></summary>
      <div class="inner">${s.position?`<p style="margin-top:0">${esc(s.name)} sits at <b>${esc(s.position.p1)}</b> on a line from 0 (most liberal) to 100 (most conservative). It comes from Voteview's score of <b>${esc(s.position.d)}</b>, worked out from which senators vote together on roll calls. 50 is Voteview's zero point.</p><p>It describes a voting record compared with other senators. It isn't a grade, a percentage or a measure of agreement with anyone, and higher isn't better.</p><p class="small muted" style="margin-bottom:0">Measured ${fmtDate(D.meta.measurement_date)}. ${ext("https://voteview.com","Source: Voteview")} · <a href="#/senate/${s.id}">See it among all senators</a> · <a href="#/about/read">How to read this</a></p>`:""}</div></details>
@@ -340,6 +346,7 @@ function issues(h,s,mine,X){const areas={},noms=[];const took=v=>["Yea","Nay"].i
   ${names.map(a=>area(a)).join("")}${areas[NO_AREA]?area(NO_AREA,"Measures with no verified policy area"):""}
   <h3 class="subhead">Nominations</h3><p class="small muted" style="margin:0 0 8px">Votes on whether a person takes a post. They're kept apart because they aren't policy stances.</p>
   <details class="issue" data-lazy="${later(()=>`<div class="in">${evList(conf,X,s)}${lazyList("Other votes on nominations, and votes not cast",nomOther,X,s)}</div>`)}"><summary><h3>Confirmation votes</h3><span class="small muted nowrap">${conf.length} ${conf.length==1?"vote":"votes"} <span class="chev" style="display:inline-block;margin-left:8px"></span></span></summary><div class="fill"></div></details>`}
+
 
 /* ---- Bills ---- */
 const billState={q:"",sort:"recent",show:"all",tier:"",area:"",sid:"",n:30};
@@ -560,11 +567,63 @@ function vMissing(t){$("#app").innerHTML=`<div class="card"><h1 class="page-titl
   inp.addEventListener("input",show);inp.addEventListener("blur",()=>setTimeout(close,120));
   inp.addEventListener("keydown",e=>{if(!pop)return;const bs=$$("button",pop);if(e.key=="ArrowDown"||e.key=="ArrowUp"){e.preventDefault();act=Math.max(0,Math.min(bs.length-1,act+(e.key=="ArrowDown"?1:-1)));bs.forEach((b,i)=>b.classList.toggle("act",i==act))}else if(e.key=="Enter"){e.preventDefault();pick(act)}else if(e.key=="Escape")close()})})();
 
+/* ---- Compare two senators using actual recorded roll calls, not a synthetic score ---- */
+async function vCompare(){
+  const q=query(),seated=D.senators.filter(s=>s.seated);
+  const valid=id=>seated.some(s=>s.id===id)?id:"";
+  const a=valid(q.a),b=valid(q.b);
+  $("#app").innerHTML=`<h1 class="page-title">Compare two senators</h1><p class="sub">Compare voting positions, committee memberships and recorded roll calls side by side. This does not rate either senator or compare them with voters in their states.</p>
+  <div class="grid2 even"><div class="card"><div class="eyebrow">First senator</div><div id="ca" style="margin-top:10px"></div></div><div class="card"><div class="eyebrow">Second senator</div><div id="cb" style="margin-top:10px"></div></div></div>
+  <div id="cr-results"><div class="card"><p class="muted">Select two different senators to compare their voting records.</p></div></div>
+  ${dataNote([POSN,LEG])}`;
+  const items=senItems().filter(i=>SEN[i.id].seated);
+  const picker=(id,other,slot,key)=>combo($(slot),{placeholder:"Search by name or state",label:key==="a"?"First senator":"Second senator",items,
+    value:id?`${SEN[id].name} (${SEN[id].party} - ${SEN[id].state})`:"",
+    pick:i=>go(withQuery("#/compare",key==="a"?{a:i.id,b:other}:{a:other,b:i.id}))});
+  picker(a,b,"#ca","a");picker(b,a,"#cb","b");
+  if(!a||!b)return;
+  const h=$("#cr-results");
+  if(a===b){h.innerHTML=`<div class="card"><p>Select two different senators. <a href="#/senators/${esc(a)}">Open the senator's profile</a></p></div>`;return}
+  const X=await index();
+  if(route()[0]!=="compare"||query().a!==a||query().b!==b)return;
+  const both=compareRecordedVotes(X.votes,X.positions,a,b),opposite=both.filter(r=>r.first!==r.second),same=both.filter(r=>r.first===r.second);
+  const person=id=>{const s=SEN[id];return`<div class="card"><div style="display:flex;align-items:center;gap:14px">${photo(s)}<div><h2 class="sec" style="margin:0">${esc(s.name)} ${badge(s,true)}</h2><span class="muted small">${esc(s.state_name)}</span></div></div>
+    <p style="margin-bottom:5px"><b>Voting position:</b> ${s.position?esc(s.position.p1):NA} ${s.position?"on Voteview's 0–100 display line":""}</p>
+    ${s.position?line(s.position.p1,[D.senate.median.p1]):""}${s.position?scaleEnds:""}
+    <p class="small muted">Position is descriptive, not a percentage, grade or issue score. The tick marks the Senate midpoint.</p>
+    <p><b>Committees:</b> ${s.committees.length}</p>
+    <p class="small">${s.committees.map(c=>`<a href="#/committees/${esc(c.code)}">${esc(c.name)}</a>`).join("; ")||"No standing committee membership recorded"}</p>
+    <p style="margin-bottom:0"><a href="#/senators/${esc(id)}">Full senator profile →</a></p></div>`};
+  h.innerHTML=`<div class="grid2 even">${person(a)}${person(b)}</div>
+    <div class="card"><h2 class="sec">Voting record comparison</h2>
+    <p>On <b>${both.length}</b> roll calls where both senators have a recorded Yes or No vote, they voted on <b>opposite sides in ${opposite.length}</b> and cast the <b>same Yes/No vote in ${same.length}</b>.</p>
+    <p class="small muted">Present, Not Voting and votes missing for either person are excluded. These are vote counts, not a similarity score. Procedural motions, nominations and policy bills are all included; a disagreement does not by itself establish a difference on an issue.</p>
+    <div class="ctl" style="margin:16px 0"><select id="cr-mode" aria-label="Filter shared roll calls"><option value="opposite">Opposite Yes/No votes</option><option value="same">Same Yes/No votes</option></select></div>
+    <div class="small muted" id="cr-count" aria-live="polite"></div><div id="cr-list"></div><button type="button" class="more" id="cr-more">Show more</button>
+    <p class="small muted" style="margin-bottom:0">Data: ${ext("https://voteview.com","Voteview")} voting positions and source-linked roll calls. Last updated ${fmtDate(D.dates.snapshot)}. <a href="#/about/read">How to read these records</a>.</p></div>`;
+  let mode="opposite",n=25;
+  const draw=()=>{
+    const selected=mode==="opposite"?opposite:same;
+    $("#cr-count").textContent=`Showing ${Math.min(n,selected.length)} of ${selected.length} roll calls`;
+    $("#cr-list").innerHTML=selected.slice(0,n).map(r=>{const v=r.vote,m=measure(v,X);
+      return`<div class="ivote" style="display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap">
+      <div style="flex:1;min-width:220px"><a href="#/vote/${esc(v.id)}"><b>${esc(m.label)}</b></a> <span class="small muted">${fmtDate(v.date)}</span>
+      <div class="small">${esc(v.title||v.question||"")}</div>
+      <div class="small muted">${v.provisional?'<span class="chip warn">Provisional</span> ':""}${ext(v.source_url,"Source roll call")}</div></div>
+      <div style="display:flex;gap:12px;align-items:center"><div><div class="small muted">${esc(SEN[a].last)}</div>${pill(r.first)}</div>
+      <div><div class="small muted">${esc(SEN[b].last)}</div>${pill(r.second)}</div></div></div>`}).join("")||'<p class="muted">No roll calls in this category.</p>';
+    $("#cr-more").style.display=n<selected.length?"":"none";
+  };
+  $("#cr-mode").onchange=e=>{mode=e.target.value;n=25;draw()};
+  $("#cr-more").onclick=()=>{n+=25;draw()};
+  draw();
+}
+
 /* ---- routes ---- */
 function route(){return location.hash.replace(/^#\/?/,"").split("?")[0].split("/").filter(Boolean)}
 function go(h){if(location.hash===h)render();else location.hash=h}
-async function render(){const[a="senators",b,c]=route();lazy={};$$("[data-nav]").forEach(n=>{const on=n.dataset.nav==a||(a=="vote"&&n.dataset.nav=="bills");n.classList.toggle("on",on);if(on){n.setAttribute("aria-current","page");const b=n.parentElement;b.scrollLeft=n.offsetLeft-b.offsetLeft-16}else n.removeAttribute("aria-current")});
-  try{if(a=="senators"){b?await vSenator(b,c):vSenators()}else if(a=="bills")await vBills(b);else if(a=="vote")await vVote(b,c);else if(a=="committees")await vCommittees(b,c);else if(a=="senate")vSenate(b);else if(a=="about")vAbout(b);else vMissing("That page doesn't exist.")}
+async function render(){const[a="senators",b,c]=route();lazy={};$$("[data-nav]").forEach(n=>{const on=n.dataset.nav==a||(a=="vote"&&n.dataset.nav=="bills")||(a=="compare"&&n.dataset.nav=="senators");n.classList.toggle("on",on);if(on){n.setAttribute("aria-current","page");const b=n.parentElement;b.scrollLeft=n.offsetLeft-b.offsetLeft-16}else n.removeAttribute("aria-current")});
+  try{if(a=="senators"){b?await vSenator(b,c):vSenators()}else if(a=="compare")await vCompare();else if(a=="bills")await vBills(b);else if(a=="vote")await vVote(b,c);else if(a=="committees")await vCommittees(b,c);else if(a=="senate")vSenate(b);else if(a=="about")vAbout(b);else vMissing("That page doesn't exist.")}
   catch(err){console.error(err);$("#app").innerHTML=`<div class="card"><h1 style="font-size:24px">Couldn't load this page's data</h1><p class="muted">The data files didn't load. Please try reloading the page.</p></div>`}
   if(!(a=="about"&&b)&&c!="votes")window.scrollTo(0,0)}
 window.addEventListener("hashchange",render);
