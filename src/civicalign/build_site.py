@@ -25,6 +25,7 @@ from . import build_pages as BP
 from . import health as H
 from . import legislative as L
 from . import photos as PH
+from . import financials as FIN
 from . import record_votes as RV
 from .config import DEFAULT, Config
 from .ideology import bills as BL
@@ -353,7 +354,8 @@ def build(cfg: Config = DEFAULT) -> dict[str, bytes]:
     embedded = f'<script id="data" type="application/json">{_dump(core).replace("</", "<" + chr(92) + "/")}</script>'
     pages = {PAGE: template.replace("<!--DATA-->", embedded).encode(),
              "data/derived.json": _dump(derived).encode(), "data/engine_bills.json": _dump(engine_bills).encode(),
-             "data/bill_details.json": _dump(bill_details(cfg, L.load(cfg)["bills"])).encode(), "data/supplement.json": _dump(with_record(L.supplement(L.load(cfg), cfg), cfg)).encode()}
+             "data/bill_details.json": _dump(bill_details(cfg, L.load(cfg)["bills"])).encode(), "data/supplement.json": _dump(with_record(L.supplement(L.load(cfg), cfg), cfg)).encode(),
+              "data/financials.json": _dump(FIN.read_snapshot(cfg.ideology_dir.parent / "financials" / "senate.json")).encode()}
     bad = PH.verify(cfg)
     if bad:
         raise BP.BuildError("senator photos don't match their records: " + "; ".join(bad[:5]))
