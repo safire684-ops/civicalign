@@ -24,7 +24,8 @@ a disagreement or a gap between the two systems is published instead of hidden.
 
 supplement() fills that gap: a roll call in Voteview's verified file but not yet in the drop
 is published with its question, result and counts, marked provisional, with no plain-language
-meaning. Voteview can miss a later vote change, so these stay provisional until a drop has them.
+meaning. They stay provisional until a drop has them. record_votes.py checks each against the
+official list in the Congressional Record, and the page says what that check found.
 """
 import csv
 import hashlib

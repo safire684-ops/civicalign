@@ -431,3 +431,44 @@ a separate, new method); landmark bills; and every 0–100 score or grade (the d
 separate, presentation-only transformation). None of them is replaced by a hidden
 equivalent. The documents that described them are kept, marked as archived,
 under `docs/archive/`.
+
+## Checking votes against the Congressional Record
+
+Voteview supplies the roll calls the site publishes. Every roll call is also checked against the
+Congressional Record, the official account of Senate proceedings, read from GovInfo. The Record prints each
+vote by name, and prints a CHANGE OF VOTE notice when the Senate lets a senator correct a vote. Each stored
+result keeps the page's address and SHA-256, and stored lines are never rewritten.
+
+- **Verified:** the printed totals equal Voteview's, and the names match once any change-of-vote notice granted
+  by the Senate is applied.
+- **Conflict:** they don't match, and nothing official explains why. The page says the sources differ.
+- **Pending:** the vote hasn't been found in the Record, or its list couldn't be read completely.
+
+Limits: this checks who voted how, not what a vote means. A vote in Voteview but not the legislative files stays
+Provisional, with no plain-language explanation, even when its list is verified. Every provisional vote's page is
+read again on each run, along with a rotating sample of others, so an official correction to an older page may
+take some weeks to be noticed. A printed surname is matched to a senator by name and state; when a successor has
+the same name and state, Voteview's list of who could vote on that roll call settles which senator it was.
+
+## Bill details and the voter navigation pages
+
+- **Sponsor, official summary, latest action, short title, latest text.** Read from GovInfo's bill-status XML for
+  every measure on the site (`build_site.bill_record`), published as `data/bill_details.json`. Summaries are the
+  Congressional Research Service's own text, shown in full with the version and date they describe; CivicAlign
+  never writes or shortens one into new words. A bill with no summary says "Not available". The supervisor
+  (`site_bill_detail_checks`) re-reads each file with regular expressions and fails the run on any difference.
+- **What a Yes or No meant** on a bill page is the `meaning` of its main direct vote (fixed rules, not AI). If no
+  vote on the bill has a checked meaning, the page says so.
+- **What it would change** shows only the checked "change" facts from the legislative files (40 bills).
+- **Regions** are the Census Bureau's four statistical regions.
+- **Senator and committee ordering** uses Voteview scores (the committee midpoint is the median of its scored
+  members). Position bands on the Senators page are equal slices of the 0 to 100 display line, labelled with numbers
+  only. A position is never described as a grade, a percentage or agreement.
+- **The State vs Senator card** was removed from profiles. The comparison is still unavailable (bridge NONE), and
+  the supervisor still fails a build that publishes one.
+- **Senator photos** are official portraits in the public domain: the unitedstates/images copy of the Government
+  Publishing Office's Member Guide (225 x 275), or the Biographical Directory of the U.S. Congress when that has none
+  (and for three senators whose Member Guide copy is a wide shot). `photos.py` saves each one once in
+  `data/photos/` with its source, URL and checksum, and the site serves those files, so no photo depends on another
+  site being up. A senator with no official photo anywhere shows initials and is listed in Data checks; the
+  supervisor fails a build where a saved photo changed, is missing, or was swapped for initials.

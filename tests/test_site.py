@@ -211,8 +211,8 @@ def test_the_state_comparison_stays_unavailable(built):
         assert s["public"]["distance"]["s"] == "NOT_AVAILABLE" and s["public"]["distance"]["v"] is None
         assert s["public"]["state_on_senator_scale"]["v"] is None
         assert "p0" not in s["public"]["state_public_estimate"] and "p1" not in s["public"]["state_public_estimate"]
-    assert "<h3>State vs Senator</h3>" in TEMPLATE
-    assert 'class="big-n na">${NA}</span>' in TEMPLATE
+    # the profile carries no state comparison card at all (removed at the user's request, 2026-11-08)
+    assert "State vs Senator" not in TEMPLATE and "state_public_estimate" not in TEMPLATE
 
 
 def test_a_published_state_distance_is_caught(built):
@@ -400,3 +400,41 @@ def test_both_update_chains_build_the_site_before_the_tests():
 
 def test_the_home_page_opens_the_site():
     assert "url=civicalign.html" in (ROOT / "demo" / "index.html").read_text()
+
+
+def test_the_record_check_is_published_and_recounted(built):
+    core, extra = built["core"], json.loads(BS.build(DEFAULT)["data/supplement.json"])
+    assert core["record"]["total"] == sum(core["record"]["counts"].values())
+    assert core["record"]["counts"]["conflict"] == len(core["record"]["conflicts"])
+    assert all(v["official_record"]["status"] in ("verified", "conflict", "pending") for v in extra["votes"])
+    assert not failed(S.site_record_checks(DEFAULT, built["raw"], core, extra), "Site: Congressional Record")
+    bad = copy.deepcopy(core)
+    bad["record"]["counts"]["verified"] -= 1
+    assert failed(S.site_record_checks(DEFAULT, built["raw"], bad, extra), "Site: Congressional Record")
+    bad = copy.deepcopy(extra)
+    bad["votes"][0]["official_record"]["status"] = "conflict"
+    assert failed(S.site_record_checks(DEFAULT, built["raw"], core, bad), "Site: Congressional Record")
+
+
+def test_a_tampered_stored_list_fails_the_supervisor(built, tmp_path):
+    extra = json.loads(BS.build(DEFAULT)["data/supplement.json"])
+    source = L.root(DEFAULT)
+    rows = (source / "record_votes.jsonl").read_text().splitlines()
+    first = json.loads(rows[-1])
+    first["Yea"], first["Nay"] = first["Nay"], first["Yea"]
+    (tmp_path / "record_votes.jsonl").write_text("\n".join(rows[:-1] + [json.dumps(first)]) + "\n")
+    (tmp_path / "record_changes.jsonl").write_text((source / "record_changes.jsonl").read_text())
+    assert failed(S.site_record_checks(DEFAULT, built["raw"], built["core"], extra, store=tmp_path), "Site: Congressional Record")
+
+
+def test_a_provisional_vote_keeps_its_label_whatever_the_record_says():
+    start = TEMPLATE.index("function recordStatus")
+    body = TEMPLATE[start:TEMPLATE.index("function voteBody", start)]
+    assert body.count('<span class="chip warn">Provisional</span>') == 3
+    assert "no plain-language explanation yet" in body and "Sources differ" in body and "hasn't been found" in body
+
+
+def test_the_health_card_is_on_the_about_page():
+    assert "${healthCard()}" in TEMPLATE and "D.health" in TEMPLATE and "D.record" in TEMPLATE
+    start = TEMPLATE.index("function healthCard")
+    assert "<table" not in TEMPLATE[start:TEMPLATE.index("function vMissing", start)], "long sentences must wrap on a phone"
