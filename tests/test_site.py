@@ -285,7 +285,7 @@ def test_old_issue_rule_is_gone():
 
 def test_financial_disclosures_are_sourced_and_never_presented_as_exact_live_wealth():
     assert "<b>Estimated Net Worth</b><span>${financeWorth(s,fin)}" in TEMPLATE
-    assert "<b>Stocks Held</b><span>${financeStocks(s,fin)}" in TEMPLATE
+    assert '<b>Stocks Held</b><div class="fin-details">${financeStocks(s,fin)}' in TEMPLATE
     assert "This is not proof that no stocks are held" in TEMPLATE
     assert "efdsearch.senate.gov/search/" in TEMPLATE
     assert "No verified policy area" in TEMPLATE
