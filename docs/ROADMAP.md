@@ -8,7 +8,7 @@
 - **LIVE:** approved white/navy/rust layout, senator list/filters/sorting and links, committee-to-profile navigation and median display positions, four-tab bill details and official CRS summaries, data-health reporting and verified locally stored photos. Alan Armstrong remains an explicit initials fallback.
 - **LIVE and limited:** 128 bills have an official status record, 107 have an official CRS summary. Only **40** have provisional text-linked bill facts; **88** still lack checked plain-English explanations. This is not AI auto-generation.
 - **LIVE:** Congressional Record cross-check matched 923 Senate roll calls in the November 18 release. 26 newer Voteview roll calls still lack 50degrees plain-language explanation; show as provisional.
-- **TESTING ON BRANCH, NOT LIVE:** two-senator comparison on `feature-senator-comparison-2026-11-18`, pending its own CI run and merged deployment.
+- **LIVE:** source-linked two-senator comparison (shareable `#/compare?a=...&b=...`), released in [PR #12](https://github.com/safire684-ops/civicalign/pull/12) with [successful production run 44216596713](https://github.com/safire684-ops/civicalign/actions/runs/44216596713): **632 tests and 67 independent checks**, Pages deployment successful. This is a factual roll-call comparison, never a similarity or alignment score.
 - Superseded overlapping PRs **#6** and **#9** were closed after release #11; separate committee measure expansion **PR #2 remains open for independent review**.
 
 ## Remaining blockers / prioritized next work
