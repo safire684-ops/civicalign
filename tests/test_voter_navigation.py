@@ -307,3 +307,35 @@ def test_data_health_tracks_bill_records_summaries_and_explanations():
     assert items["bill_records"]["level"] == "ok" and "official bill-status record" in items["bill_records"]["text"]
     assert "Congressional Research Service" in items["bill_summaries"]["text"]
     assert items["bill_explanations"]["level"] == "warn" and "Explanation coming soon" in items["bill_explanations"]["text"]
+
+
+# ---- senator-to-senator comparison: source votes, never an invented alignment metric ----
+@needs_node
+def test_comparison_only_counts_shared_direct_yes_no():
+    payload = {
+        "votes": [{"id": "one"}, {"id": "two"}, {"id": "three"}, {"id": "four"}, {"id": "five"}],
+        "positions": {
+            "one": {"A": "Yea", "B": "Nay"},
+            "two": {"A": "Nay", "B": "Nay"},
+            "three": {"A": "Yea", "B": "Present"},
+            "four": {"A": "Not Voting", "B": "Yea"},
+            "five": {"A": "Yea"},
+        },
+    }
+    result = js('console.log(JSON.stringify(compareRecordedVotes(DATA.votes,DATA.positions,"A","B").map(r=>({id:r.vote.id,first:r.first,second:r.second}))))', payload)
+    assert result == [
+        {"id": "one", "first": "Yea", "second": "Nay"},
+        {"id": "two", "first": "Nay", "second": "Nay"},
+    ]
+
+
+def test_comparison_is_linked_shareable_and_contains_original_sources():
+    assert 'href="#/compare"' in TEMPLATE
+    assert 'withQuery("#/compare",{a:s.id})' in TEMPLATE
+    assert 'async function vCompare()' in SCRIPT
+    assert 'const q=query(),seated=D.senators.filter(s=>s.seated)' in SCRIPT
+    assert 'compareRecordedVotes(X.votes,X.positions,a,b)' in SCRIPT
+    assert 'ext(v.source_url,"Source roll call")' in SCRIPT
+    assert 'both senators have a recorded Yes or No vote' in SCRIPT
+    assert 'not a similarity score' in SCRIPT
+    assert 'else if(a=="compare")await vCompare()' in SCRIPT
