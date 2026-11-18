@@ -1,0 +1,74 @@
+{
+  "schema": "civicalign.senate_financials/1",
+  "source": "https://senatefiles.org",
+  "official_search": "https://efdsearch.senate.gov/search/",
+  "checked_utc": null,
+  "entries": {
+    "O000174": {
+      "year": 2025,
+      "assets": "$1.2M – $5.6M",
+      "debts": "$250K – $500K",
+      "net_worth": "$659K – $5.3M",
+      "profile_url": "https://senatefiles.org/senator/O000174",
+      "source_url": "https://efdsearch.senate.gov/search/",
+      "filed": "Aug 13, 2026",
+      "details_checked": true,
+      "holdings_source": "largest holdings shown",
+      "stock_rows_in_summary": 0,
+      "stocks": [],
+      "other_holdings": [
+        {
+          "name": "The Thomas Jonathan Ossoff Qualified Blind Trust of 2021",
+          "kind": "Trust",
+          "owner": "Self",
+          "range": "$1.0M – $5.0M"
+        },
+        {
+          "name": "FDRXX - Fidelity Government Cash Reserves in Fidelity IRA",
+          "kind": "Mutual Funds",
+          "owner": "Self",
+          "range": "$50K – $100K"
+        },
+        {
+          "name": "VFFVX - Vanguard Target Retirement 2055 Fund",
+          "kind": "Mutual Funds",
+          "owner": "Spouse",
+          "range": "$50K – $100K"
+        }
+      ]
+    },
+    "W000790": {
+      "year": 2025,
+      "assets": "$884K – $2.1M",
+      "debts": "$500K – $1.0M",
+      "net_worth": "−$116K – $1.6M",
+      "profile_url": "https://senatefiles.org/senator/W000790",
+      "source_url": "https://efdsearch.senate.gov/search/",
+      "filed": "Aug 13, 2026",
+      "details_checked": true,
+      "holdings_source": "largest holdings shown",
+      "stock_rows_in_summary": 0,
+      "stocks": [],
+      "other_holdings": [
+        {
+          "name": "Balanced Fund in MMBB - American Baptist Church Retirement Plan",
+          "kind": "Mutual Funds",
+          "owner": "Self",
+          "range": "$500K – $1.0M"
+        },
+        {
+          "name": "BlackRock Liquidity Funds FedFund in Merrill Lynch - CMA Account",
+          "kind": "Mutual Funds",
+          "owner": "Self",
+          "range": "$100K – $250K"
+        },
+        {
+          "name": "VTTHX - Vanguard Target Retirement 2035 Fund",
+          "kind": "Mutual Funds",
+          "owner": "Self",
+          "range": "$100K – $250K"
+        }
+      ]
+    }
+  }
+}
