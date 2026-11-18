@@ -1,0 +1,38 @@
+# Checks the published site once a day, separately from the daily update, so an update that
+# silently stops running still gets noticed. It reports only and never publishes anything.
+
+name: Live site check
+
+on:
+  schedule:
+    - cron: "0 23 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  check:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+
+      - name: Check the live site is up and recent
+        id: live
+        run: |
+          set +e
+          PYTHONPATH=src python -m civicalign.health --watch | tee watch.txt
+          echo "failed=${PIPESTATUS[0]}" >> "$GITHUB_OUTPUT"
+
+      - name: Open an alert if it isn't
+        if: steps.live.outputs.failed != '0'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: python scripts/data_alert.py --watch-failed "$(cat watch.txt)"

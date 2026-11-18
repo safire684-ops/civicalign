@@ -5,20 +5,27 @@
 Reuses build_pages.payload() for every Engine B number (nothing is recalculated) and joins
 the legislative drop (legislative.load) through verified ids. Writes
     demo/civicalign.html        the page, with the core data embedded
-    demo/data/*.json            the drop's files byte for byte, plus derived.json and engine_bills.json
+    demo/data/*.json            the drop's files byte for byte, plus derived.json, engine_bills.json and
+                                bill_details.json (each bill's sponsor, official summary and latest action)
+    demo/photos/*.jpg           official senator photos, byte for byte from data/photos (photos.py)
 A failed join stops the build. The senator-to-state comparison stays unavailable while the
 bridge is NONE, and survey estimates never receive a display position.
 """
 import argparse
 import csv
+import html.parser
 import json
+import re
 import sys
 import xml.etree.ElementTree as ET
 import zipfile
 from pathlib import Path
 
 from . import build_pages as BP
+from . import health as H
 from . import legislative as L
+from . import photos as PH
+from . import record_votes as RV
 from .config import DEFAULT, Config
 from .ideology import bills as BL
 from .ideology import display as DS
@@ -31,30 +38,132 @@ PAGE = "civicalign.html"
 COPIED = ("votes.json", "positions.json", "bills.json", "committee_votes.json", "nominations.json")
 PARTY = {"Democrat": "D", "Republican": "R", "Independent": "I"}
 LETTER = {v: k for k, v in PARTY.items()}
-ARCHIVES = {"s": "billflow_zip", "hr": "billflow_house_zip", "sjres": "billstatus_sjres_zip", "hjres": "billstatus_hjres_zip"}
+ARCHIVES = {"s": "billflow_zip", "hr": "billflow_house_zip", "sjres": "billstatus_sjres_zip", "hjres": "billstatus_hjres_zip",
+            "sres": "billstatus_sres_zip", "sconres": "billstatus_sconres_zip", "hconres": "billstatus_hconres_zip"}
+# The Census Bureau's four statistical regions (census.gov/geographies/reference-maps, "Census Regions and Divisions").
+REGIONS = {"Northeast": "CT ME MA NH RI VT NJ NY PA", "Midwest": "IL IN MI OH WI IA KS MN MO NE ND SD",
+           "South": "DE DC FL GA MD NC SC VA WV AL KY MS TN AR LA OK TX", "West": "AZ CO ID MT NV NM UT WY AK CA HI OR WA"}
+ARCHIVE_SOURCES = ("bill flow", "bill flow (House bills)", "joint resolutions (Senate)", "joint resolutions (House)",
+                   "simple resolutions (Senate)", "concurrent resolutions (Senate)", "concurrent resolutions (House)")
+REGION = {st: r for r, sts in REGIONS.items() for st in sts.split()}
+PARTY_WORD = {"D": "Democrat", "R": "Republican", "I": "Independent", "ID": "Independent", "L": "Libertarian"}
 
 
 def _dump(data) -> str:
     return json.dumps(data, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
 
 
+def archives(cfg: Config) -> dict[str, zipfile.ZipFile]:
+    """The bill-status archives the snapshot verified. A resolution archive that wasn't fetched is left
+    out (its bills show "Not available"); one on disk that differs from the snapshot stops the build."""
+    snap = I.snapshot(cfg)
+    names = {s.get("file") for s in snap["sources"]}
+    out = {}
+    for kind, attr in ARCHIVES.items():
+        path = getattr(cfg, attr)
+        if kind in ("sres", "sconres", "hconres") and path.name not in names:
+            continue
+        I.source_entry(cfg, snap, path.name)        # refuses a file that is not the verified one
+        out[kind] = zipfile.ZipFile(path)
+    return out
+
+
 def policy_areas(cfg: Config, bills: list[dict]) -> dict[str, str | None]:
     """Each bill's official policy area, from the bill-status archives the snapshot verified.
     Measure types with no archive in the snapshot (and bills with no area yet) are None."""
-    snap = I.snapshot(cfg)
-    archives = {}
-    for kind, attr in ARCHIVES.items():
-        path = getattr(cfg, attr)
-        I.source_entry(cfg, snap, path.name)        # refuses a file that is not the verified one
-        archives[kind] = zipfile.ZipFile(path)
+    archives_ = archives(cfg)
     out = {}
     for b in bills:
-        z, member = archives.get(b["type"]), f"BILLSTATUS-{cfg.congress}{b['type']}{b['number']}.xml"
+        z, member = archives_.get(b["type"]), f"BILLSTATUS-{cfg.congress}{b['type']}{b['number']}.xml"
         area = None
         if z is not None and member in z.namelist():
             node = ET.fromstring(z.read(member)).find("bill")
             area = (node.findtext("policyArea/name") or "").strip() or None if node is not None else None
         out[b["id"]] = area
+    return out
+
+
+class _Paragraphs(html.parser.HTMLParser):
+    """An official summary's HTML as plain paragraphs: one per <p> or <li>, tags dropped, text kept."""
+    BLOCKS = {"p", "li", "h1", "h2", "h3", "h4", "div", "br"}
+
+    def __init__(self):
+        super().__init__(convert_charrefs=True)
+        self.out, self.buf = [], []
+
+    def _flush(self):
+        text = re.sub(r"\s+", " ", "".join(self.buf)).strip()
+        if text:
+            self.out.append(text)
+        self.buf = []
+
+    def handle_starttag(self, tag, attrs):
+        if tag in self.BLOCKS:
+            self._flush()
+
+    def handle_endtag(self, tag):
+        if tag in self.BLOCKS:
+            self._flush()
+
+    def handle_data(self, data):
+        self.buf.append(data)
+
+    def close(self):
+        super().close()
+        self._flush()
+
+
+def paragraphs(markup: str) -> list[str]:
+    p = _Paragraphs()
+    p.feed(markup or "")
+    p.close()
+    return p.out
+
+
+def bill_record(xml: bytes) -> dict:
+    """What the official bill-status record says about one bill: sponsor, latest official summary,
+    latest action, introduced date and latest text. Nothing is rewritten or inferred."""
+    node = ET.fromstring(xml).find("bill")
+    t = lambda e, tag: (e.findtext(tag) or "").strip() if e is not None else ""
+    sp = node.find("sponsors/item")
+    sponsor = None
+    if sp is not None:
+        party = t(sp, "party")
+        sponsor = {"id": t(sp, "bioguideId"), "name": " ".join(x for x in (t(sp, "firstName"), t(sp, "middleName"), t(sp, "lastName")) if x),
+                   "full": t(sp, "fullName"), "party": party, "party_name": PARTY_WORD.get(party), "state": t(sp, "state")}
+    summaries = node.findall("summaries/summary")
+    summary = None
+    if summaries:
+        s = max(summaries, key=lambda x: (t(x, "actionDate"), t(x, "updateDate"), t(x, "versionCode")))
+        summary = {"version": t(s, "versionCode"), "action": t(s, "actionDesc"), "date": t(s, "actionDate")[:10],
+                   "updated": t(s, "updateDate")[:10],
+                   "paragraphs": paragraphs(s.findtext("text") or s.findtext("cdata/text") or ""), "count": len(summaries)}   # some records nest the text in <cdata>
+    la = node.find("latestAction")
+    texts = [it for it in node.findall("textVersions/item")]
+    latest_text = None
+    if texts:
+        it = max(texts, key=lambda x: t(x, "date"))
+        urls = [t(f, "url") for f in it.findall("formats/item") if t(f, "url")]
+        url = next((u for ext in (".htm", ".pdf") for u in urls if u.endswith(ext)), urls[0] if urls else None)   # readable formats first
+        latest_text = {"name": t(it, "type"), "date": t(it, "date")[:10], "url": url}
+    return {"sponsor": sponsor, "summary": summary, "introduced": t(node, "introducedDate")[:10] or None,
+            "latest_action": {"date": t(la, "actionDate")[:10], "text": t(la, "text")} if la is not None and t(la, "text") else None,
+            "text": latest_text, "title": t(node, "title"),
+            "short_title": next((t(i, "title") for i in node.findall("titles/item") if "Short Title" in t(i, "titleType") and t(i, "title")), None)}
+
+
+def bill_details(cfg: Config, bills: list[dict]) -> dict[str, dict]:
+    """Each bill's official record (bill_record), or None where its archive or file isn't available."""
+    zs = archives(cfg)
+    out = {}
+    for b in bills:
+        z, member = zs.get(b["type"]), f"BILLSTATUS-{cfg.congress}{b['type']}{b['number']}.xml"
+        if z is None or member not in z.namelist():
+            out[b["id"]] = None
+            continue
+        rec = bill_record(z.read(member))
+        rec["source"] = f"https://www.govinfo.gov/bulkdata/BILLSTATUS/{cfg.congress}/{b['type']}/{member}"
+        out[b["id"]] = rec
     return out
 
 
@@ -86,18 +195,41 @@ def data_dates(cfg: Config, drop: dict, meta: dict) -> dict:
     floor, committee = max(v["date"] for v in drop["votes"]), max(c["date"] for c in drop["committee_votes"])
     senate = json.loads((cfg.explain_raw_dir / "senate" / "PROVENANCE.json").read_text())
     pulled = max(r["checked_utc"] for r in senate["records"].values())
+    record = RV.compare(cfg)
+    sync = json.loads(RV.status_path(cfg).read_text()) if RV.status_path(cfg).exists() else {}
+    record_checked = sync["checked_utc"] if sync.get("state") == "ok" else max((r["retrieved_utc"] for r in RV.read_jsonl(RV.store_path(cfg))), default=today)
     rows = [snapped("Senator positions", ["senator scores"], f"Votes through {last_roll}"),
             snapped("Voteview roll-call list", ["floor roll calls", "senator votes"], f"Votes through {last_roll}"),
             snapped("Who is seated", ["seated senators"], "Current roster"),
             snapped("Committee membership", ["committee rosters", "committee names"], "Current committees"),
             snapped("Senate bills, passage and law, policy areas", ["bill flow", "bill flow (House bills)", "joint resolutions (Senate)", "joint resolutions (House)"], "Official bill-status files"),
+            snapped("Bill sponsors, official summaries and status", [n for n in ARCHIVE_SOURCES if n in sources], "Official bill-status files",
+                    "Summaries are written by the Congressional Research Service at the Library of Congress."),
             snapped("State survey estimates", ["state ideology"], f"Survey wave {meta['aip_wave']}", "Shown on their own scale only."),
             snapped("State populations", ["state populations"], f"Census {meta['population'].split(',')[0]}"),
             row("Floor votes, senator votes, bills and nominations", made, made, f"Votes through {floor}"),
             snapped("Newer floor votes, provisional", ["floor roll calls"], f"Votes through {last_roll}", "From Voteview, because the files above don't have them yet. Question, result and counts only."),
             row("Committee votes", made, made, f"Votes through {committee}"),
+            row("Official vote lists (Congressional Record)", record_checked, record_checked, f"{record['counts']['verified']} of {len(record['votes'])} roll calls match", "The Senate's printed list of how each senator voted, read from GovInfo."),
             row("Official Senate vote records (used for cross-checks)", pulled, pulled, f"{len(senate['records'])} passage votes", senate["note"])]
     return {"snapshot": today, "floor_through": floor, "rows": rows}
+
+
+def with_record(extra: dict, cfg: Config) -> dict:
+    """Each provisional vote with what the Congressional Record says about it."""
+    votes = RV.compare(cfg)["votes"]
+    for v in extra["votes"]:
+        c = votes.get(v["id"], {"status": "pending"})
+        v["official_record"] = {"status": c["status"], "url": c.get("url"), "issue": c.get("issue"), "changes": c.get("changes", [])}
+    return extra
+
+
+def record_summary(cfg: Config) -> dict:
+    c = RV.compare(cfg)
+    return {"counts": c["counts"], "total": len(c["votes"]),
+            "conflicts": sorted(k for k, v in c["votes"].items() if v["status"] == "conflict"),
+            "pending": sorted(k for k, v in c["votes"].items() if v["status"] == "pending"),
+            "changes": sorted(k for k, v in c["votes"].items() if v.get("changes"))}
 
 
 def bill_status(bill: dict, votes: dict[str, dict], outcomes: dict[str, dict]) -> dict:
@@ -121,7 +253,7 @@ def assemble(cfg: Config = DEFAULT) -> tuple[dict, dict, dict]:
     if bad:
         raise BP.BuildError("the legislative data does not join: " + "; ".join(bad[:5]))
 
-    extra = L.supplement(drop, cfg)
+    extra = with_record(L.supplement(drop, cfg), cfg)
     all_votes = drop["votes"] + extra["votes"]
 
     # ---- senators: identity and terms from the drop, positions from Engine B ----
@@ -149,7 +281,7 @@ def assemble(cfg: Config = DEFAULT) -> tuple[dict, dict, dict]:
         senators.append({
             "id": s["id"], "name": e["name"] if e else s["name"], "last": s["last_name"], "party": e["party"] if e else PARTY.get(s["party"], s["party"]),
             "party_name": LETTER.get(e["party"], e["party"]) if e else s["party"], "caucus": s["caucus"], "state": s["state"], "state_name": BP.STATE_NAMES.get(s["state"], s["state"]),
-            "seated": bool(e), "since": min((t["start"] for t in s["terms"]), default=None), "term_end": max((t["end"] for t in s["terms"]), default=None),
+            "region": REGION.get(s["state"]), "seated": bool(e), "since": min((t["start"] for t in s["terms"]), default=None), "term_end": max((t["end"] for t in s["terms"]), default=None),
             "side": DS.side_label(v), "position": pos, "committees": sorted(on.get(s["id"], []), key=lambda c: c["name"]), "tally": tally[s["id"]],
             "public": {k: e[k] for k in ("state_public_estimate", "state_on_senator_scale", "distance")} if e else None})
     senators.sort(key=lambda x: (x["last"], x["name"]))
@@ -187,7 +319,12 @@ def assemble(cfg: Config = DEFAULT) -> tuple[dict, dict, dict]:
         "rules": d["display_rules"] + [{"id": L.EVIDENCE_RULE, "label": "Issue Positions: which votes are shown", "rule": L.EVIDENCE_TEXT, "limits": []},
                                        {"id": L.PARTY_RULE, "label": "Votes where party majorities were opposed", "rule": L.PARTY_TEXT, "limits": []}],
         "dates": data_dates(cfg, drop, d["meta"]), "reconcile": L.reconcile(drop, cfg),
+        "record": record_summary(cfg), "health": H.report(cfg),
+        "photos": {"sources": PH.read_manifest(cfg).get("sources", []), "unavailable": sorted(PH.read_manifest(cfg)["unavailable"])},
     }
+    pics = PH.read_manifest(cfg)["photos"]
+    for s in senators:
+        s["photo"] = f"photos/{s['id']}.jpg" if s["id"] in pics else None
 
     # ---- derived: only what the verified inputs determine ----
     votes = {v["id"]: v for v in all_votes}
@@ -215,7 +352,13 @@ def build(cfg: Config = DEFAULT) -> dict[str, bytes]:
         raise BP.BuildError("site template must contain <!--DATA--> exactly once")
     embedded = f'<script id="data" type="application/json">{_dump(core).replace("</", "<" + chr(92) + "/")}</script>'
     pages = {PAGE: template.replace("<!--DATA-->", embedded).encode(),
-             "data/derived.json": _dump(derived).encode(), "data/engine_bills.json": _dump(engine_bills).encode(), "data/supplement.json": _dump(L.supplement(L.load(cfg), cfg)).encode()}
+             "data/derived.json": _dump(derived).encode(), "data/engine_bills.json": _dump(engine_bills).encode(),
+             "data/bill_details.json": _dump(bill_details(cfg, L.load(cfg)["bills"])).encode(), "data/supplement.json": _dump(with_record(L.supplement(L.load(cfg), cfg), cfg)).encode()}
+    bad = PH.verify(cfg)
+    if bad:
+        raise BP.BuildError("senator photos don't match their records: " + "; ".join(bad[:5]))
+    for pid in PH.read_manifest(cfg)["photos"]:
+        pages[f"photos/{pid}.jpg"] = (PH.home(cfg) / f"{pid}.jpg").read_bytes()
     d = L.latest_dir(cfg)
     for name in COPIED:
         pages[f"data/{name}"] = (d / name).read_bytes()
