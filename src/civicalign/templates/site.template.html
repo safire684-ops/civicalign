@@ -348,58 +348,6 @@ function issues(h,s,mine,X){const areas={},noms=[];const took=v=>["Yea","Nay"].i
   <details class="issue" data-lazy="${later(()=>`<div class="in">${evList(conf,X,s)}${lazyList("Other votes on nominations, and votes not cast",nomOther,X,s)}</div>`)}"><summary><h3>Confirmation votes</h3><span class="small muted nowrap">${conf.length} ${conf.length==1?"vote":"votes"} <span class="chev" style="display:inline-block;margin-left:8px"></span></span></summary><div class="fill"></div></details>`}
 
 
-/* ---- Compare two senators using actual recorded roll calls, not a synthetic score ---- */
-async function vCompare(){
-  const q=query(),seated=D.senators.filter(s=>s.seated);
-  const valid=id=>seated.some(s=>s.id===id)?id:"";
-  const a=valid(q.a),b=valid(q.b);
-  $("#app").innerHTML=`<h1 class="page-title">Compare two senators</h1><p class="sub">Compare voting positions, committee memberships and recorded roll calls side by side. This does not rate either senator or compare them with voters in their states.</p>
-  <div class="grid2 even"><div class="card"><div class="eyebrow">First senator</div><div id="ca" style="margin-top:10px"></div></div><div class="card"><div class="eyebrow">Second senator</div><div id="cb" style="margin-top:10px"></div></div></div>
-  <div id="cr-results"><div class="card"><p class="muted">Select two different senators to compare their voting records.</p></div></div>
-  ${dataNote([POSN,LEG])}`;
-  const items=senItems().filter(i=>SEN[i.id].seated);
-  const picker=(id,other,slot,key)=>combo($(slot),{placeholder:"Search by name or state",label:key==="a"?"First senator":"Second senator",items,
-    value:id?`${SEN[id].name} (${SEN[id].party} - ${SEN[id].state})`:"",
-    pick:i=>go(withQuery("#/compare",key==="a"?{a:i.id,b:other}:{a:other,b:i.id}))});
-  picker(a,b,"#ca","a");picker(b,a,"#cb","b");
-  if(!a||!b)return;
-  const h=$("#cr-results");
-  if(a===b){h.innerHTML=`<div class="card"><p>Select two different senators. <a href="#/senators/${esc(a)}">Open the senator's profile</a></p></div>`;return}
-  const X=await index();
-  if(route()[0]!=="compare"||query().a!==a||query().b!==b)return;
-  const both=compareRecordedVotes(X.votes,X.positions,a,b),opposite=both.filter(r=>r.first!==r.second),same=both.filter(r=>r.first===r.second);
-  const person=id=>{const s=SEN[id];return`<div class="card"><div style="display:flex;align-items:center;gap:14px">${photo(s)}<div><h2 class="sec" style="margin:0">${esc(s.name)} ${badge(s,true)}</h2><span class="muted small">${esc(s.state_name)}</span></div></div>
-    <p style="margin-bottom:5px"><b>Voting position:</b> ${s.position?esc(s.position.p1):NA} ${s.position?"on Voteview's 0–100 display line":""}</p>
-    ${s.position?line(s.position.p1,[D.senate.median.p1]):""}${s.position?scaleEnds:""}
-    <p class="small muted">Position is descriptive, not a percentage, grade or issue score. The tick marks the Senate midpoint.</p>
-    <p><b>Committees:</b> ${s.committees.length}</p>
-    <p class="small">${s.committees.map(c=>`<a href="#/committees/${esc(c.code)}">${esc(c.name)}</a>`).join("; ")||"No standing committee membership recorded"}</p>
-    <p style="margin-bottom:0"><a href="#/senators/${esc(id)}">Full senator profile →</a></p></div>`};
-  h.innerHTML=`<div class="grid2 even">${person(a)}${person(b)}</div>
-    <div class="card"><h2 class="sec">Voting record comparison</h2>
-    <p>On <b>${both.length}</b> roll calls where both senators have a recorded Yes or No vote, they voted on <b>opposite sides in ${opposite.length}</b> and cast the <b>same Yes/No vote in ${same.length}</b>.</p>
-    <p class="small muted">Present, Not Voting and votes missing for either person are excluded. These are vote counts, not a similarity score. Procedural motions, nominations and policy bills are all included; a disagreement does not by itself establish a difference on an issue.</p>
-    <div class="ctl" style="margin:16px 0"><select id="cr-mode" aria-label="Filter shared roll calls"><option value="opposite">Opposite Yes/No votes</option><option value="same">Same Yes/No votes</option></select></div>
-    <div class="small muted" id="cr-count" aria-live="polite"></div><div id="cr-list"></div><button type="button" class="more" id="cr-more">Show more</button>
-    <p class="small muted" style="margin-bottom:0">Data: ${ext("https://voteview.com","Voteview")} voting positions and source-linked roll calls. Last updated ${fmtDate(D.dates.snapshot)}. <a href="#/about/read">How to read these records</a>.</p></div>`;
-  let mode="opposite",n=25;
-  const draw=()=>{
-    const selected=mode==="opposite"?opposite:same;
-    $("#cr-count").textContent=`Showing ${Math.min(n,selected.length)} of ${selected.length} roll calls`;
-    $("#cr-list").innerHTML=selected.slice(0,n).map(r=>{const v=r.vote,m=measure(v,X);
-      return`<div class="ivote" style="display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap">
-      <div style="flex:1;min-width:220px"><a href="#/vote/${esc(v.id)}"><b>${esc(m.label)}</b></a> <span class="small muted">${fmtDate(v.date)}</span>
-      <div class="small">${esc(v.title||v.question||"")}</div>
-      <div class="small muted">${v.provisional?'<span class="chip warn">Provisional</span> ':""}${ext(v.source_url,"Source roll call")}</div></div>
-      <div style="display:flex;gap:12px;align-items:center"><div><div class="small muted">${esc(SEN[a].last)}</div>${pill(r.first)}</div>
-      <div><div class="small muted">${esc(SEN[b].last)}</div>${pill(r.second)}</div></div></div>`}).join("")||'<p class="muted">No roll calls in this category.</p>';
-    $("#cr-more").style.display=n<selected.length?"":"none";
-  };
-  $("#cr-mode").onchange=e=>{mode=e.target.value;n=25;draw()};
-  $("#cr-more").onclick=()=>{n+=25;draw()};
-  draw();
-}
-
 /* ---- Bills ---- */
 const billState={q:"",sort:"recent",show:"all",tier:"",area:"",sid:"",n:30};
 const TIERS=["Landmark","Major","Notable","Routine"];
@@ -618,6 +566,58 @@ function vMissing(t){$("#app").innerHTML=`<div class="card"><h1 class="page-titl
   const pick=i=>{const r=res[i];if(r){inp.value="";close();go(r.h)}};
   inp.addEventListener("input",show);inp.addEventListener("blur",()=>setTimeout(close,120));
   inp.addEventListener("keydown",e=>{if(!pop)return;const bs=$$("button",pop);if(e.key=="ArrowDown"||e.key=="ArrowUp"){e.preventDefault();act=Math.max(0,Math.min(bs.length-1,act+(e.key=="ArrowDown"?1:-1)));bs.forEach((b,i)=>b.classList.toggle("act",i==act))}else if(e.key=="Enter"){e.preventDefault();pick(act)}else if(e.key=="Escape")close()})})();
+
+/* ---- Compare two senators using actual recorded roll calls, not a synthetic score ---- */
+async function vCompare(){
+  const q=query(),seated=D.senators.filter(s=>s.seated);
+  const valid=id=>seated.some(s=>s.id===id)?id:"";
+  const a=valid(q.a),b=valid(q.b);
+  $("#app").innerHTML=`<h1 class="page-title">Compare two senators</h1><p class="sub">Compare voting positions, committee memberships and recorded roll calls side by side. This does not rate either senator or compare them with voters in their states.</p>
+  <div class="grid2 even"><div class="card"><div class="eyebrow">First senator</div><div id="ca" style="margin-top:10px"></div></div><div class="card"><div class="eyebrow">Second senator</div><div id="cb" style="margin-top:10px"></div></div></div>
+  <div id="cr-results"><div class="card"><p class="muted">Select two different senators to compare their voting records.</p></div></div>
+  ${dataNote([POSN,LEG])}`;
+  const items=senItems().filter(i=>SEN[i.id].seated);
+  const picker=(id,other,slot,key)=>combo($(slot),{placeholder:"Search by name or state",label:key==="a"?"First senator":"Second senator",items,
+    value:id?`${SEN[id].name} (${SEN[id].party} - ${SEN[id].state})`:"",
+    pick:i=>go(withQuery("#/compare",key==="a"?{a:i.id,b:other}:{a:other,b:i.id}))});
+  picker(a,b,"#ca","a");picker(b,a,"#cb","b");
+  if(!a||!b)return;
+  const h=$("#cr-results");
+  if(a===b){h.innerHTML=`<div class="card"><p>Select two different senators. <a href="#/senators/${esc(a)}">Open the senator's profile</a></p></div>`;return}
+  const X=await index();
+  if(route()[0]!=="compare"||query().a!==a||query().b!==b)return;
+  const both=compareRecordedVotes(X.votes,X.positions,a,b),opposite=both.filter(r=>r.first!==r.second),same=both.filter(r=>r.first===r.second);
+  const person=id=>{const s=SEN[id];return`<div class="card"><div style="display:flex;align-items:center;gap:14px">${photo(s)}<div><h2 class="sec" style="margin:0">${esc(s.name)} ${badge(s,true)}</h2><span class="muted small">${esc(s.state_name)}</span></div></div>
+    <p style="margin-bottom:5px"><b>Voting position:</b> ${s.position?esc(s.position.p1):NA} ${s.position?"on Voteview's 0–100 display line":""}</p>
+    ${s.position?line(s.position.p1,[D.senate.median.p1]):""}${s.position?scaleEnds:""}
+    <p class="small muted">Position is descriptive, not a percentage, grade or issue score. The tick marks the Senate midpoint.</p>
+    <p><b>Committees:</b> ${s.committees.length}</p>
+    <p class="small">${s.committees.map(c=>`<a href="#/committees/${esc(c.code)}">${esc(c.name)}</a>`).join("; ")||"No standing committee membership recorded"}</p>
+    <p style="margin-bottom:0"><a href="#/senators/${esc(id)}">Full senator profile →</a></p></div>`};
+  h.innerHTML=`<div class="grid2 even">${person(a)}${person(b)}</div>
+    <div class="card"><h2 class="sec">Voting record comparison</h2>
+    <p>On <b>${both.length}</b> roll calls where both senators have a recorded Yes or No vote, they voted on <b>opposite sides in ${opposite.length}</b> and cast the <b>same Yes/No vote in ${same.length}</b>.</p>
+    <p class="small muted">Present, Not Voting and votes missing for either person are excluded. These are vote counts, not a similarity score. Procedural motions, nominations and policy bills are all included; a disagreement does not by itself establish a difference on an issue.</p>
+    <div class="ctl" style="margin:16px 0"><select id="cr-mode" aria-label="Filter shared roll calls"><option value="opposite">Opposite Yes/No votes</option><option value="same">Same Yes/No votes</option></select></div>
+    <div class="small muted" id="cr-count" aria-live="polite"></div><div id="cr-list"></div><button type="button" class="more" id="cr-more">Show more</button>
+    <p class="small muted" style="margin-bottom:0">Data: ${ext("https://voteview.com","Voteview")} voting positions and source-linked roll calls. Last updated ${fmtDate(D.dates.snapshot)}. <a href="#/about/read">How to read these records</a>.</p></div>`;
+  let mode="opposite",n=25;
+  const draw=()=>{
+    const selected=mode==="opposite"?opposite:same;
+    $("#cr-count").textContent=`Showing ${Math.min(n,selected.length)} of ${selected.length} roll calls`;
+    $("#cr-list").innerHTML=selected.slice(0,n).map(r=>{const v=r.vote,m=measure(v,X);
+      return`<div class="ivote" style="display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap">
+      <div style="flex:1;min-width:220px"><a href="#/vote/${esc(v.id)}"><b>${esc(m.label)}</b></a> <span class="small muted">${fmtDate(v.date)}</span>
+      <div class="small">${esc(v.title||v.question||"")}</div>
+      <div class="small muted">${v.provisional?'<span class="chip warn">Provisional</span> ':""}${ext(v.source_url,"Source roll call")}</div></div>
+      <div style="display:flex;gap:12px;align-items:center"><div><div class="small muted">${esc(SEN[a].last)}</div>${pill(r.first)}</div>
+      <div><div class="small muted">${esc(SEN[b].last)}</div>${pill(r.second)}</div></div></div>`}).join("")||'<p class="muted">No roll calls in this category.</p>';
+    $("#cr-more").style.display=n<selected.length?"":"none";
+  };
+  $("#cr-mode").onchange=e=>{mode=e.target.value;n=25;draw()};
+  $("#cr-more").onclick=()=>{n+=25;draw()};
+  draw();
+}
 
 /* ---- routes ---- */
 function route(){return location.hash.replace(/^#\/?/,"").split("?")[0].split("/").filter(Boolean)}
