@@ -283,9 +283,11 @@ def test_old_issue_rule_is_gone():
     assert not hasattr(L, "vote_division") and not hasattr(S, "site_division")
 
 
-def test_missing_data_says_so():
-    for phrase in ["Estimated Net Worth", "Stocks Held"]:
-        assert re.search(phrase + r"</b><span>\$\{NA\}", TEMPLATE), phrase
+def test_financial_disclosures_are_sourced_and_never_presented_as_exact_live_wealth():
+    assert "<b>Estimated Net Worth</b><span>${financeWorth(s,fin)}" in TEMPLATE
+    assert "<b>Stocks Held</b><span>${financeStocks(s,fin)}" in TEMPLATE
+    assert "This is not proof that no stocks are held" in TEMPLATE
+    assert "efdsearch.senate.gov/search/" in TEMPLATE
     assert "No verified policy area" in TEMPLATE
     assert "Explanation coming soon" in TEMPLATE
     assert "how each member voted isn't in this data" in TEMPLATE
@@ -339,6 +341,7 @@ def test_the_drop_files_are_still_published_unchanged():
     pages = BS.build(DEFAULT)
     d = L.latest_dir(DEFAULT)
     assert pages["data/votes.json"] == (d / "votes.json").read_bytes() and pages["data/positions.json"] == (d / "positions.json").read_bytes()
+    assert json.loads(pages["data/financials.json"])["schema"] == "civicalign.senate_financials/1"
 
 
 def test_the_three_differences_are_documented_from_the_congressional_record(built):
