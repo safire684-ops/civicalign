@@ -1257,6 +1257,37 @@ def site_record_checks(cfg: Config, raw: dict, core: dict, extra: dict, store: P
     return out
 
 
+def site_financial_checks(cfg: Config, pages: dict) -> list[Check]:
+    """Separately confirm that published ranges and holdings equal the saved attributed source snapshot."""
+    path = cfg.ideology_dir.parent / "financials" / "senate.json"
+    try:
+        saved = json.loads(path.read_text())
+        published = json.loads(pages["data/financials.json"])
+        rows = saved["entries"]
+        bad = []
+        for sid, r in rows.items():
+            if not re.fullmatch(r"[A-Z][0-9]{6}", sid):
+                bad.append(sid)
+                continue
+            if (r.get("profile_url") != f"https://senatefiles.org/senator/{sid}"
+                or r.get("source_url") != "https://efdsearch.senate.gov/search/"
+                or not isinstance(r.get("year"), int) or r["year"] < 2012
+                or not isinstance(r.get("net_worth"), str)
+                or "$" not in r["net_worth"] or len(r["net_worth"]) > 80):
+                bad.append(sid)
+            for holding in r.get("stocks", []) + r.get("other_holdings", []):
+                if not all(isinstance(holding.get(k), str) and holding.get(k) for k in ("name", "kind", "owner", "range")):
+                    bad.append(sid)
+        ok = (saved.get("schema") == "civicalign.senate_financials/1"
+              and saved == published and not bad
+              and 'financeWorth(s,fin)' in pages["civicalign.html"].decode()
+              and 'financeStocks(s,fin)' in pages["civicalign.html"].decode())
+        return [Check("Site: financial disclosures sourced and published unchanged", ok,
+                      f"incorrect {bad[:5]}" if bad else f"{len(rows)} disclosed profiles")]
+    except (ValueError, KeyError, TypeError, OSError) as e:
+        return [Check("Site: financial disclosures sourced and published unchanged", False, str(e)[:180])]
+
+
 def site_checks(cfg: Config = DEFAULT, page_dir: Path | None = None) -> list[Check]:
     from .. import build_site as BS
     from .. import legislative as L
@@ -1278,6 +1309,7 @@ def site_checks(cfg: Config = DEFAULT, page_dir: Path | None = None) -> list[Che
     out += site_supplement_checks(cfg, raw, drop, extra, derived) + site_difference_checks(core, notes)
     out += site_bill_detail_checks(cfg, drop, json.loads(pages["data/bill_details.json"]))
     out += site_photo_checks(cfg, core, pages)
+    out += site_financial_checks(cfg, pages)
     out += site_core_checks(cfg, raw, core, BR.active(cfg)["status"]) + site_page_checks(drop, page) + site_reconcile_checks(cfg, raw, drop, core) + site_record_checks(cfg, raw, core, extra)
     where = page_dir if page_dir is not None else DEMO
     if page_dir is None or (where / BS.PAGE).exists():
