@@ -49,7 +49,7 @@ name: Daily update
 
 on:
   push:
-    branches: ["release-voter-navigation-2026-11-17", "main"]
+    branches: ["main", "feature-*", "fix-*", "release-*"]
     paths:
       - "src/**"
       - "scripts/**"
