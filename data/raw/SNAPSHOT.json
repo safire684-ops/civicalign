@@ -1,5 +1,5 @@
 {
- "run_utc": "2026-11-19T15:21:48Z",
+ "run_utc": "2026-11-19T19:25:59Z",
  "accepted": true,
  "sources": [
   {
@@ -9,12 +9,12 @@
    "critical": true,
    "vintage": "current Congress; Voteview revises scores as new votes are cast",
    "bytes": 6201643,
-   "previous_bytes": 6201586,
+   "previous_bytes": 6201643,
    "sha256": "4c21a30d45c1d8c6253a89141c86a2ea92c0c304261f5823d315fd9392d6a342",
    "content_key": "4c21a30d45c1d8c6253a89141c86a2ea92c0c304261f5823d315fd9392d6a342",
-   "changed": true,
+   "changed": false,
    "content_changed_utc": "2026-11-19T15:21:48Z",
-   "checked_utc": "2026-11-19T15:21:48Z"
+   "checked_utc": "2026-11-19T19:25:59Z"
   },
   {
    "name": "seated senators",
@@ -28,7 +28,7 @@
    "content_key": "ae8cb9477c48715df71a7d860854229d799dc90a254d61badc1efb770f892b2c",
    "changed": false,
    "content_changed_utc": "2026-09-24T13:40:44Z",
-   "checked_utc": "2026-11-19T15:21:48Z"
+   "checked_utc": "2026-11-19T19:25:59Z"
   },
   {
    "name": "committee rosters",
@@ -42,7 +42,7 @@
    "content_key": "b478738edf3b3b13bfa4057a1e04e8ea1f53d4e1f7adaf8f446db20102c22b2c",
    "changed": false,
    "content_changed_utc": "2026-09-23T13:05:55Z",
-   "checked_utc": "2026-11-19T15:21:48Z"
+   "checked_utc": "2026-11-19T19:25:59Z"
   },
   {
    "name": "committee names",
@@ -56,7 +56,7 @@
    "content_key": "640ab5c262dd47b462f3a781d07dc417db8606a324f3b0a5422e7629c38e34ec",
    "changed": false,
    "content_changed_utc": "2026-09-26T00:30:06Z",
-   "checked_utc": "2026-11-19T15:21:48Z"
+   "checked_utc": "2026-11-19T19:25:59Z"
   },
   {
    "name": "bill flow",
@@ -64,13 +64,13 @@
    "file": "BILLSTATUS-119-s.zip",
    "critical": true,
    "vintage": "current Congress; GovInfo republishes daily",
-   "bytes": 13719611,
-   "previous_bytes": 13657053,
-   "sha256": "75dc0eed3aaeadc9186f0c50ff9c09f6174ba186588953345694e2735a53e6fa",
-   "content_key": "1403a907d3ed9971c839b90f061900519f9a3a9fa63b0a2d0f0d3ae241c0b0cc",
+   "bytes": 13722615,
+   "previous_bytes": 13719611,
+   "sha256": "8ea7c96256341059a67aa5191e017087863370ff5e04adabff38437e6717813b",
+   "content_key": "6aea8b1175389c326356b132caaee928a964747cafeb91d99e21de072d45fc1e",
    "changed": true,
-   "content_changed_utc": "2026-11-19T15:21:48Z",
-   "checked_utc": "2026-11-19T15:21:48Z"
+   "content_changed_utc": "2026-11-19T19:25:59Z",
+   "checked_utc": "2026-11-19T19:25:59Z"
   },
   {
    "name": "bill flow (House bills)",
@@ -78,13 +78,13 @@
    "file": "BILLSTATUS-119-hr.zip",
    "critical": true,
    "vintage": "current Congress; GovInfo republishes daily",
-   "bytes": 33576114,
-   "previous_bytes": 33516293,
-   "sha256": "35967c253ad8d360419cbb9dc5cd2d396826a69ebbf989a471d29b86269125fb",
-   "content_key": "c4e232e5a82b2777fa0dcd5848978da004b3050ff16bdbcf1e8fdb44b737e65b",
+   "bytes": 33583439,
+   "previous_bytes": 33576114,
+   "sha256": "61b5168948d1ddc93cd45d3f3dc26782e35832e81c560b22d6a445b9633eec5e",
+   "content_key": "a404d999dc0935bd00ff8cf680d2e06f21fb7c72b73ce891c2cea864a9c5364e",
    "changed": true,
-   "content_changed_utc": "2026-11-19T15:21:48Z",
-   "checked_utc": "2026-11-19T15:21:48Z"
+   "content_changed_utc": "2026-11-19T19:25:59Z",
+   "checked_utc": "2026-11-19T19:25:59Z"
   },
   {
    "name": "floor roll calls",
@@ -93,12 +93,12 @@
    "critical": true,
    "vintage": "current Congress",
    "bytes": 335339,
-   "previous_bytes": 334574,
+   "previous_bytes": 335339,
    "sha256": "d919b2d0a214ce181efabd30579796b83041bd6d40fe3c4dcf8ffe7bac593afe",
    "content_key": "d919b2d0a214ce181efabd30579796b83041bd6d40fe3c4dcf8ffe7bac593afe",
-   "changed": true,
+   "changed": false,
    "content_changed_utc": "2026-11-19T15:21:48Z",
-   "checked_utc": "2026-11-19T15:21:48Z"
+   "checked_utc": "2026-11-19T19:25:59Z"
   },
   {
    "name": "senator votes",
@@ -107,12 +107,12 @@
    "critical": true,
    "vintage": "current Congress",
    "bytes": 2641871,
-   "previous_bytes": 2633487,
+   "previous_bytes": 2641871,
    "sha256": "649725e6561f5f055f343139b60e5008c775af1ca165f0078465d469afaa3285",
    "content_key": "649725e6561f5f055f343139b60e5008c775af1ca165f0078465d469afaa3285",
-   "changed": true,
+   "changed": false,
    "content_changed_utc": "2026-11-19T15:21:48Z",
-   "checked_utc": "2026-11-19T15:21:48Z"
+   "checked_utc": "2026-11-19T19:25:59Z"
   },
   {
    "name": "state ideology",
@@ -126,7 +126,7 @@
    "content_key": "3ba4d42dc321fb717f2f86e09074136858753a64a0a546e0c5a468f739cb87e6",
    "changed": false,
    "content_changed_utc": "2026-09-23T13:05:55Z",
-   "checked_utc": "2026-11-19T15:21:48Z"
+   "checked_utc": "2026-11-19T19:25:59Z"
   },
   {
    "name": "joint resolutions (Senate)",
@@ -135,12 +135,12 @@
    "critical": false,
    "vintage": "current Congress; GovInfo republishes daily",
    "bytes": 541910,
-   "previous_bytes": 541900,
+   "previous_bytes": 541910,
    "sha256": "baab2e7bd4244d6d9e1b6a4074ec230eca541aa20be0d629e9ac26e23f85e786",
    "content_key": "3b4f7bac14d4d30b283219d0ffb3bc6582ed9c7fcd6e38de411ddb60946441e5",
-   "changed": true,
+   "changed": false,
    "content_changed_utc": "2026-11-19T15:21:48Z",
-   "checked_utc": "2026-11-19T15:21:48Z"
+   "checked_utc": "2026-11-19T19:25:59Z"
   },
   {
    "name": "joint resolutions (House)",
@@ -149,12 +149,12 @@
    "critical": false,
    "vintage": "current Congress; GovInfo republishes daily",
    "bytes": 686657,
-   "previous_bytes": 686648,
+   "previous_bytes": 686657,
    "sha256": "b09ff28168a0736c6f3b87b8cb5e1ceebe033a364d87457f7443c38b27109c9d",
    "content_key": "6e5273885fb03dc32abf960bb5a77d392da0595378903e57050eb29b214d4f5d",
-   "changed": true,
+   "changed": false,
    "content_changed_utc": "2026-11-19T15:21:48Z",
-   "checked_utc": "2026-11-19T15:21:48Z"
+   "checked_utc": "2026-11-19T19:25:59Z"
   },
   {
    "name": "simple resolutions (Senate)",
@@ -163,12 +163,12 @@
    "critical": false,
    "vintage": "current Congress; GovInfo republishes daily",
    "bytes": 2170974,
-   "previous_bytes": 2170314,
+   "previous_bytes": 2170974,
    "sha256": "8b7c8d48acbdd2b0af5902f7db15d61476a7d4977cbd70fa6753f26c3c99db93",
    "content_key": "c679e489e6c7e58f3ef25fa18eed8161ee29790984e8a8472a390612b10f74cf",
-   "changed": true,
+   "changed": false,
    "content_changed_utc": "2026-11-19T15:21:48Z",
-   "checked_utc": "2026-11-19T15:21:48Z"
+   "checked_utc": "2026-11-19T19:25:59Z"
   },
   {
    "name": "concurrent resolutions (Senate)",
@@ -182,7 +182,7 @@
    "content_key": "60073de4fd39742e3f56c3c0ebafba3d3735262bb5886d6e5428941ee936b98b",
    "changed": false,
    "content_changed_utc": "2026-11-18T00:57:07Z",
-   "checked_utc": "2026-11-19T15:21:48Z"
+   "checked_utc": "2026-11-19T19:25:59Z"
   },
   {
    "name": "concurrent resolutions (House)",
@@ -191,12 +191,12 @@
    "critical": false,
    "vintage": "current Congress; GovInfo republishes daily",
    "bytes": 470580,
-   "previous_bytes": 470493,
+   "previous_bytes": 470580,
    "sha256": "dd14414b7771b6116ce8828731ad68869dacc836671e383e18754d48ea1c60af",
    "content_key": "89d8eebb3a4f7d0ff4a4179570ee27b629983c0e22354222f13437ea31981006",
-   "changed": true,
+   "changed": false,
    "content_changed_utc": "2026-11-19T15:21:48Z",
-   "checked_utc": "2026-11-19T15:21:48Z"
+   "checked_utc": "2026-11-19T19:25:59Z"
   },
   {
    "name": "state populations",
@@ -210,7 +210,7 @@
    "content_key": "b8b50bd345d8a5f33d5c8a28c95aeaa0a50971356f000d9b48276a65fd9022a7",
    "changed": false,
    "content_changed_utc": "2026-09-23T13:05:55Z",
-   "checked_utc": "2026-11-19T15:21:48Z"
+   "checked_utc": "2026-11-19T19:25:59Z"
   }
  ]
 }
