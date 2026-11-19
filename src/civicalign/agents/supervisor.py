@@ -1183,6 +1183,21 @@ def site_page_checks(drop: dict, page: str) -> list[Check]:
     return out
 
 
+def record_page_totals(text: str, number: str) -> tuple[int, int] | None:
+    """(yeas, nays) printed for one roll call on a Congressional Record page, or None if its heading isn't there.
+    Reading stops at the next roll call's heading: a unanimous vote prints no NAYS line, and the next vote's
+    count must never be taken for it."""
+    at = re.search(rf"(?im)^\s*\[Rollcall vote No\.\s*{number}\b[^\]]*\]\s*$", text)
+    if not at:
+        return None
+    tail = text[at.end():]
+    following = re.search(r"(?im)^\s*\[Rollcall vote No\.", tail)
+    tail = tail[:following.start()] if following else tail
+    yeas = re.search(r"(?m)^\s*YEAS\s*-+\s*(\d+)\s*$", tail)
+    nays = re.search(r"(?m)^\s*NAYS\s*-+\s*(\d+)\s*$", tail)
+    return (int(yeas.group(1)) if yeas else 0, int(nays.group(1)) if nays and (not yeas or nays.start() > yeas.start()) else 0)
+
+
 def site_record_checks(cfg: Config, raw: dict, core: dict, extra: dict, store: Path | None = None) -> list[Check]:
     """The Congressional Record comparison redone with separate code: stored lists against
     Voteview, every published status, and any saved page read by a separate parser."""
@@ -1243,15 +1258,8 @@ def site_record_checks(cfg: Config, raw: dict, core: dict, extra: dict, store: P
         if _h.sha256(body).hexdigest() != rec["sha256"]:
             continue                                  # a page saved before a later correction; its own line covers it
         read += 1
-        text = body.decode("utf-8", "replace").replace("&#x27;", "'")
-        at = re.search(rf"(?im)^\s*\[Rollcall vote No\.\s*{vote.split('-')[2]}\b[^\]]*\]\s*$", text)
-        if not at:
-            bad.append(vote)
-            continue
-        tail = text[at.end():]
-        yeas = re.search(r"(?m)^\s*YEAS\s*-+\s*(\d+)\s*$", tail)
-        nays = re.search(r"(?m)^\s*NAYS\s*-+\s*(\d+)\s*$", tail)
-        if (int(yeas.group(1)) if yeas else 0, int(nays.group(1)) if nays and (not yeas or nays.start() > yeas.start()) else 0) != (len(rec["Yea"]), len(rec["Nay"])):
+        totals = record_page_totals(body.decode("utf-8", "replace").replace("&#x27;", "'"), vote.split("-")[2])
+        if totals != (len(rec["Yea"]), len(rec["Nay"])):
             bad.append(vote)
     out.append(Check("Site: saved Congressional Record pages re-read separately", not bad, f"disagree {bad[:5]}" if bad else f"{read} pages' vote totals"))
     return out
