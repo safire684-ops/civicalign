@@ -1,6 +1,11 @@
 """Import a new legislative drop from the approved publisher, unattended.
 
     PYTHONPATH=src python -m civicalign.legislative_sync
+    PYTHONPATH=src python -m civicalign.legislative_sync --check https://publisher.example/drops/119/
+
+--check tries a candidate publisher before anyone sets CIVICALIGN_DROP_URL: it downloads the drop to a
+temporary folder, runs every import check against the drop we have now, prints the result and imports
+nothing (exit status 0 only if the drop would be accepted).
 
 The publisher is set by CIVICALIGN_DROP_URL, with an optional CIVICALIGN_DROP_TOKEN sent as a
 bearer token. It must publish manifest.json beside the drop's files:
@@ -82,8 +87,10 @@ def check_drop(folder: Path, manifest: dict, previous: dict | None, engine_ids: 
     return wrong
 
 
-def sync(cfg: Config = DEFAULT, url: str | None = None, token: str | None = None, engine_ids: set[str] | None = None) -> dict:
-    """Fetch and import if there is something new. Never raises for a bad or missing drop."""
+def sync(cfg: Config = DEFAULT, url: str | None = None, token: str | None = None, engine_ids: set[str] | None = None,
+         dry_run: bool = False) -> dict:
+    """Fetch and import if there is something new. Never raises for a bad or missing drop.
+    With dry_run, everything up to the import is the same, and the result is "would_import" instead."""
     url = url if url is not None else os.environ.get("CIVICALIGN_DROP_URL", "").strip()
     token = token if token is not None else os.environ.get("CIVICALIGN_DROP_TOKEN", "").strip() or None
     previous = L.load(cfg) if any((p / "MANIFEST.json").exists() for p in L.root(cfg).glob("*")) else None
@@ -107,6 +114,10 @@ def sync(cfg: Config = DEFAULT, url: str | None = None, token: str | None = None
             wrong = check_drop(folder, manifest, previous, ids, cfg.congress)
             if wrong:
                 return {**out, "state": "rejected", "detail": "; ".join(wrong[:8])}
+            if dry_run:
+                meta = json.loads((folder / "meta.json").read_text())
+                return {**out, "state": "would_import", "latest_drop": manifest["generated_at"], "counts": meta.get("counts", {}),
+                        "detail": f"Every check passed. A drop made {manifest['generated_at']} would replace the one made {out['latest_drop']}."}
             dest = L.import_drop(folder, cfg)
     except (urllib.error.URLError, TimeoutError, OSError, ValueError, KeyError, AttributeError, L.LegislativeError) as e:
         return {**out, "state": "unreachable", "detail": f"{type(e).__name__}: {e}"[:300]}
@@ -114,6 +125,16 @@ def sync(cfg: Config = DEFAULT, url: str | None = None, token: str | None = None
 
 
 def main() -> int:
+    import argparse
+    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("--check", metavar="URL", help="try this publisher address without importing anything")
+    a = ap.parse_args()
+    if a.check:
+        result = sync(DEFAULT, url=a.check, dry_run=True)
+        print(f"publisher check: {result['state']}: {result['detail']}")
+        for name, n in sorted(result.get("counts", {}).items()):
+            print(f"  {name}: {n}")
+        return 0 if result["state"] == "would_import" else 1
     result = sync(DEFAULT)
     path = status_path(DEFAULT)
     path.parent.mkdir(parents=True, exist_ok=True)

@@ -13,6 +13,14 @@
 - The September project blueprint proposes Anthropic Maker and OpenAI Checker as an architecture. This is a proposal, **not** proof of what is actually implemented or which key is needed.
 - GitHub Actions uses a data-import variable named CIVICALIGN_DROP_URL and optional data-import secret CIVICALIGN_DROP_TOKEN. Neither is an AI model API key.
 
+## Partner setup (added November 19, 2026)
+
+The ready-to-copy publishing workflow for the generator's own repository is
+[`docs/partner/publish-50degrees.yml`](partner/publish-50degrees.yml), explained in
+[`docs/50DEGREES_PARTNER_SETUP.md`](50DEGREES_PARTNER_SETUP.md). Before setting `CIVICALIGN_DROP_URL`, try the
+address with `python -m civicalign.legislative_sync --check <address>`, which imports nothing.
+`tests/test_publisher_chain.py` runs the whole receiving chain over a real HTTP connection with the real export.
+
 ## What can be done now, without buying an API key
 
 The new offline preparer at scripts/prepare_50degrees_publish.py takes a fresh output from the **existing** 50degrees generator and builds the exact package format that the receiving importer expects. It does **not** scrape sources, generate explanations, call AI, publish online or use credentials.

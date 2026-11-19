@@ -1,0 +1,71 @@
+# Publish the 50degrees export for CivicAlign, on a schedule, from the 50degrees generator's OWN repository.
+#
+# Copy this file to .github/workflows/publish-civicalign.yml in the repository that runs `civicalign export 119`.
+# It runs your existing generator; it generates nothing itself. It then packages the result with
+# CivicAlign's public checker (scripts/prepare_50degrees_publish.py), which refuses an export that is
+# stale, incomplete or inconsistent, and publishes the eight files plus manifest.json to this
+# repository's GitHub Pages site in one deploy, so CivicAlign never sees a half-updated folder.
+#
+# One-time setup in YOUR repository: Settings -> Pages -> Source: "GitHub Actions".
+# The address to send CivicAlign is then:  https://<owner>.github.io/<repository>/drops/119/
+# No CivicAlign credentials are involved. If your export stage needs its own AI key, store it as a
+# secret in YOUR repository and pass it to the "Run the existing 50degrees export" step only.
+
+name: Publish the 50degrees export for CivicAlign
+
+on:
+  schedule:
+    - cron: "0 9 * * 1"        # weekly, Mondays 09:00 UTC; CivicAlign's daily run picks it up the same day
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: civicalign-publish
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+
+      # ---- 1. YOUR existing generator. Replace these lines with exactly how you install and run it today. ----
+      - name: Run the existing 50degrees export
+        # env:
+        #   YOUR_PROVIDER_API_KEY: ${{ secrets.YOUR_PROVIDER_API_KEY }}   # only if your export stage needs one
+        run: |
+          pip install -e .
+          civicalign export 119 --out export          # the folder must hold the same eight files as the October 29 export
+
+      # ---- 2. CivicAlign's public packaging check (read-only; no token needed) ----
+      - name: Get CivicAlign's packaging check
+        uses: actions/checkout@v7
+        with:
+          repository: safire684-ops/civicalign
+          path: civicalign-tools
+          sparse-checkout: |
+            scripts/prepare_50degrees_publish.py
+            src/civicalign
+
+      - name: Check and package the export (stops here if anything is wrong; the last published drop stays up)
+        # PYTHONPATH points at CivicAlign's own package for this step only, in case yours is also named civicalign.
+        run: PYTHONPATH=civicalign-tools/src python civicalign-tools/scripts/prepare_50degrees_publish.py --source export --output site/drops/119
+
+      # ---- 3. Publish in one deploy ----
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: site
+
+      - id: deploy
+        uses: actions/deploy-pages@v5

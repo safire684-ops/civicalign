@@ -4,7 +4,7 @@
     python scripts/data_alert.py --watch-failed "what went wrong"
 
 Opens or updates one issue, found by its title, when the job failed or the health report has an
-error, and closes it once a later run is clean. Needs GH_TOKEN, GITHUB_REPOSITORY and, for the
+error or stale legislative data, and closes it once a later run is clean. Needs GH_TOKEN, GITHUB_REPOSITORY and, for the
 link, RUN_URL. It reports only and has no effect on what gets published.
 """
 import argparse
@@ -18,11 +18,21 @@ TITLE = "CivicAlign data alert"
 HEALTH = Path(__file__).resolve().parent.parent / "data" / "processed" / "health.json"
 
 
+# Warnings that also open the alert: stale legislative data goes unnoticed otherwise, because the
+# site keeps building from the last good drop. The publisher's own state is added as the likely cause.
+ALERT_ON_WARN = ("drop_age",)
+
+
 def problems(job_status: str, health: dict | None) -> list[str]:
     out = []
     if job_status != "success":
         out.append(f"The daily update ended with status: {job_status}. The last verified site is still published.")
-    out += [i["text"] for i in (health or {}).get("items", []) if i["level"] == "error"]
+    items = (health or {}).get("items", [])
+    out += [i["text"] for i in items if i["level"] == "error"]
+    stale = [i["text"] for i in items if i["level"] == "warn" and i.get("code") in ALERT_ON_WARN]
+    if stale:
+        cause = [i["text"] for i in items if i.get("code", "").startswith("drop_sync_") and i["level"] != "ok"]
+        out += [f"Stale legislative data: {t}" for t in stale] + [f"Publisher: {t}" for t in cause if t not in out]
     return out
 
 
