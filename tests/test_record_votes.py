@@ -257,3 +257,35 @@ def test_stored_change_notices_are_the_three_documented_differences():
     documented = {(e["vote"], e["senator"]) for e in L.differences()["entries"]}
     assert documented <= set(notices)
     assert notices[("119-1-26", "P000145")] == "Yea" and notices[("119-1-89", "B001267")] == "Nay" and notices[("119-1-114", "A000382")] == "Nay"
+
+
+def test_the_checker_never_takes_the_next_votes_nays_for_a_unanimous_vote():
+    """Regression (2026-11-19, 119-2-92): a 98-0 vote prints no NAYS line; the next roll call on the page does."""
+    from civicalign.agents.supervisor import record_page_totals
+    page = """  The result was announced--yeas 98, nays 0, as follows:
+
+                      [Rollcall Vote No. 92 Leg.]
+
+                                YEAS--98
+
+     Alsobrooks
+     Armstrong
+
+                             NOT VOTING--2
+
+     Grassley
+     Warner
+
+                      [Rollcall Vote No. 93 Leg.]
+
+                                YEAS--48
+
+     Baldwin
+
+                                NAYS--50
+
+     Banks
+"""
+    assert record_page_totals(page, "92") == (98, 0)
+    assert record_page_totals(page, "93") == (48, 50)
+    assert record_page_totals(page, "94") is None

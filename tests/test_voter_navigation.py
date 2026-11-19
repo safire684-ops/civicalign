@@ -187,9 +187,10 @@ def test_the_profile_has_no_state_comparison_card():
 
 def test_the_voting_position_is_explained_not_scored():
     body = TEMPLATE[TEMPLATE.index("async function vSenator("):TEMPLATE.index("function allVotes(")]
-    assert "<h3>Voting position</h3>" in body and "line(s.position.p1,[med.p1])" in body and "${scaleEnds}" in body
+    assert "<h3>Voting position</h3>" in body and 'posLine(s.position&&s.position.p1,{refs:[{kind:"senate",v:med.p1}]})' in body
     assert "It isn't a grade, a percentage or a measure of agreement" in body
-    assert "%" not in body.replace("${", "").split("<small>Position</small>")[0].split("Voting position")[1][:400]
+    summary = body[body.index("<h3>Voting position</h3>"):body.index("</summary>", body.index("<h3>Voting position</h3>"))]
+    assert "%" not in summary, "no percent sign next to a position"
     assert 'id="howto"' in body and "${howToRead()}" in body and "#/about/read" in body
 
 
