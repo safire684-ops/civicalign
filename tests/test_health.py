@@ -209,3 +209,15 @@ def test_the_alert_step_runs_even_after_a_failure_but_only_on_main():
 def test_the_live_check_runs_on_its_own_schedule_and_publishes_nothing():
     y = (ROOT / ".github" / "workflows" / "monitor.yml").read_text()
     assert "cron:" in y and "civicalign.health --watch" in y and "pages: write" not in y and "contents: write" not in y and "deploy-pages" not in y
+
+
+def test_stale_legislative_data_opens_the_alert_with_its_cause():
+    stale = {"items": [{"level": "warn", "code": "drop_age", "text": "The legislative files were made 2026-10-29, 21 days before this check (limit 14)."},
+                       {"level": "warn", "code": "drop_sync_not_configured", "text": "No approved publisher is set, so new drops still have to be imported by hand."},
+                       {"level": "warn", "code": "senate_blocked", "text": "senate.gov refuses automated requests."}]}
+    found = ALERT.problems("success", stale)
+    assert found[0].startswith("Stale legislative data: The legislative files were made 2026-10-29")
+    assert any(f.startswith("Publisher: No approved publisher is set") for f in found)
+    assert not any("senate.gov" in f for f in found), "other warnings stay on the site only"
+    fresh = {"items": [{"level": "ok", "code": "drop_age", "text": "fresh"}, {"level": "ok", "code": "drop_sync_imported", "text": "Imported."}]}
+    assert ALERT.problems("success", fresh) == []
