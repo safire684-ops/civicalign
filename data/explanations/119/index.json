@@ -19,13 +19,13 @@
   "stored copy": 55
  },
  "classified": {
-  "CLOTURE": 299,
+  "CLOTURE": 300,
   "MOTION_TO_PROCEED": 88,
-  "AMENDMENT": 104,
+  "AMENDMENT": 105,
   "PASSAGE": 20,
   "NOMINATION": 226,
   "MOTION_TO_TABLE": 18,
-  "OTHER": 130,
+  "OTHER": 131,
   "JOINT_RESOLUTION_PASSAGE": 35,
   "POINT_OF_ORDER": 4
  },
