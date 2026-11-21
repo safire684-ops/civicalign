@@ -16,16 +16,16 @@
   ]
  },
  "senate_records": {
-  "stored copy": 55
+  "stored copy": 56
  },
  "classified": {
-  "CLOTURE": 300,
+  "CLOTURE": 307,
   "MOTION_TO_PROCEED": 88,
   "AMENDMENT": 105,
-  "PASSAGE": 20,
-  "NOMINATION": 226,
+  "PASSAGE": 21,
+  "NOMINATION": 228,
   "MOTION_TO_TABLE": 18,
-  "OTHER": 131,
+  "OTHER": 132,
   "JOINT_RESOLUTION_PASSAGE": 35,
   "POINT_OF_ORDER": 4
  },
@@ -573,6 +573,16 @@
   {
    "file": "vote_119_2_00250.json",
    "measure": "S4668",
+   "kind": "PASSAGE_AS_AMENDED",
+   "verification": "VERIFIED",
+   "senate_record": "stored copy",
+   "text": "TEXT_BOUND",
+   "summary_eligible": true,
+   "cra": false
+  },
+  {
+   "file": "vote_119_2_00270.json",
+   "measure": "HR2347",
    "kind": "PASSAGE_AS_AMENDED",
    "verification": "VERIFIED",
    "senate_record": "stored copy",
